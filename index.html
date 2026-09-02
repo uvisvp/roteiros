@@ -628,7 +628,7 @@
 <div id="tela-app"><div class="casca-bar"><button type="button" data-lista="1">‹ Voltar</button><b id="app-tit"></b></div>
   <div style="position:relative;flex:1;display:flex"><iframe id="quadro" title="Roteiro"></iframe>
   <div id="casca-carga">Abrindo…</div></div></div>
-<div id="casca-versao">v20260902-ALIMENTOS-UX2 JS desligado</div>
+<div id="casca-versao">v20260902-CASCA-OFFLINE-FIX1 JS desligado</div>
 <script>
 /* Primeiro script da casca, antes de LZString e dos blocos. Se este texto
    mudar para "JS ativo", o JavaScript roda; se ficar "JS desligado", o arquivo
@@ -707,7 +707,11 @@
       + 'if(d.__casca==="banco"&&d.banco){recebido=d.banco;var f=fila;fila=[];f.forEach(function(cb){try{cb(recebido);}catch(x){}});}'
       + 'if(d.__casca==="banco-falhou"){var g=fila;fila=[];g.forEach(function(cb){try{cb(null);}catch(x){}});}});'
       + 'function pronto(){try{parent.postMessage({__casca:"pronto"},"*");}catch(e){}}'
-      + 'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",pronto);else pronto();'
+      + 'pronto();'
+      + 'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",pronto);'
+      + 'window.addEventListener("load",pronto);'
+      + 'window.addEventListener("error",function(e){try{parent.postMessage({__casca:"erro-modulo",mensagem:String((e&&e.message)||"erro de execução")},"*");}catch(x){};});'
+      + 'window.addEventListener("unhandledrejection",function(e){try{parent.postMessage({__casca:"erro-modulo",mensagem:String((e&&e.reason&&e.reason.message)||e.reason||"falha assíncrona")},"*");}catch(x){};});'
       + '})();</scr'+'ipt>';
     /* Núcleo de citação: obrigatório em todo módulo, venha ou não declarado
        no HTML de origem. Entra antes de padrao.js, que depende dele. */
@@ -839,28 +843,50 @@
     var q = $('quadro');
     vivo = false; geracao++;
     var g = geracao;
-    q.onload = null;
-    /* 1ª tentativa: Blob URL. Herda esta origem, então localStorage e
-       IndexedDB funcionam dentro do módulo. É o caminho bom (GitHub Pages).
-       2ª tentativa: se o módulo não avisar "pronto" em 1,5 s, o navegador
-       recusou o Blob (acontece em file:// e em alguns WebViews) e a tela
-       ficaria em branco. Aí remonta por srcdoc, que renderiza em qualquer
-       lugar; a origem fica opaca e o armazenamento local do módulo não
-       persiste, mas o conteúdo aparece e as citações chegam por postMessage. */
-    try {
-      urlBlob = URL.createObjectURL(new Blob([fonte], {type:'text/html'}));
-      q.removeAttribute('srcdoc');
-      q.src = urlBlob;
-    } catch(e){ urlBlob = null; }
-    setTimeout(function(){
-      if(g !== geracao || vivo) return;
+    q.onload = function(){
+      if(g !== geracao) return;
+      vivo = true;
+      $('casca-carga').classList.add('off');
+      var v = $('casca-versao');
+      if(v && v.textContent.indexOf(' · '+modo) < 0) v.textContent += ' · ' + modo;
+    };
+    /* Estratégia multiplataforma/offline:
+       - file://: usa srcdoc desde o início. É o caminho mais tolerante em
+         Safari/iOS, Android WebView e abertura local no Windows;
+       - http/https: tenta Blob primeiro para preservar a origem e o storage;
+       - se Blob não carregar rapidamente, troca para srcdoc.
+       A interface deixa de depender exclusivamente do postMessage "pronto":
+       o evento load do iframe também confirma que o documento foi renderizado. */
+    var local = String(location.protocol||'').toLowerCase() === 'file:';
+    if(local){
       try { q.removeAttribute('src'); } catch(e){}
       q.srcdoc = fonte;
       modo = 'srcdoc';
-      var v = $('casca-versao'); if(v && v.textContent.indexOf('srcdoc') < 0) v.textContent += ' · srcdoc';
-      setTimeout(function(){ if(g === geracao && !vivo){ $('casca-carga').textContent =
-        'O módulo não respondeu. Se o carimbo mostrar "erro", envie o texto.'; } }, 4000);
-    }, urlBlob ? 1500 : 0);
+    } else {
+      try {
+        urlBlob = URL.createObjectURL(new Blob([fonte], {type:'text/html;charset=utf-8'}));
+        q.removeAttribute('srcdoc');
+        modo = 'blob';
+        q.src = urlBlob;
+      } catch(e){ urlBlob = null; }
+      if(!urlBlob){
+        try { q.removeAttribute('src'); } catch(e){}
+        q.srcdoc = fonte;
+        modo = 'srcdoc';
+      } else {
+        setTimeout(function(){
+          if(g !== geracao || vivo) return;
+          try { q.removeAttribute('src'); } catch(e){}
+          q.srcdoc = fonte;
+          modo = 'srcdoc';
+        }, 2500);
+      }
+    }
+    setTimeout(function(){
+      if(g === geracao && !vivo){
+        $('casca-carga').textContent = 'Não foi possível renderizar este módulo neste navegador.';
+      }
+    }, 7000);
   }
   var vivo = false, geracao = 0, modo = 'blob';
 
@@ -890,6 +916,10 @@
       if(nucleoAtual) telaLista(nucleoAtual); else telaHome();
     }
     if(d.__casca === 'pronto'){ vivo = true; $('casca-carga').classList.add('off'); }
+    if(d.__casca === 'erro-modulo'){
+      var v = $('casca-versao');
+      if(v){ v.textContent = v.textContent.replace(/ · erro:.*$/,'') + ' · erro: ' + String(d.mensagem||'módulo'); }
+    }
     if(d.__casca === 'quero-banco' && e.source) entregaBanco(e.source);
     if(d.type === 'visa:abrir-consulta-externa' && d.url){
       try { window.open(d.url, '_blank', 'noopener,noreferrer'); } catch(x) { location.href = d.url; }
