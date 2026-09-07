@@ -7,7 +7,7 @@
    ============================================================= */
 'use strict';
 
-const VERSAO = '20260907-7';
+const VERSAO = '20260907-8';
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -16,11 +16,11 @@ const ESSENCIAIS = [
   './index.html',
   './manifest.webmanifest',
   './versao.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/farmacia-manipulacao.png'
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
+  './farmacia-manipulacao.png'
 ];
 
 self.addEventListener('install', event => {

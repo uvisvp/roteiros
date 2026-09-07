@@ -1,1 +1,6 @@
-{"versao":"20260907-7","banco":"v11.3"}
+{
+  "versao": "20260907-8",
+  "banco": "v11.3",
+  "correcoes": 4,
+  "notas": "Interface do núcleo de Medicamentos, faixa inferior no iPhone, limpeza contextual e verificação de atualização."
+}
