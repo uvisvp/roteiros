@@ -1,0 +1,26 @@
+name: Publish v15 staging
+
+on:
+  push:
+    branches: [publish-v15-staging]
+    paths:
+      - '.github/workflows/publish-v15.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  test-write:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish-v15-staging
+      - name: Test repository write
+        run: |
+          printf 'workflow-write-ok\n' > .publish-v15-action-ok
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .publish-v15-action-ok
+          git commit -m 'Test v15 staging write'
+          git push origin HEAD:publish-v15-staging
