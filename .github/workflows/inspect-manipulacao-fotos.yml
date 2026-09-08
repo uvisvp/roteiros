@@ -1,0 +1,38 @@
+name: Inspect Manipulacao Fotos
+on:
+  push:
+    branches: [inspect-manipulacao-fotos]
+    paths: ['.github/workflows/inspect-manipulacao-fotos.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: inspect-manipulacao-fotos
+      - name: Inspect manipulation photo/report flow
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          m=re.search(r'<script[^>]+id="lz-core"[^>]*>(.*?)</script>',p,re.S)
+          Path('/tmp/lz.js').write_text(m.group(1)+'\nmodule.exports=LZString;\n')
+          b=re.search(r'<script type="text/plain" id="app--farmacia-manipulacao">(.*?)</script>',p,re.S)
+          Path('/tmp/manip.b64').write_text(b.group(1).strip())
+          PY
+          cat >/tmp/scan.js <<'JS'
+          const fs=require('fs'),L=require('/tmp/lz.js');
+          const s=L.decompressFromBase64(fs.readFileSync('/tmp/manip.b64','utf8').trim())||'';
+          const terms=['foto','photo','image','imagem','camera','câmera','evidence','evidência','anexo','attachment','relatório','report','FileReader','data:image','toDataURL','URL.createObjectURL'];
+          console.log('LENGTH',s.length);
+          for(const term of terms){
+            let pos=0,count=0;
+            while(true){const i=s.toLowerCase().indexOf(term.toLowerCase(),pos); if(i<0)break; count++; console.log('\nTERM',term,'#'+count,'CTX',s.slice(Math.max(0,i-500),Math.min(s.length,i+1400)).replace(/\n/g,' ')); pos=i+term.length; if(count>=12)break;}
+            console.log('COUNT',term,count);
+          }
+          JS
+          node /tmp/scan.js
