@@ -703,7 +703,7 @@
 
     <footer class="app-footer">
       <span>Inspeção Sanitária · roteiros, consultas e apoio técnico</span>
-      <span class="build"><span id="casca-versao">v20260908-23 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260908-24 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -844,7 +844,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260908-23';
+    const APP_VERSAO = '20260908-24';
     const CHAVES_RASCUNHO = ['visa.inspecao.rascunho.v1', 'uvis.drogaria.rascunho'];
     let swEspera = null;
 
@@ -1056,9 +1056,9 @@
    referência, consulta diretamente o fragmento correto e só acrescenta o
    cartão quando a busca normal não tiver retornado cadastro algum. */
 if(app==='central-consultas'){
-  var ponte=['<scr','ipt>',String.raw\`(function(){
+  var ponte=['<scr','ipt>',String.raw`(function(){
     var BASE='https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/';
-    function dig(v){return String(v||'').replace(/\\D/g,'');}
+    function dig(v){return String(v||'').replace(/\D/g,'');}
     function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
     function processoAtivo(){var b=document.querySelector('.mode.on');return !!(b&&b.getAttribute('data-mode')==='processo');}
     function inserir(lista,processo){setTimeout(function(){
@@ -1075,7 +1075,7 @@ if(app==='central-consultas'){
       fetch(BASE+fragmento+'.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).then(function(d){inserir(Array.isArray(d)?d:[],processo);}).catch(function(){});}
     document.addEventListener('click',function(e){if(e.target.closest('#search'))complementar();},true);
     document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='q')complementar();},true);
-  })();\`,'</scr','ipt>'].join('');
+  })();`,'</scr','ipt>'].join('');
   s=s.replace(/<\/body>/i,ponte+'</body>');
 }
     /* Ajustes textuais específicos da Drogaria. Mantêm a lógica e alteram apenas a redação exibida/relatada. */
