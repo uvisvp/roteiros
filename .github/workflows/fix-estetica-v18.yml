@@ -1,0 +1,125 @@
+name: Fix Estetica navigation v18
+on:
+  push:
+    branches: [fix-estetica-v18]
+    paths: ['.github/workflows/fix-estetica-v18.yml']
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix-estetica-v18
+          fetch-depth: 0
+      - name: Patch Estetica without touching other modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          m=re.search(r'<script[^>]+id="lz-core"[^>]*>(.*?)</script>',p,re.S)
+          if not m: raise SystemExit('lz-core missing')
+          Path('/tmp/lz-core.js').write_text(m.group(1)+'\nmodule.exports=LZString;\n')
+          b=re.search(r'<script type="text/plain" id="app--estetica">(.*?)</script>',p,re.S)
+          if not b: raise SystemExit('Estetica packed block missing')
+          Path('/tmp/estetica.b64').write_text(b.group(1).strip())
+          PY
+          cat >/tmp/codec.js <<'JS'
+          const fs=require('fs'); const LZString=require('/tmp/lz-core.js');
+          const [,,mode,input,output]=process.argv;
+          if(mode==='d') fs.writeFileSync(output,LZString.decompressFromBase64(fs.readFileSync(input,'utf8').trim()));
+          else if(mode==='c') fs.writeFileSync(output,LZString.compressToBase64(fs.readFileSync(input,'utf8')));
+          else throw Error('mode');
+          JS
+          node /tmp/codec.js d /tmp/estetica.b64 /tmp/estetica.html
+          python - <<'PY'
+          from pathlib import Path
+          import re, json
+          f=Path('/tmp/estetica.html')
+          s=f.read_text()
+          old='function irBloco(b){bloco=b;grupo=0;$("filtro").value="";tudo();if(eMobile())ir(b==="I"||b==="S"?1:2,true);else aplicarLayout()}'
+          new='function irBloco(b){bloco=b;grupo=0;$("filtro").value="";tudo();if(eMobile()){ir(2,true);if(b==="I"||b==="S"){requestAnimationFrame(()=>{const d=$("lista2").querySelector("details.uvis-inventory");if(d)d.open=true})}}else aplicarLayout()}'
+          if old not in s: raise SystemExit('expected irBloco not found')
+          s=s.replace(old,new,1)
+          # Keep all inventory groups visible and clearly tappable on iPhone.
+          marker='@media (max-width:390px){'
+          css='@media (max-width:900px){details.uvis-inventory{display:block!important}details.uvis-inventory>summary{min-height:52px;display:flex;align-items:center;cursor:pointer}}\n'
+          if css not in s:
+              if marker not in s: raise SystemExit('mobile css marker missing')
+              s=s.replace(marker,css+marker,1)
+          f.write_text(s)
+          # Validate the embedded DATA cardinality so this fix cannot blank the lists.
+          m=re.search(r'<script>const DATA=(\{.*?\});\s*const INTERESSE=',s,re.S)
+          if not m: raise SystemExit('DATA missing after patch')
+          d=json.loads(m.group(1))
+          ni=sum(len(g.get('itens',[])) for g in d.get('interest',[]))
+          nh=sum(len(g.get('itens',[])) for g in d.get('health',[]))
+          if (ni,nh)!=(36,71): raise SystemExit(f'unexpected inventory counts {(ni,nh)}')
+          PY
+          node /tmp/codec.js c /tmp/estetica.html /tmp/estetica.new.b64
+          python - <<'PY'
+          from pathlib import Path
+          import re, json
+          p=Path('index.html').read_text()
+          # Remove the old shell-side click handler that competed with Estetica's own navigation.
+          pat=r'''    if\(app==='estetica'\)\{.*?\n    \}\n    if\(app==='drogaria'\)\{'''
+          repl="""    if(app==='estetica'){
+              cab += '<style>@media(max-width:900px){html[data-uvis-app=\"estetica\"] .aba,html[data-uvis-app=\"estetica\"] .tema{touch-action:manipulation!important}html[data-uvis-app=\"estetica\"] .tema{min-height:52px!important}}</style>';
+            }
+            if(app==='drogaria'){"""
+          p2,n=re.subn(pat,repl,p,count=1,flags=re.S)
+          if n!=1: raise SystemExit(f'Estetica shell handler replacement count={n}')
+          b64=Path('/tmp/estetica.new.b64').read_text().strip()
+          p3,n=re.subn(r'(<script type="text/plain" id="app--estetica">).*?(</script>)',lambda m:m.group(1)+b64+m.group(2),p2,count=1,flags=re.S)
+          if n!=1: raise SystemExit('packed Estetica replacement failed')
+          p3=p3.replace('20260907-17','20260908-18')
+          if 'function mostra(n)' in p3: raise SystemExit('old competing Estetica shell listener still present')
+          Path('index.html').write_text(p3)
+          # Update cache/version markers.
+          sw=Path('sw.js').read_text()
+          sw,n=re.subn(r"const VERSAO = '[^']+';","const VERSAO = '20260908-18';",sw,count=1)
+          if n!=1: raise SystemExit('sw version marker missing')
+          Path('sw.js').write_text(sw)
+          v=json.loads(Path('versao.json').read_text())
+          v['versao']='20260908-18'; v['correcoes']=4
+          v['notas']='Correção de Estética no iPhone: removida a segunda lógica de navegação injetada pela casca; as abas Interesse à saúde e Serviços de saúde abrem diretamente seus inventários e o primeiro grupo inicia expandido, preservando Produtos/equipamentos e Relatório.'
+          Path('versao.json').write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
+          PY
+          # Re-read the final packed block and prove it decompresses to the patched source.
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          m=re.search(r'<script type="text/plain" id="app--estetica">(.*?)</script>',p,re.S)
+          Path('/tmp/final-estetica.b64').write_text(m.group(1).strip())
+          PY
+          node /tmp/codec.js d /tmp/final-estetica.b64 /tmp/final-estetica.html
+          cmp /tmp/estetica.html /tmp/final-estetica.html
+          grep -q 'function irBloco(b){bloco=b;grupo=0' /tmp/final-estetica.html
+          grep -q '20260908-18' index.html
+          grep -q "const VERSAO = '20260908-18'" sw.js
+          grep -q '"versao": "20260908-18"' versao.json
+          # Syntax-check normal inline scripts in Estetica.
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('/tmp/final-estetica.html').read_text()
+          out=Path('/tmp/jscheck'); out.mkdir(exist_ok=True)
+          k=0
+          for m in re.finditer(r'<script([^>]*)>(.*?)</script>',s,re.S|re.I):
+              attrs,code=m.group(1),m.group(2)
+              if 'text/plain' in attrs or not code.strip(): continue
+              Path(out/f'{k}.js').write_text(code); k+=1
+          print('scripts',k)
+          PY
+          for f in /tmp/jscheck/*.js; do node --check "$f" >/dev/null; done
+          rm -f .github/workflows/fix-estetica-v18.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html sw.js versao.json .github/workflows/fix-estetica-v18.yml
+          git commit -m 'Fix Estetica navigation 20260908-18'
+          git push origin HEAD:fix-estetica-v18
