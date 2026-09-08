@@ -1,6 +1,6 @@
 {
-  "versao": "20260908-18",
+  "versao": "20260908-19",
   "banco": "11.2",
-  "correcoes": 4,
-  "notas": "Correção de Estética no iPhone: removida a segunda lógica de navegação injetada pela casca; as abas Interesse à saúde e Serviços de saúde abrem diretamente seus inventários e o primeiro grupo inicia expandido, preservando Produtos/equipamentos e Relatório."
+  "correcoes": 5,
+  "notas": "Estética: correção de navegação/listas no iPhone preservada. Drogaria: removido apenas o botão Produto / lote manual da conferência de estoque, mantendo Conferência completa · EAN · Anvisa · OCR."
 }
