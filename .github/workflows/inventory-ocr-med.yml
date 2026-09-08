@@ -1,0 +1,37 @@
+name: Inventory medication OCR controls
+on:
+  push:
+    branches: [fix-produtos-conferencia-v19]
+    paths: ['.github/workflows/inventory-ocr-med.yml']
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          m=re.search(r'<script[^>]+id="lz-core"[^>]*>(.*?)</script>',p,re.S)
+          Path('/tmp/lz.js').write_text(m.group(1)+'\nmodule.exports=LZString;\n')
+          for bid in ['app--drogaria','app--farmacia-manipulacao','app--distribuidoras-transportadoras','app--estoque-medicamentos']:
+            b=re.search(r'<script type="text/plain" id="'+re.escape(bid)+r'">(.*?)</script>',p,re.S)
+            Path('/tmp/'+bid+'.b64').write_text(b.group(1).strip())
+          PY
+          cat >/tmp/d.js <<'JS'
+          const fs=require('fs'),L=require('/tmp/lz.js');let a=process.argv[2];process.stdout.write(L.decompressFromBase64(fs.readFileSync(a,'utf8').trim()));
+          JS
+          for f in /tmp/app--*.b64; do
+            echo "===== $(basename $f .b64) ====="
+            node /tmp/d.js "$f" >/tmp/x
+            python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('/tmp/x').read_text(errors='replace')
+          for m in re.finditer(r'(?i)(ocr|ler documento|foto|c[aâ]mera|camera|scan)',s):
+              a=max(0,m.start()-240); b=min(len(s),m.end()+420)
+              print(' '.join(s[a:b].replace('\n',' ').split()))
+              print('---')
+          PY
+          done
