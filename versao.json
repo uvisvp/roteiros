@@ -1,6 +1,6 @@
 {
-  "versao": "20260907-17",
+  "versao": "20260908-18",
   "banco": "11.2",
-  "correcoes": 3,
-  "notas": "Correção mobile em Alimentos: resultados da consulta por processo passam a se reorganizar em uma coluna no iPhone, com rótulos e valores dentro da tela, quebra segura de textos longos e apresentações responsivas."
+  "correcoes": 4,
+  "notas": "Correção de Estética no iPhone: removida a segunda lógica de navegação injetada pela casca; as abas Interesse à saúde e Serviços de saúde abrem diretamente seus inventários e o primeiro grupo inicia expandido, preservando Produtos/equipamentos e Relatório."
 }
