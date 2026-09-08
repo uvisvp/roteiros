@@ -1,6 +1,6 @@
 {
-  "versao": "20260907-16",
+  "versao": "20260907-17",
   "banco": "11.2",
-  "correcoes": 2,
-  "notas": "Correção da navegação móvel do módulo Serviços > Estética e padronização da faixa fixa inferior para herdar automaticamente a cor-tema de cada núcleo."
+  "correcoes": 3,
+  "notas": "Correção mobile em Alimentos: resultados da consulta por processo passam a se reorganizar em uma coluna no iPhone, com rótulos e valores dentro da tela, quebra segura de textos longos e apresentações responsivas."
 }
