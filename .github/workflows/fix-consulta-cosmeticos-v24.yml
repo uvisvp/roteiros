@@ -1,0 +1,107 @@
+name: Fix consulta cosmeticos v24
+
+on:
+  push:
+    branches: [fix-consulta-cosmeticos-v24]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix-consulta-cosmeticos-v24
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Correct bridge syntax and publish v24
+        run: |
+          python <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('index.html')
+          source = path.read_text(encoding='utf-8')
+          tick = '`'
+
+          replacements = [
+              ('String.raw\\' + tick + '(function(){', 'String.raw' + tick + '(function(){', 'abertura da template string'),
+              ("})();\\" + tick + ",'</scr'", "})();" + tick + ",'</scr'", 'fechamento da template string'),
+              (r"replace(/\\D/g,'')", r"replace(/\D/g,'')", 'normalização do processo'),
+              ('v20260908-23 JS desligado', 'v20260908-24 JS desligado', 'versão da casca'),
+              ("const APP_VERSAO = '20260908-23';", "const APP_VERSAO = '20260908-24';", 'APP_VERSAO'),
+          ]
+          for old, new, label in replacements:
+              count = source.count(old)
+              assert count == 1, f'{label}: esperado 1, encontrado {count}'
+              source = source.replace(old, new)
+
+          path.write_text(source, encoding='utf-8')
+
+          path = Path('sw.js')
+          source = path.read_text(encoding='utf-8')
+          old = "const VERSAO = '20260908-23';"
+          assert source.count(old) == 1
+          path.write_text(source.replace(old, "const VERSAO = '20260908-24';"), encoding='utf-8')
+
+          path = Path('versao.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          assert data['versao'] == '20260908-23', data
+          data.update({
+              'versao': '20260908-24',
+              'correcoes': 8,
+              'notas': 'Central de Consultas: corrigida e validada a consulta de Cosméticos por processo Anvisa.'
+          })
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Validate executable shell and real process
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
+          const shell = scripts.find(code => code.includes('function montar(app)'));
+          if (!shell) throw new Error('script de montagem não localizado');
+          new vm.Script(shell);
+          for (const expected of ["v20260908-24 JS desligado", "const APP_VERSAO = '20260908-24';", 'data-uvis-cosmetico-processo']) {
+            if (!html.includes(expected)) throw new Error('ausente: ' + expected);
+          }
+          if (html.includes('String.raw\\`')) throw new Error('escape inválido antes de template string');
+          if (!html.includes("replace(/\\D/g,''")) throw new Error('normalização do processo ausente');
+          NODE
+
+          python <<'PY'
+          import json
+          import re
+          import urllib.request
+
+          process = '25351250640201090'
+          fragment = process[5:8]
+          with urllib.request.urlopen(
+              f'https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/{fragment}.json?check=20260908-24',
+              timeout=60,
+          ) as response:
+              data = json.load(response)
+          hits = [item for item in data if re.sub(r'\D', '', str(item.get('processo', ''))) == process]
+          assert hits and 'SHAMPOO FRUIT THERAPY' in hits[0].get('produto', '')
+          print('TEST OK:', hits[0]['produto'])
+          PY
+
+      - name: Commit clean result
+        run: |
+          rm .github/workflows/fix-consulta-cosmeticos-v24.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Valida consulta de cosméticos por processo 20260908-24'
+          git push origin fix-consulta-cosmeticos-v24
