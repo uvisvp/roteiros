@@ -1,0 +1,68 @@
+name: Diagnose v17 Alimentos mobile
+
+on:
+  push:
+    branches: [publish-v17-staging]
+    paths:
+      - '.github/workflows/v17-diagnose.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish-v17-staging
+      - name: Extract Alimentos lookup snippets
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .v17diag
+          mkdir -p .v17diag/blocks
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          m=re.search(r'<script[^>]+id="lz-core"[^>]*>(.*?)</script>',p,re.S)
+          if not m: raise SystemExit('lz-core missing')
+          Path('.v17diag/lz.js').write_text(m.group(1)+'\nmodule.exports=LZString;\n')
+          blocks=re.findall(r'<script type="text/plain" id="([^"]+)">(.*?)</script>',p,re.S)
+          print('packed blocks',len(blocks))
+          if len(blocks)!=36: raise SystemExit('expected 36 packed blocks')
+          for i,b in blocks:
+              Path('.v17diag/blocks/'+i.replace('/','_')+'.b64').write_text(b)
+          PY
+          cat > .v17diag/codec.js <<'JS'
+          const fs=require('fs'); const LZString=require('./lz.js');
+          const [,,input,output]=process.argv;
+          const v=LZString.decompressFromBase64(fs.readFileSync(input,'utf8').trim());
+          if(v==null) throw new Error('decompress failed '+input);
+          fs.writeFileSync(output,v);
+          JS
+          for f in .v17diag/blocks/*.b64; do node .v17diag/codec.js "$f" "${f%.b64}.src"; done
+          python - <<'PY'
+          from pathlib import Path
+          markers=['Situação do documento','Regularizado em','APRESENTAÇÃO(ÕES)','APRESENTAÇÕES','Vencimento do registro','Detentor']
+          out=[]
+          for f in Path('.v17diag/blocks').glob('*.src'):
+              s=f.read_text(errors='replace')
+              hits=[]
+              for x in markers:
+                  pos=s.find(x)
+                  if pos>=0: hits.append((x,pos))
+              if not hits: continue
+              out.append('\n===== BLOCK '+f.stem+' =====\n')
+              for x,pos in hits:
+                  a=max(0,pos-6000); b=min(len(s),pos+10000)
+                  out.append('\n--- '+x+' @ '+str(pos)+' ---\n'+s[a:b]+'\n')
+          Path('_v17-diag.txt').write_text(''.join(out))
+          if not out: raise SystemExit('markers not found')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add _v17-diag.txt
+          git commit -m 'Add v17 Alimentos layout diagnostic'
+          git push origin HEAD:publish-v17-staging
