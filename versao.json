@@ -1,5 +1,5 @@
 {
-  "versao": "20260908-19",
+  "versao": "20260908-20",
   "banco": "11.2",
   "correcoes": 5,
   "notas": "Estética: correção de navegação/listas no iPhone preservada. Drogaria: removido apenas o botão Produto / lote manual da conferência de estoque, mantendo Conferência completa · EAN · Anvisa · OCR."
