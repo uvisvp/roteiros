@@ -1,6 +1,6 @@
 {
-  "versao": "20260908-23",
+  "versao": "20260908-24",
   "banco": "11.2",
-  "correcoes": 7,
-  "notas": "Central de Consultas: consulta por processo agora tem confirmação direta no fragmento de Cosméticos, sem alterar as demais bases."
+  "correcoes": 8,
+  "notas": "Central de Consultas: corrigida e validada a consulta de Cosméticos por processo Anvisa."
 }
