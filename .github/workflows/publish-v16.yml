@@ -1,0 +1,97 @@
+name: Build v16 staging
+
+on:
+  push:
+    branches: [publish-v16-staging]
+    paths:
+      - '.github/workflows/publish-v16.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-v16:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: publish-v16-staging
+          fetch-depth: 0
+
+      - name: Rebuild and validate exact v16
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .rebuild-v16/tmp
+          base64 -d < _publish16/shell.patch.gz.b64 | gzip -d > .rebuild-v16/shell.patch
+          base64 -d < _publish16/estetica.patch.gz.b64 | gzip -d > .rebuild-v16/estetica.patch
+
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html').read_text()
+          blocks={}; out=[]; pos=0
+          pat=re.compile(r'<script type="text/plain" id="([^"]+)">(.*?)</script>',re.S)
+          for m in pat.finditer(p):
+              out.append(p[pos:m.start()])
+              blocks[m.group(1)]=m.group(2)
+              out.append(f'<script type="text/plain" id="{m.group(1)}">@@BLOCK:{m.group(1)}@@</script>')
+              pos=m.end()
+          out.append(p[pos:])
+          if len(blocks)!=36:
+              raise SystemExit(f'expected 36 packed blocks, got {len(blocks)}')
+          Path('.rebuild-v16/shell.html').write_text(''.join(out))
+          for k,v in blocks.items():
+              Path('.rebuild-v16/tmp/'+k+'.b64').write_text(v)
+          m=re.search(r'<script[^>]+id="lz-core"[^>]*>(.*?)</script>',p,re.S)
+          if not m:
+              raise SystemExit('lz-core missing')
+          Path('.rebuild-v16/lz-core.js').write_text(m.group(1)+'\nmodule.exports=LZString;\n')
+          PY
+
+          patch --batch .rebuild-v16/shell.html < .rebuild-v16/shell.patch >/dev/null
+
+          cat > .rebuild-v16/codec.js <<'JS'
+          const fs=require('fs'), LZString=require('./lz-core.js');
+          const [,,mode,input,output]=process.argv;
+          if(mode==='d') fs.writeFileSync(output,LZString.decompressFromBase64(fs.readFileSync(input,'utf8').trim()));
+          else if(mode==='c') fs.writeFileSync(output,LZString.compressToBase64(fs.readFileSync(input,'utf8')));
+          else throw Error('mode');
+          JS
+
+          node .rebuild-v16/codec.js d .rebuild-v16/tmp/app--estetica.b64 .rebuild-v16/estetica.html
+          patch --batch .rebuild-v16/estetica.html < .rebuild-v16/estetica.patch >/dev/null
+          node .rebuild-v16/codec.js c .rebuild-v16/estetica.html .rebuild-v16/tmp/app--estetica.b64
+
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('.rebuild-v16')
+          s=(root/'shell.html').read_text()
+          for p in (root/'tmp').glob('*.b64'):
+              s=s.replace('@@BLOCK:'+p.stem+'@@',p.read_text().strip())
+          if '@@BLOCK:' in s:
+              raise SystemExit('unreplaced packed block')
+          Path('index.html').write_text(s)
+          Path('sw.js').write_text(Path('_publish16/sw.js').read_text())
+          Path('versao.json').write_text(Path('_publish16/versao.json').read_text())
+          PY
+
+          echo '184b836033ad6c834d97398d8ccedc27faaf134fe2ebd0732d698756136de0ad  index.html' | sha256sum -c -
+          echo 'ecaadfa6f856123cee83d1c35178d451601787e48a4007f0cb2d119c35c67d2b  sw.js' | sha256sum -c -
+          echo '00333b16def293ed32bfdd2c8f6adc5ed183aed6be27bd2b79945337a6d408a0  versao.json' | sha256sum -c -
+          grep -q '20260907-16' index.html
+          grep -q "const VERSAO = '20260907-16'" sw.js
+          grep -q '"versao": "20260907-16"' versao.json
+          grep -q '__uvisTouchTarget' .rebuild-v16/estetica.html
+          grep -q 'uvis-theme-bottom' index.html
+
+          rm -rf _publish16 .rebuild-v16 .github/workflows/publish-v16.yml
+
+      - name: Commit validated v16 tree
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Validate inspection app 20260907-16'
+          git push origin HEAD:publish-v16-staging
