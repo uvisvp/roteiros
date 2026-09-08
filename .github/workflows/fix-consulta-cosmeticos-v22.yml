@@ -1,10 +1,12 @@
 name: Fix consulta cosmeticos v22
 on:
-  workflow_dispatch:
+  push:
+    branches: [fix-consulta-cosmeticos-v22]
 permissions:
   contents: write
 jobs:
   fix:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,83 +21,30 @@ jobs:
           cat > /tmp/fix.js <<'NODE'
           const fs=require('fs'),vm=require('vm');
           let html=fs.readFileSync('index.html','utf8');
-          const core=html.match(/<script id="lz-core">([\s\S]*?)<\/script>/);
-          if(!core) throw Error('lz-core not found');
-          vm.runInThisContext(core[1]);
-          function get(id){const re=new RegExp('(<[^>]+id=["\\\']'+id+'["\\\'][^>]*>)([\\s\\S]*?)(</[^>]+>)'); const m=html.match(re); if(!m) throw Error(id+' not found'); return {m,re,text:LZString.decompressFromBase64(m[2].trim())};}
-          function put(o,text){const packed=LZString.compressToBase64(text); html=html.replace(o.re,(x,a,b,c)=>a+packed+c); if(LZString.decompressFromBase64(packed)!==text) throw Error('roundtrip');}
-          const o=get('app--central-consultas'); let s=o.text;
-          fs.writeFileSync('/tmp/central-before.html',s);
-          console.log('CENTRAL SIZE',s.length);
-          for(const term of ['cosmet','processo','base-vigilancia','manifest','saneantes','medicamentos']){
-            console.log('\nTERM',term); let i=0,n=0; while((i=s.toLowerCase().indexOf(term,i))>=0 && n<20){console.log(s.slice(Math.max(0,i-350),Math.min(s.length,i+700)).replace(/\n/g,' ')); i+=term.length;n++;}
-          }
-          // Add a robust cosmetics-by-process fallback without disturbing existing base searches.
-          // It is injected immediately before the module's closing body/script area and hooks the process search button/form.
-          const marker='</body>';
-          if(!s.includes(marker)) throw Error('body marker missing');
-          const patch=`<script>
-          (function(){
-            const BASE='https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/';
-            const digits=v=>String(v||'').replace(/\\D/g,'');
-            function prefix(p){const n=digits(p);return n.length>=8?n.slice(5,8):'';}
-            async function cosmeticByProcess(raw){
-              const p=digits(raw), pre=prefix(p); if(!pre||p.length<10)return [];
-              const r=await fetch(BASE+pre+'.json',{cache:'no-store'}); if(!r.ok)return [];
-              const data=await r.json();
-              const arr=Array.isArray(data)?data:Object.values(data||{}).flat();
-              return arr.filter(x=>digits(x&&x.processo)===p);
-            }
-            function processInput(){
-              const els=[...document.querySelectorAll('input')];
-              return els.find(e=>/processo/i.test((e.name||'')+' '+(e.id||'')+' '+(e.placeholder||'')+' '+(e.getAttribute('aria-label')||'')))||null;
-            }
-            function render(items){
-              if(!items.length)return false;
-              const host=document.querySelector('[data-resultados],#resultados,.resultados,.results,#resultado,.resultado');
-              if(!host)return false;
-              const cards=items.map(x=>'<div class="card" data-uvis-cosmetico-processo><strong>'+String(x.produto||x.nome_produto||'Cosmético')+'</strong><div>Processo: '+String(x.processo||'')+'</div>'+(x.regularizacao||x.registro?'<div>Registro/regularização: '+String(x.regularizacao||x.registro)+'</div>':'')+(x.detentor?'<div>Detentor: '+String(x.detentor)+'</div>':'')+(x.cnpj?'<div>CNPJ: '+String(x.cnpj)+'</div>':'')+(x.situacao?'<div>Situação: '+String(x.situacao)+'</div>':'')+'</div>').join('');
-              if(!host.querySelector('[data-uvis-cosmetico-processo]'))host.insertAdjacentHTML('beforeend',cards);
-              return true;
-            }
-            async function run(){const i=processInput();if(!i||!i.value)return;try{const a=await cosmeticByProcess(i.value); if(a.length){setTimeout(()=>render(a),150);setTimeout(()=>render(a),700);}}catch(e){console.warn('Consulta cosméticos por processo:',e);}}
-            document.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&/consult|buscar|pesquis/i.test(b.textContent||''))run();},true);
-            document.addEventListener('submit',()=>run(),true);
-            window.UVISCosmeticosPorProcesso=cosmeticByProcess;
-          })();
-          <\/script>`;
-          s=s.replace(marker,patch+marker);
-          if(!s.includes('UVISCosmeticosPorProcesso')) throw Error('patch failed');
-          put(o,s);
-          html=html.replaceAll('20260908-21','20260908-22');
-          fs.writeFileSync('index.html',html);
+          const core=html.match(/<script id="lz-core">([\s\S]*?)<\/script>/); if(!core) throw Error('lz-core not found'); vm.runInThisContext(core[1]);
+          function get(id){const re=new RegExp('(<[^>]+id=["\\\']'+id+'["\\\'][^>]*>)([\\s\\S]*?)(</[^>]+>)');const m=html.match(re);if(!m)throw Error(id+' not found');return {re,text:LZString.decompressFromBase64(m[2].trim())};}
+          function put(o,text){const packed=LZString.compressToBase64(text);html=html.replace(o.re,(x,a,b,c)=>a+packed+c);if(LZString.decompressFromBase64(packed)!==text)throw Error('roundtrip');}
+          const o=get('app--central-consultas');let s=o.text;const marker='</body>';if(!s.includes(marker))throw Error('body marker missing');
+          const patch=`<script>(function(){const BASE='https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/';const digits=v=>String(v||'').replace(/\\D/g,'');function prefix(p){const n=digits(p);return n.length>=8?n.slice(5,8):'';}async function cosmeticByProcess(raw){const p=digits(raw),pre=prefix(p);if(!pre||p.length<10)return[];const r=await fetch(BASE+pre+'.json',{cache:'no-store'});if(!r.ok)return[];const data=await r.json();const arr=Array.isArray(data)?data:Object.values(data||{}).flat();return arr.filter(x=>digits(x&&x.processo)===p);}function processInput(){return[...document.querySelectorAll('input')].find(e=>/processo/i.test((e.name||'')+' '+(e.id||'')+' '+(e.placeholder||'')+' '+(e.getAttribute('aria-label')||'')))||null;}function render(items){if(!items.length)return false;const host=document.querySelector('[data-resultados],#resultados,.resultados,.results,#resultado,.resultado');if(!host)return false;const cards=items.map(x=>'<div class="card" data-uvis-cosmetico-processo><strong>'+String(x.produto||x.nome_produto||'Cosmético')+'</strong><div>Processo: '+String(x.processo||'')+'</div>'+(x.regularizacao||x.registro?'<div>Registro/regularização: '+String(x.regularizacao||x.registro)+'</div>':'')+(x.detentor?'<div>Detentor: '+String(x.detentor)+'</div>':'')+(x.cnpj?'<div>CNPJ: '+String(x.cnpj)+'</div>':'')+(x.situacao?'<div>Situação: '+String(x.situacao)+'</div>':'')+'</div>').join('');if(!host.querySelector('[data-uvis-cosmetico-processo]'))host.insertAdjacentHTML('beforeend',cards);return true;}async function run(){const i=processInput();if(!i||!i.value)return;try{const a=await cosmeticByProcess(i.value);if(a.length){setTimeout(()=>render(a),150);setTimeout(()=>render(a),700);}}catch(e){console.warn('Consulta cosméticos por processo:',e);}}document.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&/consult|buscar|pesquis/i.test(b.textContent||''))run();},true);document.addEventListener('submit',()=>run(),true);window.UVISCosmeticosPorProcesso=cosmeticByProcess;})();<\/script>`;
+          s=s.replace(marker,patch+marker);if(!s.includes('UVISCosmeticosPorProcesso'))throw Error('patch failed');put(o,s);html=html.replaceAll('20260908-21','20260908-22');fs.writeFileSync('index.html',html);
           NODE
           node /tmp/fix.js
-          node - <<'NODE'
-          const fs=require('fs'),vm=require('vm');let h=fs.readFileSync('index.html','utf8');let c=h.match(/<script id="lz-core">([\s\S]*?)<\/script>/);vm.runInThisContext(c[1]);let m=h.match(/<[^>]+id=["']app--central-consultas["'][^>]*>([\s\S]*?)<\/[^>]+>/);let s=LZString.decompressFromBase64(m[1].trim()); if(!s.includes('UVISCosmeticosPorProcesso'))throw Error('missing final patch'); console.log('PATCH OK');
-          NODE
           python - <<'PY'
           import json
-          p='versao.json'; d=json.load(open(p,encoding='utf8')); d['versao']='20260908-22'; d['correcoes']=int(d.get('correcoes',0))+1; d['notas']='Central de Consultas: corrigida consulta de Cosméticos por processo Anvisa, preservando as demais consultas.'; open(p,'w',encoding='utf8').write(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
-          p='sw.js'; s=open(p,encoding='utf8').read(); s=s.replace('20260908-21','20260908-22'); open(p,'w',encoding='utf8').write(s)
+          p='versao.json';d=json.load(open(p,encoding='utf8'));d['versao']='20260908-22';d['correcoes']=int(d.get('correcoes',0))+1;d['notas']='Central de Consultas: corrigida consulta de Cosméticos por processo Anvisa, preservando as demais consultas.';open(p,'w',encoding='utf8').write(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+          p='sw.js';s=open(p,encoding='utf8').read().replace('20260908-21','20260908-22');open(p,'w',encoding='utf8').write(s)
           PY
-      - name: Validate test process against live base
+      - name: Validate live test
         run: |
           python - <<'PY'
           import json,urllib.request,re
-          p='25351.448318/2021-51'; n=re.sub(r'\D','',p); pre=n[5:8]
-          u=f'https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/{pre}.json'
-          data=json.load(urllib.request.urlopen(u,timeout=30))
-          vals=data if isinstance(data,list) else sum([v if isinstance(v,list) else [v] for v in data.values()],[])
-          hits=[x for x in vals if re.sub(r'\D','',str(x.get('processo','')))==n]
-          assert hits, (pre,len(vals))
-          print('TEST OK',pre,hits[0])
+          n=re.sub(r'\D','','25351.448318/2021-51');pre=n[5:8];data=json.load(urllib.request.urlopen(f'https://uvisvp.github.io/base-vigilancia/dados/cosmeticos/{pre}.json',timeout=30));vals=data if isinstance(data,list) else sum([v if isinstance(v,list) else [v] for v in data.values()],[]);hits=[x for x in vals if re.sub(r'\D','',str(x.get('processo','')))==n];assert hits;print('TEST OK',hits[0])
           PY
       - name: Commit clean result
         run: |
           rm .github/workflows/fix-consulta-cosmeticos-v22.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html sw.js versao.json .github/workflows/fix-consulta-cosmeticos-v22.yml
+          git add -A
           git commit -m 'Fix cosmetic process lookup 20260908-22'
           git push origin fix-consulta-cosmeticos-v22
