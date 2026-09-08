@@ -1,0 +1,6 @@
+{
+  "versao": "20260907-16",
+  "banco": "11.2",
+  "correcoes": 2,
+  "notas": "Correção da navegação móvel do módulo Serviços > Estética e padronização da faixa fixa inferior para herdar automaticamente a cor-tema de cada núcleo."
+}
