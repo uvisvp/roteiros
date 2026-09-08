@@ -1,0 +1,1805 @@
+
+===== BLOCK app--distribuidoras-transportadoras =====
+
+--- Detentor @ 132574 ---
+apresentado ou não aceito'||p.residual==='Não controlado'})){bad=true;msg='Há plano não aceito ou risco residual não controlado. Reavalie a coerência da classificação final.'}else if(!n.length&&c&&c!=='Cumpre as Boas Práticas'){bad=true;msg='Não há NC registradas; confira a coerência da classificação selecionada.'}return bad?`<div class=\"note danger\" style=\"margin-top:10px\">${esc(msg)}</div>`:''}
+function planView(){let ncs=allNCs(),due=businessDue(state.meta.end,40);return `<div class="panel"><h3>Análise do plano de ação</h3><p class="mini">A análise é da equipe inspetora e deve ocorrer antes da finalização e entrega do relatório. O plano deve ser específico, mensurável, atingível, relevante e temporal.</p>${state.meta.end?`<div class="note">Teto de entrega do relatório: <b>${due||'calcular conforme calendário oficial'}</b> — estimativa de 40 dias úteis sem feriados.</div>`:''}</div>${ncs.length?ncs.map(planItem).join(''):`<div class="panel note">Ainda não há NC para análise. Se a inspeção terminar sem NC, registre a avaliação final e encaminhe a minuta diretamente ao par técnico.</div>`}<div class="panel"><h3>Avaliação final da equipe</h3><div class="grid">${field('plan.risk','Considerações finais / avaliação de riscos','textarea')}${field('plan.classification','Classificação técnica final','select',['Cumpre as Boas Práticas','Cumpre as Boas Práticas com Ação Corretiva','Não cumpre as Boas Práticas'])}${field('plan.activities','Atividades abrangidas pela classificação')}${field('plan.measures','Medidas adotadas / documentos emitidos','textarea')}${field('plan.attachments','Anexos do relatório','textarea')}</div>${classificationNote()}<div class="toolbar"><button class="btn" data-action="previewReport">Prévia da minuta do Anexo I</button><button class="btn" data-dist-draft>Baixar minuta do Anexo I</button><button class="btn" data-action="goPeer">Encaminhar para revisão por par →</button></div></div>`}
+function peerView(){let p=state.peer,allYes=DATA.peerAxes.every(a=>p.axes[a[0]]==='Sim'),dueSend=businessDue(state.delivery.date,10);return `<div class="panel"><h3>Revisão por par técnico — Anexo III</h3><p class="mini">A revisão ocorre antes da entrega à empresa. Comentário é obrigatório quando houver reprovação. O formulário de revisão é registro interno.</p><div class="grid">${field('peer.name','Nome do par técnico')}${field('peer.date','Data da devolução','date')}</div></div><div class="panel">${DATA.peerAxes.map(a=>`<div class="nc"><h4>${esc(a[1])}</h4><p class="mini">${esc(a[2])}</p><div class="seg"><button data-peeraxis="${a[0]}" data-v="Sim" aria-pressed="${p.axes[a[0]]==='Sim'}">Sim</button><button data-peeraxis="${a[0]}" data-v="Não" aria-pressed="${p.axes[a[0]]==='Não'}">Não</button></div></div>`).join('')}<div class="grid">${field('peer.comments','Comentários do par técnico','textarea')}${field('peer.status','Status final','select',['Aprovado','Reprovado'])}</div>${p.status==='Aprovado'&&!allYes?`<div class="note danger" style="margin-top:10px">Há eixo marcado como “Não”. O status “Aprovado” não será aceito até a revisão ficar coerente.</div>`:''}<div class="toolbar"><button class="btn" data-dist-review>Registrar revisão desta minuta</button><button class="btn" data-action="exportPeer">Baixar Anexo III (.docx)</button><button class="btn primary" data-action="exportFinal" ${peerApproved()?'':'disabled'}>Baixar Relatório Final — Anexo I (.docx)</button><button class="btn" data-action="previewReport">Prévia do relatório</button></div></div><div class="panel"><h3>Aprovação, emissão, entrega e encaminhamentos</h3><div class="grid">${field("approval.name","Aprovação para emissão — responsável")}${field("approval.date","Data da aprovação","date")}</div><p class="mini">Versão da minuta: ${distVersion()}. ${state.peer.reviewedContent&&!peerApproved()?"A minuta mudou ou a revisão está incompleta. Registre uma nova revisão antes de emitir.":""}</p><div class="grid three">${field('delivery.date','Data de entrega à empresa','date')}${field('delivery.terms','Termos e autos entregues')}${field('delivery.receiver','Responsável pelo recebimento')}${field('delivery.document','Documento de identificação')}${field('delivery.method','Meio / comprovante de entrega')}${field('delivery.sei','Processo / documento SEI de registro')}</div>${state.delivery.date?`<div class="note" style="margin-top:10px">POP-O-SNVS-023: se não houver medida preventiva de interesse sanitário nacional, prazo geral de envio é 10 dias úteis após a entrega. Estimativa sem feriados: <b>${dueSend||'—'}</b>. Casos com medida preventiva de interesse sanitário nacional: <b>72 horas</b>.</div>`:''}<details style="margin-top:12px"><summary><b>Alerta rápido — somente quando aplicável</b></summary><div style="padding-top:10px"><label class="check"><input type="checkbox" data-pathcheck="alert.enabled" ${state.alert.enabled?'checked':''}>Há desvio/recolhimento que exige preparação de alerta rápido</label>${state.alert.enabled?'<p class="note">Alerta rápido: prazo de 72 horas a partir da confirmação do fato. Esse encaminhamento pode anteceder a conclusão do relatório. Preparar a notificação e o registro NOTIVISA; informações ausentes devem constar como Não disponível. Não há envio automático.</p>'+alertFields():''}</div></details></div>`}
+function alertFields(){return `<div class="grid" style="margin-top:10px">${field('alert.class','Tipo / classe','select',['Desvio de qualidade Classe I','Desvio de qualidade Classe II','Falsificação','Outros'])}${field('alert.notivisa','Número NOTIVISA/PERIWEB')}${field('alert.product','Produto')}${field('alert.registration','Número de registro')}${field('alert.trade','Nome comercial')}${field('alert.generic','DCI / nome genérico')}${field('alert.form','Forma farmacêutica')}${field('alert.dose','Dose')}${field('alert.lot','Lote / granel')}${field('alert.validity','Validade')}${field('alert.presentation','Apresentação comercial')}${field('alert.manufacture','Data de fabricação')}${field('alert.holder','Detentor do registro')}${field('alert.manufacturer','Fabricante — nome, endereço, RT e contato')}${field('alert.site','Local específico de fabricação — endereço, RT e contato')}${field('alert.to','Destinatário')}${field('alert.signature','Identificação do signatário')}${field('alert.confirmed','Confirmação do fato — data e hora','datetime-local')}${field('alert.recallCompany','Empresa que realiza o recolhimento')}${field('alert.recallNumber','Número do recolhimento')}${field('alert.deviation','Detalhes do desvio / motivação','textarea')}${field('alert.distribution','Informações sobre distribuição/exportações','textarea')}${field('alert.authorityAction','Ação tomada pela autoridade emissora','textarea')}${field('alert.proposedAction','Ação proposta','textarea')}${field('alert.issuer','Autoridade emissora')}${field('alert.contact','Pessoa de contato / telefone')}${field('alert.date','Data','date')}${field('alert.time','Hora','time')}</div><div class="toolbar"><button class="btn" data-action="exportAlert">Baixar Anexo II do POP-023 (.docx)</button></div>`}
+
+
+function sectionHasReport(sec){if(!sec||!applicable(sec))return false;return !!String(state.narratives[sec.id]||'').trim()||sec.questions.some(q=>state.answers[q.id]?.status)|| (sec.id==='sistemas'&&(state.stockBasket||[]).length)}
+function baseReportText(){let m=state.meta,ncs=allNCs(),lines=[];let add=(h,t)=>{lines.push(h);lines.push(t||'Não informado.');lines.push('')};lines.push('RELATÓRIO DE INSPEÇÃO');lines.push(m.company||'Estabelecimento não informado');lines.push('');add('1. IDENTIFICAÇÃO DO ESTABELECIMENTO',[`Nome fantasia: ${m.fantasy||''}`,`Razão social: ${m.company||''}`,`CNPJ: ${m.cnpj||''} ${m.unit||''}`,`Endereço: ${m.address||''}`,`Fone: ${m.phone||''}`,`E-mail: ${m.email||''}`,`Responsável legal: ${m.legal||''}`,`Responsável técnico: ${m.rt||''}`,`Licença: ${m.license||''}`,`Atividades licenciadas: ${(m.activities||[]).join(', ')}`].join('\n'));add('2. DADOS DA AUTORIZAÇÃO DE FUNCIONAMENTO',`AFE: ${m.afe||''}\nAE: ${m.ae||''}`);add('3. DADOS DA INSPEÇÃO',`Período: ${m.start||''} a ${m.end||''}\nObjetivo: ${m.objective||''}\nÚltima inspeção: ${m.last||''}\nPrimeira inspeção: ${m.first||''}`);add('4. PESSOAS CONTATADAS',(m.contacts||[]).filter(x=>x.name).map(x=>`${x.name} — ${x.role||''} — ${x.contact||''}`).join('\n'));add('5. INFORMAÇÕES GERAIS',state.report.general);add('6. NÃO CONFORMIDADES ANTERIORES',state.report.previous);add('7. TERCEIRIZAÇÃO E PRESTAÇÃO DE SERVIÇOS',distSectionReport(DATA.sections.find(x=>x.id==='terceirizacao')));add('7.1 Qualificação do prestador de serviço',state.report.terceirizacao_qual);add('8. PESSOAL',distSectionReport(DATA.sections.find(x=>x.id==='pessoal')));add('8.1 Higiene pessoal e saúde do trabalhador',state.report.higiene);['recebimento','armazenamento','termolabeis','expedicao'].forEach(id=>{let s=DATA.sections.find(x=>x.id===id);if(s&&sectionHasReport(s))add(s.reportTitle,distSectionReport(s))});let tr=DATA.sections.find(x=>x.id==='transporte');if(applicable(tr)||state.narratives.transporte)add(tr.reportTitle,distSectionReport(tr));['sgq','documentacao','fornecedores','recolhimento','autoinspecao','residuos','desvios','reclamacoes','sistemas','controlados'].forEach(id=>{let s=DATA.sections.find(x=>x.id===id);if(s&&sectionHasReport(s))add(s.reportTitle,distSectionReport(s))});if(m.activities.includes('Importar'))['cq_instalacoes','cq_atividades','cq_padroes','cq_oos','cq_liberacao'].forEach(id=>{let s=DATA.sections.find(x=>x.id===id);if(sectionHasReport(s))add(s.reportTitle,distSectionReport(s))});let pa=ncs.map((n,i)=>'NC '+(i+1)+'\n'+distPlanText(n)).join('\n\n');add('13. CONSIDERAÇÕES FINAIS / AVALIAÇÃO DE RISCOS',(state.plan.risk||'')+(pa?'\n\nAnálise do plano de ação:\n'+pa:''));add('14. CONCLUSÃO',`${state.plan.classification||'Classificação não definida'}\nAtividades: ${state.plan.activities||m.activities.join(', ')}`);add('15. MEDIDAS ADOTADAS / DOCUMENTOS EMITIDOS',state.plan.measures);add('16. ANEXOS',state.plan.attachments);add('17. EQUIPE INSPETORA',(m.team||[]).filter(x=>x.name).map(x=>`${x.name} — ${x.institution||''} — ${x.code||''}`).join('\n'));add('18. REGISTRO DE REVISÃO PELO PAR TÉCNICO',`Par técnico: ${state.peer.name||''}\nData: ${state.peer.date||''}\nStatus: ${state.peer.status||''}\nComentários: ${state.peer.comments||''}`);add('19. REGISTRO DE ENTREGA DO RELATÓRIO, TERMOS E AUTOS',`Termos e autos: ${state.delivery.terms||''}\nRecebido em: ${state.delivery.date||''}\nResponsável: ${state.delivery.receiver||''}\nDocumento: ${state.delivery.document||''}\nMeio/comprovante: ${state.delivery.method||''}`);return lines.join('\n')}
+function reportText(){return baseReportText()}
+function preview(title,text){byId('modalTitle').textContent=title;byId('modalBody').innerHTML=`<div class="reportpreview">${esc(text)}</div>`;byId('modal').showModal()}
+function businessDue(iso,n){if(!iso)return'';let d=new Date(iso+'T12:00:00');if(isNaN(d))return'';let c=0;while(c<n){d.setDate(d.getDate()+1);let w=d.getDay();if(w!==0&&w!==6)c++}return d.toLocaleDateString('pt-BR')}
+function dock(){let info=byId('dockInfo'),next=byId('dockNext'),back=byId('dockBack');if(state.view==='home'){back.textContent='← Voltar ao núcleo';next.textContent='Abrir roteiro';info.textContent='Escolha um dos dois cards.'}else if(state.view==='inspection'){back.textContent='← Dois cards';next.textContent=state.itab==='anexo2'?'Fechamento do relatório':'Anexo II / NCs';info.textContent=`${allNCs().length} NC no ciclo · rascunho local`}else{back.textContent='← Dois cards';next.textContent=state.ctab==='plan'?'Par técnico':'Relatório final';info.textContent=peerApproved()?'Revisão aprovada':'Relatório final depende da aprovação do par técnico'}}
+function parentBack(){try{if(parent&&parent!==window&&typeof parent.__cascaVoltarDireto==='function'){parent.__cascaVoltarDireto();return}}catch(e){}try{parent.postMessage({__casca:'voltar'},'*')}catch(e){history.back()}}
+function modalClose(){if(byId('modal').open)byId('modal').close()}
+// ---- Minimal DOCX writer (ZIP store, no external dependency) ----
+function crc32(bytes){let table=crc32.table||(crc32.table=(()=>{let t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})());let c=0xffffffff;for(let b of bytes)c=table[(c^b)&255]^(c>>>8);return(c^0xffffffff)>>>0}
+function txt2u8(s){return new TextEncoder().encode(s)}function zip(arqs){let partes=[],central=[],off=0;let u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];arqs.forEach(a=>{let nome=txt2u8(a.nome),dados=a.dados,c=crc32(dados),lh=[].concat([80,75,3,4],u16(20),u16(0),u16(0),u16(0),u16(0),u32(c),u32(dados.length),u32(dados.length),u16(nome.length),u16(0));partes.push(new Uint8Array(lh),nome,dados);central.push({nome,crc:c,tam:dados.length,off});off+=lh.length+nome.length+dados.length});let ini=off,cd=[];central.forEach(e=>{let h=[].concat([80,75,1,2],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(e.crc),u32(e.tam),u32(e.tam),u16(e.nome.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(e.off));cd.push(new Uint8Array(h),e.nome);off+=h.length+e.nome.length});let eocd=new Uint8Array([].concat([80,75,5,6],u16(0),u16(0),u16(central.length),u16(central.length),u32(off-ini),u32(ini),u16(0))),todos=partes.concat(cd,[eocd]),tot=todos.reduce((a,p)=>a+p.length,0),saida=new Uint8Array(tot),p=0;todos.forEach(x=>{saida.set(x,p);p+=x.length});return saida}
+function xml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}function wp(t,o={}){return `<w:p><w:pPr>${o.al?`<w:jc w:val="${o.al}"/>`:''}<w:spacing w:before="${o.before||0}" w:after="${o.after??80}"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="${(o.sz||10)*2}"/>${o.b?'<w:b/>':''}</w:rPr><w:t xml:space="preserve">${xml(t)}</w:t></w:r></w:p>`}
+function wc(t,w,o={}){return `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.fill?`<w:shd w:val="clear" w:fill="${o.fill}"/>`:''}<w:vAlign w:val="top"/></w:tcPr>${wp(t,o)}</w:tc>`}function wt(cols,rows){let total=cols.reduce((a,b)=>a+b,0);return `<w:tbl><w:tblPr><w:tblW w:w="${total}" w:type="dxa"/><w:tblBorders>${['top','left','bottom','right','insideH','insideV'].map(b=>`<w:${b} w:val="single" w:sz="5" w:color="000000"/>`).join('')}</w:tblBorders></w:tblPr><w:tblGrid>${cols.map(c=>`<w:gridCol w:w="${c}"/>`).join('')}</w:tblGrid>${rows.join('')}</w:tbl>`}
+function wrow(a,b){return `<w:tr>${wc(a,3000,{b:true,fill:'FFFFFF',sz:9})}${wc(b,6300,{sz:9})}</w:tr>`}
+function docx(parts,name){let doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${parts.join('')}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1000" w:right="1000" w:bottom="1000" w:left="1000"/></w:sectPr></w:body></w:document>`,ct=`<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`,rels=`<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`,bytes=zip([{nome:'[Content_Types].xml',dados:txt2u8(ct)},{nome:'_rels/.rels',dados:txt2u8(rels)},{nome:'word/document.xml',dados:txt2u8(doc)}]),blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1200)}
+
+===== BLOCK app--central-consultas =====
+
+--- Detentor @ 38516 ---
+next][0];
+  $('hint').innerHTML=cfg[next][1];
+  $('helpBox').innerHTML=cfg[next][2];
+  $('q').value='';$('q').classList.remove('invalid');
+  $('q').inputMode=next==='lote'?'text':'numeric';
+  $('detect').innerHTML='';status('');
+}
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('helpToggle').onclick=()=>{const b=$('helpBox'),open=b.hasAttribute('hidden');b.toggleAttribute('hidden',!open);$('helpToggle').setAttribute('aria-expanded',String(open))};
+$('q').addEventListener('input',()=>{mascara();sugerir()});
+
+/* =========================================================
+   CONSULTA
+   ========================================================= */
+function erroAmigavel(e){
+  const m=String(e?.message||e||'');
+  if(/Failed to fetch|NetworkError|Load failed/i.test(m))return 'Não foi possível alcançar as bases. Verifique a conexão e tente de novo.';
+  if(/aborted|AbortError/i.test(m))return 'A base demorou demais para responder. Tente novamente ou repita em local com sinal melhor.';
+  if(/HTTP 5\d\d/.test(m))return 'A fonte das bases está indisponível no momento (erro do servidor).';
+  if(/HTTP 4\d\d/.test(m))return 'Fragmento da base não encontrado na origem. Confirme o número digitado.';
+  return m||'Falha não identificada na consulta.';
+}
+function forcar(v,texto){
+  return `<div class="notice warn">${texto}<div class="row"><button class="btn small" id="forceGo" type="button">Consultar assim mesmo</button></div></div>`;
+}
+async function runQuery(forcado=false){
+  const raw=$('q').value.trim();
+  if(!raw){status('Digite o dado da consulta.','warn');$('q').focus();return}
+  if(navigator.onLine===false&&!cacheTTL()){
+    status('Sem conexão e sem bases guardadas neste aparelho. Ative o armazenamento local para consultar offline.','bad');return;
+  }
+  /* validação de dígito verificador — só bloqueia onde existe padrão definido */
+  if(!forcado){
+    const d=digits(raw);
+    if(mode==='cnpj'&&d.length===14&&!dvCnpj(d)){
+      $('q').classList.add('invalid');
+      status(forcar(raw,'O dígito verificador deste CNPJ não confere — normalmente é erro de digitação. Corrija antes de registrar o resultado em documento.'),'warn');
+      $('forceGo').onclick=()=>runQuery(true);return;
+    }
+    if(mode==='ean'&&[8,12,13,14].includes(d.length)&&!dvGtin(d)){
+      $('q').classList.add('invalid');
+      status(forcar(raw,'O dígito verificador deste EAN/GTIN não confere. Confira o código de barras da embalagem.'),'warn');
+      $('forceGo').onclick=()=>runQuery(true);return;
+    }
+  }
+  $('q').classList.remove('invalid');$('detect').innerHTML='';
+  $('search').disabled=true;cacheHits.clear();
+  status('Consultando os índices…');
+  $('results').className='results-empty';$('results').textContent='Cruzando as fontes compatíveis…';
+  try{
+    let r={main:[],alerts:[],irregular:[]};
+    if(mode==='registro'){const v=digits(raw);if(v.length<3)throw Error('Digite o registro completo.');[r.main,r.alerts,r.irregular]=await Promise.all([baseByRegistro(v),alerts('registro',v),irregular('registro',v)])}
+    else if(mode==='processo'){const v=digits(raw);if(v.length<12)throw Error('Digite o processo completo (13 a 17 dígitos).');const idx=await json(`indices/processos/${shardProcess(v)}.json`);r.main=await materialize(idx?.[v]||[],v);const can=await json(`cannabis/processos/${shardProcess(v)}.json`);r.main.push(...(can||[]).filter(x=>digits(x.processo)===v).map(x=>({...x,_base:'cannabis'})))}
+    else if(mode==='cnpj'){const v=digits(raw);if(v.length!==14)throw Error('O CNPJ deve ter 14 dígitos.');r=await byCnpj(v)}
+    else if(mode==='ean'){const v=digits(raw);if(![8,12,13,14].includes(v.length))throw Error('Digite um EAN/GTIN com 8, 12, 13 ou 14 dígitos.');r=await byEan(v)}
+    else if(mode==='afe'){const v=digits(raw);if(v.length<3)throw Error('Digite o número completo da AFE ou AE.');const idx=await json(`indices/autorizacoes/${v.slice(0,3)}.json`);const refs=idx?.[v]||[];for(const ref of refs){const c=digits(ref.c||ref.cnpj||ref.r||ref);const data=await json(`afe_ae/${c.slice(0,3)}.json`);r.main.push(...(data||[]).filter(x=>digits(x.autorizacao||x.afe||x.numero)===v).map(x=>({...x,_base:'afe_ae'})))}}
+    else{const v=norm(raw);if(v.length<2)throw Error('Digite ao menos 2 caracteres do lote, série ou modelo.');[r.alerts,r.irregular]=await Promise.all([alerts('lote',raw),irregular('lote',raw)])}
+    ultimo=r;filtro='';render();
+    saveSearch({mode,valor:raw,quando:new Date().toISOString(),quantidade:r.main.length+r.alerts.length+r.irregular.length});
+    const doCache=cacheHits.size?` ${cacheHits.size} fragmento(s) vieram das bases guardadas neste aparelho.`:'';
+    status('Consulta concluída. Cada bloco deve ser interpretado separadamente.'+doCache,'ok');
+    if(!localStorage.getItem(CACHE_KEY)) setTimeout(()=>$('cacheDialog').showModal(),700);
+  }catch(e){
+    $('results').className='';$('results').innerHTML='<div class="notice bad">'+esc(erroAmigavel(e))+'</div>';
+    status('Não foi possível concluir esta consulta.','bad');
+  }finally{$('search').disabled=false}
+}
+
+/* =========================================================
+   RENDERIZAÇÃO — subgrupos por base + filtro por texto
+   ========================================================= */
+const order=['produto','titulo','numero_alerta','data_publicacao','area','tipo_produto','registro','regularizacao','processo','cnpj','razao_social','nome_fantasia','detentor','empresa','fabricante','principio_ativo','apresentacao','laboratorio','categoria','classe','classe_terapeutica','situacao','vencimento','marcas','atividade','municipio','uf','problema','acao','recomendacoes','descricao_produto','autorizacao','afe','tipo','lote','modelo','serie'];
+const field={produto:'Produto',titulo:'Título',numero_alerta:'Alerta',data_publicacao:'Publicação',area:'Área',tipo_produto:'Tipo de produto',registro:'Registro',regularizacao:'Regularização',processo:'Processo',cnpj:'CNPJ',razao_social:'Razão social',nome_fantasia:'Nome fantasia',detentor:'Detentor',empresa:'Empresa',fabricante:'Fabricante',principio_ativo:'Princípio ativo',apresentacao:'Apresentação',laboratorio:'Laboratório',categoria:'Categoria',classe:'Classe',classe_terapeutica:'Classe terapêutica',situacao:'Situação',vencimento:'Vencimento',marcas:'Marcas',atividade:'Atividades autorizadas',municipio:'Município',uf:'UF',problema:'Problema identificado',acao:'Ação de campo',recomendacoes:'Recomendações',descricao_produto:'Produto afetado',autorizacao:'Autorização',afe:'AFE',tipo:'Tipo',lote:'Lote',modelo:'Modelo',serie:'Série',ggrem:'GGREM',registro_apresentacao:'Registro da apresentação',referencia:'Referência',eans:'EAN / GTIN'};
+
+function valor(k,v){
+  if(k==='situacao'){
+    const t=String(v).toLowerCase();
+    const cor=/inativ|cancel|suspens|vencid|caduc|indefer/.test(t)?'--bad':/ativ|valid|defer/.test(t)?'--ok':'--muted';
+    return `<span class="chips"><i style="background:var(${cor==='--bad'?'--badbg':cor==='--ok'?'--okbg':'--soft'});color:var(${cor});font-weight:700">${esc(v)}</i></span>`;
+  }
+  if(k==='vencimento'&&/^\d{6}$/.test(String(v)))return esc(String(v).slice(0,2)+'/'+String(v).slice(2));
+  if(k==='cnpj'&&/^\d{14}$/.test(String(v)))return esc(fmtCnpj(String(v)));
+  if(k==='detentor'||k==='laboratorio'){return esc(String(v).replace(/^\d{14}\s*-\s*/,''))}
+  if(k==='atividade'||k==='marcas'){
+    const partes=String(v).split(/\s*[;]\s*|\s+;\s+/).map(x=>x.trim()).filter(Boolean);
+    if(partes.length>1)return '<span class="chips">'+partes.map(p=>`<i>${esc(p)}</i>`).join('')+'</span>';
+  }
+  if(Array.isArray(v))return esc(v.join(' · '));
+  return esc(v);
+}
+function card(x){
+  const titulo=x.produto||x.titulo||x.t||x.razao_social||x.empresa||x.detentor||x.nome_fantasia||'Registro localizado';
+  const OCULTOS=new Set(['b','r','p','i','a','t','d']);   /* chaves curtas de índice */
+  const keys=[...new Set(order.concat(Object.keys(x||{})))]
+    .filter(k=>!k.startsWith('_')&&!OCULTOS.has(k)&&x[k]!=null&&x[k]!==''&&(typeof x[k]!=='object'||Array.isArray(x[k])))
+    .filter(k=>!((k==='produto'||k==='titulo'||k==='razao_social')&&String(x[k])===String(titulo)))
+    /* referência costuma repetir registro ou processo nos índices derivados */
+    .filter(k=>!(k==='referencia'&&(String(x[k])===String(x.registro)||String(x[k])===String(x.processo))))
+    .slice(0,30);
+  return `<article class="result"><h4>${esc(titulo)}</h4><div class="kv">${keys.map(k=>`<b>${esc(field[k]||k.replaceAll('_',' '))}</b><span>${valor(k,x[k])}</span>`).join('')}</div></article>`;
+}
+function texto(x){return Object.entries(x||{}).filter(([k])=>!k.startsWith('_')).map(([,v])=>Array.isArray(v)?v.join(' '):String(v??'')).join(' ').toLowerCase()}
+function aplicaFiltro(items){ if(!filtro)return items; const f=filtro.toLowerCase(); return items.filter(x=>texto(x).includes(f)) }
+
+const PAGINA=25;
+function subgrupos(items,kind,idPrefixo){
+  const porBase=new Map();
+  for(const x of items){const b=x._base||(kind==='alert'?'alertas_sanitarios':kind==='fiscal'?'produtos_irregulares':'produto');
+    if(!porBase.has(b))porBase.set(b,[]);porBase.get(b).push(x)}
+  const bases=[...porBase.entries()].sort((a,b)=>b[1].length-a[1].length);
+  return bases.map(([b,lista],i)=>{
+    const aberto=(bases.length===1||lista.length<=6||i===0)?' open':'';
+    const mostra=lista.slice(0,PAGINA);
+    return `<details class="sub-base"${aberto}><summary>${esc(labels[b]||b)}<span class="tag">${lista.length}</span></summary>
+      <div class="sub-body" data-lista="${idPrefixo}-${esc(b)}">
+        ${mostra.map(card).join('')}
+        ${lista.length>PAGINA?`<div class="more"><button class="btn small" type="button" data-mais="${idPrefixo}|${esc(b)}|${PAGINA}">Mostrar mais ${Math.min(PAGINA,lista.length-PAGINA)} de ${lista.length-PAGINA} restantes</button></div>`:''}
+      </div></details>`;
+  }).join('');
+}
+function bloco(titulo,items,kind,idPrefixo){
+  if(!items.length)return '';
+  return `<section class="group ${kind}"><div class="grouphead"><h3>${esc(titulo)}</h3><span>${items.length} resultado(s)</span></div>${subgrupos(items,kind,idPrefixo)}</section>`;
+}
+function render(){
+  if(!ultimo)return;
+  const m=aplicaFiltro(ultimo.main),a=aplicaFiltro(ultimo.alerts),i=aplicaFiltro(ultimo.irregular);
+  const bruto=ultimo.main.length+ultimo.alerts.length+ultimo.irregular.length;
+  const vis=m.length+a.length+i.length;
+  let html=`<div class="summary">
+    <div class="sum"><b>${m.length}</b><span>cadastros e autorizações</span></div>
+    <div class="sum${a.length?' on':''}"><b>${a.length}</b><span>alertas relacionados</span></div>
+    <div class="sum${i.length?' on':''}"><b>${i.length}</b><span>medidas fiscais relacionadas</span></div></div>`;
+  if(bruto>PAGINA)html+=`<div class="filterbar"><input id="filtro" type="search" placeholder="Filtrar por produto, marca, situação, município…" value="${esc(filtro)}" aria-label="Filtrar resultados"><span class="count">${vis} de ${bruto}</span></div>`;
+  html+=bloco('Cadastro regulatório e autorizações',m,'','main');
+  if(a.length)html+='<div class="notice warn">Alerta sanitário não significa, por si só, proibição ou irregularidade do produto inspecionado. Confira lote, modelo e validade antes de concluir.</div>'+bloco('Alertas sanitários relacionados',a,'alert','al');
+  if(i.length)html+=bloco('Produtos irregulares e medidas fiscais',i,'fiscal','ir');
+  if(!vis)html+=`<div class="notice warn">${bruto?'Nenhum resultado corresponde ao filtro aplicado.':'Nenhuma correspondência exata foi localizada. Isso não significa regularidade nem irregularidade; confirme a escrita e a fonte oficial.'}</div>`;
+  $('results').className='';$('results').innerHTML=html;
+  const f=$('filtro');
+  if(f){let t;f.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{const pos=f.selectionStart;filtro=f.value;render();const nf=$('filtro');if(nf){nf.focus();try{nf.setSelectionRange(pos,pos)}catch(e){}}},220)}}
+  $('results').querySelectorAll('[data-mais]').forEach(b=>b.onclick=()=>{
+    const [pref,base,de]=b.dataset.mais.split('|');
+    const fonte=pref==='main'?m:pref==='al'?a:i;
+    const lista=fonte.filter(x=>(x._base||(pref==='al'?'alertas_sanitarios':pref==='ir'?'produtos_irregulares':'produto'))===base);
+    const ini=Number(de),fim=ini+PAGINA;
+    const host=b.closest('.sub-body');
+    b.parentElement.insertAdjacentHTML('beforebegin',lista.slice(ini,fim).map(card).join(''));
+    if(fim>=lista.length)b.parentElement.remove();
+    else{b.dataset.mais=`${pref}|${base}|${fim}`;b.textContent=`Mostrar mais ${Math.min(PAGINA,lista.length-fim)} de ${lista.length-fim} restantes`}
+  });
+}
+function saveSearch(x){try{const h=JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]');h.unshift(x);localStorage.setItem(HISTORY_KEY,JSON.stringify(h.slice(0,10)))}catch(e){}}
+
+/* =========================================================
+   ESTADO DE REDE E CACHE
+   ========================================================= */
+function marcaRede(){const on=navigator.onLine!==false;const c=$('netChip');
+  c.dataset.estado=on?'online':'offline';
+  c.textContent=on?'Conectado':(cacheTTL()?'Sem conexão · usando bases guardadas':'Sem conexão');}
+function marcaCache(){const t=cacheTTL();
+  $('cacheState').textContent=!localStorage.getItem(CACHE_KEY)?'Ainda não definido — será perguntado na primeira consulta.'
+    :t===0?'Desativado. Toda consulta baixa da fonte.'
+    :t<=86400000?'Ativado por 24 horas. Resultados servidos do cache indicam a data do download.'
+    :'Ativado por 7 dias. Atenção à defasagem em relação à fonte.';}
+$('cacheBtn').onclick=()=>$('cacheDialog').showModal();
+$('cacheCancel').onclick=()=>$('cacheDialog').close();
+$('cacheClear').onclick=async()=>{await cacheWipe();status('Bases guardadas neste aparelho foram apagadas.','ok')};
+document.querySelectorAll('#cacheDialog .opt').forEach(b=>b.onclick=()=>{localStorage.setItem(CACHE_KEY,b.dataset.ttl);marcaCache();marcaRede();$('cacheDialog').close();});
+addEventListener('online',marcaRede);addEventListener('offline',marcaRede);
+
+/* =========================================================
+   SIVISA — preservado
+   ========================================================= */
+function pending(){try{return JSON.parse(localStorage.getItem(PENDING_KEY)||'null')}catch{return null}}
+function savePending(p){localStorage.setItem(PENDING_KEY,JSON.stringify(p));renderPending()}
+function clearPending(){localStorage.removeItem(PENDING_KEY);renderPending()}
+function validPending(p){return p&&Date.now()-new Date(p.saidaEm).getTime()<=TTL}
+function renderPending(){const p=pending();if(!p){$('pendingBox').innerHTML='';return}const expired=!validPending(p);$('pendingBox').innerHTML=`<div class="pending"><b>${expired?'Consulta anterior expirada':'Consulta aguardando retorno'}</b><p>${esc(p.documento)} · saída ${esc(new Date(p.saidaEm).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}))}${expired?' · confirme antes de vincular':''}</p><button class="btn small" id="resumePending" type="button" style="margin-top:9px">Registrar retorno</button></div>`;$('resumePending').onclick=()=>{leftForExternal=true;detectReturn()}}
+function copyText(value){if(navigator.clipboard?.writeText)return navigator.clipboard.writeText(value).catch(()=>fallbackCopy(value));return fallbackCopy(value)}
+function fallbackCopy(value){const el=document.createElement('textarea');el.value=value;el.setAttribute('readonly','');el.style.position='fixed';el.style.opacity='0';document.body.appendChild(el);el.select();try{document.execCommand('copy')}catch{}el.remove()}
+function openExternal(url,ctx){const p={roteiroId:ctx.roteiroId||'central',itemId:ctx.itemId||'licenca-sanitaria',documento:ctx.documento,cnpj:ctx.documento.length===14?ctx.documento:null,alvo:'sivisa',saidaEm:new Date().toISOString(),estado:'aguardando'};let opened=null;if(window.top!==window.self){window.parent.postMessage({type:'visa:abrir-consulta-externa',url,pendencia:p},'*')}else opened=window.open(url,'_blank','noopener,noreferrer');savePending(p);leftForExternal=true;copyText(ct
+
+===== BLOCK app--estoque-produtos =====
+
+--- Detentor @ 22296 ---
+nst presentation=item.apresentacao||item.categoria||item.classe||item.classe_terapeutica||'';if(presentation)$('apres').value=presentation;
+  if(item.registro)$('reg').value=item.registro;if(item.processo)$('proc').value=item.processo;
+  const cnpj=digits(item.cnpj)||(String(item.detentor||'').match(/(?:^|\D)(\d{14})(?:\D|$)/)||[])[1];if(cnpj)$('cnpjDet').value=cnpj;
+  setLookup('Dados preenchidos a partir da base aberta. Confira com o rótulo, a nota fiscal e a fonte oficial.','ok');
+}
+async function lookup(){
+  let registro=digits($('reg').value),processo=digits($('proc').value),cnpj=digits($('cnpjDet').value),ean=digits($('ean').value);
+  $('matches').innerHTML='';setLookup('Consultando…','info');
+  try{
+    let result={items:[],available:true};
+    if(ean){const kind=identifierKind(ean);if(kind==='registro'){registro=ean;$('reg').value=ean;$('ean').value='';ean=''}else if(kind==='processo'){processo=ean;$('proc').value=ean;$('ean').value='';ean=''}else if(kind==='cnpj'){cnpj=ean;$('cnpjDet').value=ean;$('ean').value='';ean=''}}
+    if(!selectedBases().length){setLookup('Esta classe ainda não possui base local publicada. Mantenha o preenchimento manual e confirme na consulta oficial da Anvisa.','warn');return}
+    if(registro)result.items=await byRegistration(registro);
+    else if(processo){if(processo.length<12)throw new Error('Digite o processo completo.');result=await byProcess(processo)}
+    else if(cnpj){if(cnpj.length!==14)throw new Error('CNPJ deve ter 14 dígitos.');result=await byCnpj(cnpj)}
+    else if(ean){setLookup('Este número foi lido como código de barras. A base aberta não liga EAN a registro; informe o registro, o processo ou o CNPJ.','warn');return}
+    else throw new Error('Informe EAN, registro, processo ou CNPJ, ou continue preenchendo manualmente.');
+    if(!result.items.length){setLookup(result.available?'Nenhuma correspondência exata localizada. Isso não deve ser interpretado isoladamente como irregularidade.':'O índice necessário ainda não está publicado. O preenchimento manual continua disponível.','warn');return}
+    renderMatches(result.items);
+    if(result.items.length===1)fillMatch(result.items[0]);else setLookup(`${result.items.length} correspondência(s) localizada(s). Toque no resultado correto para preencher os campos.`, 'ok');
+  }catch(error){setLookup((error&&error.message)||String(error),'bad')}
+}
+
+function addLot(value={}){
+  const tr=document.createElement('tr');
+  tr.dataset.fisLater=value.fisicoDepois?'1':'0';tr.dataset.bookLater=value.escrituradoDepois?'1':'0';
+  tr.innerHTML=`<td><input class="lot" value="${esc(value.lote||'')}"></td><td><input class="val" type="date" value="${esc(value.validade||'')}"></td><td><div class="qcell"><input class="fis" type="number" step="any" value="${esc(value.fisicoRaw??value.fisico??'')}"><button class="later fis-later" type="button"></button></div></td><td><div class="qcell"><input class="book" type="number" step="any" value="${esc(value.escrituradoRaw??value.escriturado??'')}"><button class="later book-later" type="button"></button></div></td><td class="dif">—</td><td><span class="lot-status warn">pendente</span></td><td><button class="btn danger remove-lot" type="button">×</button></td>`;
+  tr.querySelectorAll('input').forEach(input=>input.oninput=()=>calcRow(tr));
+  tr.querySelector('.fis-later').onclick=()=>setLater(tr,'fis',tr.dataset.fisLater!=='1');tr.querySelector('.book-later').onclick=()=>setLater(tr,'book',tr.dataset.bookLater!=='1');
+  tr.querySelector('.remove-lot').onclick=()=>{tr.remove();if(!$('lots').querySelector('tr'))addLot()};
+  $('lots').appendChild(tr);calcRow(tr);
+}
+function setLater(tr,kind,active){const dataKey=kind==='fis'?'fisLater':'bookLater',input=tr.querySelector(kind==='fis'?'.fis':'.book'),button=tr.querySelector(kind==='fis'?'.fis-later':'.book-later');tr.dataset[dataKey]=active?'1':'0';input.disabled=active;if(active)input.value='';button.textContent=active?'Preencher agora':'Preencher depois';calcRow(tr)}
+function calcRow(tr){
+  const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value,fisLater=tr.dataset.fisLater==='1',bookLater=tr.dataset.bookLater==='1',physical=Number(fisRaw),book=Number(bookRaw),complete=!fisLater&&!bookLater&&fisRaw!==''&&bookRaw!==''&&Number.isFinite(physical)&&Number.isFinite(book);
+  const difference=complete?physical-book:null;tr.dataset.diff=difference===null?'':String(difference);tr.dataset.pending=complete?'0':'1';tr.querySelector('.dif').textContent=difference===null?'—':difference.toLocaleString('pt-BR');
+  const fisButton=tr.querySelector('.fis-later'),bookButton=tr.querySelector('.book-later');tr.querySelector('.fis').disabled=fisLater;tr.querySelector('.book').disabled=bookLater;fisButton.textContent=fisLater?'Preencher agora':'Preencher depois';bookButton.textContent=bookLater?'Preencher agora':'Preencher depois';const status=tr.querySelector('.lot-status');status.className='lot-status '+(!complete?'warn':Math.abs(difference)<1e-9?'ok':'bad');status.textContent=!complete?(fisLater||bookLater?'marcado para depois':'pendente'):Math.abs(difference)<1e-9?'sem divergência':'divergência';
+}
+function current(){
+  const lots=[...$('lots').querySelectorAll('tr')].map(tr=>{const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value;return {lote:tr.querySelector('.lot').value,validade:tr.querySelector('.val').value,fisicoRaw:fisRaw,escrituradoRaw:bookRaw,fisicoDepois:tr.dataset.fisLater==='1',escrituradoDepois:tr.dataset.bookLater==='1',fisico:fisRaw===''?null:Number(fisRaw),escriturado:bookRaw===''?null:Number(bookRaw),diferenca:tr.dataset.diff===''?null:Number(tr.dataset.diff),pendente:tr.dataset.pending==='1'}}).filter(item=>item.lote||item.validade||item.fisicoRaw!==''||item.escrituradoRaw!==''||item.fisicoDepois||item.escrituradoDepois);
+  return {ean:$('ean').value,nome:$('nome').value,fabricante:$('fab').value,apresentacao:$('apres').value,registro:$('reg').value,processo:$('proc').value,cnpjDetentor:$('cnpjDet').value,nf:$('nf').value,fornecedor:$('forn').value,lotes:lots};
+}
+function itemStatus(item){const pending=item.lotes.some(lot=>lot.pendente),divergence=item.lotes.some(lot=>lot.diferenca!==null&&Math.abs(lot.diferenca)>1e-9);return pending?{label:'pendências',className:'warn'}:divergence?{label:'divergência quantitativa',className:'bad'}:{label:'sem divergência',className:'ok'}}
+function addBasket(){const item=current();if(!item.nome&&!item.ean&&!item.registro){alert('Informe ao menos nome, EAN ou registro.');return}if(!item.lotes.length){alert('Inclua ao menos um lote.');return}cesta.push(item);saveBasket();renderBasket();newProduct()}
+function editBasket(index){const item=cesta.splice(index,1)[0];if(!item)return;saveBasket();$('ean').value=item.ean||'';$('nome').value=item.nome||'';$('fab').value=item.fabricante||'';$('apres').value=item.apresentacao||'';$('reg').value=item.registro||'';$('proc').value=item.processo||'';$('cnpjDet').value=item.cnpjDetentor||'';$('nf').value=item.nf||'';$('forn').value=item.fornecedor||'';$('lots').innerHTML='';(item.lotes||[]).forEach(addLot);if(!$('lots').querySelector('tr'))addLot();renderBasket();setLookup('Item reaberto. Complete as quantidades pendentes e adicione-o novamente à cesta.','warn');$('lots').scrollIntoView({behavior:'smooth',block:'center'})}
+function renderBasket(){if(!cesta.length){$('basket').innerHTML='<div class="status info">Cesta vazia.</div>';return}$('basket').innerHTML=cesta.map((item,index)=>{const status=itemStatus(item);return `<div class="basket-item"><strong>${esc(item.nome||item.ean||item.registro)}</strong><span class="pill ${status.className}">${status.label}</span><small>${esc(item.fabricante||'Fabricante não informado')} · ${esc(item.apresentacao||'Apresentação não informada')} · ${item.lotes.length} lote(s) · NF ${esc(item.nf||'—')}</small><button class="btn" style="margin-top:7px" type="button" data-edit="${index}">Editar / concluir</button> <button class="btn danger" style="margin-top:7px" type="button" data-remove="${index}">Remover</button></div>`}).join('');$('basket').querySelectorAll('[data-edit]').forEach(button=>button.onclick=()=>editBasket(Number(button.dataset.edit)));$('basket').querySelectorAll('[data-remove]').forEach(button=>button.onclick=()=>{cesta.splice(Number(button.dataset.remove),1);saveBasket();renderBasket()})}
+function newProduct(){['ean','nome','fab','apres','reg','proc','cnpjDet','nf','forn'].forEach(id=>$(id).value='');$('lots').innerHTML='';$('matches').innerHTML='';addLot();setLookup('Nenhuma consulta realizada. O preenchimento manual está liberado.','info');$('ean').focus()}
+function showRelation(){
+  $('relation').classList.remove('hidden');let totalLots=0,divergences=0,pending=0,rows='';
+  cesta.forEach(item=>item.lotes.forEach(lot=>{totalLots++;if(lot.pendente)pending++;else if(Math.abs(lot.diferenca)>1e-9)divergences++;const status=lot.pendente?'Pendente':Math.abs(lot.diferenca)<1e-9?'Sem divergência':'Divergência quantitativa',fisico=lot.fisicoDepois?'Preencher depois':lot.fisico===null?'—':lot.fisico,escriturado=lot.escrituradoDepois?'Preencher depois':lot.escriturado===null?'—':lot.escriturado;rows+=`<tr><td>${esc(item.nome||'—')}</td><td>${esc(item.fabricante||'—')}</td><td>${esc(item.registro||'—')}</td><td>${esc(item.processo||'—')}</td><td>${esc(lot.lote||'—')}</td><td>${esc(lot.validade||'—')}</td><td>${esc(fisico)}</td><td>${esc(escriturado)}</td><td>${lot.diferenca===null?'—':lot.diferenca}</td><td>${status}</td><td>${esc(item.nf||'—')}</td><td>${esc(item.fornecedor||'—')}</td></tr>`}));
+  $('relSum').innerHTML=`<div class="summary"><div class="sum"><b>${cesta.length}</b><span>${CONFIG.kind.toLowerCase()}</span></div><div class="sum"><b>${divergences}</b><span>divergências</span></div><div class="sum"><b>${pending}</b><span>pendências</span></div></div>`;
+  $('relBody').innerHTML=`<div class="tablewrap"><table class="tbl"><thead><tr><th>${CONFIG.singular}</th><th>Fabricante</th><th>Registro</th><th>Processo</th><th>Lote</th><th>Validade</th><th>Físico</th><th>Escriturado</th><th>Dif.</th><th>Situação</th><th>NF</th><th>CNPJ fornecedor</th></tr></thead><tbody>${rows||'<tr><td colspan="12">Cesta vazia</td></tr>'}</tbody></table></div><div class="status ${pending?'warn':divergences?'bad':'ok'}">${pending?'Há campos pendentes de preenchimento.':divergences?'Foram identificadas divergências quantitativas.':'Não foram identificadas divergências nos itens completamente informados.'}</div>`;
+  $('relation').scrollIntoView({behavior:'smooth'});
+}
+function word(){showRelation();const body=$('relation').innerHTML,doc=`<!doctype html><html><head><meta charset="utf-8"><style>body{font:10pt Arial;color:#222}h1{font-size:18pt}table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:5px;text-align:left}.actions,button{display:none}</style></head><body><h1>Conferência de estoque — ${esc(CONFIG.kind)}</h1>${body}</body></html>`;const blob=new Blob(['\ufeff',doc],{type:'application/msword'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='Conferencia_Estoque_'+CONFIG.key+'.doc';document.body.appendChild(link);link.click();setLookup('Relatório Word gerado. Verifique a pasta de downloads do navegador.','ok');setTimeout(()=>{URL.revokeObjectURL(link.href);link.remove()},800)}
+
+function stopNative(){if(loop)cancelAnimationFrame(loop);loop=0;if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;if($('video').srcObject)$('video').srcObject=null}
+function stopScan(){stopNative();if(zxingReader){try{zxingReader.reset()}catch(error){}zxingReader=null}$('scan').classList.remove('on')}
+async function loadScript(src){if([...document.scripts].some(script=>script.src===src))return;await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}
+function useCaptured(value){const number=digits(value);if(!number)return;$('ean').value=number;const valid=gtinValid(number);setLookup(valid?'GTIN capturado e validado. Confira antes de continuar.':'Número capturado. O dígito verificador não corresponde a um GTIN válido; confira ou use outro identificador.',valid?'ok':'warn')}
+async function zxingFallback(){stopNative();$('scanStatus').textContent='Iniciando leitor alternativo…';try{await loadScript('https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js');zxingReader=new ZXing.BrowserMultiFormatReader();const result=await zxingReader.decodeOnceFromVideoDevice(undefined,$('video'));if(result){useCaptured(result.getText());stopScan()}}catch(error){$('scanStatus').textContent='Leitura indisponível. Feche a câmera ou digite o código.'}}
+async function startScan(){
+  stopScan();$('scan').classList.add('on');$('scanStatus').textContent='Abrindo câmera…';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('scanStatus').textContent='Câmera indisponível. Digite o código manualmente.';return}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('video').srcObject=stream;await $('video').play();
+    if(!('BarcodeDetector' in window)){await zxingFallback();return}
+    const wanted=['ean_13','ean_8','upc_a','upc_e','code_128'];let formats=wanted;
+    if(BarcodeDetector.getSupportedFormats){const supported=await BarcodeDetector.getSupportedFormats();formats=wanted.filter(format=>supported.includes(format))}
+    if(!formats.length){await zxingFallback();return}
+    let detector;try{detector=new BarcodeDetector({formats})}catch(error){await zxingFallback();return}
+    $('scanStatus').textContent='Aponte para o código.';
+    const tick=async()=>{if(!stream)return;try{const results=await detector.detect($('video'));if(results.length){useCaptured(results[0].rawValue);stopScan();return}}catch(error){}loop=requestAnimationFrame(tick)};tick();
+  }catch(error){stopNative();$('scanStatus').textContent='Não foi possível abrir a câmera. Digite o código manualmente.'}
+}
+async function ocrPhoto(event){const file=event.target.files&&event.target.files[0];if(!file)return;setLookup('Lendo números da foto…','info');try{if(!window.Tesseract)await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js');const result=await Tesseract.recognize(file,'eng',{logger:()=>{}}),candidates=(result.data.text.match(/\d[\d\s.\/-]{6,24}\d/g)||[]).map(digits).filter(value=>value.length>=7&&value.length<=20).sort((a,b)=>(gtinValid(b)?100:0)+b.length-((gtinValid(a)?100:0)+a.length));if(!candidates.length)throw new Error('Nenhuma sequência reconhecida.');const confirmed=prompt('Confira o número reconhecido antes de usar:',candidates[0]);if(confirmed!==null)useCaptured(confirmed)}catch(error){setLookup('O OCR não conseguiu ler com segurança. Digite o número manualmente.','bad')}finally{event.target.value=''}}
+
+function init(){
+  document.title='Conferência de estoque — '+CONFIG.kind;$('pageTitle').textContent='Conferência de estoque — '+CONFIG.kind;$('pageLead').textContent=`Conferência por ${CONFIG.singular}, com múltiplos lotes, documentos de aquisição e divergência automática.`;document.querySelectorAll('.singular').forEach(element=>element.textContent=CONFIG.singular);
+  if(CONFIG.key==='med')document.querySelectorAll('.product-only').forEach(element=>element.classList.add('hidden'));
+  $('back').onclick=()=>parent.postMessage({voltar:1},'*');$('lookup').onclick=lookup;$('focusEan').onclick=()=>{$('ean').focus();$('ean').scrollIntoView({behavior:'smooth',block:'center'})};$('addLot').onclick=()=>addLot();$('addBasket').onclick=addBasket;$('newProduct').onclick=newProduct;$('showRelation').onclick=showRelation;$('closeRelation').onclick=()=>$('relation').classList.add('hidden');$('word').onclick=word;$('clearBasket').onclick=()=>{if(confirm('Limpar toda a cesta?')){cesta=[];saveBasket();renderBasket();$('relation').classList.add('hidden')}};$('scanBtn').onclick=startScan
+
+===== BLOCK rec--stock-bridge.js =====
+
+--- Detentor @ 150550 ---
+tricao_hospitalar)].filter(Boolean);\n  if(item.registro)$('reg').value=item.registro;if(item.processo)$('proc').value=item.processo;\n  const cnpj=digits(item.cnpj)||(String(item.detentor||'').match(/(?:^|\\D)(\\d{14})(?:\\D|$)/)||[])[1];if(cnpj)$('cnpjDet').value=cnpj;\n  setLookup('Dados preenchidos a partir das bases abertas Anvisa/CMED'+(extras.length?' · '+extras.join(' · '):'')+'. Confira apresentação, rótulo, nota fiscal e fonte oficial.','ok');\n}\nasync function lookup(){\n  let registro=digits($('reg').value),processo=digits($('proc').value),cnpj=digits($('cnpjDet').value),ean=digits($('ean').value);\n  $('matches').innerHTML='';setLookup('Consultando…','info');\n  try{\n    let result={items:[],available:true};\n    if(ean){const kind=identifierKind(ean);if(kind==='registro'){registro=ean;$('reg').value=ean;$('ean').value='';ean=''}else if(kind==='processo'){processo=ean;$('proc').value=ean;$('ean').value='';ean=''}else if(kind==='cnpj'){cnpj=ean;$('cnpjDet').value=ean;$('ean').value='';ean=''}}\n    if(registro)result.items=await byRegistration(registro);\n    else if(processo){if(processo.length\u003c12)throw new Error('Digite o processo completo.');result=await byProcess(processo)}\n    else if(cnpj){if(cnpj.length!==14)throw new Error('CNPJ deve ter 14 dígitos.');result=await byCnpj(cnpj)}\n    else if(ean){if(!gtinValid(ean))throw new Error('O EAN/GTIN informado não possui dígito verificador válido.');result=await byEan(ean)}\n    else throw new Error('Informe EAN, registro, processo ou CNPJ, ou continue preenchendo manualmente.');\n    if(!result.items.length){setLookup(result.available?'Nenhuma correspondência exata localizada. Isso não deve ser interpretado isoladamente como irregularidade.':'O índice necessário ainda não está publicado. O preenchimento manual continua disponível.','warn');return}\n    renderMatches(result.items);\n    if(result.items.length===1)fillMatch(result.items[0]);else setLookup(`${result.items.length} correspondência(s) localizada(s). Toque no resultado correto para preencher os campos.`, 'ok');\n  }catch(error){setLookup((error&&error.message)||String(error),'bad')}\n}\n\nfunction addLot(value={}){\n  const tr=document.createElement('tr');\n  tr.dataset.fisLater=value.fisicoDepois?'1':'0';tr.dataset.bookLater=value.escrituradoDepois?'1':'0';\n  tr.innerHTML=`\u003ctd>\u003cinput class=\"lot\" value=\"${esc(value.lote||'')}\">\u003c/td>\u003ctd>\u003cinput class=\"val\" type=\"date\" value=\"${esc(value.validade||'')}\">\u003c/td>\u003ctd>\u003cdiv class=\"qcell\">\u003cinput class=\"fis\" type=\"number\" step=\"any\" value=\"${esc(value.fisicoRaw??value.fisico??'')}\">\u003cbutton class=\"later fis-later\" type=\"button\">\u003c/button>\u003c/div>\u003c/td>\u003ctd>\u003cdiv class=\"qcell\">\u003cinput class=\"book\" type=\"number\" step=\"any\" value=\"${esc(value.escrituradoRaw??value.escriturado??'')}\">\u003cbutton class=\"later book-later\" type=\"button\">\u003c/button>\u003c/div>\u003c/td>\u003ctd class=\"dif\">—\u003c/td>\u003ctd>\u003cspan class=\"lot-status warn\">pendente\u003c/span>\u003c/td>\u003ctd>\u003cbutton class=\"btn danger remove-lot\" type=\"button\">×\u003c/button>\u003c/td>`;\n  tr.querySelectorAll('input').forEach(input=>input.oninput=()=>calcRow(tr));\n  tr.querySelector('.fis-later').onclick=()=>setLater(tr,'fis',tr.dataset.fisLater!=='1');tr.querySelector('.book-later').onclick=()=>setLater(tr,'book',tr.dataset.bookLater!=='1');\n  tr.querySelector('.remove-lot').onclick=()=>{tr.remove();if(!$('lots').querySelector('tr'))addLot()};\n  $('lots').appendChild(tr);calcRow(tr);\n}\nfunction setLater(tr,kind,active){const dataKey=kind==='fis'?'fisLater':'bookLater',input=tr.querySelector(kind==='fis'?'.fis':'.book'),button=tr.querySelector(kind==='fis'?'.fis-later':'.book-later');tr.dataset[dataKey]=active?'1':'0';input.disabled=active;if(active)input.value='';button.textContent=active?'Preencher agora':'Preencher depois';calcRow(tr)}\nfunction calcRow(tr){\n  const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value,fisLater=tr.dataset.fisLater==='1',bookLater=tr.dataset.bookLater==='1',physical=Number(fisRaw),book=Number(bookRaw),complete=!fisLater&&!bookLater&&fisRaw!==''&&bookRaw!==''&&Number.isFinite(physical)&&Number.isFinite(book);\n  const difference=complete?physical-book:null;tr.dataset.diff=difference===null?'':String(difference);tr.dataset.pending=complete?'0':'1';tr.querySelector('.dif').textContent=difference===null?'—':difference.toLocaleString('pt-BR');\n  const fisButton=tr.querySelector('.fis-later'),bookButton=tr.querySelector('.book-later');tr.querySelector('.fis').disabled=fisLater;tr.querySelector('.book').disabled=bookLater;fisButton.textContent=fisLater?'Preencher agora':'Preencher depois';bookButton.textContent=bookLater?'Preencher agora':'Preencher depois';const status=tr.querySelector('.lot-status');status.className='lot-status '+(!complete?'warn':Math.abs(difference)\u003c1e-9?'ok':'bad');status.textContent=!complete?(fisLater||bookLater?'marcado para depois':'pendente'):Math.abs(difference)\u003c1e-9?'sem divergência':'divergência';\n}\nfunction current(){\n  const lots=[...$('lots').querySelectorAll('tr')].map(tr=>{const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value;return {lote:tr.querySelector('.lot').value,validade:tr.querySelector('.val').value,fisicoRaw:fisRaw,escrituradoRaw:bookRaw,fisicoDepois:tr.dataset.fisLater==='1',escrituradoDepois:tr.dataset.bookLater==='1',fisico:fisRaw===''?null:Number(fisRaw),escriturado:bookRaw===''?null:Number(bookRaw),diferenca:tr.dataset.diff===''?null:Number(tr.dataset.diff),pendente:tr.dataset.pending==='1'}}).filter(item=>item.lote||item.validade||item.fisicoRaw!==''||item.escrituradoRaw!==''||item.fisicoDepois||item.escrituradoDepois);\n  return {ean:$('ean').value,nome:$('nome').value,fabricante:$('fab').value,apresentacao:$('apres').value,registro:$('reg').value,processo:$('proc').value,cnpjDetentor:$('cnpjDet').value,nf:$('nf').value,fornecedor:$('forn').value,lotes:lots};\n}\nfunction itemStatus(item){const pending=item.lotes.some(lot=>lot.pendente),divergence=item.lotes.some(lot=>lot.diferenca!==null&&Math.abs(lot.diferenca)>1e-9);return pending?{label:'pendências',className:'warn'}:divergence?{label:'divergência quantitativa',className:'bad'}:{label:'sem divergência',className:'ok'}}\nfunction addBasket(){const item=current();if(!item.nome&&!item.ean&&!item.registro){alert('Informe ao menos nome, EAN ou registro.');return}if(!item.lotes.length){alert('Inclua ao menos um lote.');return}if(editingBasket>=0)cesta[editingBasket]=item;else cesta.push(item);editingBasket=-1;saveBasket();renderBasket();newProduct()}\nfunction editBasket(index){const item=cesta[index];if(!item)return;editingBasket=index;$('ean').value=item.ean||'';$('nome').value=item.nome||'';$('fab').value=item.fabricante||'';$('apres').value=item.apresentacao||'';$('reg').value=item.registro||'';$('proc').value=item.processo||'';$('cnpjDet').value=item.cnpjDetentor||'';$('nf').value=item.nf||'';$('forn').value=item.fornecedor||'';$('lots').innerHTML='';(item.lotes||[]).forEach(addLot);if(!$('lots').querySelector('tr'))addLot();renderBasket();setLookup('Item reaberto. Complete as quantidades pendentes e adicione-o novamente à cesta.','warn');$('lots').scrollIntoView({behavior:'smooth',block:'center'})}\nfunction renderBasket(){if(!cesta.length){$('basket').innerHTML='\u003cdiv class=\"status info\">Cesta vazia.\u003c/div>';return}$('basket').innerHTML=cesta.map((item,index)=>{const status=itemStatus(item);return `\u003cdiv class=\"basket-item\">\u003cstrong>${esc(item.nome||item.ean||item.registro)}\u003c/strong>\u003cspan class=\"pill ${status.className}\">${status.label}\u003c/span>\u003csmall>${esc(item.fabricante||'Fabricante não informado')} · ${esc(item.apresentacao||'Apresentação não informada')} · ${item.lotes.length} lote(s) · NF ${esc(item.nf||'—')}\u003c/small>\u003cbutton class=\"btn\" style=\"margin-top:7px\" type=\"button\" data-edit=\"${index}\">Editar / concluir\u003c/button> \u003cbutton class=\"btn danger\" style=\"margin-top:7px\" type=\"button\" data-remove=\"${index}\">Remover\u003c/button>\u003c/div>`}).join('');$('basket').querySelectorAll('[data-edit]').forEach(button=>button.onclick=()=>editBasket(Number(button.dataset.edit)));$('basket').querySelectorAll('[data-remove]').forEach(button=>button.onclick=()=>{cesta.splice(Number(button.dataset.remove),1);saveBasket();renderBasket()})}\nfunction newProduct(){editingBasket=-1;['ean','nome','fab','apres','reg','proc','cnpjDet','nf','forn'].forEach(id=>$(id).value='');$('lots').innerHTML='';$('matches').innerHTML='';addLot();setLookup('Nenhuma consulta realizada. O preenchimento manual está liberado.','info');$('ean').focus()}\nfunction showRelation(){\n  $('relation').classList.remove('hidden');let totalLots=0,divergences=0,pending=0,rows='';\n  cesta.forEach(item=>item.lotes.forEach(lot=>{totalLots++;if(lot.pendente)pending++;else if(Math.abs(lot.diferenca)>1e-9)divergences++;const status=lot.pendente?'Pendente':Math.abs(lot.diferenca)\u003c1e-9?'Sem divergência':'Divergência quantitativa',fisico=lot.fisicoDepois?'Preencher depois':lot.fisico===null?'—':lot.fisico,escriturado=lot.escrituradoDepois?'Preencher depois':lot.escriturado===null?'—':lot.escriturado;rows+=`\u003ctr>\u003ctd>${esc(item.nome||'—')}\u003c/td>\u003ctd>${esc(item.fabricante||'—')}\u003c/td>\u003ctd>${esc(item.registro||'—')}\u003c/td>\u003ctd>${esc(item.processo||'—')}\u003c/td>\u003ctd>${esc(lot.lote||'—')}\u003c/td>\u003ctd>${esc(lot.validade||'—')}\u003c/td>\u003ctd>${esc(fisico)}\u003c/td>\u003ctd>${esc(escriturado)}\u003c/td>\u003ctd>${lot.diferenca===null?'—':lot.diferenca}\u003c/td>\u003ctd>${status}\u003c/td>\u003ctd>${esc(item.nf||'—')}\u003c/td>\u003ctd>${esc(item.fornecedor||'—')}\u003c/td>\u003c/tr>`}));\n  $('relSum').innerHTML=`\u003cdiv class=\"summary\">\u003cdiv class=\"sum\">\u003cb>${cesta.length}\u003c/b>\u003cspan>${CONFIG.kind.toLowerCase()}\u003c/span>\u003c/div>\u003cdiv class=\"sum\">\u003cb>${divergences}\u003c/b>\u003cspan>divergências\u003c/span>\u003c/div>\u003cdiv class=\"sum\">\u003cb>${pending}\u003c/b>\u003cspan>pendências\u003c/span>\u003c/div>\u003c/div>\u003cdiv class=\"notice info\">\u003cstrong>Consolidação:\u003c/strong> ${new Date().toLocaleString('pt-BR')}. Campos marcados “Preencher depois” permanecem como pendência e nunca são convertidos em zero.\u003c/div>`;\n  $('relBody').innerHTML=`\u003cdiv class=\"tablewrap\">\u003ctable class=\"tbl\">\u003cthead>\u003ctr>\u003cth>${CONFIG.singular}\u003c/th>\u003cth>Fabricante\u003c/th>\u003cth>Registro\u003c/th>\u003cth>Processo\u003c/th>\u003cth>Lote\u003c/th>\u003cth>Validade\u003c/th>\u003cth>Físico\u003c/th>\u003cth>Escriturado\u003c/th>\u003cth>Dif.\u003c/th>\u003cth>Situação\u003c/th>\u003cth>NF\u003c/th>\u003cth>CNPJ fornecedor\u003c/th>\u003c/tr>\u003c/thead>\u003ctbody>${rows||'\u003ctr>\u003ctd colspan=\"12\">Cesta vazia\u003c/td>\u003c/tr>'}\u003c/tbody>\u003c/table>\u003c/div>\u003cdiv class=\"status ${pending?'warn':divergences?'bad':'ok'}\">${pending?'Há campos pendentes de preenchimento.':divergences?'Foram identificadas divergências quantitativas.':'Não foram identificadas divergências nos itens completamente informados.'}\u003c/div>`;\n  $('relation').scrollIntoView({behavior:'smooth'});\n}\nfunction word(){showRelation();const body=$('relation').innerHTML,doc=`\u003c!doctype html>\u003chtml>\u003chead>\u003cmeta charset=\"utf-8\">\u003cstyle>body{font:10pt Arial;color:#222}h1{font-size:18pt}table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:5px;text-align:left}.actions,button{display:none}\u003c/style>\u003c/head>\u003cbody>\u003ch1>Conferência de estoque — ${esc(CONFIG.kind)}\u003c/h1>${body}\u003c/body>\u003c/html>`;const blob=new Blob(['\\ufeff',doc],{type:'application/msword'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='Conferencia_Estoque_'+CONFIG.key+'.doc';document.body.appendChild(link);link.click();setLookup('Relatório Word gerado. Verifique a pasta de downloads do navegador.','ok');setTimeout(()=>{URL.revokeObjectURL(link.href);link.remove()},800)}\n\nfunction stopNative(){if(loop)cancelAnimationFrame(loop);loop=0;if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;if($('video').srcObject)$('video').srcObject=null}\nfunction stopScan(){stopNative();if(zxingReader){try{zxingReader.reset()}catch(error){}zxingReader=null}$('scan').classList.remove('on')}\nasync function loadScript(src){if([...document.scripts].some(script=>script.src===src))return;await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}\nfunction useCaptured(value){const number=digits(value);if(!number)return;$('ean').value=number;const valid=gtinValid(number);setLookup(valid?'GTIN capturado e validado. Confira antes de continuar.':'Número capturado. O dígito verificador não corresponde a um GTIN válido; confira ou use outro identificador.',valid?'ok':'warn')}\nasync function zxingFallback(){stopNative();$('scanStatus').textContent='Iniciando leitor alternativo…';try{await loadScript('https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js');zxingReader=new ZXing.BrowserMultiFormatReader();const result=await zxingReader.decodeOnceFromVideoDevice(undefined,$('video'));if(result){useCaptured(result.getText());stopScan()}}catch(error){$('scanStatus').textContent='Leitura indisponível. Feche a câmera ou digite o código.'}}\nasync function startScan(){\n  stopScan();$('scan').classList.add('on');$('scanStatus').textContent='Abrindo câmera…';\n  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('scanStatus').textContent='Câmera indisponível. Digite o código manualmente.';return}\n  try{\n    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('video').srcObject=stream;await $('video').play();\n    if(!('BarcodeDetector' in window)){await zxingFallback();return}\n    const wanted=['ean_13','ean_8','upc_a','upc_e','code_128'];let formats=wanted;\n    if(BarcodeDetector.getSupportedFormats){const supported=await BarcodeDetector.getSupportedFormats();formats=wanted.filter(format=>supported.includes(format))}\n    if(!formats.length){await zxingFallback();return}\n    let detector;try{detector=new BarcodeDetector({formats})}catch(error){await zxingFallback();return}\n    $('scanStatus').textContent='Aponte para o código.';\n    const tick=async()=>{if(!stream)return;try{const results=await detector.detect($('video'));if(results.length){useCaptured(results[0].rawValue);stopScan();return}}catch(error){}loop=requestAnimationFrame(tick)};tick();\n  }catch(error){stopNative();$('scanStatus').textContent='Não foi possível abrir a câmera. Digite o código manualmente.'}\n}\nasync function ocrPhoto(){stockReader()}\nfunction stockReader(){MedTools.reader({title:'Foto ou documento do produto — conferir texto e EAN',fields:{ean:$('ean').value,nome:$('nome').value,lote:'',validade:''},extractor:t=>{const candidates=(t.match(/\\b\\d{8,14}\\b/g)||[]).filter(gtinValid);return {ean:candidates[0]||'',nome:MedOcrLabel(t,['nome do produto','produto','medicamento']),lote:MedOcrLabel(t,['lote']),validade:MedOcrLabel(t,['validade'])}},onApply:f=>{if(f.ean)$('ean').value=f.ean;if(f.nome)$('nome').value=f.nome;if(f.lote||f.validade)addLot({lote:f.lote,validade:f.validade});setLookup('Texto conferido. Use Buscar para consultar o EAN na base Anvisa.','info')}})}\n\nfunction init(){\n  document.title='Conferência de estoque — '+CONFIG.kind;$('pageTitle').textContent='Conferência de estoque — '+CONFIG.kind;$('pageLead').textContent=`Conferência por ${CONFIG.singular}, com múltiplos lotes, documentos de aquisição e divergência automática.`;document.querySelectorAll('.singular'
+
+===== BLOCK app--estoque-medicamentos =====
+
+--- Detentor @ 24332 ---
+ lista=item.lista||item.lista_controle||item.lista_controlado||item.lista_portaria344||'';const extras=[item.tipo&&('tipo '+item.tipo),item.tarja&&('tarja '+item.tarja),lista&&('lista '+lista),item.restricao_hospitalar&&('restrição hospitalar '+item.restricao_hospitalar)].filter(Boolean);
+  if(item.registro)$('reg').value=item.registro;if(item.processo)$('proc').value=item.processo;
+  const cnpj=digits(item.cnpj)||(String(item.detentor||'').match(/(?:^|\D)(\d{14})(?:\D|$)/)||[])[1];if(cnpj)$('cnpjDet').value=cnpj;
+  setLookup('Dados preenchidos a partir das bases abertas Anvisa/CMED'+(extras.length?' · '+extras.join(' · '):'')+'. Confira apresentação, rótulo, nota fiscal e fonte oficial.','ok');
+}
+async function lookup(){
+  let registro=digits($('reg').value),processo=digits($('proc').value),cnpj=digits($('cnpjDet').value),ean=digits($('ean').value);
+  $('matches').innerHTML='';setLookup('Consultando…','info');
+  try{
+    let result={items:[],available:true};
+    if(ean){const kind=identifierKind(ean);if(kind==='registro'){registro=ean;$('reg').value=ean;$('ean').value='';ean=''}else if(kind==='processo'){processo=ean;$('proc').value=ean;$('ean').value='';ean=''}else if(kind==='cnpj'){cnpj=ean;$('cnpjDet').value=ean;$('ean').value='';ean=''}}
+    if(registro)result.items=await byRegistration(registro);
+    else if(processo){if(processo.length<12)throw new Error('Digite o processo completo.');result=await byProcess(processo)}
+    else if(cnpj){if(cnpj.length!==14)throw new Error('CNPJ deve ter 14 dígitos.');result=await byCnpj(cnpj)}
+    else if(ean){if(!gtinValid(ean))throw new Error('O EAN/GTIN informado não possui dígito verificador válido.');result=await byEan(ean)}
+    else throw new Error('Informe EAN, registro, processo ou CNPJ, ou continue preenchendo manualmente.');
+    if(!result.items.length){setLookup(result.available?'Nenhuma correspondência exata localizada. Isso não deve ser interpretado isoladamente como irregularidade.':'O índice necessário ainda não está publicado. O preenchimento manual continua disponível.','warn');return}
+    renderMatches(result.items);
+    if(result.items.length===1)fillMatch(result.items[0]);else setLookup(`${result.items.length} correspondência(s) localizada(s). Toque no resultado correto para preencher os campos.`, 'ok');
+  }catch(error){setLookup((error&&error.message)||String(error),'bad')}
+}
+
+function addLot(value={}){
+  const tr=document.createElement('tr');
+  tr.dataset.fisLater=value.fisicoDepois?'1':'0';tr.dataset.bookLater=value.escrituradoDepois?'1':'0';
+  tr.innerHTML=`<td><input class="lot" value="${esc(value.lote||'')}"></td><td><input class="val" type="date" value="${esc(value.validade||'')}"></td><td><div class="qcell"><input class="fis" type="number" step="any" value="${esc(value.fisicoRaw??value.fisico??'')}"><button class="later fis-later" type="button"></button></div></td><td><div class="qcell"><input class="book" type="number" step="any" value="${esc(value.escrituradoRaw??value.escriturado??'')}"><button class="later book-later" type="button"></button></div></td><td class="dif">—</td><td><span class="lot-status warn">pendente</span></td><td><button class="btn danger remove-lot" type="button">×</button></td>`;
+  tr.querySelectorAll('input').forEach(input=>input.oninput=()=>calcRow(tr));
+  tr.querySelector('.fis-later').onclick=()=>setLater(tr,'fis',tr.dataset.fisLater!=='1');tr.querySelector('.book-later').onclick=()=>setLater(tr,'book',tr.dataset.bookLater!=='1');
+  tr.querySelector('.remove-lot').onclick=()=>{tr.remove();if(!$('lots').querySelector('tr'))addLot()};
+  $('lots').appendChild(tr);calcRow(tr);
+}
+function setLater(tr,kind,active){const dataKey=kind==='fis'?'fisLater':'bookLater',input=tr.querySelector(kind==='fis'?'.fis':'.book'),button=tr.querySelector(kind==='fis'?'.fis-later':'.book-later');tr.dataset[dataKey]=active?'1':'0';input.disabled=active;if(active)input.value='';button.textContent=active?'Preencher agora':'Preencher depois';calcRow(tr)}
+function calcRow(tr){
+  const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value,fisLater=tr.dataset.fisLater==='1',bookLater=tr.dataset.bookLater==='1',physical=Number(fisRaw),book=Number(bookRaw),complete=!fisLater&&!bookLater&&fisRaw!==''&&bookRaw!==''&&Number.isFinite(physical)&&Number.isFinite(book);
+  const difference=complete?physical-book:null;tr.dataset.diff=difference===null?'':String(difference);tr.dataset.pending=complete?'0':'1';tr.querySelector('.dif').textContent=difference===null?'—':difference.toLocaleString('pt-BR');
+  const fisButton=tr.querySelector('.fis-later'),bookButton=tr.querySelector('.book-later');tr.querySelector('.fis').disabled=fisLater;tr.querySelector('.book').disabled=bookLater;fisButton.textContent=fisLater?'Preencher agora':'Preencher depois';bookButton.textContent=bookLater?'Preencher agora':'Preencher depois';const status=tr.querySelector('.lot-status');status.className='lot-status '+(!complete?'warn':Math.abs(difference)<1e-9?'ok':'bad');status.textContent=!complete?(fisLater||bookLater?'marcado para depois':'pendente'):Math.abs(difference)<1e-9?'sem divergência':'divergência';
+}
+function current(){
+  const lots=[...$('lots').querySelectorAll('tr')].map(tr=>{const fisRaw=tr.querySelector('.fis').value,bookRaw=tr.querySelector('.book').value;return {lote:tr.querySelector('.lot').value,validade:tr.querySelector('.val').value,fisicoRaw:fisRaw,escrituradoRaw:bookRaw,fisicoDepois:tr.dataset.fisLater==='1',escrituradoDepois:tr.dataset.bookLater==='1',fisico:fisRaw===''?null:Number(fisRaw),escriturado:bookRaw===''?null:Number(bookRaw),diferenca:tr.dataset.diff===''?null:Number(tr.dataset.diff),pendente:tr.dataset.pending==='1'}}).filter(item=>item.lote||item.validade||item.fisicoRaw!==''||item.escrituradoRaw!==''||item.fisicoDepois||item.escrituradoDepois);
+  return {ean:$('ean').value,nome:$('nome').value,fabricante:$('fab').value,apresentacao:$('apres').value,registro:$('reg').value,processo:$('proc').value,cnpjDetentor:$('cnpjDet').value,nf:$('nf').value,fornecedor:$('forn').value,lotes:lots};
+}
+function itemStatus(item){const pending=item.lotes.some(lot=>lot.pendente),divergence=item.lotes.some(lot=>lot.diferenca!==null&&Math.abs(lot.diferenca)>1e-9);return pending?{label:'pendências',className:'warn'}:divergence?{label:'divergência quantitativa',className:'bad'}:{label:'sem divergência',className:'ok'}}
+function addBasket(){const item=current();if(!item.nome&&!item.ean&&!item.registro){alert('Informe ao menos nome, EAN ou registro.');return}if(!item.lotes.length){alert('Inclua ao menos um lote.');return}if(editingBasket>=0)cesta[editingBasket]=item;else cesta.push(item);editingBasket=-1;saveBasket();renderBasket();newProduct()}
+function editBasket(index){const item=cesta[index];if(!item)return;editingBasket=index;$('ean').value=item.ean||'';$('nome').value=item.nome||'';$('fab').value=item.fabricante||'';$('apres').value=item.apresentacao||'';$('reg').value=item.registro||'';$('proc').value=item.processo||'';$('cnpjDet').value=item.cnpjDetentor||'';$('nf').value=item.nf||'';$('forn').value=item.fornecedor||'';$('lots').innerHTML='';(item.lotes||[]).forEach(addLot);if(!$('lots').querySelector('tr'))addLot();renderBasket();setLookup('Item reaberto. Complete as quantidades pendentes e adicione-o novamente à cesta.','warn');$('lots').scrollIntoView({behavior:'smooth',block:'center'})}
+function renderBasket(){if(!cesta.length){$('basket').innerHTML='<div class="status info">Cesta vazia.</div>';return}$('basket').innerHTML=cesta.map((item,index)=>{const status=itemStatus(item);return `<div class="basket-item"><strong>${esc(item.nome||item.ean||item.registro)}</strong><span class="pill ${status.className}">${status.label}</span><small>${esc(item.fabricante||'Fabricante não informado')} · ${esc(item.apresentacao||'Apresentação não informada')} · ${item.lotes.length} lote(s) · NF ${esc(item.nf||'—')}</small><button class="btn" style="margin-top:7px" type="button" data-edit="${index}">Editar / concluir</button> <button class="btn danger" style="margin-top:7px" type="button" data-remove="${index}">Remover</button></div>`}).join('');$('basket').querySelectorAll('[data-edit]').forEach(button=>button.onclick=()=>editBasket(Number(button.dataset.edit)));$('basket').querySelectorAll('[data-remove]').forEach(button=>button.onclick=()=>{cesta.splice(Number(button.dataset.remove),1);saveBasket();renderBasket()})}
+function newProduct(){editingBasket=-1;['ean','nome','fab','apres','reg','proc','cnpjDet','nf','forn'].forEach(id=>$(id).value='');$('lots').innerHTML='';$('matches').innerHTML='';addLot();setLookup('Nenhuma consulta realizada. O preenchimento manual está liberado.','info');$('ean').focus()}
+function showRelation(){
+  $('relation').classList.remove('hidden');let totalLots=0,divergences=0,pending=0,rows='';
+  cesta.forEach(item=>item.lotes.forEach(lot=>{totalLots++;if(lot.pendente)pending++;else if(Math.abs(lot.diferenca)>1e-9)divergences++;const status=lot.pendente?'Pendente':Math.abs(lot.diferenca)<1e-9?'Sem divergência':'Divergência quantitativa',fisico=lot.fisicoDepois?'Preencher depois':lot.fisico===null?'—':lot.fisico,escriturado=lot.escrituradoDepois?'Preencher depois':lot.escriturado===null?'—':lot.escriturado;rows+=`<tr><td>${esc(item.nome||'—')}</td><td>${esc(item.fabricante||'—')}</td><td>${esc(item.registro||'—')}</td><td>${esc(item.processo||'—')}</td><td>${esc(lot.lote||'—')}</td><td>${esc(lot.validade||'—')}</td><td>${esc(fisico)}</td><td>${esc(escriturado)}</td><td>${lot.diferenca===null?'—':lot.diferenca}</td><td>${status}</td><td>${esc(item.nf||'—')}</td><td>${esc(item.fornecedor||'—')}</td></tr>`}));
+  $('relSum').innerHTML=`<div class="summary"><div class="sum"><b>${cesta.length}</b><span>${CONFIG.kind.toLowerCase()}</span></div><div class="sum"><b>${divergences}</b><span>divergências</span></div><div class="sum"><b>${pending}</b><span>pendências</span></div></div><div class="notice info"><strong>Consolidação:</strong> ${new Date().toLocaleString('pt-BR')}. Campos marcados “Preencher depois” permanecem como pendência e nunca são convertidos em zero.</div>`;
+  $('relBody').innerHTML=`<div class="tablewrap"><table class="tbl"><thead><tr><th>${CONFIG.singular}</th><th>Fabricante</th><th>Registro</th><th>Processo</th><th>Lote</th><th>Validade</th><th>Físico</th><th>Escriturado</th><th>Dif.</th><th>Situação</th><th>NF</th><th>CNPJ fornecedor</th></tr></thead><tbody>${rows||'<tr><td colspan="12">Cesta vazia</td></tr>'}</tbody></table></div><div class="status ${pending?'warn':divergences?'bad':'ok'}">${pending?'Há campos pendentes de preenchimento.':divergences?'Foram identificadas divergências quantitativas.':'Não foram identificadas divergências nos itens completamente informados.'}</div>`;
+  $('relation').scrollIntoView({behavior:'smooth'});
+}
+function word(){showRelation();const body=$('relation').innerHTML,doc=`<!doctype html><html><head><meta charset="utf-8"><style>body{font:10pt Arial;color:#222}h1{font-size:18pt}table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:5px;text-align:left}.actions,button{display:none}</style></head><body><h1>Conferência de estoque — ${esc(CONFIG.kind)}</h1>${body}</body></html>`;const blob=new Blob(['\ufeff',doc],{type:'application/msword'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='Conferencia_Estoque_'+CONFIG.key+'.doc';document.body.appendChild(link);link.click();setLookup('Relatório Word gerado. Verifique a pasta de downloads do navegador.','ok');setTimeout(()=>{URL.revokeObjectURL(link.href);link.remove()},800)}
+
+function stopNative(){if(loop)cancelAnimationFrame(loop);loop=0;if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;if($('video').srcObject)$('video').srcObject=null}
+function stopScan(){stopNative();if(zxingReader){try{zxingReader.reset()}catch(error){}zxingReader=null}$('scan').classList.remove('on')}
+async function loadScript(src){if([...document.scripts].some(script=>script.src===src))return;await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.appendChild(script)})}
+function useCaptured(value){const number=digits(value);if(!number)return;$('ean').value=number;const valid=gtinValid(number);setLookup(valid?'GTIN capturado e validado. Confira antes de continuar.':'Número capturado. O dígito verificador não corresponde a um GTIN válido; confira ou use outro identificador.',valid?'ok':'warn')}
+async function zxingFallback(){stopNative();$('scanStatus').textContent='Iniciando leitor alternativo…';try{await loadScript('https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js');zxingReader=new ZXing.BrowserMultiFormatReader();const result=await zxingReader.decodeOnceFromVideoDevice(undefined,$('video'));if(result){useCaptured(result.getText());stopScan()}}catch(error){$('scanStatus').textContent='Leitura indisponível. Feche a câmera ou digite o código.'}}
+async function startScan(){
+  stopScan();$('scan').classList.add('on');$('scanStatus').textContent='Abrindo câmera…';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('scanStatus').textContent='Câmera indisponível. Digite o código manualmente.';return}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('video').srcObject=stream;await $('video').play();
+    if(!('BarcodeDetector' in window)){await zxingFallback();return}
+    const wanted=['ean_13','ean_8','upc_a','upc_e','code_128'];let formats=wanted;
+    if(BarcodeDetector.getSupportedFormats){const supported=await BarcodeDetector.getSupportedFormats();formats=wanted.filter(format=>supported.includes(format))}
+    if(!formats.length){await zxingFallback();return}
+    let detector;try{detector=new BarcodeDetector({formats})}catch(error){await zxingFallback();return}
+    $('scanStatus').textContent='Aponte para o código.';
+    const tick=async()=>{if(!stream)return;try{const results=await detector.detect($('video'));if(results.length){useCaptured(results[0].rawValue);stopScan();return}}catch(error){}loop=requestAnimationFrame(tick)};tick();
+  }catch(error){stopNative();$('scanStatus').textContent='Não foi possível abrir a câmera. Digite o código manualmente.'}
+}
+async function ocrPhoto(){stockReader()}
+function stockReader(){MedTools.reader({title:'Foto ou documento do produto — conferir texto e EAN',fields:{ean:$('ean').value,nome:$('nome').value,lote:'',validade:''},extractor:t=>{const candidates=(t.match(/\b\d{8,14}\b/g)||[]).filter(gtinValid);return {ean:candidates[0]||'',nome:MedOcrLabel(t,['nome do produto','produto','medicamento']),lote:MedOcrLabel(t,['lote']),validade:MedOcrLabel(t,['validade'])}},onApply:f=>{if(f.ean)$('ean').value=f.ean;if(f.nome)$('nome').value=f.nome;if(f.lote||f.validade)addLot({lote:f.lote,validade:f.validade});setLookup('Texto conferido. Use Buscar para consultar o EAN na base Anvisa.','info')}})}
+
+function init(){
+  document.title='Conferência de estoque — '+CONFIG.kind;$('pageTitle').textContent='Conferência de estoque — '+CONFIG.kind;$('pageLead').textContent=`Conferência por ${CONFIG.singular}, com múltiplos lotes, documentos de aquisição e divergência automática.`;document.querySelectorAll('.singular').forEach(element=>element.textContent=CONFIG.singular);
+  if(CONFIG.key==='med')document.querySelectorAll('.product-only').forEach(element=>element.classList.add('hidden'));
+  $('back').onclick=()=>{const bridge=embeddedStock();if(bridge){bridge.close(window);return}try{if(parent&&parent!==window){var wrap=parent.document&&parent.document.getElementById('stockWrap'),tog=parent.document&&parent.document.getElementById('toggleStock');if(wrap){wrap.hidden=true;if(tog)tog.textContent='Abrir conferência';return}if(typeof parent.__cascaVoltarDireto==='function'){parent.__cascaVoltarDireto();return}parent.postMessage({__casca:'voltar'},'*');return}}catch(error){}try{w
+
+===== BLOCK app--alimentos-integrado =====
+
+--- Situação do documento @ 167394 ---
+eturn {dados:[]};})]).then(function (rr) {
+    var r=rr[0], afeRows=(rr[1]&&rr[1].dados)||[];
+    if (r.semRede) frios.push(r);
+    var refs = (r.dados || {})[cnpj] || [];
+    var alim = refs.filter(function (x) { return x.b === 'alimentos'; });
+    var outras = refs.filter(function (x) { return x.b !== 'alimentos'; });
+    var res = {
+      produtos: alim.map(function (x) {
+        return { processo: x.processo, registro: x.registro, produto: x.produto,
+                 detentor: x.detentor, cnpj: x.cnpj, situacao: x.situacao,
+                 vencimento_registro: x.vencimento, resumido: true };
+      }),
+      resumoCnpj: { total: refs.length, alimentos: alim.length, outras: outras.length,
+                    porBase: contaPorBase(outras), outrasRefs: outras }
+    };
+    return juntaComplementos(res.produtos, bases, frios, cnpj).then(function (j) {
+      j.resumoCnpj = res.resumoCnpj;
+      j.produtos = res.produtos;
+      j.afe = afeRows.filter(function(x){return D.so(x.cnpj)===cnpj;});
+      j.resumoCnpj.afe = j.afe.length;
+      if (!refs.length) j.vazio = 'CNPJ ' + cnpj + ' não localizado no índice de produtos.';
+      return j;
+    });
+  });
+}
+
+function contaPorBase(lista) {
+  var c = {};
+  lista.forEach(function (x) { c[x.b] = (c[x.b] || 0) + 1; });
+  return c;
+}
+
+function porGtin(g, bases, frios) {
+  var codigo = D.so(g);
+  return Promise.resolve({gtin:{
+    gtin: codigo,
+    situacao: 'Código validado estruturalmente',
+    observacao: 'O aplicativo não consulta base colaborativa de GTIN para alimentos. O código é mantido apenas como identificador do rótulo. A regularidade sanitária deve ser verificada pelas bases oficiais disponíveis por registro, processo ou CNPJ; para nome, use a consulta oficial da Anvisa.'
+  }});
+}
+
+/* ------------------------------------------- alertas e medidas fiscais */
+function juntaComplementos(produtos, bases, frios, cnpjDireto) {
+  var registros = {}, cnpjs = {}, processos = {};
+  (produtos || []).forEach(function (p) {
+    if (p.registro) registros[D.so(p.registro)] = 1;
+    if (p.cnpj) cnpjs[D.so(p.cnpj)] = 1;
+    if (p.processo) processos[D.so(p.processo)] = 1;
+  });
+  if (cnpjDireto) cnpjs[D.so(cnpjDireto)] = 1;
+
+  var tarefas = [];
+  Object.keys(cnpjs).forEach(function (c) {
+    tarefas.push(alertasPorCnpj(c, bases, frios));
+    tarefas.push(irregularPorCnpj(c, bases, frios));
+  });
+  Object.keys(registros).forEach(function (r) { tarefas.push(alertasPorRegistro(r, bases, frios)); });
+  Object.keys(processos).forEach(function (p) { tarefas.push(irregularPorProcesso(p, bases, frios)); });
+
+  return Promise.all(tarefas).then(function (rs) {
+    var alertas = [], irregulares = [], vistos = {};
+    rs.forEach(function (x) {
+      (x && x.alertas || []).forEach(function (a) {
+        if (!vistos['a' + a.a]) { vistos['a' + a.a] = 1; alertas.push(a); }
+      });
+      (x && x.irregulares || []).forEach(function (i) {
+        var k = 'i' + (i.processo || i.id_dossie);
+        if (!vistos[k]) { vistos[k] = 1; irregulares.push(i); }
+      });
+    });
+    return { produtos: produtos, alertas: alertas, irregulares: irregulares };
+  });
+}
+
+function alertasPorCnpj(cnpj, bases, frios) {
+  var f = D.CHAVE.cnpj(cnpj);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[cnpj] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function alertasPorRegistro(reg, bases, frios) {
+  var f = String(reg).slice(0, 3);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/registros/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[reg] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function irregularPorCnpj(cnpj, bases, frios) {
+  var f = String(cnpj || '').slice(0, 3);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('indices/irregulares_cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var processos = (r.dados || {})[cnpj] || [];
+    return Promise.all(processos.slice(0, 80).map(function (proc) {
+      return irregularPorProcesso(proc, bases, frios);
+    })).then(function (rs) {
+      var itens = [];
+      rs.forEach(function (x) { (x && x.irregulares || []).forEach(function (i) { itens.push(i); }); });
+      return { irregulares: itens };
+    });
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+function irregularPorProcesso(proc, bases, frios) {
+  var f = D.CHAVE.irregulares(proc);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('produtos_irregulares/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var d = (r.dados || {})[proc];
+    return { irregulares: d ? [Object.assign({ processo: proc }, d)] : [] };
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+/* -------------------------------------------------------- renderização */
+function fichaProduto(p, ctx) {
+  var b = el('div', 'bloco');
+  var h = el('h2', null, p.produto || '(produto sem nome no cadastro)');
+  b.appendChild(h);
+
+  var pills = el('div', 'chips');
+  if (p.tipo) pills.appendChild(el('span', 'pill info', p.tipo));
+  if (p.situacao) pills.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(p.situacao) ? 'ok' : 'nao'), p.situacao));
+  if (p.ativo === false && !p.situacao) pills.appendChild(el('span', 'pill nao', 'Situação da notificação/cadastro: inativa')); 
+  b.appendChild(pills);
+
+  var dl = el('dl', 'fichas');
+  function par(r, v) { if (v) { dl.appendChild(el('dt', null, r)); dl.appendChild(el('dd', null, v)); } }
+  par('Registro', p.registro);
+  par('Processo', p.processo);
+  par('Marcas', p.marcas);
+  par('Categoria', p.categoria);
+  par('Detentor', p.detentor);
+  par('CNPJ', p.cnpj);
+  par('Vencimento do registro', p.vencimento_registro);
+  par('Situação do documento (não equivale à situação do cadastro)', p.situacao_documento);
+  par('Regularizado em', p.regularizado_em);
+  par('Atualizado em', p.atualizado_em);
+  b.appendChild(dl);
+
+  if (p.resumido) {
+    var bt = el('button', 'b sec pequeno', 'Abrir cadastro completo');
+    bt.type = 'button';
+    bt.style.marginTop = '10px';
+    bt.onclick = function () {
+      bt.disabled = true;
+      produtoPorProcesso(p.processo, {}, []).then(function (full) {
+        if (!full) { b.appendChild(el('p', 'aviso-box', 'Cadastro completo não localizado.')); return; }
+        b.parentNode.replaceChild(fichaProduto(full, ctx), b);
+      });
+    };
+    b.appendChild(bt);
+    return b;
+  }
+
+  if (p.apresentacoes && p.apresentacoes.length) {
+    b.appendChild(el('h3', 'sub', p.apresentacoes.length + ' apresentação(ões)'));
+    p.apresentacoes.forEach(function (a) {
+      var d = el('details', 'ad');
+      var s = el('summary');
+      s.appendChild(el('span', 'ins', a.numero || '—'));
+      var m = el('span', 'nome');
+      m.appendChild(document.createTextNode('Registro ' + (a.registro || '—')));
+      m.appendChild(el('br'));
+      m.appendChild(el('span', 'fn', [a.material_embalagem, a.prazo_validade].filter(Boolean).join(' · ')));
+      s.appendChild(m);
+      if (a.situacao) s.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(a.situacao) ? 'ok' : 'nao'), a.situacao));
+      d.appendChild(s);
+      var c = el('div', 'corpo');
+      var dl2 = el('dl', 'fichas');
+      [['prazo_validade', 'Prazo de validade'], ['forma_fisica', 'Forma física'],
+       ['material_embalagem', 'Embalagem'], ['vias_administracao', 'Via'],
+       ['envasadores', 'Envasadores']].forEach(function (x) {
+        if (a[x[0]] && a[x[0]] !== '*******') {
+          dl2.appendChild(el('dt', null, x[1])); dl2.appendChild(el('dd', null, a[x[0]]));
+        }
+      });
+      c.appendChild(dl2);
+      if (a.tabela_nutricional) {
+        c.appendChild(el('h3', 'sub', 'Composição declarada na notificação'));
+        var pn = el('p'); pn.style.whiteSpace = 'pre-wrap'; pn.style.fontSize = '13px';
+        pn.textContent = a.tabela_nutricional;
+        c.appendChild(pn);
+        c.appendChild(el('p', 'prov-nota',
+          'Este campo só está preenchido em uma fração pequena das apresentações. '
+          + 'Serve como complemento ao rótulo, não como fonte principal.'));
+      }
+      if (a.alergenicos) {
+        c.appendChild(el('h3', 'sub', 'Alergênicos declarados'));
+        var pa = el('p'); pa.style.fontSize = '13px'; pa.style.whiteSpace = 'pre-wrap';
+        pa.textContent = String(a.alergenicos).replace(/#/g, ', ').replace(/\s*\|\s*/g, '\n');
+        c.appendChild(pa);
+      }
+      if (a.intolerancias) {
+        var pi = el('p'); pi.style.fontSize = '13px';
+        pi.textContent = a.intolerancias;
+        c.appendChild(pi);
+      }
+      d.appendChild(c);
+      b.appendChild(d);
+    });
+  }
+  return b;
+}
+
+/* Empresa: um bloco de resumo e uma lista compacta filtrável. Despejar 28
+   fichas completas, como fazia antes, é inútil no celular em campo. */
+function blocoEmpresa(r) {
+  var b = el('div', 'bloco');
+  var q = r.resumoCnpj;
+  var nome = (r.produtos[0] && r.produtos[0].detentor) || 'Empresa';
+  b.appendChild(el('h2', null, nome));
+  var pills = el('div', 'chips');
+  pills.appendChild(el('span', 'pill info', q.alimentos + ' em alimentos'));
+  if(q.afe) pills.appendChild(el('span','pill ok',q.afe+' AFE/AE'));
+  var ativos = r.produtos.filter(function (p) { return p.ativo === true || (p.ativo == null && /^\s*ativ[oa]\s*$/i.test(p.situacao || '')); }).length;
+  var inativos = r.produtos.filter(function (p) { return p.ativo === false || /^\s*inativ[oa]\s*$/i.test(p.situacao || ''); }).length;
+  var semSituacao = Math.max(0, q.alimentos - ativos - inativos);
+  pills.appendChild(el('span', 'pill ' + (ativos ? 'ok' : 'neutro'), ativos + ' ativos'));
+  if (inativos) pills.appendChild(el('span', 'pill nao', inativos + ' inativos'));
+  if (semSituacao) pills.appendChild(el('span', 'pill neutro', semSituacao + ' sem situação explícita na base'));
+  Object.keys(q.porBase || {}).forEach(function (k) {
+    pills.appendChild(el('span', 'pill neutro', q.porBase[k] + ' em ' + k));
+  });
+  b.appendChild(pills);
+  if (q.outras) {
+    b.appendChild(el('p', 'leg', 'O CNPJ também aparece em outras bases da Anvisa. Os resultados ficam separados por origem para não confundir classes de produto.'));
+    var outrasBox=el('details'); outrasBox.className='recolhivel';
+    outrasBox.appendChild(el('summary',null,'Outras bases vinculadas ao CNPJ ('+q.outras+')'));
+    var grupos={}; (q.outrasRefs||[]).forEach(function(x){var k=x.b||'outra_base';(grupos[k]||(grupos[k]=[])).push(x);});
+    Object.keys(grupos).sort().forEach(function(k){
+      var sec=el('div','info-box'); sec.appendChild(el('strong',null,(D.NOMES&&D.NOMES[k])||k));
+      grupos[k].slice(0,40).forEach(function(x){
+        var p=el('p'); p.style.fontSize='13px'; p.textContent=[x.produto||x.nome||x.razao_social,x.registro||x.regularizacao,x.processo,x.situacao].filter(Boolean).join(' · '); sec.appendChild(p);
+      });
+      if(grupos[k].length>40) sec.appendChild(el('p','leg','Mais '+(grupos[k].length-40)+' vínculos nesta origem.'));
+      outrasBox.appendChild(sec);
+    });
+    b.appendChild(outrasBox);
+  }
+  if(r.afe && r.afe.length){var af=el('details');af.className='recolhivel';var sm=el('summary',null,'AFE / AE localizadas ('+r.afe.length+')');af.appendChild(sm);r.afe.slice(0,20).forEach(function(x){var d=el('div','info-box');d.textContent=[x.autorizacao||x.afe||x.numero,x.atividade||x.tipo,x.situacao].filter(Boolean).join(' · ');af.appendChild(d)});b.appendChild(af);}
+
+  if (!r.produtos.length) return b;
+
+  var f = el('label', 'campo');
+  f.appendChild(el('span', null, 'Filtrar produtos desta empresa'));
+  var fi = el('input'); fi.type = 'search'; fi.placeholder = 'nome, registro ou situação';
+  f.appendChild(fi);
+  b.appendChild(f);
+
+  var lista = el('div');
+  b.appendChild(lista);
+
+  var pagina = 0, POR = 12;
+  function pinta(reset) {
+    if (reset) { pagina = 0; limpa(lista); }
+    var t = D.texto(fi.value);
+    var filtrados = r.produtos.filter(function (p) {
+      return !t || D.texto(p.produto).indexOf(t) >= 0
+          || String(p.registro || '').indexOf(fi.value.trim()) === 0
+          || D.texto(p.situacao).indexOf(t) >= 0;
+    });
+    limpa(lista);
+    if (!filtrados.length) { lista.appendChild(el('p', 'vazio', 'Nenhum produto com esse termo.')); return; }
+    filtrados.slice(0, (pagina + 1) * POR).forEach(function (p) {
+      var linha = el('button', 'no');
+      linha.type = 'button';
+      linha.appendChild(el('span', 'cod', p.registro || '—'));
+      var n = el('span', 'nome');
+      n.appendChild(document.createTextNode(p.produto || '(sem nome)'));
+      n.appendChild(el('br'));
+      n.appendChild(el('span', 'fn', [p.situacao, p.vencimento_registro && 'venc. ' + p.vencimento_registro]
+        .filter(Boolean).join(' · ')));
+      linha.appendChild(n);
+      linha.appendChild(el('span', 'seta', '›'));
+      linha.onclick = function () {
+        linha.disabled = true;
+        produtoPorProcesso(p.processo, {}, []).then(function (full) {
+          var ficha = fichaProduto(full || p, r);
+          ficha.style.margin = '8px 0';
+          linha.parentNode.insertBefore(ficha, linha.nextSibling);
+          linha.remove();
+        });
+      };
+      lista.appendChild(linha);
+    });
+    if (filtrados.length > (pagina + 1) * POR) {
+      var mais = el('button', 'b leve pequeno',
+        'Ver mais (' + (filtrados.length - (pagina + 1) * POR) + ' restantes)');
+      mais.type = 'button';
+      mais.style.marginTop = '10px';
+      mais.onclick = function () { pagina++; pinta(false); };
+      lista.appendChild(mais);
+    }
+  }
+  var t = null;
+  fi.oninput = function () { clearTimeout(t); t = setTimeout(function () { pinta(true); }, 160); };
+  pinta(true);
+  return b;
+}
+
+function fichaGtin(g) {
+  var b = el('div', 'bloco');
+  b.appendChild(el('h2', null, g.produto || 'Produto localizado por GTIN'));
+  var dl = el('dl', 'fichas');
+  Object.keys(g).slice(0, 16).forEach(function (k) {
+    if (!g[k] || typeof g[k] === 'object') return;
+    dl.appendChild(el('dt', null, k.replace(/_/g, ' ')));
+    dl.appendChild(el('dd', null, String(g[k])));
+  });
+  b.appendChild(dl);
+  b.appendChild(el('div', 'info-box', 'GTIN validado somente como identificador. Não há consulta a base colaborativa nem inferência de regularidade sanitária a partir do código.'));
+  return b;
+}
+
+function blocoAlertas(alertas) {
+  var b = el('div', 'bloco');
+  var h = el('h2');
+  h.appendChild(el('span', 'pill aviso', String(alertas.length)));
+  h.appendChild(document.createTextNode(' alerta(s) sanitário(s) relacionado(s)'));
+  b.appendChild(h);
+  b.appendChild(el('p', 'leg',
+    'Alertas ligados ao registro ou ao CNPJ. Confira se o alerta se refere ao produto '
+    + 'e ao lote encontrados na inspeção antes de citá-lo.'));
+  alertas.sort(function (x, y) { return String(y.d).localeCompare(String(x.d)); });
+  alertas.slice(0, 30).forEach(function (a) {
+    var d = el('details', 'ad');
+    var s = el('summary');
+    s.appendChild(el('span', 'ins', String(a.a)));
+    var m = el('span', 'nome');
+    m.appendChild(document.createTextNode(a.t || '(sem título)'));
+    m.appendChild(el('br'));
+    m.appendChild(el('span', 'fn', [fmtData(a.d), a.area, a.tipo_produto].filter(Boolean).join(' · ')));
+    s.appendChild(m);
+    d.appendChild(s);
+    var c = el('div', 'corpo');
+    var bt = el('button', 'b sec pequeno', 'Abrir o alerta completo');
+    bt.type = 'button';
+    bt.onclick = function () {
+      bt.disabled = true;
+      var f = D.CHAVE.alerta(a.a);
+      D.busca('alertas_sanitarios/alertas/' + f + '.json').then(function (r) {
+        var lista = r.dados || [];
+        var alvo = null;
+        for (var i = 0; i < lista.length; i++)
+          if (String(lista[i].numero_alerta) === String(a.a)) { alvo = lista[i]; break; }
+        if (!alvo) 
+
+--- Regularizado em @ 167486 ---
+;
+    if (r.semRede) frios.push(r);
+    var refs = (r.dados || {})[cnpj] || [];
+    var alim = refs.filter(function (x) { return x.b === 'alimentos'; });
+    var outras = refs.filter(function (x) { return x.b !== 'alimentos'; });
+    var res = {
+      produtos: alim.map(function (x) {
+        return { processo: x.processo, registro: x.registro, produto: x.produto,
+                 detentor: x.detentor, cnpj: x.cnpj, situacao: x.situacao,
+                 vencimento_registro: x.vencimento, resumido: true };
+      }),
+      resumoCnpj: { total: refs.length, alimentos: alim.length, outras: outras.length,
+                    porBase: contaPorBase(outras), outrasRefs: outras }
+    };
+    return juntaComplementos(res.produtos, bases, frios, cnpj).then(function (j) {
+      j.resumoCnpj = res.resumoCnpj;
+      j.produtos = res.produtos;
+      j.afe = afeRows.filter(function(x){return D.so(x.cnpj)===cnpj;});
+      j.resumoCnpj.afe = j.afe.length;
+      if (!refs.length) j.vazio = 'CNPJ ' + cnpj + ' não localizado no índice de produtos.';
+      return j;
+    });
+  });
+}
+
+function contaPorBase(lista) {
+  var c = {};
+  lista.forEach(function (x) { c[x.b] = (c[x.b] || 0) + 1; });
+  return c;
+}
+
+function porGtin(g, bases, frios) {
+  var codigo = D.so(g);
+  return Promise.resolve({gtin:{
+    gtin: codigo,
+    situacao: 'Código validado estruturalmente',
+    observacao: 'O aplicativo não consulta base colaborativa de GTIN para alimentos. O código é mantido apenas como identificador do rótulo. A regularidade sanitária deve ser verificada pelas bases oficiais disponíveis por registro, processo ou CNPJ; para nome, use a consulta oficial da Anvisa.'
+  }});
+}
+
+/* ------------------------------------------- alertas e medidas fiscais */
+function juntaComplementos(produtos, bases, frios, cnpjDireto) {
+  var registros = {}, cnpjs = {}, processos = {};
+  (produtos || []).forEach(function (p) {
+    if (p.registro) registros[D.so(p.registro)] = 1;
+    if (p.cnpj) cnpjs[D.so(p.cnpj)] = 1;
+    if (p.processo) processos[D.so(p.processo)] = 1;
+  });
+  if (cnpjDireto) cnpjs[D.so(cnpjDireto)] = 1;
+
+  var tarefas = [];
+  Object.keys(cnpjs).forEach(function (c) {
+    tarefas.push(alertasPorCnpj(c, bases, frios));
+    tarefas.push(irregularPorCnpj(c, bases, frios));
+  });
+  Object.keys(registros).forEach(function (r) { tarefas.push(alertasPorRegistro(r, bases, frios)); });
+  Object.keys(processos).forEach(function (p) { tarefas.push(irregularPorProcesso(p, bases, frios)); });
+
+  return Promise.all(tarefas).then(function (rs) {
+    var alertas = [], irregulares = [], vistos = {};
+    rs.forEach(function (x) {
+      (x && x.alertas || []).forEach(function (a) {
+        if (!vistos['a' + a.a]) { vistos['a' + a.a] = 1; alertas.push(a); }
+      });
+      (x && x.irregulares || []).forEach(function (i) {
+        var k = 'i' + (i.processo || i.id_dossie);
+        if (!vistos[k]) { vistos[k] = 1; irregulares.push(i); }
+      });
+    });
+    return { produtos: produtos, alertas: alertas, irregulares: irregulares };
+  });
+}
+
+function alertasPorCnpj(cnpj, bases, frios) {
+  var f = D.CHAVE.cnpj(cnpj);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[cnpj] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function alertasPorRegistro(reg, bases, frios) {
+  var f = String(reg).slice(0, 3);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/registros/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[reg] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function irregularPorCnpj(cnpj, bases, frios) {
+  var f = String(cnpj || '').slice(0, 3);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('indices/irregulares_cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var processos = (r.dados || {})[cnpj] || [];
+    return Promise.all(processos.slice(0, 80).map(function (proc) {
+      return irregularPorProcesso(proc, bases, frios);
+    })).then(function (rs) {
+      var itens = [];
+      rs.forEach(function (x) { (x && x.irregulares || []).forEach(function (i) { itens.push(i); }); });
+      return { irregulares: itens };
+    });
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+function irregularPorProcesso(proc, bases, frios) {
+  var f = D.CHAVE.irregulares(proc);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('produtos_irregulares/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var d = (r.dados || {})[proc];
+    return { irregulares: d ? [Object.assign({ processo: proc }, d)] : [] };
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+/* -------------------------------------------------------- renderização */
+function fichaProduto(p, ctx) {
+  var b = el('div', 'bloco');
+  var h = el('h2', null, p.produto || '(produto sem nome no cadastro)');
+  b.appendChild(h);
+
+  var pills = el('div', 'chips');
+  if (p.tipo) pills.appendChild(el('span', 'pill info', p.tipo));
+  if (p.situacao) pills.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(p.situacao) ? 'ok' : 'nao'), p.situacao));
+  if (p.ativo === false && !p.situacao) pills.appendChild(el('span', 'pill nao', 'Situação da notificação/cadastro: inativa')); 
+  b.appendChild(pills);
+
+  var dl = el('dl', 'fichas');
+  function par(r, v) { if (v) { dl.appendChild(el('dt', null, r)); dl.appendChild(el('dd', null, v)); } }
+  par('Registro', p.registro);
+  par('Processo', p.processo);
+  par('Marcas', p.marcas);
+  par('Categoria', p.categoria);
+  par('Detentor', p.detentor);
+  par('CNPJ', p.cnpj);
+  par('Vencimento do registro', p.vencimento_registro);
+  par('Situação do documento (não equivale à situação do cadastro)', p.situacao_documento);
+  par('Regularizado em', p.regularizado_em);
+  par('Atualizado em', p.atualizado_em);
+  b.appendChild(dl);
+
+  if (p.resumido) {
+    var bt = el('button', 'b sec pequeno', 'Abrir cadastro completo');
+    bt.type = 'button';
+    bt.style.marginTop = '10px';
+    bt.onclick = function () {
+      bt.disabled = true;
+      produtoPorProcesso(p.processo, {}, []).then(function (full) {
+        if (!full) { b.appendChild(el('p', 'aviso-box', 'Cadastro completo não localizado.')); return; }
+        b.parentNode.replaceChild(fichaProduto(full, ctx), b);
+      });
+    };
+    b.appendChild(bt);
+    return b;
+  }
+
+  if (p.apresentacoes && p.apresentacoes.length) {
+    b.appendChild(el('h3', 'sub', p.apresentacoes.length + ' apresentação(ões)'));
+    p.apresentacoes.forEach(function (a) {
+      var d = el('details', 'ad');
+      var s = el('summary');
+      s.appendChild(el('span', 'ins', a.numero || '—'));
+      var m = el('span', 'nome');
+      m.appendChild(document.createTextNode('Registro ' + (a.registro || '—')));
+      m.appendChild(el('br'));
+      m.appendChild(el('span', 'fn', [a.material_embalagem, a.prazo_validade].filter(Boolean).join(' · ')));
+      s.appendChild(m);
+      if (a.situacao) s.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(a.situacao) ? 'ok' : 'nao'), a.situacao));
+      d.appendChild(s);
+      var c = el('div', 'corpo');
+      var dl2 = el('dl', 'fichas');
+      [['prazo_validade', 'Prazo de validade'], ['forma_fisica', 'Forma física'],
+       ['material_embalagem', 'Embalagem'], ['vias_administracao', 'Via'],
+       ['envasadores', 'Envasadores']].forEach(function (x) {
+        if (a[x[0]] && a[x[0]] !== '*******') {
+          dl2.appendChild(el('dt', null, x[1])); dl2.appendChild(el('dd', null, a[x[0]]));
+        }
+      });
+      c.appendChild(dl2);
+      if (a.tabela_nutricional) {
+        c.appendChild(el('h3', 'sub', 'Composição declarada na notificação'));
+        var pn = el('p'); pn.style.whiteSpace = 'pre-wrap'; pn.style.fontSize = '13px';
+        pn.textContent = a.tabela_nutricional;
+        c.appendChild(pn);
+        c.appendChild(el('p', 'prov-nota',
+          'Este campo só está preenchido em uma fração pequena das apresentações. '
+          + 'Serve como complemento ao rótulo, não como fonte principal.'));
+      }
+      if (a.alergenicos) {
+        c.appendChild(el('h3', 'sub', 'Alergênicos declarados'));
+        var pa = el('p'); pa.style.fontSize = '13px'; pa.style.whiteSpace = 'pre-wrap';
+        pa.textContent = String(a.alergenicos).replace(/#/g, ', ').replace(/\s*\|\s*/g, '\n');
+        c.appendChild(pa);
+      }
+      if (a.intolerancias) {
+        var pi = el('p'); pi.style.fontSize = '13px';
+        pi.textContent = a.intolerancias;
+        c.appendChild(pi);
+      }
+      d.appendChild(c);
+      b.appendChild(d);
+    });
+  }
+  return b;
+}
+
+/* Empresa: um bloco de resumo e uma lista compacta filtrável. Despejar 28
+   fichas completas, como fazia antes, é inútil no celular em campo. */
+function blocoEmpresa(r) {
+  var b = el('div', 'bloco');
+  var q = r.resumoCnpj;
+  var nome = (r.produtos[0] && r.produtos[0].detentor) || 'Empresa';
+  b.appendChild(el('h2', null, nome));
+  var pills = el('div', 'chips');
+  pills.appendChild(el('span', 'pill info', q.alimentos + ' em alimentos'));
+  if(q.afe) pills.appendChild(el('span','pill ok',q.afe+' AFE/AE'));
+  var ativos = r.produtos.filter(function (p) { return p.ativo === true || (p.ativo == null && /^\s*ativ[oa]\s*$/i.test(p.situacao || '')); }).length;
+  var inativos = r.produtos.filter(function (p) { return p.ativo === false || /^\s*inativ[oa]\s*$/i.test(p.situacao || ''); }).length;
+  var semSituacao = Math.max(0, q.alimentos - ativos - inativos);
+  pills.appendChild(el('span', 'pill ' + (ativos ? 'ok' : 'neutro'), ativos + ' ativos'));
+  if (inativos) pills.appendChild(el('span', 'pill nao', inativos + ' inativos'));
+  if (semSituacao) pills.appendChild(el('span', 'pill neutro', semSituacao + ' sem situação explícita na base'));
+  Object.keys(q.porBase || {}).forEach(function (k) {
+    pills.appendChild(el('span', 'pill neutro', q.porBase[k] + ' em ' + k));
+  });
+  b.appendChild(pills);
+  if (q.outras) {
+    b.appendChild(el('p', 'leg', 'O CNPJ também aparece em outras bases da Anvisa. Os resultados ficam separados por origem para não confundir classes de produto.'));
+    var outrasBox=el('details'); outrasBox.className='recolhivel';
+    outrasBox.appendChild(el('summary',null,'Outras bases vinculadas ao CNPJ ('+q.outras+')'));
+    var grupos={}; (q.outrasRefs||[]).forEach(function(x){var k=x.b||'outra_base';(grupos[k]||(grupos[k]=[])).push(x);});
+    Object.keys(grupos).sort().forEach(function(k){
+      var sec=el('div','info-box'); sec.appendChild(el('strong',null,(D.NOMES&&D.NOMES[k])||k));
+      grupos[k].slice(0,40).forEach(function(x){
+        var p=el('p'); p.style.fontSize='13px'; p.textContent=[x.produto||x.nome||x.razao_social,x.registro||x.regularizacao,x.processo,x.situacao].filter(Boolean).join(' · '); sec.appendChild(p);
+      });
+      if(grupos[k].length>40) sec.appendChild(el('p','leg','Mais '+(grupos[k].length-40)+' vínculos nesta origem.'));
+      outrasBox.appendChild(sec);
+    });
+    b.appendChild(outrasBox);
+  }
+  if(r.afe && r.afe.length){var af=el('details');af.className='recolhivel';var sm=el('summary',null,'AFE / AE localizadas ('+r.afe.length+')');af.appendChild(sm);r.afe.slice(0,20).forEach(function(x){var d=el('div','info-box');d.textContent=[x.autorizacao||x.afe||x.numero,x.atividade||x.tipo,x.situacao].filter(Boolean).join(' · ');af.appendChild(d)});b.appendChild(af);}
+
+  if (!r.produtos.length) return b;
+
+  var f = el('label', 'campo');
+  f.appendChild(el('span', null, 'Filtrar produtos desta empresa'));
+  var fi = el('input'); fi.type = 'search'; fi.placeholder = 'nome, registro ou situação';
+  f.appendChild(fi);
+  b.appendChild(f);
+
+  var lista = el('div');
+  b.appendChild(lista);
+
+  var pagina = 0, POR = 12;
+  function pinta(reset) {
+    if (reset) { pagina = 0; limpa(lista); }
+    var t = D.texto(fi.value);
+    var filtrados = r.produtos.filter(function (p) {
+      return !t || D.texto(p.produto).indexOf(t) >= 0
+          || String(p.registro || '').indexOf(fi.value.trim()) === 0
+          || D.texto(p.situacao).indexOf(t) >= 0;
+    });
+    limpa(lista);
+    if (!filtrados.length) { lista.appendChild(el('p', 'vazio', 'Nenhum produto com esse termo.')); return; }
+    filtrados.slice(0, (pagina + 1) * POR).forEach(function (p) {
+      var linha = el('button', 'no');
+      linha.type = 'button';
+      linha.appendChild(el('span', 'cod', p.registro || '—'));
+      var n = el('span', 'nome');
+      n.appendChild(document.createTextNode(p.produto || '(sem nome)'));
+      n.appendChild(el('br'));
+      n.appendChild(el('span', 'fn', [p.situacao, p.vencimento_registro && 'venc. ' + p.vencimento_registro]
+        .filter(Boolean).join(' · ')));
+      linha.appendChild(n);
+      linha.appendChild(el('span', 'seta', '›'));
+      linha.onclick = function () {
+        linha.disabled = true;
+        produtoPorProcesso(p.processo, {}, []).then(function (full) {
+          var ficha = fichaProduto(full || p, r);
+          ficha.style.margin = '8px 0';
+          linha.parentNode.insertBefore(ficha, linha.nextSibling);
+          linha.remove();
+        });
+      };
+      lista.appendChild(linha);
+    });
+    if (filtrados.length > (pagina + 1) * POR) {
+      var mais = el('button', 'b leve pequeno',
+        'Ver mais (' + (filtrados.length - (pagina + 1) * POR) + ' restantes)');
+      mais.type = 'button';
+      mais.style.marginTop = '10px';
+      mais.onclick = function () { pagina++; pinta(false); };
+      lista.appendChild(mais);
+    }
+  }
+  var t = null;
+  fi.oninput = function () { clearTimeout(t); t = setTimeout(function () { pinta(true); }, 160); };
+  pinta(true);
+  return b;
+}
+
+function fichaGtin(g) {
+  var b = el('div', 'bloco');
+  b.appendChild(el('h2', null, g.produto || 'Produto localizado por GTIN'));
+  var dl = el('dl', 'fichas');
+  Object.keys(g).slice(0, 16).forEach(function (k) {
+    if (!g[k] || typeof g[k] === 'object') return;
+    dl.appendChild(el('dt', null, k.replace(/_/g, ' ')));
+    dl.appendChild(el('dd', null, String(g[k])));
+  });
+  b.appendChild(dl);
+  b.appendChild(el('div', 'info-box', 'GTIN validado somente como identificador. Não há consulta a base colaborativa nem inferência de regularidade sanitária a partir do código.'));
+  return b;
+}
+
+function blocoAlertas(alertas) {
+  var b = el('div', 'bloco');
+  var h = el('h2');
+  h.appendChild(el('span', 'pill aviso', String(alertas.length)));
+  h.appendChild(document.createTextNode(' alerta(s) sanitário(s) relacionado(s)'));
+  b.appendChild(h);
+  b.appendChild(el('p', 'leg',
+    'Alertas ligados ao registro ou ao CNPJ. Confira se o alerta se refere ao produto '
+    + 'e ao lote encontrados na inspeção antes de citá-lo.'));
+  alertas.sort(function (x, y) { return String(y.d).localeCompare(String(x.d)); });
+  alertas.slice(0, 30).forEach(function (a) {
+    var d = el('details', 'ad');
+    var s = el('summary');
+    s.appendChild(el('span', 'ins', String(a.a)));
+    var m = el('span', 'nome');
+    m.appendChild(document.createTextNode(a.t || '(sem título)'));
+    m.appendChild(el('br'));
+    m.appendChild(el('span', 'fn', [fmtData(a.d), a.area, a.tipo_produto].filter(Boolean).join(' · ')));
+    s.appendChild(m);
+    d.appendChild(s);
+    var c = el('div', 'corpo');
+    var bt = el('button', 'b sec pequeno', 'Abrir o alerta completo');
+    bt.type = 'button';
+    bt.onclick = function () {
+      bt.disabled = true;
+      var f = D.CHAVE.alerta(a.a);
+      D.busca('alertas_sanitarios/alertas/' + f + '.json').then(function (r) {
+        var lista = r.dados || [];
+        var alvo = null;
+        for (var i = 0; i < lista.length; i++)
+          if (String(lista[i].numero_alerta) === String(a.a)) { alvo = lista[i]; break; }
+        if (!alvo) { c.appendChild(el('p', 'aviso-box', 'Alerta não localizado no fragmento.')); return; }
+    
+
+--- Vencimento do registro @ 167338 ---
+afe_ae/' + cnpj.slice(0,3) + '.json').catch(function(){return {dados:[]};})]).then(function (rr) {
+    var r=rr[0], afeRows=(rr[1]&&rr[1].dados)||[];
+    if (r.semRede) frios.push(r);
+    var refs = (r.dados || {})[cnpj] || [];
+    var alim = refs.filter(function (x) { return x.b === 'alimentos'; });
+    var outras = refs.filter(function (x) { return x.b !== 'alimentos'; });
+    var res = {
+      produtos: alim.map(function (x) {
+        return { processo: x.processo, registro: x.registro, produto: x.produto,
+                 detentor: x.detentor, cnpj: x.cnpj, situacao: x.situacao,
+                 vencimento_registro: x.vencimento, resumido: true };
+      }),
+      resumoCnpj: { total: refs.length, alimentos: alim.length, outras: outras.length,
+                    porBase: contaPorBase(outras), outrasRefs: outras }
+    };
+    return juntaComplementos(res.produtos, bases, frios, cnpj).then(function (j) {
+      j.resumoCnpj = res.resumoCnpj;
+      j.produtos = res.produtos;
+      j.afe = afeRows.filter(function(x){return D.so(x.cnpj)===cnpj;});
+      j.resumoCnpj.afe = j.afe.length;
+      if (!refs.length) j.vazio = 'CNPJ ' + cnpj + ' não localizado no índice de produtos.';
+      return j;
+    });
+  });
+}
+
+function contaPorBase(lista) {
+  var c = {};
+  lista.forEach(function (x) { c[x.b] = (c[x.b] || 0) + 1; });
+  return c;
+}
+
+function porGtin(g, bases, frios) {
+  var codigo = D.so(g);
+  return Promise.resolve({gtin:{
+    gtin: codigo,
+    situacao: 'Código validado estruturalmente',
+    observacao: 'O aplicativo não consulta base colaborativa de GTIN para alimentos. O código é mantido apenas como identificador do rótulo. A regularidade sanitária deve ser verificada pelas bases oficiais disponíveis por registro, processo ou CNPJ; para nome, use a consulta oficial da Anvisa.'
+  }});
+}
+
+/* ------------------------------------------- alertas e medidas fiscais */
+function juntaComplementos(produtos, bases, frios, cnpjDireto) {
+  var registros = {}, cnpjs = {}, processos = {};
+  (produtos || []).forEach(function (p) {
+    if (p.registro) registros[D.so(p.registro)] = 1;
+    if (p.cnpj) cnpjs[D.so(p.cnpj)] = 1;
+    if (p.processo) processos[D.so(p.processo)] = 1;
+  });
+  if (cnpjDireto) cnpjs[D.so(cnpjDireto)] = 1;
+
+  var tarefas = [];
+  Object.keys(cnpjs).forEach(function (c) {
+    tarefas.push(alertasPorCnpj(c, bases, frios));
+    tarefas.push(irregularPorCnpj(c, bases, frios));
+  });
+  Object.keys(registros).forEach(function (r) { tarefas.push(alertasPorRegistro(r, bases, frios)); });
+  Object.keys(processos).forEach(function (p) { tarefas.push(irregularPorProcesso(p, bases, frios)); });
+
+  return Promise.all(tarefas).then(function (rs) {
+    var alertas = [], irregulares = [], vistos = {};
+    rs.forEach(function (x) {
+      (x && x.alertas || []).forEach(function (a) {
+        if (!vistos['a' + a.a]) { vistos['a' + a.a] = 1; alertas.push(a); }
+      });
+      (x && x.irregulares || []).forEach(function (i) {
+        var k = 'i' + (i.processo || i.id_dossie);
+        if (!vistos[k]) { vistos[k] = 1; irregulares.push(i); }
+      });
+    });
+    return { produtos: produtos, alertas: alertas, irregulares: irregulares };
+  });
+}
+
+function alertasPorCnpj(cnpj, bases, frios) {
+  var f = D.CHAVE.cnpj(cnpj);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[cnpj] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function alertasPorRegistro(reg, bases, frios) {
+  var f = String(reg).slice(0, 3);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/registros/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[reg] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function irregularPorCnpj(cnpj, bases, frios) {
+  var f = String(cnpj || '').slice(0, 3);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('indices/irregulares_cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var processos = (r.dados || {})[cnpj] || [];
+    return Promise.all(processos.slice(0, 80).map(function (proc) {
+      return irregularPorProcesso(proc, bases, frios);
+    })).then(function (rs) {
+      var itens = [];
+      rs.forEach(function (x) { (x && x.irregulares || []).forEach(function (i) { itens.push(i); }); });
+      return { irregulares: itens };
+    });
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+function irregularPorProcesso(proc, bases, frios) {
+  var f = D.CHAVE.irregulares(proc);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('produtos_irregulares/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var d = (r.dados || {})[proc];
+    return { irregulares: d ? [Object.assign({ processo: proc }, d)] : [] };
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+/* -------------------------------------------------------- renderização */
+function fichaProduto(p, ctx) {
+  var b = el('div', 'bloco');
+  var h = el('h2', null, p.produto || '(produto sem nome no cadastro)');
+  b.appendChild(h);
+
+  var pills = el('div', 'chips');
+  if (p.tipo) pills.appendChild(el('span', 'pill info', p.tipo));
+  if (p.situacao) pills.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(p.situacao) ? 'ok' : 'nao'), p.situacao));
+  if (p.ativo === false && !p.situacao) pills.appendChild(el('span', 'pill nao', 'Situação da notificação/cadastro: inativa')); 
+  b.appendChild(pills);
+
+  var dl = el('dl', 'fichas');
+  function par(r, v) { if (v) { dl.appendChild(el('dt', null, r)); dl.appendChild(el('dd', null, v)); } }
+  par('Registro', p.registro);
+  par('Processo', p.processo);
+  par('Marcas', p.marcas);
+  par('Categoria', p.categoria);
+  par('Detentor', p.detentor);
+  par('CNPJ', p.cnpj);
+  par('Vencimento do registro', p.vencimento_registro);
+  par('Situação do documento (não equivale à situação do cadastro)', p.situacao_documento);
+  par('Regularizado em', p.regularizado_em);
+  par('Atualizado em', p.atualizado_em);
+  b.appendChild(dl);
+
+  if (p.resumido) {
+    var bt = el('button', 'b sec pequeno', 'Abrir cadastro completo');
+    bt.type = 'button';
+    bt.style.marginTop = '10px';
+    bt.onclick = function () {
+      bt.disabled = true;
+      produtoPorProcesso(p.processo, {}, []).then(function (full) {
+        if (!full) { b.appendChild(el('p', 'aviso-box', 'Cadastro completo não localizado.')); return; }
+        b.parentNode.replaceChild(fichaProduto(full, ctx), b);
+      });
+    };
+    b.appendChild(bt);
+    return b;
+  }
+
+  if (p.apresentacoes && p.apresentacoes.length) {
+    b.appendChild(el('h3', 'sub', p.apresentacoes.length + ' apresentação(ões)'));
+    p.apresentacoes.forEach(function (a) {
+      var d = el('details', 'ad');
+      var s = el('summary');
+      s.appendChild(el('span', 'ins', a.numero || '—'));
+      var m = el('span', 'nome');
+      m.appendChild(document.createTextNode('Registro ' + (a.registro || '—')));
+      m.appendChild(el('br'));
+      m.appendChild(el('span', 'fn', [a.material_embalagem, a.prazo_validade].filter(Boolean).join(' · ')));
+      s.appendChild(m);
+      if (a.situacao) s.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(a.situacao) ? 'ok' : 'nao'), a.situacao));
+      d.appendChild(s);
+      var c = el('div', 'corpo');
+      var dl2 = el('dl', 'fichas');
+      [['prazo_validade', 'Prazo de validade'], ['forma_fisica', 'Forma física'],
+       ['material_embalagem', 'Embalagem'], ['vias_administracao', 'Via'],
+       ['envasadores', 'Envasadores']].forEach(function (x) {
+        if (a[x[0]] && a[x[0]] !== '*******') {
+          dl2.appendChild(el('dt', null, x[1])); dl2.appendChild(el('dd', null, a[x[0]]));
+        }
+      });
+      c.appendChild(dl2);
+      if (a.tabela_nutricional) {
+        c.appendChild(el('h3', 'sub', 'Composição declarada na notificação'));
+        var pn = el('p'); pn.style.whiteSpace = 'pre-wrap'; pn.style.fontSize = '13px';
+        pn.textContent = a.tabela_nutricional;
+        c.appendChild(pn);
+        c.appendChild(el('p', 'prov-nota',
+          'Este campo só está preenchido em uma fração pequena das apresentações. '
+          + 'Serve como complemento ao rótulo, não como fonte principal.'));
+      }
+      if (a.alergenicos) {
+        c.appendChild(el('h3', 'sub', 'Alergênicos declarados'));
+        var pa = el('p'); pa.style.fontSize = '13px'; pa.style.whiteSpace = 'pre-wrap';
+        pa.textContent = String(a.alergenicos).replace(/#/g, ', ').replace(/\s*\|\s*/g, '\n');
+        c.appendChild(pa);
+      }
+      if (a.intolerancias) {
+        var pi = el('p'); pi.style.fontSize = '13px';
+        pi.textContent = a.intolerancias;
+        c.appendChild(pi);
+      }
+      d.appendChild(c);
+      b.appendChild(d);
+    });
+  }
+  return b;
+}
+
+/* Empresa: um bloco de resumo e uma lista compacta filtrável. Despejar 28
+   fichas completas, como fazia antes, é inútil no celular em campo. */
+function blocoEmpresa(r) {
+  var b = el('div', 'bloco');
+  var q = r.resumoCnpj;
+  var nome = (r.produtos[0] && r.produtos[0].detentor) || 'Empresa';
+  b.appendChild(el('h2', null, nome));
+  var pills = el('div', 'chips');
+  pills.appendChild(el('span', 'pill info', q.alimentos + ' em alimentos'));
+  if(q.afe) pills.appendChild(el('span','pill ok',q.afe+' AFE/AE'));
+  var ativos = r.produtos.filter(function (p) { return p.ativo === true || (p.ativo == null && /^\s*ativ[oa]\s*$/i.test(p.situacao || '')); }).length;
+  var inativos = r.produtos.filter(function (p) { return p.ativo === false || /^\s*inativ[oa]\s*$/i.test(p.situacao || ''); }).length;
+  var semSituacao = Math.max(0, q.alimentos - ativos - inativos);
+  pills.appendChild(el('span', 'pill ' + (ativos ? 'ok' : 'neutro'), ativos + ' ativos'));
+  if (inativos) pills.appendChild(el('span', 'pill nao', inativos + ' inativos'));
+  if (semSituacao) pills.appendChild(el('span', 'pill neutro', semSituacao + ' sem situação explícita na base'));
+  Object.keys(q.porBase || {}).forEach(function (k) {
+    pills.appendChild(el('span', 'pill neutro', q.porBase[k] + ' em ' + k));
+  });
+  b.appendChild(pills);
+  if (q.outras) {
+    b.appendChild(el('p', 'leg', 'O CNPJ também aparece em outras bases da Anvisa. Os resultados ficam separados por origem para não confundir classes de produto.'));
+    var outrasBox=el('details'); outrasBox.className='recolhivel';
+    outrasBox.appendChild(el('summary',null,'Outras bases vinculadas ao CNPJ ('+q.outras+')'));
+    var grupos={}; (q.outrasRefs||[]).forEach(function(x){var k=x.b||'outra_base';(grupos[k]||(grupos[k]=[])).push(x);});
+    Object.keys(grupos).sort().forEach(function(k){
+      var sec=el('div','info-box'); sec.appendChild(el('strong',null,(D.NOMES&&D.NOMES[k])||k));
+      grupos[k].slice(0,40).forEach(function(x){
+        var p=el('p'); p.style.fontSize='13px'; p.textContent=[x.produto||x.nome||x.razao_social,x.registro||x.regularizacao,x.processo,x.situacao].filter(Boolean).join(' · '); sec.appendChild(p);
+      });
+      if(grupos[k].length>40) sec.appendChild(el('p','leg','Mais '+(grupos[k].length-40)+' vínculos nesta origem.'));
+      outrasBox.appendChild(sec);
+    });
+    b.appendChild(outrasBox);
+  }
+  if(r.afe && r.afe.length){var af=el('details');af.className='recolhivel';var sm=el('summary',null,'AFE / AE localizadas ('+r.afe.length+')');af.appendChild(sm);r.afe.slice(0,20).forEach(function(x){var d=el('div','info-box');d.textContent=[x.autorizacao||x.afe||x.numero,x.atividade||x.tipo,x.situacao].filter(Boolean).join(' · ');af.appendChild(d)});b.appendChild(af);}
+
+  if (!r.produtos.length) return b;
+
+  var f = el('label', 'campo');
+  f.appendChild(el('span', null, 'Filtrar produtos desta empresa'));
+  var fi = el('input'); fi.type = 'search'; fi.placeholder = 'nome, registro ou situação';
+  f.appendChild(fi);
+  b.appendChild(f);
+
+  var lista = el('div');
+  b.appendChild(lista);
+
+  var pagina = 0, POR = 12;
+  function pinta(reset) {
+    if (reset) { pagina = 0; limpa(lista); }
+    var t = D.texto(fi.value);
+    var filtrados = r.produtos.filter(function (p) {
+      return !t || D.texto(p.produto).indexOf(t) >= 0
+          || String(p.registro || '').indexOf(fi.value.trim()) === 0
+          || D.texto(p.situacao).indexOf(t) >= 0;
+    });
+    limpa(lista);
+    if (!filtrados.length) { lista.appendChild(el('p', 'vazio', 'Nenhum produto com esse termo.')); return; }
+    filtrados.slice(0, (pagina + 1) * POR).forEach(function (p) {
+      var linha = el('button', 'no');
+      linha.type = 'button';
+      linha.appendChild(el('span', 'cod', p.registro || '—'));
+      var n = el('span', 'nome');
+      n.appendChild(document.createTextNode(p.produto || '(sem nome)'));
+      n.appendChild(el('br'));
+      n.appendChild(el('span', 'fn', [p.situacao, p.vencimento_registro && 'venc. ' + p.vencimento_registro]
+        .filter(Boolean).join(' · ')));
+      linha.appendChild(n);
+      linha.appendChild(el('span', 'seta', '›'));
+      linha.onclick = function () {
+        linha.disabled = true;
+        produtoPorProcesso(p.processo, {}, []).then(function (full) {
+          var ficha = fichaProduto(full || p, r);
+          ficha.style.margin = '8px 0';
+          linha.parentNode.insertBefore(ficha, linha.nextSibling);
+          linha.remove();
+        });
+      };
+      lista.appendChild(linha);
+    });
+    if (filtrados.length > (pagina + 1) * POR) {
+      var mais = el('button', 'b leve pequeno',
+        'Ver mais (' + (filtrados.length - (pagina + 1) * POR) + ' restantes)');
+      mais.type = 'button';
+      mais.style.marginTop = '10px';
+      mais.onclick = function () { pagina++; pinta(false); };
+      lista.appendChild(mais);
+    }
+  }
+  var t = null;
+  fi.oninput = function () { clearTimeout(t); t = setTimeout(function () { pinta(true); }, 160); };
+  pinta(true);
+  return b;
+}
+
+function fichaGtin(g) {
+  var b = el('div', 'bloco');
+  b.appendChild(el('h2', null, g.produto || 'Produto localizado por GTIN'));
+  var dl = el('dl', 'fichas');
+  Object.keys(g).slice(0, 16).forEach(function (k) {
+    if (!g[k] || typeof g[k] === 'object') return;
+    dl.appendChild(el('dt', null, k.replace(/_/g, ' ')));
+    dl.appendChild(el('dd', null, String(g[k])));
+  });
+  b.appendChild(dl);
+  b.appendChild(el('div', 'info-box', 'GTIN validado somente como identificador. Não há consulta a base colaborativa nem inferência de regularidade sanitária a partir do código.'));
+  return b;
+}
+
+function blocoAlertas(alertas) {
+  var b = el('div', 'bloco');
+  var h = el('h2');
+  h.appendChild(el('span', 'pill aviso', String(alertas.length)));
+  h.appendChild(document.createTextNode(' alerta(s) sanitário(s) relacionado(s)'));
+  b.appendChild(h);
+  b.appendChild(el('p', 'leg',
+    'Alertas ligados ao registro ou ao CNPJ. Confira se o alerta se refere ao produto '
+    + 'e ao lote encontrados na inspeção antes de citá-lo.'));
+  alertas.sort(function (x, y) { return String(y.d).localeCompare(String(x.d)); });
+  alertas.slice(0, 30).forEach(function (a) {
+    var d = el('details', 'ad');
+    var s = el('summary');
+    s.appendChild(el('span', 'ins', String(a.a)));
+    var m = el('span', 'nome');
+    m.appendChild(document.createTextNode(a.t || '(sem título)'));
+    m.appendChild(el('br'));
+    m.appendChild(el('span', 'fn', [fmtData(a.d), a.area, a.tipo_produto].filter(Boolean).join(' · ')));
+    s.appendChild(m);
+    d.appendChild(s);
+    var c = el('div', 'corpo');
+    var bt = el('button', 'b sec pequeno', 'Abrir o alerta completo');
+    bt.type = 'button';
+    bt.onclick = function () {
+      bt.disabled = true;
+      var f = D.CHAVE.alerta(a.a);
+      D.busca('alertas_sanitarios/alertas/' + f + '.json').then(function (r) {
+        var lista = r.dados || [];
+        var alvo = null;
+        for (var i = 0; i < lista.length; i++)
+          if (String(lista[i].numero_alerta) === Stri
+
+--- Detentor @ 167284 ---
+sca('indices/cnpj_produtos/' + f + '.json'), D.busca('afe_ae/' + cnpj.slice(0,3) + '.json').catch(function(){return {dados:[]};})]).then(function (rr) {
+    var r=rr[0], afeRows=(rr[1]&&rr[1].dados)||[];
+    if (r.semRede) frios.push(r);
+    var refs = (r.dados || {})[cnpj] || [];
+    var alim = refs.filter(function (x) { return x.b === 'alimentos'; });
+    var outras = refs.filter(function (x) { return x.b !== 'alimentos'; });
+    var res = {
+      produtos: alim.map(function (x) {
+        return { processo: x.processo, registro: x.registro, produto: x.produto,
+                 detentor: x.detentor, cnpj: x.cnpj, situacao: x.situacao,
+                 vencimento_registro: x.vencimento, resumido: true };
+      }),
+      resumoCnpj: { total: refs.length, alimentos: alim.length, outras: outras.length,
+                    porBase: contaPorBase(outras), outrasRefs: outras }
+    };
+    return juntaComplementos(res.produtos, bases, frios, cnpj).then(function (j) {
+      j.resumoCnpj = res.resumoCnpj;
+      j.produtos = res.produtos;
+      j.afe = afeRows.filter(function(x){return D.so(x.cnpj)===cnpj;});
+      j.resumoCnpj.afe = j.afe.length;
+      if (!refs.length) j.vazio = 'CNPJ ' + cnpj + ' não localizado no índice de produtos.';
+      return j;
+    });
+  });
+}
+
+function contaPorBase(lista) {
+  var c = {};
+  lista.forEach(function (x) { c[x.b] = (c[x.b] || 0) + 1; });
+  return c;
+}
+
+function porGtin(g, bases, frios) {
+  var codigo = D.so(g);
+  return Promise.resolve({gtin:{
+    gtin: codigo,
+    situacao: 'Código validado estruturalmente',
+    observacao: 'O aplicativo não consulta base colaborativa de GTIN para alimentos. O código é mantido apenas como identificador do rótulo. A regularidade sanitária deve ser verificada pelas bases oficiais disponíveis por registro, processo ou CNPJ; para nome, use a consulta oficial da Anvisa.'
+  }});
+}
+
+/* ------------------------------------------- alertas e medidas fiscais */
+function juntaComplementos(produtos, bases, frios, cnpjDireto) {
+  var registros = {}, cnpjs = {}, processos = {};
+  (produtos || []).forEach(function (p) {
+    if (p.registro) registros[D.so(p.registro)] = 1;
+    if (p.cnpj) cnpjs[D.so(p.cnpj)] = 1;
+    if (p.processo) processos[D.so(p.processo)] = 1;
+  });
+  if (cnpjDireto) cnpjs[D.so(cnpjDireto)] = 1;
+
+  var tarefas = [];
+  Object.keys(cnpjs).forEach(function (c) {
+    tarefas.push(alertasPorCnpj(c, bases, frios));
+    tarefas.push(irregularPorCnpj(c, bases, frios));
+  });
+  Object.keys(registros).forEach(function (r) { tarefas.push(alertasPorRegistro(r, bases, frios)); });
+  Object.keys(processos).forEach(function (p) { tarefas.push(irregularPorProcesso(p, bases, frios)); });
+
+  return Promise.all(tarefas).then(function (rs) {
+    var alertas = [], irregulares = [], vistos = {};
+    rs.forEach(function (x) {
+      (x && x.alertas || []).forEach(function (a) {
+        if (!vistos['a' + a.a]) { vistos['a' + a.a] = 1; alertas.push(a); }
+      });
+      (x && x.irregulares || []).forEach(function (i) {
+        var k = 'i' + (i.processo || i.id_dossie);
+        if (!vistos[k]) { vistos[k] = 1; irregulares.push(i); }
+      });
+    });
+    return { produtos: produtos, alertas: alertas, irregulares: irregulares };
+  });
+}
+
+function alertasPorCnpj(cnpj, bases, frios) {
+  var f = D.CHAVE.cnpj(cnpj);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[cnpj] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function alertasPorRegistro(reg, bases, frios) {
+  var f = String(reg).slice(0, 3);
+  bases['alertas_sanitarios'] = 1;
+  return D.busca('alertas_sanitarios/indices/registros/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    return { alertas: (r.dados || {})[reg] || [] };
+  }).catch(function () { return { alertas: [] }; });
+}
+
+function irregularPorCnpj(cnpj, bases, frios) {
+  var f = String(cnpj || '').slice(0, 3);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('indices/irregulares_cnpj/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var processos = (r.dados || {})[cnpj] || [];
+    return Promise.all(processos.slice(0, 80).map(function (proc) {
+      return irregularPorProcesso(proc, bases, frios);
+    })).then(function (rs) {
+      var itens = [];
+      rs.forEach(function (x) { (x && x.irregulares || []).forEach(function (i) { itens.push(i); }); });
+      return { irregulares: itens };
+    });
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+function irregularPorProcesso(proc, bases, frios) {
+  var f = D.CHAVE.irregulares(proc);
+  if (!f) return Promise.resolve({ irregulares: [] });
+  bases['produtos_irregulares'] = 1;
+  return D.busca('produtos_irregulares/' + f + '.json').then(function (r) {
+    if (r.semRede) frios.push(r);
+    var d = (r.dados || {})[proc];
+    return { irregulares: d ? [Object.assign({ processo: proc }, d)] : [] };
+  }).catch(function () { return { irregulares: [] }; });
+}
+
+/* -------------------------------------------------------- renderização */
+function fichaProduto(p, ctx) {
+  var b = el('div', 'bloco');
+  var h = el('h2', null, p.produto || '(produto sem nome no cadastro)');
+  b.appendChild(h);
+
+  var pills = el('div', 'chips');
+  if (p.tipo) pills.appendChild(el('span', 'pill info', p.tipo));
+  if (p.situacao) pills.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(p.situacao) ? 'ok' : 'nao'), p.situacao));
+  if (p.ativo === false && !p.situacao) pills.appendChild(el('span', 'pill nao', 'Situação da notificação/cadastro: inativa')); 
+  b.appendChild(pills);
+
+  var dl = el('dl', 'fichas');
+  function par(r, v) { if (v) { dl.appendChild(el('dt', null, r)); dl.appendChild(el('dd', null, v)); } }
+  par('Registro', p.registro);
+  par('Processo', p.processo);
+  par('Marcas', p.marcas);
+  par('Categoria', p.categoria);
+  par('Detentor', p.detentor);
+  par('CNPJ', p.cnpj);
+  par('Vencimento do registro', p.vencimento_registro);
+  par('Situação do documento (não equivale à situação do cadastro)', p.situacao_documento);
+  par('Regularizado em', p.regularizado_em);
+  par('Atualizado em', p.atualizado_em);
+  b.appendChild(dl);
+
+  if (p.resumido) {
+    var bt = el('button', 'b sec pequeno', 'Abrir cadastro completo');
+    bt.type = 'button';
+    bt.style.marginTop = '10px';
+    bt.onclick = function () {
+      bt.disabled = true;
+      produtoPorProcesso(p.processo, {}, []).then(function (full) {
+        if (!full) { b.appendChild(el('p', 'aviso-box', 'Cadastro completo não localizado.')); return; }
+        b.parentNode.replaceChild(fichaProduto(full, ctx), b);
+      });
+    };
+    b.appendChild(bt);
+    return b;
+  }
+
+  if (p.apresentacoes && p.apresentacoes.length) {
+    b.appendChild(el('h3', 'sub', p.apresentacoes.length + ' apresentação(ões)'));
+    p.apresentacoes.forEach(function (a) {
+      var d = el('details', 'ad');
+      var s = el('summary');
+      s.appendChild(el('span', 'ins', a.numero || '—'));
+      var m = el('span', 'nome');
+      m.appendChild(document.createTextNode('Registro ' + (a.registro || '—')));
+      m.appendChild(el('br'));
+      m.appendChild(el('span', 'fn', [a.material_embalagem, a.prazo_validade].filter(Boolean).join(' · ')));
+      s.appendChild(m);
+      if (a.situacao) s.appendChild(el('span', 'pill ' + (/^\s*ativ[oa]\s*$/i.test(a.situacao) ? 'ok' : 'nao'), a.situacao));
+      d.appendChild(s);
+      var c = el('div', 'corpo');
+      var dl2 = el('dl', 'fichas');
+      [['prazo_validade', 'Prazo de validade'], ['forma_fisica', 'Forma física'],
+       ['material_embalagem', 'Embalagem'], ['vias_administracao', 'Via'],
+       ['envasadores', 'Envasadores']].forEach(function (x) {
+        if (a[x[0]] && a[x[0]] !== '*******') {
+          dl2.appendChild(el('dt', null, x[1])); dl2.appendChild(el('dd', null, a[x[0]]));
+        }
+      });
+      c.appendChild(dl2);
+      if (a.tabela_nutricional) {
+        c.appendChild(el('h3', 'sub', 'Composição declarada na notificação'));
+        var pn = el('p'); pn.style.whiteSpace = 'pre-wrap'; pn.style.fontSize = '13px';
+        pn.textContent = a.tabela_nutricional;
+        c.appendChild(pn);
+        c.appendChild(el('p', 'prov-nota',
+          'Este campo só está preenchido em uma fração pequena das apresentações. '
+          + 'Serve como complemento ao rótulo, não como fonte principal.'));
+      }
+      if (a.alergenicos) {
+        c.appendChild(el('h3', 'sub', 'Alergênicos declarados'));
+        var pa = el('p'); pa.style.fontSize = '13px'; pa.style.whiteSpace = 'pre-wrap';
+        pa.textContent = String(a.alergenicos).replace(/#/g, ', ').replace(/\s*\|\s*/g, '\n');
+        c.appendChild(pa);
+      }
+      if (a.intolerancias) {
+        var pi = el('p'); pi.style.fontSize = '13px';
+        pi.textContent = a.intolerancias;
+        c.appendChild(pi);
+      }
+      d.appendChild(c);
+      b.appendChild(d);
+    });
+  }
+  return b;
+}
+
+/* Empresa: um bloco de resumo e uma lista compacta filtrável. Despejar 28
+   fichas completas, como fazia antes, é inútil no celular em campo. */
+function blocoEmpresa(r) {
+  var b = el('div', 'bloco');
+  var q = r.resumoCnpj;
+  var nome = (r.produtos[0] && r.produtos[0].detentor) || 'Empresa';
+  b.appendChild(el('h2', null, nome));
+  var pills = el('div', 'chips');
+  pills.appendChild(el('span', 'pill info', q.alimentos + ' em alimentos'));
+  if(q.afe) pills.appendChild(el('span','pill ok',q.afe+' AFE/AE'));
+  var ativos = r.produtos.filter(function (p) { return p.ativo === true || (p.ativo == null && /^\s*ativ[oa]\s*$/i.test(p.situacao || '')); }).length;
+  var inativos = r.produtos.filter(function (p) { return p.ativo === false || /^\s*inativ[oa]\s*$/i.test(p.situacao || ''); }).length;
+  var semSituacao = Math.max(0, q.alimentos - ativos - inativos);
+  pills.appendChild(el('span', 'pill ' + (ativos ? 'ok' : 'neutro'), ativos + ' ativos'));
+  if (inativos) pills.appendChild(el('span', 'pill nao', inativos + ' inativos'));
+  if (semSituacao) pills.appendChild(el('span', 'pill neutro', semSituacao + ' sem situação explícita na base'));
+  Object.keys(q.porBase || {}).forEach(function (k) {
+    pills.appendChild(el('span', 'pill neutro', q.porBase[k] + ' em ' + k));
+  });
+  b.appendChild(pills);
+  if (q.outras) {
+    b.appendChild(el('p', 'leg', 'O CNPJ também aparece em outras bases da Anvisa. Os resultados ficam separados por origem para não confundir classes de produto.'));
+    var outrasBox=el('details'); outrasBox.className='recolhivel';
+    outrasBox.appendChild(el('summary',null,'Outras bases vinculadas ao CNPJ ('+q.outras+')'));
+    var grupos={}; (q.outrasRefs||[]).forEach(function(x){var k=x.b||'outra_base';(grupos[k]||(grupos[k]=[])).push(x);});
+    Object.keys(grupos).sort().forEach(function(k){
+      var sec=el('div','info-box'); sec.appendChild(el('strong',null,(D.NOMES&&D.NOMES[k])||k));
+      grupos[k].slice(0,40).forEach(function(x){
+        var p=el('p'); p.style.fontSize='13px'; p.textContent=[x.produto||x.nome||x.razao_social,x.registro||x.regularizacao,x.processo,x.situacao].filter(Boolean).join(' · '); sec.appendChild(p);
+      });
+      if(grupos[k].length>40) sec.appendChild(el('p','leg','Mais '+(grupos[k].length-40)+' vínculos nesta origem.'));
+      outrasBox.appendChild(sec);
+    });
+    b.appendChild(outrasBox);
+  }
+  if(r.afe && r.afe.length){var af=el('details');af.className='recolhivel';var sm=el('summary',null,'AFE / AE localizadas ('+r.afe.length+')');af.appendChild(sm);r.afe.slice(0,20).forEach(function(x){var d=el('div','info-box');d.textContent=[x.autorizacao||x.afe||x.numero,x.atividade||x.tipo,x.situacao].filter(Boolean).join(' · ');af.appendChild(d)});b.appendChild(af);}
+
+  if (!r.produtos.length) return b;
+
+  var f = el('label', 'campo');
+  f.appendChild(el('span', null, 'Filtrar produtos desta empresa'));
+  var fi = el('input'); fi.type = 'search'; fi.placeholder = 'nome, registro ou situação';
+  f.appendChild(fi);
+  b.appendChild(f);
+
+  var lista = el('div');
+  b.appendChild(lista);
+
+  var pagina = 0, POR = 12;
+  function pinta(reset) {
+    if (reset) { pagina = 0; limpa(lista); }
+    var t = D.texto(fi.value);
+    var filtrados = r.produtos.filter(function (p) {
+      return !t || D.texto(p.produto).indexOf(t) >= 0
+          || String(p.registro || '').indexOf(fi.value.trim()) === 0
+          || D.texto(p.situacao).indexOf(t) >= 0;
+    });
+    limpa(lista);
+    if (!filtrados.length) { lista.appendChild(el('p', 'vazio', 'Nenhum produto com esse termo.')); return; }
+    filtrados.slice(0, (pagina + 1) * POR).forEach(function (p) {
+      var linha = el('button', 'no');
+      linha.type = 'button';
+      linha.appendChild(el('span', 'cod', p.registro || '—'));
+      var n = el('span', 'nome');
+      n.appendChild(document.createTextNode(p.produto || '(sem nome)'));
+      n.appendChild(el('br'));
+      n.appendChild(el('span', 'fn', [p.situacao, p.vencimento_registro && 'venc. ' + p.vencimento_registro]
+        .filter(Boolean).join(' · ')));
+      linha.appendChild(n);
+      linha.appendChild(el('span', 'seta', '›'));
+      linha.onclick = function () {
+        linha.disabled = true;
+        produtoPorProcesso(p.processo, {}, []).then(function (full) {
+          var ficha = fichaProduto(full || p, r);
+          ficha.style.margin = '8px 0';
+          linha.parentNode.insertBefore(ficha, linha.nextSibling);
+          linha.remove();
+        });
+      };
+      lista.appendChild(linha);
+    });
+    if (filtrados.length > (pagina + 1) * POR) {
+      var mais = el('button', 'b leve pequeno',
+        'Ver mais (' + (filtrados.length - (pagina + 1) * POR) + ' restantes)');
+      mais.type = 'button';
+      mais.style.marginTop = '10px';
+      mais.onclick = function () { pagina++; pinta(false); };
+      lista.appendChild(mais);
+    }
+  }
+  var t = null;
+  fi.oninput = function () { clearTimeout(t); t = setTimeout(function () { pinta(true); }, 160); };
+  pinta(true);
+  return b;
+}
+
+function fichaGtin(g) {
+  var b = el('div', 'bloco');
+  b.appendChild(el('h2', null, g.produto || 'Produto localizado por GTIN'));
+  var dl = el('dl', 'fichas');
+  Object.keys(g).slice(0, 16).forEach(function (k) {
+    if (!g[k] || typeof g[k] === 'object') return;
+    dl.appendChild(el('dt', null, k.replace(/_/g, ' ')));
+    dl.appendChild(el('dd', null, String(g[k])));
+  });
+  b.appendChild(dl);
+  b.appendChild(el('div', 'info-box', 'GTIN validado somente como identificador. Não há consulta a base colaborativa nem inferência de regularidade sanitária a partir do código.'));
+  return b;
+}
+
+function blocoAlertas(alertas) {
+  var b = el('div', 'bloco');
+  var h = el('h2');
+  h.appendChild(el('span', 'pill aviso', String(alertas.length)));
+  h.appendChild(document.createTextNode(' alerta(s) sanitário(s) relacionado(s)'));
+  b.appendChild(h);
+  b.appendChild(el('p', 'leg',
+    'Alertas ligados ao registro ou ao CNPJ. Confira se o alerta se refere ao produto '
+    + 'e ao lote encontrados na inspeção antes de citá-lo.'));
+  alertas.sort(function (x, y) { return String(y.d).localeCompare(String(x.d)); });
+  alertas.slice(0, 30).forEach(function (a) {
+    var d = el('details', 'ad');
+    var s = el('summary');
+    s.appendChild(el('span', 'ins', String(a.a)));
+    var m = el('span', 'nome');
+    m.appendChild(document.createTextNode(a.t || '(sem título)'));
+    m.appendChild(el('br'));
+    m.appendChild(el('span', 'fn', [fmtData(a.d), a.area, a.tipo_produto].filter(Boolean).join(' · ')));
+    s.appendChild(m);
+    d.appendChild(s);
+    var c = el('div', 'corpo');
+    var bt = el('button', 'b sec pequeno', 'Abrir o alerta completo');
+    bt.type = 'button';
+    bt.onclick = function () {
+      bt.disabled = true;
+      var f = D.CHAVE.alerta(a.a);
+      D.busca('alertas_sanitarios/alertas/' + f + '.json').then(function (r) {
+        var lista = r.dados || [];
+        var alvo = null;
+        for (var i = 0; i < lista.length; i++)
