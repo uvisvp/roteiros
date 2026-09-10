@@ -1,0 +1,96 @@
+name: Integrar OCR Drogaria
+
+on:
+  push:
+    branches: [drogaria-ocr-2-0-20260910]
+    paths:
+      - '._drogaria_ocr_upload/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  integrar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruir leitor enviado
+        shell: bash
+        run: |
+          cat ._drogaria_ocr_upload/part-* | base64 --decode > drogaria-ocr-tools.js
+          node --check drogaria-ocr-tools.js
+          grep -q "drogaria-ocr-tools-2.0" drogaria-ocr-tools.js
+          grep -q "fotos: Object.freeze" drogaria-ocr-tools.js
+          grep -q "atividades_licenciadas" drogaria-ocr-tools.js
+
+      - name: Ajustar destino das atividades da licença
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('drogaria-section1.js')
+          s = p.read_text(encoding='utf-8')
+          old1 = "atividade_licenciada: f.atividade_economica || state.meta.atividade_licenciada"
+          new1 = "atividade_licenciada: (f.atividades_licenciadas || f.atividade_economica) || state.meta.atividade_licenciada"
+          old2 = "state.fields.atividades_licenciadas = activities(f.atividade_economica || state.meta.atividade_licenciada);"
+          new2 = "state.fields.atividades_licenciadas = activities(f.atividades_licenciadas || f.atividade_economica || state.meta.atividade_licenciada);"
+          for old, new in [(old1,new1),(old2,new2)]:
+              if new not in s:
+                  if old not in s:
+                      raise SystemExit('Trecho esperado não localizado em drogaria-section1.js: ' + old)
+                  s = s.replace(old,new,1)
+          p.write_text(s, encoding='utf-8')
+
+      - name: Reempacotar somente Drogaria no HTML vigente
+        run: node scripts/repack-drogaria.cjs
+
+      - name: Publicar nova versão PWA
+        shell: python
+        run: |
+          from pathlib import Path
+          import json
+          old='20260910-27'; new='20260910-28'
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          checks=[(f'v{old} JS desligado',f'v{new} JS desligado'),(f"const APP_VERSAO = '{old}'",f"const APP_VERSAO = '{new}'")]
+          for a,b in checks:
+              if b not in s:
+                  if a not in s: raise SystemExit('Versão esperada não localizada no index: '+a)
+                  s=s.replace(a,b,1)
+          p.write_text(s,encoding='utf-8')
+          p=Path('sw.js'); s=p.read_text(encoding='utf-8')
+          a=f"const VERSAO = '{old}'"; b=f"const VERSAO = '{new}'"
+          if b not in s:
+              if a not in s: raise SystemExit('Versão esperada não localizada em sw.js')
+              s=s.replace(a,b,1)
+          p.write_text(s,encoding='utf-8')
+          p=Path('versao.json'); d=json.loads(p.read_text(encoding='utf-8'))
+          d['versao']=new
+          d['correcoes']=int(d.get('correcoes',0))+1
+          d['notas']='Drogaria: leitor documental OCR 2.0 integrado com conferência editável; atividades da licença permanecem separadas das atividades autorizadas pela Anvisa. Fotografias de evidência e relatório fotográfico preservados.'
+          p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+      - name: Testes de integração
+        shell: bash
+        run: |
+          node scripts/test-drogaria.cjs
+          node scripts/test-pwa-update.cjs
+          node scripts/test-pwa-scope.cjs
+          node scripts/test-processos.cjs
+          node scripts/integrated-html.cjs rec--drogaria-ocr-tools.js > /tmp/ocr-embutido.js
+          cmp -s drogaria-ocr-tools.js /tmp/ocr-embutido.js
+          grep -q "drogaria-ocr-tools-2.0" /tmp/ocr-embutido.js
+          grep -q "atividades_licenciadas" drogaria-section1.js
+          ! grep -q "atividade_licenciada: f.atividade_economica ||" drogaria-section1.js
+
+      - name: Limpar upload temporário e gravar integração
+        shell: bash
+        run: |
+          rm -rf ._drogaria_ocr_upload
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add drogaria-ocr-tools.js drogaria-section1.js index.html sw.js versao.json ._drogaria_ocr_upload
+          git diff --cached --quiet && exit 0
+          git commit -m "Drogaria: integra leitor OCR 2.0 e publica 20260910-28"
+          git push
