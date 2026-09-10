@@ -105,3 +105,13 @@ Limitações e revisão ainda necessária:
 - Em Área Física, Próximo percorre 4.1 a 4.8; em Documentos da Qualidade, percorre 8.1 a 8.4. A próxima seção só abre depois do último subitem.
 - Voltar percorre os subitens em sentido inverso; no primeiro, retorna à lista da própria seção. Abertura de subitem e setas posicionam o conteúdo no início da página.
 - Testados os handlers reais do rodapé extraídos do HTML integrado, a sequência completa das duas seções, o retorno, os limites e a preservação dos dados. Demais módulos, referências, relatório e leitores permanecem como na versão 25.
+
+## Atualização que mantinha a cópia anterior — versão 20260910-27
+
+- Após o relato de que ambos os defeitos continuavam iguais no iPhone, foi identificada uma falha adicional no PWA. O teste reproduziu o worker v26 aceitando HTML v25 do cache HTTP; isso explica uma possibilidade de continuar abrindo o código antigo, mas não confirma qual versão estava no aparelho do usuário.
+- A instalação baixa os arquivos por endereço de versão, sem usar o cache HTTP, e confere se o HTML e os metadados pertencem à versão do worker. Uma instalação incompleta ou inconsistente é rejeitada.
+- O botão solicita a busca de atualização, aguarda instalação e troca do controlador e só então abre o endereço da nova versão. Removido o recarregamento fixo após 1,2 segundo.
+- Rascunhos salvos não impedem permanentemente a atualização; uma tela de inspeção aberta precisa ser fechada antes da troca. Nenhum rascunho, documento ou foto é apagado.
+- A tela inicial passa a exibir o número real do HTML carregado, substituindo a data fixa 07/09/2026.
+- Testes em `scripts/test-pwa-update.cjs`: reprodução da falha anterior, cache offline correto, rejeição de HTML antigo/arquivo ausente, espera de instalação e ativação, falha sem recarregar, atualização pendente e preservação dos rascunhos.
+- As correções de rodapé e navegação da v26 permanecem intactas. O comportamento no iPhone do usuário ainda depende de confirmar a versão efetivamente aberta; não considerar a aprovação visual do aparelho como concluída.

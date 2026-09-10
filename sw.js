@@ -7,7 +7,7 @@
    ============================================================= */
 'use strict';
 
-const VERSAO = '20260910-26';
+const VERSAO = '20260910-27';
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -23,12 +23,32 @@ const ESSENCIAIS = [
   './farmacia-manipulacao.png'
 ];
 
+async function preparaAplicativo() {
+  // Cada versão baixa seus arquivos da rede. O cache HTTP antigo não pode
+  // colocar o HTML anterior dentro do cache de um worker recém-publicado.
+  const arquivos = await Promise.all(ESSENCIAIS.map(async caminho => {
+    const chave = new URL(caminho, self.location.href);
+    const origem = new URL(chave);
+    origem.searchParams.set('__uvis_build', VERSAO);
+    const resposta = await fetch(origem.href, { cache: 'no-store' });
+    if (!resposta.ok) throw new Error('Arquivo indisponível: ' + caminho);
+    if (caminho === './' || caminho === './index.html') {
+      const texto = await resposta.clone().text();
+      const versao = /const APP_VERSAO\s*=\s*['"]([^'"]+)['"]/.exec(texto)?.[1];
+      if (versao !== VERSAO) throw new Error('HTML e atualização pertencem a versões diferentes.');
+    }
+    if (caminho === './versao.json' && (await resposta.clone().json()).versao !== VERSAO) {
+      throw new Error('A publicação ainda não terminou.');
+    }
+    return { chave: chave.href, resposta };
+  }));
+  const cache = await caches.open(CACHE_APP);
+  await Promise.all(arquivos.map(a => cache.put(a.chave, a.resposta)));
+}
+
 self.addEventListener('install', event => {
   /* Sem skipWaiting no install: a atualização só troca após o clique. */
-  event.waitUntil(
-    caches.open(CACHE_APP)
-      .then(c => c.addAll(ESSENCIAIS))
-  );
+  event.waitUntil(preparaAplicativo());
 });
 
 self.addEventListener('activate', event => {
@@ -84,17 +104,17 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith((async () => {
-    const guardado = await caches.match(req);
+    const cache = await caches.open(CACHE_APP);
+    const guardado = await cache.match(req);
     if (guardado) return guardado;
     try {
       const r = await fetch(req);
       if (r && r.ok && r.type === 'basic') {
-        const cache = await caches.open(CACHE_APP);
         cache.put(req, r.clone());
       }
       return r;
     } catch (e) {
-      const alvo = await caches.match('./index.html');
+      const alvo = await cache.match('./index.html');
       if (alvo && req.mode === 'navigate') return alvo;
       throw e;
     }

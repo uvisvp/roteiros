@@ -705,7 +705,7 @@
 
     <footer class="app-footer">
       <span>Inspeção Sanitária · roteiros, consultas e apoio técnico</span>
-      <span class="build"><span id="casca-versao">v20260910-26 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260910-27 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -846,17 +846,13 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260910-26';
-    const CHAVES_RASCUNHO = ['visa.inspecao.rascunho.v1', 'uvis.drogaria.rascunho'];
-    let swEspera = null;
+    const APP_VERSAO = '20260910-27';
+    let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
-      try {
-        return CHAVES_RASCUNHO.some(k => {
-          const v = localStorage.getItem(k);
-          return !!v && v !== 'null' && v !== '{}';
-        });
-      } catch (e) { return false; }
+      // Um rascunho salvo pode permanecer por meses. Apenas uma tela de
+      // inspeção aberta impede a troca; não é necessário apagar o rascunho.
+      return document.getElementById('tela-app')?.classList.contains('on') === true;
     }
 
     function faixa(html, tipo) {
@@ -883,9 +879,14 @@
       }
       try {
         const r = await fetch('./versao.json?t=' + Date.now(), { cache: 'no-store' });
-        if (!r.ok) return;
+        if (!r.ok) throw new Error('Não foi possível verificar a atualização.');
         const d = await r.json();
-        if (!d.versao || d.versao === APP_VERSAO) {
+        if (!d.versao) throw new Error('A publicação ainda não informou a versão.');
+        novaVersao = d.versao;
+        const reg = registroSW ? await registroSW : null;
+        if (manual && reg) await reg.update();
+        const pendente = !!(reg && (reg.waiting || reg.installing));
+        if (d.versao === APP_VERSAO && !pendente) {
           marcaVersaoRodape('atualizado', 'ok');
           if (manual) faixa('<div class="txt"><b>Você está na versão mais recente</b>'
             + '<span>Versão ' + APP_VERSAO + ' · banco ' + (d.banco || '—') + '</span></div>'
@@ -908,33 +909,70 @@
         const ad = document.getElementById('btn-adiar');
         if (ad) ad.onclick = () => { document.getElementById('faixa-versao').hidden = true; };
         const dp = document.getElementById('btn-depois');
-        if (dp) dp.onclick = () => mostrarAviso('Há uma inspeção em andamento. Encerre ou exporte o rascunho antes de atualizar — o preenchimento não é apagado, mas trocar o código no meio do trabalho é evitável.');
-      } catch (e) { /* offline: segue com o que está em cache */ }
+        if (dp) dp.onclick = () => mostrarAviso('Volte à tela inicial para atualizar. O preenchimento fica salvo neste aparelho.');
+      } catch (e) { if (manual) falhaAtualizacao(e); }
     }
 
     function esc(v) {
       return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
-    function aplicaAtualizacao() {
-      const f = document.getElementById('faixa-versao');
-      faixa('<div class="txt"><b>Atualizando…</b><span>O rascunho da inspeção é preservado.</span></div>', '');
-      if (swEspera) { swEspera.postMessage({ tipo: 'ATUALIZAR_AGORA' }); setTimeout(() => location.reload(), 1200); }
-      else location.reload();
+    function falhaAtualizacao(e) {
+      faixa('<div class="txt"><b>A atualização não foi concluída</b><span>'
+        + esc(e.message || 'Confira a conexão e tente novamente.')
+        + ' Seus dados continuam salvos.</span></div><div class="update-actions">'
+        + '<button id="btn-tentar-atualizacao">Tentar novamente</button>'
+        + '<button class="ghost" onclick="document.getElementById(\'faixa-versao\').hidden=true">Fechar</button></div>', '');
+      document.getElementById('btn-tentar-atualizacao').onclick = () => checaVersao(true);
+    }
+
+    function esperaInstalacao(reg) {
+      const worker = reg.installing || reg.waiting;
+      if (!worker || worker.state === 'installed' || worker.state === 'activated') return Promise.resolve(worker);
+      return new Promise((resolve, reject) => {
+        const finish = erro => { clearTimeout(timer); worker.removeEventListener('statechange', check); erro ? reject(erro) : resolve(worker); };
+        const check = () => {
+          if (worker.state === 'installed' || worker.state === 'activated') finish();
+          else if (worker.state === 'redundant') finish(new Error('O download da atualização falhou. Tente novamente.'));
+        };
+        const timer = setTimeout(() => finish(new Error('O download ainda não terminou. Tente novamente.')), 45000);
+        worker.addEventListener('statechange', check); check();
+      });
+    }
+
+    function ativaAtualizacao(worker) {
+      if (navigator.serviceWorker.controller === worker) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const finish = erro => { clearTimeout(timer); navigator.serviceWorker.removeEventListener('controllerchange', check); erro ? reject(erro) : resolve(); };
+        const check = () => { if (navigator.serviceWorker.controller === worker) finish(); };
+        const timer = setTimeout(() => finish(new Error('A nova versão ainda não ficou pronta. Tente novamente.')), 30000);
+        navigator.serviceWorker.addEventListener('controllerchange', check);
+        worker.postMessage({ tipo: 'ATUALIZAR_AGORA' }); check();
+      });
+    }
+
+    async function aplicaAtualizacao() {
+      if (atualizando) return;
+      if (inspecaoEmAndamento()) { mostrarAviso('Volte à tela inicial para atualizar. O preenchimento fica salvo.'); return; }
+      atualizando = true;
+      faixa('<div class="txt"><b>Atualizando…</b><span>Aguarde o download. O rascunho da inspeção é preservado.</span></div>', '');
+      try {
+        if (registroSW) {
+          const reg = await registroSW;
+          if (!reg) throw new Error('Não foi possível preparar a atualização. Confira a conexão.');
+          await reg.update();
+          const worker = await esperaInstalacao(reg);
+          if (worker) await ativaAtualizacao(worker);
+        }
+        // Uma URL de versão também evita reabrir o HTML antigo do cache HTTP.
+        const url = new URL(location.href);
+        url.searchParams.set('v', novaVersao);
+        location.replace(url.href);
+      } catch (e) { atualizando = false; falhaAtualizacao(e); }
     }
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('./sw.js').then(reg => {
-        if (reg.waiting) swEspera = reg.waiting;
-        reg.addEventListener('updatefound', () => {
-          const nv = reg.installing;
-          if (nv) nv.addEventListener('statechange', () => { if (nv.state === 'installed' && reg.waiting) swEspera = reg.waiting; });
-        });
-      }).catch(() => {});
-      let recarregou = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (recarregou) return; recarregou = true; location.reload();
-      });
+      registroSW = navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => null);
     }
 
     document.getElementById('versao-estado').onclick = () => checaVersao(true);
@@ -1311,7 +1349,7 @@ if(app==='central-consultas'){
     var v = document.getElementById('casca-versao');
     if(!v) return;
     var n = document.querySelectorAll('script[id^="app--"]').length;
-    v.textContent = 'Versão 07/09/2026 · ' + n + ' módulos · legislação 11.2' + (LEVE ? ' · via Git' : '');
+    v.textContent = 'Versão ' + APP_VERSAO + ' · ' + n + ' módulos · legislação 11.2' + (LEVE ? ' · via Git' : '');
   })();
 
   var $ = function(i){ return document.getElementById(i); };
