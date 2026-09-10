@@ -7,7 +7,7 @@ const events=new Map(),elements=new Map(),persisted=new Map();let renders=0,stat
 function element(id='') {if(elements.has(id))return elements.get(id);const e={id,innerHTML:'',textContent:'',className:'',dataset:{},attributes:[],open:false,value:'',classList:{add(){},remove(){},contains(){return false},toggle(){}},querySelector(){return element('child')},querySelectorAll(){return []},append(){},prepend(){},appendChild(){},remove(){},addEventListener(){},setAttribute(){},showModal(){this.open=true},close(){this.open=false},click(){},matches(){return false},closest(){return null}};elements.set(id,e);return e;}
 const doc={body:element('body'),documentElement:element('html'),addEventListener:(name,fn)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(fn)},querySelectorAll:()=>[],querySelector:()=>null,getElementById:id=>elements.get(id)||null,createElement:tag=>element('created-'+tag),};
 element('content');
-const ctx={document:doc,console,structuredClone,URL,Blob,File,TextEncoder,TextDecoder,AbortController,Date,queueMicrotask,setTimeout:()=>0,clearTimeout(){},alert:()=>{},MutationObserver:class{observe(){}disconnect(){}},localStorage:{getItem:k=>persisted.get(k)||null,setItem:(k,v)=>persisted.set(k,v)}};
+const ctx={document:doc,console,structuredClone,URL,Blob,File,TextEncoder,TextDecoder,AbortController,Date,queueMicrotask,setTimeout:()=>0,clearTimeout(){},scrollTo(){},alert:()=>{},MutationObserver:class{observe(){}disconnect(){}},localStorage:{getItem:k=>persisted.get(k)||null,setItem:(k,v)=>persisted.set(k,v)}};
 ctx.window=ctx;vm.createContext(ctx);vm.runInContext(scripts(app)[2].source,ctx);state=ctx.DrogariaEngine.fresh();
 ctx.DrogariaAPI={getState:()=>state,getCatalog:()=>catalog,getBank:()=>data,engine:ctx.DrogariaEngine,setState:(s,opts={})=>{state=s;ctx.DrogariaReview?.sync(state);persisted.set('draft',JSON.stringify(state));if(opts.render!==false)renders++},rooms:()=>'',physicalChecklist:()=>'',areaCard:()=>'',coldCard:()=>'',questions:()=>''};
 for(const name of ['drogaria-ocr-tools','drogaria-review','drogaria-section1','drogaria-area-fisica','drogaria-servicos-documentos','drogaria-final-bridge'])vm.runInContext(blocks.get('rec--'+name+'.js'),ctx,{filename:name+'.js'});
@@ -23,6 +23,33 @@ fire('click',eventTarget('[data-sd-answer]',{sdAnswer:'servicos_farmaceuticos|re
 fire('click',eventTarget('[data-fb-check]',{fbCheck:'controlados_complementos|antimicrobianos'}));assert.ok(state.fields.products.includes('antibiotico'));
 fire('input',eventTarget('[data-fb-text]',{fbText:'transporte|objeto'},'Entrega em domicílio'));assert.equal(state.meta.drogaria_secoes.transporte.fields.objeto,'Entrega em domicílio');assert.equal(JSON.parse(persisted.get('draft')).meta.drogaria_secoes.transporte.fields.objeto,'Entrega em domicílio');
 assert.ok([1,2,3,4,5,6,7,8].every(id=>ctx.DrogariaEngine.cardVisible(id,ctx.DrogariaEngine.fresh())),'Todas as seções devem ser acessíveis antes das respostas');
+// Executa os handlers reais do rodapé com as pontes carregadas do HTML integrado.
+// Regressão: antes, Próximo em 4.2 pulava diretamente para a seção 3.
+ctx.byId=element;ctx.catalog=catalog;ctx.E=ctx.DrogariaEngine;ctx.tab='roteiro';ctx.active=2;ctx.save=()=>{};
+ctx.changeView=(tab,section=0)=>{ctx.tab=tab;ctx.active=section;};
+Object.defineProperty(ctx,'state',{get:()=>state});
+for(const id of ['back','next']){
+  const handler=app.match(new RegExp("byId\\('"+id+"'\\)\\.onclick=\\(\\)=>\\{[^\\n]+"));
+  assert.ok(handler,'Handler do rodapé precisa existir');vm.runInContext(handler[0],ctx);
+}
+fire('click',eventTarget('[data-af-open]',{afOpen:'dispensacao'}));
+element('next').onclick();assert.equal(ctx.active,2);assert.equal(state.meta.drogaria_secoes.area_fisica.fields.active_card,'armazenamento');
+element('back').onclick();assert.equal(ctx.active,2);assert.equal(state.meta.drogaria_secoes.area_fisica.fields.active_card,'dispensacao');
+fire('click',eventTarget('[data-af-back]'));
+for(const id of ['recebimento','dispensacao','armazenamento','residuos','vencidos','dml','refeitorio','sanitarios']){
+  element('next').onclick();assert.equal(ctx.active,2);assert.equal(state.meta.drogaria_secoes.area_fisica.fields.active_card,id);
+}
+element('next').onclick();assert.equal(ctx.active,3,'Somente o último subitem libera a seção seguinte');
+assert.equal(state.meta.endereco,'Rua de Teste');assert.equal(state.meta.drogaria_secoes.area_recebimento.answers.conferencia,'nao');
+ctx.active=6;fire('click',eventTarget('[data-sd-back]'));
+element('next').onclick();assert.equal(state.meta.drogaria_secoes.documentos_hub.fields.active,'qualidade');
+element('next').onclick();assert.equal(state.meta.drogaria_secoes.documentos_hub.fields.active,'rastreabilidade');
+element('back').onclick();assert.equal(state.meta.drogaria_secoes.documentos_hub.fields.active,'qualidade');
+element('back').onclick();assert.equal(ctx.active,6);assert.equal(state.meta.drogaria_secoes.documentos_hub.fields.active,'','Do primeiro subitem, Voltar retorna à lista da seção');
+for(const id of ['qualidade','rastreabilidade','remota','descarte']){element('next').onclick();assert.equal(ctx.active,6);assert.equal(state.meta.drogaria_secoes.documentos_hub.fields.active,id);}
+element('next').onclick();assert.equal(ctx.active,7);assert.equal(JSON.parse(persisted.get('draft')).meta.drogaria_secoes.area_recebimento.answers.conferencia,'nao');
+ctx.active=8;element('next').onclick();assert.equal(ctx.tab,'relatorio');
+element('back').onclick();assert.equal(ctx.tab,'roteiro');assert.equal(ctx.active,0);
 state=ctx.DrogariaEngine.fresh();state.meta={data:'2026-09-10',razao:'Drogaria Teste',endereco:'Rua de Teste',endereco_numero:'123',bairro:'Centro',municipio:'São Paulo',estado:'SP',cep:'01000-000',afe:'AFE-TESTE',ae:'AE-TESTE',atividades_autorizadas:['Autorização Anvisa de teste'],review_specs:{'area_recebimento|conferencia':{label:'Conferência de lote e validade',refs:[]},'transporte|objeto':{label:'Objeto do contrato',group:'fields'}}};
 state.fields.atividades_licenciadas=['Atividade licenciada de teste'];state.answers.vaccine='nao';state.answers.eac='nao';state.answers.thermo='sim';state.cold=[{id:'c1',name:'Geladeira 1',min:'2',max:'7',now:'5'},{id:'c2',name:'Geladeira 2',min:'3',max:'8',now:'6'}];state.answers['cold_clean@c2']='nao';state.meta.drogaria_secoes={area_recebimento:{answers:{conferencia:'nao'},fields:{},docs:[]},servicos_farmaceuticos:{answers:{realiza:'nao'},fields:{},docs:[]},transporte:{answers:{aplica:'sim'},fields:{objeto:'Entrega em domicílio'},docs:[]},documentos_qualidade:{answers:{},fields:{},docs:[{title:'Manual',fields:{titulo:'Manual conferido'},includeInReport:true},{title:'Documento excluído',fields:{titulo:'SEGREDO_NAO_TRANSMITIR'},includeInReport:false}]}};
 state.stock=[{name:'Produto teste',registro:'123',lote:'L1',expected:'8',actual:'7'}];

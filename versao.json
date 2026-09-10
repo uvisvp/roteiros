@@ -1,6 +1,6 @@
 {
-  "versao": "20260910-25",
+  "versao": "20260910-26",
   "banco": "11.2",
-  "correcoes": 8,
-  "notas": "Drogaria: telas compactas, conferência documental específica, persistência e relatório integrado. Produtos: corrigida a consulta por processo na conferência de estoque, incluindo cosméticos. PWA e referências preservados."
+  "correcoes": 2,
+  "notas": "Drogaria: rodapé compacto no limite inferior, sem duplicação da área segura do iPhone. As setas percorrem os subitens de Área Física e Documentos da Qualidade antes de mudar de seção."
 }

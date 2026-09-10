@@ -97,3 +97,11 @@ Limitações e revisão ainda necessária:
 - Ausência de resultado em base cadastral não prova ausência de autorização. AE não localizada não é deduzida de atividade de controlados.
 - Requisitos sem equivalência exata e fundamento conferido permanecem como achados de enquadramento pendente, nunca como infração automaticamente validada. Vacinação/EAC sem licença específica são descritos como não conformidade com enquadramento específico pendente.
 - A revisão visual detalhada de todos os subtítulos dos anexos, os campos de sanitários por unidade e a amostragem de fornecedores continuam pendentes; não declarar equivalência integral a todos os exemplos sem essa revisão.
+
+## Correção do rodapé e das setas — versão 20260910-26
+
+- Rodapé da Drogaria encostado no limite inferior. Retirados o afastamento inferior e a reserva duplicada de área segura entre a casca e o módulo. O espaço para o gesto do iPhone fica apenas dentro do rodapé.
+- Regras compactas prevalecem sobre o estilo compartilhado do rodapé no celular; os três botões ocupam uma única linha.
+- Em Área Física, Próximo percorre 4.1 a 4.8; em Documentos da Qualidade, percorre 8.1 a 8.4. A próxima seção só abre depois do último subitem.
+- Voltar percorre os subitens em sentido inverso; no primeiro, retorna à lista da própria seção. Abertura de subitem e setas posicionam o conteúdo no início da página.
+- Testados os handlers reais do rodapé extraídos do HTML integrado, a sequência completa das duas seções, o retorno, os limites e a preservação dos dados. Demais módulos, referências, relatório e leitores permanecem como na versão 25.

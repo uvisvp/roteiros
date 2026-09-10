@@ -33,6 +33,17 @@
     ['refeitorio','4.7 Refeitório','Condições e equipamentos da área de refeições.'],
     ['sanitarios','4.8 Vestiários e sanitários','Quantidade, tipos, acessibilidade e condições gerais.']
   ];
+  function openArea(id) {
+    setField('area_fisica','active_card',id);
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function navigate(section,direction) {
+    if(section!==2)return false;
+    const index=areaCards.findIndex(c=>c[0]===active('area_fisica').fields.active_card);
+    if(direction===1&&index<areaCards.length-1){openArea(areaCards[index+1][0]);return true;}
+    if(direction===-1&&index>=0){openArea(index?areaCards[index-1][0]:'');return true;}
+    return false;
+  }
   function hub() {
     return '<div class="panel af-panel"><div class="subbar"><span class="badge">Seção 2 de 8</span><button data-action="home">Todas as seções</button></div><h2>Área física</h2><p class="muted">Selecione o ambiente para registrar a verificação. As respostas serão usadas na revisão posterior do relatório.</p><div class="cards af-cards">' + areaCards.map(([id,title,desc]) => '<button class="card-button" type="button" data-af-open="' + id + '"><span class="number">4</span><span><strong>' + esc(title) + '</strong><small>' + esc(desc) + '</small></span></button>').join('') + '</div><section class="box"><h3>Ambientes e pavimentos</h3>' + window.DrogariaAPI.rooms() + window.DrogariaAPI.physicalChecklist() + '</section><section class="box"><h3>Condições gerais e documentos</h3>' + question('area_geral','caixa_agua','Possui caixa d’água?',null,false) + (active('area_geral').answers.caixa_agua==='nao'?field('area_geral','origem_agua','Origem da água'):'') + question('area_geral','ar_condicionado','Apresentou manutenção do ar-condicionado?',null,true) + '<div class="actions">'+docButton('area_geral','controle_pragas_urbanas','certificado de controle de pragas')+docButton('area_geral','higienizacao_caixa_agua','certificado de higienização de caixa d’água')+docButton('area_geral','avcb_clcb','AVCB ou CLCB')+docButton('area_geral','pop_manual_pgrss','POP de higienização')+'</div>'+docList('area_geral')+'</section></div>';
   }
@@ -96,11 +107,11 @@
     window.DrogariaReview.readSection(name,type);
   }
   function install() {
-    document.addEventListener('click',e=>{const o=e.target.closest('[data-af-open]');if(o){e.preventDefault();setField('area_fisica','active_card',o.dataset.afOpen);return;}if(e.target.closest('[data-af-back]')){e.preventDefault();setField('area_fisica','active_card','');return;}const a=e.target.closest('[data-af-answer]');if(a){const [n,k,v]=a.dataset.afAnswer.split('|');setAnswer(n,k,v);return;}const d=e.target.closest('[data-af-doc]');if(d){const [n,t]=d.dataset.afDoc.split('|');reviewDoc(n,t);return;}const rm=e.target.closest('[data-af-remove]');if(rm){const[n,id]=rm.dataset.afRemove.split('|');save(s=>stateFor(s,n).docs=stateFor(s,n).docs.filter(x=>x.id!==id));}});
+    document.addEventListener('click',e=>{const o=e.target.closest('[data-af-open]');if(o){e.preventDefault();openArea(o.dataset.afOpen);return;}if(e.target.closest('[data-af-back]')){e.preventDefault();openArea('');return;}const a=e.target.closest('[data-af-answer]');if(a){const [n,k,v]=a.dataset.afAnswer.split('|');setAnswer(n,k,v);return;}const d=e.target.closest('[data-af-doc]');if(d){const [n,t]=d.dataset.afDoc.split('|');reviewDoc(n,t);return;}const rm=e.target.closest('[data-af-remove]');if(rm){const[n,id]=rm.dataset.afRemove.split('|');save(s=>stateFor(s,n).docs=stateFor(s,n).docs.filter(x=>x.id!==id));}});
     document.addEventListener('input',e=>{const f=e.target.closest('[data-af-field],[data-af-text]');if(f){const[n,k]=(f.dataset.afField||f.dataset.afText).split('|');save(s=>stateFor(s,n).fields[k]=f.value,false);}});
     document.addEventListener('change',e=>{const f=e.target.closest('[data-af-field]');if(f){const[n,k]=f.dataset.afField.split('|');save(s=>stateFor(s,n).fields[k]=f.value,false);return;}const c=e.target.closest('[data-af-check]');if(c){const[n,k]=c.dataset.afCheck.split('|');setField(n,k,c.checked);return;}const t=e.target.closest('[data-af-text]');if(t){const[n,k]=t.dataset.afText.split('|');save(s=>stateFor(s,n).fields[k]=t.value,false);}});
   }
   function start(){install();let busy=false;const refresh=()=>{if(busy)return;busy=true;try{mount()}finally{busy=false}};refresh();new MutationObserver(()=>queueMicrotask(refresh)).observe(document.body,{childList:true,subtree:true});document.addEventListener('click',()=>setTimeout(refresh,0),true);}
   document.addEventListener('DOMContentLoaded',()=>{const wait=()=>window.DrogariaAPI?.getCatalog()&&window.DrogariaOcrTools?start():setTimeout(wait,50);wait();});
-  window.DrogariaAreaFisica=Object.freeze({mount});
+  window.DrogariaAreaFisica=Object.freeze({mount,navigate});
 })();

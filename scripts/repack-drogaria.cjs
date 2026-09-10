@@ -18,6 +18,9 @@ app = change(app, 'const r=catalog.referencias[id],d=bank[r.arquivo]', "const r=
 app = change(app,"if(!confirm('Limpar os dados do card '+active+'? Os dados dos outros cards serão preservados.'))return;", "if(!confirm('Limpar os dados da seção '+active+'? As demais seções serão preservadas.'))return;window.DrogariaReview?.clearSection(state,active);");
 app = change(app,"if(active===1){state.hours={};state.roomArchive=[...(state.roomArchive||[]),...state.rooms];state.rooms=[]}","if(active===1){state.hours={}}if(active===2){state.roomArchive=[...(state.roomArchive||[]),...state.rooms];state.rooms=[]}");
 app = app.replace('Selecione um card','Selecione uma seção').replaceAll('Todos os cards','Todas as seções').replaceAll('no Card 1','na seção correspondente').replaceAll('Card ${active} de 8','Seção ${active} de 8');
+// As setas percorrem primeiro as páginas internas das seções que possuem subitens.
+app = change(app,"byId('back').onclick=()=>{save();if(tab!=='roteiro'||active)","byId('back').onclick=()=>{save();if(tab==='roteiro'&&(window.DrogariaAreaFisica?.navigate(active,-1)||window.DrogariaServicosDocumentos?.navigate(active,-1)))return;if(tab!=='roteiro'||active)");
+app = change(app,"byId('next').onclick=()=>{if(tab==='roteiro'&&active)","byId('next').onclick=()=>{if(tab==='roteiro'&&(window.DrogariaAreaFisica?.navigate(active,1)||window.DrogariaServicosDocumentos?.navigate(active,1)))return;if(tab==='roteiro'&&active)");
 blocks.set('app--drogaria',app);
 let stock=blocks.get('app--estoque-produtos');
 stock=change(stock,"bases:['dispositivos','saneantes']","bases:['dispositivos','saneantes','cosmeticos']");
