@@ -1,0 +1,76 @@
+{
+  "manifest": {
+    "bases": {
+      "dispositivos": {
+        "prefixo": 5
+      },
+      "medicamentos": {
+        "prefixo": 4
+      },
+      "saneantes": {
+        "prefixo": 4
+      },
+      "cosmeticos": {
+        "prefixo": 3
+      }
+    },
+    "indices": {
+      "processos": {
+        "fragmentacao": "dígitos 6 a 8 do processo normalizado"
+      }
+    }
+  },
+  "indices/processos/001": {
+    "250000010199593": [
+      {
+        "b": "dispositivos",
+        "r": "10345160176"
+      }
+    ],
+    "250000011320035": [
+      {
+        "b": "cosmeticos",
+        "r": "250000011320035"
+      }
+    ],
+    "250000012900086": [
+      {
+        "b": "cosmeticos",
+        "r": "250000012900086"
+      }
+    ]
+  },
+  "dispositivos/10345": [
+    {
+      "registro": "10345160176",
+      "produto": "CONDICIONADOR",
+      "processo": "250000010199593",
+      "detentor": "SIEMENS HEALTHCARE DIAGNÓSTICOS LTDA",
+      "fabricante": "SIEMENS HEALTHCARE DIAGNOSTICS MANUFACTURING LIMITED  UK PARA SIEMENS HEALTHCARE DIAGNOSTICS INC  EUA",
+      "pais": "ESTADOS UNIDOS DA AMÉRICA",
+      "classe": "I"
+    }
+  ],
+  "cosmeticos/001": [
+    {
+      "processo": "250000011320035",
+      "produto": "OLEO DE BABOSA GRANADO",
+      "cnpj": "33109356000117",
+      "detentor": "CASA GRANADO LABORATÓRIOS, FARMÁCIAS E DROGARIAS S/A",
+      "tipo": "Notificado",
+      "situacao": "ATIVO",
+      "vencimento": "06/10/2005",
+      "atualizado_em": "04/09/2026"
+    },
+    {
+      "processo": "250000012900086",
+      "produto": "BATON VINCY AROMA E SABOR CHOCOLATE",
+      "cnpj": "60891371000132",
+      "detentor": "CASA ADELINO PRODS ANACONDA LTDA",
+      "tipo": "Notificado",
+      "situacao": "ATIVO",
+      "vencimento": "16/08/2005",
+      "atualizado_em": "04/09/2026"
+    }
+  ]
+}

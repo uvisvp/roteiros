@@ -1,6 +1,6 @@
 {
-  "versao": "20260908-24",
+  "versao": "20260910-25",
   "banco": "11.2",
   "correcoes": 8,
-  "notas": "Central de Consultas: corrigida e validada a consulta de Cosméticos por processo Anvisa."
+  "notas": "Drogaria: telas compactas, conferência documental específica, persistência e relatório integrado. Produtos: corrigida a consulta por processo na conferência de estoque, incluindo cosméticos. PWA e referências preservados."
 }
