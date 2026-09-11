@@ -20,7 +20,7 @@ jobs:
       - name: Reconstruir leitor enviado
         shell: bash
         run: |
-          cat ._drogaria_ocr_upload/part-* | base64 --decode > drogaria-ocr-tools.js
+          cat ._drogaria_ocr_upload/part-* | base64 --decode | xz --decompress --stdout > drogaria-ocr-tools.js
           node --check drogaria-ocr-tools.js
           grep -q "drogaria-ocr-tools-2.0" drogaria-ocr-tools.js
           grep -q "fotos: Object.freeze" drogaria-ocr-tools.js
