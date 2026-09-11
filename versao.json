@@ -1,6 +1,6 @@
 {
-  "versao": "20260910-27",
-  "banco": "11.2",
-  "correcoes": 2,
-  "notas": "Corrigida a atualização que podia continuar abrindo a cópia antiga. Versão carregada agora aparece na tela inicial. Mantidas as correções do rodapé e das setas da Drogaria."
+  "versao": "20260911-28",
+  "banco": "12.0",
+  "correcoes": 3,
+  "notas": "Central de Consultas: consulta por processo ampliada para saneantes e medicamentos, incluindo produtos sem número de registro; cosméticos preservados."
 }

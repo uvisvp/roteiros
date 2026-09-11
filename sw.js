@@ -7,7 +7,7 @@
    ============================================================= */
 'use strict';
 
-const VERSAO = '20260910-27';
+const VERSAO = '20260911-28';
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
