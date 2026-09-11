@@ -7,13 +7,20 @@
    ============================================================= */
 'use strict';
 
-const VERSAO = '20260911-28';
+const VERSAO = '20260911-29';
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
 const ESSENCIAIS = [
   './',
   './index.html',
+  './drogaria-final-bridge.js',
+  './drogaria-report-final.js',
+  './drogaria-ocr-tools.js',
+  './drogaria-review.js',
+  './drogaria-servicos-documentos.js',
+  './drogaria-area-fisica.js',
+  './drogaria-section1.js',
   './manifest.webmanifest',
   './versao.json',
   './icon-192.png',

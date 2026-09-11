@@ -1,6 +1,6 @@
 {
-  "versao": "20260911-28",
+  "versao": "20260911-29",
   "banco": "12.0",
-  "correcoes": 3,
-  "notas": "Central de Consultas: consulta por processo ampliada para saneantes e medicamentos, incluindo produtos sem número de registro; cosméticos preservados."
+  "correcoes": 4,
+  "notas": "PWA atualizada para incorporar a última revisão de Drogaria e forçar renovação do cache instalado; módulos de Drogaria passam a integrar o cache essencial. Mantida a ampliação das consultas por processo de saneantes e medicamentos."
 }
