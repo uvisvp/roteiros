@@ -897,7 +897,6 @@
     const missingRequired = (spec.required || spec.fields).filter(key => !trim(fields[key]));
     return { found, missing, missingRequired, complete: !missing.length };
   }
-
   function safeExtract(type, raw) {
     try { return { ...empty(CATALOG[type].fields), ...EXTRACTORS[type](text(raw)) }; }
     catch (error) { console.warn('[DrogariaOcrTools] extrator ' + type + ':', error); return empty(CATALOG[type].fields); }
@@ -998,3 +997,703 @@
     const words = (data.words && data.words.length) ? data.words
       : (data.blocks || []).flatMap(b => (b.paragraphs || []).flatMap(p => (p.lines || []).flatMap(l => l.words || [])));
     let good = 0, score = 0;
+    for (const w of words) {
+      const t = text(w.text).replace(/[^\p{L}\d]/gu, '');
+      if (t.length >= 3 && w.confidence >= 60 && /\p{L}{3,}|\d{3,}/u.test(t)) { good++; score += Math.min(t.length, 12); }
+    }
+    return { good, score, words: words.length };
+  }
+
+  async function recognize(canvas, { psm = '3', label = '', progress = () => {} } = {}) {
+    const worker = await ocrWorker();
+    workerLog = m => {
+      if (!m || !m.status) return;
+      const pt = STATUS_PT[m.status] || m.status;
+      progress(m.status === 'recognizing text' ? label + ' — ' + Math.round((m.progress || 0) * 100) + '%' : 'Preparando: ' + pt + '…');
+    };
+    await worker.setParameters({ tessedit_pageseg_mode: String(psm), preserve_interword_spaces: '1', user_defined_dpi: '300' });
+    const result = await worker.recognize(canvas, { rotateAuto: true }, { text: true, blocks: true, hocr: false, tsv: false });
+    const data = (result && result.data) || {};
+    return { text: text(data.text), quality: wordQuality(data), confidence: data.confidence || 0 };
+  }
+
+  /* ----------------------------------------------------------- imagem */
+  function makeCanvas(w, h) {
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h));
+    return c;
+  }
+  function freeCanvas(c) { if (c) { try { c.width = 0; c.height = 0; } catch (_) { /* ignorado */ } } }
+
+  function targetScale(w, h, { longSide = 2800, maxPixels = 7.5e6, maxScale = 3.5, minLong = 1800 } = {}) {
+    const long = Math.max(w, h);
+    let scale = Math.min(longSide / long, maxScale);
+    if (long * scale < minLong) scale = Math.min(minLong / long, maxScale);
+    if (w * h * scale * scale > maxPixels) scale = Math.sqrt(maxPixels / (w * h));
+    return scale;
+  }
+
+  async function fileToCanvas(file) {
+    let source = null, w = 0, h = 0, cleanup = () => {};
+    if (typeof createImageBitmap === 'function') {
+      try {
+        source = await createImageBitmap(file, { imageOrientation: 'from-image' });
+        w = source.width; h = source.height; cleanup = () => { if (source.close) source.close(); };
+      } catch (_) { source = null; }
+    }
+    if (!source) {
+      const url = URL.createObjectURL(file);
+      source = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error('Não foi possível abrir a imagem. Use foto JPG ou PNG.'));
+        image.src = url;
+      });
+      w = source.naturalWidth || source.width; h = source.naturalHeight || source.height;
+      cleanup = () => URL.revokeObjectURL(url);
+    }
+    try {
+      const scale = targetScale(w, h);
+      const canvas = makeCanvas(w * scale, h * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+      return { canvas, native: { w, h } };
+    } finally { cleanup(); }
+  }
+
+  function grayOf(canvas) {
+    const w = canvas.width, h = canvas.height;
+    const data = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h).data;
+    const g = new Uint8ClampedArray(w * h);
+    for (let i = 0, j = 0; j < g.length; i += 4, j++) g[j] = (data[i] * 77 + data[i + 1] * 150 + data[i + 2] * 29) >> 8;
+    return { g, w, h };
+  }
+  function grayToCanvas(img) {
+    const c = makeCanvas(img.w, img.h), ctx = c.getContext('2d');
+    const out = ctx.createImageData(img.w, img.h), d = out.data, g = img.g;
+    for (let j = 0, i = 0; j < g.length; j++, i += 4) { d[i] = d[i + 1] = d[i + 2] = g[j]; d[i + 3] = 255; }
+    ctx.putImageData(out, 0, 0);
+    return c;
+  }
+  function rotateGray(img, deg) {
+    const { g, w, h } = img;
+    if (deg === 180) { const o = new Uint8ClampedArray(g.length); for (let i = 0; i < g.length; i++) o[i] = g[g.length - 1 - i]; return { g: o, w, h }; }
+    const o = new Uint8ClampedArray(g.length), nw = h, nh = w;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const v = g[y * w + x];
+      if (deg === 90) o[x * nw + (nw - 1 - y)] = v; else o[(nh - 1 - x) * nw + y] = v;
+    }
+    return { g: o, w: nw, h: nh };
+  }
+  function downscaleGray(img, maxSide) {
+    const f = Math.max(1, Math.ceil(Math.max(img.w, img.h) / maxSide));
+    if (f === 1) return img;
+    const w = Math.floor(img.w / f), h = Math.floor(img.h / f), o = new Uint8ClampedArray(w * h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      let s = 0; for (let yy = 0; yy < f; yy++) for (let xx = 0; xx < f; xx++) s += img.g[(y * f + yy) * img.w + x * f + xx];
+      o[y * w + x] = s / (f * f);
+    }
+    return { g: o, w, h };
+  }
+
+  function boxBlurGrid(grid, gw, gh, r) {
+    if (r < 1) return grid;
+    const tmp = new Float32Array(grid.length), out = new Float32Array(grid.length);
+    for (let y = 0; y < gh; y++) {
+      let acc = 0, n = 0;
+      for (let x = -r; x < gw; x++) {
+        const add = x + r, sub = x - r - 1;
+        if (add < gw) { acc += grid[y * gw + add]; n++; }
+        if (sub >= 0) { acc -= grid[y * gw + sub]; n--; }
+        if (x >= 0) tmp[y * gw + x] = acc / n;
+      }
+    }
+    for (let x = 0; x < gw; x++) {
+      let acc = 0, n = 0;
+      for (let y = -r; y < gh; y++) {
+        const add = y + r, sub = y - r - 1;
+        if (add < gh) { acc += tmp[add * gw + x]; n++; }
+        if (sub >= 0) { acc -= tmp[sub * gw + x]; n--; }
+        if (y >= 0) out[y * gw + x] = acc / n;
+      }
+    }
+    return out;
+  }
+  function bilinearField(grid, gw, gh, cell, w, h, fn) {
+    for (let y = 0; y < h; y++) {
+      const gy = Math.min(gh - 1, Math.max(0, (y + 0.5) / cell - 0.5)), y0 = Math.floor(gy), y1 = Math.min(gh - 1, y0 + 1), fy = gy - y0;
+      for (let x = 0; x < w; x++) {
+        const gx = Math.min(gw - 1, Math.max(0, (x + 0.5) / cell - 0.5)), x0 = Math.floor(gx), x1 = Math.min(gw - 1, x0 + 1), fx = gx - x0;
+        const top = grid[y0 * gw + x0] * (1 - fx) + grid[y0 * gw + x1] * fx;
+        const bottom = grid[y1 * gw + x0] * (1 - fx) + grid[y1 * gw + x1] * fx;
+        fn(y * w + x, top * (1 - fy) + bottom * fy);
+      }
+    }
+  }
+
+  // Remove variação de iluminação/cor de fundo: divide cada pixel pelo fundo local estimado.
+  function normalizeIllumination(img) {
+    const { g, w, h } = img;
+    const cell = Math.max(8, Math.round(Math.min(w, h) / 48));
+    const gw = Math.ceil(w / cell), gh = Math.ceil(h / cell);
+    const mx = new Float32Array(gw * gh);
+    for (let y = 0; y < h; y++) { const row = ((y / cell) | 0) * gw; for (let x = 0; x < w; x++) { const v = g[y * w + x], k = row + ((x / cell) | 0); if (v > mx[k]) mx[k] = v; } }
+    const dil = new Float32Array(gw * gh);
+    for (let y = 0; y < gh; y++) for (let x = 0; x < gw; x++) {
+      let m = 0;
+      for (let yy = Math.max(0, y - 1); yy <= Math.min(gh - 1, y + 1); yy++) for (let xx = Math.max(0, x - 1); xx <= Math.min(gw - 1, x + 1); xx++) if (mx[yy * gw + xx] > m) m = mx[yy * gw + xx];
+      dil[y * gw + x] = m;
+    }
+    const bg = boxBlurGrid(dil, gw, gh, 2);
+    const out = new Uint8ClampedArray(w * h);
+    bilinearField(bg, gw, gh, cell, w, h, (i, b) => { out[i] = g[i] * 255 / Math.max(b, 24); });
+    const hist = new Uint32Array(256); for (let i = 0; i < out.length; i++) hist[out[i]]++;
+    const pct = p => { const target = out.length * p; let acc = 0; for (let v = 0; v < 256; v++) { acc += hist[v]; if (acc >= target) return v; } return 255; };
+    const lo = Math.min(pct(0.01), 96), hi = Math.max(pct(0.99), lo + 64), span = hi - lo;
+    for (let i = 0; i < out.length; i++) out[i] = (out[i] - lo) * 255 / span;
+    return { g: out, w, h };
+  }
+
+  // Binarização adaptativa (Sauvola) com estatística em grade reduzida.
+  function sauvola(img, k = 0.24) {
+    const { g, w, h } = img, cell = 4;
+    const gw = Math.ceil(w / cell), gh = Math.ceil(h / cell), n = new Float32Array(gw * gh), mean = new Float32Array(gw * gh), sq = new Float32Array(gw * gh);
+    for (let y = 0; y < h; y++) { const row = ((y / cell) | 0) * gw; for (let x = 0; x < w; x++) { const v = g[y * w + x], idx = row + ((x / cell) | 0); mean[idx] += v; sq[idx] += v * v; n[idx]++; } }
+    for (let i = 0; i < mean.length; i++) { mean[i] /= n[i]; sq[i] /= n[i]; }
+    const r = Math.max(2, Math.round(Math.min(w, h) / 45 / cell / 2));
+    const m = boxBlurGrid(mean, gw, gh, r), s2 = boxBlurGrid(sq, gw, gh, r), T = new Float32Array(gw * gh);
+    for (let i = 0; i < T.length; i++) { const sd = Math.sqrt(Math.max(0, s2[i] - m[i] * m[i])); T[i] = m[i] * (1 + k * (sd / 128 - 1)); }
+    const out = new Uint8ClampedArray(w * h);
+    bilinearField(T, gw, gh, cell, w, h, (i, t) => { out[i] = g[i] > t ? 255 : 0; });
+    return { g: out, w, h };
+  }
+
+  function prepared(unit, prep) {
+    unit.cache ||= {};
+    const rot = unit.rotation || 0, key = rot + ':' + prep;
+    if (unit.cache[key]) return unit.cache[key];
+    let base = unit.cache[rot + ':gray'];
+    if (!base) { base = rot ? rotateGray(unit.base, rot) : unit.base; unit.cache[rot + ':gray'] = base; }
+    let img;
+    if (prep === 'gray') img = base;
+    else if (prep === 'norm') img = normalizeIllumination(base);
+    else if (prep === 'bin') img = sauvola(prepared(unit, 'norm'));
+    unit.cache[key] = img;
+    return img;
+  }
+
+  async function probeRotation(unit, progress) {
+    const results = [];
+    for (const deg of [0, 90, 270, 180]) {
+      const small = normalizeIllumination(downscaleGray(deg ? rotateGray(unit.base, deg) : unit.base, 1500));
+      const canvas = grayToCanvas(small);
+      try {
+        const r = await recognize(canvas, { psm: '3', label: 'Verificando orientação (' + deg + '°)', progress });
+        results.push({ deg, score: r.quality.score });
+        if (deg && r.quality.good >= 30) break;
+      } finally { freeCanvas(canvas); }
+    }
+    const zero = (results.find(r => r.deg === 0) || { score: 0 }).score;
+    const best = results.slice().sort((a, b) => b.score - a.score)[0];
+    return best && best.deg && best.score > Math.max(40, zero * 1.6) ? best.deg : 0;
+  }
+
+  /* ------------------------------------------------------------- PDF */
+  function linesFromTextContent(items) {
+    const rows = [];
+    for (const it of items || []) {
+      if (!it || typeof it.str !== 'string' || !it.str.trim()) continue;
+      const t = it.transform || [1, 0, 0, 1, 0, 0];
+      const hgt = Math.hypot(t[2], t[3]) || it.height || 10;
+      rows.push({ x: t[4], y: t[5], w: it.width || it.str.length * hgt * 0.5, h: hgt, s: it.str });
+    }
+    rows.sort((a, b) => b.y - a.y || a.x - b.x);
+    const lines = [];
+    for (const r of rows) {
+      let line = null;
+      for (let k = lines.length - 1; k >= Math.max(0, lines.length - 3); k--) {
+        if (Math.abs(lines[k].y - r.y) <= Math.min(lines[k].h, r.h) * 0.45) { line = lines[k]; break; }
+      }
+      if (!line) { line = { y: r.y, h: r.h, items: [] }; lines.push(line); }
+      line.items.push(r);
+    }
+    return lines.map(line => {
+      const items = line.items.sort((a, b) => a.x - b.x);
+      let out = '', prev = null;
+      for (const it of items) {
+        if (prev) {
+          const gap = it.x - (prev.x + prev.w);
+          if (gap > it.h * 1.2) out += '   ';
+          else if (gap > it.h * 0.12 && !/\s$/.test(out) && !/^\s/.test(it.s)) out += ' ';
+        }
+        out += it.s; prev = it;
+      }
+      return out.replace(/\s+$/, '');
+    }).join('\n');
+  }
+
+  async function imageBoxes(lib, page, viewport) {
+    const O = lib.OPS, ops = await page.getOperatorList();
+    const mul = (m, n) => [m[0] * n[0] + m[2] * n[1], m[1] * n[0] + m[3] * n[1], m[0] * n[2] + m[2] * n[3], m[1] * n[2] + m[3] * n[3], m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5]];
+    let ctm = [1, 0, 0, 1, 0, 0];
+    const stack = [], boxes = [];
+    const paints = new Set([O.paintImageXObject, O.paintInlineImageXObject, O.paintImageMaskXObject, O.paintJpegXObject].filter(v => v != null));
+    for (let i = 0; i < ops.fnArray.length; i++) {
+      const fn = ops.fnArray[i], args = ops.argsArray[i];
+      if (fn === O.save) stack.push(ctm);
+      else if (fn === O.restore) ctm = stack.pop() || [1, 0, 0, 1, 0, 0];
+      else if (fn === O.transform && args && args.length === 6) ctm = mul(ctm, args);
+      else if (fn === O.paintFormXObjectBegin) { stack.push(ctm); if (args && Array.isArray(args[0]) && args[0].length === 6) ctm = mul(ctm, args[0]); }
+      else if (fn === O.paintFormXObjectEnd) ctm = stack.pop() || ctm;
+      else if (paints.has(fn)) {
+        const pts = [[0, 0], [1, 0], [0, 1], [1, 1]].map(([x, y]) => viewport.convertToViewportPoint(ctm[0] * x + ctm[2] * y + ctm[4], ctm[1] * x + ctm[3] * y + ctm[5]));
+        const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+        let pw = 0, ph = 0;
+        if (args && typeof args[1] === 'number') { pw = args[1]; ph = args[2]; }
+        else if (args && args[0] && args[0].width) { pw = args[0].width; ph = args[0].height; }
+        const x0 = Math.max(0, Math.min(...xs)), y0 = Math.max(0, Math.min(...ys));
+        const x1 = Math.min(viewport.width, Math.max(...xs)), y1 = Math.min(viewport.height, Math.max(...ys));
+        if (x1 > x0 && y1 > y0) boxes.push({ x: x0, y: y0, w: x1 - x0, h: y1 - y0, pw, ph });
+      }
+    }
+    return boxes;
+  }
+
+  async function renderRegion(page, region) {
+    const nativeLimit = region.nativePerPt ? Math.max(2.2, region.nativePerPt * 4) : 5;
+    const scale = Math.min(targetScale(region.w, region.h, { maxScale: 6, minLong: 1800 }), nativeLimit);
+    const viewport = page.getViewport({ scale });
+    const canvas = makeCanvas(region.w * scale, region.h * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport, transform: [1, 0, 0, 1, -region.x * scale, -region.y * scale], background: 'rgb(255,255,255)' }).promise;
+    return canvas;
+  }
+
+  async function pdfPages(file, type, progress) {
+    const lib = await pdfLib();
+    const pdf = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false }).promise;
+    const maxPages = Math.min(pdf.numPages, 40);
+    const maxOcrPages = /pop_manual_pgrss|sumario_documentos/.test(type) ? 6 : 4;
+    const pages = [];
+    let ocrPages = 0;
+    for (let p = 1; p <= maxPages; p++) {
+      progress('Lendo página ' + p + ' de ' + pdf.numPages + '…');
+      const page = await pdf.getPage(p);
+      const viewport = page.getViewport({ scale: 1 });
+      const textLayer = linesFromTextContent((await page.getTextContent()).items);
+      const chars = textLayer.replace(/\s/g, '').length;
+      let region = null;
+      if (ocrPages < maxOcrPages) {
+        const pageArea = viewport.width * viewport.height;
+        const boxes = (await imageBoxes(lib, page, viewport)).filter(b => b.w * b.h >= pageArea * 0.02);
+        const coverage = boxes.reduce((s, b) => s + b.w * b.h, 0) / pageArea;
+        if (chars < 25) region = { x: 0, y: 0, w: viewport.width, h: viewport.height };
+        else if (boxes.length && coverage >= 0.12) {
+          const m = viewport.width * 0.01;
+          const x0 = Math.max(0, Math.min(...boxes.map(b => b.x)) - m), y0 = Math.max(0, Math.min(...boxes.map(b => b.y)) - m);
+          const x1 = Math.min(viewport.width, Math.max(...boxes.map(b => b.x + b.w)) + m), y1 = Math.min(viewport.height, Math.max(...boxes.map(b => b.y + b.h)) + m);
+          region = (x1 - x0) * (y1 - y0) > pageArea * 0.7 ? { x: 0, y: 0, w: viewport.width, h: viewport.height } : { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+        }
+        if (region) {
+          const natives = boxes.filter(b => b.pw).map(b => Math.min(b.pw / b.w, b.ph / b.h));
+          if (natives.length) region.nativePerPt = Math.max(...natives);
+          ocrPages++;
+        }
+      }
+      pages.push({ number: p, page, textLayer, region });
+    }
+    return { pdf, pages, total: pdf.numPages };
+  }
+
+  /* ------------------------------------------------- leituras múltiplas */
+  const PLAN = [
+    { prep: 'norm', psm: '3', name: 'leitura 1' },
+    { prep: 'bin', psm: '3', name: 'leitura 2 (binarizada)' },
+    { prep: 'norm', psm: '11', name: 'leitura 3 (texto esparso)' }
+  ];
+
+  async function ocrUnits(type, units, assemble, progress) {
+    const readings = [];
+    let merged = null;
+    for (let pass = 0; pass < PLAN.length; pass++) {
+      const step = PLAN[pass];
+      let qualityScore = 0;
+      for (let u = 0; u < units.length; u++) {
+        const unit = units[u];
+        if (!unit.base) {
+          progress('Preparando imagem ' + (units.length > 1 ? (u + 1) + ' de ' + units.length : '') + '…');
+          const canvas = await unit.getCanvas();
+          unit.base = grayOf(canvas); freeCanvas(canvas);
+        }
+        const label = 'Reconhecendo texto — ' + step.name + (units.length > 1 ? ', ' + unit.label : '');
+        let canvas = grayToCanvas(prepared(unit, step.prep));
+        let r;
+        try { r = await recognize(canvas, { psm: step.psm, label, progress }); } finally { freeCanvas(canvas); }
+        if (pass === 0 && !unit.rotationChecked) {
+          unit.rotationChecked = true;
+          if (r.quality.good < 25) {
+            const deg = await probeRotation(unit, progress);
+            if (deg) {
+              unit.rotation = deg;
+              canvas = grayToCanvas(prepared(unit, step.prep));
+              try { r = await recognize(canvas, { psm: step.psm, label: label + ' (rotação ' + deg + '°)', progress }); } finally { freeCanvas(canvas); }
+            }
+          }
+        }
+        unit.texts = unit.texts || [];
+        unit.texts[pass] = r.text;
+        qualityScore += r.quality.score;
+      }
+      const docText = assemble(pass);
+      const fields = safeExtract(type, docText);
+      const found = CATALOG[type].fields.filter(k => trim(fields[k])).length;
+      readings.push({ pass, name: step.name, text: docText, fields, quality: qualityScore + found * 60, found });
+      merged = mergeFields(type, readings);
+      if (!inspectFields(type, merged).missingRequired.length) break;
+      // Leitura sem nenhum texto útil após a 2ª passagem: não insistir.
+      if (pass >= 1 && readings.every(x => x.quality < 30)) break;
+    }
+    for (const unit of units) { unit.cache = null; unit.base = null; }
+    return { merged, readings };
+  }
+
+  function composeRaw(readings) {
+    if (!readings.length) return '';
+    const best = readings.slice().sort((a, b) => b.quality - a.quality)[0];
+    const others = readings.filter(r => r !== best);
+    return best.text + (others.length ? '\n\n——— Leituras complementares (usadas só para completar campos) ———\n' + others.map(r => '[' + r.name + ']\n' + r.text).join('\n\n') : '');
+  }
+
+  async function readImageFile(type, file, progress) {
+    let nativeInfo = null;
+    const unit = { label: 'imagem', getCanvas: async () => { const r = await fileToCanvas(file); nativeInfo = r.native; return r.canvas; } };
+    const { merged, readings } = await ocrUnits(type, [unit], pass => unit.texts[pass] || '', progress);
+    const small = nativeInfo && Math.max(nativeInfo.w, nativeInfo.h) < 1400;
+    return extract(type, composeRaw(readings), {
+      fields: merged, filename: file.name, readAt: new Date().toISOString(),
+      method: 'Foto: OCR com correção de iluminação' + (unit.rotation ? ', rotação ' + unit.rotation + '°' : '') + ' · ' + readings.length + ' leitura(s)' + (small ? ' · imagem de baixa resolução (' + nativeInfo.w + '×' + nativeInfo.h + ')' : ''),
+      passes: readings.map(r => ({ name: r.name, found: r.found, quality: Math.round(r.quality) }))
+    });
+  }
+
+  async function readPdfFile(type, file, progress) {
+    const { pdf, pages, total } = await pdfPages(file, type, progress);
+    try {
+      const ocrPages = pages.filter(p => p.region);
+      const units = ocrPages.map(p => ({ label: 'página ' + p.number, pageNumber: p.number, getCanvas: () => renderRegion(p.page, p.region) }));
+      const assemble = pass => pages.map(p => {
+        const unit = units.find(u => u.pageNumber === p.number);
+        const ocr = unit && unit.texts ? unit.texts[pass] || '' : '';
+        return (total > 1 ? 'Página ' + p.number + '\n' : '') + [p.textLayer, ocr].filter(Boolean).join('\n');
+      }).join('\n\n');
+      const cut = total > pages.length ? ' · lidas ' + pages.length + ' de ' + total + ' páginas' : '';
+      if (!units.length) {
+        return extract(type, assemble(0), { filename: file.name, readAt: new Date().toISOString(), method: 'PDF: texto digital' + cut });
+      }
+      let result;
+      try { result = await ocrUnits(type, units, assemble, progress); }
+      catch (error) {
+        // Sem OCR, só vale devolver o texto digital se ele já contiver os campos essenciais.
+        const partial = pages.map(p => p.textLayer).join('\n\n');
+        const fields = safeExtract(type, partial);
+        if (!inspectFields(type, fields).missingRequired.length) {
+          return extract(type, partial, { filename: file.name, readAt: new Date().toISOString(), method: 'PDF: texto digital — OCR da imagem indisponível (' + error.message + ')' + cut });
+        }
+        throw new Error('O documento contém imagem e o reconhecimento de texto não pôde ser executado (' + error.message + '). Na primeira utilização o leitor precisa de internet para ser baixado.');
+      }
+      const withText = pages.some(p => p.textLayer.replace(/\s/g, '').length >= 25);
+      return extract(type, composeRaw(result.readings), {
+        fields: result.merged, filename: file.name, readAt: new Date().toISOString(),
+        method: 'PDF: ' + (withText ? 'texto digital + ' : '') + 'OCR da imagem (' + units.map(u => u.label + (u.rotation ? ' girada ' + u.rotation + '°' : '')).join(', ') + ') · ' + result.readings.length + ' leitura(s)' + cut,
+        passes: result.readings.map(r => ({ name: r.name, found: r.found, quality: Math.round(r.quality) }))
+      });
+    } finally {
+      pages.forEach(p => { try { p.page.cleanup(); } catch (_) { /* ignorado */ } });
+      try { await pdf.destroy(); } catch (_) { /* ignorado */ }
+    }
+  }
+
+  async function readPlainFile(file, progress) {
+    const name = text(file.name).toLowerCase();
+    if (/\.(txt|csv|xml|json)$/.test(name) || /^text\/|xml/.test(file.type || '')) return { text: await file.text(), method: 'Texto do arquivo' };
+    if (/\.docx$/.test(name)) {
+      if (window.MedTools && typeof window.MedTools.read === 'function') return window.MedTools.read(file, progress);
+      if (!window.JSZip) throw new Error('Leitor de Word indisponível nesta tela.');
+      const zip = await window.JSZip.loadAsync(await file.arrayBuffer()), entry = zip.file('word/document.xml');
+      if (!entry) throw new Error('Documento Word inválido.');
+      const doc = new DOMParser().parseFromString(await entry.async('string'), 'application/xml');
+      return { text: [...doc.getElementsByTagNameNS('*', 'p')].map(p => [...p.getElementsByTagNameNS('*', 't')].map(x => x.textContent).join('')).join('\n'), method: 'Texto do Word' };
+    }
+    throw new Error('Use foto, PDF, DOCX ou XML. Para .doc antigo, salve como DOCX ou PDF.');
+  }
+
+  async function read(type, file, progress = () => {}) {
+    if (!CATALOG[type]) throw new Error('Tipo documental não reconhecido: ' + type);
+    if (!file) throw new Error('Nenhum arquivo selecionado.');
+    const say = message => { try { progress(message); } catch (_) { /* ignorado */ } };
+    const name = text(file.name).toLowerCase();
+    if (/\.doc$/.test(name)) throw new Error('Word no formato .doc ainda exige conversão para .docx ou PDF. O leitor local aceita .docx, PDF, XML e imagens.');
+    if (file.size > 40 * 1024 * 1024) throw new Error('Arquivo acima de 40 MB. Use uma cópia menor.');
+    try {
+      let result;
+      if (name.endsWith('.pdf') || file.type === 'application/pdf') result = await readPdfFile(type, file, say);
+      else if ((file.type || '').startsWith('image/') || /\.(png|jpe?g|webp|bmp|gif|heic|heif)$/.test(name)) result = await readImageFile(type, file, say);
+      else {
+        const plain = await readPlainFile(file, say);
+        result = extract(type, plain.text, { filename: file.name, method: plain.method, readAt: new Date().toISOString() });
+      }
+      say('Texto lido. Confira os campos.');
+      return result;
+    } finally { releaseWorkerSoon(); }
+  }
+
+  /*
+   * Adaptador: a tela chama openReader com o tipo documental explícito.
+   * O callback recebe o objeto de revisão completo. Não grava estado.
+   */
+  function openReader(type, { onReview, progress } = {}) {
+    if (!CATALOG[type]) throw new Error('Tipo documental não reconhecido: ' + type);
+    return {
+      type,
+      title: CATALOG[type].title,
+      accept: CATALOG[type].accepted.join(','),
+      async read(file) {
+        const result = await read(type, file, progress || (() => {}));
+        if (typeof onReview === 'function') await onReview(result);
+        return result;
+      }
+    };
+  }
+
+  /* ============================================ CONSULTAS ANVISA (inalterado) */
+  async function getJson(path) {
+    let last;
+    for (const base of DATA_BASES) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch(base + path, { signal: controller.signal, cache: 'no-store' });
+        if (response.status === 404) continue;
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return await response.json();
+      } catch (error) { last = error; } finally { clearTimeout(timeout); }
+    }
+    throw new Error('Base Anvisa indisponível' + (last ? ': ' + last.message : '.'));
+  }
+
+  let manifestPromise;
+  async function manifest() { return manifestPromise ||= getJson('manifest.json'); }
+  function prefix(man, base, fallback) {
+    const entry = (man.bases && man.bases[base]) || (man.indices && man.indices[base]) || {};
+    const value = Number(entry.prefixo || entry.prefixo_fragmento);
+    return Number.isInteger(value) && value > 0 && value < 10 ? value : fallback;
+  }
+  async function shardForRegistro(base, registro) {
+    const man = await manifest();
+    const n = prefix(man, base, 3);
+    return digits(registro).slice(0, n);
+  }
+  async function shardForProcess(base, processo) {
+    const man = await manifest();
+    const n = prefix(man, base, base === 'alimentos' ? 4 : 3);
+    return digits(processo).slice(5, 5 + n);
+  }
+  function firstOf(row, keys) { for (const key of keys) if (trim(row && row[key])) return trim(row[key]); return ''; }
+  function allOf(rows, keys) { return unique((rows || []).flatMap(row => keys.flatMap(key => Array.isArray(row && row[key]) ? row[key] : [row && row[key]]))); }
+
+  async function empresa(cnpj) {
+    const target = digits(cnpj);
+    if (!cnpjValid(target)) throw new Error('CNPJ inválido.');
+    const rows = (await getJson('afe_ae/' + target.slice(0, 3) + '.json') || []).filter(row => digits(row.cnpj) === target);
+    const afe = unique(rows.flatMap(row => [row.autorizacao, row.afe, row.numero_afe]).filter(Boolean));
+    const ae = unique(rows.flatMap(row => [row.autorizacao_especial, row.ae, row.numero_ae]).filter(Boolean));
+    return {
+      source: 'Base pública Anvisa — AFE/AE',
+      queriedAt: new Date().toISOString(),
+      cnpj: target,
+      razao_social: firstOf(rows[0], ['razao_social', 'razao', 'empresa', 'nome_empresarial']),
+      numero_afe: afe,
+      numero_ae: ae,
+      atividades: allOf(rows, ['atividade', 'atividades', 'descricao_atividade']),
+      raw: rows
+    };
+  }
+
+  function normalizeMedicine(row) {
+    return {
+      nome: firstOf(row, ['produto', 'nome_produto', 'marca', 'descricao']),
+      apresentacao: firstOf(row, ['apresentacao', 'descricao_apresentacao']),
+      fabricante: firstOf(row, ['fabricante', 'laboratorio', 'detentor', 'empresa']),
+      numero_registro_anvisa: firstOf(row, ['registro', 'registro_apresentacao', 'regularizacao']),
+      processo: firstOf(row, ['processo']),
+      ean: firstOf(row, ['ean', 'gtin', 'codigo_barras']),
+      raw: row
+    };
+  }
+
+  function normalizeEquipment(row) {
+    return {
+      nome: firstOf(row, ['produto', 'nome_produto', 'nome']),
+      fabricante: firstOf(row, ['fabricante', 'detentor', 'empresa']),
+      descricao: firstOf(row, ['descricao', 'produto', 'apresentacao', 'modelo']),
+      numero_anvisa_ou_processo: firstOf(row, ['registro', 'regularizacao', 'processo']),
+      numero_anvisa: firstOf(row, ['registro', 'regularizacao']),
+      processo: firstOf(row, ['processo']),
+      raw: row
+    };
+  }
+
+  async function recordsByRegistro(base, registro) {
+    const shard = await shardForRegistro(base, registro);
+    const rows = await getJson(base + '/' + shard + '.json') || [];
+    return rows.filter(row => digits(row.registro || row.regularizacao) === digits(registro));
+  }
+
+  async function recordsByProcess(base, processo) {
+    const p = digits(processo);
+    const indexShard = p.slice(5, 8);
+    const index = await getJson('indices/processos/' + indexShard + '.json') || {};
+    const refs = index[p] || [];
+    const matching = refs.filter(ref => (ref.b || ref.base || '') === base);
+    if (!matching.length) return [];
+    // Os dados de medicamentos e dispositivos são fragmentados por REGISTRO.
+    const shards = unique(await Promise.all(matching.map(ref => shardForRegistro(base, ref.r))));
+    const rows = (await Promise.all(shards.map(shard => getJson(base + '/' + shard + '.json')))).flat();
+    const registers = new Set(matching.map(ref => digits(ref.r)));
+    return rows.filter(row => registers.has(digits(row.registro)) && digits(row.processo) === p);
+  }
+
+  async function medicamento({ ean, processo, registro } = {}) {
+    const modes = [ean && 'ean', processo && 'processo', registro && 'registro'].filter(Boolean);
+    if (modes.length !== 1) throw new Error('Informe exatamente um entre EAN, processo ou registro Anvisa.');
+    let rows = [];
+    if (ean) {
+      const code = digits(ean);
+      const padded = code.padStart(14, '0');
+      const cmed = await getJson('cmed/' + padded.slice(0, 8) + '.json') || {};
+      const cmedRows = cmed[padded] || cmed[code] || [];
+      const registers = unique(cmedRows.map(row => digits(row.registro || row.registro_apresentacao)));
+      for (const item of registers) rows.push(...await recordsByRegistro('medicamentos', item));
+      rows.push(...cmedRows);
+    } else if (registro) rows = await recordsByRegistro('medicamentos', registro);
+    else rows = await recordsByProcess('medicamentos', processo);
+    const normalized = rows.map(normalizeMedicine);
+    return { source: 'Bases públicas Anvisa e CMED', queriedAt: new Date().toISOString(), mode: modes[0], results: normalized };
+  }
+
+  async function equipamento({ processo, registro } = {}) {
+    const modes = [processo && 'processo', registro && 'registro'].filter(Boolean);
+    if (modes.length !== 1) throw new Error('Informe exatamente um entre processo ou número de registro Anvisa.');
+    const rows = registro ? await recordsByRegistro('dispositivos', registro) : await recordsByProcess('dispositivos', processo);
+    return { source: 'Base pública Anvisa — Dispositivos médicos', queriedAt: new Date().toISOString(), mode: modes[0], results: rows.map(normalizeEquipment) };
+  }
+
+  /* Foto-evidência: armazenamento original, separado de OCR e de relatório. */
+  const PHOTO_DB = 'drogaria-fotos-evidencia-v1';
+  const PHOTO_STORE = 'photos';
+  let photoDbPromise;
+  function photoDb() {
+    return photoDbPromise ||= new Promise((resolve, reject) => {
+      const request = indexedDB.open(PHOTO_DB, 1);
+      request.onupgradeneeded = () => request.result.createObjectStore(PHOTO_STORE, { keyPath: 'key' });
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Não foi possível abrir o armazenamento de fotos.'));
+    });
+  }
+  async function photoTx(mode, operation) {
+    const db = await photoDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(PHOTO_STORE, mode);
+      const request = operation(tx.objectStore(PHOTO_STORE));
+      let result;
+      request.onsuccess = () => { result = request.result; };
+      tx.oncomplete = () => resolve(result);
+      tx.onerror = () => reject(tx.error || new Error('Não foi possível gravar a foto.'));
+      tx.onabort = () => reject(tx.error || new Error('Gravação de foto interrompida.'));
+    });
+  }
+  function photoKey(scope, id) { return String(scope) + '|' + String(id); }
+  function newPhotoId() { return 'foto_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8); }
+
+  async function savePhoto(scope, file, { id = newPhotoId(), section = '', caption = '' } = {}) {
+    if (!file || !(file.type || '').startsWith('image/')) throw new Error('Selecione uma fotografia.');
+    if (file.size > 25 * 1024 * 1024) throw new Error('A foto excede 25 MB. Use uma imagem menor para preservar o armazenamento local.');
+    const record = {
+      key: photoKey(scope, id), id, scope: String(scope), section: trim(section), caption: trim(caption),
+      blob: file, filename: file.name || (id + '.jpg'), mime: file.type || 'image/jpeg', size: file.size,
+      capturedAt: new Date().toISOString(), version: VERSION
+    };
+    await photoTx('readwrite', store => store.put(record));
+    return { ...record, previewUrl: URL.createObjectURL(file) };
+  }
+
+  async function listPhotos(scope) {
+    const all = await photoTx('readonly', store => store.getAll());
+    return all.filter(item => item.scope === String(scope)).sort((a, b) => a.capturedAt.localeCompare(b.capturedAt)).map(item => ({ ...item, previewUrl: URL.createObjectURL(item.blob) }));
+  }
+  function revokePhotoPreview(item) { if (item && item.previewUrl) URL.revokeObjectURL(item.previewUrl); }
+  async function removePhoto(scope, id) { await photoTx('readwrite', store => store.delete(photoKey(scope, id))); }
+
+  async function imageToDataUrl(blob, maxSide = 1600) {
+    const url = URL.createObjectURL(blob);
+    try {
+      const image = new Image();
+      await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; image.src = url; });
+      const ratio = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL('image/jpeg', .88);
+    } finally { URL.revokeObjectURL(url); }
+  }
+
+  async function photoBookBlob(scope, { title = 'Fotografias da inspeção — Drogaria', establishment = '', inspectionDate = '' } = {}) {
+    const photos = await listPhotos(scope);
+    try {
+      const body = [];
+      for (let index = 0; index < photos.length; index++) {
+        const photo = photos[index];
+        const dataUrl = await imageToDataUrl(photo.blob);
+        body.push('<section class="photo"><h2>Foto ' + (index + 1) + '</h2>' +
+          '<p><b>Seção:</b> ' + esc(photo.section || 'Não informada') + '<br><b>Descrição:</b> ' + esc(photo.caption || 'Não informada') +
+          '<br><b>Registrada em:</b> ' + esc(new Date(photo.capturedAt).toLocaleString('pt-BR')) + '</p>' +
+          '<img src="' + dataUrl + '" alt="Foto de evidência ' + (index + 1) + '"></section>');
+      }
+      const html = '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>' + esc(title) + '</title><style>' +
+        '@page{margin:2cm}body{font:11pt Arial,sans-serif;color:#000}h1{font-size:16pt}h2{font-size:12pt;margin:0 0 6px}.meta{margin:0 0 22px}.photo{page-break-inside:avoid;border-top:1px solid #777;padding-top:12px;margin-top:18px}.photo img{display:block;max-width:100%;max-height:20cm;margin-top:10px}p{line-height:1.4}</style></head><body>' +
+        '<h1>' + esc(title) + '</h1><p class="meta"><b>Estabelecimento:</b> ' + esc(establishment || 'Não informado') + '<br><b>Data da inspeção:</b> ' + esc(inspectionDate || 'Não informada') +
+        '<br><b>Total de fotografias:</b> ' + photos.length + '</p>' +
+        (body.join('') || '<p>Nenhuma fotografia foi registrada nesta inspeção.</p>') + '</body></html>';
+      return new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+    } finally { photos.forEach(revokePhotoPreview); }
+  }
+
+  async function downloadPhotoBook(scope, options = {}) {
+    const blob = await photoBookBlob(scope, options);
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Fotografias_da_inspecao_Drogaria.doc';
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    return blob;
+  }
+
+
+  window.DrogariaOcrTools = Object.freeze({
+    version: VERSION,
+    catalog: CATALOG,
+    labels: LABELS,
+    extract,
+    read,
+    openReader,
+    util: Object.freeze({ toIso, splitActivities, datesIn, cnpjValid }),
+    anvisa: Object.freeze({ empresa, medicamento, equipamento }),
+    fotos: Object.freeze({ save: savePhoto, list: listPhotos, remove: removePhoto, revokePreview: revokePhotoPreview, photoBookBlob, downloadPhotoBook })
+  });
+})();
