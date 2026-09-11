@@ -1,0 +1,191 @@
+name: Gerar Drogaria Isolada
+
+on:
+  push:
+    branches:
+      - chatgpt-drogaria-standalone
+    paths:
+      - '.github/workflows/gerar-drogaria-isolada.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Testar módulo original da Drogaria
+        run: |
+          node scripts/test-drogaria.cjs
+          node scripts/test-processos.cjs
+
+      - name: Gerar HTML isolado
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          let html = fs.readFileSync('index.html', 'utf8');
+
+          const headPatch = String.raw`<script id="drogaria-isolada-fetch-proxy">
+          (() => {
+            'use strict';
+            window.__DROGARIA_ISOLADA__ = true;
+            const nativeFetch = window.fetch.bind(window);
+            const RAW = 'https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/';
+            const PAGE = 'https://uvisvp.github.io/base-vigilancia/dados/';
+
+            function dataTail(value) {
+              const s = String(value || '');
+              const m = s.match(/(?:^|\/)dados\/([^?#]+)(?:[?#].*)?$/i);
+              return m ? m[1] : '';
+            }
+
+            function rewrite(input) {
+              const url = typeof input === 'string' ? input : (input && input.url) || String(input || '');
+              const tail = dataTail(url);
+              if (!tail) return input;
+              try {
+                const parsed = new URL(url, location.href);
+                if (parsed.protocol === 'file:' || parsed.origin === 'null' || url.startsWith('dados/') || url.startsWith('./dados/') || url.startsWith('../dados/')) {
+                  return RAW + tail;
+                }
+              } catch (_) {
+                return RAW + tail;
+              }
+              return input;
+            }
+
+            window.fetch = async function(input, init) {
+              const rewritten = rewrite(input);
+              try {
+                const response = await nativeFetch(rewritten, init);
+                if (response && response.ok) return response;
+                const url = typeof rewritten === 'string' ? rewritten : (rewritten && rewritten.url) || '';
+                const tail = dataTail(url);
+                if (tail && url.startsWith(PAGE)) return nativeFetch(RAW + tail, init);
+                return response;
+              } catch (error) {
+                const url = typeof rewritten === 'string' ? rewritten : (rewritten && rewritten.url) || '';
+                const tail = dataTail(url);
+                if (tail && !url.startsWith(RAW)) return nativeFetch(RAW + tail, init);
+                throw error;
+              }
+            };
+          })();
+          </script>
+          <style id="drogaria-isolada-style">
+            html[data-drogaria-isolada="1"] #drogaria-isolada-loading{position:fixed;inset:0;z-index:2147483647;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font:600 16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;text-align:center;padding:24px}
+            html[data-drogaria-isolada="1"][data-uvis-app="drogaria"] #drogaria-isolada-loading{display:none}
+          </style>`;
+
+          const bootPatch = String.raw`<script id="drogaria-isolada-boot">
+          (() => {
+            'use strict';
+            document.documentElement.dataset.drogariaIsolada = '1';
+
+            function visible(el) {
+              if (!el) return false;
+              const style = getComputedStyle(el);
+              return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+            }
+            function norm(s) {
+              return String(s || '').replace(/\s+/g, ' ').trim();
+            }
+            function candidates() {
+              return [...document.querySelectorAll('button,a,[role="button"],.card,.card-button')].filter(visible);
+            }
+            function clickMatch(regex) {
+              const el = candidates().find(x => regex.test(norm(x.textContent)));
+              if (!el) return false;
+              el.click();
+              return true;
+            }
+            let entered = false;
+            let lastClick = 0;
+            function route() {
+              const app = document.documentElement.dataset.uvisApp || '';
+              if (app === 'drogaria') {
+                entered = true;
+                return;
+              }
+              const now = Date.now();
+              if (now - lastClick < 250) return;
+              lastClick = now;
+              if (clickMatch(/^Drogaria$/i) || clickMatch(/\bDrogaria\b/i)) return;
+              clickMatch(/^Medicamentos$/i) || clickMatch(/Núcleo\s+de\s+Medicamentos/i);
+            }
+            function addLoading() {
+              if (document.getElementById('drogaria-isolada-loading')) return;
+              const el = document.createElement('div');
+              el.id = 'drogaria-isolada-loading';
+              el.textContent = 'Abrindo Drogaria…';
+              document.body.appendChild(el);
+            }
+            window.addEventListener('DOMContentLoaded', () => {
+              addLoading();
+              route();
+              const observer = new MutationObserver(() => queueMicrotask(route));
+              observer.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['data-uvis-app','class','style']});
+              setInterval(route, 700);
+            });
+          })();
+          </script>`;
+
+          if (!html.includes('<head>')) throw new Error('HEAD não localizado');
+          html = html.replace('<head>', '<head>\n' + headPatch + '\n');
+          html = html.replace(/<title>[\s\S]*?<\/title>/i, '<title>Drogaria — Inspeção Sanitária</title>');
+          if (!html.includes('</body>')) throw new Error('BODY não localizado');
+          html = html.replace('</body>', bootPatch + '\n</body>');
+
+          // Não instala service worker quando aberto como arquivo isolado.
+          html = html.replace(/<link[^>]+rel=["']manifest["'][^>]*>/ig, '');
+
+          fs.writeFileSync('Drogaria_Isolada.html', html, 'utf8');
+
+          const readme = `DROGARIA ISOLADA — versão derivada da PWA 20260911-29\n\n` +
+            `Abra Drogaria_Isolada.html diretamente no navegador. O arquivo mantém a aplicação integrada da Drogaria e entra automaticamente no módulo.\n\n` +
+            `BANCO DE DADOS\nAs consultas utilizam uvisvp/base-vigilancia. Quando aberto por file://, chamadas relativas a /dados/ são redirecionadas para https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/. A URL do GitHub Pages continua disponível como origem normal/fallback nos leitores já existentes.\n\n` +
+            `OCR\nO OCR continua usando drogaria-ocr-tools 2.0 e bibliotecas externas (PDF.js/Tesseract) carregadas pela internet. É necessária conexão para consultas e para componentes OCR ainda não armazenados pelo navegador.\n\n` +
+            `PERSISTÊNCIA\nRascunhos/fotos dependem do armazenamento que o navegador disponibiliza para arquivos locais. Navegadores podem tratar file:// de maneira diferente; para uso operacional contínuo, HTTPS/PWA continua sendo o ambiente mais confiável.\n\n` +
+            `Este arquivo NÃO publica nem altera o aplicativo oficial.\n`;
+          fs.writeFileSync('LEIA-ME_Drogaria_Isolada.txt', readme, 'utf8');
+
+          const required = [
+            'drogaria-isolada-fetch-proxy',
+            'drogaria-isolada-boot',
+            'rec--drogaria-ocr-tools.js',
+            'rec--drogaria-review.js',
+            'rec--drogaria-report-final.js',
+            'app--drogaria'
+          ];
+          for (const marker of required) {
+            if (!html.includes(marker)) throw new Error('Marcador ausente: ' + marker);
+          }
+          console.log('Drogaria_Isolada.html:', fs.statSync('Drogaria_Isolada.html').size, 'bytes');
+          NODE
+
+      - name: Validar HTML isolado
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const h=fs.readFileSync('Drogaria_Isolada.html','utf8');
+          if(!h.includes('https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/')) throw Error('Proxy do banco ausente');
+          if(!h.includes('window.__DROGARIA_ISOLADA__ = true')) throw Error('Modo isolado ausente');
+          if(!h.includes("const APP_VERSAO = '20260911-29'")) throw Error('Versão de origem inesperada');
+          console.log('PASS: HTML isolado contém módulo atual, proxy de banco e inicialização exclusiva da Drogaria.');
+          NODE
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Drogaria-Isolada
+          path: |
+            Drogaria_Isolada.html
+            LEIA-ME_Drogaria_Isolada.txt
+          if-no-files-found: error
+          retention-days: 1
