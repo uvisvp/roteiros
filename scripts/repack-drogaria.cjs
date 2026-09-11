@@ -7,7 +7,7 @@ const root = path.join(__dirname, '..');
 let {html, blocks, lz} = unpack();
 function change(text, from, to) {
   if (text.includes(to)) return text;
-  if (!text.includes(from)) throw Error('Trecho esperado não localizado: ' + from.slice(0,100));
+  if (!text.includes(from)) throw Error('Trecho esperado não localizado: ' + String(from).slice(0,100));
   return text.replace(from, to);
 }
 let app = blocks.get('app--drogaria');
@@ -25,22 +25,29 @@ blocks.set('app--drogaria',app);
 let stock=blocks.get('app--estoque-produtos');
 stock=change(stock,"bases:['dispositivos','saneantes']","bases:['dispositivos','saneantes','cosmeticos']");
 stock=change(stock,"function fragmento(base,value){const n=prefixoDe(base),number=digits(value);return number.slice(0,n).padStart(n,'0')}","function fragmento(base,value){const n=prefixoDe(base),number=digits(value);return base==='cosmeticos'?number.slice(5,5+n):number.slice(0,n).padStart(n,'0')}");
-// Cosméticos publicados são indexados pelo processo, mesmo quando não têm registro.
 stock=change(stock,'group.regs.has(digits(item.registro))&&digits(item.processo)===processo','group.regs.has(digits(group.base===\'cosmeticos\'?item.processo:item.registro))&&digits(item.processo)===processo');
 stock=change(stock,'mesmoRegistro(item.registro,registro)',"base!=='cosmeticos'&&mesmoRegistro(item.registro,registro)");
-// Um processo digitado não pode ser silenciosamente ignorado por um registro antigo.
 stock=change(stock,"if(registro)result.items=await byRegistration(registro);\n    else if(processo){if(processo.length<12)throw new Error('Digite o processo completo.');result=await byProcess(processo)}", "if(processo){if(processo.length<12)throw new Error('Digite o processo completo.');result=await byProcess(processo)}\n    else if(registro)result.items=await byRegistration(registro);");
 blocks.set('app--estoque-produtos',stock);
-// Mutação idempotente: impede ciclo infinito do observador ao renomear as abas.
 html=change(html,'if(b.dataset.tab==="achados")b.textContent="Infrações";if(b.dataset.tab==="relatorio")b.textContent="Relatório";', 'if(b.dataset.tab==="achados"&&b.textContent!=="Infrações")b.textContent="Infrações";if(b.dataset.tab==="relatorio"&&b.textContent!=="Relatório")b.textContent="Relatório";');
 html=html.replaceAll('html[data-uvis-app="drogaria"] header','html[data-uvis-app="drogaria"] body>header');
 html=change(html,'var h=document.querySelector("header");if(h&&h.textContent', 'var h=document.querySelector("body>header");if(h&&h.textContent');
 const reviewScript="      try{cab += '<scr'+'ipt>'+rec('rec--drogaria-review.js')+'</scr'+'ipt>';}catch(e){}\n";
 if(!html.includes("rec('rec--drogaria-review.js')"))html=html.replace("      try{cab += '<scr'+'ipt>'+rec('rec--drogaria-section1.js')",reviewScript+"      try{cab += '<scr'+'ipt>'+rec('rec--drogaria-section1.js')");
-for(const name of ['drogaria-ocr-tools','drogaria-review','drogaria-section1','drogaria-area-fisica','drogaria-servicos-documentos','drogaria-final-bridge'])blocks.set('rec--'+name+'.js',fs.readFileSync(path.join(root,name+'.js'),'utf8'));
+const finalReportScript="      try{cab += '<scr'+'ipt>'+rec('rec--drogaria-report-final.js')+'</scr'+'ipt>';}catch(e){}\n";
+if(!html.includes("rec('rec--drogaria-report-final.js')")){
+  const anchor="      try{cab += '<scr'+'ipt>'+rec('rec--drogaria-final-bridge.js')+'</scr'+'ipt>';}catch(e){}";
+  if(!html.includes(anchor))throw Error('Loader do final bridge da Drogaria não localizado.');
+  html=html.replace(anchor,anchor+'\n'+finalReportScript.trimEnd());
+}
+for(const name of ['drogaria-ocr-tools','drogaria-review','drogaria-section1','drogaria-area-fisica','drogaria-servicos-documentos','drogaria-final-bridge','drogaria-report-final'])blocks.set('rec--'+name+'.js',fs.readFileSync(path.join(root,name+'.js'),'utf8'));
 for(const [id,source] of blocks) {
   const re=new RegExp('(<script type="text/plain" id="'+id.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'">)[\\s\\S]*?(</script>)');
-  let old=html.match(re);if(!old){if(id!=='rec--drogaria-review.js')throw Error(id);html=html.replace('</html>','<script type="text/plain" id="'+id+'"></script>\n</html>');old=html.match(re);}
+  let old=html.match(re);
+  if(!old){
+    if(!['rec--drogaria-review.js','rec--drogaria-report-final.js'].includes(id))throw Error(id);
+    html=html.replace('</html>','<script type="text/plain" id="'+id+'"></script>\n</html>');old=html.match(re);
+  }
   const encoded=lz.compressToBase64(source);
   if(lz.decompressFromBase64(encoded)!==source)throw Error('Falha de round-trip '+id);
   html=html.replace(re,()=>old[1]+encoded+old[2]);
