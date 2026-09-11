@@ -11,10 +11,13 @@ const candidates=[];
 try{candidates.push(['lz-string',lz.decompressFromBase64(encoded)]);}catch(e){}
 try{candidates.push(['brotli',zlib.brotliDecompressSync(raw).toString('utf8')]);}catch(e){}
 try{candidates.push(['inflate',zlib.inflateSync(raw).toString('utf8')]);}catch(e){}
+try{candidates.push(['inflateRaw',zlib.inflateRawSync(raw).toString('utf8')]);}catch(e){}
 try{candidates.push(['gunzip',zlib.gunzipSync(raw).toString('utf8')]);}catch(e){}
+try{candidates.push(['unzip',zlib.unzipSync(raw).toString('utf8')]);}catch(e){}
+if(typeof zlib.zstdDecompressSync==='function'){try{candidates.push(['zstd',zlib.zstdDecompressSync(raw).toString('utf8')]);}catch(e){}}
 candidates.push(['base64',raw.toString('utf8')]);
 const found=candidates.find(([,text])=>text&&text.includes('window.DrogariaReview'));
-if(!found)throw Error('Falha ao reconstruir o gerador final da Drogaria. Métodos testados: '+candidates.map(([n,t])=>n+':'+String(t||'').length).join(', '));
+if(!found)throw Error('Falha ao reconstruir o gerador final da Drogaria. Métodos testados: '+candidates.map(([n,t])=>n+':'+String(t||'').length).join(', ')+'; bytes iniciais='+raw.subarray(0,12).toString('hex'));
 const [method,review]=found;
 console.log('Gerador reconstruído por '+method+'; '+review.length+' caracteres.');
 if(!review.includes('IRREGULARIDADES OBSERVADAS'))throw Error('Gerador reconstruído sem a seção final de irregularidades.');
