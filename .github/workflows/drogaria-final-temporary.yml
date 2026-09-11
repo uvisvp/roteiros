@@ -1,0 +1,33 @@
+name: Finalizar revisão Drogaria
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/apply-drogaria-final.cjs'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Aplicar fontes, reempacotar e testar
+        run: node scripts/apply-drogaria-final.cjs
+      - name: Publicar revisão validada
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add drogaria-area-fisica.js drogaria-servicos-documentos.js drogaria-final-bridge.js drogaria-review.js scripts/test-drogaria.cjs index.html
+          git diff --cached --quiet || git commit -m "Finaliza revisão do roteiro e relatório da Drogaria"
+          rm -f scripts/apply-drogaria-final.cjs .github/workflows/drogaria-final-temporary.yml
+          git add -A
+          git diff --cached --quiet || git commit -m "Remove automação temporária da revisão da Drogaria"
+          git push origin main
