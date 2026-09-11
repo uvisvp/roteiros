@@ -25,9 +25,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add drogaria-area-fisica.js drogaria-servicos-documentos.js drogaria-final-bridge.js drogaria-review.js scripts/test-drogaria.cjs index.html
+          git add drogaria-area-fisica.js drogaria-servicos-documentos.js drogaria-final-bridge.js drogaria-review.js drogaria-report-final.js scripts/repack-drogaria.cjs scripts/test-drogaria.cjs index.html
           git diff --cached --quiet || git commit -m "Finaliza revisão do roteiro e relatório da Drogaria"
-          rm -f scripts/apply-drogaria-final.cjs .github/workflows/drogaria-final-temporary.yml
+          rm -f scripts/apply-drogaria-final.cjs .github/workflows/drogaria-final-temporary.yml scripts/.drogaria-review.part1 scripts/.drogaria-review.part2 scripts/.drogaria-review.part3 scripts/.drogaria-review.part4 scripts/.drogaria-review.part5
           git add -A
           git diff --cached --quiet || git commit -m "Remove automação temporária da revisão da Drogaria"
           git push origin main
