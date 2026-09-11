@@ -1,6 +1,6 @@
 {
   "versao": "20260911-29",
   "banco": "12.0",
-  "correcoes": 4,
+  "correcoes": 5,
   "notas": "PWA atualizada para incorporar a última revisão de Drogaria e forçar renovação do cache instalado; módulos de Drogaria passam a integrar o cache essencial. Mantida a ampliação das consultas por processo de saneantes e medicamentos."
 }
