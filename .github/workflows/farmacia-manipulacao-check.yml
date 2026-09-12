@@ -1,0 +1,49 @@
+name: Validar Farmácia de Manipulação
+
+on:
+  push:
+    branches:
+      - farmacia-manipulacao
+    paths:
+      - 'farmacia-manipulacao-*.js'
+      - '.github/workflows/farmacia-manipulacao-check.yml'
+  workflow_dispatch:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar sintaxe JavaScript
+        run: |
+          set -e
+          for f in farmacia-manipulacao-*.js; do
+            echo "node --check $f"
+            node --check "$f"
+          done
+      - name: Verificar arquivos obrigatórios
+        run: |
+          test -f farmacia-manipulacao-core.js
+          test -f farmacia-manipulacao-section1.js
+          test -f farmacia-manipulacao-sections2-3.js
+          test -f farmacia-manipulacao-section4.js
+          test -f farmacia-manipulacao-section5.js
+          test -f farmacia-manipulacao-section6.js
+          test -f farmacia-manipulacao-section7.js
+          test -f farmacia-manipulacao-section8.js
+          test -f farmacia-manipulacao-section9.js
+          test -f farmacia-manipulacao-report.js
+      - name: Guardrails funcionais básicos
+        run: |
+          grep -q -- '-5 a -120 Pa' farmacia-manipulacao-core.js
+          grep -q 'refrigeratorCard' farmacia-manipulacao-section4.js
+          grep -q 'refrigeratorCard' farmacia-manipulacao-section5.js
+          grep -q 'refrigeratorCard' farmacia-manipulacao-section6.js
+          grep -q 'DANFE de aquisição' farmacia-manipulacao-section9.js
+          grep -q 'ifa-lookup-requested' farmacia-manipulacao-section9.js
+          grep -q 'copy-section' farmacia-manipulacao-report.js
