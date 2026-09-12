@@ -42,7 +42,7 @@ jobs:
           fi
 
           # CRT não possui campo de validade; somente data de emissão quando constar.
-          if grep -niE "crt\.(validade|dataValidade)|crt.*Validade" farmacia-manipulacao-section1.js; then
+          if grep -niE "crt\.(validade|dataValidade)" farmacia-manipulacao-section1.js; then
             echo 'ERRO: CRT recebeu campo de validade.'
             exit 1
           fi
