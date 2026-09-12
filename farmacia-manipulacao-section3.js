@@ -59,6 +59,19 @@
     return box;
   }
 
+  function refreshVisibleAfterOcr(event) {
+    var detail = event && event.detail || {};
+    if (detail.documentType !== 'aso' || String(detail.destination || '').indexOf(BASE + '.saude.asos') !== 0) return;
+    window.setTimeout(function () {
+      var target = document.querySelector('#fm-app.is-open .fm-app-content.fm-section3');
+      if (target) render(target);
+    }, 0);
+  }
+  if (!window.__FM_SECTION3_OCR_REFRESH__) {
+    window.__FM_SECTION3_OCR_REFRESH__ = true;
+    window.addEventListener('farmacia-manipulacao:ocr-applied', refreshVisibleAfterOcr);
+  }
+
   function render(target) {
     FM.dom.clear(target);
     target.classList.add('fm-manipulation-module', 'fm-section3');
@@ -86,7 +99,7 @@
     aso.appendChild(E('h4', 'fm-option-group-title', 'Atestados de Saúde Ocupacional — ASO'));
     var actions = E('div', 'fm-document-actions');
     actions.appendChild(ocrButton('📄 Selecionar / fotografar ASO', 'aso', BASE + '.saude.asos'));
-    actions.appendChild(E('span', 'fm-helper-text', 'O leitor deve apenas extrair dados estruturados; a equipe confere antes de aplicar.'));
+    actions.appendChild(E('span', 'fm-helper-text', 'O leitor apenas extrai dados estruturados; a equipe confere e corrige antes de aplicar. É possível adicionar vários ASOs.'));
     aso.appendChild(actions);
     aso.appendChild(FM.createRepeatableTable({
       path: BASE + '.saude.asos',
@@ -98,8 +111,10 @@
         { key: 'tipoExame', label: 'Tipo de exame' },
         { key: 'dataExame', label: 'Data' },
         { key: 'riscos', label: 'Riscos / agentes' },
+        { key: 'exames', label: 'Exames relacionados' },
         { key: 'aptidao', label: 'Apto / inapto' },
-        { key: 'medico', label: 'Médico / CRM' }
+        { key: 'medico', label: 'Médico examinador / CRM' },
+        { key: 'medicoPcmso', label: 'Responsável pelo PCMSO, quando constar' }
       ]
     }));
     health.appendChild(aso);
