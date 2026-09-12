@@ -14,7 +14,8 @@
     'farmacia-manipulacao-section6.js',
     'farmacia-manipulacao-section7.js',
     'farmacia-manipulacao-section8.js',
-    'farmacia-manipulacao-section9.js'
+    'farmacia-manipulacao-section9.js',
+    'farmacia-manipulacao-report.js'
   ];
   var loaded = null;
   var root = null;
@@ -69,9 +70,7 @@
     document.head.appendChild(s);
   }
 
-  function E(tag, cls, text) {
-    var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e;
-  }
+  function E(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function ensureRoot() {
     if (root) return root;
     injectStyle();
@@ -91,24 +90,30 @@
   ];
   function renderNav(){var nav=ensureRoot().querySelector('.fm-app-nav');nav.innerHTML='';NAV.forEach(function(item){var b=E('button','',item[1]);b.type='button';b.dataset.section=item[0];b.setAttribute('aria-current',active===item[0]?'true':'false');b.addEventListener('click',function(){show(item[0]);});nav.appendChild(b);});}
 
+  function humanPath(path){
+    var sectionNames={s1:'Identificação e informações gerais',s2:'Edificações e instalações',s3:'Pessoal, saúde e treinamento',s4:'Áreas físicas',s5:'Laboratórios',s6:'Sensibilizantes',s7:'Documentos apresentados',s8:'Monitoramento magistral e água',s9:'Rastreabilidade e controle de qualidade'};
+    var special={requirements:'Condições estruturais',req:'Requisitos',documentos:'Documentos',checklists:'Checklist',pessoal:'Pessoal e organização',saude:'Saúde ocupacional',treinamentos:'Treinamentos',recepcao:'Recepção/dispensação',industrializados:'Industrializados/drogaria',servicos:'Serviços farmacêuticos',conferencia:'Conferência',dml:'DML',sanitarios:'Sanitários/vestiários',paramentacao:'Paramentação',almoxarifado:'Almoxarifado',cq:'Controle de Qualidade',semissolidos:'Semissólidos e líquidos',solidos:'Sólidos',lavagem:'Lavagem',homeopatia:'Homeopatia',sbit:'SBIT',hormonios:'Hormônios',antibioticos:'Antibióticos',citostaticos:'Citostáticos',penicilinicos:'Penicilínicos',aguaPurificada:'Água purificada',aguaPotavel:'Água potável',baseGalenica:'Base galênica',baixaDose:'Fármaco ≤ 25 mg',diluido:'Diluído preparado',sensibilizantes:'Sensibilizantes',prescricao:'Prescrição',rastreabilidade:'Rastreabilidade',vegetal:'Matéria-prima vegetal',estoqueControlados:'Confronto de estoque',transporte:'Conservação/transporte/dispensação'};
+    var parts=String(path||'').split('.').filter(function(x){return x&&x!=='sections'&&x!=='status';});
+    return parts.map(function(p){if(sectionNames[p])return sectionNames[p];if(special[p])return special[p];return p.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/_/g,' ').replace(/^./,function(c){return c.toUpperCase();});}).join(' — ');
+  }
   function walkStatuses(obj,path,out){
     if(!obj||typeof obj!=='object')return;
     if(Object.prototype.hasOwnProperty.call(obj,'status')){
       var st=obj.status;
-      if(st==='NC') out.nc.push({path:path,status:st,notes:obj.notes||''});
-      if(st==='NAO'||st==='ATUALIZAR'||st==='OBS') out.pending.push({path:path,status:st,notes:obj.notes||obj.observacao||''});
+      if(st==='NC') out.nc.push({path:path,label:humanPath(path),status:st,notes:obj.notes||''});
+      if(st==='NAO'||st==='ATUALIZAR') out.pending.push({path:path,label:humanPath(path),status:st,notes:obj.notes||obj.observacao||''});
     }
     Object.keys(obj).forEach(function(k){if(k!=='status'&&k!=='photos')walkStatuses(obj[k],path?path+'.'+k:k,out);});
   }
   function collectFinal(){var FM=window.FarmaciaManipulacao,state=FM.loadState(),out={nc:[],pending:[]};walkStatuses(state.sections||{},'sections',out);return out;}
   function finalField(path,label,rows){var FM=window.FarmaciaManipulacao,l=E('label','fm-field');l.appendChild(E('span','fm-field-label',label));var t=document.createElement('textarea');t.rows=rows||4;t.value=FM.get(path,'');t.addEventListener('input',function(){FM.set(path,t.value,{source:'final-field'});});l.appendChild(t);return l;}
   function reportText(){
-    var FM=window.FarmaciaManipulacao, state=FM.loadState(), result=collectFinal(), lines=['RELATÓRIO DE INSPEÇÃO — FARMÁCIA DE MANIPULAÇÃO'];
+    var FM=window.FarmaciaManipulacao, result=collectFinal(), lines=['RELATÓRIO DE INSPEÇÃO — FARMÁCIA DE MANIPULAÇÃO'];
     for(var i=1;i<=9;i+=1){var s=FM.sections&&FM.sections['section'+i];if(s&&typeof s.getText==='function'){var txt=s.getText();if(txt)lines.push('\n'+txt);}else lines.push('\nSEÇÃO '+i+' — dados registrados no aplicativo.');}
     lines.push('\nDOCUMENTAÇÃO PENDENTE');
-    if(result.pending.length)result.pending.forEach(function(x,n){lines.push((n+1)+'. '+x.path+' — '+x.status+(x.notes?' — '+x.notes:''));});else lines.push('Nenhuma pendência consolidada até o momento.');
+    if(result.pending.length)result.pending.forEach(function(x,n){lines.push((n+1)+'. '+x.label+' — '+(x.status==='NAO'?'Não apresentado':'Necessita atualização/complementação')+(x.notes?' — '+x.notes:''));});else lines.push('Nenhuma pendência consolidada até o momento.');
     lines.push('\nNÃO CONFORMIDADES');
-    if(result.nc.length)result.nc.forEach(function(x,n){lines.push((n+1)+'. '+x.path+(x.notes?' — '+x.notes:''));});else lines.push('Nenhuma não conformidade marcada até o momento.');
+    if(result.nc.length)result.nc.forEach(function(x,n){lines.push((n+1)+'. '+x.label+(x.notes?' — '+x.notes:' — constatação ainda sem anotação.'));});else lines.push('Nenhuma não conformidade marcada até o momento.');
     lines.push('\nCONSIDERAÇÕES FINAIS / AVALIAÇÃO DE RISCO\n'+(FM.get('sections.final.consideracoes','')||''));
     lines.push('\nCONCLUSÃO\n'+(FM.get('sections.final.classificacao','')||'Não selecionada'));
     lines.push('\nMEDIDAS ADOTADAS / DOCUMENTOS EMITIDOS\n'+(FM.get('sections.final.medidas','')||''));
@@ -117,8 +122,8 @@
   }
   function dialog(title, bodyNode){var d=document.getElementById('fm-app-dialog');if(!d){d=document.createElement('dialog');d.id='fm-app-dialog';d.className='fm-dialog';document.body.appendChild(d);}d.innerHTML='';var h=E('header');h.appendChild(E('strong','',title));var x=E('button','', 'Fechar ×');x.type='button';x.addEventListener('click',function(){d.close();});h.appendChild(x);d.appendChild(h);var body=E('div','fm-dialog-body');if(typeof bodyNode==='string')body.innerHTML=bodyNode;else body.appendChild(bodyNode);d.appendChild(body);d.showModal();return d;}
   function renderFinal(target){var FM=window.FarmaciaManipulacao,result=collectFinal();target.innerHTML='';var wrap=E('section','fm-final-section');wrap.appendChild(E('h2','fm-section-title','Fechamento do relatório'));
-    var pend=E('section','fm-final-card');pend.appendChild(E('h3','', '10. Documentação Pendente'));if(result.pending.length){var ul=E('ol','fm-final-list');result.pending.forEach(function(x){var li=E('li','',x.path+' — '+x.status+(x.notes?' — '+x.notes:''));ul.appendChild(li);});pend.appendChild(ul);}else pend.appendChild(E('p','fm-helper-text','Nenhum documento pendente consolidado até o momento.'));pend.appendChild(finalField('sections.final.pendenciasComplementares','Complementos, prazos e observações de documentação',5));wrap.appendChild(pend);
-    var nc=E('section','fm-final-card');nc.appendChild(E('h3','', '11. Não Conformidades'));if(result.nc.length){var ncul=E('ol','fm-final-list');result.nc.forEach(function(x){ncul.appendChild(E('li','',x.path+(x.notes?' — '+x.notes:' — constatação ainda sem anotação.')));});nc.appendChild(ncul);}else nc.appendChild(E('p','fm-helper-text','Nenhum item marcado como Não Conforme até o momento.'));nc.appendChild(E('p','fm-helper-text','A consolidação não cria NC a partir de foto, OCR, campo vazio ou anotação isolada. Apenas itens expressamente marcados como NC entram nesta lista.'));wrap.appendChild(nc);
+    var pend=E('section','fm-final-card');pend.appendChild(E('h3','', '10. Documentação Pendente'));if(result.pending.length){var ul=E('ol','fm-final-list');result.pending.forEach(function(x){var li=E('li','',x.label+' — '+(x.status==='NAO'?'Não apresentado':'Necessita atualização/complementação')+(x.notes?' — '+x.notes:''));ul.appendChild(li);});pend.appendChild(ul);}else pend.appendChild(E('p','fm-helper-text','Nenhum documento pendente consolidado até o momento.'));pend.appendChild(E('p','fm-helper-text','“Apresentado com observação” não entra automaticamente como documentação pendente; a equipe define a necessidade de complementação.'));pend.appendChild(finalField('sections.final.pendenciasComplementares','Complementos, prazos e observações de documentação',5));wrap.appendChild(pend);
+    var nc=E('section','fm-final-card');nc.appendChild(E('h3','', '11. Não Conformidades'));if(result.nc.length){var ncul=E('ol','fm-final-list');result.nc.forEach(function(x){ncul.appendChild(E('li','',x.label+(x.notes?' — '+x.notes:' — constatação ainda sem anotação.')));});nc.appendChild(ncul);}else nc.appendChild(E('p','fm-helper-text','Nenhum item marcado como Não Conforme até o momento.'));nc.appendChild(E('p','fm-helper-text','A consolidação não cria NC a partir de foto, OCR, campo vazio ou anotação isolada. Apenas itens expressamente marcados como NC entram nesta lista.'));wrap.appendChild(nc);
     var risk=E('section','fm-final-card');risk.appendChild(E('h3','', '12. Considerações Finais / Avaliação de Risco'));risk.appendChild(finalField('sections.final.consideracoes','Avaliação de risco, orientações prestadas e avaliação geral das Boas Práticas',7));wrap.appendChild(risk);
     var cls=E('section','fm-final-card');cls.appendChild(E('h3','', '13. Conclusão'));cls.appendChild(E('p','fm-helper-text','A classificação é escolhida expressamente pela autoridade sanitária. O aplicativo não decide automaticamente.'));var options=['Satisfatório','Satisfatório com restrições','Insatisfatório','Insatisfatório com Interdição Parcial','Insatisfatório com Interdição Total'],current=FM.get('sections.final.classificacao',''),list=E('div','fm-classifications');options.forEach(function(v){var l=E('label'),r=document.createElement('input');r.type='radio';r.name='fm-classificacao';r.value=v;r.checked=current===v;r.addEventListener('change',function(){if(r.checked)FM.set('sections.final.classificacao',v,{source:'final-classification'});});l.appendChild(r);l.appendChild(E('span','',v));list.appendChild(l);});cls.appendChild(list);wrap.appendChild(cls);
     var measures=E('section','fm-final-card');measures.appendChild(E('h3','', '14. Medidas Adotadas / Documentos Emitidos'));measures.appendChild(finalField('sections.final.medidas','Auto de Infração, Termo de Interdição e outros documentos/medidas',5));wrap.appendChild(measures);
