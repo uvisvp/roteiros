@@ -1,0 +1,50 @@
+name: Diagnosticar Central de Consultas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnosticar-central-consultas.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnosticar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extrair contexto da Central de Consultas
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          termos = ['Central de Consultas', 'central de consultas', 'CENTRAL DE CONSULTAS', 'GTIN', 'Consulta de produtos', 'Consultas']
+          out=[]
+          for nome in ['index.html','Index.html']:
+              p=Path(nome)
+              if not p.exists():
+                  continue
+              txt=p.read_text(encoding='utf-8', errors='replace')
+              out.append(f'===== {nome} | {len(txt)} caracteres =====')
+              vistos=[]
+              for termo in termos:
+                  pos=0
+                  achados=0
+                  while achados < 4:
+                      i=txt.find(termo,pos)
+                      if i<0: break
+                      if all(abs(i-v)>500 for v in vistos):
+                          vistos.append(i); achados+=1
+                          ini=max(0,i-1800); fim=min(len(txt),i+3200)
+                          out.append(f'\n--- termo={termo!r} posição={i} ---\n'+txt[ini:fim])
+                      pos=i+len(termo)
+          Path('diagnostico-central.txt').write_text('\n'.join(out),encoding='utf-8')
+          print('\n'.join(out[:8]))
+          PY
+      - name: Guardar diagnóstico
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostico-central-consultas
+          path: diagnostico-central.txt
+          if-no-files-found: error
