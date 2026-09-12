@@ -6,6 +6,7 @@
 
   var FILES = [
     'farmacia-manipulacao-core.js',
+    'farmacia-manipulacao-lookup.js',
     'farmacia-manipulacao-section1.js',
     'farmacia-manipulacao-section2.js',
     'farmacia-manipulacao-section3.js',
