@@ -1,0 +1,31 @@
+name: Integrar IFA na Central de Consultas
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/integrar-ifa-central-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Integrar card de IFA
+        run: python scripts/integrar_ifa_central_temp.py
+      - name: Validar integração
+        run: |
+          grep -q 'data-uvis-ifa-central' index.html
+          grep -q 'ifa-lookup-shared.js' index.html
+          grep -q 'Processo Anvisa (IFA)' index.html
+      - name: Salvar integração
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Integra consulta IFA na Central de Consultas'
+          git pull --rebase origin main
+          git push origin HEAD:main
