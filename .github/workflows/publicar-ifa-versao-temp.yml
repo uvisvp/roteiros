@@ -1,0 +1,68 @@
+name: Publicar versão IFA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-ifa-versao-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Atualizar versão e cache PWA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re
+          V='20260912-1'
+
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s,n=re.subn(r"const APP_VERSAO\s*=\s*['\"][^'\"]+['\"]", "const APP_VERSAO = '"+V+"'", s, count=1)
+          assert n==1, 'APP_VERSAO não localizado uma única vez'
+          assert 'data-uvis-ifa-central' in s, 'ponte IFA da Central ausente'
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('sw.js')
+          sw=p.read_text(encoding='utf-8')
+          sw,n=re.subn(r"const VERSAO = ['\"][^'\"]+['\"]", "const VERSAO = '"+V+"'", sw, count=1)
+          assert n==1, 'VERSAO do SW não localizada'
+          if "'./ifa-lookup-shared.js'" not in sw:
+              anchor="  './farmacia-manipulacao-lookup.js',\n"
+              assert anchor in sw, 'âncora de cache da manipulação ausente'
+              sw=sw.replace(anchor,anchor+"  './ifa-lookup-shared.js',\n",1)
+          p.write_text(sw,encoding='utf-8')
+
+          p=Path('versao.json')
+          v=json.loads(p.read_text(encoding='utf-8'))
+          v['versao']=V
+          v['banco']='12.1'
+          v['correcoes']=6
+          v['notas']='Farmácia de Manipulação: consulta IFA ativada no confronto de estoque e na Central de Consultas, usando o mesmo motor e a nova visão pública da Anvisa; identificador exibido como Processo Anvisa (IFA), sem confundir com registro de medicamento. Base IFA incluída na atualização semanal.'
+          p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Validar versão
+        run: |
+          node --check sw.js
+          node --check ifa-lookup-shared.js
+          node --check farmacia-manipulacao-lookup.js
+          node --check farmacia-manipulacao-section9.js
+          grep -q "const APP_VERSAO = '20260912-1'" index.html
+          grep -q "const VERSAO = '20260912-1'" sw.js
+          grep -q "ifa-lookup-shared.js" sw.js
+      - name: Salvar versão
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html sw.js versao.json
+          git commit -m 'Publica versão 20260912-1 com consulta IFA'
+          git pull --rebase origin main
+          git push origin HEAD:main
