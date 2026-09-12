@@ -83,4 +83,11 @@ jobs:
             grep -q "section${n}" farmacia-manipulacao-report.js
           done
 
+          # Tudo que o bootstrap carrega precisa estar no cache essencial para abrir offline.
+          grep -q "./farmacia-manipulacao-lookup.js" sw.js
+          grep -q "./farmacia-manipulacao-report.js" sw.js
+          for arquivo in farmacia-manipulacao-core.js farmacia-manipulacao-lookup.js farmacia-manipulacao-ocr.js farmacia-manipulacao-section1.js farmacia-manipulacao-section2.js farmacia-manipulacao-section3.js farmacia-manipulacao-section4.js farmacia-manipulacao-section5.js farmacia-manipulacao-section6.js farmacia-manipulacao-section7.js farmacia-manipulacao-section8.js farmacia-manipulacao-section9.js farmacia-manipulacao-report.js; do
+            grep -q "./$arquivo" sw.js || { echo "ERRO: $arquivo não está no cache essencial."; exit 1; }
+          done
+
           echo 'Regras críticas de Manipulação verificadas.'
