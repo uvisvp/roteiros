@@ -29,3 +29,14 @@
   document.addEventListener('DOMContentLoaded',()=>{const w=()=>window.DrogariaAPI?.getCatalog()&&window.DrogariaOcrTools?start():setTimeout(w,50);w();});
   window.DrogariaFinalBridge=Object.freeze({mount});
 })();
+
+/* Carregador isolado — Farmácia de Manipulação. */
+(() => {
+  'use strict';
+  if (window.__FARMACIA_MANIPULACAO_LOADER__) return;
+  window.__FARMACIA_MANIPULACAO_LOADER__ = true;
+  const s = document.createElement('script');
+  s.src = './farmacia-manipulacao-app.js';
+  s.defer = true;
+  document.head.appendChild(s);
+})();
