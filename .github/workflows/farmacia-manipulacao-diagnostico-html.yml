@@ -1,0 +1,40 @@
+name: Diagnóstico HTML Farmácia de Manipulação
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - farmacia-manipulacao
+    paths:
+      - '.github/workflows/farmacia-manipulacao-diagnostico-html.yml'
+
+jobs:
+  diagnostico:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Arquivos HTML
+        run: |
+          ls -lh Index.html index.html || true
+          sha256sum Index.html index.html || true
+      - name: Ocorrências de Farmácia de Manipulação
+        run: |
+          echo '=== index.html ==='
+          grep -in -m 30 -E 'farm[aá]cia.{0,40}manipula|farmacia-manipulacao|manipulação' index.html || true
+          echo '=== Index.html ==='
+          grep -in -m 30 -E 'farm[aá]cia.{0,40}manipula|farmacia-manipulacao|manipulação' Index.html || true
+      - name: Scripts externos no fim do documento
+        run: |
+          echo '=== scripts index.html ==='
+          grep -in '<script[^>]*src=' index.html | tail -n 50 || true
+          echo '=== final index.html ==='
+          tail -n 90 index.html || true
+      - name: Contexto do cartão / imagem de manipulação
+        run: |
+          for f in index.html Index.html; do
+            echo "=== $f ==="
+            n=$(grep -in -m1 'farmacia-manipulacao.png' "$f" | cut -d: -f1 || true)
+            if [ -n "$n" ]; then
+              a=$((n>40?n-40:1)); b=$((n+80)); sed -n "${a},${b}p" "$f"
+            fi
+          done
