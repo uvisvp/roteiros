@@ -1,0 +1,45 @@
+name: Patch temporário relatório Seção 9
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-section9-report-temp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Integrar narrativa completa da Seção 9
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('farmacia-manipulacao-report.js')
+          s=p.read_text(encoding='utf-8')
+          old="""  function install(){var m={1:section1,2:section2,3:section3,4:section4,5:section5,6:section6};Object.keys(m).forEach(function(n){var s=FM.sections&&FM.sections['section'+n];if(s)s.getText=m[n];});FM.reportNarrators=m;}"""
+          new=r'''  function section9(){var s=FM.get('sections.s9',{}),L=['9. RASTREABILIDADE E CONTROLE DE QUALIDADE'];var pres=s.prescricao||{},pc=onlyConforme({prescricao:pres},{'prescricao.legivel':'prescrição legível, sem rasuras e com identificação do prescritor/paciente','prescricao.conteudo':'identificação da substância ativa, concentração, forma, quantidades, posologia e demais elementos conferidos','prescricao.calculos':'cálculos de conversão/correção/equivalência registrados','prescricao.continuado':'duração expressa para tratamento continuado quando aplicável','prescricao.controlados':'requisitos específicos dos controlados conferidos','prescricao.antimicrobianos':'requisitos aplicáveis aos antimicrobianos conferidos','prescricao.digital':'assinatura eletrônica/arquivo digital conferidos quando aplicável'});if(pc.length)push(L,'Na avaliação das prescrições foram verificados: '+sent(pc)+'.');
+    var r=s.rastreabilidade||{};[['Formulação sólida','solida'],['Formulação semissólida','semissolida'],['Formulação líquida','liquida']].forEach(function(x){var v=r[x[1]]||{};if(!v.produto&&!v.omNumero)return;var a=[v.produto,v.omNumero&&('OM nº '+v.omNumero),v.omData&&('de '+date(v.omData)),v.manipulador&&('manipulada por '+v.manipulador)].filter(Boolean);push(L,x[0]+': '+a.join(', ')+'.');var ins=arr(v.insumos).filter(function(i){return i&&(i.nome||i.loteInterno||i.loteFabricante);});if(ins.length)push(L,'Rastreabilidade amostrada: '+ins.map(function(i){return [i.tipo,i.nome,i.loteInterno&&('lote interno '+i.loteInterno),i.loteFabricante&&('lote fabricante '+i.loteFabricante),i.validade&&('validade '+i.validade),i.fornecedor&&('fornecedor '+i.fornecedor),i.fabricante&&('fabricante '+i.fabricante),i.notaFiscal&&('NF '+i.notaFiscal)].filter(Boolean).join(' · ');}).join('; ')+'.');if(v.cqProdutoAcabado)push(L,'Controle de qualidade do produto acabado: '+v.cqProdutoAcabado+'.');if(v.rotulagem)push(L,'Rotulagem conferida: '+v.rotulagem+'.');});
+    var veg=s.vegetal||{};if(!veg.naoSeAplica&&(veg.materia||veg.lote||veg.fabricante)){push(L,'Matéria-prima vegetal: '+[veg.materia,veg.lote&&('lote '+veg.lote),veg.fabricante&&('fabricante '+veg.fabricante),veg.validade&&('validade '+veg.validade)].filter(Boolean).join(' · ')+'.');var dn=(veg.danfe||{}).numeroNota,cn=(veg.certificadoFabricante||{}).numeroCertificado;if(dn||cn)push(L,'Documentos vinculados: '+[dn&&('DANFE/NF nº '+dn),cn&&('certificado do fabricante nº '+cn)].filter(Boolean).join('; ')+'.');}
+    var ho=s.homeopatia||{};if(!ho.naoSeAplica){var hd=ho.documento||{};if(hd.matriz||hd.lote||ho.linhagem)push(L,'Matéria-prima homeopática: '+[hd.matriz,hd.lote&&('lote '+hd.lote),hd.dinamizacao&&('dinamização '+hd.dinamizacao),hd.escala&&('escala '+hd.escala),hd.teorAlcoolico&&('teor alcoólico '+hd.teorAlcoolico),ho.linhagem&&('rastreabilidade '+ho.linhagem)].filter(Boolean).join(' · ')+'.');}
+    var st=((s.estoqueControlados||{}).rows)||[];if(st.length)push(L,'Confronto físico × escriturado: '+st.map(function(i){return [i.substancia,i.lista&&('lista '+i.lista),i.fabricante&&('fabricante '+i.fabricante),i.ifa&&((i.tipoId?i.tipoId+' ':'identificador regulatório do IFA ')+i.ifa),i.lote&&('lote '+i.lote),i.fisico!==''&&i.fisico!=null&&('físico '+i.fisico),i.sistema!==''&&i.sistema!=null&&('escriturado '+i.sistema),i.diferenca!==''&&i.diferenca!=null&&('diferença '+i.diferenca)].filter(Boolean).join(' · ');}).join('; ')+'.');
+    var tr=s.transporte||{};if(!tr.naoSeAplica){var tc=onlyConforme({transporte:tr},{'transporte.procedimentos':'procedimentos escritos de conservação/transporte','transporte.termossensiveis':'controle dos termossensíveis','transporte.incompativeis':'segregação de materiais incompatíveis no transporte','transporte.receitas':'identificação das receitas aviadas','transporte.repeticao':'controle da repetição de atendimento'});if(tc.length)push(L,'Conservação, transporte e dispensação: '+sent(tc)+'.');var rf=refrigeratorText(tr.refrigeracao);if(rf)push(L,rf);if(tr.entrega)push(L,'Entrega domiciliar: '+tr.entrega+'.');}
+    return L.join('\n');}
+
+  function install(){var m={1:section1,2:section2,3:section3,4:section4,5:section5,6:section6,9:section9};Object.keys(m).forEach(function(n){var s=FM.sections&&FM.sections['section'+n];if(s)s.getText=m[n];});FM.reportNarrators=m;}'''
+          if old not in s:
+              raise SystemExit('Bloco install esperado não encontrado; abortando sem alterar.')
+          p.write_text(s.replace(old,new),encoding='utf-8')
+          PY
+          node --check farmacia-manipulacao-report.js
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add farmacia-manipulacao-report.js
+          git diff --cached --quiet && exit 0
+          git commit -m 'fix: complete section 9 narrative in manipulation report'
+          git push
