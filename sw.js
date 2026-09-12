@@ -7,7 +7,7 @@
    ============================================================= */
 'use strict';
 
-const VERSAO = '20260911-29';
+const VERSAO = '20260912-1';
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -24,6 +24,7 @@ const ESSENCIAIS = [
   './farmacia-manipulacao-app.js',
   './farmacia-manipulacao-core.js',
   './farmacia-manipulacao-lookup.js',
+  './ifa-lookup-shared.js',
   './farmacia-manipulacao-ocr.js',
   './farmacia-manipulacao-section1.js',
   './farmacia-manipulacao-section2.js',

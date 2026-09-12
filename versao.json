@@ -1,6 +1,6 @@
 {
-  "versao": "20260911-29",
-  "banco": "12.0",
-  "correcoes": 5,
-  "notas": "PWA atualizada para incorporar a última revisão de Drogaria e forçar renovação do cache instalado; módulos de Drogaria passam a integrar o cache essencial. Mantida a ampliação das consultas por processo de saneantes e medicamentos."
+  "versao": "20260912-1",
+  "banco": "12.1",
+  "correcoes": 6,
+  "notas": "Farmácia de Manipulação: consulta IFA ativada no confronto de estoque e na Central de Consultas, usando o mesmo motor e a nova visão pública da Anvisa; identificador exibido como Processo Anvisa (IFA), sem confundir com registro de medicamento. Base IFA incluída na atualização semanal."
 }
