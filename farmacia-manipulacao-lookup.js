@@ -1,5 +1,7 @@
 /* Farmácia de Manipulação — consultas regulatórias compartilhadas.
  * CNPJ/AFE/AE reutilizam a base pública já consumida pela Drogaria.
+ * A classificação da Portaria 344/98 usa a base operacional compartilhada e
+ * só preenche a lista em correspondência exata e única da substância.
  * IFA permanece bloqueado até validação do esquema oficial específico.
  */
 (function(window, document){
@@ -7,11 +9,18 @@
   var FM=window.FarmaciaManipulacao;
   if(!FM||FM.lookupAdapter)return;
 
+  var DATA_BASES=[
+    'https://uvisvp.github.io/base-vigilancia/dados/',
+    'https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/'
+  ];
+  var controlledPromise=null;
+
   function E(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
   function clean(v){return String(v==null?'':v).trim();}
   function unique(values){var out=[];(values||[]).forEach(function(v){v=clean(v);if(v&&!out.some(function(x){return x===v;}))out.push(v);});return out;}
   function digits(v){return clean(v).replace(/\D/g,'');}
   function formatCnpj(v){var d=digits(v);return /^\d{14}$/.test(d)?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5'):clean(v);}
+  function normSubstance(v){return clean(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[()\[\]{},.;:]/g,' ').replace(/[–—_-]+/g,' ').replace(/\s+/g,' ').trim();}
 
   function dialog(){
     var d=document.getElementById('fm-lookup-dialog');
@@ -21,6 +30,42 @@
   }
   function closeButton(d){var b=E('button','','Fechar ×');b.type='button';b.addEventListener('click',function(){d.close();});return b;}
   function input(label,value,opts){opts=opts||{};var l=E('label','fm-field');l.appendChild(E('span','fm-field-label',label));var i=opts.textarea?document.createElement('textarea'):document.createElement('input');if(opts.textarea)i.rows=opts.rows||3;else i.type=opts.type||'text';i.className='fm-input';i.value=value||'';if(opts.placeholder)i.placeholder=opts.placeholder;l.appendChild(i);l.input=i;return l;}
+
+  function fetchJson(relative){
+    var errors=[];
+    return DATA_BASES.reduce(function(p,base){
+      return p.catch(function(){
+        var url=base+relative;
+        return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status+' em '+url);return r.json();}).catch(function(err){errors.push(err.message||String(err));throw err;});
+      });
+    },Promise.reject(new Error('início'))).catch(function(){throw new Error('Não foi possível carregar '+relative+'. '+errors.join(' | '));});
+  }
+
+  function loadControlledBase(){
+    if(controlledPromise)return controlledPromise;
+    controlledPromise=fetchJson('controlados_portaria344/listas.json').then(function(data){
+      var index={},all=[];
+      (data.listas||[]).forEach(function(list){
+        (list.substancias||[]).forEach(function(s){
+          var item={id:s.id||'',nome:clean(s.nome),lista:clean(s.lista||list.lista),numero:clean(s.numero),tipo:clean(s.tipo),titulo:clean(list.titulo)};
+          var key=normSubstance(item.nome);if(!key)return;
+          (index[key]||(index[key]=[])).push(item);all.push(item);
+        });
+      });
+      return {raw:data,index:index,items:all,source:{schema:data.schema||'',normaBase:data.norma_base||'',normaFonte:data.norma_fonte||'',fonteOficial:data.fonte_oficial||'',geradoEm:data.gerado_em||''}};
+    }).catch(function(err){controlledPromise=null;throw err;});
+    return controlledPromise;
+  }
+
+  function classificarControlado(nome){
+    var original=clean(nome),key=normSubstance(original);
+    if(!key)return Promise.resolve({query:original,exact:false,matches:[],lista:'',source:null});
+    return loadControlledBase().then(function(base){
+      var matches=(base.index[key]||[]).slice();
+      var exact=matches.length===1;
+      return {query:original,exact:exact,matches:matches,lista:exact?matches[0].lista:'',substancia:exact?matches[0]:null,source:base.source};
+    });
+  }
 
   function ensureAnvisaTools(){
     if(window.DrogariaOcrTools&&window.DrogariaOcrTools.anvisa&&typeof window.DrogariaOcrTools.anvisa.empresa==='function')return Promise.resolve(window.DrogariaOcrTools);
@@ -86,11 +131,16 @@
 
   function openIfaReserved(){
     var d=dialog(),head=E('header');head.appendChild(E('strong','','IFA — Insumo Farmacêutico Ativo'));head.appendChild(closeButton(d));d.appendChild(head);var body=E('div','fm-dialog-body');
-    body.appendChild(E('p','fm-helper-text','A pesquisa IFA permanece desativada nesta etapa. As fontes oficiais foram identificadas, mas o esquema real dos arquivos ainda precisa ser validado antes de vincular substância, fabricante e identificador regulatório. Nenhum dado será inferido a partir do registro do medicamento acabado.'));
+    body.appendChild(E('p','fm-helper-text','A pesquisa IFA permanece desativada nesta etapa. A tabela oficial de fabricantes já teve os campos básicos identificados, porém ela não estabelece sozinha a relação substância/IFA → fabricante. O esquema da tabela oficial de IFA ainda precisa ser validado antes de unir substância, fabricante e identificador regulatório. Nenhum dado será inferido a partir do registro do medicamento acabado.'));
     d.appendChild(body);d.showModal();
   }
 
   function request(detail){detail=detail||{};var type=detail.lookupType||'';if(type==='cnpj'||type==='afe'||type==='ae')return openCompanyLookup(detail);if(type==='ifa')return openIfaReserved();var d=dialog(),h=E('header');h.appendChild(E('strong','','Consulta'));h.appendChild(closeButton(d));d.appendChild(h);var b=E('div','fm-dialog-body');b.appendChild(E('p','fm-helper-text','Consulta ainda não implementada para este tipo.'));d.appendChild(b);d.showModal();}
 
-  FM.lookupAdapter=Object.freeze({request:request,empresa:function(cnpj){return ensureAnvisaTools().then(function(t){return t.anvisa.empresa(cnpj);});}});
+  FM.lookupAdapter=Object.freeze({
+    request:request,
+    empresa:function(cnpj){return ensureAnvisaTools().then(function(t){return t.anvisa.empresa(cnpj);});},
+    classificarControlado:classificarControlado,
+    carregarBaseControlados:loadControlledBase
+  });
 })(window,document);
