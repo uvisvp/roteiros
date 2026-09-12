@@ -25,7 +25,7 @@ jobs:
           base='https://dados.anvisa.gov.br/dados'
           for f in 'TA_FABRICANTE_MEDICAMENTO_IFA.CSV' 'TA_EXPORT_IFA.csv' 'CICLO_ANALISE_PETICOES_INSUMO_FARMACEUTICO.CSV' 'CICLO_ANALISE_PETICOES_ANDAMENTO_INSUMO_FARMACEUTICO.CSV'; do
             echo "===== $f ====="
-            curl -L --fail --retry 4 --retry-delay 2 --connect-timeout 20 "$base/$f" -o "/tmp/$f"
+            curl -k -L --fail --retry 4 --retry-delay 2 --connect-timeout 20 "$base/$f" -o "/tmp/$f"
             ls -lh "/tmp/$f"
             FILE="/tmp/$f" python - <<'PY'
           import csv, os
@@ -59,7 +59,7 @@ jobs:
           base='https://dados.anvisa.gov.br/dados'
           for f in 'Documentacao_e_Dicionario_de_Dados_Fabricantes_IFA.pdf' 'Documentacao_e_Dicionario_de_Dados_INSUMO_FARMACEUTICO.pdf'; do
             echo "===== $f ====="
-            curl -L --fail --retry 4 --retry-delay 2 --connect-timeout 20 "$base/$f" -o "/tmp/$f"
+            curl -k -L --fail --retry 4 --retry-delay 2 --connect-timeout 20 "$base/$f" -o "/tmp/$f"
             FILE="/tmp/$f" python - <<'PY'
           import os
           from pypdf import PdfReader
