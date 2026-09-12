@@ -81,11 +81,15 @@ jobs:
           grep -q "farmacia-manipulacao-app.js" drogaria-final-bridge.js
           grep -q "stopImmediatePropagation" farmacia-manipulacao-app.js
 
-          # O relatório narrativo precisa estar carregado e nenhuma seção 1–9 pode depender do placeholder.
+          # O fechamento precisa ter narrativa das 9 seções.
+          # Seções 1–6 e 9 usam o compositor central; 7 e 8 mantêm getText próprio
+          # porque também oferecem o botão "Copiar texto desta seção" durante a inspeção.
           grep -q "farmacia-manipulacao-report.js" farmacia-manipulacao-app.js
-          for n in 1 2 3 4 5 6 7 8 9; do
+          for n in 1 2 3 4 5 6 9; do
             grep -q "section${n}" farmacia-manipulacao-report.js
           done
+          grep -q "getText:text" farmacia-manipulacao-section7.js
+          grep -q "getText:text" farmacia-manipulacao-section8.js
 
           # Tudo que o bootstrap carrega precisa estar no cache essencial para abrir offline.
           grep -q "./farmacia-manipulacao-app.js" sw.js
