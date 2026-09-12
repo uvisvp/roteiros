@@ -30,3 +30,57 @@ jobs:
           done
           node --check drogaria-final-bridge.js
           node --check sw.js
+      - name: Verificar regras funcionais críticas de Manipulação
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # O campo antigo não pode voltar para o roteiro novo.
+          if grep -Rni --include='farmacia-manipulacao-*.js' 'Evidência / Referência' .; then
+            echo 'ERRO: campo Evidência / Referência reapareceu no módulo.'
+            exit 1
+          fi
+
+          # CRT não possui campo de validade; somente data de emissão quando constar.
+          if grep -niE "crt\.(validade|dataValidade)|crt.*Validade" farmacia-manipulacao-section1.js; then
+            echo 'ERRO: CRT recebeu campo de validade.'
+            exit 1
+          fi
+          grep -q "crt.dataEmissao" farmacia-manipulacao-section1.js
+
+          # PCMSO, PGR e treinamentos permanecem por checklist, sem leitores de conteúdo.
+          if grep -niE "ocrActions?\([^\n]*(pcmso|pgr|trein)|documentType:[^\n]*(pcmso|pgr|trein)" farmacia-manipulacao-section3.js; then
+            echo 'ERRO: OCR indevido em PCMSO/PGR/treinamentos.'
+            exit 1
+          fi
+          grep -q "documentType: 'aso'\|documentType:'aso'\|ocr-request.*aso" farmacia-manipulacao-section3.js || grep -q "'aso'" farmacia-manipulacao-section3.js
+
+          # Seções condicionais não podem ser globalmente omitidas; o core mantém NSA local.
+          grep -q "autoHideSectionsFromOtherAnswers: false" farmacia-manipulacao-core.js
+          grep -q "createApplicabilityControl" farmacia-manipulacao-section4.js
+          grep -q "createApplicabilityControl" farmacia-manipulacao-section5.js
+          grep -q "createApplicabilityControl" farmacia-manipulacao-section6.js
+
+          # Parâmetro operacional informado pelo projeto para cabines sensibilizantes.
+          grep -q -- "-5 a -120 Pa" farmacia-manipulacao-core.js
+
+          # Refrigerador reutilizável deve existir nas áreas/laboratórios aplicáveis.
+          grep -q "createRefrigeratorCard" farmacia-manipulacao-section4.js
+          grep -q "createRefrigeratorCard" farmacia-manipulacao-section5.js
+          grep -q "createRefrigeratorCard" farmacia-manipulacao-section6.js
+
+          # Dois laudos da mesma coleta devem poder formar um único evento de amostragem.
+          grep -q "sameSamplingEvent" farmacia-manipulacao-section8.js
+          grep -q "mergeSamplingEvent" farmacia-manipulacao-section8.js
+
+          # Matéria-prima vegetal conserva DANFE e certificado do fabricante separados.
+          grep -q "vegetal.danfe" farmacia-manipulacao-section9.js
+          grep -q "vegetal.certificadoFabricante" farmacia-manipulacao-section9.js
+
+          # O relatório narrativo precisa estar carregado e nenhuma seção 1–6 pode depender do placeholder.
+          grep -q "farmacia-manipulacao-report.js" farmacia-manipulacao-app.js
+          for n in 1 2 3 4 5 6; do
+            grep -q "section${n}" farmacia-manipulacao-report.js
+          done
+
+          echo 'Regras críticas de Manipulação verificadas.'
