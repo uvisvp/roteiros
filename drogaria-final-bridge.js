@@ -35,6 +35,19 @@
   'use strict';
   if (window.__FARMACIA_MANIPULACAO_LOADER__) return;
   window.__FARMACIA_MANIPULACAO_LOADER__ = true;
+
+  const loadOcr = () => {
+    if (window.__FARMACIA_MANIPULACAO_OCR_LOADER__) return;
+    window.__FARMACIA_MANIPULACAO_OCR_LOADER__ = true;
+    const o = document.createElement('script');
+    o.src = './farmacia-manipulacao-ocr.js';
+    o.defer = true;
+    document.head.appendChild(o);
+  };
+
+  window.addEventListener('farmacia-manipulacao:core-ready', loadOcr, { once: true });
+  if (window.FarmaciaManipulacao) loadOcr();
+
   const s = document.createElement('script');
   s.src = './farmacia-manipulacao-app.js';
   s.defer = true;
