@@ -1,0 +1,32 @@
+name: Validar módulos JavaScript
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'farmacia-manipulacao-*.js'
+      - 'drogaria-final-bridge.js'
+      - 'sw.js'
+      - '.github/workflows/validar-js.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verificar sintaxe dos módulos de Farmácia de Manipulação
+        run: |
+          set -e
+          for arquivo in farmacia-manipulacao-*.js; do
+            echo "Verificando $arquivo"
+            node --check "$arquivo"
+          done
+          node --check drogaria-final-bridge.js
+          node --check sw.js
