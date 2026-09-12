@@ -23,6 +23,7 @@ const ESSENCIAIS = [
   './drogaria-section1.js',
   './farmacia-manipulacao-app.js',
   './farmacia-manipulacao-core.js',
+  './farmacia-manipulacao-ocr.js',
   './farmacia-manipulacao-section1.js',
   './farmacia-manipulacao-section2.js',
   './farmacia-manipulacao-section3.js',
