@@ -25,3 +25,22 @@
   }
   FM.sections=FM.sections||{};FM.sections.section6={id:'section6',title:'Laboratórios de Sensibilizantes',render:render,statePath:BASE};FM.renderSection6=render;
 })(window,document);
+
+/* Ajustes narrativos compatíveis com o estado real dos componentes reutilizáveis. */
+(function(window){
+  'use strict';
+  var FM=window.FarmaciaManipulacao;if(!FM||window.__FM_REPORT_COMPONENT_ALIGNMENT__)return;
+  window.__FM_REPORT_COMPONENT_ALIGNMENT__=true;
+  function t(v){return String(v==null?'':v).trim();}
+  function fmtDate(v){v=t(v);if(/^\d{4}-\d{2}-\d{2}$/.test(v)){var a=v.split('-');return a[2]+'/'+a[1]+'/'+a[0];}return v;}
+  function st(o,path){var x=o;String(path||'').split('.').forEach(function(k){x=x&&x[k];});return x&&x.status||'';}
+  function fridgeSupplement(label,r){r=r||{};if(r.presenca!=='SIM')return '';var lines=[];if(r.certificado&&r.calibracaoValidade)lines.push(label+': certificado de calibração '+r.certificado+', válido até '+fmtDate(r.calibracaoValidade)+'.');var ok=[];[['organizacao','organização interna'],['segregacao','segregação/identificação dos itens'],['limpeza','limpeza/higienização'],['monitoramento','monitoramento de temperatura'],['registros','registros preenchidos'],['acaoCorretiva','ação corretiva para desvios']].forEach(function(x){if(st(r,'checklist.'+x[0])==='C')ok.push(x[1]);});if(ok.length)lines.push(label+': foram conferidos '+ok.join(', ')+'.');return lines.join('\n');}
+  function extras4(){var s=FM.get('sections.s4',{}),a=[];[['Recepção',s.recepcao],['Industrializados/drogaria',s.industrializados],['Serviços farmacêuticos',s.servicos],['Conferência',s.conferencia]].forEach(function(x){var z=fridgeSupplement('Refrigerador — '+x[0],(x[1]||{}).refrigerador);if(z)a.push(z);});return a.join('\n');}
+  function extras5(){var s=FM.get('sections.s5',{}),a=[];[['Almoxarifado',s.almoxarifado],['CQ',s.cq],['Semissólidos e líquidos',s.semissolidos],['Sólidos',s.solidos],['Lavagem',s.lavagem],['Homeopatia',s.homeopatia],['SBIT',s.sbit]].forEach(function(x){var z=fridgeSupplement('Refrigerador — '+x[0],(x[1]||{}).refrigerador);if(z)a.push(z);});return a.join('\n');}
+  function extras6(){var s=FM.get('sections.s6',{}),a=[];[['Hormônios',s.hormonios],['Antibióticos',s.antibioticos],['Citostáticos',s.citostaticos],['Penicilínicos',s.penicilinicos]].forEach(function(x){var c=x[1]||{};if(c.naoSeAplica)return;var status=[];if(c.manipula)status.push('manipula esta classe: '+(c.manipula==='SIM'?'sim':'não'));if(c.cabineExistente)status.push('cabine/área dedicada: '+(c.cabineExistente==='SIM'?'sim':'não'));if(c.situacaoLicenca)status.push('situação da licença: '+c.situacaoLicenca);if(c.substancias)status.push('substâncias/classes verificadas: '+c.substancias);if(status.length)a.push(x[0]+': '+status.join('; ')+'.');var z=fridgeSupplement('Refrigerador — '+x[0],c.refrigerador);if(z)a.push(z);});return a.join('\n');}
+  function extras9(){var s=FM.get('sections.s9',{});return fridgeSupplement('Refrigeração / condição térmica do transporte',(s.transporte||{}).refrigeracao);}
+  function wrap(n,extra){var sec=FM.sections&&FM.sections['section'+n];if(!sec||typeof sec.getText!=='function'||sec.getText.__fmAligned)return;var original=sec.getText;var fn=function(){var base=String(original()||''),add=String(extra()||'').trim();return add?(base?base+'\n'+add:add):base;};fn.__fmAligned=true;sec.getText=fn;}
+  function patch(){if(!FM.reportNarrators)return false;wrap(4,extras4);wrap(5,extras5);wrap(6,extras6);wrap(9,extras9);return true;}
+  var tries=0,timer=setInterval(function(){tries+=1;if(patch()||tries>100)clearInterval(timer);},50);
+  window.addEventListener('farmacia-manipulacao:section-rendered',function(){setTimeout(patch,0);});
+})(window);
