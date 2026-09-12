@@ -1135,7 +1135,51 @@
         document.addEventListener('click',function(e){if(e.target.closest('#search'))complementar();},true);
         document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='q')complementar();},true);
       })();`,'</scr','ipt>'].join('');
-      s=s.replace(/<\/body>/i,ponte+'</body>');
+      var ponteIfa='<scr'+'ipt src="./ifa-lookup-shared.js"></scr'+'ipt><scr'+'ipt>'+String.raw`(function(){
+        'use strict';
+        if(window.__UVIS_IFA_CENTRAL__)return;window.__UVIS_IFA_CENTRAL__=true;
+        function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+        function E(id){return document.getElementById(id);}
+        function ifaButton(){return document.querySelector('.mode[data-mode="ifa"]');}
+        function ativo(){var b=ifaButton();return !!(b&&b.classList.contains('on'));}
+        function status(text,ok){var st=E('status');if(st){st.className='status '+(ok?'ok':'');st.textContent=text||'';}}
+        function ativar(){
+          document.querySelectorAll('.mode').forEach(function(x){x.classList.remove('on');});
+          var b=ifaButton();if(b)b.classList.add('on');
+          var q=E('q');if(q){q.value='';q.placeholder='IFA, fabricante, código, processo Anvisa ou CNPJ do peticionante';q.focus();}
+          var host=E('results');if(host){host.className='';host.innerHTML='<div class="empty"><b>Consulta de IFA</b><br>Pesquise o insumo, fabricante, código do fabricante, processo Anvisa ou CNPJ do peticionante.</div>';}
+          status('Consulta específica à visão pública de IFA da Anvisa. Ausência de resultado não prova ausência de regularização.',false);
+        }
+        function instalar(){
+          if(ifaButton())return;var modos=document.querySelectorAll('.mode');if(!modos.length)return;
+          var b=document.createElement('button');b.type='button';b.className='mode';b.setAttribute('data-mode','ifa');b.setAttribute('data-uvis-ifa-central','1');b.textContent='IFA';
+          b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();ativar();});
+          modos[modos.length-1].parentElement.appendChild(b);
+        }
+        function artigo(r){
+          var kv=[['Fabricante do IFA',r.fabricante_ifa],['Código do fabricante',r.codigo_fabricante_ifa],['País',r.pais_fabricante],['Processo Anvisa (IFA)',r.processo_anvisa],['Detentor / peticionante',r.detentor_peticionante],['CNPJ do peticionante',r.cnpj_detentor_peticionante],['Assunto',r.assunto]];
+          return '<article class="result"><h4>'+esc(r.ifa||'IFA')+'</h4><div class="kv">'+kv.filter(function(x){return x[1];}).map(function(x){return '<b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span>';}).join('')+'</div></article>';
+        }
+        function consultar(){
+          var q=E('q'),host=E('results'),term=(q&&q.value||'').trim();if(!term){status('Informe um termo para consulta.',false);return;}
+          if(!window.UvisIfaLookup||typeof window.UvisIfaLookup.search!=='function'){status('O motor compartilhado de IFA ainda não está disponível. Recarregue o aplicativo com conexão.',false);return;}
+          status('Consultando a base pública de IFA…',false);if(host)host.innerHTML='';
+          window.UvisIfaLookup.search(term,{limit:50}).then(function(result){
+            var list=(result.resultados||[]).map(function(x){return window.UvisIfaLookup.formatResult(x);});
+            if(!list.length){if(host)host.innerHTML='<div class="empty"><b>Nenhum resultado localizado.</b><br>Isso não equivale a ausência de regularização do IFA por outra via.</div>';status('Consulta concluída sem resultado nesta visão pública.',true);return;}
+            var html='<div class="summary"><div class="sum"><b>'+list.length+'</b><span>resultado(s) de IFA</span></div><div class="sum"><b>Anvisa</b><span>fonte pública</span></div></div><div class="group"><div class="grouphead"><h3>IFA — Insumo Farmacêutico Ativo</h3><span>'+list.length+' resultado(s)</span></div>'+list.map(artigo).join('')+'</div>';
+            if(result.observacao)html+='<p class="muted">'+esc(result.observacao)+'</p>';if(result.fonte)html+='<p class="muted"><b>Fonte:</b> '+esc(result.fonte)+(result.gerado_em?' · base gerada em '+esc(new Date(result.gerado_em).toLocaleString('pt-BR')):'')+'.</p>';
+            if(host){host.className='';host.innerHTML=html;}status('Consulta concluída. Confira o fabricante do IFA e o Processo Anvisa antes de utilizar a informação.',true);
+          }).catch(function(err){status('Não foi possível concluir a consulta IFA: '+((err&&err.message)||err),false);});
+        }
+        document.addEventListener('click',function(e){
+          var mode=e.target&&e.target.closest&&e.target.closest('.mode');if(mode&&mode.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}
+          if(ativo()&&e.target&&e.target.closest&&e.target.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}
+        },true);
+        document.addEventListener('keydown',function(e){if(ativo()&&e.key==='Enter'&&e.target&&e.target.id==='q'){e.preventDefault();e.stopImmediatePropagation();consultar();}},true);
+        if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',instalar);else instalar();
+      })();`+'</scr'+'ipt>';
+      s=s.replace(/<\/body>/i,ponte+ponteIfa+'</body>');
     }
     /* Ajustes textuais específicos da Drogaria. Mantêm a lógica e alteram apenas a redação exibida/relatada. */
     if(app==='drogaria'){
