@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re
 
-V='20260913-13'
+V='20260913-14'
 p=Path('index.html')
 s=p.read_text(encoding='utf-8')
 
@@ -36,6 +36,7 @@ if marker not in s:
 
 # 2) Estética: remover os dois botões soltos problemáticos e usar uma única toolbar fixa.
 # Ela contém: anterior, consulta, selecionadas, próximo.
+# Importante: não reservar altura no <main>; isso criava a faixa vazia nas três telas.
 est_marker="estetica-toolbar-v13"
 if est_marker not in s:
     anchor="    if(app==='produtos-correlatos'){"
@@ -43,7 +44,9 @@ if est_marker not in s:
     inject=r'''    if(app==='estetica'){
       var estDock='<style id="estetica-toolbar-v13">'
         +'html[data-uvis-app="estetica"] #estetica-consulta-dock,html[data-uvis-app="estetica"] #acoesMobile{display:none!important}'
-        +'html[data-uvis-app="estetica"] main{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))!important}'
+        +'html[data-uvis-app="estetica"] main{padding-bottom:0!important}'
+        +'html[data-uvis-app="estetica"] .rolagem{scroll-padding-bottom:64px!important}'
+        +'html[data-uvis-app="estetica"] .acoes:empty{display:none!important}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:56px;padding:4px max(8px,env(safe-area-inset-left)) calc(4px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #cbd6dc;box-shadow:0 -3px 12px rgba(15,42,57,.08)}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button{display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;margin:0;border:0;border-radius:0;background:transparent;color:var(--roxo,#25535B);font:700 20px/1 system-ui;cursor:pointer;-webkit-tap-highlight-color:transparent}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button:active{background:rgba(37,83,91,.08)}'
@@ -88,7 +91,7 @@ vp=Path('versao.json')
 v=json.loads(vp.read_text(encoding='utf-8'))
 v['versao']=V
 v['banco']='12.1'
-v['correcoes']=13
-v['notas']='Estética: removidos os botões soltos Consulta e Ver selecionadas; nova toolbar fixa com anterior, consulta, selecionadas e próximo. Central: consulta IFA passa a ler diretamente a base pública e aceita processo_anvisa no próprio modo IFA. Restaurados ícones dos cards internos dos núcleos.'
+v['correcoes']=14
+v['notas']='Estética: removida a faixa inferior vazia que era causada pela reserva de 62 px no main; mantida a toolbar fixa de quatro ícones sem alterar suas funções. Mantidas as correções IFA e os ícones internos.'
 vp.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 print(V)
