@@ -1,3 +1,4 @@
+# Refresh do GitHub Pages após a correção iOS 20260913-11
 name: Publicar correção IFA e paleta
 
 on:
