@@ -29,8 +29,9 @@ jobs:
         run: |
           node --check sw.js
           node --check ifa-lookup-shared.js
-          grep -q "const APP_VERSAO = '20260913-10'" index.html
-          grep -q "const VERSAO = '20260913-10'" sw.js
+          V=$(python -c "import json;print(json.load(open('versao.json'))['versao'])")
+          grep -q "const APP_VERSAO = '$V'" index.html
+          grep -q "const VERSAO = '$V'" sw.js
           grep -q "uvis-publish-vivid-20260913" index.html
           grep -q "mode='ifa'" index.html
           grep -q "ifa/registros.json" index.html
@@ -45,6 +46,6 @@ jobs:
             echo 'Publicação já aplicada; nada novo para commitar.'
             exit 0
           fi
-          git commit -m 'fix: corrige consulta IFA e reforça paleta visual'
+          git commit -m 'fix: corrige consulta IFA e compatibilidade de navegação'
           git pull --rebase origin main
           git push origin HEAD:main
