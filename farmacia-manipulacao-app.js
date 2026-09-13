@@ -69,6 +69,22 @@
 @media(max-width:780px){#fm-app.is-open{grid-template-rows:auto 1fr}.fm-app-body{grid-template-columns:1fr;grid-template-rows:auto 1fr}.fm-app-nav{display:flex;gap:5px;overflow:auto;border-right:0;border-bottom:1px solid #ddd;padding:6px}.fm-app-nav button{min-width:205px;margin:0}.fm-app-content{padding:11px}.fm-field-grid,.fm-checkbox-grid,.fm-final-grid{grid-template-columns:1fr}.fm-requirement-main{display:block}.fm-status-control{justify-content:flex-start;margin-top:7px}.fm-section-title{font-size:21px}.fm-app-head h1{font-size:15px}}
 `;
     document.head.appendChild(s);
+    var theme = document.createElement('style');
+    theme.textContent = ':root{--fm-navy:#143e52;--fm-blue:#1767a6;--fm-teal:#087e8b;--fm-canvas:#eef4f8;--fm-line:#cfdee8;--fm-ink:#102f46;--fm-muted:#5c7180;--fm-danger:#b5333b}'
+      + '#fm-app{background:var(--fm-canvas);color:var(--fm-ink)}'
+      + '.fm-app-head{background:var(--fm-navy);box-shadow:0 1px 0 #0005}.fm-app-head button{border-color:rgba(255,255,255,.55);background:transparent;color:#fff}'
+      + '.fm-app-body{grid-template-columns:1fr}.fm-app-nav{display:none}.fm-app-content{padding:14px 18px 82px;scroll-behavior:smooth;background:var(--fm-canvas)}'
+      + '.fm-section-header{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:10px;margin:-14px 0 12px;padding:10px 0 9px;background:rgba(238,244,248,.96);border-bottom:1px solid var(--fm-line);backdrop-filter:blur(8px)}'
+      + '.fm-section-title{font-size:22px;color:var(--fm-ink)}.fm-section-intro,.fm-section-card-subtitle,.fm-helper-text{color:var(--fm-muted)}'
+      + '.fm-section-card,.fm-final-card{border-color:var(--fm-line);border-radius:10px;box-shadow:0 2px 8px rgba(16,47,70,.05)}'
+      + '.fm-field input,.fm-field textarea,.fm-field select,.fm-input,.fm-notes,.fm-table-input,.fm-final-section textarea{border-color:var(--fm-line);border-radius:7px;color:var(--fm-ink)}'
+      + '.fm-status-button,.fm-secondary-button,.fm-add-row,.fm-remove-row,.fm-copy-button,.fm-photo-button,.fm-applicability-button{border-color:#b8cfdf;color:var(--fm-blue);border-radius:7px}.fm-status-button.is-selected,.fm-status-button[aria-pressed="true"]{background:var(--fm-blue);border-color:var(--fm-blue)}'
+      + '.fm-photo-button{color:#fff;background:var(--fm-teal);border-color:var(--fm-teal)}.fm-requirement-details summary{cursor:pointer;color:var(--fm-blue);padding:6px 0}.fm-section-clear{margin-left:auto;border:1px solid #d68b91;border-radius:7px;background:#fff;color:var(--fm-danger);padding:7px 9px;font-weight:650}'
+      + '.fm-bottom-nav{position:fixed;z-index:6;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:7px 10px max(8px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--fm-line);box-shadow:0 -3px 12px rgba(16,47,70,.12)}.fm-bottom-nav button{min-height:42px;border:1px solid #b8cfdf;border-radius:7px;background:#fff;color:var(--fm-blue);font-weight:650}.fm-bottom-nav button:last-child{background:var(--fm-blue);border-color:var(--fm-blue);color:#fff}'
+      + '.fm-scroll-marker{position:fixed;z-index:5;right:7px;top:50%;transform:translateY(-50%);width:5px;height:104px;border-radius:9px;background:#d7e5ee;pointer-events:none}.fm-scroll-marker i{display:block;width:100%;min-height:18px;border-radius:9px;background:var(--fm-blue)}'
+      + '.fm-menu-panel{position:fixed;z-index:7;inset:auto 10px 69px;max-height:60vh;overflow:auto;padding:10px;background:#fff;border:1px solid var(--fm-line);border-radius:10px;box-shadow:0 12px 30px rgba(16,47,70,.22)}'
+      + '@media(max-width:780px){.fm-app-content{padding:11px 11px 78px}.fm-section-header{margin:-11px 0 10px}.fm-section-title{font-size:20px}.fm-bottom-nav{gap:4px;padding-left:6px;padding-right:6px}.fm-bottom-nav button{font-size:.78rem;padding:5px 3px}.fm-field-grid,.fm-checkbox-grid,.fm-final-grid{grid-template-columns:1fr}}';
+    document.head.appendChild(theme);
   }
 
   function E(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -82,8 +98,15 @@
     var save = E('button','', 'Salvar'); save.type='button'; save.addEventListener('click', function(){ var FM=window.FarmaciaManipulacao; if(FM)FM.saveState(FM.loadState(),{source:'manual-save'}); flash(save,'✓ Salvo'); }); head.appendChild(save);
     root.appendChild(head);
     var body=E('div','fm-app-body'), nav=E('nav','fm-app-nav'), main=E('main','fm-app-content');body.appendChild(nav);body.appendChild(main);root.appendChild(body);document.body.appendChild(root);
+    var dock=E('nav','fm-bottom-nav');dock.setAttribute('aria-label','Navegação da inspeção');
+    var prev=E('button','', '← Anterior');prev.type='button';prev.addEventListener('click',function(){var i=NAV.findIndex(function(x){return x[0]===active;});if(i>0)show(NAV[i-1][0]);});dock.appendChild(prev);
+    var menu=E('button','', '☷ Menu de seções');menu.type='button';menu.addEventListener('click',function(){var old=document.getElementById('fm-menu-panel');if(old){old.remove();return;}var panel=E('div','fm-menu-panel');panel.id='fm-menu-panel';NAV.forEach(function(item){var b=E('button','',item[1]);b.type='button';b.style.cssText='display:block;width:100%;margin:3px 0;text-align:left;padding:9px;border:1px solid #d7e5ee;border-radius:7px;background:#fff;color:#143e52';b.addEventListener('click',function(){show(item[0]);panel.remove();});panel.appendChild(b);});document.body.appendChild(panel);});dock.appendChild(menu);
+    var next=E('button','', 'Próxima →');next.type='button';next.addEventListener('click',function(){var i=NAV.findIndex(function(x){return x[0]===active;});if(i<NAV.length-1)show(NAV[i+1][0]);});dock.appendChild(next);document.body.appendChild(dock);
+    var marker=E('div','fm-scroll-marker');marker.setAttribute('aria-hidden','true');marker.appendChild(E('i'));document.body.appendChild(marker);main.addEventListener('scroll',function(){updateScrollMarker(main,marker);});
     return root;
   }
+  function updateScrollMarker(main,marker){var max=Math.max(0,main.scrollHeight-main.clientHeight),ratio=max?main.scrollTop/max:0,thumb=marker.querySelector('i'),travel=marker.clientHeight-(thumb?thumb.offsetHeight:0);if(thumb)thumb.style.transform='translateY('+Math.round(travel*ratio)+'px)';marker.hidden=max===0;}
+  function addSectionActions(main){var h=main.querySelector('.fm-section-header');if(!h)return;h.classList.add('fm-section-header-fixed');if(!h.querySelector('.fm-section-clear')){var b=E('button','fm-section-clear','Limpar seção');b.type='button';b.addEventListener('click',function(){if(!confirm('Limpar somente os dados desta seção? As demais seções serão preservadas.'))return;var FM=window.FarmaciaManipulacao,s=FM.loadState();delete s.sections[active];FM.saveState(s,{source:'clear-section'});show(active);});h.appendChild(b);}}
   function flash(button,text){var old=button.textContent;button.textContent=text;window.setTimeout(function(){button.textContent=old;},1000);}
 
   var NAV = [
@@ -143,7 +166,7 @@
     var actions=E('div','fm-final-actions'),preview=E('button','fm-secondary-button','Gerar prévia textual do relatório');preview.type='button';preview.addEventListener('click',function(){var ta=document.createElement('textarea');ta.value=reportText();dialog('Prévia textual do relatório',ta);});actions.appendChild(preview);wrap.appendChild(actions);target.appendChild(wrap);
   }
 
-  function show(id){var FM=window.FarmaciaManipulacao;if(!FM)return;active=id||'section1';FM.set('meta.activeSection',active,{source:'navigation',silent:true});renderNav();var main=ensureRoot().querySelector('.fm-app-content');main.innerHTML='';if(active==='final'){renderFinal(main);return;}var section=FM.sections&&FM.sections[active];if(!section||typeof section.render!=='function'){main.appendChild(E('p','fm-helper-text','Seção ainda não carregada.'));return;}section.render(main);main.scrollTop=0;}
+  function show(id){var FM=window.FarmaciaManipulacao;if(!FM)return;active=id||'section1';FM.set('meta.activeSection',active,{source:'navigation',silent:true});renderNav();var main=ensureRoot().querySelector('.fm-app-content');main.innerHTML='';if(active==='final'){renderFinal(main);}else{var section=FM.sections&&FM.sections[active];if(!section||typeof section.render!=='function'){main.appendChild(E('p','fm-helper-text','Seção ainda não carregada.'));}else section.render(main);}addSectionActions(main);main.scrollTop=0;updateScrollMarker(main,document.querySelector('.fm-scroll-marker'));}
   function open(){ensureModules().then(function(){ensureRoot();var FM=window.FarmaciaManipulacao;active=FM.get('meta.activeSection','section1')||'section1';root.classList.add('is-open');document.documentElement.style.overflow='hidden';show(active);}).catch(function(err){console.error(err);alert('Não foi possível abrir o módulo de Farmácia de Manipulação. Atualize a página e tente novamente.');});}
   function close(){if(!root)return;root.classList.remove('is-open');document.documentElement.style.overflow='';}
 
