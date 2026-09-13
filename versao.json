@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-10",
+  "versao": "20260913-11",
   "banco": "12.1",
-  "correcoes": 10,
-  "notas": "Central de Consultas: IFA mantém o modo selecionado e aceita processo Anvisa sem redirecionar; o modo Processo também procura processos IFA. Interface: botões e cards da casca passam a usar fundos temáticos preenchidos, com texto e ícones brancos e paleta institucional mais viva."
+  "correcoes": 11,
+  "notas": "Correção emergencial de navegação no iPhone/iPad: módulos passam a abrir por srcdoc diretamente no Safari/PWA, evitando falha de Blob URL após atualização. Mantidas a correção IFA e a paleta de botões/cards preenchidos."
 }

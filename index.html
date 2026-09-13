@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260913-10';
+    const APP_VERSAO = '20260913-11';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1550,7 +1550,9 @@ DwQgJg9gxgLgngBwKYAIAWMC2AbAfAKGAxxWwEMA7AcwF4AiBGAWgCEAlO3IpMsLzJDDIooaMgCcAzoP
        - se Blob não carregar rapidamente, troca para srcdoc.
        A interface deixa de depender exclusivamente do postMessage "pronto":
        o evento load do iframe também confirma que o documento foi renderizado. */
-    var local = String(location.protocol||'').toLowerCase() === 'file:';
+    var uvisUa = String(navigator.userAgent||'');
+    var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var local = String(location.protocol||'').toLowerCase() === 'file:' || iosUvis;
     if(local){
       try { q.removeAttribute('src'); } catch(e){}
       q.srcdoc = fonte;
