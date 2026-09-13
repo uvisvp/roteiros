@@ -1,4 +1,4 @@
-# Refresh do GitHub Pages após a correção iOS 20260913-11
+# Publicação PWA — correção de navegação Safari/iPhone + home padrão B
 name: Publicar correção IFA e paleta
 
 on:
@@ -33,7 +33,8 @@ jobs:
           V=$(python -c "import json;print(json.load(open('versao.json'))['versao'])")
           grep -q "const APP_VERSAO = '$V'" index.html
           grep -q "const VERSAO = '$V'" sw.js
-          grep -q "uvis-publish-vivid-20260913" index.html
+          grep -q "home-option-b-overrides" index.html
+          grep -q "__UVIS_CASCA_DIRECT_BINDINGS__" index.html
           grep -q "mode='ifa'" index.html
           grep -q "ifa/registros.json" index.html
           cmp -s index.html Index.html
@@ -47,6 +48,6 @@ jobs:
             echo 'Publicação já aplicada; nada novo para commitar.'
             exit 0
           fi
-          git commit -m 'fix: corrige consulta IFA e compatibilidade de navegação'
+          git commit -m 'fix: restaura navegação PWA e atualiza home'
           git pull --rebase origin main
           git push origin HEAD:main
