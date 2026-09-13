@@ -1,0 +1,88 @@
+index.html linhas=1699 chars=5271294
+
+=== APP IDS ===
+rec--citacao-unificada.js
+rec--documentos.js
+rec--evidencias.js
+rec--ficha-alimentos.js
+rec--jszip.js
+rec--med-tools.css
+rec--med-tools.js
+rec--ocr-extractors.js
+rec--stock-bridge.js
+rec--textos-normas.js
+rec--uvis-clean.js
+rec--uvis-ui.css
+rec--uvis-ui.js
+app--farmacia-manipulacao
+app--estetica
+app--odontologia
+app--servicos-assistenciais
+app--central-consultas
+app--alimentos-integrado
+app--servicos-alimentacao-roteiro
+app--drogaria
+app--distribuidoras-transportadoras
+app--estoque-medicamentos
+app--produtos-correlatos
+app--analise-produtos
+app--estoque-produtos
+rec--padrao.css
+rec--grupos.js
+rec--dados.js
+rec--padrao.js
+rec--roteiro-guiado.css
+rec--roteiro-guiado.js
+nuc--citacoes.css
+nuc--citacoes.js
+nuc--proveniencia.js
+banco--v11
+rec--drogaria-ocr-tools.js
+rec--drogaria-section1.js
+rec--drogaria-area-fisica.js
+rec--drogaria-servicos-documentos.js
+rec--drogaria-final-bridge.js
+rec--drogaria-review.js
+rec--drogaria-report-final.js
+
+=== SCRIPT SRC ===
+
+=== OCORRÊNCIAS MANIPULAÇÃO / FARMÁCIA ===
+01052:   var ROTEIROS = {"Medicamentos":[["Farmácia de manipulação","Preparações não estéreis: roteiro, documentos, estoque e relatório.","farmacia-manipulacao"],["Drogaria","Roteiro completo. A conferência de estoque já está dentro da inspeção.","drogaria"],["Distribuidora / transportadora","Atacado, armazenagem e transporte de medicamentos em um único módulo.","distribuidoras-transportadoras"]],"Alimentos":[["Inspeção do estabelecimento","Roteiro por tipo de estabelecimento, relatório e infrações.","servicos-alimentacao-roteiro"],["Rotulagem, consultas e composição","Conferência de rótulo, consulta de produto ou empresa, aditivos, coadjuvantes, enzimas e suplementos.","alimentos-integrado"]],"Serviços":[["Estética e beleza","Inventário de infrações, consulta de produtos e relatório.","estetica"]],"Produtos":[["Fabricante de cosméticos","Trilha específica de inspeção para fabricação de cosméticos, produtos de higiene e perfumes — BPF, produção, controle da qualidade, documentação, reclamações e recolhimento.","produtos-correlatos","atividade=fab_cosm"],["Atacadista / distribuidor","Trilha de inspeção para distribuição e armazenagem de cosméticos, saneantes e dispositivos médicos/IVD, exibindo os controles conforme as classes selecionadas.","produtos-correlatos","atividade=atacadista"],["Transportador","Trilha de inspeção para transporte de produtos sujeitos à vigilância sanitária, com foco em AFE, conservação da carga, temperatura, segregação e rastreabilidade.","produtos-correlatos","atividade=transportadora"],["Conferência de estoque","Contagem física de produtos quando necessária.","estoque-produtos"]],"Serviços assistenciais":[["ILPI e acolhimentos","ILPI, Centro Dia, comunidade terapêutica, SRT, SAICA e demais modalidades.","servicos-assistenciais"]],"Odontologia":[["Serviço odontológico","Consultórios, clínicas e policlínicas — RDC nº 1.002/2025.","odontologia"]]};
+01069:     if(app==='farmacia-manipulacao'){
+01299:     cab += '<style>@media(max-width:900px){html[data-uvis-app="estetica"] .aba,html[data-uvis-app="estetica"] .tema{touch-action:manipulation!important}html[data-uvis-app="estetica"] .tema{min-height:52px!important}}</style>';
+01431:     'farmacia-manipulacao':'Medicamentos', 'drogaria':'Medicamentos', 'distribuidoras-transportadoras':'Medicamentos',
+
+=== ROTAS / NÚCLEO MEDICAMENTOS ===
+00035:       /* Medicamentos */      --t-med: #2F6B8F; --t-med-d: #22506C; --t-med-w: #EDF4F9;
+00280:     .nucleus-card[data-nucleo="Medicamentos"]          { --tone: var(--t-med); --tone-dark: var(--t-med-d); --wash: var(--t-med-w); }
+00281:     .nucleus-card[data-nucleo="Alimentos"]             { --tone: var(--t-ali); --tone-dark: var(--t-ali-d); --wash: var(--t-ali-w); }
+00282:     .nucleus-card[data-nucleo="Serviços"]              { --tone: var(--t-ser); --tone-dark: var(--t-ser-d); --wash: var(--t-ser-w); }
+00283:     .nucleus-card[data-nucleo="Produtos"]              { --tone: var(--t-pro); --tone-dark: var(--t-pro-d); --wash: var(--t-pro-w); }
+00284:     .nucleus-card[data-nucleo="Serviços assistenciais"]{ --tone: var(--t-ass); --tone-dark: var(--t-ass-d); --wash: var(--t-ass-w); }
+00285:     .nucleus-card[data-nucleo="Odontologia"]           { --tone: var(--t-odo); --tone-dark: var(--t-odo-d); --wash: var(--t-odo-w); }
+00666:         <button class="nucleus-card" type="button" data-nucleo="Medicamentos">
+00668:           <span class="nucleus-content"><strong>Medicamentos</strong><span>Drogaria e distribuidora/transportadora, com conferência de estoque.</span><em>Abrir núcleo</em></span>
+00672:         <button class="nucleus-card" type="button" data-nucleo="Alimentos">
+00678:         <button class="nucleus-card" type="button" data-nucleo="Serviços">
+00684:         <button class="nucleus-card" type="button" data-nucleo="Produtos">
+00690:         <button class="nucleus-card" type="button" data-nucleo="Serviços assistenciais">
+00696:         <button class="nucleus-card" type="button" data-nucleo="Odontologia">
+00732:             <article class="guide-route"><b>Medicamentos</b><p>Drogaria ou distribuidora/transportadora. A conferência de estoque está incorporada ao roteiro de drogaria.</p></article>
+00757:        no fim do arquivo. Aqui não há mais listener em [data-nucleo]:
+01052:   var ROTEIROS = {"Medicamentos":[["Farmácia de manipulação","Preparações não estéreis: roteiro, documentos, estoque e relatório.","farmacia-manipulacao"],["Drogaria","Roteiro completo. A conferência de estoque já está dentro da inspeção.","drogaria"],["Distribuidora / transportadora","Atacado, armazenagem e transporte de medicamentos em um único módulo.","distribuidoras-transportadoras"]],"Alimentos":[["Inspeção do estabelecimento","Roteiro por tipo de estabelecimento, relatório e infrações.","servicos-alimentacao-roteiro"],["Rotulagem, consultas e composição","Conferência de rótulo, consulta de produto ou empresa, aditivos, coadjuvantes, enzimas e suplementos.","alimentos-integrado"]],"Serviços":[["Estética e beleza","Inventário de infrações, consulta de produtos e relatório.","estetica"]],"Produtos":[["Fabricante de cosméticos","Trilha específica de inspeção para fabricação de cosméticos, produtos de higiene e perfumes — BPF, produção, controle da qualidade, documentação, reclamações e recolhimento.","produtos-correlatos","atividade=fab_cosm"],["Atacadista / distribuidor","Trilha de inspeção para distribuição e armazenagem de cosméticos, saneantes e dispositivos médicos/IVD, exibindo os controles conforme as classes selecionadas.","produtos-correlatos","atividade=atacadista"],["Transportador","Trilha de inspeção para transporte de produtos sujeitos à vigilância sanitária, com foco em AFE, conservação da carga, temperatura, segregação e rastreabilidade.","produtos-correlatos","atividade=transportadora"],["Conferência de estoque","Contagem física de produtos quando necessária.","estoque-produtos"]],"Serviços assistenciais":[["ILPI e acolhimentos","ILPI, Centro Dia, comunidade terapêutica, SRT, SAICA e demais modalidades.","servicos-assistenciais"]],"Odontologia":[["Serviço odontológico","Consultórios, clínicas e policlínicas — RDC nº 1.002/2025.","odontologia"]]};
+01104:           {p:'medicamentos_processos',l:'Medicamentos',f:'Medicamento'}
+01191:          .replace(/Medicamentos Controlados, Antimicrobianos e Receituário/g,'Controlados e Antimicrobianos')
+01192:          .replace(/Serviços Farmacêuticos e Administração de Medicamentos/g,'Serviços Farmacêuticos')
+01338:       cab += '<scr'+'ipt>document.addEventListener("DOMContentLoaded",function(){var busy=false,names={"Dados da inspeção e do estabelecimento":"Dados da inspeção","Medicamentos Controlados, Antimicrobianos e Receituário":"Controlados e Antimicrobianos","Serviços Farmacêuticos e Administração de Medicamentos":"Serviços Farmacêuticos","Documentos de Qualidade e Registros":"Documentos da Qualidade"};function compact(){if(busy)return;busy=true;try{var h=document.querySelector("body>header");if(h&&h.textContent.trim()!=="Roteiro de inspeção sanitária")h.innerHTML="<h1>Roteiro de inspeção sanitária</h1>";document.querySelectorAll(".tabs button").forEach(function(b){if(b.dataset.tab==="achados"&&b.textContent!=="Infrações")b.textContent="Infrações";if(b.dataset.tab==="relatorio"&&b.textContent!=="Relatório")b.textContent="Relatório";});document.querySelectorAll(".card-button").forEach(function(card){var n=card.querySelector(".number"),title=card.querySelector("strong");if(n&&/^\\d+$/.test(n.textContent.trim()))n.textContent="Seção "+n.textContent.trim();if(title&&names[title.textContent.trim()])title.textContent=names[title.textContent.trim()];});var d=document.querySelector(".dock,.bottom");if(d){d.classList.add("uvis-card-dock");var saved=d.querySelector("#saved");if(saved)saved.style.display="none";var back=d.querySelector("#back,[data-back]"),next=d.querySelector("#next,[data-next]"),clear=d.querySelector("[data-uvis-card-clear],#clear,.clear,[data-clear]");if(back&&back.textContent.trim()!=="←")back.textContent="←";if(next&&next.textContent.trim()!=="→")next.textContent="→";if(clear&&clear.textContent.trim()!=="Limpar dados")clear.textContent="Limpar dados";}}finally{busy=false}}compact();var mo=new MutationObserver(function(){queueMicrotask(compact)});mo.observe(document.body,{childList:true,subtree:true,characterData:true});document.addEventListener("click",function(){setTimeout(compact,0)},true)},false);</scr'+'ipt>';
+01427:     'Medicamentos':'--t-med', 'Alimentos':'--t-ali', 'Serviços':'--t-ser',
+01431:     'farmacia-manipulacao':'Medicamentos', 'drogaria':'Medicamentos', 'distribuidoras-transportadoras':'Medicamentos',
+01432:     'estoque-medicamentos':'Medicamentos',
+01476:     var lista = ROTEIROS[nucleo] || [];
+01573:     if(nucleoAtual && ROTEIROS[nucleoAtual]) telaLista(nucleoAtual); else telaHome();
+01578:     var n = e.target.closest('[data-nucleo]');
+01580:       if(ROTEIROS[k] && ROTEIROS[k].length){
+01583:         if(ROTEIROS[k].length === 1){ var r = ROTEIROS[k][0]; abrirApp(r[2], r[0], r[3] || ''); }
+
+=== VERSÃO ===
+20260912-1
