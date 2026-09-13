@@ -29,11 +29,11 @@ jobs:
             'farmacia-manipulacao-section4.js':['createRefrigeratorCard','Selecionar fórmulas para rastreabilidade'],
             'farmacia-manipulacao-section5.js':['Almoxarifado','Controle de Qualidade','Homeopatia','SBIT'],
             'farmacia-manipulacao-section6.js':['Cabine de Hormônios','Cabine de Antibióticos','Cabine de Citostáticos','Cabine de Penicilínicos','sensitizerPressureOperationalReference'],
-            'farmacia-manipulacao-section7.js':['createCopyButton','Qualificação e Manutenção do Sistema de Exaustão'],
+            'farmacia-manipulacao-section7.js':['createCopyButton','7. DOCUMENTOS APRESENTADOS','Qualificação e Manutenção do Sistema de Exaustão'],
             'farmacia-manipulacao-section8.js':['createCopyButton','Água Purificada','Água Potável','sameSamplingEvent','mergeSamplingEvent'],
             'farmacia-manipulacao-section9.js':['createCopyButton','DANFE de aquisição','Certificado de CQ do fabricante','Consultar IFA','estoqueControlados'],
             'farmacia-manipulacao-ocr.js':['function parseCrt(base)','function parseLicense(base)','rtHorario','reviewedPeople(fields.substitutos)','parsers:{parseCrt:parseCrt,parseLicense:parseLicense}'],
-            'farmacia-manipulacao-report.js':['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO','7. DOCUMENTOS APRESENTADOS','Responsáveis técnicos substitutos constantes da licença','checklist.organizacao','manômetro'],
+            'farmacia-manipulacao-report.js':['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO','Responsáveis técnicos substitutos constantes da licença','checklist.organizacao','manômetro'],
             'farmacia-manipulacao-lookup.js':['IFA — Insumo Farmacêutico Ativo','processo_anvisa','Não equivale a ausência de regularização']
           }
           for fn,needles in checks.items():
