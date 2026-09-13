@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-16",
+  "versao": "20260913-17",
   "banco": "12.1",
-  "correcoes": 16,
-  "notas": "Estética: eliminada também a faixa inferior específica do iPhone, removendo o padding de safe-area que aumentava a altura da toolbar sem conteúdo. Mantida a toolbar fixa de quatro ícones. Home: cards dos núcleos mantidos cerca de 20% menores."
+  "correcoes": 17,
+  "notas": "Serviços > Estética: restaurado o botão nativo Ver selecionadas na faixa inferior móvel, sem ampliar a faixa com safe-area; removida a abertura automática do primeiro grupo Licenciamento e regularidade no iPhone nas abas Interesse à saúde e Serviços de saúde. Demais núcleos preservados."
 }
