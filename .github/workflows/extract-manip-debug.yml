@@ -1,4 +1,4 @@
-name: Extrair módulo de manipulação
+name: Auditar integração de manipulação
 
 on:
   push:
@@ -9,55 +9,61 @@ permissions:
   contents: write
 
 jobs:
-  extrair:
+  auditar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Mapear integração do Index
+      - name: Mapear index publicado e validar scripts
         run: |
+          set -e
           python - <<'PY'
           from pathlib import Path
-          import re
-          raw=Path('Index.html').read_text(encoding='utf-8',errors='replace')
+          import re, json
+          raw=Path('index.html').read_text(encoding='utf-8',errors='replace')
           lines=raw.splitlines()
           out=[]
-          out.append(f'Total de linhas: {len(lines)}')
-          out.append(f'Tamanho: {len(raw)}')
+          out.append(f'index.html linhas={len(lines)} chars={len(raw)}')
           out.append('')
-          out.append('=== APP IDS EMPACOTADOS ===')
+          out.append('=== APP IDS ===')
           for m in re.finditer(r'<script\s+type="text/plain"\s+id="([^"]+)"',raw,re.I):
-              line=raw.count('\n',0,m.start())+1
-              # comprimento do payload até </script>
-              end=raw.find('</script>',m.end())
-              size=max(0,end-m.end()) if end>=0 else -1
-              out.append(f'{line:04d} | {m.group(1)} | payload≈{size} chars')
+              out.append(m.group(1))
           out.append('')
           out.append('=== SCRIPT SRC ===')
           for m in re.finditer(r'<script[^>]+src=["\']([^"\']+)["\'][^>]*>',raw,re.I):
-              out.append(f'{raw.count(chr(10),0,m.start())+1:04d} | {m.group(1)}')
+              out.append(m.group(1))
           out.append('')
-          out.append('=== LINHAS NORMAIS 610-940 ===')
-          for i in range(609,min(len(lines),940)):
-              line=lines[i]
-              if len(line)<=5000:
-                  out.append(f'{i+1:04d}: {line}')
-              else:
-                  mt=re.search(r'id="([^"]+)"',line)
-                  out.append(f'{i+1:04d}: [linha longa {len(line)} chars] id={mt.group(1) if mt else "?"}')
+          out.append('=== OCORRÊNCIAS MANIPULAÇÃO / FARMÁCIA ===')
+          for i,line in enumerate(lines,1):
+              low=line.lower()
+              if ('manipula' in low or 'farmácia' in low or 'farmacia-manipulacao' in low) and len(line)<12000:
+                  out.append(f'{i:05d}: {line[:5000]}')
           out.append('')
-          out.append('=== CHAVES/ROTAS EM JS NÃO EMPACOTADO ===')
-          # remove payloads para pesquisar somente o código de casca
-          shell=re.sub(r'(<script\s+type="text/plain"[^>]*>).*?(</script>)',r'\1[PACKED]\2',raw,flags=re.I|re.S)
-          shell_lines=shell.splitlines()
-          pats=re.compile(r'(nucleus|nucleo|module|modulo|route|rota|medic|drog|manip|app--)',re.I)
-          for i,line in enumerate(shell_lines,1):
-              if pats.search(line): out.append(f'{i:04d}: {line[:3000]}')
-          Path('INDEX_MAP.txt').write_text('\n'.join(out),encoding='utf-8')
+          out.append('=== ROTAS / NÚCLEO MEDICAMENTOS ===')
+          for i,line in enumerate(lines,1):
+              if ('ROTEIROS' in line or 'Medicamentos' in line or 'data-nucleo' in line) and len(line)<20000:
+                  out.append(f'{i:05d}: {line[:10000]}')
+          out.append('')
+          out.append('=== VERSÃO ===')
+          m=re.search(r"APP_VERSAO\s*=\s*['\"]([^'\"]+)",raw)
+          out.append(m.group(1) if m else 'não localizada')
+          Path('MANIP_LIVE_AUDIT.txt').write_text('\n'.join(out),encoding='utf-8')
           PY
-      - name: Commit do mapa
+          for f in farmacia-manipulacao-app.js farmacia-manipulacao-core.js farmacia-manipulacao-lookup.js farmacia-manipulacao-ocr.js farmacia-manipulacao-report.js farmacia-manipulacao-section{1,2,3,4,5,6,7,8,9}.js ifa-lookup-shared.js; do
+            test -f "$f"
+            node --check "$f"
+          done
+          python - <<'PY'
+          from pathlib import Path
+          sw=Path('sw.js').read_text(encoding='utf-8')
+          required=['farmacia-manipulacao-app.js','farmacia-manipulacao-core.js','farmacia-manipulacao-lookup.js','farmacia-manipulacao-ocr.js','farmacia-manipulacao-report.js']+[f'farmacia-manipulacao-section{i}.js' for i in range(1,10)]+['ifa-lookup-shared.js']
+          missing=[x for x in required if x not in sw]
+          if missing: raise SystemExit('Ausentes do service worker: '+', '.join(missing))
+          print('Service worker: arquivos de manipulação presentes.')
+          PY
+      - name: Commit da auditoria
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add INDEX_MAP.txt
-          git diff --cached --quiet || git commit -m "chore: atualizar mapa de integração do Index"
+          git add MANIP_LIVE_AUDIT.txt
+          git diff --cached --quiet || git commit -m "chore: registrar auditoria da integração de manipulação"
           git push
