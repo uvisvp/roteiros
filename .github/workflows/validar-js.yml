@@ -54,6 +54,7 @@ jobs:
             exit 1
           fi
           grep -q "documentType: 'aso'\|documentType:'aso'\|ocr-request.*aso" farmacia-manipulacao-section3.js || grep -q "'aso'" farmacia-manipulacao-section3.js
+          grep -q "recomendando-se sistema de rodízio" farmacia-manipulacao-section3.js
 
           # Seções condicionais não podem ser globalmente omitidas; o core mantém NSA local.
           grep -q "autoHideSectionsFromOtherAnswers: false" farmacia-manipulacao-core.js
@@ -68,6 +69,24 @@ jobs:
           grep -q "createRefrigeratorCard" farmacia-manipulacao-section4.js
           grep -q "createRefrigeratorCard" farmacia-manipulacao-section5.js
           grep -q "createRefrigeratorCard" farmacia-manipulacao-section6.js
+
+          # Calibrações devem poder ser lidas nos ambientes e nas cabines.
+          grep -q "certificado-calibracao" farmacia-manipulacao-section4.js
+          grep -q "certificado-calibracao" farmacia-manipulacao-section6.js
+
+          # SBIT precisa conservar os requisitos específicos aprovados do Anexo II.
+          grep -q "perfilDissolucao" farmacia-manipulacao-section5.js
+          grep -q "duplaDiluicao" farmacia-manipulacao-section5.js
+          grep -q "bula" farmacia-manipulacao-section5.js
+          grep -q "atencao" farmacia-manipulacao-section5.js
+
+          # Sensibilizantes são independentes por classe e mantêm situação própria e rodízio.
+          grep -q "\.manipula" farmacia-manipulacao-section6.js
+          grep -q "\.cabineExistente" farmacia-manipulacao-section6.js
+          grep -q "rodizio" farmacia-manipulacao-section6.js
+
+          # Qualificação do sistema de exaustão aceita validade quando o documento a trouxer.
+          grep -q "exaustao.validade" farmacia-manipulacao-section7.js
 
           # Dois laudos da mesma coleta devem poder formar um único evento de amostragem.
           grep -q "sameSamplingEvent" farmacia-manipulacao-section8.js
