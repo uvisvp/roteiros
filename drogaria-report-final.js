@@ -21,12 +21,12 @@
     c2:'retinoides da Lista C2', cannabis:'produtos de Cannabis', glp1:'análogos GLP-1', termolabeis:'medicamentos termolábeis'
   };
   const installLabels = {
-    predio_rua:'prédio comercial independente / imóvel de rua', mercado:'área independente situada dentro de mercado, antes da área de vendas', galeria:'galeria comercial', shopping:'shopping center', pavimento_predio:'pavimento de prédio comercial'
+    predio_rua:'prédio comercial independente / imóvel de rua', mercado:'área independente situada dentro de mercado, antes da área de vendas', mercado_area_vendas:'farmácia localizada dentro da área de vendas de supermercado / mercado', galeria:'galeria comercial', shopping:'shopping center', pavimento_predio:'pavimento de prédio comercial'
   };
   const areaLabels = {
     area_dispensacao:'área de dispensação', area_controlados:'sala de medicamentos sujeitos a controle especial', area_servicos:'sala de prestação de serviços farmacêuticos', area_administrativa:'sala administrativa',
     area_estoque_recebimento:'sala de estoque e recebimento de produtos', area_dml:'Depósito de Materiais de Limpeza (DML)', area_refeicoes:'área para refeições', area_vestiario:'vestiário de funcionários',
-    san_cliente_masc:'sanitário de clientes masculino', san_cliente_fem:'sanitário de clientes feminino', san_func_masc:'sanitário de funcionários masculino', san_func_fem:'sanitário de funcionários feminino', san_pcd:'sanitário acessível para PCD'
+    san_cliente_unissex:'sanitário de clientes unissex', san_cliente_masc:'sanitário de clientes masculino', san_cliente_fem:'sanitário de clientes feminino', san_func_unissex:'sanitário de funcionários unissex', san_func_masc:'sanitário de funcionários masculino', san_func_fem:'sanitário de funcionários feminino', san_pcd:'sanitário acessível para PCD'
   };
   const structuralLabels = {
     nc_poeira:'acúmulo de poeira ou sujeira', nc_pragas:'presença de pragas vivas, mortas ou vestígios', nc_mofo:'sinais de mofo em paredes ou superfícies',
