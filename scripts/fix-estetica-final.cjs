@@ -17,17 +17,17 @@ function replaceRequired(from,to,label){
   src=src.replace(from,to);
 }
 
-/* A faixa persistente vinha do próprio app de Estética: o main reservava
-   58/56 px para o antigo dock, mesmo depois de ele ter sido ocultado. */
-replaceRequired('main{padding-bottom:58px!important}','main{padding-bottom:0!important}','reserva desktop do main');
-replaceRequired('main{padding-bottom:56px!important}','main{padding-bottom:0!important}','reserva mobile do main');
+/* O botão nativo "Ver selecionadas" volta a ocupar a faixa de ações no mobile.
+   Evita-se apenas somar a safe-area do iPhone à altura dessa faixa. */
+replaceRequired(
+  '.acoes{padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))}',
+  '.acoes{padding-bottom:11px}',
+  'safe-area das ações móveis'
+);
 
-/* Ao reexibir "Ver selecionadas", não somar a safe-area do iPhone a essa ação. */
-replaceRequired('.acoes{padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))}', '.acoes{padding-bottom:11px}', 'safe-area das ações móveis');
-
-/* No iPhone, trocar de aba I/S abria automaticamente o primeiro grupo
-   (Licenciamento e regularidade). Agora a aba entra recolhida; abrir um grupo
-   pelo sumário continua funcionando por irGrupo(). */
+/* No iPhone, trocar para Interesse à saúde ou Serviços de saúde abria sozinho
+   o primeiro grupo (Licenciamento e regularidade). Agora ambos entram recolhidos.
+   A abertura deliberada pelo usuário, via sumário/irGrupo(), continua intacta. */
 replaceRequired(
   'if(eMobile()){ir(2,true);if(b==="I"||b==="S"){requestAnimationFrame(()=>{const d=$("lista2").querySelector("details.uvis-inventory");if(d)d.open=true})}}else aplicarLayout()',
   'if(eMobile()){ir(2,true)}else aplicarLayout()',
@@ -44,9 +44,8 @@ if(lz.decompressFromBase64(encoded)!==src) throw new Error('Falha no round-trip 
 const out=html.replace(re,()=>m[1]+encoded+m[2]);
 fs.writeFileSync(file,out);
 
-/* Validações específicas do ajuste. */
 const check=unpack(file).blocks.get(id);
-if(check.includes('main{padding-bottom:58px!important}')||check.includes('main{padding-bottom:56px!important}')) throw new Error('Reserva antiga ainda presente');
 if(check.includes('requestAnimationFrame(()=>{const d=$("lista2").querySelector("details.uvis-inventory");if(d)d.open=true})')) throw new Error('Autoabertura do primeiro grupo ainda presente');
 if(!check.includes('<button class="principal" data-ir="3">Ver selecionadas</button>')) throw new Error('Botão nativo Ver selecionadas ausente');
-console.log('Estética ajustada: sem reserva inferior e sem autoabertura do primeiro grupo.');
+if(!check.includes('.acoes{padding-bottom:11px}')) throw new Error('Faixa móvel compacta não aplicada');
+console.log('Estética ajustada: Ver selecionadas restaurável e primeiro grupo recolhido no mobile.');
