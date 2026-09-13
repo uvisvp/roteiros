@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-5",
+  "versao": "20260913-10",
   "banco": "12.1",
-  "correcoes": 9,
-  "notas": "Cards iniciais com cores mais visíveis; cabeçalho compacto em Odontologia e SIVISA integrado ao seletor da Central. Inclui os ajustes visuais aprovados, preservando roteiros e conteúdos técnicos."
+  "correcoes": 10,
+  "notas": "Central de Consultas: IFA mantém o modo selecionado e aceita processo Anvisa sem redirecionar; o modo Processo também procura processos IFA. Interface: botões e cards da casca passam a usar fundos temáticos preenchidos, com texto e ícones brancos e paleta institucional mais viva."
 }
