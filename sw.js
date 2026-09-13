@@ -9,6 +9,7 @@
 
 const VERSAO = '20260912-3';
 // Build visual/navigation 20260912-3
+// Navigation guards initialize after DOMContentLoaded
 const CACHE_APP   = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
