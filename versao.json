@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-4",
+  "versao": "20260913-5",
   "banco": "12.1",
-  "correcoes": 8,
-  "notas": "Ajustes específicos de navegação e apresentação em Distribuidora/Transportadora, Central de Consultas, Odontologia e Serviço de estética; Drogaria e Farmácia de Manipulação preservadas."
+  "correcoes": 9,
+  "notas": "Cards iniciais com cores mais visíveis; cabeçalho compacto em Odontologia e SIVISA integrado ao seletor da Central. Inclui os ajustes visuais aprovados, preservando roteiros e conteúdos técnicos."
 }
