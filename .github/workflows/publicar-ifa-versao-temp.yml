@@ -1,4 +1,4 @@
-# Publicação PWA — correção de navegação Safari/iPhone + home padrão B
+# Publicação PWA — correções pontuais de navegação/IFA/Estética
 name: Publicar correção IFA e paleta
 
 on:
@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/publicar-ifa-versao-temp.yml'
       - 'scripts/publicar_ifa_cores.py'
+      - 'scripts/ajuste_estetica_ifa_v13.py'
 
 permissions:
   contents: write
@@ -23,8 +24,11 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Aplicar correções
+      - name: Aplicar base da correção anterior
         run: python scripts/publicar_ifa_cores.py
+
+      - name: Aplicar ajustes Estética e IFA v13
+        run: python scripts/ajuste_estetica_ifa_v13.py
 
       - name: Validar
         run: |
@@ -35,7 +39,9 @@ jobs:
           grep -q "const VERSAO = '$V'" sw.js
           grep -q "home-option-b-overrides" index.html
           grep -q "__UVIS_CASCA_DIRECT_BINDINGS__" index.html
-          grep -q "mode='ifa'" index.html
+          grep -q "__UVIS_IFA_DIRECT_V13__" index.html
+          grep -q "estetica-toolbar-v13" index.html
+          grep -q "uvis-rot-icons-v13" index.html
           grep -q "ifa/registros.json" index.html
           cmp -s index.html Index.html
 
@@ -48,6 +54,6 @@ jobs:
             echo 'Publicação já aplicada; nada novo para commitar.'
             exit 0
           fi
-          git commit -m 'fix: restaura navegação PWA e atualiza home'
+          git commit -m 'fix: ajusta Estética, IFA e ícones internos'
           git pull --rebase origin main
           git push origin HEAD:main
