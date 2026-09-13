@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-15",
+  "versao": "20260913-16",
   "banco": "12.1",
-  "correcoes": 15,
-  "notas": "Estética: removida de fato a reserva antiga de 62 px + safe-area que permanecia no HTML publicado e causava a faixa vazia, sobretudo no iPhone. Home: cards dos núcleos reduzidos em cerca de 20% para melhor caber na tela. Mantidas toolbar, IFA e ícones internos."
+  "correcoes": 16,
+  "notas": "Estética: eliminada também a faixa inferior específica do iPhone, removendo o padding de safe-area que aumentava a altura da toolbar sem conteúdo. Mantida a toolbar fixa de quatro ícones. Home: cards dos núcleos mantidos cerca de 20% menores."
 }
