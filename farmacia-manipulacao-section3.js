@@ -23,7 +23,7 @@
     var detail = document.createElement('details');
     detail.className = 'fm-requirement-details';
     var summary = document.createElement('summary');
-    summary.textContent = 'Anotações e foto';
+    summary.textContent = 'Anotações e fotos';
     detail.appendChild(summary);
     detail.appendChild(FM.createPhotoNotesControl({ path: path, multiple: true }));
     row.appendChild(detail);
