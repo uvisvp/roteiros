@@ -5,35 +5,26 @@ V='20260913-15'
 p=Path('index.html')
 s=p.read_text(encoding='utf-8')
 
-# Esta etapa roda depois de publicar_ifa_cores.py. A correção precisa ser
-# incondicional porque o bloco estetica-toolbar-v13 já existe no HTML e a
-# lógica anterior de "injetar somente se ausente" deixava sobreviver a
-# reserva antiga de 62px no main.
+# Esta etapa roda depois de publicar_ifa_cores.py. A correção é incondicional:
+# o bloco estetica-toolbar-v13 já existe e a versão anterior pulava sua troca.
 s,n=re.subn(r"const APP_VERSAO\s*=\s*['\"][^'\"]+['\"]",f"const APP_VERSAO = '{V}'",s,count=1)
 assert n==1, 'APP_VERSAO não localizado'
 
 for marker in ('__UVIS_IFA_DIRECT_V13__','estetica-toolbar-v13','uvis-rot-icons-v13','home-option-b-overrides'):
     assert marker in s, f'{marker} ausente'
 
-# Estética: eliminar de fato a faixa vazia. No iPhone o env(safe-area-inset-bottom)
-# tornava a faixa ainda maior. A toolbar continua fixa e independente do fluxo.
-old_rule='html[data-uvis-app=\\"estetica\\"] main{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))!important}'
-new_rule='html[data-uvis-app=\\"estetica\\"] main{padding-bottom:0!important}'
-assert old_rule in s, 'regra antiga de 62px da Estética não localizada'
-s=s.replace(old_rule,new_rule,1)
+# Estética: remove a reserva visual antiga de 62px + safe-area, independentemente
+# de como as aspas do seletor estejam escapadas no JavaScript que monta o srcdoc.
+s,n=re.subn(
+    r'padding-bottom:calc\(62px \+ env\(safe-area-inset-bottom,0px\)\)!important',
+    'padding-bottom:0!important',
+    s,
+    count=1
+)
+assert n==1, 'reserva antiga de 62px da Estética não localizada'
 
-# Mantém apenas scroll-padding (não cria espaço visual) para o último conteúdo
-# poder ser alcançado acima da toolbar fixa.
-style_anchor="+'html[data-uvis-app=\\\"estetica\\\"] main{padding-bottom:0!important}'"
-if 'html[data-uvis-app=\\"estetica\\"] .rolagem{scroll-padding-bottom:64px!important}' not in s and style_anchor in s:
-    s=s.replace(
-        style_anchor,
-        style_anchor+"\n        +'html[data-uvis-app=\\\"estetica\\\"] .rolagem{scroll-padding-bottom:64px!important}'\n        +'html[data-uvis-app=\\\"estetica\\\"] .acoes:empty{display:none!important}'",
-        1
-    )
-
-# Home: reduzir aproximadamente 20% os cards dos núcleos, preservando a grade,
-# cores, textos e comportamento.
+# Home: reduz aproximadamente 20% os cards dos núcleos, sem mexer em cores,
+# links ou lógica de navegação.
 m=re.search(r'(<style id="home-option-b-overrides">)(.*?)(</style>)',s,re.S)
 assert m, 'CSS home-option-b-overrides não localizado'
 css=m.group(2)
@@ -49,7 +40,6 @@ for old,new in changes.items():
     css=css.replace(old,new,1)
 s=s[:m.start(2)]+css+s[m.end(2):]
 
-# Confirma que a regra causadora da faixa realmente saiu do artefato final.
 assert 'padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))!important' not in s
 assert 'min-height:133px!important' in s
 
