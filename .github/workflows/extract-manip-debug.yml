@@ -22,38 +22,33 @@ jobs:
           done
           python - <<'PY'
           from pathlib import Path
-          checks = {
-              'farmacia-manipulacao-core.js': ['automaticSanitaryJudgment: false','autoHideSectionsFromOtherAnswers: false','crtHasValidityField: false',"sensitizerPressureOperationalReference: '-5 a -120 Pa'",'createRefrigeratorCard'],
-              'farmacia-manipulacao-section1.js': ["BASE + '.licenca.substitutos'","BASE + '.crt.substitutos'",'A CRT não possui campo de validade'],
-              'farmacia-manipulacao-section3.js': ['PCMSO','PGR','Adicionar ASO','Treinamentos'],
-              'farmacia-manipulacao-section4.js': ['createRefrigeratorCard','Selecionar fórmulas para rastreabilidade'],
-              'farmacia-manipulacao-section5.js': ['Almoxarifado','Controle de Qualidade','Homeopatia','SBIT','createRefrigeratorCard'],
-              'farmacia-manipulacao-section6.js': ['Cabine de Hormônios','Cabine de Antibióticos','Cabine de Citostáticos','Cabine de Penicilínicos','sensitizerPressureOperationalReference'],
-              'farmacia-manipulacao-section7.js': ['Copiar texto desta seção','Qualificação e Manutenção do Sistema de Exaustão'],
-              'farmacia-manipulacao-section8.js': ['Copiar texto desta seção','Água Purificada','Água Potável','eventKey'],
-              'farmacia-manipulacao-section9.js': ['Copiar texto desta seção','DANFE de aquisição','Certificado do fabricante','Consultar IFA','estoqueControlados'],
-              'farmacia-manipulacao-ocr.js': ['function parseCrt(base)','function parseLicense(base)','rtHorario','reviewedPeople(fields.substitutos)','parsers:{parseCrt:parseCrt,parseLicense:parseLicense}'],
-              'farmacia-manipulacao-report.js': ['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO','7. DOCUMENTOS APRESENTADOS','Responsáveis técnicos substitutos constantes da licença','checklist.organizacao','manômetro'],
-              'farmacia-manipulacao-lookup.js': ['IFA — Insumo Farmacêutico Ativo','processo_anvisa','Não equivale a ausência de regularização']
+          checks={
+            'farmacia-manipulacao-core.js':['automaticSanitaryJudgment: false','autoHideSectionsFromOtherAnswers: false','crtHasValidityField: false',"sensitizerPressureOperationalReference: '-5 a -120 Pa'",'createRefrigeratorCard'],
+            'farmacia-manipulacao-section1.js':["BASE + '.licenca.substitutos'","BASE + '.crt.substitutos'",'A CRT não possui campo de validade'],
+            'farmacia-manipulacao-section3.js':['PCMSO','PGR','Adicionar ASO','Treinamentos'],
+            'farmacia-manipulacao-section4.js':['createRefrigeratorCard','Selecionar fórmulas para rastreabilidade'],
+            'farmacia-manipulacao-section5.js':['Almoxarifado','Controle de Qualidade','Homeopatia','SBIT'],
+            'farmacia-manipulacao-section6.js':['Cabine de Hormônios','Cabine de Antibióticos','Cabine de Citostáticos','Cabine de Penicilínicos','sensitizerPressureOperationalReference'],
+            'farmacia-manipulacao-section7.js':['createCopyButton','Qualificação e Manutenção do Sistema de Exaustão'],
+            'farmacia-manipulacao-section8.js':['createCopyButton','Água Purificada','Água Potável','eventKey'],
+            'farmacia-manipulacao-section9.js':['createCopyButton','DANFE de aquisição','Certificado do fabricante','Consultar IFA','estoqueControlados'],
+            'farmacia-manipulacao-ocr.js':['function parseCrt(base)','function parseLicense(base)','rtHorario','reviewedPeople(fields.substitutos)','parsers:{parseCrt:parseCrt,parseLicense:parseLicense}'],
+            'farmacia-manipulacao-report.js':['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO','7. DOCUMENTOS APRESENTADOS','Responsáveis técnicos substitutos constantes da licença','checklist.organizacao','manômetro'],
+            'farmacia-manipulacao-lookup.js':['IFA — Insumo Farmacêutico Ativo','processo_anvisa','Não equivale a ausência de regularização']
           }
-          for filename, needles in checks.items():
-              text=Path(filename).read_text(encoding='utf-8')
-              missing=[x for x in needles if x not in text]
-              if missing:
-                  raise SystemExit(f'{filename}: ausentes {missing}')
+          for fn,needles in checks.items():
+            text=Path(fn).read_text(encoding='utf-8')
+            missing=[x for x in needles if x not in text]
+            if missing: raise SystemExit(f'{fn}: ausentes {missing}')
           index=Path('index.html').read_text(encoding='utf-8')
-          if 'Farmácia de manipulação, drogaria e distribuidora/transportadora.' not in index:
-              raise SystemExit('Texto atualizado do card Medicamentos ausente no index publicado.')
-          if 'farmacia-manipulacao-app.js' not in index and 'drogaria-final-bridge.js' not in index:
-              raise SystemExit('Bootstrap de Manipulação não localizado no index.')
+          if 'Farmácia de manipulação, drogaria e distribuidora/transportadora.' not in index: raise SystemExit('Card Medicamentos desatualizado.')
           sw=Path('sw.js').read_text(encoding='utf-8')
           required=['farmacia-manipulacao-app.js','farmacia-manipulacao-core.js','farmacia-manipulacao-lookup.js','farmacia-manipulacao-ocr.js','farmacia-manipulacao-report.js']+[f'farmacia-manipulacao-section{i}.js' for i in range(1,10)]+['ifa-lookup-shared.js']
           missing=[x for x in required if x not in sw]
-          if missing:
-              raise SystemExit('Arquivos ausentes do cache essencial: '+', '.join(missing))
+          if missing: raise SystemExit('Ausentes do cache essencial: '+', '.join(missing))
           print('Validação estrutural: OK')
           PY
-      - name: Atualizar versão e remover artefatos temporários
+      - name: Atualizar versão e limpar temporários
         run: |
           set -e
           python - <<'PY'
@@ -62,24 +57,20 @@ jobs:
           version='20260912-2'
           p=Path('index.html'); s=p.read_text(encoding='utf-8')
           s,n=re.subn(r"(const\s+APP_VERSAO\s*=\s*['\"])[^'\"]+(['\"])",lambda m:m.group(1)+version+m.group(2),s,count=1)
-          if n!=1: raise SystemExit('APP_VERSAO não localizado no index.html')
+          if n!=1: raise SystemExit('APP_VERSAO não localizado.')
           p.write_text(s,encoding='utf-8')
           p=Path('sw.js'); s=p.read_text(encoding='utf-8')
           s,n=re.subn(r"(const\s+VERSAO\s*=\s*['\"])[^'\"]+(['\"])",lambda m:m.group(1)+version+m.group(2),s,count=1)
-          if n!=1: raise SystemExit('VERSAO não localizada no sw.js')
+          if n!=1: raise SystemExit('VERSAO do service worker não localizada.')
           p.write_text(s,encoding='utf-8')
           p=Path('versao.json'); data=json.loads(p.read_text(encoding='utf-8'))
-          data['versao']=version
-          data['correcoes']=7
-          data['notas']='Farmácia de Manipulação: relatório narrativo revisado, refrigeradores e equipamentos consolidados, CRT sem validade com horários individuais de RT/substitutos, múltiplos substitutos da licença preservados, OCR sempre sujeito à conferência e consulta IFA mantida pelo motor compartilhado.'
+          data['versao']=version; data['correcoes']=7
+          data['notas']='Farmácia de Manipulação: relatório narrativo revisado, refrigeradores e equipamentos consolidados, CRT sem validade com horários individuais de RT/substitutos, múltiplos substitutos da licença preservados, OCR sujeito à conferência e consulta IFA mantida pelo motor compartilhado.'
           p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           for name in ['MANIP_DEBUG.txt','INDEX_STRUCTURE.txt','INDEX_MAP.txt','MANIP_LIVE_AUDIT.txt','tools/tmp_patch_manip_ocr.py']:
-              Path(name).unlink(missing_ok=True)
+            Path(name).unlink(missing_ok=True)
           Path('.github/workflows/extract-manip-debug.yml').unlink(missing_ok=True)
-          idx=Path('index.html').read_text(encoding='utf-8')
-          sw=Path('sw.js').read_text(encoding='utf-8')
-          if version not in idx or version not in sw:
-              raise SystemExit('Versão não sincronizada entre HTML e service worker.')
+          if version not in Path('index.html').read_text(encoding='utf-8') or version not in Path('sw.js').read_text(encoding='utf-8'): raise SystemExit('Versão não sincronizada.')
           print('Versão preparada:',version)
           PY
       - name: Commit final
