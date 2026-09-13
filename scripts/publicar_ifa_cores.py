@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import re
 
-V = "20260913-10"
+V = "20260913-11"
 
 p = Path("index.html")
 s = p.read_text(encoding="utf-8")
@@ -57,6 +57,16 @@ if "tarefas.push(fetch(RAIZ+'ifa/registros.json'" not in s:
     assert process_old in s, "ponte de busca complementar por processo não localizada"
     s = s.replace(process_old, process_new, 1)
 
+# Compatibilidade iPhone/iPad: dentro do PWA/Safari, Blob URL em iframe pode
+# não renderizar de forma confiável após a troca do service worker. Nesses
+# dispositivos usamos srcdoc diretamente, que já era o fallback do aplicativo.
+ios_marker = "var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);"
+if ios_marker not in s:
+    old = "var local = String(location.protocol||'').toLowerCase() === 'file:';"
+    new = "var uvisUa = String(navigator.userAgent||'');\n    var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);\n    var local = String(location.protocol||'').toLowerCase() === 'file:' || iosUvis;"
+    assert old in s, "âncora da estratégia de renderização do iframe não localizada"
+    s = s.replace(old, new, 1)
+
 # Paleta final: fundos preenchidos e conteúdo branco.
 style_id = "uvis-publish-vivid-20260913"
 s = re.sub(r'<style id="' + re.escape(style_id) + r'">.*?</style>\s*', '', s, flags=re.S)
@@ -96,6 +106,6 @@ vp = Path("versao.json")
 v = json.loads(vp.read_text(encoding="utf-8"))
 v["versao"] = V
 v["banco"] = "12.1"
-v["correcoes"] = 10
-v["notas"] = "Central de Consultas: IFA mantém o modo selecionado e aceita processo Anvisa sem redirecionar; o modo Processo também procura processos IFA. Interface: botões e cards da casca passam a usar fundos temáticos preenchidos, com texto e ícones brancos e paleta institucional mais viva."
+v["correcoes"] = 11
+v["notas"] = "Correção emergencial de navegação no iPhone/iPad: módulos passam a abrir por srcdoc diretamente no Safari/PWA, evitando falha de Blob URL após atualização. Mantidas a correção IFA e a paleta de botões/cards preenchidos."
 vp.write_text(json.dumps(v, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
