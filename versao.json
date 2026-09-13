@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-14",
+  "versao": "20260913-15",
   "banco": "12.1",
-  "correcoes": 14,
-  "notas": "Estética: removida a faixa inferior vazia que era causada pela reserva de 62 px no main; mantida a toolbar fixa de quatro ícones sem alterar suas funções. Mantidas as correções IFA e os ícones internos. Publicação PWA confirmada para esta revisão."
+  "correcoes": 15,
+  "notas": "Estética: removida de fato a reserva antiga de 62 px + safe-area que permanecia no HTML publicado e causava a faixa vazia, sobretudo no iPhone. Home: cards dos núcleos reduzidos em cerca de 20% para melhor caber na tela. Mantidas toolbar, IFA e ícones internos."
 }

@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260913-14';
+    const APP_VERSAO = '20260913-15';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1315,7 +1315,7 @@ DwQgJg9gxgLgngBwKYAIAWMC2AbAfAKGAxxWwEMA7AcwF4AiBGAWgCEAlO3IpMsLzJDDIooaMgCcAzoP
     if(app==='estetica'){
       var estDock='<style id="estetica-toolbar-v13">'
         +'html[data-uvis-app="estetica"] #estetica-consulta-dock,html[data-uvis-app="estetica"] #acoesMobile{display:none!important}'
-        +'html[data-uvis-app="estetica"] main{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px))!important}'
+        +'html[data-uvis-app="estetica"] main{padding-bottom:0!important}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:56px;padding:4px max(8px,env(safe-area-inset-left)) calc(4px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #cbd6dc;box-shadow:0 -3px 12px rgba(15,42,57,.08)}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button{display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;margin:0;border:0;border-radius:0;background:transparent;color:var(--roxo,#25535B);font:700 20px/1 system-ui;cursor:pointer;-webkit-tap-highlight-color:transparent}'
         +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button:active{background:rgba(37,83,91,.08)}'
@@ -1814,13 +1814,13 @@ body>.app{width:min(100%,1060px);padding:20px 24px 16px}
 .quick-action.primary{background:#1E5877!important;color:#fff!important;border-color:#1E5877!important;box-shadow:0 8px 18px rgba(30,88,119,.18)!important}
 .quick-action.primary:hover,.quick-action.primary:focus-visible{background:#174A66!important;border-color:#174A66!important}
 .section-heading h2{color:#455B70!important;text-align:center!important;letter-spacing:.13em!important;text-transform:uppercase!important}
-.nuclei-grid{gap:16px!important}
-.nucleus-card{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:14px!important;min-height:166px!important;padding:22px 18px 20px!important;border:0!important;color:#fff!important;box-shadow:0 9px 22px rgba(18,38,63,.15)!important}
+.nuclei-grid{gap:12px!important}
+.nucleus-card{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:11px!important;min-height:133px!important;padding:17px 14px 16px!important;border:0!important;color:#fff!important;box-shadow:0 9px 22px rgba(18,38,63,.15)!important}
 .nucleus-card::before{display:none!important}
-.nucleus-symbol{width:66px!important;height:66px!important;border-radius:999px!important;background:#fff!important;border:0!important;box-shadow:0 7px 16px rgba(10,25,45,.20)!important}
-.nucleus-symbol svg{width:31px!important;height:31px!important}
+.nucleus-symbol{width:53px!important;height:53px!important;border-radius:999px!important;background:#fff!important;border:0!important;box-shadow:0 7px 16px rgba(10,25,45,.20)!important}
+.nucleus-symbol svg{width:25px!important;height:25px!important}
 .nucleus-content{align-items:center!important}
-.nucleus-content strong{color:#fff!important;font-size:1.05rem!important;font-weight:760!important;text-align:center!important;text-shadow:none!important}
+.nucleus-content strong{color:#fff!important;font-size:.98rem!important;font-weight:760!important;text-align:center!important;text-shadow:none!important}
 .nucleus-content span,#tela-home .nucleus-go{display:none!important}
 .nucleus-card[data-nucleo="Medicamentos"]{background:#286B94!important}
 .nucleus-card[data-nucleo="Alimentos"]{background:#2B7D4D!important}
