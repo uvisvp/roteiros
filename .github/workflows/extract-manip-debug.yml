@@ -34,7 +34,7 @@ jobs:
             'farmacia-manipulacao-section9.js':['createCopyButton','DANFE de aquisição','Certificado de CQ do fabricante','Consultar IFA','estoqueControlados'],
             'farmacia-manipulacao-ocr.js':['function parseCrt(base)','function parseLicense(base)','rtHorario','reviewedPeople(fields.substitutos)','parsers:{parseCrt:parseCrt,parseLicense:parseLicense}'],
             'farmacia-manipulacao-report.js':['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO','Responsáveis técnicos substitutos constantes da licença','checklist.organizacao','manômetro'],
-            'farmacia-manipulacao-lookup.js':['IFA — Insumo Farmacêutico Ativo','processo_anvisa','Não equivale a ausência de regularização']
+            'farmacia-manipulacao-lookup.js':['IFA — Insumo Farmacêutico Ativo','processo_anvisa','não equivale a ausência de regularização']
           }
           for fn,needles in checks.items():
             text=Path(fn).read_text(encoding='utf-8')
