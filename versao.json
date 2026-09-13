@@ -2,5 +2,5 @@
   "versao": "20260913-14",
   "banco": "12.1",
   "correcoes": 14,
-  "notas": "Estética: removida a faixa inferior vazia que era causada pela reserva de 62 px no main; mantida a toolbar fixa de quatro ícones sem alterar suas funções. Mantidas as correções IFA e os ícones internos."
+  "notas": "Estética: removida a faixa inferior vazia que era causada pela reserva de 62 px no main; mantida a toolbar fixa de quatro ícones sem alterar suas funções. Mantidas as correções IFA e os ícones internos. Publicação PWA confirmada para esta revisão."
 }
