@@ -1,0 +1,56 @@
+name: Extrair módulo de manipulação
+
+on:
+  push:
+    paths:
+      - '.github/workflows/extract-manip-debug.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  extrair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extrair trechos relevantes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('Index.html')
+          lines = p.read_text(encoding='utf-8', errors='replace').splitlines()
+          termos = [
+              'Farmácia de Manipulação', 'farmacia de manipulacao', 'farmácia de manipulação',
+              'RDC 67/2007', 'RDC 67', 'MANIPULAÇÃO', 'manipulacao', 'manipulação'
+          ]
+          hits=[]
+          for i,line in enumerate(lines):
+              low=line.lower()
+              if any(t.lower() in low for t in termos):
+                  hits.append(i)
+          out=[]
+          out.append(f'Total de linhas do Index.html: {len(lines)}')
+          out.append(f'Ocorrências localizadas: {len(hits)}')
+          out.append('')
+          # Agrupa ocorrências próximas para evitar repetição
+          groups=[]
+          for i in hits:
+              if not groups or i-groups[-1][-1] > 60:
+                  groups.append([i])
+              else:
+                  groups[-1].append(i)
+          for n,g in enumerate(groups,1):
+              a=max(0,g[0]-35); b=min(len(lines),g[-1]+36)
+              out.append(f'===== BLOCO {n} · linhas {a+1}-{b} =====')
+              for j in range(a,b):
+                  out.append(f'{j+1:06d}: {lines[j]}')
+              out.append('')
+          Path('MANIP_DEBUG.txt').write_text('\n'.join(out),encoding='utf-8')
+          PY
+      - name: Commit do extrato
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MANIP_DEBUG.txt
+          git diff --cached --quiet || git commit -m "chore: atualizar extrato técnico de manipulação"
+          git push
