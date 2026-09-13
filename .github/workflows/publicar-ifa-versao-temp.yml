@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/publicar-ifa-versao-temp.yml'
+      - 'scripts/publicar_ifa_cores.py'
 
 permissions:
   contents: write
