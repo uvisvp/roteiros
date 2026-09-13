@@ -1,4 +1,4 @@
-name: Ajustar relatório de manipulação
+name: Corrigir OCR de CRT e licença — manipulação
 
 on:
   push:
@@ -9,47 +9,160 @@ permissions:
   contents: write
 
 jobs:
-  ajustar:
+  corrigir:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Aprimorar narrativa das áreas e laboratórios
+      - name: Corrigir leitores e testar
         run: |
           set -e
           python - <<'PY'
           from pathlib import Path
-          import re
+
+          p=Path('farmacia-manipulacao-ocr.js')
+          s=p.read_text(encoding='utf-8')
+
+          marker="  function parseCalibration(base){var f=base.fields||{};return result('Certificado de calibração'"
+          if marker not in s:
+              raise SystemExit('Ponto de inserção dos parsers não localizado.')
+
+          helpers=r'''  function splitPeople(value){
+    return txt(value).split(/;|\n/).map(clean).filter(function(x){return x&&x!=='?';});
+  }
+  function personLineMatches(line,name){
+    var n=norm(name).replace(/^dr?a?\.?\s+/,'').trim();if(!n)return false;
+    var l=norm(line),parts=n.split(/\s+/).filter(Boolean);if(l.indexOf(n)>=0)return true;
+    return parts.length>1&&l.indexOf(parts[0])>=0&&l.indexOf(parts[parts.length-1])>=0;
+  }
+  function scheduleForPerson(raw,name,otherNames){
+    if(!name)return '';
+    var lines=txt(raw).split('\n').map(clean).filter(Boolean),start=-1;
+    for(var i=0;i<lines.length;i++){if(personLineMatches(lines[i],name)){start=i;break;}}
+    if(start<0)return '';
+    var end=lines.length,others=(otherNames||[]).filter(function(x){return x&&norm(x)!==norm(name);});
+    for(var j=start+1;j<lines.length;j++){
+      var nl=norm(lines[j]);
+      if(/esta certidao|validade.*portal|certificamos que|sao paulo.*20\d{2}/.test(nl)){end=j;break;}
+      if(/farmaceutic.*substitut/.test(nl)&&j>start+1){end=j;break;}
+      if(others.some(function(o){return personLineMatches(lines[j],o);})){end=j;break;}
+    }
+    var out=[];
+    for(var k=start+1;k<end;k++){
+      var n=norm(lines[k]);
+      if((/rotina|plantao|horario de assistencia|intervalo/.test(n))&&/\d{1,2}\s*[:h]\s*\d{2}/i.test(lines[k]))out.push(lines[k]);
+    }
+    return unique(out).join(' | ');
+  }
+  function reviewedPeople(value){
+    return txt(value).split('\n').map(clean).filter(Boolean).map(function(line){
+      var parts=line.split(/\s*\|\s*/).map(clean),name=parts.shift()||'',crf='',hours=[];
+      parts.forEach(function(part){var m=part.match(/^CRF\s*[:#-]?\s*([0-9A-Za-z./-]+)/i);if(m&&!crf)crf=m[1];else if(part)hours.push(part);});
+      return {nome:name,crf:crf,horario:hours.join(' | ')};
+    }).filter(function(x){return x.nome;});
+  }
+  function peopleReviewText(people){
+    return (people||[]).map(function(x){return [x.nome,x.crf&&('CRF '+x.crf),x.horario].filter(Boolean).join(' | ');}).join('\n');
+  }
+  function parseCrt(base){
+    var raw=base.rawText||'',f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),all=[f.responsavel_tecnico||''].concat(names).filter(Boolean);
+    var subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:scheduleForPerson(raw,name,all)};});
+    return result('Certidão de Regularidade Técnica — CRF','crt-crf',{
+      numeroCertidao:f.numero_certidao||'',razaoSocial:f.razao_social||'',cnpj:f.cnpj||'',ramoAtividade:f.ramo_atividade||'',horarioEstabelecimento:f.rotina||'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',rtHorario:scheduleForPerson(raw,f.responsavel_tecnico,all),substitutos:peopleReviewText(subs),dataEmissao:f.data_emissao||''
+    },raw,base.source);
+  }
+  function parseLicense(base){
+    var f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:''};});
+    return result('Licença Sanitária','licenca-sanitaria',{
+      numero:f.numero_cevs_ou_cmvs||'',validade:f.validade||'',titular:f.razao_social||'',cnpj:f.cnpj||'',atividades:f.atividades_licenciadas||'',grupos:'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',substitutos:peopleReviewText(subs)
+    },base.rawText,base.source);
+  }
+
+'''
+          s=s.replace('  function parseCalibration(base){',helpers+'  function parseCalibration(base){',1)
+
+          old="    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseSimple(base,type);}\n    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseSimple(base,type);}"
+          new="    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseLicense(base);}\n    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseCrt(base);}"
+          if old not in s:
+              raise SystemExit('Bloco de leitura de licença/CRT não localizado.')
+          s=s.replace(old,new,1)
+
+          old="    if(type==='licenca-sanitaria'){\n      FM.set(dest,{numero:fields.numero_cevs_ou_cmvs||'',validade:toIso(fields.validade),titular:fields.razao_social||'',cnpj:fields.cnpj||'',atividades:fields.atividades_licenciadas||'',grupos:'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }\n    if(type==='crt-crf'){\n      var names=txt(fields.responsavel_tecnico_substituto).split(/;|\\n/).map(clean).filter(Boolean),crfs=txt(fields.numero_conselho_responsavel_tecnico_substituto).split(/;|\\n/).map(clean).filter(Boolean),subs=names.map(function(n,i){return {nome:n,crf:crfs[i]||'',horario:''};});\n      FM.set(dest,{numeroCertidao:fields.numero_certidao||'',razaoSocial:fields.razao_social||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramo_atividade||'',horarioEstabelecimento:fields.rotina||'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',rtHorario:'',dataEmissao:toIso(fields.data_emissao),substitutos:subs,sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }"
+          new="    if(type==='licenca-sanitaria'){\n      FM.set(dest,{numero:fields.numero||'',validade:toIso(fields.validade),titular:fields.titular||'',cnpj:fields.cnpj||'',atividades:fields.atividades||'',grupos:fields.grupos||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }\n    if(type==='crt-crf'){\n      FM.set(dest,{numeroCertidao:fields.numeroCertidao||'',razaoSocial:fields.razaoSocial||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramoAtividade||'',horarioEstabelecimento:fields.horarioEstabelecimento||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',rtHorario:fields.rtHorario||'',dataEmissao:toIso(fields.dataEmissao),substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }"
+          if old not in s:
+              raise SystemExit('Bloco applyExisting antigo não localizado.')
+          s=s.replace(old,new,1)
+
+          old="  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal};"
+          new="  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal,parsers:{parseCrt:parseCrt,parseLicense:parseLicense}};"
+          if old not in s: raise SystemExit('Adapter OCR não localizado.')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+
+          # Licença: exibe e preserva vários substitutos como fonte própria.
+          p=Path('farmacia-manipulacao-section1.js'); s=p.read_text(encoding='utf-8')
+          marker="    licenca.appendChild(licGrid);\n    target.appendChild(licenca);"
+          replacement="    licenca.appendChild(licGrid);\n    licenca.appendChild(E('h4', 'fm-option-group-title', 'Responsáveis técnicos substitutos constantes da licença'));\n    licenca.appendChild(FM.createRepeatableTable({path: BASE + '.licenca.substitutos',addLabel: '+ Adicionar substituto da licença',columns:[{key:'nome',label:'Nome'},{key:'crf',label:'CRF'}]}));\n    target.appendChild(licenca);"
+          if marker not in s: raise SystemExit('Ponto da licença na Seção 1 não localizado.')
+          s=s.replace(marker,replacement,1)
+          p.write_text(s,encoding='utf-8')
+
+          # Relatório: registra substitutos constantes da licença sem misturar fontes.
           p=Path('farmacia-manipulacao-report.js'); s=p.read_text(encoding='utf-8')
-
-          pat=r"  function refrigeratorText\(r\)\{.*?\}\n\n  function section1"
-          rep="  function refrigeratorText(r){r=r||{};if(r.presenca!=='SIM')return '';var a=[];if(t(r.identificacao))a.push('identificado como '+r.identificacao);if(t(r.finalidade||r.uso))a.push('destinado a '+t(r.finalidade||r.uso));if(t(r.faixa))a.push('faixa/parâmetro adotado '+r.faixa);var m=monitorText(r);if(m)a.push(m);if(t(r.instrumento))a.push('monitorado por '+r.instrumento+(t(r.instrumentoId)?' identificado como '+r.instrumentoId:''));if(t(r.certificado))a.push('certificado de calibração '+r.certificado+(t(r.calibracaoValidade||r.validade)?', válido até '+date(r.calibracaoValidade||r.validade):''));var checks=[];if(status(r,'checklist.organizacao')==='C')checks.push('organização interna');if(status(r,'checklist.segregacao')==='C')checks.push('segregação/identificação dos itens');if(status(r,'checklist.limpeza')==='C')checks.push('higienização');if(status(r,'checklist.monitoramento')==='C')checks.push('monitoramento de temperatura');if(status(r,'checklist.registros')==='C')checks.push('registros de monitoramento');if(status(r,'checklist.acaoCorretiva')==='C')checks.push('registro de ação corretiva quando necessário');if(checks.length)a.push('com '+sent(checks)+' conferidos');return 'O ambiente dispõe de refrigerador'+(a.length?', '+a.join(', '):'')+'.';}\n  function instrumentText(rows){var list=arr(rows).filter(function(x){return x&&(x.instrumento||x.identificacao||x.certificado);});if(!list.length)return '';return list.map(function(x){return [x.instrumento,x.identificacao&&('identificação '+x.identificacao),x.certificado&&('certificado '+x.certificado),x.validade&&('validade '+date(x.validade)),x.emitidoPor&&('emitido por '+x.emitidoPor)].filter(Boolean).join(' · ');}).join('; ');}\n  function recordsText(obj){obj=obj||{};var labels={ambiental:'monitoramento de temperatura e umidade',limpeza:'limpeza do ambiente/bancadas/equipamentos',balanca:'verificação diária das balanças',estoque:'entradas/saídas e situação de estoque',phmetro:'verificação/calibração do pHmetro',exaustor:'limpeza/manutenção do exaustor ou capela',purificador:'limpeza/manutenção do purificador e filtros',geladeira:'temperatura/limpeza do refrigerador',pressao:'pressão negativa/diferencial',filtros:'limpeza/troca de filtros',corretiva:'ações corretivas',estufa:'tempo/temperatura da estufa'};var ok=[];Object.keys(labels).forEach(function(k){if(obj[k]&&obj[k].status==='C')ok.push(labels[k]);});return sent(ok);}\n\n  function section1"
-          s2,n=re.subn(pat,lambda m:rep,s,count=1,flags=re.S)
-          if n!=1: raise SystemExit('Falha ao corrigir refrigeratorText: '+str(n))
-          s=s2
-
-          pat=r"  function areaText\(name,x\)\{.*?\}\n  function section4\(\)\{.*?return L\.join\('\\n'\);\}\n"
-          rep="  function areaText(name,x){x=x||{};if(x.naoSeAplica)return '';var L=[];if(x.descricao)push(L,name+': '+x.descricao+(x.equipamentos?' Equipamentos/mobiliário: '+x.equipamentos+'.':'').replace(/\\.\\./g,'.'));var direct={guarda:'guarda adequada das preparações',armario:'local apropriado para preparações prontas',afixados:'informações obrigatórias afixadas',validade:'controle de validade',promocao:'ausência de exposição promocional inadequada',controlados:'guarda compatível de controlados',termolabeis:'conservação de termolábeis',segregacao:'segregação de produtos não conformes/vencidos',restricao:'controle de acesso',genericos:'informação de genéricos',sngpc:'registros/escrituração aplicáveis',lavatorio:'estrutura de higiene das mãos',primeirosSocorros:'materiais de primeiros socorros/EPI',perfuro:'manejo de perfurocortantes',declaracao:'declarações/registros dos serviços',limpeza:'limpeza compatível',vacinacao:'situação vacinal dos aplicadores',cartaz:'informações dos serviços ao usuário',capacitacao:'capacitação/delegação profissional',registro:'registro da conferência e aprovação farmacêutica',confronto:'confronto entre OM, prescrição e rótulo',trocas:'organização para prevenir trocas'};var cf=onlyConforme(x,direct);if(cf.length)push(L,'Foram verificados: '+sent(cf)+'.');var m=monitorText(x.monitoramento);if(m)push(L,'Monitoramento em '+name.toLowerCase()+': '+m+'.');var ins=instrumentText((x.monitoramento||{}).instrumentos);if(ins)push(L,'Instrumentos: '+ins+'.');var rf=refrigeratorText(x.refrigerador);if(rf)push(L,rf);return L.join('\\n');}\n  function section4(){var s=FM.get('sections.s4',{}),L=['4. ÁREAS FÍSICAS'];push(L,areaText('Recepção e área de vendas/dispensação',s.recepcao));push(L,areaText('Dispensação de industrializados/drogaria',s.industrializados));push(L,areaText('Sala de prestação de serviços farmacêuticos',s.servicos));push(L,areaText('Área/local de conferência',s.conferencia));var d=s.dml||{},sa=s.sanitarios||{},pa=s.paramentacao||{};var dc=onlyConforme(d,{guarda:'guarda segregada e organizada dos materiais de limpeza/germicidas',regularizacao:'regularização dos produtos de limpeza'});if(dc.length)push(L,'DML: '+sent(dc)+'.');if(d.registros&&d.registros.notes)push(L,'DML — observações: '+d.registros.notes);var sc=onlyConforme(sa,{comunicacao:'ausência de comunicação direta inadequada com áreas técnicas',higiene:'insumos e estruturas para higiene',ralos:'ralos/tampas em condições adequadas',pertences:'guarda organizada de roupas e pertences'});if(sc.length)push(L,'Sanitários/vestiários: '+sent(sc)+'.');if(sa.registros&&sa.registros.notes)push(L,'Sanitários/vestiários — observações: '+sa.registros.notes);var pc=onlyConforme(pa,{fluxo:'barreira/fluxo compatível entre sujo e limpo',acesso:'acesso às áreas técnicas após paramentação',lavatorio:'lavatório e insumos de higiene compatíveis',epi:'EPI e vestimentas adequados'});if(pc.length)push(L,'Paramentação: '+sent(pc)+'.');if(pa.registros&&pa.registros.notes)push(L,'Paramentação — observações: '+pa.registros.notes);return L.join('\\n');}\n"
-          s2,n=re.subn(pat,lambda m:rep,s,count=1,flags=re.S)
-          if n!=1: raise SystemExit('Falha ao aprimorar Seção 4: '+str(n))
-          s=s2
-
-          pat=r"  function labLine\(title,x\)\{.*?\}\n  function section5\(\)\{.*?return L\.join\('\\n'\);\}\n"
-          rep="  function labLine(title,x){x=x||{};if(x.naoSeAplica)return '';var L=[];if(x.descricao||x.fluxo)push(L,title+': '+[x.descricao,x.fluxo].filter(Boolean).join(' '));var m=monitorText(x.monitoramento);if(m)push(L,'Monitoramento: '+m+'.');var ins=instrumentText((x.monitoramento||{}).instrumentos);if(ins)push(L,'Equipamentos/instrumentos: '+ins+'.');var regs=recordsText(x.registros);if(regs)push(L,'Planilhas/registros conferidos: '+regs+'.');var rf=refrigeratorText(x.refrigerador);if(rf)push(L,rf);return L.join('\\n');}\n  function section5(){var s=FM.get('sections.s5',{}),L=['5. LABORATÓRIOS'];[['Almoxarifado de matérias-primas e materiais de embalagem','almoxarifado'],['Controle de Qualidade','cq'],['Laboratório de Semissólidos e Líquidos','semissolidos'],['Laboratório de Sólidos','solidos'],['Área/local de lavagem','lavagem'],['Laboratório de Homeopatia','homeopatia']].forEach(function(x){push(L,labLine(x[0],s[x[1]]));});var semi=s.semissolidos||{},pur=semi.purificador||{};if(pur.metodo||pur.marca||pur.modelo)push(L,'Sistema purificador de água: '+[pur.metodo,pur.marca&&('marca '+pur.marca),pur.modelo&&('modelo '+pur.modelo),pur.ultimaTroca&&('última troca '+pur.ultimaTroca),pur.validade&&('próxima troca/validade '+pur.validade)].filter(Boolean).join(' · ')+'.');var sb=s.sbit||{};if(!sb.naoSeAplica){if(sb.substancias||sb.situacaoLicenca)push(L,'SBIT: '+[sb.substancias&&('substâncias '+sb.substancias),sb.situacaoLicenca&&('situação da licença '+sb.situacaoLicenca)].filter(Boolean).join('; ')+'.');var sr=refrigeratorText(sb.refrigerador);if(sr)push(L,sr);}return L.join('\\n');}\n"
-          s2,n=re.subn(pat,lambda m:rep,s,count=1,flags=re.S)
-          if n!=1: raise SystemExit('Falha ao aprimorar Seção 5: '+str(n))
-          s=s2
-
-          pat=r"  function cabin\(title,x\)\{.*?\}\n  function section6\(\)\{.*?return L\.join\('\\n'\);\}\n"
-          rep="  function cabin(title,x){x=x||{};if(x.naoSeAplica)return '';var L=[];if(x.descricao||x.identificacao||x.situacaoLicenca)push(L,title+': '+[x.descricao,x.identificacao&&('identificação '+x.identificacao),x.situacaoLicenca&&('situação da licença '+x.situacaoLicenca)].filter(Boolean).join('; ')+'.');var m=x.monitoramento||{},parts=[];if(t(m.pressure))parts.push('diferencial de pressão '+m.pressure+' Pa');var amb=monitorText(m);if(amb)parts.push(amb);if(t(m.manometer))parts.push('manômetro '+m.manometer+(t(m.manometerCert)?' · certificado '+m.manometerCert:'')+(t(m.manometerValid)?' · calibração válida até '+date(m.manometerValid):''));if(parts.length)push(L,'Monitoramento de '+title.toLowerCase()+': '+parts.join('; ')+'.');var ins=instrumentText(m.instrumentos);if(ins)push(L,'Instrumentos da cabine: '+ins+'.');var regs=recordsText(x.registros);if(regs)push(L,'Registros da cabine conferidos: '+regs+'.');var rf=refrigeratorText(x.refrigerador);if(rf)push(L,rf);return L.join('\\n');}\n  function section6(){var s=FM.get('sections.s6',{}),L=['6. LABORATÓRIOS DE SENSIBILIZANTES'];var g=s.geral||{},gc=onlyConforme(g,{salas:'salas/cabines dedicadas e antecâmaras quando exigidas',ar:'sistemas de ar/exaustão independentes quando exigidos',pesagem:'pesagem nas áreas dedicadas',limpeza:'procedimentos/registros de limpeza de balanças e bancadas',utensilios:'utensílios separados por classe',epi:'EPI e paramentação compatíveis',pop:'procedimentos para prevenção de contaminação cruzada/padronização de excipientes'});if(gc.length)push(L,'Requisitos gerais verificados: '+sent(gc)+'.');push(L,cabin('Cabine de Hormônios',s.hormonios));push(L,cabin('Cabine de Antibióticos',s.antibioticos));push(L,cabin('Cabine de Citostáticos',s.citostaticos));push(L,cabin('Cabine de Penicilínicos',s.penicilinicos));return L.join('\\n');}\n"
-          s2,n=re.subn(pat,lambda m:rep,s,count=1,flags=re.S)
-          if n!=1: raise SystemExit('Falha ao aprimorar Seção 6: '+str(n))
-          p.write_text(s2,encoding='utf-8')
+          old="    if(lic.numero||lic.validade||lic.atividades){push(L,'Licença Sanitária '+[lic.numero&&('nº '+lic.numero),lic.validade&&('válida até '+date(lic.validade)),lic.titular&&('titular '+lic.titular),lic.cnpj&&('CNPJ '+lic.cnpj)].filter(Boolean).join(', ')+'.');if(lic.atividades)push(L,'Atividades licenciadas: '+lic.atividades+'.');if(lic.grupos)push(L,'Grupos/categorias autorizados: '+lic.grupos+'.');}"
+          new="    if(lic.numero||lic.validade||lic.atividades){push(L,'Licença Sanitária '+[lic.numero&&('nº '+lic.numero),lic.validade&&('válida até '+date(lic.validade)),lic.titular&&('titular '+lic.titular),lic.cnpj&&('CNPJ '+lic.cnpj)].filter(Boolean).join(', ')+'.');if(lic.atividades)push(L,'Atividades licenciadas: '+lic.atividades+'.');if(lic.grupos)push(L,'Grupos/categorias autorizados: '+lic.grupos+'.');var lsubs=arr(lic.substitutos).filter(function(x){return x&&x.nome;});if(lsubs.length)push(L,'Responsáveis técnicos substitutos constantes da licença: '+lsubs.map(function(x){return x.nome+(x.crf?' — CRF '+x.crf:'');}).join('; ')+'.');}"
+          if old not in s: raise SystemExit('Bloco de licença no relatório não localizado.')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
           PY
+
+          node --check farmacia-manipulacao-ocr.js
+          node --check farmacia-manipulacao-section1.js
           node --check farmacia-manipulacao-report.js
-      - name: Commit do relatório
+
+          # Teste do parser de CRT com a estrutura do documento real usado como benchmark.
+          node <<'NODE'
+          global.window={FarmaciaManipulacao:{registerOCRAdapter:function(a){global.adapter=a;},on:function(){}}};
+          global.document={};
+          require('./farmacia-manipulacao-ocr.js');
+          const raw=`CERTIDÃO DE REGULARIDADE
+          Horário de Funcionamento do Estabelecimento:
+          Rotina: (Seg - Ter - Qua - Qui - Sex) Das 07:00h às 23:00
+          Plantão: (Sab) Das 07:00h às 23:00
+          Plantão: (Dom) Das 07:00h às 23:00
+          Responsável Técnico
+          Dra. DANIELA SALINO SALATINO FARMACÊUTICO CRF 34598
+          Horário de assistência:
+          Rotina: (Seg - Ter - Qua - Qui - Sex) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+          Plantão: (Sab) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+          Plantão: (Dom) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+          Farmacêutico(s) Substituto(s)
+          Dr. DANIEL FREITAS PEIXOTO FARMACÊUTICO CRF 57406
+          Horário de assistência:
+          Rotina: (Seg - Ter - Qua - Qui - Sex) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+          Plantão: (Sab) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+          Plantão: (Dom) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+          Dra. JOICE CLEO DE ALMEIDA PEDICINO FARMACÊUTICO CRF 74723
+          Horário de assistência:
+          Rotina: (Seg - Ter - Qua - Qui - Sex) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+          Plantão: (Sab) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+          Plantão: (Dom) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+          Esta certidão deve ser afixada...
+          SÃO PAULO, 10 DE OUTUBRO DE 2024.`;
+          const base={rawText:raw,source:{},fields:{numero_certidao:'72280',razao_social:'DROGA LESTE LTDA',cnpj:'71.813.612/0004-94',ramo_atividade:'DROGARIA',rotina:'Rotina 07:00 às 23:00',responsavel_tecnico:'DANIELA SALINO SALATINO',numero_conselho_responsavel_tecnico:'34598',responsavel_tecnico_substituto:'DANIEL FREITAS PEIXOTO; JOICE CLEO DE ALMEIDA PEDICINO',numero_conselho_responsavel_tecnico_substituto:'57406; 74723',data_emissao:'10/10/2024'}};
+          const r=global.adapter.parsers.parseCrt(base);
+          if(!/07:00h às 15:00/.test(r.fields.rtHorario))throw new Error('Horário do RT principal não extraído.');
+          if(!/DANIEL FREITAS PEIXOTO/.test(r.fields.substitutos)||!/11:00h às 19:00/.test(r.fields.substitutos))throw new Error('Horário do primeiro substituto não extraído.');
+          if(!/JOICE CLEO DE ALMEIDA PEDICINO/.test(r.fields.substitutos)||!/15:00h às 23:00/.test(r.fields.substitutos))throw new Error('Horário do segundo substituto não extraído.');
+          if(Object.prototype.hasOwnProperty.call(r.fields,'validade'))throw new Error('CRT não pode ter campo validade.');
+          const lic=global.adapter.parsers.parseLicense({rawText:'',source:{},fields:{numero_cevs_ou_cmvs:'1',validade:'03/10/2028',razao_social:'DROGA LESTE LTDA',cnpj:'71.813.612/0004-94',responsavel_tecnico:'DANIELA BELLONI SALINO',numero_conselho_responsavel_tecnico:'34598',responsavel_tecnico_substituto:'JOICE CLEO DE ALMEIDA; DANIEL FREITAS PEIXOTO',numero_conselho_responsavel_tecnico_substituto:'74723; 57406'}});
+          if((lic.fields.substitutos.match(/CRF/g)||[]).length!==2)throw new Error('Substitutos da licença não preservados.');
+          console.log('OCR CRT/licença: testes estruturais OK');
+          NODE
+
+      - name: Commit das correções
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add farmacia-manipulacao-report.js
-          git diff --cached --quiet || git commit -m "Aprimora narrativa de áreas, laboratórios e refrigeradores"
+          git add farmacia-manipulacao-ocr.js farmacia-manipulacao-section1.js farmacia-manipulacao-report.js
+          git diff --cached --quiet || git commit -m "Corrige horários do CRT e substitutos da licença em Manipulação"
           git push
