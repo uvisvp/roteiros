@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-3",
+  "versao": "20260913-4",
   "banco": "12.1",
-  "correcoes": 7,
-  "notas": "Drogaria e Farmácia de Manipulação: identidade visual unificada, navegação inferior fixa, cabeçalhos persistentes, marcador lateral de rolagem, anotações e OCR recolhíveis; referências legislativas com artigos repetidos resolvidas pelo conteúdo."
+  "correcoes": 8,
+  "notas": "Ajustes específicos de navegação e apresentação em Distribuidora/Transportadora, Central de Consultas, Odontologia e Serviço de estética; Drogaria e Farmácia de Manipulação preservadas."
 }
