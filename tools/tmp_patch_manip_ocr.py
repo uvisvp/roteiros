@@ -1,0 +1,145 @@
+from pathlib import Path
+
+p = Path('farmacia-manipulacao-ocr.js')
+s = p.read_text(encoding='utf-8')
+
+if 'function parseCrt(base)' not in s:
+    helpers = r'''  function splitPeople(value){
+    return txt(value).split(/;|\n/).map(clean).filter(function(x){return x&&x!=='?';});
+  }
+  function personLineMatches(line,name){
+    var n=norm(name).replace(/^dr?a?\.?\s+/,'').trim();if(!n)return false;
+    var l=norm(line),parts=n.split(/\s+/).filter(Boolean);if(l.indexOf(n)>=0)return true;
+    return parts.length>1&&l.indexOf(parts[0])>=0&&l.indexOf(parts[parts.length-1])>=0;
+  }
+  function scheduleForPerson(raw,name,otherNames){
+    if(!name)return '';
+    var lines=txt(raw).split('\n').map(clean).filter(Boolean),start=-1;
+    for(var i=0;i<lines.length;i++){if(personLineMatches(lines[i],name)){start=i;break;}}
+    if(start<0)return '';
+    var end=lines.length,others=(otherNames||[]).filter(function(x){return x&&norm(x)!==norm(name);});
+    for(var j=start+1;j<lines.length;j++){
+      var nl=norm(lines[j]);
+      if(/esta certidao|validade.*portal|certificamos que|sao paulo.*20\d{2}/.test(nl)){end=j;break;}
+      if(/farmaceutic.*substitut/.test(nl)&&j>start+1){end=j;break;}
+      if(others.some(function(o){return personLineMatches(lines[j],o);})){end=j;break;}
+    }
+    var out=[];
+    for(var k=start+1;k<end;k++){
+      var n=norm(lines[k]);
+      if((/rotina|plantao|horario de assistencia|intervalo/.test(n))&&/\d{1,2}\s*[:h]\s*\d{2}/i.test(lines[k]))out.push(lines[k]);
+    }
+    return unique(out).join(' | ');
+  }
+  function reviewedPeople(value){
+    return txt(value).split('\n').map(clean).filter(Boolean).map(function(line){
+      var parts=line.split(/\s*\|\s*/).map(clean),name=parts.shift()||'',crf='',hours=[];
+      parts.forEach(function(part){var m=part.match(/^CRF\s*[:#-]?\s*([0-9A-Za-z./-]+)/i);if(m&&!crf)crf=m[1];else if(part)hours.push(part);});
+      return {nome:name,crf:crf,horario:hours.join(' | ')};
+    }).filter(function(x){return x.nome;});
+  }
+  function peopleReviewText(people){
+    return (people||[]).map(function(x){return [x.nome,x.crf&&('CRF '+x.crf),x.horario].filter(Boolean).join(' | ');}).join('\n');
+  }
+  function parseCrt(base){
+    var raw=base.rawText||'',f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),all=[f.responsavel_tecnico||''].concat(names).filter(Boolean);
+    var subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:scheduleForPerson(raw,name,all)};});
+    return result('Certidão de Regularidade Técnica — CRF','crt-crf',{
+      numeroCertidao:f.numero_certidao||'',razaoSocial:f.razao_social||'',cnpj:f.cnpj||'',ramoAtividade:f.ramo_atividade||'',horarioEstabelecimento:f.rotina||'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',rtHorario:scheduleForPerson(raw,f.responsavel_tecnico,all),substitutos:peopleReviewText(subs),dataEmissao:f.data_emissao||''
+    },raw,base.source);
+  }
+  function parseLicense(base){
+    var f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:''};});
+    return result('Licença Sanitária','licenca-sanitaria',{
+      numero:f.numero_cevs_ou_cmvs||'',validade:f.validade||'',titular:f.razao_social||'',cnpj:f.cnpj||'',atividades:f.atividades_licenciadas||'',grupos:'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',substitutos:peopleReviewText(subs)
+    },base.rawText,base.source);
+  }
+
+'''
+    needle = '  function parseCalibration(base){'
+    if needle not in s:
+        raise SystemExit('Ponto de inserção dos parsers não localizado.')
+    s = s.replace(needle, helpers + needle, 1)
+
+old = "    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseSimple(base,type);}\n    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseSimple(base,type);}"
+new = "    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseLicense(base);}\n    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseCrt(base);}"
+if old in s:
+    s = s.replace(old, new, 1)
+elif new not in s:
+    raise SystemExit('Bloco de leitura de licença/CRT não localizado.')
+
+old = "    if(type==='licenca-sanitaria'){\n      FM.set(dest,{numero:fields.numero_cevs_ou_cmvs||'',validade:toIso(fields.validade),titular:fields.razao_social||'',cnpj:fields.cnpj||'',atividades:fields.atividades_licenciadas||'',grupos:'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }\n    if(type==='crt-crf'){\n      var names=txt(fields.responsavel_tecnico_substituto).split(/;|\\n/).map(clean).filter(Boolean),crfs=txt(fields.numero_conselho_responsavel_tecnico_substituto).split(/;|\\n/).map(clean).filter(Boolean),subs=names.map(function(n,i){return {nome:n,crf:crfs[i]||'',horario:''};});\n      FM.set(dest,{numeroCertidao:fields.numero_certidao||'',razaoSocial:fields.razao_social||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramo_atividade||'',horarioEstabelecimento:fields.rotina||'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',rtHorario:'',dataEmissao:toIso(fields.data_emissao),substitutos:subs,sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }"
+new = "    if(type==='licenca-sanitaria'){\n      FM.set(dest,{numero:fields.numero||'',validade:toIso(fields.validade),titular:fields.titular||'',cnpj:fields.cnpj||'',atividades:fields.atividades||'',grupos:fields.grupos||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }\n    if(type==='crt-crf'){\n      FM.set(dest,{numeroCertidao:fields.numeroCertidao||'',razaoSocial:fields.razaoSocial||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramoAtividade||'',horarioEstabelecimento:fields.horarioEstabelecimento||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',rtHorario:fields.rtHorario||'',dataEmissao:toIso(fields.dataEmissao),substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;\n    }"
+if old in s:
+    s = s.replace(old, new, 1)
+elif new not in s:
+    raise SystemExit('Bloco applyExisting de licença/CRT não localizado.')
+
+old = '  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal};'
+new = '  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal,parsers:{parseCrt:parseCrt,parseLicense:parseLicense}};'
+if old in s:
+    s = s.replace(old, new, 1)
+elif new not in s:
+    raise SystemExit('Adapter OCR não localizado.')
+p.write_text(s, encoding='utf-8')
+
+# Licença: mostra substitutos como dados da própria fonte, sem sobrescrever RT global.
+p = Path('farmacia-manipulacao-section1.js')
+s = p.read_text(encoding='utf-8')
+marker = "    licenca.appendChild(licGrid);\n    target.appendChild(licenca);"
+replacement = "    licenca.appendChild(licGrid);\n    licenca.appendChild(E('h4', 'fm-option-group-title', 'Responsáveis técnicos substitutos constantes da licença'));\n    licenca.appendChild(FM.createRepeatableTable({ path: BASE + '.licenca.substitutos', addLabel: '+ Adicionar substituto da licença', columns: [{ key: 'nome', label: 'Nome' }, { key: 'crf', label: 'CRF' }] }));\n    target.appendChild(licenca);"
+if marker in s:
+    s = s.replace(marker, replacement, 1)
+elif "BASE + '.licenca.substitutos'" not in s:
+    raise SystemExit('Ponto da licença na Seção 1 não localizado.')
+p.write_text(s, encoding='utf-8')
+
+# Relatório: cita substitutos constantes da licença separadamente da equipe informada/CRT.
+p = Path('farmacia-manipulacao-report.js')
+s = p.read_text(encoding='utf-8')
+old = "    if(lic.numero||lic.validade||lic.atividades){push(L,'Licença Sanitária '+[lic.numero&&('nº '+lic.numero),lic.validade&&('válida até '+date(lic.validade)),lic.titular&&('titular '+lic.titular),lic.cnpj&&('CNPJ '+lic.cnpj)].filter(Boolean).join(', ')+'.');if(lic.atividades)push(L,'Atividades licenciadas: '+lic.atividades+'.');if(lic.grupos)push(L,'Grupos/categorias autorizados: '+lic.grupos+'.');}"
+new = "    if(lic.numero||lic.validade||lic.atividades){push(L,'Licença Sanitária '+[lic.numero&&('nº '+lic.numero),lic.validade&&('válida até '+date(lic.validade)),lic.titular&&('titular '+lic.titular),lic.cnpj&&('CNPJ '+lic.cnpj)].filter(Boolean).join(', ')+'.');if(lic.atividades)push(L,'Atividades licenciadas: '+lic.atividades+'.');if(lic.grupos)push(L,'Grupos/categorias autorizados: '+lic.grupos+'.');var lsubs=arr(lic.substitutos).filter(function(x){return x&&x.nome;});if(lsubs.length)push(L,'Responsáveis técnicos substitutos constantes da licença: '+lsubs.map(function(x){return x.nome+(x.crf?' — CRF '+x.crf:'');}).join('; ')+'.');}"
+if old in s:
+    s = s.replace(old, new, 1)
+elif 'Responsáveis técnicos substitutos constantes da licença:' not in s:
+    raise SystemExit('Bloco de licença no relatório não localizado.')
+p.write_text(s, encoding='utf-8')
+
+# Gera teste temporário executado pelo workflow e removido antes do commit.
+Path('tmp_test_manip_ocr.js').write_text(r'''global.window={FarmaciaManipulacao:{registerOCRAdapter:function(a){global.adapter=a;},on:function(){}}};
+global.document={};
+require('./farmacia-manipulacao-ocr.js');
+const raw=`CERTIDÃO DE REGULARIDADE
+Horário de Funcionamento do Estabelecimento:
+Rotina: (Seg - Ter - Qua - Qui - Sex) Das 07:00h às 23:00
+Plantão: (Sab) Das 07:00h às 23:00
+Plantão: (Dom) Das 07:00h às 23:00
+Responsável Técnico
+Dra. DANIELA SALINO SALATINO FARMACÊUTICO CRF 34598
+Horário de assistência:
+Rotina: (Seg - Ter - Qua - Qui - Sex) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+Plantão: (Sab) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+Plantão: (Dom) Das 07:00h às 15:00 (Intervalo Das 12:00h às 13:00h)
+Farmacêutico(s) Substituto(s)
+Dr. DANIEL FREITAS PEIXOTO FARMACÊUTICO CRF 57406
+Horário de assistência:
+Rotina: (Seg - Ter - Qua - Qui - Sex) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+Plantão: (Sab) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+Plantão: (Dom) Das 11:00h às 19:00 (Intervalo Das 14:00h às 15:00h)
+Dra. JOICE CLEO DE ALMEIDA PEDICINO FARMACÊUTICO CRF 74723
+Horário de assistência:
+Rotina: (Seg - Ter - Qua - Qui - Sex) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+Plantão: (Sab) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+Plantão: (Dom) Das 15:00h às 23:00 (Intervalo Das 19:00h às 20:00h)
+Esta certidão deve ser afixada...
+SÃO PAULO, 10 DE OUTUBRO DE 2024.`;
+const base={rawText:raw,source:{},fields:{numero_certidao:'72280',razao_social:'DROGA LESTE LTDA',cnpj:'71.813.612/0004-94',ramo_atividade:'DROGARIA',rotina:'Rotina 07:00 às 23:00',responsavel_tecnico:'DANIELA SALINO SALATINO',numero_conselho_responsavel_tecnico:'34598',responsavel_tecnico_substituto:'DANIEL FREITAS PEIXOTO; JOICE CLEO DE ALMEIDA PEDICINO',numero_conselho_responsavel_tecnico_substituto:'57406; 74723',data_emissao:'10/10/2024'}};
+const r=global.adapter.parsers.parseCrt(base);
+if(!/07:00h às 15:00/.test(r.fields.rtHorario))throw new Error('Horário do RT principal não extraído: '+r.fields.rtHorario);
+if(!/DANIEL FREITAS PEIXOTO/.test(r.fields.substitutos)||!/11:00h às 19:00/.test(r.fields.substitutos))throw new Error('Horário do primeiro substituto não extraído: '+r.fields.substitutos);
+if(!/JOICE CLEO DE ALMEIDA PEDICINO/.test(r.fields.substitutos)||!/15:00h às 23:00/.test(r.fields.substitutos))throw new Error('Horário do segundo substituto não extraído: '+r.fields.substitutos);
+if(Object.prototype.hasOwnProperty.call(r.fields,'validade'))throw new Error('CRT não pode ter campo validade.');
+const lic=global.adapter.parsers.parseLicense({rawText:'',source:{},fields:{numero_cevs_ou_cmvs:'1',validade:'03/10/2028',razao_social:'DROGA LESTE LTDA',cnpj:'71.813.612/0004-94',responsavel_tecnico:'DANIELA BELLONI SALINO',numero_conselho_responsavel_tecnico:'34598',responsavel_tecnico_substituto:'JOICE CLEO DE ALMEIDA; DANIEL FREITAS PEIXOTO',numero_conselho_responsavel_tecnico_substituto:'74723; 57406'}});
+if((lic.fields.substitutos.match(/CRF/g)||[]).length!==2)throw new Error('Substitutos da licença não preservados: '+lic.fields.substitutos);
+console.log('OCR CRT/licença: testes estruturais OK');
+''',encoding='utf-8')
