@@ -19,81 +19,30 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import re
-
-          # 1) Corrige textos antigos da tela inicial/guia no index publicado.
-          p=Path('index.html')
-          s=p.read_text(encoding='utf-8')
-          old='Drogaria e distribuidora/transportadora, com conferência de estoque.'
-          new='Farmácia de manipulação, drogaria e distribuidora/transportadora.'
-          if old not in s:
-              raise SystemExit('Texto antigo do card Medicamentos não localizado.')
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          old='Drogaria e distribuidora/transportadora, com conferência de estoque.'; new='Farmácia de manipulação, drogaria e distribuidora/transportadora.'
+          if old not in s: raise SystemExit('Texto antigo do card Medicamentos não localizado.')
           s=s.replace(old,new,1)
-          old2='Drogaria ou distribuidora/transportadora. A conferência de estoque está incorporada ao roteiro de drogaria.'
-          new2='Farmácia de manipulação, drogaria ou distribuidora/transportadora. A conferência de estoque da drogaria está incorporada ao respectivo roteiro.'
-          if old2 not in s:
-              raise SystemExit('Texto antigo do guia Medicamentos não localizado.')
-          s=s.replace(old2,new2,1)
-          p.write_text(s,encoding='utf-8')
+          old='Drogaria ou distribuidora/transportadora. A conferência de estoque está incorporada ao roteiro de drogaria.'; new='Farmácia de manipulação, drogaria ou distribuidora/transportadora. A conferência de estoque da drogaria está incorporada ao respectivo roteiro.'
+          if old not in s: raise SystemExit('Texto antigo do guia Medicamentos não localizado.')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
 
-          # 2) Seção 3 no relatório: mantém narrativa ocupacional concisa;
-          # detalhes formais de ASO/PCMSO/PGR/treinamentos passam à Seção 7.
-          p=Path('farmacia-manipulacao-report.js')
-          s=p.read_text(encoding='utf-8')
+          p=Path('farmacia-manipulacao-report.js'); s=p.read_text(encoding='utf-8')
           pattern=r"  function section3\(\)\{.*?return L\.join\('\\n'\);\}\n"
-          replacement=r'''  function section3(){var s=FM.get('sections.s3',{}),L=['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO'];var conf=onlyConforme(s,{ 'pessoal.organograma':'estrutura organizacional/pessoal compatíveis', 'pessoal.atribuicoes':'atribuições formalmente definidas', 'pessoal.admissao':'exames admissionais e periódicos', 'pessoal.afastamento':'critérios de afastamento sanitário', 'pessoal.adornos':'controle de adornos/cosméticos', 'pessoal.comida':'restrições de alimentos/objetos nas áreas técnicas', 'pessoal.risco':'comunicação de condições de risco', 'pessoal.epi':'fornecimento de EPI', 'pessoal.paramentacao':'paramentação e higiene das mãos/antebraços'});if(conf.length)push(L,'Quanto ao pessoal, foram verificados: '+sent(conf)+'.');var asos=((s.saude||{}).asos)||[];if(asos.length)push(L,'Foram verificados '+asos.length+' ASO(s) dos trabalhadores amostrados; a descrição documental consta na Seção 7.');var pcm=status(s,'saude.pcmso.apresentado')==='C',pgr=status(s,'saude.pgr.apresentado')==='C';if(pcm||pgr)push(L,'A documentação de saúde ocupacional foi conferida por checklist; a descrição de PCMSO/PGR consta na Seção 7.');var tr=((s.treinamentos||{}).registros)||[];if(tr.length)push(L,'Foram verificados registros de treinamento e capacitação; a relação documental consta na Seção 7.');return L.join('\n');}
-'''
-          s2,n=re.subn(pattern,replacement,s,count=1,flags=re.S)
-          if n!=1:
-              raise SystemExit(f'Não foi possível substituir section3 no relatório (n={n}).')
+          replacement="  function section3(){var s=FM.get('sections.s3',{}),L=['3. PESSOAL, SAÚDE OCUPACIONAL E TREINAMENTO'];var conf=onlyConforme(s,{ 'pessoal.organograma':'estrutura organizacional/pessoal compatíveis', 'pessoal.atribuicoes':'atribuições formalmente definidas', 'pessoal.admissao':'exames admissionais e periódicos', 'pessoal.afastamento':'critérios de afastamento sanitário', 'pessoal.adornos':'controle de adornos/cosméticos', 'pessoal.comida':'restrições de alimentos/objetos nas áreas técnicas', 'pessoal.risco':'comunicação de condições de risco', 'pessoal.epi':'fornecimento de EPI', 'pessoal.paramentacao':'paramentação e higiene das mãos/antebraços'});if(conf.length)push(L,'Quanto ao pessoal, foram verificados: '+sent(conf)+'.');var asos=((s.saude||{}).asos)||[];if(asos.length)push(L,'Foram verificados '+asos.length+' ASO(s) dos trabalhadores amostrados; a descrição documental consta na Seção 7.');var pcm=status(s,'saude.pcmso.apresentado')==='C',pgr=status(s,'saude.pgr.apresentado')==='C';if(pcm||pgr)push(L,'A documentação de saúde ocupacional foi conferida por checklist; a descrição de PCMSO/PGR consta na Seção 7.');var tr=((s.treinamentos||{}).registros)||[];if(tr.length)push(L,'Foram verificados registros de treinamento e capacitação; a relação documental consta na Seção 7.');return L.join('\\n');}\n"
+          s2,n=re.subn(pattern,lambda m:replacement,s,count=1,flags=re.S)
+          if n!=1: raise SystemExit('Não foi possível substituir section3 no relatório: '+str(n))
           p.write_text(s2,encoding='utf-8')
 
-          # 3) Seção 7: transforma a saída em narrativa documental e incorpora,
-          # uma única vez, os detalhes formais coletados na Seção 3.
-          p=Path('farmacia-manipulacao-section7.js')
-          s=p.read_text(encoding='utf-8')
+          p=Path('farmacia-manipulacao-section7.js'); s=p.read_text(encoding='utf-8')
           pattern=r"  function text\(\)\{.*?return lines\.join\('\\n'\);\}\n"
-          replacement=r'''  function text(){
-    var state=FM.get(BASE,{}),s3=FM.get('sections.s3',{}),lines=['7. DOCUMENTOS APRESENTADOS'];
-    var titles={crt:'Certidão de Regularidade Técnica — CRT/CRF',manual:'Manual de Boas Práticas de Manipulação',manualFarm:'Manual de Boas Práticas Farmacêuticas',pcmso:'PCMSO',pgr:'PGR',caixaAgua:'Comprovante de limpeza da caixa d’água',pragas:'Comprovante de controle de pragas',pmoc:'PMOC',pgrss:'PGRSS',planta:'Planta baixa / croqui das áreas',avcb:'AVCB / CLCB',spregula:'Cadastro SPREGULA / AMLURB',licControlados:'Licenças para produtos químicos controlados',afeae:'Autorizações ANVISA — AFE e AE',mapas:'Mapas e balanços da Portaria 344/98',reclamacoes:'Registros de reclamações de clientes',autoinspecao:'Registro da última autoinspeção',treinamentos:'Programa e registros de treinamento',fornecedores:'Qualificação de fornecedores e auditorias',contratoLab:'Contrato com laboratório terceirizado',manutencao:'Programa de manutenção preventiva',materiasPrimas:'Relação das matérias-primas utilizadas',livros:'Sistema/Livro de Receituário e termos',informatizacao:'Autorização de informatização de livros',cnpjContrato:'Cartão CNPJ, Contrato Social e alterações',mapa:'Registro/Certificado MAPA'};
-    var docs=state.documentos||{},presented=[];
-    Object.keys(docs).forEach(function(k){
-      var d=docs[k]||{};if(d.status!=='APRESENTADO'&&d.status!=='OBS')return;
-      var pieces=[];if(d.codigo)pieces.push('nº/código '+d.codigo);if(d.revisao)pieces.push('revisão '+d.revisao);if(d.data)pieces.push('data/vigência '+d.data);
-      var extracted=d.dados&&typeof d.dados==='object'?Object.keys(d.dados).filter(function(x){return x!=='sourceDocument'&&x!=='rawText';}).map(function(x){var v=valueText(d.dados[x]);return v?friendly(x)+': '+v:'';}).filter(Boolean):[];
-      if(extracted.length)pieces.push(extracted.join('; '));if(d.observacao)pieces.push('observação: '+d.observacao);if(d.status==='OBS')pieces.push('apresentado com observação');
-      presented.push((titles[k]||friendly(k))+(pieces.length?' — '+pieces.join('; '):''));
-    });
-    if(presented.length){lines.push('Foram apresentados os seguintes documentos:');presented.forEach(function(x,i){lines.push((i+1)+'. '+x+'.');});}
-
-    function isC(obj,key){return !!(obj&&obj[key]&&obj[key].status==='C');}
-    var saude=s3.saude||{},asos=Array.isArray(saude.asos)?saude.asos:[];
-    if(asos.length){
-      lines.push('ASOs conferidos: '+asos.map(function(a){return [a.funcionario,a.funcao,a.tipoExame,a.dataExame,a.aptidao,a.medico].filter(Boolean).join(' · ');}).join('; ')+'.');
-    }
-    var pcm=saude.pcmso||{};if(isC(pcm,'apresentado')){
-      var pi=[];if(isC(pcm,'identificacao'))pi.push('identificação do estabelecimento e responsável/coordenador');if(isC(pcm,'riscos'))pi.push('reconhecimento/análise dos riscos ocupacionais e riscos por função');if(isC(pcm,'exames'))pi.push('exames clínicos/complementares e periodicidades');if(isC(pcm,'planejamento'))pi.push('planejamento, medidas preventivas e recomendações');
-      lines.push('PCMSO apresentado e conferido'+(pi.length?', contemplando '+pi.join('; '):'')+'.');
-    }
-    var pgr=saude.pgr||{};if(isC(pgr,'apresentado')){
-      var pg=[];if(isC(pgr,'identificacao'))pg.push('identificação, responsáveis/avaliadores e escopo');if(isC(pgr,'avaliacao'))pg.push('avaliação/inventário de riscos, métodos e antecipação');if(isC(pgr,'controle'))pg.push('metas/prioridades de controle, prevenção e recomendações');if(isC(pgr,'funcoes'))pg.push('riscos por função e ambiente');
-      lines.push('PGR apresentado e conferido'+(pg.length?', contemplando '+pg.join('; '):'')+'.');
-    }
-    var trs=((s3.treinamentos||{}).registros)||[];if(Array.isArray(trs)&&trs.length){lines.push('Registros de treinamento conferidos: '+trs.map(function(x){return [x.tema,x.data,x.cargaHoraria,x.numeroTreinados&&('nº treinados '+x.numeroTreinados),x.efetividade&&('efetividade '+x.efetividade)].filter(Boolean).join(' · ');}).join('; ')+'.');}
-
-    var pops=Array.isArray(state.pops)?state.pops:[];if(pops.length){lines.push('Procedimentos Operacionais Padronizados verificados: '+pops.map(function(x){return [x.numero,x.titulo||x.assunto,x.data].filter(Boolean).join(' · ');}).filter(Boolean).join('; ')+'.');}
-    var ex=state.exaustao||{},eq=[];if(ex.empresa)eq.push('executada por '+ex.empresa);if(ex.responsavel)eq.push('responsável '+ex.responsavel);if(ex.numero)eq.push('documento nº '+ex.numero);if(ex.data)eq.push('data '+ex.data);var q=[];['qp','qi','qo','qd'].forEach(function(k){if(ex[k]&&ex[k].status==='C')q.push(k.toUpperCase());});if(q.length)eq.push('etapas '+q.join(', '));if(ex.areas)eq.push('áreas abrangidas: '+ex.areas);if(eq.length)lines.push('Qualificação/manutenção do sistema de exaustão: '+eq.join('; ')+'.');
-    return lines.join('\n');
-  }
-'''
-          s2,n=re.subn(pattern,replacement,s,count=1,flags=re.S)
-          if n!=1:
-              raise SystemExit(f'Não foi possível substituir text() da Seção 7 (n={n}).')
+          replacement="  function text(){var state=FM.get(BASE,{}),s3=FM.get('sections.s3',{}),lines=['7. DOCUMENTOS APRESENTADOS'];var titles={crt:'Certidão de Regularidade Técnica — CRT/CRF',manual:'Manual de Boas Práticas de Manipulação',manualFarm:'Manual de Boas Práticas Farmacêuticas',pcmso:'PCMSO',pgr:'PGR',caixaAgua:'Comprovante de limpeza da caixa d’água',pragas:'Comprovante de controle de pragas',pmoc:'PMOC',pgrss:'PGRSS',planta:'Planta baixa / croqui das áreas',avcb:'AVCB / CLCB',spregula:'Cadastro SPREGULA / AMLURB',licControlados:'Licenças para produtos químicos controlados',afeae:'Autorizações ANVISA — AFE e AE',mapas:'Mapas e balanços da Portaria 344/98',reclamacoes:'Registros de reclamações de clientes',autoinspecao:'Registro da última autoinspeção',treinamentos:'Programa e registros de treinamento',fornecedores:'Qualificação de fornecedores e auditorias',contratoLab:'Contrato com laboratório terceirizado',manutencao:'Programa de manutenção preventiva',materiasPrimas:'Relação das matérias-primas utilizadas',livros:'Sistema/Livro de Receituário e termos',informatizacao:'Autorização de informatização de livros',cnpjContrato:'Cartão CNPJ, Contrato Social e alterações',mapa:'Registro/Certificado MAPA'};var docs=state.documentos||{},presented=[];Object.keys(docs).forEach(function(k){var d=docs[k]||{};if(d.status!=='APRESENTADO'&&d.status!=='OBS')return;var pieces=[];if(d.codigo)pieces.push('nº/código '+d.codigo);if(d.revisao)pieces.push('revisão '+d.revisao);if(d.data)pieces.push('data/vigência '+d.data);var extracted=d.dados&&typeof d.dados==='object'?Object.keys(d.dados).filter(function(x){return x!=='sourceDocument'&&x!=='rawText';}).map(function(x){var v=valueText(d.dados[x]);return v?friendly(x)+': '+v:'';}).filter(Boolean):[];if(extracted.length)pieces.push(extracted.join('; '));if(d.observacao)pieces.push('observação: '+d.observacao);if(d.status==='OBS')pieces.push('apresentado com observação');presented.push((titles[k]||friendly(k))+(pieces.length?' — '+pieces.join('; '):''));});if(presented.length){lines.push('Foram apresentados os seguintes documentos:');presented.forEach(function(x,i){lines.push((i+1)+'. '+x+'.');});}function isC(obj,key){return !!(obj&&obj[key]&&obj[key].status==='C');}var saude=s3.saude||{},asos=Array.isArray(saude.asos)?saude.asos:[];if(asos.length)lines.push('ASOs conferidos: '+asos.map(function(a){return [a.funcionario,a.funcao,a.tipoExame,a.dataExame,a.aptidao,a.medico].filter(Boolean).join(' · ');}).join('; ')+'.');var pcm=saude.pcmso||{};if(isC(pcm,'apresentado')){var pi=[];if(isC(pcm,'identificacao'))pi.push('identificação do estabelecimento e responsável/coordenador');if(isC(pcm,'riscos'))pi.push('reconhecimento/análise dos riscos ocupacionais e riscos por função');if(isC(pcm,'exames'))pi.push('exames clínicos/complementares e periodicidades');if(isC(pcm,'planejamento'))pi.push('planejamento, medidas preventivas e recomendações');lines.push('PCMSO apresentado e conferido'+(pi.length?', contemplando '+pi.join('; '):'')+'.');}var pgr=saude.pgr||{};if(isC(pgr,'apresentado')){var pg=[];if(isC(pgr,'identificacao'))pg.push('identificação, responsáveis/avaliadores e escopo');if(isC(pgr,'avaliacao'))pg.push('avaliação/inventário de riscos, métodos e antecipação');if(isC(pgr,'controle'))pg.push('metas/prioridades de controle, prevenção e recomendações');if(isC(pgr,'funcoes'))pg.push('riscos por função e ambiente');lines.push('PGR apresentado e conferido'+(pg.length?', contemplando '+pg.join('; '):'')+'.');}var trs=((s3.treinamentos||{}).registros)||[];if(Array.isArray(trs)&&trs.length)lines.push('Registros de treinamento conferidos: '+trs.map(function(x){return [x.tema,x.data,x.cargaHoraria,x.numeroTreinados&&('nº treinados '+x.numeroTreinados),x.efetividade&&('efetividade '+x.efetividade)].filter(Boolean).join(' · ');}).join('; ')+'.');var pops=Array.isArray(state.pops)?state.pops:[];if(pops.length)lines.push('Procedimentos Operacionais Padronizados verificados: '+pops.map(function(x){return [x.numero,x.titulo||x.assunto,x.data].filter(Boolean).join(' · ');}).filter(Boolean).join('; ')+'.');var ex=state.exaustao||{},eq=[];if(ex.empresa)eq.push('executada por '+ex.empresa);if(ex.responsavel)eq.push('responsável '+ex.responsavel);if(ex.numero)eq.push('documento nº '+ex.numero);if(ex.data)eq.push('data '+ex.data);var qs=[];['qp','qi','qo','qd'].forEach(function(k){if(ex[k]&&ex[k].status==='C')qs.push(k.toUpperCase());});if(qs.length)eq.push('etapas '+qs.join(', '));if(ex.areas)eq.push('áreas abrangidas: '+ex.areas);if(eq.length)lines.push('Qualificação/manutenção do sistema de exaustão: '+eq.join('; ')+'.');return lines.join('\\n');}\n"
+          s2,n=re.subn(pattern,lambda m:replacement,s,count=1,flags=re.S)
+          if n!=1: raise SystemExit('Não foi possível substituir text() da Seção 7: '+str(n))
           p.write_text(s2,encoding='utf-8')
           PY
-
           node --check farmacia-manipulacao-report.js
           node --check farmacia-manipulacao-section7.js
-
       - name: Commit dos ajustes
         run: |
           git config user.name "github-actions[bot]"
