@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-12",
+  "versao": "20260913-13",
   "banco": "12.1",
-  "correcoes": 12,
-  "notas": "Correção de navegação no Safari/PWA: cliques da tela inicial usam alvo seguro e bindings diretos de fallback; módulos continuam abrindo por srcdoc no iPhone/iPad. Home adotada no padrão B, com cartões preenchidos por núcleo, texto branco e ícone em disco branco. Mantida a correção IFA por processo."
+  "correcoes": 13,
+  "notas": "Estética: removidos os botões soltos Consulta e Ver selecionadas; nova toolbar fixa com anterior, consulta, selecionadas e próximo. Central: consulta IFA passa a ler diretamente a base pública e aceita processo_anvisa no próprio modo IFA. Restaurados ícones dos cards internos dos núcleos."
 }
