@@ -1,3 +1,4 @@
+# Disparo de publicação 2026-09-13
 from pathlib import Path
 import json
 import re
