@@ -1,111 +1,140 @@
-# Disparo de publicação 2026-09-13
 from pathlib import Path
-import json
-import re
-
-V = "20260913-11"
-
-p = Path("index.html")
-s = p.read_text(encoding="utf-8")
-
-# Versão e cor da barra do navegador.
-s, n = re.subn(r"const APP_VERSAO\s*=\s*['\"][^'\"]+['\"]", f"const APP_VERSAO = '{V}'", s, count=1)
-assert n == 1, "APP_VERSAO não localizado uma única vez"
-s = re.sub(r'<meta name="theme-color" content="[^"]+">', '<meta name="theme-color" content="#062D3E">', s, count=1)
-
-# IFA: a ponte visual marcava IFA, mas o modo interno continuava Registro.
-assert "data-uvis-ifa-central" in s, "ponte IFA da Central ausente"
-marker = "try{mode='ifa';if(typeof nomeModo==='object')nomeModo.ifa='IFA';}"
+import json,re
+V='20260913-12'
+p=Path('index.html')
+s=p.read_text(encoding='utf-8')
+# version
+s,n=re.subn(r"const APP_VERSAO\s*=\s*['\"][^'\"]+['\"]",f"const APP_VERSAO = '{V}'",s,count=1)
+assert n==1
+# iOS srcdoc safeguard
+if "var iosUvis = /iP(hone|ad|od)/i.test(uvisUa)" not in s:
+    old="var local = String(location.protocol||'').toLowerCase() === 'file:';"
+    new="var uvisUa = String(navigator.userAgent||'');\n    var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);\n    var local = String(location.protocol||'').toLowerCase() === 'file:' || iosUvis;"
+    assert old in s
+    s=s.replace(old,new,1)
+# robust delegated shell click
+pat=re.compile(r"  document\.addEventListener\('click', function\(e\)\{\n    var n = e\.target\.closest\('\[data-nucleo\]'\);\n    if\(n\)\{ var k = n\.dataset\.nucleo;\n      if\(ROTEIROS\[k\] && ROTEIROS\[k\]\.length\)\{\n        e\.preventDefault\(\); e\.stopPropagation\(\);\n        nucleoAtual = k;\n        if\(ROTEIROS\[k\]\.length === 1\)\{ var r = ROTEIROS\[k\]\[0\]; abrirApp\(r\[2\], r\[0\], r\[3\] \|\| ''\); \}\n        else telaLista\(k\);\n      \}\n      return; \}\n    if\(e\.target\.closest\('\[data-home\]'\)\)\{ telaHome\(\); return; \}\n    if\(e\.target\.closest\('\[data-lista\]'\)\)\{ voltarDoModulo\(\); return; \}\n    var c = e\.target\.closest\('#abrir-consultas'\);\n    if\(c\)\{ e\.preventDefault\(\); e\.stopPropagation\(\);\n      abrirApp\('central-consultas','Central de Consultas'\); \}\n  \}, true\);")
+repl="""  document.addEventListener('click', function(e){
+    var target=e.target;
+    if(!target)return;
+    if(target.nodeType!==1)target=target.parentElement;
+    if(!target||!target.closest)return;
+    var n=target.closest('[data-nucleo]');
+    if(n){var k=n.dataset.nucleo;
+      if(ROTEIROS[k]&&ROTEIROS[k].length){
+        e.preventDefault();e.stopPropagation();e.__uvisCascaHandled=true;
+        nucleoAtual=k;
+        if(ROTEIROS[k].length===1){var r=ROTEIROS[k][0];abrirApp(r[2],r[0],r[3]||'');}
+        else telaLista(k);
+      }
+      return;}
+    if(target.closest('[data-home]')){e.__uvisCascaHandled=true;telaHome();return;}
+    if(target.closest('[data-lista]')){e.__uvisCascaHandled=true;voltarDoModulo();return;}
+    var c=target.closest('#abrir-consultas');
+    if(c){e.preventDefault();e.stopPropagation();e.__uvisCascaHandled=true;abrirApp('central-consultas','Central de Consultas');}
+  }, true);"""
+if 'e.__uvisCascaHandled=true' not in s:
+    s,n=pat.subn(repl,s,count=1)
+    assert n==1, 'shell listener not patched'
+else:
+    n=0
+# direct fallback bindings
+marker='window.__UVIS_CASCA_DIRECT_BINDINGS__'
 if marker not in s:
-    s, n = re.subn(
-        r"function ativar\(\)\{\s*setMode\('registro'\);",
-        "function ativar(){\n          setMode('registro');\n          try{mode='ifa';if(typeof nomeModo==='object')nomeModo.ifa='IFA';}catch(_e){}",
-        s,
-        count=1,
-    )
-    assert n == 1, "não foi possível corrigir o modo interno IFA"
+    anchor="  window.addEventListener('message', function(e){"
+    assert anchor in s
+    add="""
+  /* Fallback direto para Safari/PWA: os botões principais não dependem apenas
+     da delegação de eventos. Isso evita o caso em que o toque destaca o botão
+     mas a navegação não é executada. */
+  window.__UVIS_CASCA_DIRECT_BINDINGS__=true;
+  function abrirNucleoDireto(k){
+    if(!(ROTEIROS[k]&&ROTEIROS[k].length))return;
+    nucleoAtual=k;
+    if(ROTEIROS[k].length===1){var r=ROTEIROS[k][0];abrirApp(r[2],r[0],r[3]||'');}
+    else telaLista(k);
+  }
+  function bindCascaDireta(){
+    document.querySelectorAll('[data-nucleo]').forEach(function(b){
+      if(b.dataset.uvisBound==='1')return;b.dataset.uvisBound='1';
+      b.addEventListener('click',function(e){if(e.__uvisCascaHandled)return;e.preventDefault();abrirNucleoDireto(b.dataset.nucleo);},false);
+    });
+    var consultas=$('abrir-consultas');
+    if(consultas&&consultas.dataset.uvisBound!=='1'){
+      consultas.dataset.uvisBound='1';
+      consultas.addEventListener('click',function(e){if(e.__uvisCascaHandled)return;e.preventDefault();abrirApp('central-consultas','Central de Consultas');},false);
+    }
+    document.querySelectorAll('[data-home]').forEach(function(b){if(b.dataset.uvisBound==='1')return;b.dataset.uvisBound='1';b.addEventListener('click',function(e){if(e.__uvisCascaHandled)return;e.preventDefault();telaHome();},false);});
+    document.querySelectorAll('[data-lista]').forEach(function(b){if(b.dataset.uvisBound==='1')return;b.dataset.uvisBound='1';b.addEventListener('click',function(e){if(e.__uvisCascaHandled)return;e.preventDefault();voltarDoModulo();},false);});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bindCascaDireta,{once:true});else bindCascaDireta();
 
-s = s.replace(
-    "if(q){q.value='';q.placeholder='IFA, fabricante, código, processo Anvisa ou CNPJ do peticionante';q.focus();}",
-    "if(q){q.value='';q.inputMode='text';q.placeholder='IFA, fabricante, código, processo Anvisa ou CNPJ do peticionante';q.focus();}",
-    1,
-)
-
-# Enquanto IFA estiver ativo, o detector genérico não pode sugerir mudar para Processo.
-capture_marker = "if(ativo()&&e.target&&e.target.id==='q'){var box=E('detect');if(box)box.innerHTML='';e.stopImmediatePropagation();}"
-if capture_marker not in s:
-    anchor = """document.addEventListener('click',function(e){
-          var mode=e.target&&e.target.closest&&e.target.closest('.mode');if(mode&&mode.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}
-          if(ativo()&&e.target&&e.target.closest&&e.target.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}
-        },true);"""
-    assert anchor in s, "âncora do listener IFA não localizada"
-    fixed = """document.addEventListener('input',function(e){
-          if(ativo()&&e.target&&e.target.id==='q'){var box=E('detect');if(box)box.innerHTML='';e.stopImmediatePropagation();}
-        },true);
-        document.addEventListener('click',function(e){
-          var modeBtn=e.target&&e.target.closest&&e.target.closest('.mode');if(modeBtn&&modeBtn.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}
-          if(ativo()&&e.target&&e.target.closest&&e.target.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}
-        },true);"""
-    s = s.replace(anchor, fixed, 1)
-
-# Se o processo IFA for digitado no modo Processo, a busca complementar também consulta IFA.
-process_old = """Promise.all(FONTES.map(function(f){return fetch(RAIZ+f.p+'/'+fragmento+'.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){return {f:f,d:d};});})).then(function(p){inserir(p,processo);});"""
-process_new = """var tarefas=FONTES.map(function(f){return fetch(RAIZ+f.p+'/'+fragmento+'.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){return {f:f,d:d};});});
-          tarefas.push(fetch(RAIZ+'ifa/registros.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(p){var a=p&&Array.isArray(p.registros)?p.registros:[];var d=a.filter(function(x){return dig(x&&x.processo_anvisa)===processo;}).map(function(x){return {produto:x.ifa||'IFA',processo:x.processo_anvisa,categoria:'IFA',cnpj:x.cnpj_detentor_peticionante,detentor:x.detentor_peticionante,fabricante:x.fabricante_ifa,situacao:'',_ifa:true};});return {f:{p:'ifa',l:'IFA — Insumo Farmacêutico Ativo',f:'IFA'},d:d};}).catch(function(){return {f:{p:'ifa',l:'IFA — Insumo Farmacêutico Ativo',f:'IFA'},d:[]};}));
-          Promise.all(tarefas).then(function(p){inserir(p,processo);});"""
-if "tarefas.push(fetch(RAIZ+'ifa/registros.json'" not in s:
-    assert process_old in s, "ponte de busca complementar por processo não localizada"
-    s = s.replace(process_old, process_new, 1)
-
-# Compatibilidade iPhone/iPad: dentro do PWA/Safari, Blob URL em iframe pode
-# não renderizar de forma confiável após a troca do service worker. Nesses
-# dispositivos usamos srcdoc diretamente, que já era o fallback do aplicativo.
-ios_marker = "var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);"
-if ios_marker not in s:
-    old = "var local = String(location.protocol||'').toLowerCase() === 'file:';"
-    new = "var uvisUa = String(navigator.userAgent||'');\n    var iosUvis = /iP(hone|ad|od)/i.test(uvisUa) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);\n    var local = String(location.protocol||'').toLowerCase() === 'file:' || iosUvis;"
-    assert old in s, "âncora da estratégia de renderização do iframe não localizada"
-    s = s.replace(old, new, 1)
-
-# Paleta final: fundos preenchidos e conteúdo branco.
-style_id = "uvis-publish-vivid-20260913"
-s = re.sub(r'<style id="' + re.escape(style_id) + r'">.*?</style>\s*', '', s, flags=re.S)
-css = r'''<style id="uvis-publish-vivid-20260913">
+"""
+    s=s.replace(anchor,add+anchor,1)
+# IFA click safety
+s=s.replace("document.addEventListener('click',function(e){if(e.target.closest('#search'))complementar();},true);",
+            "document.addEventListener('click',function(e){var t=e.target;if(t&&t.nodeType!==1)t=t.parentElement;if(t&&t.closest&&t.closest('#search'))complementar();},true);")
+s=s.replace("var modeBtn=e.target&&e.target.closest&&e.target.closest('.mode');if(modeBtn&&modeBtn.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}\n          if(ativo()&&e.target&&e.target.closest&&e.target.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}",
+            "var t=e.target;if(t&&t.nodeType!==1)t=t.parentElement;var modeBtn=t&&t.closest&&t.closest('.mode');if(modeBtn&&modeBtn.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}\n          if(ativo()&&t&&t.closest&&t.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}")
+# Replace old vivid styles and any prior option B
+s=re.sub(r'<style id="uvis-publish-vivid-20260913">.*?</style>\s*','',s,flags=re.S)
+s=re.sub(r'<style id="home-option-b-overrides">.*?</style>\s*','',s,flags=re.S)
+css=r'''<style id="home-option-b-overrides">
 :root{
-  --brand:#062D3E;--brand-strong:#041F2B;--brand-mid:#25535B;--brand-soft:#E7EFF0;
-  --t-med:#0D5E78;--t-med-d:#08485D;--t-med-w:#E5F1F5;
-  --t-ali:#2E6B4F;--t-ali-d:#24543E;--t-ali-w:#E6F2EB;
-  --t-ser:#3C5E88;--t-ser-d:#2F496B;--t-ser-w:#E8EEF7;
-  --t-pro:#9A641F;--t-pro-d:#744913;--t-pro-w:#F7EEDD;
-  --t-ass:#8B3F5F;--t-ass-d:#6A3048;--t-ass-w:#F7E8EE;
-  --t-odo:#25535B;--t-odo-d:#193F46;--t-odo-w:#E5EFF0;
+  --brand:#174C68;--brand-strong:#103C54;--brand-mid:#25535B;--brand-soft:#E8F0F4;
+  --t-med:#286B94;--t-med-d:#205777;--t-med-w:#E6F0F6;
+  --t-ali:#2B7D4D;--t-ali-d:#23663F;--t-ali-w:#E7F3EB;
+  --t-ser:#5754A3;--t-ser-d:#49468A;--t-ser-w:#ECEBFA;
+  --t-pro:#A0651D;--t-pro-d:#855216;--t-pro-w:#F8EFE2;
+  --t-ass:#9B3868;--t-ass-d:#812F57;--t-ass-w:#F8E8F0;
+  --t-odo:#2A6F7B;--t-odo-d:#235C66;--t-odo-w:#E6F1F3;
 }
-.nucleus-card{background:linear-gradient(145deg,var(--tone) 0%,var(--tone-dark) 100%)!important;border-color:color-mix(in srgb,var(--tone-dark) 82%,#0000)!important;color:#fff!important;box-shadow:0 9px 22px color-mix(in srgb,var(--tone-dark) 28%,transparent)!important}
-.nucleus-card::before{content:""!important;display:block!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:inherit!important;background:radial-gradient(circle at 82% 12%,rgba(255,255,255,.15),transparent 38%)!important;opacity:1!important;pointer-events:none!important}
-.nucleus-symbol{background:rgba(255,255,255,.13)!important;color:#fff!important;border:1px solid rgba(255,255,255,.24)!important;box-shadow:none!important}
-.nucleus-content strong{color:#fff!important;font-weight:720!important;text-shadow:0 1px 1px rgba(0,0,0,.12)}
-.nucleus-card:hover,.nucleus-card:focus-visible{border-color:rgba(255,255,255,.34)!important;filter:saturate(1.05) brightness(1.03)}
-.rot-card{background:linear-gradient(135deg,var(--casca-tone,#062D3E),color-mix(in srgb,var(--casca-tone,#062D3E) 78%,#000))!important;border-color:color-mix(in srgb,var(--casca-tone,#062D3E) 72%,#000)!important;box-shadow:0 7px 18px color-mix(in srgb,var(--casca-tone,#062D3E) 20%,transparent)!important}
-.rot-card b,.rot-card span,.rot-card i{color:#fff!important}.rot-card span{opacity:.88}.rot-ic{background:rgba(255,255,255,.14)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important}
+.hero{background:#fff!important;border:1px solid #D7E1E8!important;box-shadow:0 10px 28px rgba(23,55,79,.08)!important}
+.hero .brand{color:#152536!important}.hero #titulo-principal{color:#607285!important}
+.quick-action{background:#fff!important;color:#20364A!important;border:1px solid #D6E0E7!important;box-shadow:none!important}
+.quick-action.primary{background:#1E5877!important;color:#fff!important;border-color:#1E5877!important;box-shadow:0 8px 18px rgba(30,88,119,.18)!important}
+.quick-action.primary:hover,.quick-action.primary:focus-visible{background:#174A66!important;border-color:#174A66!important}
+.section-heading h2{color:#455B70!important;text-align:center!important;letter-spacing:.13em!important;text-transform:uppercase!important}
+.nuclei-grid{gap:16px!important}
+.nucleus-card{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:14px!important;min-height:166px!important;padding:22px 18px 20px!important;border:0!important;color:#fff!important;box-shadow:0 9px 22px rgba(18,38,63,.15)!important}
+.nucleus-card::before{display:none!important}
+.nucleus-symbol{width:66px!important;height:66px!important;border-radius:999px!important;background:#fff!important;border:0!important;box-shadow:0 7px 16px rgba(10,25,45,.20)!important}
+.nucleus-symbol svg{width:31px!important;height:31px!important}
+.nucleus-content{align-items:center!important}
+.nucleus-content strong{color:#fff!important;font-size:1.05rem!important;font-weight:760!important;text-align:center!important;text-shadow:none!important}
+.nucleus-content span,#tela-home .nucleus-go{display:none!important}
+.nucleus-card[data-nucleo="Medicamentos"]{background:#286B94!important}
+.nucleus-card[data-nucleo="Alimentos"]{background:#2B7D4D!important}
+.nucleus-card[data-nucleo="Serviços"]{background:#5754A3!important}
+.nucleus-card[data-nucleo="Produtos"]{background:#A0651D!important}
+.nucleus-card[data-nucleo="Serviços assistenciais"]{background:#9B3868!important}
+.nucleus-card[data-nucleo="Odontologia"]{background:#2A6F7B!important}
+.nucleus-card[data-nucleo="Medicamentos"] .nucleus-symbol{color:#286B94!important}
+.nucleus-card[data-nucleo="Alimentos"] .nucleus-symbol{color:#2B7D4D!important}
+.nucleus-card[data-nucleo="Serviços"] .nucleus-symbol{color:#5754A3!important}
+.nucleus-card[data-nucleo="Produtos"] .nucleus-symbol{color:#A0651D!important}
+.nucleus-card[data-nucleo="Serviços assistenciais"] .nucleus-symbol{color:#9B3868!important}
+.nucleus-card[data-nucleo="Odontologia"] .nucleus-symbol{color:#2A6F7B!important}
+.rot-card{background:var(--casca-tone,#174C68)!important;border-color:var(--casca-tone-dark,#103C54)!important;box-shadow:0 7px 18px rgba(20,50,70,.14)!important}
+.rot-card b,.rot-card span,.rot-card i{color:#fff!important}.rot-card span{opacity:.90}.rot-ic{background:#fff!important;color:var(--casca-tone,#174C68)!important;border:0!important}
 </style>'''
-assert "</body>" in s, "fechamento do body ausente"
-s = s.replace("</body>", css + "\n</body>", 1)
+idx=s.rfind('</body>');assert idx!=-1
+s=s[:idx]+css+'\n'+s[idx:]
+p.write_text(s,encoding='utf-8')
+Path('Index.html').write_text(s,encoding='utf-8')
 
-p.write_text(s, encoding="utf-8")
-Path("Index.html").write_text(s, encoding="utf-8")
+# Service worker / PWA
+sp=Path('sw.js')
+sw=sp.read_text(encoding='utf-8')
+sw,n=re.subn(r"const VERSAO = ['\"][^'\"]+['\"]",f"const VERSAO = '{V}'",sw,count=1)
+assert n==1, 'VERSAO do service worker não localizada'
+sp.write_text(sw,encoding='utf-8')
 
-# Service worker / versão pública.
-sp = Path("sw.js")
-sw = sp.read_text(encoding="utf-8")
-sw, n = re.subn(r"const VERSAO = ['\"][^'\"]+['\"]", f"const VERSAO = '{V}'", sw, count=1)
-assert n == 1, "VERSAO do SW não localizada"
-assert "'./ifa-lookup-shared.js'" in sw, "IFA compartilhado não está no cache essencial"
-sp.write_text(sw, encoding="utf-8")
-
-vp = Path("versao.json")
-v = json.loads(vp.read_text(encoding="utf-8"))
-v["versao"] = V
-v["banco"] = "12.1"
-v["correcoes"] = 11
-v["notas"] = "Correção emergencial de navegação no iPhone/iPad: módulos passam a abrir por srcdoc diretamente no Safari/PWA, evitando falha de Blob URL após atualização. Mantidas a correção IFA e a paleta de botões/cards preenchidos."
-vp.write_text(json.dumps(v, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+vp=Path('versao.json')
+v=json.loads(vp.read_text(encoding='utf-8'))
+v['versao']=V
+v['banco']='12.1'
+v['correcoes']=12
+v['notas']='Correção de navegação no Safari/PWA: cliques da tela inicial usam alvo seguro e bindings diretos de fallback; módulos continuam abrindo por srcdoc no iPhone/iPad. Home adotada no padrão B, com cartões preenchidos por núcleo, texto branco e ícone em disco branco. Mantida a correção IFA por processo.'
+vp.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(V)
