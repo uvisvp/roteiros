@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-11",
+  "versao": "20260913-12",
   "banco": "12.1",
-  "correcoes": 11,
-  "notas": "Correção emergencial de navegação no iPhone/iPad: módulos passam a abrir por srcdoc diretamente no Safari/PWA, evitando falha de Blob URL após atualização. Mantidas a correção IFA e a paleta de botões/cards preenchidos."
+  "correcoes": 12,
+  "notas": "Correção de navegação no Safari/PWA: cliques da tela inicial usam alvo seguro e bindings diretos de fallback; módulos continuam abrindo por srcdoc no iPhone/iPad. Home adotada no padrão B, com cartões preenchidos por núcleo, texto branco e ícone em disco branco. Mantida a correção IFA por processo."
 }
