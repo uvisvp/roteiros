@@ -260,6 +260,8 @@
       field(BASE + '.licenca.rtCrf', 'CRF do RT')
     ]);
     licenca.appendChild(licGrid);
+    licenca.appendChild(E('h4', 'fm-option-group-title', 'Responsáveis técnicos substitutos constantes da licença'));
+    licenca.appendChild(FM.createRepeatableTable({ path: BASE + '.licenca.substitutos', addLabel: '+ Adicionar substituto da licença', columns: [{ key: 'nome', label: 'Nome' }, { key: 'crf', label: 'CRF' }] }));
     target.appendChild(licenca);
 
     var crt = sectionCard('1.6 Certidão de Regularidade Técnica — CRT/CRF', 'A CRT não possui campo de validade neste módulo. Quando constar, registrar a data de emissão.');

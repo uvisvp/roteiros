@@ -67,6 +67,57 @@
     },raw,base.source);
   }
 
+  function splitPeople(value){
+    return txt(value).split(/;|\n/).map(clean).filter(function(x){return x&&x!=='?';});
+  }
+  function personLineMatches(line,name){
+    var n=norm(name).replace(/^dr?a?\.?\s+/,'').trim();if(!n)return false;
+    var l=norm(line),parts=n.split(/\s+/).filter(Boolean);if(l.indexOf(n)>=0)return true;
+    return parts.length>1&&l.indexOf(parts[0])>=0&&l.indexOf(parts[parts.length-1])>=0;
+  }
+  function scheduleForPerson(raw,name,otherNames){
+    if(!name)return '';
+    var lines=txt(raw).split('\n').map(clean).filter(Boolean),start=-1;
+    for(var i=0;i<lines.length;i++){if(personLineMatches(lines[i],name)){start=i;break;}}
+    if(start<0)return '';
+    var end=lines.length,others=(otherNames||[]).filter(function(x){return x&&norm(x)!==norm(name);});
+    for(var j=start+1;j<lines.length;j++){
+      var nl=norm(lines[j]);
+      if(/esta certidao|validade.*portal|certificamos que|sao paulo.*20\d{2}/.test(nl)){end=j;break;}
+      if(/farmaceutic.*substitut/.test(nl)&&j>start+1){end=j;break;}
+      if(others.some(function(o){return personLineMatches(lines[j],o);})){end=j;break;}
+    }
+    var out=[];
+    for(var k=start+1;k<end;k++){
+      var n=norm(lines[k]);
+      if((/rotina|plantao|horario de assistencia|intervalo/.test(n))&&/\d{1,2}\s*[:h]\s*\d{2}/i.test(lines[k]))out.push(lines[k]);
+    }
+    return unique(out).join(' | ');
+  }
+  function reviewedPeople(value){
+    return txt(value).split('\n').map(clean).filter(Boolean).map(function(line){
+      var parts=line.split(/\s*\|\s*/).map(clean),name=parts.shift()||'',crf='',hours=[];
+      parts.forEach(function(part){var m=part.match(/^CRF\s*[:#-]?\s*([0-9A-Za-z./-]+)/i);if(m&&!crf)crf=m[1];else if(part)hours.push(part);});
+      return {nome:name,crf:crf,horario:hours.join(' | ')};
+    }).filter(function(x){return x.nome;});
+  }
+  function peopleReviewText(people){
+    return (people||[]).map(function(x){return [x.nome,x.crf&&('CRF '+x.crf),x.horario].filter(Boolean).join(' | ');}).join('\n');
+  }
+  function parseCrt(base){
+    var raw=base.rawText||'',f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),all=[f.responsavel_tecnico||''].concat(names).filter(Boolean);
+    var subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:scheduleForPerson(raw,name,all)};});
+    return result('Certidão de Regularidade Técnica — CRF','crt-crf',{
+      numeroCertidao:f.numero_certidao||'',razaoSocial:f.razao_social||'',cnpj:f.cnpj||'',ramoAtividade:f.ramo_atividade||'',horarioEstabelecimento:f.rotina||'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',rtHorario:scheduleForPerson(raw,f.responsavel_tecnico,all),substitutos:peopleReviewText(subs),dataEmissao:f.data_emissao||''
+    },raw,base.source);
+  }
+  function parseLicense(base){
+    var f=base.fields||{},names=splitPeople(f.responsavel_tecnico_substituto),crfs=splitPeople(f.numero_conselho_responsavel_tecnico_substituto),subs=names.map(function(name,i){return {nome:name,crf:crfs[i]&&crfs[i]!=='?'?crfs[i]:'',horario:''};});
+    return result('Licença Sanitária','licenca-sanitaria',{
+      numero:f.numero_cevs_ou_cmvs||'',validade:f.validade||'',titular:f.razao_social||'',cnpj:f.cnpj||'',atividades:f.atividades_licenciadas||'',grupos:'',rtNome:f.responsavel_tecnico||'',rtCrf:f.numero_conselho_responsavel_tecnico||'',substitutos:peopleReviewText(subs)
+    },base.rawText,base.source);
+  }
+
   function parseCalibration(base){var f=base.fields||{};return result('Certificado de calibração','certificado-calibracao',{instrumento:f.instrumento_equipamento||'',identificacao:f.identificacao||'',certificado:f.numero_certificado||'',validade:f.validade||'',emitidoPor:f.empresa_responsavel||'',numeroSerie:f.numero_serie||'',marca:f.marca_fabricante||'',modelo:f.modelo||'',dataCalibracao:f.data_calibracao||''},base.rawText,base.source);}
   function parseSimple(base,type){return result(base.documentTitle||type,type,Object.assign({},base.fields||{}),base.rawText,base.source);}
   function parseDanfe(base){
@@ -99,8 +150,8 @@
   async function readDocument(detail,file,progress){
     var D=window.DrogariaOcrTools;if(!D)throw new Error('Motor OCR compartilhado não carregado.');
     var type=detail.documentType||'',base;
-    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseSimple(base,type);}
-    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseSimple(base,type);}
+    if(type==='licenca-sanitaria'){base=await D.read('licenca_sanitaria',file,progress);return parseLicense(base);}
+    if(type==='crt-crf'){base=await D.read('certidao_regularidade_crf',file,progress);return parseCrt(base);}
     if(type==='aso'){base=await D.read('aso',file,progress);return parseAso(base);}
     if(type==='certificado-calibracao'){base=await D.read('calibracao_termohigrometro',file,progress);return parseCalibration(base);}
     if(type==='avcb-clcb'){base=await D.read('avcb_clcb',file,progress);return parseSimple(base,type);}
@@ -130,11 +181,10 @@
 
   function applyExisting(type,dest,fields,docRef){
     if(type==='licenca-sanitaria'){
-      FM.set(dest,{numero:fields.numero_cevs_ou_cmvs||'',validade:toIso(fields.validade),titular:fields.razao_social||'',cnpj:fields.cnpj||'',atividades:fields.atividades_licenciadas||'',grupos:'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',sourceDocument:docRef},{source:'ocr-reviewed'});return;
+      FM.set(dest,{numero:fields.numero||'',validade:toIso(fields.validade),titular:fields.titular||'',cnpj:fields.cnpj||'',atividades:fields.atividades||'',grupos:fields.grupos||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;
     }
     if(type==='crt-crf'){
-      var names=txt(fields.responsavel_tecnico_substituto).split(/;|\n/).map(clean).filter(Boolean),crfs=txt(fields.numero_conselho_responsavel_tecnico_substituto).split(/;|\n/).map(clean).filter(Boolean),subs=names.map(function(n,i){return {nome:n,crf:crfs[i]||'',horario:''};});
-      FM.set(dest,{numeroCertidao:fields.numero_certidao||'',razaoSocial:fields.razao_social||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramo_atividade||'',horarioEstabelecimento:fields.rotina||'',rtNome:fields.responsavel_tecnico||'',rtCrf:fields.numero_conselho_responsavel_tecnico||'',rtHorario:'',dataEmissao:toIso(fields.data_emissao),substitutos:subs,sourceDocument:docRef},{source:'ocr-reviewed'});return;
+      FM.set(dest,{numeroCertidao:fields.numeroCertidao||'',razaoSocial:fields.razaoSocial||'',cnpj:fields.cnpj||'',ramoAtividade:fields.ramoAtividade||'',horarioEstabelecimento:fields.horarioEstabelecimento||'',rtNome:fields.rtNome||'',rtCrf:fields.rtCrf||'',rtHorario:fields.rtHorario||'',dataEmissao:toIso(fields.dataEmissao),substitutos:reviewedPeople(fields.substitutos),sourceDocument:docRef},{source:'ocr-reviewed'});return;
     }
     FM.set(dest,Object.assign({},fields,{sourceDocument:docRef}),{source:'ocr-reviewed'});
   }
@@ -161,7 +211,7 @@
     var detail=event.detail||{},path=detail.path||'',files=detail.files||[];if(!files.length||!window.DrogariaOcrTools||!window.DrogariaOcrTools.fotos)return;var scope='farmacia-manipulacao';var stored=FM.get(path+'.storedPhotos',[]);if(!Array.isArray(stored))stored=[];for(var i=0;i<files.length;i++){try{var rec=await window.DrogariaOcrTools.fotos.save(scope,files[i],{section:path,caption:FM.get(path+'.notes','')});stored.push({id:rec.id,filename:rec.filename,mime:rec.mime,size:rec.size,capturedAt:rec.capturedAt});}catch(err){console.warn('[FarmaciaManipulacao] Foto não persistida',err);}}FM.set(path+'.storedPhotos',stored,{source:'photo-adapter'});
   }
 
-  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal};
+  var adapter={request:request,readDocument:readDocument,saveOriginal:saveOriginal,parsers:{parseCrt:parseCrt,parseLicense:parseLicense}};
   FM.registerOCRAdapter(adapter);
   FM.on('photoselected',persistPhotos);
   window.FarmaciaManipulacaoOCR=Object.freeze(adapter);
