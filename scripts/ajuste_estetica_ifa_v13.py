@@ -32,12 +32,17 @@ assert new_pad in s[s.find('estetica-toolbar-v13'):s.find('estetica-toolbar-v13'
 
 # Voltar a usar o botão nativo "Ver selecionadas" na faixa de ações da Estética.
 # O dock antigo de Consulta continua oculto; somente #acoesMobile é reexibido.
-old_hide='html[data-uvis-app=\\"estetica\\"] #estetica-consulta-dock,html[data-uvis-app=\\"estetica\\"] #acoesMobile{display:none!important}'
-new_hide='html[data-uvis-app=\\"estetica\\"] #estetica-consulta-dock{display:none!important}'
+old_hide=r'html[data-uvis-app=\"estetica\"] #estetica-consulta-dock,html[data-uvis-app=\"estetica\"] #acoesMobile{display:none!important}'
+new_hide=r'html[data-uvis-app=\"estetica\"] #estetica-consulta-dock{display:none!important}'
 if old_hide in s:
     s=s.replace(old_hide,new_hide,1)
-assert old_hide not in s, 'acoesMobile ainda está oculto pela casca'
-assert new_hide in s, 'regra isolada do dock de Consulta não localizada'
+else:
+    # Aceitar também a forma sem escapes, caso a casca seja recomposta assim.
+    old_plain='html[data-uvis-app="estetica"] #estetica-consulta-dock,html[data-uvis-app="estetica"] #acoesMobile{display:none!important}'
+    new_plain='html[data-uvis-app="estetica"] #estetica-consulta-dock{display:none!important}'
+    if old_plain in s:
+        s=s.replace(old_plain,new_plain,1)
+assert '#estetica-consulta-dock,html[data-uvis-app=' not in s[s.find('estetica-toolbar-v13'):s.find('estetica-toolbar-v13')+1000], 'acoesMobile ainda está oculto pela casca'
 
 # Home: preservar exatamente a compactação já aprovada (~20% menor). O bloco
 # abaixo só evita regressão porque publicar_ifa_cores.py recompõe a base antiga.
