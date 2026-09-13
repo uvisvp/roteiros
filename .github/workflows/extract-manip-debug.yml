@@ -13,44 +13,46 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extrair trechos relevantes
+      - name: Mapear estrutura do Index
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
           p = Path('Index.html')
-          lines = p.read_text(encoding='utf-8', errors='replace').splitlines()
-          termos = [
-              'Farmácia de Manipulação', 'farmacia de manipulacao', 'farmácia de manipulação',
-              'RDC 67/2007', 'RDC 67', 'MANIPULAÇÃO', 'manipulacao', 'manipulação'
-          ]
-          hits=[]
-          for i,line in enumerate(lines):
-              low=line.lower()
-              if any(t.lower() in low for t in termos):
-                  hits.append(i)
+          raw = p.read_text(encoding='utf-8', errors='replace')
+          lines = raw.splitlines()
           out=[]
-          out.append(f'Total de linhas do Index.html: {len(lines)}')
-          out.append(f'Ocorrências localizadas: {len(hits)}')
+          out.append(f'Total de linhas: {len(lines)}')
+          out.append(f'Tamanho em caracteres: {len(raw)}')
           out.append('')
-          # Agrupa ocorrências próximas para evitar repetição
-          groups=[]
-          for i in hits:
-              if not groups or i-groups[-1][-1] > 60:
-                  groups.append([i])
-              else:
-                  groups[-1].append(i)
-          for n,g in enumerate(groups,1):
-              a=max(0,g[0]-35); b=min(len(lines),g[-1]+36)
-              out.append(f'===== BLOCO {n} · linhas {a+1}-{b} =====')
-              for j in range(a,b):
-                  out.append(f'{j+1:06d}: {lines[j]}')
-              out.append('')
-          Path('MANIP_DEBUG.txt').write_text('\n'.join(out),encoding='utf-8')
+          out.append('=== LINHAS LONGAS ===')
+          for i,line in enumerate(lines,1):
+              if len(line) > 5000:
+                  out.append(f'Linha {i}: {len(line)} caracteres')
+                  out.append('INÍCIO: '+line[:500])
+                  out.append('FIM: '+line[-500:])
+                  out.append('')
+          out.append('=== SCRIPTS / REFERÊNCIAS EXTERNAS ===')
+          for i,line in enumerate(lines,1):
+              if '<script' in line.lower() or 'script src' in line.lower() or '.js' in line.lower():
+                  out.append(f'{i:04d}: {line[:1800]}')
+          out.append('')
+          out.append('=== TERMOS / ATRIBUTOS DE NAVEGAÇÃO ===')
+          pats=['nucleus-card','data-nucleus','data-module','openModule','openNucleus','farmacia','manip','medicamentos','drogaria']
+          for i,line in enumerate(lines,1):
+              low=line.lower()
+              if any(x.lower() in low for x in pats):
+                  out.append(f'{i:04d}: {line[:2500]}')
+          out.append('')
+          out.append('=== ÚLTIMAS 120 LINHAS (TRUNCADAS) ===')
+          for i in range(max(0,len(lines)-120),len(lines)):
+              out.append(f'{i+1:04d}: {lines[i][:2500]}')
+          Path('INDEX_STRUCTURE.txt').write_text('\n'.join(out),encoding='utf-8')
           PY
-      - name: Commit do extrato
+      - name: Commit do diagnóstico
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add MANIP_DEBUG.txt
-          git diff --cached --quiet || git commit -m "chore: atualizar extrato técnico de manipulação"
+          git add INDEX_STRUCTURE.txt
+          git diff --cached --quiet || git commit -m "chore: atualizar diagnóstico técnico do Index"
           git push
