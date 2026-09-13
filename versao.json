@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-13",
+  "versao": "20260913-14",
   "banco": "12.1",
-  "correcoes": 13,
-  "notas": "Estética: removidos os botões soltos Consulta e Ver selecionadas; nova toolbar fixa com anterior, consulta, selecionadas e próximo. Central: consulta IFA passa a ler diretamente a base pública e aceita processo_anvisa no próprio modo IFA. Restaurados ícones dos cards internos dos núcleos."
+  "correcoes": 14,
+  "notas": "Estética: removida a faixa inferior vazia que era causada pela reserva de 62 px no main; mantida a toolbar fixa de quatro ícones sem alterar suas funções. Mantidas as correções IFA e os ícones internos."
 }
