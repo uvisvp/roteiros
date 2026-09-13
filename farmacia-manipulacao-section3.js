@@ -168,8 +168,8 @@
 
     target.appendChild(conditionalBlock('3.4 Requisitos ocupacionais específicos — Anexo III', BASE + '.anexoIII.naoSeAplica', function (body) {
       body.appendChild(E('p', 'fm-helper-text', 'A aplicabilidade é decidida aqui. A seção não é ocultada com base em respostas de outras telas nem pela situação da licença.'));
-      body.appendChild(question(BASE + '.anexoIII.exames', 'Os trabalhadores diretamente envolvidos são submetidos a exames médicos específicos previstos no PCMSO, conforme a atividade?'));
-      body.appendChild(question(BASE + '.anexoIII.comunicacao', 'Os responsáveis pela elaboração do PCMSO foram informados sobre a manipulação das substâncias abrangidas?'));
+      body.appendChild(question(BASE + '.anexoIII.exames', 'Os funcionários diretamente envolvidos são submetidos a exames médicos específicos previstos no PCMSO, recomendando-se sistema de rodízio?'));
+      body.appendChild(question(BASE + '.anexoIII.comunicacao', 'Os responsáveis pela elaboração do PCMSO foram comunicados da manipulação dessas substâncias?'));
     }));
 
     var notes = card('3.5 Registros gerais da seção');
