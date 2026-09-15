@@ -1,6 +1,6 @@
 {
-  "versao": "20260913-17",
-  "banco": "12.1",
-  "correcoes": 17,
-  "notas": "Serviços > Estética: restaurado o botão nativo Ver selecionadas na faixa inferior móvel, sem ampliar a faixa com safe-area; removida a abertura automática do primeiro grupo Licenciamento e regularidade no iPhone nas abas Interesse à saúde e Serviços de saúde. Demais núcleos preservados."
+  "versao": "20260914-18",
+  "banco": "13.0",
+  "correcoes": 18,
+  "notas": "Central de Consultas: AFE/AE atualizada para o esquema 3 da base-vigilancia. Consulta por CNPJ ou número de autorização passa a exibir todas as autorizações localizadas, com identificação AFE/AE, situação, autorização nova, processo, datas, classe e atividades carregadas sob demanda. Demais consultas preservadas."
 }
