@@ -13,7 +13,8 @@ const ESSENCIAIS = [
   './icon-192.png',
   './icon-512.png',
   './icon-maskable-512.png',
-  './apple-touch-icon.png'
+  './apple-touch-icon.png',
+  './central-afe-ae-fix.js'
 ];
 
 self.addEventListener('install', event => {
