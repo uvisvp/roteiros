@@ -1,6 +1,6 @@
 {
-  "versao": "20260915-19",
+  "versao": "20260915-20",
   "banco": "13.0",
-  "correcoes": 19,
-  "notas": "Central de Consultas AFE/AE no esquema 3 e correção do PWA: atualização não depende mais do pré-download do HTML completo durante a instalação do service worker; dados locais permanecem preservados."
+  "correcoes": 20,
+  "notas": "Central de Consultas AFE/AE: força leitura do esquema 3 sem reaproveitar cache antigo, exibindo tipo AFE/AE, situação, autorização nova e datas oficiais. PWA sincronizado com o build publicado."
 }
