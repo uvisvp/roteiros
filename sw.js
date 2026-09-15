@@ -1,7 +1,7 @@
 /* Service worker — Inspeção Sanitária / UVIS */
 'use strict';
 
-const VERSAO = '20260915-19';
+const VERSAO = '20260915-20';
 const CACHE_APP = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -86,8 +86,20 @@ self.addEventListener('fetch', event => {
         redeUrl.searchParams.set('__uvis_build', VERSAO);
         const r = await fetch(redeUrl.href, { cache: 'no-store' });
         if (r && r.ok) {
-          await cache.put(new URL('./index.html', self.location.href).href, r.clone());
-          return r;
+          let texto = await r.text();
+          /* O arquivo físico ainda traz a versão-base; o PWA entrega o build
+             corrente e invalida somente o cache da Central de Consultas. */
+          texto = texto.replace(/const APP_VERSAO\s*=\s*['"][^'"]+['"];/,
+                                "const APP_VERSAO = '" + VERSAO + "';");
+          texto = texto.replace('</head>',
+            '<script>try{localStorage.removeItem("visa.consulta.cache.ttl.v1");indexedDB.deleteDatabase("uvis-consultas");}catch(e){}<\/script></head>');
+          const nova = new Response(texto, {
+            status: r.status,
+            statusText: r.statusText,
+            headers: {'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'}
+          });
+          await cache.put(new URL('./index.html', self.location.href).href, nova.clone());
+          return nova;
         }
       } catch (_) {}
       return (await cache.match(new URL('./index.html', self.location.href).href)) ||
