@@ -2,5 +2,5 @@
   "versao": "20260915-20",
   "banco": "13.0",
   "correcoes": 20,
-  "notas": "Central de Consultas AFE/AE: força leitura do esquema 3 sem reaproveitar cache antigo, exibindo tipo AFE/AE, situação, autorização nova e datas oficiais. PWA sincronizado com o build publicado."
+  "notas": "Central de Consultas: corrige identificação AFE/AE e situação usando os campos oficiais do esquema 3. Mantida a correção PWA e preservados os demais módulos."
 }
