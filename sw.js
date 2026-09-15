@@ -1,86 +1,39 @@
-/* =============================================================
-   Service worker — Inspeção Sanitária / UVIS
-   -------------------------------------------------------------
-   A troca de versão é decidida pela pessoa usuária. O worker não
-   toca em IndexedDB nem em localStorage; o rascunho da inspeção
-   permanece separado do cache do aplicativo.
-   ============================================================= */
+/* Service worker — Inspeção Sanitária / UVIS */
 'use strict';
 
-const VERSAO = '20260914-18';
-const CACHE_APP   = 'app-' + VERSAO;
+const VERSAO = '20260915-19';
+const CACHE_APP = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
+/* O shell PWA fica pequeno e confiável. O HTML grande é armazenado
+   sob demanda, evitando que a instalação do novo worker falhe por
+   causa de um download de ~5 MB durante o evento install. */
 const ESSENCIAIS = [
-  './',
-  './index.html',
-  './drogaria-final-bridge.js',
-  './drogaria-report-final.js',
-  './drogaria-ocr-tools.js',
-  './drogaria-review.js',
-  './drogaria-servicos-documentos.js',
-  './drogaria-area-fisica.js',
-  './drogaria-section1.js',
-  './farmacia-manipulacao-app.js',
-  './farmacia-manipulacao-core.js',
-  './farmacia-manipulacao-lookup.js',
-  './ifa-lookup-shared.js',
-  './farmacia-manipulacao-ocr.js',
-  './farmacia-manipulacao-section1.js',
-  './farmacia-manipulacao-section2.js',
-  './farmacia-manipulacao-section3.js',
-  './farmacia-manipulacao-section4.js',
-  './farmacia-manipulacao-section5.js',
-  './farmacia-manipulacao-section6.js',
-  './farmacia-manipulacao-section7.js',
-  './farmacia-manipulacao-section8.js',
-  './farmacia-manipulacao-section9.js',
-  './farmacia-manipulacao-report.js',
   './manifest.webmanifest',
-  './versao.json',
   './icon-192.png',
   './icon-512.png',
   './icon-maskable-512.png',
-  './apple-touch-icon.png',
-  './farmacia-manipulacao.png'
+  './apple-touch-icon.png'
 ];
 
-async function preparaAplicativo() {
-  // Cada versão baixa seus arquivos da rede. O cache HTTP antigo não pode
-  // colocar o HTML anterior dentro do cache de um worker recém-publicado.
-  const arquivos = await Promise.all(ESSENCIAIS.map(async caminho => {
-    const chave = new URL(caminho, self.location.href);
-    const origem = new URL(chave);
-    origem.searchParams.set('__uvis_build', VERSAO);
-    const resposta = await fetch(origem.href, { cache: 'no-store' });
-    if (!resposta.ok) throw new Error('Arquivo indisponível: ' + caminho);
-    if (caminho === './' || caminho === './index.html') {
-      const texto = await resposta.clone().text();
-      const versao = /const APP_VERSAO\s*=\s*['"]([^'"]+)['"]/.exec(texto)?.[1];
-      if (versao !== VERSAO) throw new Error('HTML e atualização pertencem a versões diferentes.');
-    }
-    if (caminho === './versao.json' && (await resposta.clone().json()).versao !== VERSAO) {
-      throw new Error('A publicação ainda não terminou.');
-    }
-    return { chave: chave.href, resposta };
-  }));
-  const cache = await caches.open(CACHE_APP);
-  await Promise.all(arquivos.map(a => cache.put(a.chave, a.resposta)));
-}
-
 self.addEventListener('install', event => {
-  /* Sem skipWaiting no install: a atualização só troca após o clique. */
-  event.waitUntil(preparaAplicativo());
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_APP);
+    for (const caminho of ESSENCIAIS) {
+      try {
+        const u = new URL(caminho, self.location.href);
+        u.searchParams.set('__uvis_build', VERSAO);
+        const r = await fetch(u.href, { cache: 'no-store' });
+        if (r.ok) await cache.put(new URL(caminho, self.location.href).href, r.clone());
+      } catch (_) {}
+    }
+  })());
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const nomes = await caches.keys();
-    await Promise.all(nomes.map(n => {
-      /* O cache de dados permanece entre versões. */
-      if (n.startsWith('app-') && n !== CACHE_APP) return caches.delete(n);
-      return null;
-    }));
+    await Promise.all(nomes.map(n => n.startsWith('app-') && n !== CACHE_APP ? caches.delete(n) : null));
     await self.clients.claim();
   })());
 });
@@ -91,19 +44,19 @@ self.addEventListener('message', event => {
   if (dado.tipo === 'VERSAO_SW') {
     event.source && event.source.postMessage({ tipo: 'VERSAO_SW', versao: VERSAO });
   }
-  if (dado.tipo === 'LIMPAR_DADOS') {
-    event.waitUntil(caches.delete(CACHE_DADOS));
-  }
+  if (dado.tipo === 'LIMPAR_DADOS') event.waitUntil(caches.delete(CACHE_DADOS));
 });
 
-function semCache(url) {
-  return /\/versao\.json(\?|$)/.test(url) || /\/dados\/manifest\.json(\?|$)/.test(url);
+function semCache(path) {
+  return /\/versao\.json$/.test(path) || /\/dados\/manifest\.json$/.test(path);
+}
+function ehHTMLPrincipal(url, req) {
+  return req.mode === 'navigate' || /\/index\.html$/.test(url.pathname) || /\/roteiros\/$/.test(url.pathname);
 }
 
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
-
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
@@ -120,7 +73,26 @@ self.addEventListener('fetch', event => {
         if (r && r.ok) cache.put(req, r.clone());
         return r;
       }).catch(() => null);
-      return guardado || await rede || new Response('{}', { status: 503, headers: { 'Content-Type': 'application/json' } });
+      return guardado || await rede || new Response('{}', {status:503,headers:{'Content-Type':'application/json'}});
+    })());
+    return;
+  }
+
+  if (ehHTMLPrincipal(url, req)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_APP);
+      try {
+        const redeUrl = new URL('./index.html', self.location.href);
+        redeUrl.searchParams.set('__uvis_build', VERSAO);
+        const r = await fetch(redeUrl.href, { cache: 'no-store' });
+        if (r && r.ok) {
+          await cache.put(new URL('./index.html', self.location.href).href, r.clone());
+          return r;
+        }
+      } catch (_) {}
+      return (await cache.match(new URL('./index.html', self.location.href).href)) ||
+             (await caches.match(new URL('./index.html', self.location.href).href)) ||
+             new Response('Aplicativo indisponível offline nesta primeira abertura.', {status:503});
     })());
     return;
   }
@@ -131,13 +103,9 @@ self.addEventListener('fetch', event => {
     if (guardado) return guardado;
     try {
       const r = await fetch(req);
-      if (r && r.ok && r.type === 'basic') {
-        cache.put(req, r.clone());
-      }
+      if (r && r.ok && r.type === 'basic') cache.put(req, r.clone());
       return r;
     } catch (e) {
-      const alvo = await cache.match('./index.html');
-      if (alvo && req.mode === 'navigate') return alvo;
       throw e;
     }
   })());
