@@ -1,6 +1,6 @@
 {
-  "versao": "20260916-21",
-  "banco": "13.0",
-  "correcoes": 24,
-  "notas": "Central de Consultas: separa busca por nome de Medicamento e IFA; medicamentos podem ser localizados também por componentes de associações e filtrados por Ativo/Inativo. IFA exibe situação somente quando publicada pela fonte, sem inferência automática. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
+  "versao": "20260916-22",
+  "banco": "13.1",
+  "correcoes": 25,
+  "notas": "Central de Consultas: otimização adaptativa dos índices por nome. Fragmentos grandes de Medicamentos e IFA são subdivididos automaticamente pelas letras seguintes, mantendo a busca a partir de 3 letras e carregando somente o ramo necessário. Interface visual preservada; busca por associações e filtros de situação mantidos."
 }
