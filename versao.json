@@ -1,6 +1,6 @@
 {
-  "versao": "20260916-19",
+  "versao": "20260916-20",
   "banco": "13.0",
-  "correcoes": 22,
-  "notas": "Central de Consultas: busca leve por nome de medicamento, princípio ativo ou IFA a partir de três letras, sem pesquisa de empresas; exibe classe terapêutica e indicação de lista da Portaria 344 somente por correspondência nominal confirmada. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
+  "correcoes": 23,
+  "notas": "Central de Consultas: corrige o carregamento do modo Nome dentro do iframe; busca leve por medicamento, princípio ativo ou IFA a partir de três letras, sem pesquisa de empresas. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
 }
