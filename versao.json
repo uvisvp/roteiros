@@ -1,6 +1,6 @@
 {
-  "versao": "20260916-20",
+  "versao": "20260916-21",
   "banco": "13.0",
-  "correcoes": 23,
-  "notas": "Central de Consultas: corrige o carregamento do modo Nome dentro do iframe; busca leve por medicamento, princípio ativo ou IFA a partir de três letras, sem pesquisa de empresas. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
+  "correcoes": 24,
+  "notas": "Central de Consultas: separa busca por nome de Medicamento e IFA; medicamentos podem ser localizados também por componentes de associações e filtrados por Ativo/Inativo. IFA exibe situação somente quando publicada pela fonte, sem inferência automática. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
 }
