@@ -1,6 +1,6 @@
 /* Central de Consultas — buscas leves e separadas por nome de Medicamento e de IFA.
    Medicamentos: nome comercial, princípio ativo e componentes de associações.
-   IFA: nome do insumo. A situação só é exibida/filtrada quando publicada pela fonte. */
+   IFA: nome do insumo. Fragmentos grandes são roteados adaptativamente. */
 (() => {
   'use strict';
   if (window.__UVIS_CENTRAL_NOMES__) return;
@@ -27,9 +27,14 @@
   };
 
   const $ = id => document.getElementById(id);
-  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const norm = v => String(v == null ? '' : v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+  const norm = v => String(v == null ? '' : v)
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
   const compact = v => norm(v).replace(/\s/g, '');
+
   let timer = 0;
   let filtroSituacao = 'todos';
   let ultimo = null;
@@ -42,10 +47,9 @@
 
   function setStatus(text, ok) {
     const el = $('status');
-    if (el) {
-      el.className = 'status' + (ok ? ' ok' : '');
-      el.textContent = text || '';
-    }
+    if (!el) return;
+    el.className = 'status' + (ok ? ' ok' : '');
+    el.textContent = text || '';
   }
 
   function clearDetect() {
@@ -62,16 +66,16 @@
   }
 
   function statusChip(valor) {
-    const k = statusKind(valor);
     if (!valor) return '';
-    const cls = k ? ' ' + k : '';
-    return '<span class="uvis-sit' + cls + '">' + esc(valor) + '</span>';
+    const k = statusKind(valor);
+    return '<span class="uvis-sit' + (k ? ' ' + k : '') + '">' + esc(valor) + '</span>';
   }
 
   function activate(tipo) {
     const cfg = MODES[tipo];
     if (!cfg) return;
     try { setMode('registro'); } catch (_) {}
+
     document.querySelectorAll('.mode').forEach(x => {
       x.classList.remove('on');
       x.setAttribute('aria-pressed', 'false');
@@ -81,6 +85,7 @@
       b.classList.add('on');
       b.setAttribute('aria-pressed', 'true');
     }
+
     filtroSituacao = 'todos';
     ultimo = null;
     const q = $('q');
@@ -91,9 +96,11 @@
       q.focus();
     }
     clearDetect();
+
     const host = $('results');
     if (host) {
-      host.innerHTML = '<div class="empty"><b>Busca por nome — ' + esc(cfg.rotulo) + '</b><br>' + esc(cfg.vazio) + '</div>';
+      host.innerHTML = '<div class="empty"><b>Busca por nome — ' + esc(cfg.rotulo) +
+        '</b><br>' + esc(cfg.vazio) + '</div>';
     }
     setStatus('A busca começa a partir de três letras e consulta somente o fragmento necessário da base.', false);
   }
@@ -102,6 +109,7 @@
     if (document.querySelector('.mode[data-uvis-nome-tipo="' + tipo + '"]')) return;
     const modes = document.querySelectorAll('.mode');
     if (!modes.length) return;
+
     const cfg = MODES[tipo];
     const b = document.createElement('button');
     b.type = 'button';
@@ -151,8 +159,10 @@
       .filter(r => r[0] === 'Portaria / lista' || r[1])
       .map(r => r[0] === 'Portaria / lista'
         ? listText(x)
-        : '<b>' + esc(r[0]) + '</b><span>' + (r[0] === 'Situação' ? statusChip(r[1]) : esc(r[1])) + '</span>')
+        : '<b>' + esc(r[0]) + '</b><span>' +
+          (r[0] === 'Situação' ? statusChip(r[1]) : esc(r[1])) + '</span>')
       .join('');
+
     const titulo = esc(x.produto || 'Medicamento') + (x.situacao ? ' ' + statusChip(x.situacao) : '');
     return '<article class="result"' +
       (button != null
@@ -179,6 +189,7 @@
         : '<b>' + esc(r[0]) + '</b><span>' +
           (r[0] === 'Situação' && x.situacao ? statusChip(r[1]) : esc(r[1])) + '</span>')
       .join('');
+
     const titulo = 'IFA · ' + esc(x.ifa || 'Insumo farmacêutico ativo') +
       (x.situacao ? ' ' + statusChip(x.situacao) : '');
     return '<article class="result"' +
@@ -190,28 +201,45 @@
   }
 
   async function manifest(tipo, pastaUsada) {
-    const key = tipo + '|' + (pastaUsada || MODES[tipo].pasta);
+    const pasta = pastaUsada || MODES[tipo].pasta;
+    const key = tipo + '|' + pasta;
     if (!manifests[key]) {
-      manifests[key] = fetch(BASE + '/' + (pastaUsada || MODES[tipo].pasta) + '/manifest.json', {cache:'no-store'})
+      manifests[key] = fetch(BASE + '/' + pasta + '/manifest.json', {cache:'no-store'})
         .then(r => r.ok ? r.json() : null)
         .catch(() => null);
     }
     return manifests[key];
   }
 
-  async function fetchIndex(tipo, prefixo) {
+  async function obterJson(pasta, caminho) {
+    const r = await fetch(BASE + '/' + pasta + '/' + caminho, {cache:'no-store'});
+    if (!r.ok) throw new Error('índice indisponível (' + r.status + ')');
+    return r.json();
+  }
+
+  async function fetchIndex(tipo, prefixo, termoCompacto) {
     const cfg = MODES[tipo];
     const pastas = [cfg.pasta];
     if (cfg.fallback) pastas.push(cfg.fallback);
     let last = null;
+
     for (const pasta of pastas) {
       try {
-        const r = await fetch(BASE + '/' + pasta + '/' + prefixo + '.json', {cache:'no-store'});
-        if (!r.ok) {
-          last = new Error('índice indisponível (' + r.status + ')');
-          continue;
+        let payload = await obterJson(pasta, prefixo + '.json');
+        let passos = 0;
+
+        while (payload && payload.subfragmentado && passos < 32) {
+          const profundidade = Number(payload.profundidade);
+          if (!Number.isFinite(profundidade) || termoCompacto.length <= profundidade) break;
+
+          const caractere = termoCompacto.charAt(profundidade);
+          const proximo = payload.fragmentos && payload.fragmentos[caractere];
+          if (!proximo) break;
+
+          payload = await obterJson(pasta, proximo);
+          passos += 1;
         }
-        return {payload: await r.json(), pasta};
+        return {payload, pasta, passos};
       } catch (e) {
         last = e;
       }
@@ -223,14 +251,17 @@
     const gerado = man && man.gerado_em
       ? ' Índice gerado em ' + esc(new Date(man.gerado_em).toLocaleString('pt-BR')) + '.'
       : '';
+
     if (tipo === 'medicamento') {
       return '<details class="sub-base"><summary>Fonte e atualização</summary><div class="sub-body">' +
         '<p><b>Medicamentos:</b> base pública DADOS_ABERTOS_MEDICAMENTOS.csv da Anvisa.</p>' +
         '<p><b>Busca:</b> nome do produto, princípio ativo completo e cada componente nominal das associações.</p>' +
         '<p><b>Situação:</b> Ativo/Inativo conforme o campo publicado na base de medicamentos.</p>' +
+        '<p><b>Desempenho:</b> índices grandes são subdivididos automaticamente; a Central baixa somente o ramo necessário.</p>' +
         '<p><b>Portaria:</b> indicação somente por correspondência nominal confirmada na base local do Anexo I da Portaria SVS/MS nº 344/1998.</p>' +
         '<p>Empresas não são pesquisadas neste modo.' + gerado + '</p></div></details>';
     }
+
     const situacao = man && man.situacao_disponivel;
     const transicao = pastaUsada === MODES.ifa.fallback
       ? '<p><b>Transição:</b> usando temporariamente o índice anterior até a publicação do índice separado de IFA.</p>'
@@ -242,6 +273,7 @@
         ? 'exibida somente quando publicada pela fonte.'
         : 'a exportação usada nesta visão não informa situação regulatória; o sistema não infere Ativo/Inativo.') +
       '</p>' +
+      '<p><b>Desempenho:</b> índices grandes são subdivididos automaticamente; a Central baixa somente o ramo necessário.</p>' +
       '<p><b>Portaria:</b> indicação somente por correspondência nominal confirmada. Não substitui a conferência das condições de aplicação.</p>' +
       transicao +
       '<p>Ausência no índice não prova ausência de regularização por outra via.' + gerado + '</p></div></details>';
@@ -256,11 +288,10 @@
       '" data-uvis-status="' + valor + '"' +
       (valor !== 'todos' && desabilitar ? ' disabled aria-disabled="true"' : '') +
       '>' + texto + '</button>';
+
     return '<div class="uvis-status-row"><span><b>Situação</b></span>' +
       mk('todos', 'Todos') + mk('ativo', 'Ativos') + mk('inativo', 'Inativos') +
-      (desabilitar
-        ? '<small>Ativo/Inativo não é informado pela fonte IFA atual.</small>'
-        : '') +
+      (desabilitar ? '<small>Ativo/Inativo não é informado pela fonte IFA atual.</small>' : '') +
       '</div>';
   }
 
@@ -272,6 +303,7 @@
   function render(items, term, man, tipo, pastaUsada) {
     const host = $('results');
     if (!host) return;
+
     ultimo = {items, term, man, tipo, pastaUsada};
     const filtrados = applyStatus(items);
     const exibidos = filtrados.slice(0, LIMIT);
@@ -297,15 +329,16 @@
     }
 
     const cfg = MODES[tipo];
-    const html =
+    host.innerHTML =
       filtro +
       '<div class="summary"><div class="sum"><b>' + exibidos.length + '</b><span>resultado(s) exibido(s)</span></div>' +
-      '<div class="sum"><b>' + items.length + '</b><span>correspondência(s) no fragmento</span></div>' +
+      '<div class="sum"><b>' + items.length + '</b><span>correspondência(s) carregada(s)</span></div>' +
       '<div class="sum"><b>3+</b><span>letras para busca</span></div></div>' +
-      '<div class="group"><div class="grouphead"><h3>' + esc(cfg.rotulo) + '</h3><span>toque em um resultado para detalhar</span></div>' +
+      '<div class="group"><div class="grouphead"><h3>' + esc(cfg.rotulo) +
+      '</h3><span>toque em um resultado para detalhar</span></div>' +
       exibidos.map((x, i) => tipo === 'ifa' ? ifaCard(x, String(i)) : medCard(x, String(i))).join('') +
       '</div>' + source(tipo, man, pastaUsada);
-    host.innerHTML = html;
+
     setStatus(
       tipo === 'medicamento'
         ? 'Consulta de medicamentos concluída. Associações podem ser encontradas por qualquer componente indexado.'
@@ -325,6 +358,7 @@
     const tipo = activeType();
     const host = $('results');
     if (!host) return;
+
     host.innerHTML =
       '<div class="toolbar"><button type="button" class="btn" data-uvis-name-back>← Voltar aos resultados</button></div>' +
       (tipo === 'ifa' ? ifaCard(x) : medCard(x)) +
@@ -334,6 +368,7 @@
   async function search() {
     const tipo = activeType();
     if (!MODES[tipo]) return;
+
     const q = $('q');
     const raw = q ? q.value : '';
     const n = compact(raw);
@@ -348,7 +383,7 @@
     setStatus('Consultando o fragmento “' + n.slice(0, 3).toUpperCase() + '”…', false);
 
     try {
-      const achado = await fetchIndex(tipo, n.slice(0, 3));
+      const achado = await fetchIndex(tipo, n.slice(0, 3), n);
       const man = await manifest(tipo, achado.pasta);
       const seen = new Set();
       const items = (achado.payload.registros || [])
@@ -362,6 +397,7 @@
           seen.add(id);
           return true;
         });
+
       render(items, raw, man, tipo, achado.pasta);
     } catch (err) {
       if (host) {
@@ -398,7 +434,6 @@
       document.querySelectorAll('.mode[data-uvis-nome-tipo]').forEach(b => b.classList.remove('on'));
       return;
     }
-
     if (!activeType()) return;
 
     if (t.matches('#search')) {
