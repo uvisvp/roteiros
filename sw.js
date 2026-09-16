@@ -15,7 +15,21 @@ const ESSENCIAIS = [
   './icon-maskable-512.png',
   './apple-touch-icon.png',
   './central-afe-ae-fix.js',
-  './central-nomes-medicamentos.js'
+  './central-nomes-medicamentos.js',
+  './farmacia-manipulacao-app.js',
+  './farmacia-manipulacao-core.js',
+  './farmacia-manipulacao-lookup.js',
+  './farmacia-manipulacao-ocr.js',
+  './farmacia-manipulacao-section1.js',
+  './farmacia-manipulacao-section2.js',
+  './farmacia-manipulacao-section3.js',
+  './farmacia-manipulacao-section4.js',
+  './farmacia-manipulacao-section5.js',
+  './farmacia-manipulacao-section6.js',
+  './farmacia-manipulacao-section7.js',
+  './farmacia-manipulacao-section8.js',
+  './farmacia-manipulacao-section9.js',
+  './farmacia-manipulacao-report.js'
 ];
 
 self.addEventListener('install', event => {
