@@ -1,6 +1,6 @@
 {
-  "versao": "20260915-20",
+  "versao": "20260916-18",
   "banco": "13.0",
-  "correcoes": 20,
-  "notas": "Central de Consultas: corrige identificação AFE/AE e situação usando os campos oficiais do esquema 3. Mantida a correção PWA e preservados os demais módulos."
+  "correcoes": 21,
+  "notas": "Medicamentos: integrada a Farmácia de Manipulação atualizada; inventário de infrações organizado por tipo/tema técnico, com caixa para abrir a norma citada. Distribuidora/Transportadora preservada com as atualizações aprovadas; mantida a correção da Central AFE/AE."
 }
