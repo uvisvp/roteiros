@@ -1,7 +1,7 @@
 /* Service worker — Inspeção Sanitária / UVIS */
 'use strict';
 
-const VERSAO = '20260916-18';
+const VERSAO = '20260916-19';
 const CACHE_APP = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -14,7 +14,8 @@ const ESSENCIAIS = [
   './icon-512.png',
   './icon-maskable-512.png',
   './apple-touch-icon.png',
-  './central-afe-ae-fix.js'
+  './central-afe-ae-fix.js',
+  './central-nomes-medicamentos.js'
 ];
 
 self.addEventListener('install', event => {

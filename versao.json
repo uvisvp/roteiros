@@ -1,6 +1,6 @@
 {
-  "versao": "20260916-18",
+  "versao": "20260916-19",
   "banco": "13.0",
-  "correcoes": 21,
-  "notas": "Medicamentos: integrada a Farmácia de Manipulação atualizada; inventário de infrações organizado por tipo/tema técnico, com caixa para abrir a norma citada. Distribuidora/Transportadora preservada com as atualizações aprovadas; mantida a correção da Central AFE/AE."
+  "correcoes": 22,
+  "notas": "Central de Consultas: busca leve por nome de medicamento, princípio ativo ou IFA a partir de três letras, sem pesquisa de empresas; exibe classe terapêutica e indicação de lista da Portaria 344 somente por correspondência nominal confirmada. Farmácia de Manipulação e Distribuidora/Transportadora preservadas."
 }

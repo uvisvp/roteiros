@@ -1374,7 +1374,7 @@ if(app==='distribuidoras-transportadoras'){
         document.addEventListener('keydown',function(e){if(ativo()&&e.key==='Enter'&&e.target&&e.target.id==='q'){e.preventDefault();e.stopImmediatePropagation();consultar();}},true);
         if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',instalar);else instalar();
       })();`+'</scr'+'ipt>';
-      s=s.replace(/<\/body>/i,ponte+ponteIfa+'</body>');
+      s=s.replace(/<\/body>/i,ponte+ponteIfa+'<scr'+'ipt src="./central-nomes-medicamentos.js"></scr'+'ipt></body>');
     }
     /* Ajustes textuais específicos da Drogaria. Mantêm a lógica e alteram apenas a redação exibida/relatada. */
     if(app==='drogaria'){
