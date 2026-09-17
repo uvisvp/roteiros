@@ -5,10 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const TECHNICAL_ROOTS = new Set([
-    'rdc-67-2007',
-    'rdc-204-2006'
-  ]);
+  const TECHNICAL_ROOTS = new Set(['rdc-67-2007', 'rdc-204-2006']);
 
   function stripAccents(value) {
     return String(value == null ? '' : value)
@@ -73,19 +70,20 @@
     const raw = String(text == null ? '' : text);
     const clean = stripAccents(raw);
     const out = {};
-
     const norma = parseNormIdentity(raw);
     if (norma) out.norma = norma.raw;
 
     let m = clean.match(/\bANEXO\s+([IVXLCDM]+|\d+[A-Z]?)\b/i);
     if (m) out.anexo = m[1].toUpperCase();
 
-    m = clean.match(/\bART(?:IGO)?\.?\s*(\d+(?:-[A-Z]|[A-Z])?)/i);
+    // O ordinal º costuma virar "o" após normalização Unicode; ele não pode ser
+    // confundido com artigo acrescido. Por isso excluímos a letra O do sufixo.
+    m = clean.match(/\bART(?:IGO)?\.?\s*(\d+(?:-[A-Z]|[A-NP-Z])?)/i);
     if (m) out.artigo = m[1].toUpperCase();
 
     if (/PARAGRAFO\s+UNICO/i.test(clean)) out.paragrafo = 'unico';
     else {
-      m = clean.match(/§\s*(\d+[A-Z]?)/i);
+      m = clean.match(/§\s*(\d+[A-NP-Z]?)/i);
       if (m) out.paragrafo = m[1].toUpperCase();
     }
 
@@ -99,7 +97,6 @@
     if (m) out.item = m[1];
 
     if (/REGULAMENTO\s+TECNICO/i.test(clean)) out.regulamentoTecnico = true;
-
     return out;
   }
 
@@ -114,7 +111,6 @@
 
     const levels = [];
     let current = null;
-
     const useTechnical = !!s.regulamentoTecnico || (
       TECHNICAL_ROOTS.has(slug) && !!s.item && !s.artigo && !s.anexo
     );
@@ -136,9 +132,7 @@
       levels.push({ id: current, level: 'artigo' });
     }
 
-    if (!current) {
-      throw new Error('Referência sem raiz estrutural (artigo, anexo ou regulamento técnico)');
-    }
+    if (!current) throw new Error('Referência sem raiz estrutural (artigo, anexo ou regulamento técnico)');
 
     if (s.paragrafo) {
       current += `::paragrafo::${normalizeDeviceNumber(s.paragrafo)}`;
@@ -167,33 +161,14 @@
 
   function resolveReference(doc, spec) {
     if (!doc || !Array.isArray(doc.nos)) {
-      return {
-        found: false,
-        exact: false,
-        reason: 'documento_invalido',
-        node: null,
-        requestedId: null,
-        resolvedId: null,
-        fallbackLevel: null,
-        triedIds: []
-      };
+      return { found: false, exact: false, reason: 'documento_invalido', node: null, requestedId: null, resolvedId: null, fallbackLevel: null, triedIds: [] };
     }
 
     let plan;
     try {
       plan = buildReferenceLevels(spec);
     } catch (err) {
-      return {
-        found: false,
-        exact: false,
-        reason: 'referencia_invalida',
-        error: err.message,
-        node: null,
-        requestedId: null,
-        resolvedId: null,
-        fallbackLevel: null,
-        triedIds: []
-      };
+      return { found: false, exact: false, reason: 'referencia_invalida', error: err.message, node: null, requestedId: null, resolvedId: null, fallbackLevel: null, triedIds: [] };
     }
 
     const byId = new Map(doc.nos.map(no => [String(no.id || ''), no]));
@@ -214,44 +189,31 @@
       };
     }
 
-    return {
-      found: false,
-      exact: false,
-      reason: 'nao_encontrado',
-      node: null,
-      requestedId: plan.requestedId,
-      resolvedId: null,
-      fallbackLevel: null,
-      triedIds: plan.candidates.map(x => x.id)
-    };
+    return { found: false, exact: false, reason: 'nao_encontrado', node: null, requestedId: plan.requestedId, resolvedId: null, fallbackLevel: null, triedIds: plan.candidates.map(x => x.id) };
   }
 
   function findManifestEntry(manifest, rawNorm) {
     if (!manifest || !manifest.normas) return null;
     const wantedSlug = slugNorma(rawNorm);
-    const entries = Object.entries(manifest.normas);
-
-    for (const [name, entry] of entries) {
+    for (const [name, entry] of Object.entries(manifest.normas)) {
       const arquivo = entry && entry.arquivo ? String(entry.arquivo) : '';
-      if (arquivo === `${wantedSlug}.json`) return { name, entry, slug: wantedSlug };
-      if (slugNorma(name) === wantedSlug) return { name, entry, slug: wantedSlug };
+      if (arquivo === `${wantedSlug}.json` || slugNorma(name) === wantedSlug) {
+        return { name, entry, slug: wantedSlug };
+      }
     }
     return null;
   }
 
   function getDocumentPath(manifest, rawNorm) {
     const hit = findManifestEntry(manifest, rawNorm);
-    if (!hit || !hit.entry || !hit.entry.arquivo) return null;
-    return `normas/${hit.entry.arquivo}`;
+    return hit && hit.entry && hit.entry.arquivo ? `normas/${hit.entry.arquivo}` : null;
   }
 
   function validateReferences(references, docsBySlug) {
     const refs = Array.isArray(references) ? references : [];
     const docs = docsBySlug || {};
     const details = [];
-    let exact = 0;
-    let fallback = 0;
-    let missing = 0;
+    let exact = 0, fallback = 0, missing = 0;
 
     refs.forEach((ref, index) => {
       let spec;
@@ -266,37 +228,17 @@
 
       const slug = spec.slug || (spec.norma ? slugNorma(spec.norma) : '');
       const doc = docs[slug];
-      let result;
-      if (!doc) {
-        result = {
-          found: false,
-          exact: false,
-          reason: 'norma_nao_carregada',
-          node: null,
-          requestedId: null,
-          resolvedId: null,
-          fallbackLevel: null,
-          triedIds: []
-        };
-      } else {
-        result = resolveReference(doc, Object.assign({}, spec, { slug }));
-      }
+      const result = doc
+        ? resolveReference(doc, Object.assign({}, spec, { slug }))
+        : { found: false, exact: false, reason: 'norma_nao_carregada', node: null, requestedId: null, resolvedId: null, fallbackLevel: null, triedIds: [] };
 
       if (result.found && result.exact) exact += 1;
       else if (result.found) fallback += 1;
       else missing += 1;
-
       details.push({ index, reference: ref, slug, result });
     });
 
-    return {
-      total: refs.length,
-      exact,
-      fallback,
-      missing,
-      ok: missing === 0,
-      details
-    };
+    return { total: refs.length, exact, fallback, missing, ok: missing === 0, details };
   }
 
   return Object.freeze({
