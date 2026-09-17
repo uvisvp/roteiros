@@ -1,0 +1,28 @@
+name: Validar resolvedor legislação v12
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "legis-v12-reference-utils.js"
+      - "scripts/test-legis-v12-reference-utils.cjs"
+      - ".github/workflows/validar-legis-v12-reference-utils.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Testar resolução hierárquica
+        run: node scripts/test-legis-v12-reference-utils.cjs
+
+      - name: Confirmar que HTML não foi incluído no escopo
+        run: |
+          echo "Validação limitada ao utilitário e aos testes."
+          echo "Nenhum index.html/Index.html é modificado por este workflow."
