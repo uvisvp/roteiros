@@ -1,0 +1,51 @@
+name: Diagnosticar consumidor legislação v12
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnosticar-legis-consumo.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnosticar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Mostrar contexto do consumidor v12
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s = Path('index.html').read_text(encoding='utf-8')
+          needles = [
+              'const LEGIS_NORMAS',
+              'function slugNorma',
+              'function idArtigo',
+              'function parseLegalRefs',
+              'parseLegalRefs(',
+              'idArtigo(',
+              'legisDocs',
+              'nomeArquivoNorma',
+          ]
+          vistos = set()
+          for needle in needles:
+              print('\n\n###', needle)
+              start = 0
+              achados = 0
+              while achados < 8:
+                  i = s.find(needle, start)
+                  if i < 0:
+                      break
+                  chave = (needle, i)
+                  if chave not in vistos:
+                      vistos.add(chave)
+                      print(f'\n--- posição {i} ---')
+                      print(s[max(0, i-1000):min(len(s), i+4500)])
+                  achados += 1
+                  start = i + len(needle)
+          PY
