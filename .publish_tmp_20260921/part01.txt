@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#062D3E">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f4655'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' transform='translate(9,9) scale(0.72)'%3E%3Cpath d='M20 6v14H6M44 6v14h14M20 58V44H6M44 58V44h14'/%3E%3Cpath d='M8 36c12-13 30-15 48-3M56 29C44 42 26 44 8 32'/%3E%3Ccircle cx='32' cy='32' r='4.2' fill='%23fff' stroke='none'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/png;base64,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">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <title>Inspeção Sanitária — Roteiros e apoio técnico</title>
+  <style>
+    /* ============================================================
+       PALETA E TOKENS — fonte única de verdade das cores dos núcleos.
+       A casca (--casca-tone) e o tema injetado nos módulos (--uvis-tone)
+       leem estas variáveis via getComputedStyle. Não duplicar hex em JS.
+       Todos os tons garantem ícone branco >= 4,5:1 (WCAG AA).
+       ============================================================ */
+    :root {
+      --brand: #126BAE;
+      --brand-strong: #173E54;
+      --ink: #1b262d;
+      --muted: #5b6870;
+      --muted-soft: #626f77;
+      --line: #dfe5e9;
+      --line-strong: #c6d0d6;
+      --canvas: #f4f6f7;
+      --paper: #ffffff;
+      --shadow: 0 10px 26px rgba(25, 39, 48, .07);
+      --radius: 22px;
+
+      /* Medicamentos */      --t-med: #176BAC; --t-med-d: #145485; --t-med-w: #E7F2FC;
+      /* Alimentos */         --t-ali: #247B4B; --t-ali-d: #1C603A; --t-ali-w: #E8F5ED;
+      /* Serviços */          --t-ser: #5452AA; --t-ser-d: #403E89; --t-ser-w: #EDEDFB;
+      /* Produtos */          --t-pro: #A46317; --t-pro-d: #7F4A0E; --t-pro-w: #FFF3DF;
+      /* Serv. assistenciais*/--t-ass: #A03767; --t-ass-d: #7C294F; --t-ass-w: #FBEAF2;
+      /* Odontologia */       --t-odo: #276A79; --t-odo-d: #1D515E; --t-odo-w: #E6F2F5;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: var(--canvas);
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fafbfc 0%, var(--canvas) 100%);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      font-synthesis-weight: none;
+    }
+
+    button, a { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .app {
+      width: min(100%, 1160px);
+      margin: 0 auto;
+      padding: max(20px, env(safe-area-inset-top)) clamp(16px, 4vw, 42px) max(28px, env(safe-area-inset-bottom));
+    }
+
+    /* ---------- HERO ---------- */
+
+    .hero {
+      overflow: hidden;
+      position: relative;
+      padding: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 36px) clamp(26px, 4vw, 34px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafb 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .brandline {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--brand);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 66px;
+      height: 56px;
+      place-items: center;
+      color: var(--brand);
+    }
+
+    .brand-mark svg { width: 66px; height: 56px; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: #f7f9fa;
+      color: #3d4d57;
+      font-size: .74rem;
+      font-weight: 600;
+      letter-spacing: .01em;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #2e7a55;
+      box-shadow: 0 0 0 3px rgba(46, 122, 85, .14);
+      content: "";
+    }
+
+    .status[data-estado="offline"] { color: #6b4a11; border-color: #e3d4ae; background: #fdf8ec; }
+    .status[data-estado="offline"]::before { background: #a06a2b; box-shadow: 0 0 0 3px rgba(160, 106, 43, .16); }
+
+    h1 {
+      max-width: 660px;
+      margin: 0 auto;
+      color: #17222a;
+      font-size: clamp(1.95rem, 4.6vw, 3.1rem);
+      font-weight: 700;
+      letter-spacing: -.028em;
+      line-height: 1.08;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .intro {
+      max-width: 620px;
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: clamp(.94rem, 1.6vw, 1.02rem);
+      line-height: 1.6;
+      text-align: center;
+      text-wrap: pretty;
+    }
+
+    /* ---------- AÇÕES RÁPIDAS ---------- */
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 720px;
+      margin: 26px auto 0;
+    }
+
+    .quick-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 11px 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .92);
+      color: #3d4d57;
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .quick-action:hover,
+    .quick-action:focus-visible {
+      border-color: #a9b7bf;
+      box-shadow: 0 8px 20px rgba(31, 47, 57, .08);
+      transform: translateY(-1px);
+    }
+
+    .quick-action.primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(47, 70, 85, .20);
+    }
+
+    .quick-action.primary:hover,
+    .quick-action.primary:focus-visible { background: var(--brand-strong); border-color: var(--brand-strong); }
+    .quick-action svg { width: 17px; height: 17px; flex: 0 0 auto; }
+    .quick-action .ext { width: 13px; height: 13px; opacity: .55; }
+
+    .quick-action[aria-disabled="true"] {
+      background: #f1f4f5;
+      border-color: var(--line);
+      color: #8d9aa1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ---------- NÚCLEOS ---------- */
+
+    .nuclei-section { margin-top: clamp(30px, 5vw, 46px); }
+
+    .section-heading { margin: 0 2px 16px; }
+
+    .section-heading h2 {
+      margin: 0;
+      color: #27343c;
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: -.012em;
+    }
+
+    .nuclei-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .nucleus-card {
+      --tone: var(--brand);
+      --tone-dark: var(--brand-strong);
+      --wash: #eef2f4;
+      position: relative;
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) 34px;
+      align-items: stretch;
+      min-height: 146px;
+      gap: 16px;
+      overflow: hidden;
+      width: 100%;
+      padding: 19px 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 5px 15px rgba(24, 40, 51, .04);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nucleus-card[data-nucleo="Medicamentos"]          { --tone: var(--t-med); --tone-dark: var(--t-med-d); --wash: var(--t-med-w); --card-bg:#CDE5FF; }
+    .nucleus-card[data-nucleo="Alimentos"]             { --tone: var(--t-ali); --tone-dark: var(--t-ali-d); --wash: var(--t-ali-w); --card-bg:#D1EFDD; }
+    .nucleus-card[data-nucleo="Serviços"]              { --tone: var(--t-ser); --tone-dark: var(--t-ser-d); --wash: var(--t-ser-w); --card-bg:#DDD6FF; }
+    .nucleus-card[data-nucleo="Produtos"]              { --tone: var(--t-pro); --tone-dark: var(--t-pro-d); --wash: var(--t-pro-w); --card-bg:#FFE5B5; }
+    .nucleus-card[data-nucleo="Serviços assistenciais"]{ --tone: var(--t-ass); --tone-dark: var(--t-ass-d); --wash: var(--t-ass-w); --card-bg:#F8D2E3; }
+    .nucleus-card[data-nucleo="Odontologia"]           { --tone: var(--t-odo); --tone-dark: var(--t-odo-d); --wash: var(--t-odo-w); --card-bg:#CAEAF0; }
+
+    .nucleus-card::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 98px;
+      height: 98px;
+      border-radius: 0 0 0 100%;
+      background: var(--wash);
+      content: "";
+      opacity: .8;
+    }
+
+    .nucleus-card:hover,
+    .nucleus-card:focus-visible {
+      border-color: var(--line-strong);
+      border-color: color-mix(in srgb, var(--tone) 40%, var(--line));
+      box-shadow: 0 12px 26px rgba(24, 40, 51, .10);
+      box-shadow: 0 12px 26px color-mix(in srgb, var(--tone) 16%, transparent);
+      transform: translateY(-2px);
+    }
+
+    .nucleus-card:active { transform: translateY(0) scale(.995); }
+
+    .nucleus-symbol {
+      position: relative;
+      z-index: 1;
+      align-self: center;
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(150deg, var(--tone), var(--tone-dark));
+      color: #fff;
+      box-shadow: 0 8px 15px rgba(24, 40, 51, .16);
+    }
+
+    .nucleus-symbol svg { width: 26px; height: 26px; }
+
+    .nucleus-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .nucleus-content strong {
+      display: block;
+      color: #16211f;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -.012em;
+      line-height: 1.25;
+    }
+
+    .nucleus-content span {
+      display: block;
+      margin-top: 6px;
+      color: #5b6870;
+      font-size: .82rem;
+      line-height: 1.45;
+    }
+
+    .nucleus-content em {
+      align-self: flex-start;
+      margin-top: auto;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: var(--wash);
+      color: var(--tone-dark);
+      font-size: .69rem;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .card-arrow {
+      position: relative;
+      z-index: 1;
+      align-self: center;
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-color: color-mix(in srgb, var(--tone) 26%, var(--line));
+      border-radius: 50%;
+      background: #fff;
+      color: var(--tone-dark);
+      transition: color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .card-arrow svg { width: 17px; height: 17px; }
+    .nucleus-card:hover .card-arrow { background: var(--tone); color: #fff; transform: translateX(2px); }
+
+    /* ---------- RODAPÉ ---------- */
+
+    .privacy-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 20px 2px 0;
+      color: var(--muted);
+      font-size: .79rem;
+      line-height: 1.5;
+    }
+
+    .privacy-note svg { width: 17px; height: 17px; flex: 0 0 auto; margin-top: 1px; color: #66757f; }
+
+    .app-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px 16px;
+      margin: 26px 2px 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted-soft);
+      font-size: .75rem;
+    }
+
+    .app-footer .build { font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+
+    .vstate {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-left: 8px;
+      padding: 4px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: #fff;
+      color: #4d5b65;
+      cursor: pointer;
+      font: inherit;
+      font-size: .72rem;
+      font-variant-numeric: normal;
+    }
+
+    .vstate:hover { border-color: var(--brand); color: var(--brand); }
+    .vstate[data-estado="nova"] { border-color: #b9cbd8; background: #eef4f8; color: #234055; font-weight: 600; }
+    .vstate[data-estado="ok"] { border-color: #bcd6c6; background: var(--okbg, #edf6f1); color: #1f5c3c; }
+
+
+    /* ---------- ATUALIZAÇÃO ---------- */
+    .updatebar{position:fixed;z-index:90;inset:0;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));background:rgba(23,32,39,.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+    .updatebar[hidden]{display:none!important}
+    .updatebox{width:min(100%,500px);background:#fff;border:1px solid var(--line-strong);border-radius:16px;box-shadow:0 18px 60px rgba(20,47,70,.28);padding:20px;color:var(--text);display:grid;gap:12px}
+    .updatebox .txt{display:grid;gap:6px;line-height:1.5}
+    .updatebox .txt b{font-size:1.05rem;color:var(--brand)}
+    .updatebox .txt span{color:var(--muted);font-size:.9rem}
+    .updatebox .update-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .updatebox button{min-height:44px;border:1px solid var(--line-strong);border-radius:10px;background:var(--brand);color:#fff;padding:8px 14px;font:600 .86rem/1.3 inherit;cursor:pointer}
+    .updatebox button.ghost{background:#fff;color:var(--brand)}
+    @media(max-width:520px){.updatebox{padding:17px}.updatebox .update-actions{display:grid;grid-template-columns:1fr}.updatebox button{width:100%}}
+
+    /* ---------- MODAL DO GUIA ---------- */
+
+    body.modal-open { overflow: hidden; }
+
+    .modal-backdrop {
+      position: fixed;
+      z-index: 60;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+      background: rgba(23, 32, 39, .45);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .modal-backdrop[hidden] { display: none; }
+
+    .guide-modal {
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 560px);
+      max-height: min(82vh, 660px);
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 26px 80px rgba(9, 16, 21, .30);
+    }
+
+    .guide-modal > header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 0 0 auto;
+      padding: 20px 20px 15px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .guide-body { flex: 1 1 auto; overflow: auto; padding: 4px 20px 22px; -webkit-overflow-scrolling: touch; }
+    .guide-modal h2 { margin: 0; font-size: 1.22rem; font-weight: 700; letter-spacing: -.018em; }
+    .guide-modal > header p { margin: 6px 0 0; color: var(--muted); font-size: .86rem; line-height: 1.5; }
+    .guide-section { margin-top: 20px; }
+    .guide-section h3 { margin: 0 0 9px; color: #3d4d57; font-size: .74rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .guide-routes { display: grid; gap: 8px; }
+    .guide-route { padding: 12px 13px; border: 1px solid var(--line); border-radius: 13px; background: #fbfcfc; }
+    .guide-route b { display: block; color: #26343c; font-size: .875rem; font-weight: 700; }
+    .guide-route p { margin: 3px 0 0; color: var(--muted); font-size: .81rem; line-height: 1.5; }
+
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      place-items: center;
+      margin: -6px -6px 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: #46565f;
+      cursor: pointer;
+    }
+
+    .icon-button:hover { background: #f4f6f7; }
+    .icon-button svg { width: 18px; height: 18px; }
+
+    /* ---------- TOAST ---------- */
+
+    .toast {
+      position: fixed;
+      z-index: 70;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      max-width: min(360px, calc(100vw - 32px));
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 14px;
+      background: #223541;
+      color: #fff;
+      box-shadow: 0 14px 32px rgba(17, 30, 39, .24);
+      font-size: .84rem;
+      font-weight: 600;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ---------- RESPONSIVO ---------- */
+
+    @media (max-width: 860px) {
+      .nucleus-content span { font-size: .81rem; }
+    }
+
+    @media (max-width: 700px) {
+      .app { padding-inline: 14px; }
+      .hero { border-radius: 23px; }
+      .brandline { margin-bottom: 18px; }
+      .quick-actions { grid-template-columns: 1fr 1fr; max-width: none; }
+      .quick-action.primary { grid-column: 1 / -1; }
+      .nuclei-grid { grid-template-columns: 1fr; gap: 11px; }
+      .nucleus-card { min-height: 0; }
+      .nucleus-card::before { width: 78px; height: 78px; }
+      .app-footer { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .guide-modal { max-height: min(88vh, 720px); }
+    }
+
+    @media (max-width: 420px) {
+      .quick-action { gap: 6px; padding: 11px 8px; font-size: .84rem; white-space: nowrap; }
+      .quick-action .ext { width: 12px; height: 12px; }
+      .quick-actions { gap: 8px; }
+    }
+
+    @media (max-width: 390px) {
+      .nucleus-card { grid-template-columns: 48px minmax(0, 1fr) 30px; gap: 13px; padding: 16px 14px; }
+      .nucleus-symbol { width: 48px; height: 48px; border-radius: 15px; }
+      .card-arrow { width: 30px; height: 30px; }
+      h1 { font-size: 1.8rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+
+    @media print {
+      .quick-actions, .card-arrow, .toast, .modal-backdrop { display: none !important; }
+      .hero, .nucleus-card { box-shadow: none; }
+    }
+  </style>
+
+<style id="casca-css">
+#tela-lista,#tela-app{position:fixed;inset:0;z-index:40;background:#f4f6f7;display:none;flex-direction:column}
+#tela-lista.on,#tela-app.on{display:flex}
+#tela-app.on{padding-bottom:0;box-sizing:border-box}
+#tela-app.on[data-uvis-app="drogaria"]{padding-bottom:0}
+#tela-app[data-uvis-app="drogaria"]>div:last-child{min-height:0}
+.casca-bar{display:grid;grid-template-columns:1fr minmax(0,auto) 1fr;align-items:center;gap:10px;background:var(--casca-tone,#2f4655);color:var(--casca-on-tone,#fff);
+  padding:9px 12px;flex:0 0 auto;min-height:60px;padding-top:calc(9px + env(safe-area-inset-top));
+  box-shadow:0 1px 0 rgba(0,0,0,.10)}
+.casca-bar button{white-space:nowrap;background:rgba(255,255,255,.94);color:#17212b;border:1px solid rgba(0,0,0,.14)!important;border-radius:10px;
+  padding:0 14px;font:inherit;font-weight:600;cursor:pointer;min-height:44px;box-shadow:0 1px 2px rgba(0,0,0,.10)}
+.casca-bar button:active{background:#e9eef1}
+/* Grid 1fr/auto/1fr: o título fica opticamente centrado sem position:absolute.
+   O antigo left:50% com width:62vw sobrepunha o botão em telas de 375px. */
+.casca-bar b{grid-column:2;justify-self:center;min-width:0;max-width:100%;text-align:center;
+  font-size:16px;font-weight:700;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.casca-bar button{justify-self:start}
+.casca-bar .espaco{grid-column:3}
+#lista-corpo{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:26px clamp(14px,3vw,34px) calc(26px + env(safe-area-inset-bottom));max-width:1180px;margin:0 auto;width:100%}
+#lista-corpo h2{font-size:21px;font-weight:700;letter-spacing:-.018em;margin:2px 0 6px;color:#1b262d;text-align:center}
+#lista-corpo p.sub{font-size:13px;color:#5b6870;margin:0 0 22px;text-align:center}
+.rot-card{display:flex;gap:16px;align-items:center;width:100%;text-align:left;background:#fff;
+  border:1px solid #dfe5e9;border-radius:14px;padding:17px 18px;margin-bottom:12px;font:inherit;cursor:pointer;min-height:72px;
+  box-shadow:0 3px 12px rgba(29,43,53,.05);transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+.rot-card:hover{border-color:#c6d0d6;box-shadow:0 8px 20px rgba(29,43,53,.09);transform:translateY(-1px)}
+.rot-card:active{background:#f4f6f7;transform:none}
+.rot-card b{display:block;font-size:15px;font-weight:700;color:#1b262d}
+.rot-card span{display:block;font-size:13px;line-height:1.45;color:#5b6870}
+.rot-card i{font-style:normal;color:var(--casca-tone,#2f4655);font-weight:700;font-size:18px;flex:0 0 auto}
+.rot-ic{flex:0 0 auto;display:grid;place-items:center;width:44px;height:44px;border-radius:13px;
+  background:color-mix(in srgb, var(--casca-tone,#2f4655) 10%, #fff);
+  background:var(--casca-wash,#eef2f4);color:var(--casca-tone,#2f4655)}
+.rot-ic svg{width:23px;height:23px}
+.rot-ic img{width:32px;height:32px;object-fit:contain;display:block}
+@media(max-width:400px){.rot-ic{width:40px;height:40px;border-radius:12px}.rot-ic svg{width:21px;height:21px}}
+#quadro{flex:1;border:0;width:100%;background:#fff}
+#casca-carga{position:absolute;inset:0;display:grid;place-items:center;background:#f4f6f7;color:#5b6870;font-size:14px}
+#casca-carga.off{display:none}
+</style>
+
+  
+
+  
+
+<style id="uvis-home-tone">
+  /* Acabamento restrito a tela inicial. Nao toca .casca-bar, #tela-lista,
+     #tela-app nem .rot-card, que sao a moldura compartilhada por todos os
+     nucleos e devem manter a cor tematica de cada um. */
+  .app .hero { border-color: #d2e2ee; box-shadow: 0 12px 34px rgba(20,69,102,.09); }
+  .app .nucleus-card { border-color: var(--tone); }
+  .app .nucleus-card:hover,
+  .app .nucleus-card:focus-visible { border-color: var(--tone); }
+  </style>
+
+
+</head>
+<body>
+  <main class="app">
+    <div class="updatebar" id="faixa-versao" hidden role="status" aria-live="polite"></div>
+    <section class="hero" aria-labelledby="titulo-principal">
+      <div class="brandline">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6v14H6M44 6v14h14M20 58V44H6M44 58V44h14"/>
+              <path d="M8 36c12-13 30-15 48-3M56 29C44 42 26 44 8 32"/>
+              <circle cx="32" cy="32" r="4.2" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          Inspeção Sanitária
+        </div>
+        <span id="estado-rede" hidden></span>
+      </div>
+
+      <h1 id="titulo-principal">Roteiros e apoio técnico</h1>
+      
+
+      <nav class="quick-actions" aria-label="Ações iniciais">
+        <button class="quick-action primary" id="abrir-consultas" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.2-4.2M4 11h2m5-7v2"/></svg>
+          Consultas<span class="sr-only"> — Central de Consultas</span>
+        </button>
+        <button class="quick-action" id="abrir-guia" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M9.8 9.2a2.4 2.4 0 1 1 3.5 2.1c-.9.45-1.3.9-1.3 1.9M12 16.5h.01"/></svg>
+          Guia de uso
+        </button>
+        <a class="quick-action" id="abrir-juntar" href="https://juntardoc.netlify.app" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l4 4v14H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z"/><path d="M14 3v5h5M8.5 14h7M8.5 17h5"/></svg>
+          Juntar PDF
+          <svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5h10v10M19 5 7 17"/></svg>
+          <span class="sr-only"> (abre site externo, exige internet)</span>
+        </a>
+      </nav>
+    </section>
+
+    <section class="nuclei-section" aria-labelledby="titulo-nucleos">
+      <div class="section-heading">
+        <h2 id="titulo-nucleos">Núcleos de inspeção</h2>
+      </div>
+
+      <div class="nuclei-grid">
+        <button class="nucleus-card" type="button" data-nucleo="Medicamentos">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7.5 16.5 14M8.2 9.3l6.5 6.5"/><path d="m7.1 4.8 12.1 12.1a3.1 3.1 0 0 1-4.4 4.4L2.7 9.2a3.1 3.1 0 0 1 4.4-4.4Z"/><path d="m7.1 4.8 2.2 2.2-6.6 6.6a3.1 3.1 0 0 0 4.4 4.4l6.6-6.6"/></svg></span>
+          <span class="nucleus-content"><strong>Medicamentos</strong></span>
+          
+        </button>
+
+        <button class="nucleus-card" type="button" data-nucleo="Alimentos">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V7"/><path d="M12 7C9.2 7 7.5 5.4 7.5 3c2.8 0 4.5 1.6 4.5 4Zm0 0c2.8 0 4.5-1.6 4.5-4-2.8 0-4.5 1.6-4.5 4Z"/><path d="M12 12c-3 0-4.8-1.7-4.8-4.2 3 0 4.8 1.7 4.8 4.2Zm0 0c3 0 4.8-1.7 4.8-4.2-3 0-4.8 1.7-4.8 4.2Z"/><path d="M12 17c-3 0-4.8-1.7-4.8-4.2 3 0 4.8 1.7 4.8 4.2Zm0 0c3 0 4.8-1.7 4.8-4.2-3 0-4.8 1.7-4.8 4.2Z"/></svg></span>
+          <span class="nucleus-content"><strong>Alimentos</strong></span>
+          
+        </button>
+
+        <button class="nucleus-card" type="button" data-nucleo="Serviços">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M7 21v-8l5-4 5 4v8M9.5 15h5M10 4h4v5h-4z"/></svg></span>
+          <span class="nucleus-content"><strong>Serviços</strong></span>
+          
+        </button>
+
+        <button class="nucleus-card" type="button" data-nucleo="Produtos">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V11a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10M6 9V6h4v3M8 6V4h5M13 4v2h2"/><rect x="12" y="13" width="9" height="8" rx="2"/><path d="M14 13v-2h5v2M15 17h3"/></svg></span>
+          <span class="nucleus-content"><strong>Produtos</strong></span>
+          
+        </button>
+
+        <button class="nucleus-card" type="button" data-nucleo="Serviços assistenciais">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8l7-5 7 5v8M9 20v-4h6v4M5 4h14"/><path d="M12 4V2"/></svg></span>
+          <span class="nucleus-content"><strong>Serviços assistenciais</strong></span>
+          
+        </button>
+
+        <button class="nucleus-card" type="button" data-nucleo="Odontologia">
+          <span class="nucleus-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.3 4.3C6.1 3 3.7 4.8 4 7.3c.4 3.1 2.1 5.7 3.4 8.3.7 1.4 1.1 4.1 2.4 4.1 1.7 0 .8-5.2 2.2-5.2s.5 5.2 2.2 5.2c1.3 0 1.7-2.7 2.4-4.1 1.3-2.6 3-5.2 3.4-8.3.3-2.5-2.1-4.3-4.3-3-2.2 1.2-3.5 1.2-5.8 0Z"/></svg></span>
+          <span class="nucleus-content"><strong>Odontologia</strong></span>
+          
+        </button>
+      </div>
+
+      
+    </section>
+
+    <footer class="app-footer">
+      
+      <span class="build"><span id="casca-versao">v20260918-1 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+    </footer>
+  </main>
+
+  <div class="modal-backdrop" id="guia" hidden>
+    <section class="guide-modal" role="dialog" aria-modal="true" aria-labelledby="titulo-guia">
+      <header>
+        <div>
+          <h2 id="titulo-guia">Mapa de navegação</h2>
+          <p>Onde cada botão e cada núcleo levam dentro do aplicativo.</p>
+        </div>
+        <button class="icon-button" type="button" id="fechar-guia" aria-label="Fechar o mapa de navegação"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </header>
+      <div class="guide-body">
+        <section class="guide-section">
+          <h3>Ações do topo</h3>
+          <div class="guide-routes">
+            <article class="guide-route"><b>Central de Consultas</b><p>Consulta transversal: produto por EAN/GTIN, registro, notificação ou processo; empresa por CNPJ e AFE/AE; situação regulatória e alertas sanitários.</p></article>
+            <article class="guide-route"><b>Juntar PDF</b><p>Ferramenta externa para reunir documentos em um único PDF. Abre em nova aba e exige conexão com a internet.</p></article>
+          </div>
+        </section>
+        <section class="guide-section">
+          <h3>Núcleos de inspeção</h3>
+          <div class="guide-routes">
+            <article class="guide-route"><b>Medicamentos</b><p>Farmácia de manipulação, drogaria ou distribuidora/transportadora. A conferência de estoque da drogaria está incorporada ao respectivo roteiro.</p></article>
+            <article class="guide-route"><b>Alimentos</b><p>Inspeção do estabelecimento em um roteiro e, no outro, rotulagem, consultas regulatórias, aditivos e suplementos.</p></article>
+            <article class="guide-route"><b>Serviços</b><p>Estética e beleza: roteiro, inventário de infrações, consulta auxiliar de produtos e relatório.</p></article>
+            <article class="guide-route"><b>Produtos</b><p>Trilhas separadas para fabricante de cosméticos, atacadista/distribuidor e transportador. A conferência de estoque é um roteiro à parte.</p></article>
+            <article class="guide-route"><b>Serviços assistenciais</b><p>ILPI, centro dia, comunidade terapêutica, residência terapêutica e modalidades de acolhimento, como o SAICA.</p></article>
+            <article class="guide-route"><b>Odontologia</b><p>Consultórios, clínicas e policlínicas. A tipologia é escolhida dentro do módulo, com roteiro, relatório e infrações.</p></article>
+          </div>
+        </section>
+        <section class="guide-section">
+          <h3>Uso em campo</h3>
+          <div class="guide-routes">
+            <article class="guide-route"><b>Preenchimento</b><p>O que for preenchido fica apenas neste aparelho e neste navegador. Nada é enviado para servidor.</p></article>
+            <article class="guide-route"><b>Sem internet</b><p>Roteiros, infrações e normas funcionam offline. As consultas às bases da Anvisa e o Juntar PDF exigem conexão.</p></article>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ==========================================================
+       TELA INICIAL — modal do guia, toast e estado de rede.
+       A navegação dos cards fica a cargo do listener da casca,
+       no fim do arquivo. Aqui não há mais listener em [data-nucleo]:
+       o antigo disparava window.location.href para arquivos
+       externos inexistentes e quebrava o HTML único.
+       ========================================================== */
+    const guia = document.getElementById('guia');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function mostrarAviso(texto) {
+      toast.textContent = texto;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    /* Trava de rolagem que funciona também no Safari iOS, onde
+       overflow:hidden no body não segura o fundo. */
+    let scrollSalvo = 0;
+    function travarFundo() {
+      scrollSalvo = window.scrollY || 0;
+      document.body.style.top = `-${scrollSalvo}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.classList.add('modal-open');
+    }
+    function destravarFundo() {
+      document.body.classList.remove('modal-open');
+      document.body.style.position = '';
