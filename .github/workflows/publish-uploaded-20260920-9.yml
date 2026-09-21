@@ -1,0 +1,82 @@
+name: Publish uploaded PWA 20260920-9
+
+on:
+  push:
+    paths:
+      - 'publish_payload_20260920_9/**'
+      - '.github/workflows/publish-uploaded-20260920-9.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reassemble uploaded HTML
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          VERSION = "20260920-9"
+          payload = Path("publish_payload_20260920_9")
+          parts = sorted(payload.glob("part*.txt"))
+          if not parts:
+              raise SystemExit("No payload parts found")
+
+          html = "".join(p.read_text(encoding="utf-8") for p in parts)
+          marker = f"const APP_VERSAO = '{VERSION}'"
+          if marker not in html:
+              raise SystemExit(f"Version marker not found: {marker}")
+
+          Path("index.html").write_text(html, encoding="utf-8")
+          Path("Index.html").write_text(html, encoding="utf-8")
+
+          swp = Path("sw.js")
+          sw = swp.read_text(encoding="utf-8")
+          sw, n = re.subn(r"const\s+VERSAO\s*=\s*['\"][^'\"]+['\"]",
+                          f"const VERSAO = '{VERSION}'", sw, count=1)
+          if n != 1:
+              raise SystemExit("Could not update sw.js version")
+          swp.write_text(sw, encoding="utf-8")
+
+          vp = Path("versao.json")
+          data = json.loads(vp.read_text(encoding="utf-8"))
+          data["versao"] = VERSION
+          data["notas"] = "Publicação do HTML anexado pelo usuário como versão PWA vigente."
+          vp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print("Published version", VERSION, "with", len(parts), "parts and", len(html), "characters")
+          PY
+
+      - name: Validate
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path("index.html").read_text(encoding="utf-8")
+          assert "<!doctype html>" in s.lower()
+          assert "const APP_VERSAO = '20260920-9'" in s
+          assert Path("Index.html").read_text(encoding="utf-8")==s
+          assert "const VERSAO = '20260920-9'" in Path("sw.js").read_text(encoding="utf-8")
+          print("validation ok")
+          PY
+
+      - name: Commit PWA
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html Index.html sw.js versao.json
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "publish: PWA 20260920-9 from uploaded HTML"
+          git push
