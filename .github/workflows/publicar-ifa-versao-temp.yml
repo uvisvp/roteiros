@@ -1,79 +1,14 @@
-# Publicação PWA — correções pontuais de navegação/IFA/Estética
+# Publicação PWA — workflow temporário preservado apenas para execução manual
 name: Publicar correção IFA e paleta
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/publicar-ifa-versao-temp.yml'
-      - 'scripts/publicar_ifa_cores.py'
-      - 'scripts/ajuste_estetica_ifa_v13.py'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  publicar:
+  informar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Aplicar base da correção anterior
-        run: python scripts/publicar_ifa_cores.py
-
-      - name: Diagnóstico Estética
-        run: |
-          node - <<'NODE'
-          const {unpack}=require('./scripts/integrated-html.cjs');
-          const {blocks}=unpack('index.html');
-          const ids=[...blocks.keys()].filter(x=>/estet|serv/i.test(x));
-          console.log('BLOCOS_ESTETICA='+JSON.stringify(ids));
-          for(const id of ids){
-            const src=blocks.get(id)||'';
-            if(!/licen|acoesMobile|irGrupo|irregular|details|p3/i.test(src)) continue;
-            console.log('\n### BLOCO '+id+' ###');
-            for(const termo of ['Licença','licença','licenca','acoesMobile','irGrupo','irregular','details','p3']){
-              let pos=src.toLowerCase().indexOf(termo.toLowerCase());
-              if(pos<0) continue;
-              const ini=Math.max(0,pos-900), fim=Math.min(src.length,pos+1800);
-              console.log('\n-- '+termo+' @ '+pos+' --\n'+src.slice(ini,fim));
-            }
-          }
-          NODE
-
-      - name: Aplicar ajustes Estética e IFA v13
-        run: python scripts/ajuste_estetica_ifa_v13.py
-
-      - name: Validar
-        run: |
-          node --check sw.js
-          node --check ifa-lookup-shared.js
-          V=$(python -c "import json;print(json.load(open('versao.json'))['versao'])")
-          grep -q "const APP_VERSAO = '$V'" index.html
-          grep -q "const VERSAO = '$V'" sw.js
-          grep -q "home-option-b-overrides" index.html
-          grep -q "__UVIS_CASCA_DIRECT_BINDINGS__" index.html
-          grep -q "__UVIS_IFA_DIRECT_V13__" index.html
-          grep -q "estetica-toolbar-v13" index.html
-          grep -q "uvis-rot-icons-v13" index.html
-          grep -q "ifa/registros.json" index.html
-          cmp -s index.html Index.html
-
-      - name: Publicar
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html Index.html sw.js versao.json
-          if git diff --cached --quiet; then
-            echo 'Publicação já aplicada; nada novo para commitar.'
-            exit 0
-          fi
-          git commit -m 'fix: ajusta Estética, IFA e ícones internos'
-          git pull --rebase origin main
-          git push origin HEAD:main
+      - run: echo "Workflow legado desativado para pushes automáticos."
