@@ -1,0 +1,735 @@
+
+<script>
+/* ================= CASCA =================
+   Tela inicial remodelada (preservada) -> lista de roteiros do núcleo -> módulo.
+   Os módulos ficam em blocos LZ-String e são montados sob demanda. */
+(function(){
+  var ROTEIROS = {"Medicamentos":[["Drogaria", "Roteiro completo. A conferência de estoque já está dentro da inspeção.", "drogaria"], ["Farmácia com Manipulação", "Preparações não estéreis: roteiro, documentos, estoque e relatório.", "farmacia-manipulacao"], ["Distribuidora / transportadora", "Atacado, armazenagem e transporte de medicamentos em um único módulo.", "distribuidoras-transportadoras"]],"Alimentos":[["Inspeção do estabelecimento","Roteiro por tipo de estabelecimento, relatório e infrações.","servicos-alimentacao-roteiro"],["Rotulagem, consultas e composição","Conferência de rótulo, consulta de produto ou empresa, aditivos, coadjuvantes, enzimas e suplementos.","alimentos-integrado"]],"Serviços":[["Estética e beleza","Inventário de infrações, consulta de produtos e relatório.","estetica"]],"Produtos":[["Fabricante de cosméticos", "Trilha específica de inspeção para fabricação de cosméticos, produtos de higiene e perfumes — BPF, produção, controle da qualidade, documentação, reclamações e recolhimento.", "produtos-correlatos", "atividade=fab_cosm"], ["Atacadista / distribuidor", "Trilha de inspeção para distribuição e armazenagem de cosméticos, saneantes e dispositivos médicos/IVD, exibindo os controles conforme as classes selecionadas.", "produtos-correlatos", "atividade=atacadista"], ["Transportador", "Trilha de inspeção para transporte de produtos sujeitos à vigilância sanitária, com foco em AFE, conservação da carga, temperatura, segregação e rastreabilidade.", "produtos-correlatos", "atividade=transportadora"]],"Serviços assistenciais":[["ILPI e acolhimentos","ILPI, Centro Dia, comunidade terapêutica, SRT, SAICA e demais modalidades.","servicos-assistenciais"]],"Odontologia":[["Serviço odontológico","Consultórios, clínicas e policlínicas — RDC nº 1.002/2025.","odontologia"]]};
+  /* Símbolo minimalista por roteiro. A chave é o id do módulo; quando o mesmo
+     módulo atende trilhas diferentes, acrescenta-se |querystring. */
+  var ICONES = {
+    "drogaria": '<path d="M4 9h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM4 9l1.6-5h12.8L20 9M12 12v5M9.5 14.5h5"/>',
+    "distribuidoras-transportadoras": '<path d="M2 7h11v10H2zM13 10h4l3 3v4h-7zM6.5 17a1.6 1.6 0 1 0 0 3.2A1.6 1.6 0 0 0 6.5 17M16.5 17a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2"/>',
+    "servicos-alimentacao-roteiro": '<path d="M6 3v8a2 2 0 0 0 4 0V3M8 11v10M17 3c-1.4 1.4-2 3-2 5v4h4V8c0-2-.6-3.6-2-5zM17 12v9"/>',
+    "alimentos-integrado": '<path d="M4 5h11l5 5v9H4zM15 5v5h5M7 13h9M7 16.5h6"/>',
+    "estetica": '<path d="M6.5 4.5a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4M6.5 15.1a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4M8.4 7.6 19 18.6M8.4 16.4 19 5.4"/>',
+    "produtos-correlatos|atividade=fab_cosm": '<path d="M3 21V10l6 3.5V10l6 3.5V4h6v17zM7 17.5h.01M11 17.5h.01M18 17.5h.01"/>',
+    "produtos-correlatos|atividade=atacadista": '<path d="M3 8.5 8 6l5 2.5v5L8 16l-5-2.5zM13 12.5 18 10l3 1.5v4L18 17l-5-2.5zM8 6V3h8v3"/>',
+    "produtos-correlatos|atividade=transportadora": '<path d="M2 6h12v11H2zM14 9.5h3.6L21 13v4h-7zM6 17a1.6 1.6 0 1 0 0 3.2A1.6 1.6 0 0 0 6 17M17 17a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2M17.5 3H21M18.5 6H21"/>',
+    "estoque-produtos": '<path d="M8 4h8v3H8zM6 5H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-1M8.5 13l2.2 2.2 4.8-4.8"/>',
+    "servicos-assistenciais": '<path d="M4 20V10l8-6 8 6v10zM9 20v-5a3 3 0 0 1 6 0v5M12 9.4l.9-1a1.5 1.5 0 1 1 2.1 2.1L12 13.4 8.9 10.5A1.5 1.5 0 1 1 11 8.4z"/>',
+    "odontologia": '<path d="M12 5.4C10.6 4.4 8.8 3.7 7.4 4.3 5.6 5 4.7 7 5 9.7c.3 2.4.9 3.6 1.4 5.6.4 1.6.5 4.7 1.9 4.7 1.3 0 1.4-2.5 1.8-4.2.3-1.3.8-2 1.9-2s1.6.7 1.9 2c.4 1.7.5 4.2 1.8 4.2 1.4 0 1.5-3.1 1.9-4.7.5-2 1.1-3.2 1.4-5.6.3-2.7-.6-4.7-2.4-5.4-1.4-.6-3.2.1-4.6 1.1z"/>'
+  };
+  function simbolo(app, qs){
+    if(app==='farmacia-manipulacao'){
+      var wi=document.createElement('span');wi.className='rot-ic';
+      wi.innerHTML='<svg viewBox="0 0 64 64" width="36" height="36" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 27h28v3a19 19 0 0 1-19 19h-1a19 19 0 0 1-19-19v-3h11"/><path d="M25 49h14"/><path d="M38 27l12-12"/><circle cx="52" cy="13" r="4.5"/><path d="M19 15c4 1 8 4.2 10 8.8"/><path d="M28 12c4.2 2.1 6.9 6.6 6.9 11.3"/><path d="M18 34h9"/><path d="M22.5 29.5v9"/></g></svg>';
+      return wi;
+    }
+    var d = ICONES[app + (qs ? '|' + qs : '')] || ICONES[app];
+    /* __UVIS_ROT_ICON_FALLBACK_V13__ */
+    if(!d) d='<path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/>';
+    var s = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('fill','none');
+    s.setAttribute('aria-hidden','true'); s.setAttribute('focusable','false');
+    s.innerHTML = '<g stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + d + '</g>';
+    var w = document.createElement('span'); w.className = 'rot-ic'; w.appendChild(s);
+    return w;
+  }
+  var cache = {};
+  function rec(id){
+    if(cache[id]) return cache[id];
+    var el = document.getElementById(id);
+    if(!el) throw new Error('bloco ausente: ' + id);
+    var t = LZString.decompressFromBase64(el.textContent.trim());
+    if(!t) throw new Error('bloco ilegível: ' + id);
+    return (cache[id] = t);
+  }
+  function montar(app){
+    var s = rec('app--' + app);
+if(app==='distribuidoras-transportadoras'){
+      var distTela1 = String.raw`(function(){
+        var D={
+          inspection:[['meta.start','Data inicial','date'],['meta.end','Data final','date'],['meta.inspectionType','Tipo de inspeção','select',['Licença inicial','Alteração / ampliação de atividade','Alteração de endereço','Renovação','Reinspeção','Denúncia','Outro']],['meta.objective','Objetivo / escopo'],['meta.process','Processo SEI / solicitação']],
+          business:[['meta.company','Razão social'],['meta.fantasy','Nome fantasia'],['meta.cnpj','CNPJ'],['meta.unit','Matriz / filial','select',['Matriz','Filial']],['meta.address','Endereço completo'],['meta.phone','Telefone'],['meta.email','E-mail'],['meta.otherUnits','Outros estabelecimentos / unidades vinculadas','textarea']],
+          contacts:[['meta.legal','Responsável legal / CPF'],['meta.rt','Responsável técnico principal / CRF-UF'],['meta.rtAlternate','RT substituto(s) / CRF-UF'],['meta.crtSchedule','CRT / CRF e horários, quando constarem'],['meta.contactInspection','Pessoa(s) contatada(s) nesta inspeção','textarea']],
+          characterization:[['meta.area','Área total aproximada (m²)'],['meta.sectors','Edificações, áreas e setores','checks',['Recepção','Expedição','Almoxarifado / estoque','Área de quarentena','Área de segregados','Câmara fria / termolábeis','Área de controlados','Área de inflamáveis','Laboratório de controle de qualidade','Administrativo','Vestiário','Sanitários','Refeitório / copa','Abrigo de resíduos','Doca / pátio de carga','Garagem / frota']],['meta.workers','Número de trabalhadores'],['meta.hours','Horário de funcionamento'],['meta.surroundings','Observações','textarea']],
+          history:[['meta.previousInspection','Inspeção anterior: data / processo'],['meta.previousNC','NCs anteriores e situação atual','textarea'],['meta.previousActions','Ações e evidências apresentadas','textarea'],['meta.historyEvaluation','Avaliação atual da equipe','textarea']]
+        };
+        function fs(rows){return rows.map(function(x){return field(x[0],x[1],x[2]||'text',x[3])}).join('')}
+        function dc(id,title,desc,fields){return '<article class="dist-doc-card"><div><b>'+esc(title)+'</b><small>'+esc(desc)+'</small></div><div class="grid">'+fs(fields)+'</div></article>'}
+        function docStatus(prefix,opcoes){return [[prefix+'.status','Situação do documento','select',opcoes||['Apresentado','Não apresentado','Não se aplica']]]}
+        DATA.sections=DATA.sections.filter(function(x){return x.id!=='dist-identificacao-preparacao'});
+        DATA.sections.unshift({id:'dist-identificacao-preparacao',title:'Checklist de regularidade e preparação',subtitle:'A equipe registra a conclusão. A tela não cria não conformidade automaticamente por ausência de documento ou por dado divergente.',condition:'all',docs:['Licença sanitária','AFE','AE','Certidão de regularidade técnica','AVCB/CLCB'],reportTitle:'1. Identificação e situação regulatória',questions:[
+          {id:'dist-id-licenca',text:'A licença sanitária apresentada identifica o estabelecimento e abrange as atividades inspecionadas?',legal:'RDC Anvisa nº 430/2020, arts. 7 a 10; legislação sanitária aplicável.',ncText:'A equipe registrou divergência entre a licença sanitária e o estabelecimento ou as atividades inspecionadas.'},
+          {id:'dist-id-afe',text:'A AFE apresentada ou consultada abrange as atividades com medicamentos efetivamente inspecionadas?',legal:'RDC Anvisa nº 16/2014, quando aplicável; conferir dados confirmados na fonte oficial.',ncText:'A equipe registrou que a AFE não abrange as atividades com medicamentos efetivamente inspecionadas.'},
+          {id:'dist-id-ae',text:'Quando aplicável, a AE abrange a operação com medicamentos sujeitos a controle especial?',legal:'RDC Anvisa nº 16/2014, quando aplicável; normas específicas de controle especial.',ncText:'A equipe registrou que a AE não abrange a operação com medicamentos sujeitos a controle especial.'},
+          {id:'dist-id-rt',text:'Os responsáveis técnico e legal estão identificados e compatíveis com os documentos e a operação observada?',legal:'RDC Anvisa nº 430/2020, arts. 8 a 10.',ncText:'A equipe registrou inconsistência na identificação ou compatibilidade dos responsáveis.'},
+          
+        ]});
+        function sec(id){return DATA.sections.find(function(x){return x.id===id})}
+        /* Novos blocos objetivos: são sempre visíveis e a equipe pode marcar N/A.
+           A referência técnica orienta a análise, sem criar exigência autônoma. */
+        DATA.sections.push(
+          {id:'ifa-rastreabilidade',title:'Regularidade e rastreabilidade de IFA',subtitle:'Amostragem de IFA destinado à manipulação. A consulta Anvisa é complementar: não substitui a análise documental, a qualidade do lote ou a avaliação sanitária.',condition:'all',docs:['Amostra de nota fiscal e recebimento','Qualificação/aprovação de fornecedor','Acordo de qualidade ou especificação documentada','Certificado de análise do lote','Registros de quarentena, liberação, estoque e expedição','Documentos de importação, quando aplicável','Registros de fracionamento, quando aplicável'],reportTitle:'11.2.1 Regularidade e rastreabilidade de IFA',questions:[
+            {id:'ifa-01',text:'O destinatário da amostra de IFA está identificado, autorizado e licenciado para a atividade pertinente?',legal:'RDC Anvisa nº 204/2006, art. 4º.',ncText:'A equipe registrou pendência na identificação, autorização ou licenciamento do destinatário da amostra de IFA.',noOcr:true},
+            {id:'ifa-02',text:'A finalidade de uso do IFA e seu respaldo regulatório foram identificados para a amostra examinada?',legal:'RDC Anvisa nº 204/2006, art. 5º e parágrafo único; verificar atos específicos incidentes no caso.',ncText:'A equipe registrou pendência na identificação da finalidade de uso ou do respaldo regulatório do IFA.',noOcr:true},
+            {id:'ifa-03',text:'Fornecedor, fabricante e insumo foram aprovados documentalmente, com qualificação proporcional ao risco?',legal:'RDC Anvisa nº 204/2006, Anexo, item 7.2; IN Anvisa nº 62/2020, art. 2º.',ncText:'A equipe registrou pendência na aprovação ou qualificação documental do fornecedor, fabricante ou IFA.',noOcr:true},
+            {id:'ifa-04',text:'Há acordo de qualidade ou especificação documentada que cubra os requisitos pertinentes da operação?',legal:'IN Anvisa nº 62/2020, art. 3º e parágrafo único.',ncText:'A equipe registrou ausência ou insuficiência do acordo de qualidade ou da especificação documentada.',noOcr:true},
+            {id:'ifa-05',text:'A cadeia de fornecimento e seus riscos estão documentados e sujeitos a verificação periódica?',legal:'IN Anvisa nº 62/2020, art. 4º, §§1º e 2º.',ncText:'A equipe registrou pendência na documentação ou verificação da cadeia de fornecimento e seus riscos.',noOcr:true},
+            {id:'ifa-06',text:'Auditorias de fabricantes e distribuidores estão documentadas e sua periodicidade é justificada por risco?',legal:'IN Anvisa nº 62/2020, art. 4º, §§3º a 7º.',ncText:'A equipe registrou pendência na auditoria ou na justificativa de sua periodicidade baseada em risco.',noOcr:true},
+            {id:'ifa-07',text:'Recebimento, identificação, quarentena, aprovação e liberação do lote estão registrados?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 7.3.1 a 7.3.7 e 10.4.',ncText:'A equipe registrou pendência nos registros de recebimento, quarentena, aprovação ou liberação do lote de IFA.',noOcr:true},
+            {id:'ifa-08',text:'Quando houver importação, as análises aplicáveis do IFA importado estão vinculadas ao lote examinado?',legal:'IN Anvisa nº 62/2020, art. 4º, §8º, respeitado o art. 1º.',ncText:'A equipe registrou pendência nas análises aplicáveis do IFA importado examinadas.',noOcr:true},
+            {id:'ifa-09',text:'Quando aplicável ao importador, há amostra de referência do lote mantida nas condições definidas?',legal:'IN Anvisa nº 62/2020, art. 4º, §9º.',ncText:'A equipe registrou pendência na manutenção da amostra de referência do lote importado.',noOcr:true},
+            {id:'ifa-10',text:'O certificado de análise corresponde ao lote e traz os elementos aplicáveis de identificação, especificação e emissão?',legal:'RDC Anvisa nº 204/2006, Anexo, item 12.3.3, com alteração da RDC nº 32/2010.',ncText:'A equipe registrou pendência na correspondência ou nos elementos aplicáveis do certificado de análise.',noOcr:true},
+            {id:'ifa-11',text:'O certificado disponibilizado corresponde à operação realizada, inclusive quando houver fracionamento ou análise?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 12.3.1 e 12.3.2; IN Anvisa nº 62/2020, art. 4º, §8º.',ncText:'A equipe registrou pendência na correspondência do certificado à operação realizada.',noOcr:true},
+            {id:'ifa-12',text:'Quando houver fracionamento, foi respeitada a proibição aplicável ao insumo estéril?',legal:'RDC Anvisa nº 204/2006, art. 3º.',ncText:'A equipe registrou pendência no atendimento à proibição de fracionamento de insumo estéril.',noOcr:true},
+            {id:'ifa-13',text:'Quando houver fracionamento, análises e liberação após a operação foram registradas antes da comercialização?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 8.18 e 12.2.1.1 a 12.2.1.2.',ncText:'A equipe registrou pendência nas análises ou na liberação pós-fracionamento.',noOcr:true},
+            {id:'ifa-14',text:'Quando aplicável ao fracionador, a estrutura de controle da qualidade atende à atividade executada?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 12.1.3 a 12.2.3; IN Anvisa nº 62/2020, art. 4º, §8º.',ncText:'A equipe registrou pendência na estrutura de controle da qualidade aplicável ao fracionamento.',noOcr:true},
+            {id:'ifa-15',text:'Embalagens e rótulos preservam a identidade do IFA e, no fracionamento, trazem os dados aplicáveis?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 8.16, 9.6, 9.7, 10.1 e 10.1.1.',ncText:'A equipe registrou pendência na preservação da identidade do IFA por embalagem ou rotulagem.',noOcr:true},
+            {id:'ifa-16',text:'O lote pode ser localizado e reconciliado entre entrada, estoque, expedição e destinatário?',legal:'RDC Anvisa nº 204/2006, Anexo, itens 8.17 e 10.5.',ncText:'A equipe registrou pendência na localização ou reconciliação do lote de IFA.',noOcr:true}
+          ]},
+          {id:'qt-area',title:'Qualificação de área térmica',subtitle:'Armazéns, câmaras e áreas climatizadas. A norma exige o estudo; a avaliação do documento segue a orientação.',condition:'all',docs:['Protocolo e relatório de mapeamento térmico da área','Registros do monitoramento de rotina','Controle de mudanças e requalificação'],reportTitle:'9.3.1 Qualificação de área térmica',questions:[
+            {id:'qta-01',text:'Foi apresentado estudo de qualificação térmica das áreas de armazenagem climatizadas?',legal:'RDC Anvisa nº 430/2020, art. 43, §1º',ncText:'Não foi apresentado estudo de qualificação térmica das áreas de armazenagem climatizadas: «evidência» (RDC Anvisa nº 430/2020, art. 43, §1º).'},
+            {id:'qta-02',text:'O estudo declara número e posição dos sensores, duração, condição de carga, critério de aceitação e conclusão?',legal:'RDC Anvisa nº 430/2020, art. 43, §1º',ncText:'O estudo de qualificação da área não declara os elementos necessários à sua avaliação: «evidência».'},
+            {id:'qta-03',text:'O monitoramento de rotina é feito nos pontos críticos apontados pelo estudo?',legal:'RDC Anvisa nº 430/2020, art. 43, §1º',ncText:'O monitoramento de rotina não é feito nos pontos críticos apontados pelo estudo: «evidência».'}
+          ]},
+          {id:'qt-equip',title:'Qualificação de equipamentos',subtitle:'Câmaras frias, refrigeradores e freezers, individualmente.',condition:'all',docs:['Relatório de qualificação por equipamento','Certificados de calibração dos sensores'],reportTitle:'9.3.2 Qualificação de equipamentos',questions:[
+            {id:'qte-01',text:'Os equipamentos de conservação de termolábeis foram qualificados individualmente?',legal:'RDC Anvisa nº 430/2020, art. 78',ncText:'Os equipamentos de conservação de termolábeis não foram qualificados: «evidência» (RDC Anvisa nº 430/2020, art. 78).'},
+            {id:'qte-02',text:'A qualificação avalia comportamento em carga, tempo de recuperação após abertura e após falta de energia?',legal:'RDC Anvisa nº 430/2020, art. 78',ncText:'A qualificação dos equipamentos não avalia o comportamento em carga e a recuperação: «evidência».'}
+          ]},
+          {id:'qt-veiculo',title:'Qualificação de veículos e embalagens térmicas',subtitle:'São qualificações distintas: um estudo não substitui o outro.',condition:'transporte',docs:['Qualificação do veículo refrigerado','Qualificação da embalagem ou recipiente térmico','Procedimento de acondicionamento'],reportTitle:'9.3.3 Qualificação de veículos e embalagens',questions:[
+            {id:'qtv-01',text:'Os veículos utilizados no transporte de termolábeis foram qualificados?',legal:'RDC Anvisa nº 430/2020, art. 64, IV',ncText:'Os veículos utilizados no transporte de termolábeis não foram qualificados: «evidência» (RDC Anvisa nº 430/2020, art. 64, IV).'},
+            {id:'qtv-02',text:'As embalagens e recipientes térmicos foram qualificados na configuração efetivamente utilizada?',legal:'RDC Anvisa nº 430/2020, art. 83',ncText:'As embalagens e recipientes térmicos não foram qualificados na configuração utilizada: «evidência» (RDC Anvisa nº 430/2020, art. 83).'}
+          ]},
+          {id:'qt-rota',title:'Qualificação de rotas',subtitle:'Perfil de temperatura do trajeto real, por época do ano.',condition:'transporte',docs:['Estudo de perfil de rota','Registros de temperatura das entregas'],reportTitle:'9.3.4 Qualificação de rotas',questions:[
+            {id:'qtr-01',text:'As rotas utilizadas para produtos sujeitos a controle de temperatura foram objeto de qualificação de perfil de rota?',legal:'RDC Anvisa nº 430/2020, art. 64',ncText:'As rotas utilizadas para produtos sujeitos a controle de temperatura não foram qualificadas: «evidência» (RDC Anvisa nº 430/2020, art. 64).'},
+            {id:'qtr-02',text:'O estudo cobre a pior condição de temperatura externa, paradas e transbordos do trajeto real?',legal:'RDC Anvisa nº 430/2020, art. 64',ncText:'O estudo de rota não cobre a pior condição do trajeto real: «evidência».'}
+          ]},
+
+          {id:'qualificacao-sistemas',title:'Qualificação e validação de sistemas informatizados',subtitle:'Aplicável a sistemas que impactem qualidade, rastreabilidade, liberação, registros ou dados. O roteiro segue abordagem proporcional ao risco.',condition:'all',docs:['Inventário e classificação de sistemas','Avaliação de risco','Requisitos do usuário/especificações, quando aplicáveis','Plano, testes, desvios e relatório de validação','Controle de mudanças e reavaliação','Procedimentos de contingência, cópia e recuperação de dados'],reportTitle:'11.8.1 Qualificação e validação de sistemas informatizados',questions:[
+            {id:'si-01',text:'Os sistemas com impacto na qualidade foram identificados e classificados conforme seu impacto e risco?',legal:'RDC Anvisa nº 430/2020, art. 40; guia técnico de validação de sistemas computadorizados como apoio, sem criar exigência autônoma.',ncText:'A equipe registrou pendência na identificação ou classificação de risco dos sistemas com impacto na qualidade.',noOcr:true},
+            {id:'si-02',text:'A validação ou qualificação apresenta escopo e requisitos proporcionais ao uso pretendido e ao risco identificado?',legal:'RDC Anvisa nº 430/2020, art. 40.',ncText:'A equipe registrou insuficiência no escopo ou nos requisitos da validação proporcional ao risco.',noOcr:true},
+            {id:'si-03',text:'Testes, resultados, desvios e aprovação estão documentados antes do uso pretendido ou após mudança significativa?',legal:'RDC Anvisa nº 430/2020, art. 40.',ncText:'A equipe registrou pendência na documentação de testes, desvios, aprovação ou mudança significativa do sistema.',noOcr:true},
+            {id:'si-04',text:'Há controle de mudanças e reavaliação do estado validado quando alterações podem afetar a qualidade ou rastreabilidade?',legal:'RDC Anvisa nº 430/2020, arts. 18, IX e 40.',ncText:'A equipe registrou pendência no controle de mudanças ou na reavaliação do estado validado.',noOcr:true},
+            {id:'si-05',text:'Procedimentos de contingência e recuperação de dados são definidos e testados conforme a criticidade do sistema?',legal:'RDC Anvisa nº 430/2020, arts. 18, XV e 40.',ncText:'A equipe registrou pendência nos procedimentos de contingência ou recuperação de dados proporcionais à criticidade.',noOcr:true},
+            {id:'si-06',text:'Quando houver fornecedor ou interface terceirizada, responsabilidades e rastreabilidade de dados relevantes estão documentadas?',legal:'RDC Anvisa nº 430/2020, arts. 40, 72 a 74.',ncText:'A equipe registrou pendência na definição de responsabilidades ou na rastreabilidade de dados em sistema terceirizado.',noOcr:true}
+          ]},
+          {id:'residuos-abrigo',title:'Resíduos — lixeiras, abrigo temporário e abrigo externo',subtitle:'Verificação física no padrão da Drogaria. Informe “Não se aplica” quando o tipo de abrigo não existir ou não for pertinente ao resíduo gerado.',condition:'all',docs:['PGRSS, quando aplicável','Procedimento de segregação, armazenamento e destinação','Contrato e comprovantes de coleta/destinação, quando aplicáveis'],reportTitle:'11.5.1 Armazenamento e destinação de resíduos',questions:[
+            {id:'re-01',text:'Os resíduos estão acondicionados em lixeiras devidamente identificadas e com abertura por pedal?',legal:'RDC Anvisa nº 222/2018, arts. 17 e 22.',ncText:'A equipe registrou lixeiras de resíduos sem identificação adequada ou sem abertura por pedal.',noOcr:true},
+            {id:'re-02',text:'Existe abrigo temporário de resíduos?',legal:'RDC Anvisa nº 222/2018, quando aplicável ao fluxo de resíduos do estabelecimento.',ncText:'A equipe registrou a inexistência de abrigo temporário de resíduos no caso em que ele foi considerado aplicável.',noOcr:true},
+            {id:'re-03',text:'Quando houver abrigo temporário: pisos e paredes são resistentes, laváveis e impermeáveis?',legal:'RDC Anvisa nº 222/2018, art. 29, I.',ncText:'A equipe registrou inadequação de pisos ou paredes do abrigo temporário de resíduos.',noOcr:true},
+            {id:'re-04',text:'Quando houver abrigo temporário: iluminação, água, tomada elétrica alta e ralo sifonado com tampa atendem ao requisito?',legal:'RDC Anvisa nº 222/2018, art. 29, II.',ncText:'A equipe registrou inadequação de iluminação, água, tomada elétrica ou ralo do abrigo temporário de resíduos.',noOcr:true},
+            {id:'re-05',text:'Quando houver abrigo temporário: ele está identificado como abrigo temporário de resíduos?',legal:'RDC Anvisa nº 222/2018, art. 29, V.',ncText:'A equipe registrou ausência de identificação do abrigo temporário de resíduos.',noOcr:true},
+            {id:'re-06',text:'Existe abrigo externo de resíduos?',legal:'RDC Anvisa nº 222/2018, quando aplicável ao fluxo de resíduos do estabelecimento.',ncText:'A equipe registrou a inexistência de abrigo externo de resíduos no caso em que ele foi considerado aplicável.',noOcr:true},
+            {id:'re-07',text:'Quando houver abrigo externo: os coletores são separados conforme os grupos de resíduos gerados?',legal:'RDC Anvisa nº 222/2018, art. 34.',ncText:'A equipe registrou inadequação na separação dos coletores no abrigo externo de resíduos.',noOcr:true}
+          ]}
+        );
+        var expeditionItems=[
+          ['q245','Data da expedição ou do recebimento','Confirme a data vinculada a esta expedição.'],
+          ['q246','Transportador: razão social, endereço e CNPJ','Confira a identificação completa do transportador no conjunto documental.'],
+          ['q247','Motorista: nome e documento de identificação','Verifique a identificação do condutor quando houver transporte rodoviário.'],
+          ['q248','Destinatário: razão social, endereço e CNPJ','Compare os dados com o destinatário efetivo da carga.'],
+          ['q249','Medicamento: nome e apresentação','A descrição deve permitir identificar sem ambiguidade o produto expedido.'],
+          ['q250','Quantidade, lote e validade','Confira esses dados para cada medicamento incluído na expedição.'],
+          ['q251','Condições de transporte e identificação do veículo ou instrumento','Verifique a condição aplicável ao produto e a identificação usada no monitoramento.'],
+          ['q252','Número único da ordem de entrega','O identificador deve permitir recuperar o registro da expedição.'],
+          ['q253','Número da nota fiscal ou DANFE','Registre o número do documento fiscal conferido.'],
+          ['q254','Lotes dos medicamentos na nota fiscal','O documento fiscal deve permitir relacionar os lotes aos produtos expedidos.']
+        ];
+        var expedition=sec('expedicao'),legacyExpeditionIds=expeditionItems.map(function(x){return x[0]});
+        var expeditionComposite={id:'expedicao-documento',text:'O documento ou conjunto de registros desta expedição reúne os dados obrigatórios conferidos abaixo?',legal:'RDC Anvisa nº 430/2020, arts. 59, incisos I a IX, e 60.',ncText:'O documento ou conjunto de registros da expedição não reúne todos os dados obrigatórios conferidos.',inventoryMatch:'expedicao-documental-consolidada',composite:true,noOcr:true};
+        if(expedition){
+          var operationalExpedition=expedition.questions.filter(function(q){return legacyExpeditionIds.indexOf(q.id)<0});
+          var loadingRule=operationalExpedition.find(function(q){return q.id==='q256'});
+          if(loadingRule){
+            loadingRule.text='O carregamento é feito de forma cuidadosa e sistemática, seguindo o princípio de que o primeiro que entra é o último que sai, quando aplicável?';
+            loadingRule.ncText='O carregamento não é feito de forma cuidadosa e sistemática segundo o princípio de que o primeiro que entra é o último que sai, quando aplicável.';
+          }
+          expedition.questions=[expeditionComposite].concat(operationalExpedition);
+          expedition.subtitle='Conferência da DANFE e dos registros vinculados à expedição em um único bloco, seguida das verificações operacionais da carga.';
+          expedition.docs=['DANFE ou nota fiscal da amostra','Arquivo eletrônico ou manifesto de expedição vinculado','Ordem de entrega, quando utilizada','Cronograma e rota da entrega'];
+        }
+        state.answers=state.answers||{};
+        var expeditionAnswer=state.answers['expedicao-documento']=state.answers['expedicao-documento']||{};
+        expeditionAnswer.document=expeditionAnswer.document||{};
+        if(!expeditionAnswer.document.legacyMigrated){
+          var oldExpeditionAnswers=legacyExpeditionIds.map(function(id){return state.answers[id]||{}}),hasOldExpedition=oldExpeditionAnswers.some(function(a){return a.status||a.evidence});
+          if(hasOldExpedition){
+            expeditionAnswer.document.items=expeditionAnswer.document.items||{};
+            legacyExpeditionIds.forEach(function(id,i){expeditionAnswer.document.items[id]=oldExpeditionAnswers[i].status==='C'});
+            expeditionAnswer.document.legacyAnswers={};
+            legacyExpeditionIds.forEach(function(id){if(state.answers[id])expeditionAnswer.document.legacyAnswers[id]=state.answers[id]});
+            if(oldExpeditionAnswers.some(function(a){return a.status==='NC'}))expeditionAnswer.status='NC';
+            else if(oldExpeditionAnswers.every(function(a){return a.status==='C'}))expeditionAnswer.status='C';
+            else if(oldExpeditionAnswers.every(function(a){return a.status==='NA'}))expeditionAnswer.status='NA';
+            expeditionAnswer.evidence=oldExpeditionAnswers.map(function(a,i){return a.evidence?expeditionItems[i][1]+': '+a.evidence:''}).filter(Boolean).join('\n');
+          }
+          expeditionAnswer.document.legacyMigrated=true;
+          save();
+        }
+        ['termolabeis','sistemas'].forEach(function(id){var x=sec(id);if(x)x.questions.forEach(function(q){q.noOcr=true})});
+        DIST_CARDS[2][1].push('qt-area','qt-equip');DIST_CARDS[3][1].push('qt-veiculo','qt-rota');
+        DIST_CARDS[4][1].splice(3,0,'ifa-rastreabilidade');
+        DIST_CARDS[5][1].splice(4,0,'residuos-abrigo');
+        DIST_CARDS[6][1].splice(1,0,'qualificacao-sistemas');
+        function standardizeRef(v){return String(v||'').replaceAll('RDC Anvisa nº 204/2006','RDC nº 204, de 14 de novembro de 2006').replaceAll('IN Anvisa nº 62/2020','IN nº 62, de 16 de junho de 2020')}
+        DATA.sections.forEach(function(s){s.questions.forEach(function(q){q.legal=standardizeRef(q.legal)})});
+        DATA.sources=DATA.sources.filter(function(s){return !/^RDC (Anvisa )?nº 204/.test(s.name)&&!/^IN (Anvisa )?nº 62/.test(s.name)});
+        DATA.sources.push(
+          {name:'RDC nº 204, de 14 de novembro de 2006',rev:'Anexo',vigencia:'vigente',role:'Regulamento Técnico das Boas Práticas de Distribuição e Fracionamento de Insumos Farmacêuticos.',url:'https://anvisalegis.datalegis.net/action/UrlPublicasAction.php?acao=abrirAtoPublico&num_ato=00000204&sgl_tipo=RDC&sgl_orgao=RDC/DC/ANVISA/MS&vlr_ano=2006&seq_ato=002&cod_modulo=134&cod_menu=1696'},
+          {name:'IN nº 62, de 16 de junho de 2020',rev:'—',vigencia:'vigente',role:'Diretrizes para a qualificação de fornecedores de insumos farmacêuticos.',url:'https://anvisalegis.datalegis.net/action/UrlPublicasAction.php?acao=abrirAtoPublico&num_ato=00000062&sgl_tipo=INM&sgl_orgao=DC/ANVISA/MS&vlr_ano=2020&seq_ato=000&cod_modulo=134&cod_menu=1696'}
+        );
+        normasView=function(){return '<div class="panel"><h3>Normas e POPs usados neste módulo</h3><p class="mini">As referências são exibidas no padrão do ato. A consulta da fonte oficial apoia a conferência e não substitui a decisão da equipe.</p>'+DATA.sources.map(function(s){return '<div class="nc"><h4>'+esc(s.name)+' <span class="badge">'+esc(s.rev||'')+'</span></h4><p>'+esc(s.role)+'</p><p class="mini">Vigência: '+esc(s.vigencia||'não informada')+(s.url?' · <a href="'+esc(s.url)+'" target="_blank" rel="noopener">Abrir fonte oficial</a>':'')+'</p></div>'}).join('')+'</div>'};
+        var normTab=byId('inspectionTabs');if(normTab&&!normTab.querySelector('[data-itab="normas"]')){var normBtn=document.createElement('button');normBtn.className='tab';normBtn.dataset.itab='normas';normBtn.setAttribute('aria-pressed','false');normBtn.textContent='Normas';normTab.appendChild(normBtn)}
+        distHint=function(id){var hs=DIST_HINTS[id];if(!hs||!hs.length)return '';return '<details class="dist-hint"><summary>Orientação — o que verificar'+(hs.length>1?' ('+hs.length+')':'')+'</summary>'+hs.map(function(t){return '<p>'+esc(t)+'</p>'}).join('')+'</details>'};
+        function expeditionDocumentHtml(q){
+          var a=state.answers[q.id]||{},doc=a.document||{},items=doc.items||{};
+          var checklist=expeditionItems.map(function(item){return '<label class="dist-expedition-item"><input type="checkbox" data-expedition-item="'+item[0]+'" '+(items[item[0]]?'checked':'')+'><span><b>'+esc(item[1])+'</b><small>'+esc(item[2])+'</small></span></label>'}).join('');
+          return '<div class="q q-expedition-document"><div class="qmain"><div class="qtext">'+esc(q.text)+'</div><button class="med-ref" data-dist-cite="'+esc(q.legal)+'">'+esc(q.legal)+'</button><div class="dist-expedition-fields"><div class="grid three">'+field('answers.expedicao-documento.document.danfe','Número da DANFE / nota fiscal')+field('answers.expedicao-documento.document.dispatchDate','Data de expedição','date')+field('answers.expedicao-documento.document.issueDate','Data de emissão','date')+field('answers.expedicao-documento.document.issuer','Emitente')+field('answers.expedicao-documento.document.sender','Remetente')+field('answers.expedicao-documento.document.recipient','Destinatário')+field('answers.expedicao-documento.document.transporter','Transportador')+field('answers.expedicao-documento.document.driver','Motorista e documento')+field('answers.expedicao-documento.document.order','Ordem de entrega')+field('answers.expedicao-documento.document.vehicle','Veículo')+field('answers.expedicao-documento.document.instrument','Instrumento de monitoramento')+'</div><h4>Itens localizados no documento ou registro vinculado</h4><p class="mini">Marque apenas o que foi localizado e conferido na amostra. Itens não marcados permanecem pendentes de avaliação pela equipe.</p><div class="dist-expedition-checklist">'+checklist+'</div></div><details class="dist-hint" open><summary>Orientação — o que verificar</summary><p>Os dados dos arts. 59 e 60 podem estar na DANFE, no arquivo eletrônico, no manifesto ou em registro vinculado. Confirme o vínculo entre os documentos e identifique a amostra examinada.</p><p>Registre número, título, revisão ou data do documento quando aplicável, conforme a orientação do POP-O-SNVS-011 para evidências verificáveis.</p></details><div class="seg">'+['C','NC','NA'].map(function(v){return '<button data-answer="'+q.id+'" data-v="'+v+'" aria-pressed="'+(a.status===v)+'">'+({C:'Cumpre',NC:'Não cumpre',NA:'Não se aplica'}[v])+'</button>'}).join('')+'</div></div><div class="evidence"><label>Evidência e identificação dos documentos<textarea data-evidence="'+q.id+'" placeholder="Identifique a DANFE, os registros vinculados e os itens ausentes ou divergentes">'+esc(a.evidence||'')+'</textarea></label><div class="toolbar"><button class="btn" data-dist-photo="'+q.id+'">📷 Fotos</button></div></div></div>';
+        }
+        var oldQuestionHtml=questionHtml;
+        questionHtml=function(q){
+          if(q.id==='expedicao-documento')return expeditionDocumentHtml(q);
+          var html=oldQuestionHtml(q);
+          if(DIST_HINTS[q.id])html=html.replace('<div class="q">','<div class="q q-has-hint">');
+          return q.noOcr?html.replace(/<button class="btn" data-dist-read="[^"]+">[\s\S]*?<\/button>/,''):html;
+        };
+        function thermalRecordsHtml(){
+          state.thermalQualifications=Array.isArray(state.thermalQualifications)&&state.thermalQualifications.length?state.thermalQualifications:[{}];
+          return '<div class="dist-thermal-list"><div class="statusline"><div><b>Registros de qualificação analisados</b><div class="mini">Inclua uma ficha para cada área, equipamento, veículo, embalagem ou rota. A faixa e os critérios são próprios de cada objeto.</div></div><button class="btn" type="button" data-thermal-add>＋ Incluir qualificação</button></div>'+state.thermalQualifications.map(function(_,i){var p='thermalQualifications.'+i;return '<article class="dist-thermal-card"><div class="statusline"><b>Qualificação '+(i+1)+'</b>'+(state.thermalQualifications.length>1?'<button class="btn" type="button" data-thermal-remove="'+i+'">Remover</button>':'')+'</div><div class="grid three">'+field(p+'.kind','O que foi qualificado','select',['Área térmica','Equipamento térmico','Veículo','Embalagem','Rota'])+field(p+'.identification','Identificação / código')+field(p+'.purpose','Finalidade / produto ou operação')+field(p+'.range','Faixa definida / condição aplicável')+field(p+'.document','Protocolo ou relatório / revisão')+field(p+'.date','Data do estudo','date')+field(p+'.risk','Risco e pior caso considerados','textarea')+field(p+'.result','Resultado / limites e desvios avaliados','textarea')+field(p+'.observations','Observações, exceções e consideração da equipe','textarea')+'</div></article>'}).join('')+'</div>';
+        }
+        /* Todas as etapas permanecem disponíveis. A aplicabilidade é registrada
+           localmente com “Não se aplica”, sem ocultar o checklist. */
+        applicable=function(){return true};
+        var oldSectionHtml=sectionHtml;
+        sectionHtml=function(sec){
+          var html=oldSectionHtml(sec),done=sec.questions.filter(function(q){return state.answers[q.id]&&state.answers[q.id].status}).length;
+          html=html.replace('<summary class="mini">Verificações C / NC / NA</summary>','<summary class="dist-checklist-toggle"><b>📋 Abrir checklist de requisitos</b><span>'+done+'/'+sec.questions.length+' avaliados · toque para abrir</span></summary>');
+          if(sec.id==='ifa-rastreabilidade')html=html.replace('<div class="narrative">','<div class="dist-ifa-callout"><b>Consulta de IFA na base pública Anvisa</b><span>Pesquisa complementar; resultado não confirma sozinho a regularidade do IFA ou do lote.</span><button class="btn" type="button" data-ick-abrir="atacadista" data-ick-natureza="ativo">Verificar IFA / princípio ativo</button> <button class="btn" type="button" data-ick-abrir="atacadista" data-ick-natureza="excipiente">Verificar excipiente ou outro insumo</button></div><div class="narrative">');
+          if(sec.id==='qt-area')html=html.replace('<div class="narrative">',thermalRecordsHtml()+'<div class="narrative">');
+          var holder=document.createElement('div');holder.innerHTML=html;
+          var body=holder.querySelector('.sectionbody'),checklist=body&&Array.from(body.children).find(function(x){return x.tagName==='DETAILS'});
+          if(body&&checklist)body.insertBefore(checklist,body.firstChild);
+          return holder.innerHTML;
+        };
+        function openIfa(){
+          byId('modalTitle').textContent='Consulta de IFA — Anvisa';
+          byId('modalBody').innerHTML='<p class="mini">Pesquise por IFA, fabricante, código do fabricante, processo Anvisa ou CNPJ do peticionante. Revise o resultado e registre a avaliação no checklist; nada é aplicado automaticamente.</p><div class="grid"><label class="field">Pesquisa<input id="distIfaTerm" placeholder="Ex.: nome do IFA, processo ou CNPJ"></label></div><div class="toolbar"><button class="btn primary" type="button" data-dist-ifa-search>Pesquisar</button></div><div id="distIfaResults" class="mini"></div>';
+          byId('modal').showModal();
+        }
+        function searchIfa(){
+          var term=String((byId('distIfaTerm')||{}).value||'').trim().toLowerCase(),host=byId('distIfaResults');
+          if(!term){host.textContent='Informe um termo para pesquisa.';return}host.textContent='Consultando a base pública de IFA…';
+          fetch('https://uvisvp.github.io/base-vigilancia/dados/ifa/registros.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('Fonte indisponível');return r.json()}).then(function(p){
+            var list=(p&&Array.isArray(p.registros)?p.registros:[]).filter(function(x){return [x.ifa,x.fabricante_ifa,x.codigo_fabricante_ifa,x.processo_anvisa,x.cnpj_detentor_peticionante,x.detentor_peticionante].join(' ').toLowerCase().includes(term)}).slice(0,20);
+            if(!list.length){host.innerHTML='<p>Nenhum resultado localizado nesta visão pública. Isso não prova ausência de regularização por outra via.</p>';return}
+            host.innerHTML='<p><b>'+list.length+' resultado(s)</b> — conferir antes de usar na avaliação.</p>'+list.map(function(x){return '<article class="dist-ifa-result"><b>'+esc(x.ifa||'IFA')+'</b><span>Fabricante: '+esc(x.fabricante_ifa||'não informado')+'</span><span>Processo Anvisa: '+esc(x.processo_anvisa||'não informado')+'</span><span>Peticionante: '+esc(x.detentor_peticionante||'não informado')+'</span></article>'}).join('');
+          }).catch(function(){host.innerHTML='<p>Consulta indisponível no momento. O roteiro continua utilizável offline; registre os documentos e a fonte disponível.</p>'});
+        }
+        document.addEventListener('click',function(e){var b=e.target.closest('[data-dist-ifa-open],[data-dist-ifa-search]');if(!b)return;if(b.dataset.distIfaOpen)openIfa();else searchIfa()});
+        document.addEventListener('click',function(e){var b=e.target.closest('[data-thermal-add],[data-thermal-remove]');if(!b)return;state.thermalQualifications=Array.isArray(state.thermalQualifications)?state.thermalQualifications:[];if(b.hasAttribute('data-thermal-add'))state.thermalQualifications.push({});else state.thermalQualifications.splice(Number(b.dataset.thermalRemove),1);save();renderITab()});
+        document.addEventListener('change',function(e){
+          var input=e.target.closest('input[data-array],input[data-expedition-item]');if(!input)return;
+          e.stopImmediatePropagation();
+          if(input.dataset.array){
+            var values=getPath(input.dataset.array);values=Array.isArray(values)?values:[];
+            if(input.checked&&values.indexOf(input.value)<0)values.push(input.value);
+            if(!input.checked)values=values.filter(function(v){return v!==input.value});
+            setPath(input.dataset.array,values);
+          }else{
+            var expAnswer=state.answers['expedicao-documento']=state.answers['expedicao-documento']||{};
+            expAnswer.document=expAnswer.document||{};expAnswer.document.items=expAnswer.document.items||{};
+            expAnswer.document.items[input.dataset.expeditionItem]=input.checked;save();
+          }
+        },true);
+        /* A marcação C/NC/N/A não recria a tela: preserva o card e todos os
+           recolhimentos já abertos para permitir a conferência contínua. */
+        document.addEventListener('click',function(e){
+          var b=e.target.closest('button[data-answer]');if(!b)return;
+          e.preventDefault();e.stopImmediatePropagation();
+          var a=state.answers[b.dataset.answer]=state.answers[b.dataset.answer]||{};a.status=b.dataset.v;
+          var group=b.parentElement;group.querySelectorAll('button[data-answer]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+          save();
+        },true);
+        var oldAllNCs=allNCs;
+        allNCs=function(){
+          var result=oldAllNCs(),answer=state.answers['expedicao-documento']||{},items=(answer.document||{}).items||{};
+          if(answer.status==='NC'){
+            var missing=expeditionItems.filter(function(item){return !items[item[0]]}).map(function(item){return item[1]});
+            var nc=result.find(function(item){return item.id==='expedicao-documento'});
+            if(nc&&missing.length)nc.evidence=[nc.evidence,'Itens não localizados ou não confirmados: '+missing.join('; ')+'.'].filter(Boolean).join('\n');
+          }
+          return result;
+        };
+        var distAdjustStyle=document.createElement('style');
+        distAdjustStyle.textContent='.dist-hint{border:1px solid #d79a94;border-left:4px solid #9b241c;border-radius:10px;background:#fff5f3;color:#701b15;padding:0 10px}.dist-hint summary{color:#8b2019;font-weight:800;cursor:pointer;padding:9px 0}.dist-hint p{color:#701b15;margin:7px 0 10px;font-size:.82rem;line-height:1.45}.dist-expedition-fields{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfdfe}.dist-expedition-checklist{display:grid;gap:8px}.dist-expedition-item{display:flex;gap:9px;align-items:flex-start;padding:9px;border:1px solid #d9e2e8;border-radius:9px;background:#fff}.dist-expedition-item input{margin-top:3px}.dist-expedition-item span{display:grid;gap:2px}.dist-expedition-item small{color:#8b2019;line-height:1.35}.q-expedition-document>.qmain{min-width:0}@media(min-width:1050px){.q-has-hint>.qmain{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.72fr);gap:8px 12px}.q-has-hint>.qmain>:not(.dist-hint){grid-column:1}.q-has-hint>.qmain>.dist-hint{grid-column:2;grid-row:1/span 8;margin:0}}';
+        document.head.appendChild(distAdjustStyle);
+        if(window.DistributorAPI)window.DistributorAPI.allNCs=allNCs;
+        var oldRoteiroView=roteiroView;
+        roteiroView=function(){
+          var c=Number(state.activeCard||0);
+          if(c!==1)return oldRoteiroView();
+          var sec=DATA.sections.find(function(x){return x.id==='dist-identificacao-preparacao'});
+          return '<div class="panel dist-card-head"><h3>1 · Identificação e preparação</h3>'+(typeof distNav==='function'?distNav(1):'')+'<p class="mini">Preencha ou revise cada bloco em qualquer ordem. Consultas e leitores apenas propõem dados: a aplicação é sempre confirmada pela equipe.</p></div>'+
+          '<details class="section" open><summary><strong>1. Dados da inspeção</strong><small>Escopo, período e equipe</small></summary><div class="sectionbody"><div class="grid three">'+fs(D.inspection)+'</div><h4>Atividades</h4><div class="checks">'+['Distribuir','Transportar','Importar','Armazenar','Expedir'].map(function(x){return activityCheck(x,x)}).join('')+'</div><h4>Equipe inspetora <button class=\"btn\" data-dist-add=\"team\" style=\"font-size:.8rem;padding:2px 9px\">+</button></h4><div class=\"grid\">'+Array.from({length:Math.max(1,(state.meta.teamCount||1))},function(_,i){return i}).map(function(i){return field('meta.team.'+i+'.name','Autoridade sanitária '+(i+1))+field('meta.team.'+i+'.code','Matrícula / código')+field('meta.team.'+i+'.institution','Instituição')+field('meta.team.'+i+'.sphere','Esfera','select',['Municipal','Estadual','Federal'])}).join('')+'</div></div></details>'+
+          '<details class="section"><summary><strong>2. Estabelecimento</strong><small>Identificação e localização</small></summary><div class="sectionbody"><div class="grid">'+fs(D.business)+'</div><div class="toolbar"><button class="btn" data-dist-company>Consultar CNPJ na Central de Consultas</button><button class="btn" data-dist-copy-id="estabelecimento">📋 Copiar texto desta seção</button></div><p class="mini">Dados de CNPJ ou consulta são propostos para revisão; não substituem a conferência da equipe.</p></div></details>'+
+          '<details class="section"><summary><strong>3. Responsáveis e contatos</strong><small>Legal, técnico e interlocutores</small></summary><div class="sectionbody"><div class="grid">'+fs(D.contacts)+'</div><h4>Pessoas contatadas <button class=\\"btn\\" data-dist-add=\\"contact\\" style=\\"font-size:.8rem;padding:2px 9px\\">+</button></h4><div class="grid three">'+Array.from({length:Math.max(1,(state.meta.contactCount||1))},function(_,i){return i}).map(function(i){return field('meta.contacts.'+i+'.name','Pessoa '+(i+1)+' — nome')+field('meta.contacts.'+i+'.role','Cargo')+field('meta.contacts.'+i+'.contact','Contato')}).join('')+'</div></div></details>'+
+          '<details class="section"><summary><strong>4. Situação regulatória e documentos obrigatórios</strong><small>Conferência documental</small></summary><div class="sectionbody"><p class="note">Use um registro por documento. “Não apresentado” não cria NC automaticamente; registre a conclusão no checklist ao final. AFE e AE são independentes.</p>'+
+            dc('lic','Licença sanitária','Número, validade expressa, estabelecimento e atividades.',docStatus('distDocs.lic',['Vigente','Vencida','Não se aplica']).concat([['distDocs.lic.number','Número'],['distDocs.lic.validity','Validade'],['distDocs.lic.activities','Atividades / CNAE licenciados','checks',['Distribuição de medicamentos','Armazenagem de medicamentos','Transporte de medicamentos','Importação de medicamentos','Expedição de medicamentos','Distribuição de insumos farmacêuticos','Armazenagem de insumos farmacêuticos','Medicamentos sujeitos a controle especial','Produtos para saúde / correlatos','Cosméticos e produtos de higiene','Saneantes','Alimentos']]]))+
+            dc('afe','AFE','Revisar dados trazidos pela Central antes de aplicar.',docStatus('distDocs.afe',['Possui','Não possui','Não se aplica']).concat([['distDocs.afe.number','Autorização'],['distDocs.afe.process','Processo'],['distDocs.afe.statusOfficial','Situação na fonte oficial'],['distDocs.afe.authorizationDate','Data da autorização','date'],['distDocs.afe.publicationDate','Data da publicação','date'],['distDocs.afe.class','Classe'],['distDocs.afe.activities','Atividades autorizadas','textarea'],['distDocs.afe.sourceUpdate','Atualização da fonte','date']]))+
+            dc('ae','AE — quando aplicável','Não inferir AE por número ou por atividade; registre somente dado confirmado.',docStatus('distDocs.ae',['Possui','Não possui','Não se aplica']).concat([['distDocs.ae.number','Autorização'],['distDocs.ae.process','Processo'],['distDocs.ae.statusOfficial','Situação na fonte oficial'],['distDocs.ae.authorizationDate','Data da autorização','date'],['distDocs.ae.publicationDate','Data da publicação','date'],['distDocs.ae.class','Classe'],['distDocs.ae.activities','Atividades autorizadas','textarea'],['distDocs.ae.sourceUpdate','Atualização da fonte','date']]))+
+            dc('crt','CRT / CRF — quando aplicável','Identificação, RTs/substitutos e horários quando constarem.',docStatus('distDocs.crt').concat([['distDocs.crt.number','Número'],['distDocs.crt.issueDate','Emissão / publicação','date'],['distDocs.crt.validity','Validade expressa'],['distDocs.crt.activity','Ramo de atividade'],['distDocs.crt.technical','RTs, substitutos e horários','textarea']]))+
+            dc('avcb','AVCB / CLCB — quando aplicável','Registrar apenas o que o documento efetivamente informar.',docStatus('distDocs.avcb').concat([['distDocs.avcb.number','Número'],['distDocs.avcb.validity','Validade expressa'],['distDocs.avcb.issuer','Órgão emissor']]))+
+            '<div class="toolbar"><button class="btn" data-dist-copy-id="regularidade">📋 Copiar texto desta seção</button></div></div></details>'+
+          '<details class="section"><summary><strong>5. Caracterização e preparação</strong><small>Estrutura, operação e escopo</small></summary><div class="sectionbody"><div class="grid">'+fs(D.characterization)+'</div><h4>Condições relevantes para preenchimento e revisão</h4><p class="mini">Todos os blocos do roteiro permanecem disponíveis. Use “Não se aplica” em cada requisito quando ele não se aplicar ao estabelecimento.</p><div class="checks">'+flagCheck('terceirizacao','Há terceirização / prestação de serviços')+flagCheck('termolabeis','Trabalha com termolábeis')+flagCheck('controlados','Trabalha com controlados')+'</div></div></details>'+
+          '<details class="section"><summary><strong>6. Histórico</strong><small>Acompanhamento e pendências</small></summary><div class="sectionbody"><div class="grid">'+fs(D.history)+'</div><div class="toolbar"><button class="btn" data-dist-copy-id="historico">📋 Copiar texto desta seção</button></div></div></details>'+
+          '<div class="panel">'+sectionHtml(sec)+'</div>';
+        };
+        document.addEventListener('click',function(e){var b=e.target.closest('[data-dist-copy-id]');if(!b)return;var m=state.meta||{},kind=b.dataset.distCopyId,txt=kind==='estabelecimento'?'Estabelecimento: '+[m.company,m.fantasy,m.cnpj,m.address].filter(Boolean).join(' · '):kind==='regularidade'?'Situação regulatória: Licença '+((state.distDocs||{}).lic?.status||'não informada')+'; AFE '+((state.distDocs||{}).afe?.status||'não informada')+'; AE '+((state.distDocs||{}).ae?.status||'não informada')+'.':'Histórico: '+[m.previousInspection,m.previousNC,m.previousActions,m.historyEvaluation].filter(Boolean).join(' · ');if(navigator.clipboard)navigator.clipboard.writeText(txt);else prompt('Copie o texto:',txt);b.textContent='✓ Texto copiado';setTimeout(function(){b.textContent='📋 Copiar texto desta seção'},1200)});
+        if(state.view==='inspection')renderITab();
+      })();`;
+      s=s.replace('</body>','<style>.dist-doc-card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fbfdfe}.dist-doc-card>div:first-child{margin-bottom:10px}.dist-doc-card b{display:block;color:var(--tone2)}.dist-doc-card small{color:var(--muted);font-size:.78rem}.section h4{margin:15px 0 8px;font-size:.95rem}.dist-card-menu .card{background:#eaf5fb!important;border:2px solid #79b4d1!important;box-shadow:0 5px 14px rgba(23,105,166,.14)!important}.dist-card-menu .card .ico{background:#1769a6!important;color:#fff!important}.dist-card-menu .card strong,.dist-card-menu .card em{color:#104f7d!important}.dist-card-menu .card:hover{background:#d9edf8!important;border-color:#1769a6!important;transform:translateY(-2px)!important}.dist-checklist-toggle{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-top:12px!important;padding:13px 14px!important;border:2px solid #1769a6!important;border-radius:11px!important;background:#dceff9!important;color:#104f7d!important;cursor:pointer!important;box-shadow:0 3px 10px rgba(23,105,166,.12)!important}.dist-checklist-toggle b{font-size:.9rem!important}.dist-checklist-toggle span{font-size:.74rem!important;text-align:right!important;color:#245f83!important}.dist-checklist-toggle:hover{background:#cce8f6!important;border-color:#0e568b!important}.dist-checklist-toggle::after{content:"⌄";font-size:1.1rem;font-weight:700}details[open]>.dist-checklist-toggle::after{content:"⌃"}.dist-ifa-callout{display:grid;gap:8px;margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:12px;background:#eaf5fb;color:#104f7d}.dist-ifa-callout span{font-size:.8rem}.dist-ifa-callout .btn{justify-self:start;background:#1769a6;color:#fff;border-color:#1769a6}.dist-ifa-result{display:grid;gap:3px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.dist-ifa-result span{font-size:.79rem;color:var(--muted)}.dist-thermal-list{margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:13px;background:#f2f9fd}.dist-thermal-card{margin-top:11px;padding:12px;border:1px solid #b9d6e6;border-radius:12px;background:#fff}.dist-thermal-card .statusline>.btn{min-height:34px;font-size:.78rem}@media(max-width:600px){.dist-checklist-toggle{align-items:flex-start!important;flex-wrap:wrap!important}.dist-checklist-toggle span{text-align:left!important;width:100%}}</style><scr'+'ipt>'+distTela1+'</scr'+'ipt></body>');
+    }
+    if(!['drogaria','farmacia-manipulacao','central-consultas'].includes(app) && !/data-voltar-nucleo|id="backTop"|id="voltarNucleoApp"/.test(s)){
+      s=s.replace(/(<header\b[^>]*>)/i,'$1<button type="button" data-voltar-nucleo class="native-back" aria-label="Voltar ao núcleo" title="Voltar ao núcleo" style="font:inherit;min-height:44px;padding:8px 12px;border:1px solid currentColor;border-radius:7px;background:transparent;color:inherit">← Voltar ao núcleo</button>');
+    }
+
+    /* Complemento de segurança da Central: cosméticos, saneantes e medicamentos
+       podem ser consultados diretamente pelo processo quando o índice normal não
+       trouxer cadastro. Saneantes e medicamentos usam visões completas por processo,
+       que incluem também produtos sem número de registro. */
+    if(app==='central-consultas'){
+      var ponte=['<scr','ipt>',String.raw`(function(){
+        var RAIZ='https://uvisvp.github.io/base-vigilancia/dados/';
+        var FONTES=[
+          {p:'cosmeticos',l:'Cosméticos',f:'Cosmético'},
+          {p:'saneantes_processos',l:'Saneantes',f:'Saneante'},
+          {p:'medicamentos_processos',l:'Medicamentos',f:'Medicamento'}
+        ];
+        function dig(v){return String(v||'').replace(/\D/g,'');}
+        function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+        function processoAtivo(){var b=document.querySelector('.mode.on');return !!(b&&b.getAttribute('data-mode')==='processo');}
+        function situacao(v){v=String(v||'').trim();return v==='S'?'ATIVO':v==='N'?'INATIVO':v;}
+        function regularizacao(x){
+          if(String(x&&x.registrado)==='0')return 'Notificado / sem número de registro';
+          if(x&&x.registro)return x.registro;
+          return (x&&(x.tipo||x.categoria))||'Não informada';
+        }
+        function artigo(x,fonte){return '<article class="result" data-uvis-processo-complementar="'+esc(fonte.p)+'"><h4>'+esc(x.produto||fonte.f)+'</h4><div class="kv"><b>Processo</b><span>'+esc(x.processo)+'</span><b>Registro / regularização</b><span>'+esc(regularizacao(x))+'</span><b>CNPJ</b><span>'+esc(x.cnpj)+'</span><b>Detentor</b><span>'+esc(x.detentor)+'</span><b>Situação</b><span>'+esc(situacao(x.situacao))+'</span><b>Categoria / tipo</b><span>'+esc(x.categoria||x.tipo||x.tipo_peticao)+'</span></div></article>';}
+        function inserir(pacotes,processo){setTimeout(function(){
+          var atual=dig(document.getElementById('q')&&document.getElementById('q').value);
+          var host=document.getElementById('results');
+          if(atual!==processo||!host||host.querySelector('.result,[data-uvis-processo-complementar]'))return;
+          var grupos=[];
+          pacotes.forEach(function(p){var itens=(Array.isArray(p.d)?p.d:[]).filter(function(x){return dig(x&&x.processo)===processo;});if(itens.length)grupos.push({f:p.f,itens:itens});});
+          if(!grupos.length)return;
+          var total=grupos.reduce(function(n,g){return n+g.itens.length;},0);
+          var html='<div class="summary"><div class="sum"><b>'+total+'</b><span>cadastros e autorizações</span></div><div class="sum"><b>0</b><span>alertas relacionados</span></div><div class="sum"><b>0</b><span>medidas fiscais relacionadas</span></div></div><div class="group"><div class="grouphead"><h3>Cadastro regulatório e autorizações</h3><span>'+total+' resultado(s)</span></div>'+grupos.map(function(g){return '<details class="sub-base" open><summary>'+esc(g.f.l)+' <span class="tag">'+g.itens.length+'</span></summary><div class="sub-body">'+g.itens.map(function(x){return artigo(x,g.f);}).join('')+'</div></details>';}).join('')+'</div>';
+          host.className='';host.innerHTML=html;
+          var st=document.getElementById('status');if(st){st.className='status ok';st.textContent='Consulta concluída. Cadastro regulatório localizado pelo processo Anvisa.';}
+        },900);}
+        function complementar(){
+          if(!processoAtivo())return;
+          var processo=dig(document.getElementById('q')&&document.getElementById('q').value);
+          if(processo.length<13)return;
+          var fragmento=processo.slice(5,8);if(!fragmento)return;
+          var tarefas=FONTES.map(function(f){return fetch(RAIZ+f.p+'/'+fragmento+'.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}).then(function(d){return {f:f,d:d};});});
+          tarefas.push(fetch(RAIZ+'ifa/registros.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(p){var a=p&&Array.isArray(p.registros)?p.registros:[];var d=a.filter(function(x){return dig(x&&x.processo_anvisa)===processo;}).map(function(x){return {produto:x.ifa||'IFA',processo:x.processo_anvisa,categoria:'IFA',cnpj:x.cnpj_detentor_peticionante,detentor:x.detentor_peticionante,fabricante:x.fabricante_ifa,situacao:'',_ifa:true};});return {f:{p:'ifa',l:'IFA — Insumo Farmacêutico Ativo',f:'IFA'},d:d};}).catch(function(){return {f:{p:'ifa',l:'IFA — Insumo Farmacêutico Ativo',f:'IFA'},d:[]};}));
+          Promise.all(tarefas).then(function(p){inserir(p,processo);});
+        }
+        document.addEventListener('click',function(e){var t=e.target;if(t&&t.nodeType!==1)t=t.parentElement;if(t&&t.closest&&t.closest('#search'))complementar();},true);
+        document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='q')complementar();},true);
+      })();`,'</scr','ipt>'].join('');
+      var ponteIfa='<scr'+'ipt src="./ifa-lookup-shared.js"></scr'+'ipt><scr'+'ipt>'+String.raw`(function(){
+        'use strict';
+        if(window.__UVIS_IFA_CENTRAL__)return;window.__UVIS_IFA_CENTRAL__=true;
+        function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+        function E(id){return document.getElementById(id);}
+        function ifaButton(){return document.querySelector('.mode[data-mode="ifa"]');}
+        function ativo(){var b=ifaButton();return !!(b&&b.classList.contains('on'));}
+        function status(text,ok){var st=E('status');if(st){st.className='status '+(ok?'ok':'');st.textContent=text||'';}}
+        function ativar(){
+          setMode('registro');
+          try{mode='ifa';if(typeof nomeModo==='object')nomeModo.ifa='IFA';}catch(_e){}
+          document.querySelectorAll('.mode').forEach(function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+          var b=ifaButton();if(b){b.classList.add('on');b.setAttribute('aria-pressed','true');}
+          var q=E('q');if(q){q.value='';q.inputMode='text';q.placeholder='IFA, fabricante, código, processo Anvisa ou CNPJ do peticionante';q.focus();}
+          var host=E('results');if(host){host.className='';host.innerHTML='<div class="empty"><b>Consulta de IFA</b><br>Pesquise o insumo, fabricante, código do fabricante, processo Anvisa ou CNPJ do peticionante.</div>';}
+          status('Consulta específica à visão pública de IFA da Anvisa. Ausência de resultado não prova ausência de regularização.',false);
+        }
+        function instalar(){
+          if(ifaButton())return;var modos=document.querySelectorAll('.mode');if(!modos.length)return;
+          var b=document.createElement('button');b.type='button';b.className='mode';b.setAttribute('data-mode','ifa');b.setAttribute('data-uvis-ifa-central','1');b.setAttribute('aria-pressed','false');b.textContent='IFA';
+          b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();ativar();});
+          var sivisa=document.querySelector('.mode[data-mode="sivisa"]');
+          modos[modos.length-1].parentElement.insertBefore(b,sivisa);
+        }
+        function artigo(r){
+          var kv=[['Fabricante do IFA',r.fabricante_ifa],['Código do fabricante',r.codigo_fabricante_ifa],['País',r.pais_fabricante],['Processo Anvisa (IFA)',r.processo_anvisa],['Detentor / peticionante',r.detentor_peticionante],['CNPJ do peticionante',r.cnpj_detentor_peticionante],['Assunto',r.assunto]];
+          return '<article class="result"><h4>'+esc(r.ifa||'IFA')+'</h4><div class="kv">'+kv.filter(function(x){return x[1];}).map(function(x){return '<b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span>';}).join('')+'</div></article>';
+        }
+        function consultar(){
+          var q=E('q'),host=E('results'),term=(q&&q.value||'').trim();if(!term){status('Informe um termo para consulta.',false);return;}
+          status('Consultando a base pública de IFA…',false);if(host)host.innerHTML='';
+          /* __UVIS_IFA_DIRECT_V13__ */
+          fetch('https://uvisvp.github.io/base-vigilancia/dados/ifa/registros.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(payload){
+            function n(v){return String(v==null?'':v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+            function d(v){return String(v==null?'':v).replace(/\D/g,'');}
+            var qn=n(term),qd=d(term),all=payload&&Array.isArray(payload.registros)?payload.registros:[];
+            var hits=all.filter(function(x){
+              var fields=[x.ifa,x.fabricante_ifa,x.codigo_fabricante_ifa,x.processo_anvisa,x.detentor_peticionante,x.cnpj_detentor_peticionante,x.assunto];
+              return fields.some(function(v){var nv=n(v),dv=d(v);return (qn&&nv.indexOf(qn)>=0)||(qd&&dv&&dv===qd);});
+            }).slice(0,50);
+            return {resultados:hits,total:hits.length,fonte:payload.fonte||'Anvisa — TA_EXPORT_IFA.csv',observacao:payload.observacao||'',gerado_em:payload.gerado_em||''};
+          }).then(function(result){
+            var list=(result.resultados||[]).map(function(x){return (window.UvisIfaLookup&&typeof window.UvisIfaLookup.formatResult==='function')?window.UvisIfaLookup.formatResult(x):x;});
+            if(!list.length){if(host)host.innerHTML='<div class="empty"><b>Nenhum resultado localizado.</b><br>Isso não equivale a ausência de regularização do IFA por outra via.</div>';status('Consulta concluída sem resultado nesta visão pública.',true);return;}
+            var html='<div class="summary"><div class="sum"><b>'+list.length+'</b><span>resultado(s) de IFA</span></div><div class="sum"><b>Anvisa</b><span>fonte pública</span></div></div><div class="group"><div class="grouphead"><h3>IFA — Insumo Farmacêutico Ativo</h3><span>'+list.length+' resultado(s)</span></div>'+list.map(artigo).join('')+'</div>';
+            if(result.observacao)html+='<p class="muted">'+esc(result.observacao)+'</p>';if(result.fonte)html+='<p class="muted"><b>Fonte:</b> '+esc(result.fonte)+(result.gerado_em?' · base gerada em '+esc(new Date(result.gerado_em).toLocaleString('pt-BR')):'')+'.</p>';
+            if(host){host.className='';host.innerHTML=html;}status('Consulta concluída. Confira o fabricante do IFA e o Processo Anvisa antes de utilizar a informação.',true);
+          }).catch(function(err){status('Não foi possível concluir a consulta IFA: '+((err&&err.message)||err),false);});
+        }
+        document.addEventListener('input',function(e){
+          if(ativo()&&e.target&&e.target.id==='q'){var box=E('detect');if(box)box.innerHTML='';e.stopImmediatePropagation();}
+        },true);
+        document.addEventListener('click',function(e){
+          var t=e.target;if(t&&t.nodeType!==1)t=t.parentElement;var modeBtn=t&&t.closest&&t.closest('.mode');if(modeBtn&&modeBtn.getAttribute('data-mode')!=='ifa'){var ib=ifaButton();if(ib)ib.classList.remove('on');}
+          if(ativo()&&t&&t.closest&&t.closest('#search')){e.preventDefault();e.stopImmediatePropagation();consultar();}
+        },true);
+        document.addEventListener('keydown',function(e){if(ativo()&&e.key==='Enter'&&e.target&&e.target.id==='q'){e.preventDefault();e.stopImmediatePropagation();consultar();}},true);
+        if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',instalar);else instalar();
+      })();`+'</scr'+'ipt>';
+      /* O módulo é renderizado em iframe Blob/srcdoc; caminho relativo apontaria
+         para blob:/about:srcdoc e impediria o botão Nome de carregar. */
+      s=s.replace(/<\/body>/i,ponte+ponteIfa+'<scr'+'ipt src="https://uvisvp.github.io/roteiros/central-nomes-medicamentos.js"></scr'+'ipt></body>');
+    }
+    /* Ajustes textuais específicos da Drogaria. Mantêm a lógica e alteram apenas a redação exibida/relatada. */
+    if(app==='drogaria'){
+      s=s.replace(/A oferta de serviços farmacêuticos já foi verificada\?/g,'O estabelecimento realiza serviços farmacêuticos?')
+         .replace(/O estabelecimento atende solicitações remotas\?/g,'O estabelecimento realiza venda remota?')
+         .replace(/8\.3\. Solicitação remota/g,'8.3. Venda remota')
+         .replace(/O estabelecimento não atende solicitações remotas\./g,'O estabelecimento não realiza venda remota.')
+         .replace(/Dados da inspeção e do estabelecimento/g,'Dados da inspeção')
+         .replace(/Medicamentos Controlados, Antimicrobianos e Receituário/g,'Controlados e Antimicrobianos')
+         .replace(/Serviços Farmacêuticos e Administração de Medicamentos/g,'Serviços Farmacêuticos')
+         .replace(/Documentos de Qualidade e Registros/g,'Documentos da Qualidade')
+         .replace(/Selecione um card para preencher\./g,'Selecione uma seção para preencher.')
+         .replace(/no Card 1/g,'na Seção 1')
+         .replace(/Card \$\{active\} de 8/g,'Seção ${active} de 8')
+         .replace(/Todos os cards/g,'Todas as seções')
+         .replace(/Progresso do card/g,'Progresso da seção');
+    }
+    s = s.replace(/<!--css:([^>]+?)-->/g, function(m,f){
+      try { return '<style>' + rec('rec--' + f) + '</style>'; } catch(e){ return ''; } });
+    s = s.replace(/<!--js:([^:]+):([^>]*)-->/g, function(m,f,d){
+      var code; try { code = rec('rec--' + f); } catch(e){ return ''; }
+      if(d) code = "document.addEventListener('DOMContentLoaded',function(){\n"+code+"\n});";
+      return '<scr'+'ipt>'+code+'</scr'+'ipt>'; });
+    /* Preâmbulo de todo módulo:
+       · polyfill de structuredClone (Safari < 15.4);
+       · botão "voltar" via postMessage;
+       · aperto de mão com a casca: o módulo avisa "pronto" e recebe o banco
+         de legislação por postMessage. Nada de parent.__bancoV11 direto —
+         em iframe de origem opaca (srcdoc, file://) isso lança SecurityError
+         e a tela fica em branco. */
+    var bancoBloco = document.getElementById('banco--v11');
+    var lzBloco = document.getElementById('lz-core');
+    var bancoB64Local = bancoBloco ? String(bancoBloco.textContent || '').trim() : '';
+    var lzCodigoLocal = lzBloco ? String(lzBloco.textContent || '') : '';
+    var cab = '';
+    var ownLayout=['drogaria','farmacia-manipulacao','central-consultas'].includes(app);
+    cab += '<scr'+'ipt>document.documentElement.setAttribute("data-uvis-app",'+JSON.stringify(app)+');'+(ownLayout?'document.documentElement.classList.add("uvis-layout");':'')+'</scr'+'ipt>';
+    if(lzCodigoLocal) cab += '<scr'+'ipt>'+lzCodigoLocal+'</scr'+'ipt>';
+    if(bancoB64Local && app!=="servicos-alimentacao-roteiro" && app!=="drogaria") cab += '<scr'+'ipt type="text/plain" id="__casca-banco-v11">'+bancoB64Local+'</scr'+'ipt>';
+    cab += '<scr'+'ipt>if(typeof structuredClone!=="function"){window.structuredClone='
+      + 'function(v){return JSON.parse(JSON.stringify(v));};}'
+      + '(function(){var P="https://uvisvp.github.io/base-vigilancia/dados/",R="https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/",F=window.fetch?window.fetch.bind(window):null;'
+      + 'if(!F||window.__visaFetchFallback)return;window.__visaFetchFallback=true;'
+      + 'window.fetch=function(input,init){var u=typeof input==="string"?input:(input&&input.url)||"";'
+      + 'if(u.indexOf(P)!==0)return F(input,init);'
+      + 'return F(input,init).then(function(resp){if(resp&&resp.ok)return resp;'
+      + 'var alt=R+u.slice(P.length);return F(alt,init).then(function(r2){return r2&&r2.ok?r2:resp;}).catch(function(){return resp;});'
+      + '}).catch(function(err){var alt=R+u.slice(P.length);return F(alt,init).catch(function(){throw err;});});};})();'
+      /* CORREÇÃO: este preâmbulo estava sub-escapado em um nível. No fonte
+         antigo, \" virava " e \/ virava /, então o seletor perdia as aspas
+         internas e /\/nucleos\// virava //nucleos// — um comentário de linha.
+         O bloco inteiro deixava de parsear ("missing ) after argument list") e
+         derrubava, em TODOS os módulos: polyfill de structuredClone, fallback
+         de fetch para o raw.githubusercontent, interceptação do botão voltar,
+         __pedeBanco e o relato de erros para a casca. */
+      + "document.addEventListener('click',function(e){var b=e.target.closest('button,a');if(b){var h=String(b.getAttribute('href')||'');var t=String(b.textContent||'').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'');var SEL='[data-voltar-nucleo],[data-voltar=\"1\"],#voltarNucleoApp,a[href*=\"tela-inicial-remodelada\"]';if(!(b.matches(SEL)||/\\/nucleos\\//.test(h)||/^\\.\\.\\/nucleos\\//.test(h)||t.indexOf('voltar ao nucleo')>=0))b=null;}"
+      + 'if(b){e.preventDefault();e.stopPropagation();(function(){try{if(parent&&parent!==window&&typeof parent.__cascaVoltarDireto==="function"){parent.__cascaVoltarDireto();return;}}catch(x){}try{parent.postMessage({__casca:"voltar"},"*");}catch(x){}})();}},true);'
+      + "document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('[data-voltar-nucleo],[data-voltar=\"1\"],#voltarNucleoApp,a[href*=\"tela-inicial-remodelada\"],a[href*=\"/nucleos/\"],a[href^=\"../nucleos/\"]').forEach(function(b){if(/tela inicial/i.test(String(b.textContent||'')))b.textContent='\u2190 Voltar ao n\u00facleo';b.setAttribute('data-voltar-nucleo','1');b.onclick=function(e){e.preventDefault();e.stopPropagation();(function(){try{if(parent&&parent!==window&&typeof parent.__cascaVoltarDireto==='function'){parent.__cascaVoltarDireto();return;}}catch(x){}try{parent.postMessage({__casca:'voltar'},'*');}catch(x){}})();return false;};});});"
+      + '(function(){var recebido=null,fila=[];'
+      + 'window.__pedeBanco=function(cb){if(recebido){cb(recebido);return;}'
+      + 'try{var el=document.getElementById("__casca-banco-v11");if(el&&typeof LZString!=="undefined"){var tx=LZString.decompressFromBase64(String(el.textContent||"").trim());if(tx){recebido=JSON.parse(tx);cb(recebido);return;}}}catch(localErr){}'
+      + 'try{if(parent&&parent!==window&&typeof parent.__bancoV11Promise==="function"){parent.__bancoV11Promise().then(function(b){if(b){recebido=b;cb(b);}else cb(null);},function(){cb(null);});return;}}catch(x){}'
+      + 'fila.push(cb);try{parent.postMessage({__casca:"quero-banco"},"*");}catch(e){}};'
+      + 'window.addEventListener("message",function(e){var d=e.data||{};'
+      + 'if(d.__casca==="banco"&&d.banco){recebido=d.banco;var f=fila;fila=[];f.forEach(function(cb){try{cb(recebido);}catch(x){}});}'
+      + 'if(d.__casca==="banco-falhou"){var g=fila;fila=[];g.forEach(function(cb){try{cb(null);}catch(x){}});}});'
+      + 'function pronto(){try{parent.postMessage({__casca:"pronto"},"*");}catch(e){}}'
+      + 'pronto();'
+      + 'if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",pronto);'
+      + 'window.addEventListener("load",pronto);'
+      + 'window.addEventListener("error",function(e){try{parent.postMessage({__casca:"erro-modulo",mensagem:String((e&&e.message)||"erro de execução")},"*");}catch(x){};});'
+      + 'window.addEventListener("unhandledrejection",function(e){try{parent.postMessage({__casca:"erro-modulo",mensagem:String((e&&e.reason&&e.reason.message)||e.reason||"falha assíncrona")},"*");}catch(x){};});'
+      + '})();</scr'+'ipt>';
+    /* Núcleo de citação: obrigatório em todo módulo, venha ou não declarado
+       no HTML de origem. Entra antes de padrao.js, que depende dele. */
+    /* Camada de dados: precisa existir antes de qualquer script do módulo,
+       porque padrao.js e o próprio roteiro leem window.Inspecao na carga. */
+    try { cab += '<scr'+'ipt>' + rec('rec--dados.js') + '</scr'+'ipt>'; } catch(e){}
+    try { cab += '<scr'+'ipt>' + rec('rec--grupos.js') + '</scr'+'ipt>'; } catch(e){}
+    /* Resolvedor legislativo v12: fonte única das citações dos três
+       módulos de medicamentos. Entra antes dos scripts do roteiro. */
+    if(app==='drogaria'||app==='farmacia-manipulacao'||app==='distribuidoras-transportadoras'){
+      try { cab += '<scr'+'ipt>' + rec('rec--legis-v12.js') + '</scr'+'ipt>'; } catch(e){}
+    }
+    if(app==='farmacia-manipulacao'||app==='distribuidoras-transportadoras'||app==='central-consultas'){
+      try { cab += '<scr'+'ipt>' + rec('rec--insumo-check.js') + '</scr'+'ipt>'; } catch(e){}
+    }
+    try { cab += '<style>' + rec('nuc--citacoes.css') + '</style>'; } catch(e){}
+    ['nuc--citacoes.js','nuc--proveniencia.js'].forEach(function(k){
+      try { cab += '<scr'+'ipt>' + rec(k) + '</scr'+'ipt>'; } catch(e){}
+    });
+    /* O banco legislativo é indexado antes dos scripts do módulo. Isso evita
+       a primeira renderização com "Banco de legislação não carregado". */
+    if(bancoB64Local && app!=="servicos-alimentacao-roteiro" && app!=="drogaria") cab += '<scr'+'ipt>try{if(window.Citacoes&&Citacoes.carregaDoBloco)Citacoes.carregaDoBloco("__casca-banco-v11");}catch(e){}</scr'+'ipt>';
+    cab += '<style>'+rec('rec--uvis-ui.css').replace(/\.uvis-card-dock[\s\S]*?(?=\/\* Prevalece)/,'')+'</style><scr'+'ipt>'+rec('rec--uvis-ui.js').replace('installDock();','/* Native navigation remains the only owner. */').replace('function start(){', "function start(){\n if(['drogaria','farmacia-manipulacao','central-consultas'].includes(document.documentElement.dataset.uvisApp)){ normalize();ready().then(normalize).catch(()=>{});window.padraoCiteDispositivo=citeDevice;window.padraoCite=citeText;return; }")+'</scr'+'ipt><scr'+'ipt>'+rec('rec--uvis-clean.js')+'</scr'+'ipt>';
+    /* Revisão móvel 20260908-22 — Estética e faixa inferior por núcleo. */
+    if(app==='estetica'){
+      var estDock='<style id="estetica-toolbar-v13">'
+        +'html[data-uvis-app="estetica"] #estetica-consulta-dock{display:none!important}'
+        +'html[data-uvis-app="estetica"] main{padding-bottom:0!important}'
+        +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:56px;padding:4px 8px;background:#fff;border-top:1px solid #cbd6dc;box-shadow:0 -3px 12px rgba(15,42,57,.08)}'
+        +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button{display:flex;align-items:center;justify-content:center;min-width:0;min-height:48px;margin:0;border:0;border-radius:0;background:transparent;color:var(--roxo,#25535B);font:700 20px/1 system-ui;cursor:pointer;-webkit-tap-highlight-color:transparent}'
+        +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar button:active{background:rgba(37,83,91,.08)}'
+        +'html[data-uvis-app="estetica"] #uvis-estetica-toolbar svg{width:23px;height:23px;display:block}'
+        +'</style>'
+        +'<nav id="uvis-estetica-toolbar" aria-label="Navegação rápida">'
+        +'<button type="button" data-est-nav="prev" aria-label="Anterior" title="Anterior"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+        +'<button type="button" data-est-nav="consulta" aria-label="Consulta" title="Consulta"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5" stroke="currentColor" stroke-width="2"/><path d="m15 15 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>'
+        +'<button type="button" data-est-nav="selecionadas" aria-label="Ver selecionadas" title="Ver selecionadas"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5h2.5M10 6.5h9M5 12h2.5M10 12h9M5 17.5h2.5M10 17.5h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4.5 12 1.2 1.2L8 10.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+        +'<button type="button" data-est-nav="next" aria-label="Próximo" title="Próximo"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
+        +'</nav>'
+        +'<scr'+'ipt>(function(){function target(e){var t=e.target;if(t&&t.nodeType!==1)t=t.parentElement;return t&&t.closest?t.closest("[data-est-nav]"):null}function step(delta){try{if(typeof gruposAtuais!=="function"||typeof irGrupo!=="function")return;var gs=gruposAtuais()||[];if(!gs.length)return;var g=(typeof grupo==="number"?grupo:0)+delta;g=Math.max(0,Math.min(gs.length-1,g));irGrupo(g)}catch(_){}}document.addEventListener("click",function(e){var b=target(e);if(!b)return;e.preventDefault();e.stopPropagation();var a=b.getAttribute("data-est-nav");if(a==="consulta"){if(typeof irBloco==="function")irBloco("C");return}if(a==="selecionadas"){if(typeof ir==="function")ir(3,true);return}if(a==="prev"){var p3=document.getElementById("p3");if(p3&&p3.classList.contains("visivel")&&typeof ir==="function"){ir(2,true);return}step(-1);return}if(a==="next"){step(1);return}},true)})();</scr'+'ipt>';
+      s=s.replace(/<\/body>/i,estDock+'</body>');
+    }
+    if(app==='produtos-correlatos'){
+      cab += '<style>\n'
+        + 'html[data-uvis-app="produtos-correlatos"] .tab[aria-selected="true"],html[data-uvis-app="produtos-correlatos"] body.p-on .app-header nav.tabs .tab[aria-selected="true"]{color:#6B4215!important;background:#FFF6EA!important;border-color:#A06A2B!important;border-top-color:#A06A2B!important}\n'
+        + 'html[data-uvis-app="produtos-correlatos"] .back-link,html[data-uvis-app="produtos-correlatos"] .plain-action,html[data-uvis-app="produtos-correlatos"] .secondary,html[data-uvis-app="produtos-correlatos"] .type-card .type-mark,html[data-uvis-app="produtos-correlatos"] .spotlight strong,html[data-uvis-app="produtos-correlatos"] .trail-preview h3,html[data-uvis-app="produtos-correlatos"] .route-dashboard b,html[data-uvis-app="produtos-correlatos"] .route-nav button.active,html[data-uvis-app="produtos-correlatos"] .route-nav button:hover,html[data-uvis-app="produtos-correlatos"] .section-head h3,html[data-uvis-app="produtos-correlatos"] .tag,html[data-uvis-app="produtos-correlatos"] .text-button,html[data-uvis-app="produtos-correlatos"] .legal summary,html[data-uvis-app="produtos-correlatos"] .metric b,html[data-uvis-app="produtos-correlatos"] .inventory>summary,html[data-uvis-app="produtos-correlatos"] .norm h3,html[data-uvis-app="produtos-correlatos"] .print-body h2{color:#6B4215!important}\n'
+        + 'html[data-uvis-app="produtos-correlatos"] .print-bar .print-now{color:#6B4215!important;background:#fff!important;border:2px solid #D9C5A8!important}\n'
+        + 'html[data-uvis-app="produtos-correlatos"] details.uvis-inventory>summary,html[data-uvis-app="produtos-correlatos"] .inventory>summary{font-size:1rem!important;line-height:1.4!important;font-weight:800!important;min-height:54px!important}\n'
+        + 'html[data-uvis-app="produtos-correlatos"] .infraction strong{font-size:1rem!important;line-height:1.45!important}\n'
+        + 'html[data-uvis-app="produtos-correlatos"] .infraction small{font-size:.86rem!important;line-height:1.5!important}\n'
+        + '@media(max-width:760px){html[data-uvis-app="produtos-correlatos"] .tab{font-size:.88rem!important;padding:12px 7px!important}html[data-uvis-app="produtos-correlatos"] .infraction{padding:14px!important}}\n'
+        + '</style>';
+    }
+    if(app==='servicos-alimentacao-roteiro'){
+      cab += '<style>\n'
+        + 'html[data-uvis-app="servicos-alimentacao-roteiro"] header{color:#fff!important}\n'
+        + 'html[data-uvis-app="servicos-alimentacao-roteiro"] header h1,html[data-uvis-app="servicos-alimentacao-roteiro"] header p{color:#fff!important;opacity:1!important}\n'
+        + 'html[data-uvis-app="servicos-alimentacao-roteiro"] nav.abas{justify-content:center!important;overflow-x:visible!important;padding:0 8px!important}\n'
+        + 'html[data-uvis-app="servicos-alimentacao-roteiro"] nav.abas button{flex:1 1 0!important;max-width:230px!important;text-align:center!important;color:rgba(255,255,255,.92)!important}\n'
+        + 'html[data-uvis-app="servicos-alimentacao-roteiro"] nav.abas button[aria-selected="true"]{color:#173C2B!important;background:#EDF6F1!important;border-bottom-color:#173C2B!important}\n'
+        + '@media(max-width:560px){html[data-uvis-app="servicos-alimentacao-roteiro"] nav.abas button{font-size:.9rem!important;padding:12px 5px!important}}\n'
+        + '</style>';
+    }
+    if(app==='estetica'){
+    cab += '<style>@media(max-width:900px){html[data-uvis-app="estetica"] .aba,html[data-uvis-app="estetica"] .tema{touch-action:manipulation!important}html[data-uvis-app="estetica"] .tema{min-height:52px!important}}</style>';
+  }
+    if(app==='drogaria'){
+      ['drogaria-ocr-tools.js','drogaria-review.js','drogaria-section1.js','drogaria-area-fisica.js','drogaria-servicos-documentos.js','drogaria-final-bridge.js','drogaria-report-final.js'].forEach(function(file){
+        cab += '<scr'+'ipt>'+rec('rec--'+file)+'</scr'+'ipt>';
+      });
+    }
+    if(app==='estetica'){
+      s=s.replace(/<style id="uvis-estetica-mobile-v2[01]">[\s\S]*?<\/style>/g,'');
+      s=s.replace('<a class="home-link" data-voltar-nucleo="1" href="#">← Voltar ao núcleo</a>','<a class="home-link" data-voltar-nucleo="1" href="#" aria-label="Voltar ao núcleo" title="Voltar ao núcleo"><span aria-hidden="true">←</span></a>');
+      s=s.replace('</head>','<style>header{display:grid;grid-template-columns:44px minmax(0,1fr);padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;gap:6px 10px}header .home-link{position:static;display:flex;justify-content:center;align-items:center;min-height:44px;width:44px;font-size:20px}header h1{text-align:left;font-size:14px;line-height:1.4}header .abas{grid-column:1/-1;width:100%;display:flex;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}header .aba{flex:1 0 auto;min-height:44px;white-space:nowrap}header .conta{grid-column:1/-1}.voltar{min-height:44px}#p2 .acoes button{min-height:44px}#saida .barra{flex-wrap:wrap}#saida .barra button{min-height:44px}</style></head>');
+    }
+    if(app==='produtos-correlatos'){s=s.replace('</head>','<style>header.app-header .p-bar .plain-action[data-voltar-nucleo]{display:flex!important;align-items:center;justify-content:center;min-height:44px;padding:8px 12px}</style></head>');}
+    if(ownLayout){cab += '<scr'+'ipt>'+rec('rec--uvis-layout.js')+'</scr'+'ipt>';s=s.replace('</head>','<style>'+rec('rec--uvis-layout.css')+'</style></head>');}
+    /* Alguns módulos entram no head do srcdoc e criam observers antes do
+       body existir. O html é um alvo estável e mantém a mesma observação. */
+    cab = cab.replaceAll(').observe(document.body,', ').observe(document.body || document.documentElement,');
+    return s.indexOf('</head>') >= 0 ? s.replace('</head>', cab + '</head>') : cab + s;
+  }
+
+  /* Banco de legislação v11: descompactado e analisado UMA vez, sob demanda.
+     Blob URL herda a origem, então o módulo alcança daqui por parent.__bancoV11(). */
+  var bancoObj = null, bancoFalhou = false, bancoPromessa = null;
+  var LEVE = false;
+  var URL_BANCO = 'https://uvisvp.github.io/base-vigilancia/dados/legislacao/banco.lz.b64.txt';
+  var URL_BANCO_RAW = 'https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/legislacao/banco.lz.b64.txt';
+  function parseBanco(b64){
+    var t = LZString.decompressFromBase64(String(b64||'').trim());
+    if(!t) throw new Error('banco ilegível');
+    var o = JSON.parse(t); t = null; return o;
+  }
+  /* Síncrono: devolve o banco se já estiver em memória (ou embutido). */
+  window.__bancoV11 = function(){
+    if(bancoObj) return bancoObj;
+    if(bancoFalhou || LEVE) return null;
+    try {
+      var el = document.getElementById('banco--v11');
+      if(!el) { bancoFalhou = true; return null; }
+      bancoObj = parseBanco(el.textContent);
+      return bancoObj;
+    } catch(e){ bancoFalhou = true; bancoObj = null; return null; }
+  };
+  /* Assíncrono: na variante leve, busca do Git com cache em IndexedDB
+     (aqui na casca a origem é a página, não um Blob — o IndexedDB funciona). */
+  window.__bancoV11Promise = function(){
+    if(bancoObj) return Promise.resolve(bancoObj);
+    if(!LEVE) return Promise.resolve(window.__bancoV11());
+    if(bancoPromessa) return bancoPromessa;
+    function idb(modo, fn){
+      return new Promise(function(ok){
+        try{
+          if(!window.indexedDB) return ok(null);
+          var r = indexedDB.open('uvis-legislacao', 1);
+          r.onupgradeneeded = function(){ r.result.createObjectStore('b'); };
+          r.onerror = function(){ ok(null); };
+          r.onsuccess = function(){
+            try{
+              var tx = r.result.transaction('b', modo), st = tx.objectStore('b');
+              var q = fn(st);
+              q.onsuccess = function(){ ok(q.result === undefined ? null : q.result); };
+              q.onerror = function(){ ok(null); };
+            }catch(e){ ok(null); }
+          };
+          setTimeout(function(){ ok(null); }, 1500);
+        }catch(e){ ok(null); }
+      });
+    }
+    bancoPromessa = idb('readonly', function(st){ return st.get('banco'); }).then(function(c){
+      var fresco = c && c.b64 && (Date.now() - (c.em||0)) < 21*24*3600*1000;
+      if(fresco){ try{ bancoObj = parseBanco(c.b64); return bancoObj; }catch(e){} }
+      function buscaBanco(url){
+        return fetch(url, {cache:'no-cache'}).then(function(r){
+          if(!r.ok) throw new Error('HTTP '+r.status); return r.text();
+        });
+      }
+      return buscaBanco(URL_BANCO).catch(function(){ return buscaBanco(URL_BANCO_RAW); }).then(function(b64){
+        bancoObj = parseBanco(b64);
+        idb('readwrite', function(st){ return st.put({b64:b64, em:Date.now()}, 'banco'); });
+        return bancoObj;
+      }).catch(function(e){
+        if(c && c.b64){ try{ bancoObj = parseBanco(c.b64); return bancoObj; }catch(e2){} }
+        bancoFalhou = true; throw e;
+      });
+    });
+    return bancoPromessa;
+  };
+  /* Carimbo de diagnóstico: se este texto continuar "JS desligado", o arquivo
+     foi aberto num contexto sem JavaScript (o app Arquivos do iOS desliga o
+     JS em HTML acima de ~1,8 MB). Aí nenhuma tela abre, e não é defeito. */
+  (function(){
+    var v = document.getElementById('casca-versao');
+    if(!v) return;
+    var n = document.querySelectorAll('script[id^="app--"]').length;
+    v.textContent = 'Versão ' + APP_VERSAO + ' · ' + n + ' módulos · legislação 11.2' + (LEVE ? ' · via Git' : '');
+  })();
+
+  var $ = function(i){ return document.getElementById(i); };
+  var urlBlob = null, nucleoAtual = null;
+  /* ---------------- PALETA: FONTE ÚNICA ----------------
+     Os hex ficam apenas no :root do CSS. Aqui só se lê. Assim a cor do
+     card, a cor da barra da casca e o tema injetado no módulo não podem
+     mais divergir. Todos os tons são escuros o bastante para texto e
+     ícone brancos (>= 4,5:1), então --casca-on-tone é sempre #fff. */
+  var VAR_NUCLEO = {
+    'Medicamentos':'--t-med', 'Alimentos':'--t-ali', 'Serviços':'--t-ser',
+    'Produtos':'--t-pro', 'Serviços assistenciais':'--t-ass', 'Odontologia':'--t-odo'
+  };
+  var APP_NUCLEO = {
+    'farmacia-manipulacao':'Medicamentos', 'drogaria':'Medicamentos', 'distribuidoras-transportadoras':'Medicamentos',
+    'estoque-medicamentos':'Medicamentos',
+    'alimentos-integrado':'Alimentos', 'servicos-alimentacao-roteiro':'Alimentos',
+    'estetica':'Serviços',
+    'produtos-correlatos':'Produtos', 'analise-produtos':'Produtos', 'estoque-produtos':'Produtos',
+    'servicos-assistenciais':'Serviços assistenciais',
+    'odontologia':'Odontologia'
+  };
+  var _cssCache = {};
+  function css(nome, alt){
+    if(_cssCache[nome] !== undefined) return _cssCache[nome];
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue(nome).trim(); } catch(e){}
+    return (_cssCache[nome] = v || alt);
+  }
+  function corNucleo(n){
+    var k = VAR_NUCLEO[n];
+    return k ? css(k, '#2f4655') : '#2f4655';
+  }
+  function temaApp(app){
+    var n = APP_NUCLEO[app];
+    if(!n) return ['#2f4655', '#ffffff', '#f3f6f8'];
+    return [css(VAR_NUCLEO[n], '#2f4655'), '#ffffff', css(VAR_NUCLEO[n] + '-w', '#f3f6f8')];
+  }
+  window.__uvisTemaApp = temaApp;
+
+  function aplicaCorNucleo(n){
+    var cor = corNucleo(n);
+    document.documentElement.style.setProperty('--casca-tone', cor);
+    document.documentElement.style.setProperty('--casca-on-tone', '#ffffff');
+    var k = VAR_NUCLEO[n];
+    document.documentElement.style.setProperty('--casca-wash', k ? css(k + '-w', '#eef2f4') : '#eef2f4');
+    /* Barra de status do Android/Chrome acompanha a tela. */
+    var m = document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', n ? cor : '#f4f6f7');
+  }
+
+  function telaHome(){
+    nucleoAtual = null; aplicaCorNucleo(null);
+    $('tela-lista').classList.remove('on'); $('tela-app').classList.remove('on');
+    if(urlBlob){ URL.revokeObjectURL(urlBlob); urlBlob = null; }
+    $('quadro').removeAttribute('src'); $('quadro').removeAttribute('srcdoc'); geracao++;
+  }
+  function telaLista(nucleo){
+    nucleoAtual = nucleo; aplicaCorNucleo(nucleo);
+    var lista = ROTEIROS[nucleo] || [];
+    $('lista-tit').textContent = nucleo;
+    var c = $('lista-corpo'); c.innerHTML = '';
+    var h = document.createElement('h2'); h.textContent = nucleo; c.appendChild(h);
+    var p = document.createElement('p'); p.className = 'sub';
+    p.textContent = lista.length ? 'Escolha a atividade que será inspecionada.'
+                                 : 'Nenhum roteiro publicado neste núcleo.';
+    c.appendChild(p);
+    lista.forEach(function(r){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'rot-card';
+      var d = document.createElement('span');
+      d.innerHTML = '<b></b><span></span>';
+      d.firstChild.textContent = r[0];
+      d.lastChild.textContent = r[1];
+      d.style.flex = '1';
+      var a = document.createElement('i'); a.textContent = '→';
+      var ico = simbolo(r[2], r[3] || '');
+      if(ico) b.appendChild(ico);
+      b.appendChild(d); b.appendChild(a);
+      b.onclick = function(){ abrirApp(r[2], r[0], r[3] || ''); };
+      c.appendChild(b);
+    });
+    $('tela-app').classList.remove('on');
+    $('tela-lista').classList.add('on');
+    window.scrollTo(0,0);
+  }
+  function abrirApp(app, titulo, qs){
+    aplicaCorNucleo(nucleoAtual);
+    $('tela-app').dataset.uvisApp = app;
+    $('quadro').title = titulo;
+    $('casca-carga').classList.remove('off');
+    $('tela-lista').classList.remove('on');
+    $('tela-app').classList.add('on');
+    var fonte;
+    try { fonte = montar(app); if(qs){ fonte = fonte.replace('</head>','<script>window.__QS='+JSON.stringify('?'+qs)+';<\/script></head>'); } }
+    catch(e){ $('casca-carga').textContent = 'Não foi possível abrir: ' + e.message; return; }
+    if(urlBlob){ URL.revokeObjectURL(urlBlob); urlBlob = null; }
+    var q = $('quadro');
+    vivo = false; geracao++;
+    var g = geracao;
