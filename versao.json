@@ -1,6 +1,6 @@
 {
-  "versao": "20260916-22",
+  "versao": "20260920-6",
   "banco": "13.1",
-  "correcoes": 25,
-  "notas": "Central de Consultas: otimização adaptativa dos índices por nome. Fragmentos grandes de Medicamentos e IFA são subdivididos automaticamente pelas letras seguintes, mantendo a busca a partir de 3 letras e carregando somente o ramo necessário. Interface visual preservada; busca por associações e filtros de situação mantidos."
+  "correcoes": 3,
+  "notas": "Distribuidora/Transportadora: tela da caracterização preservada ao marcar itens, checklist reposicionado e conferência documental da expedição consolidada; inclui os ajustes posteriores fornecidos na versão integral."
 }
