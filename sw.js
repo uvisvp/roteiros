@@ -1,7 +1,7 @@
 /* Service worker — Inspeção Sanitária / UVIS */
 'use strict';
 
-const VERSAO = '20260920-16';
+const VERSAO = '20260920-17';
 const CACHE_APP = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
@@ -103,8 +103,8 @@ self.addEventListener('fetch', event => {
         const r = await fetch(redeUrl.href, { cache: 'no-store' });
         if (r && r.ok) {
           let texto = await r.text();
-          /* O arquivo físico ainda traz a versão-base; o PWA entrega o build
-             corrente e invalida somente o cache da Central de Consultas. */
+          /* O PWA entrega o build corrente e garante que a navegação atualizada
+             seja recebida como uma nova versão, sem reaproveitar o HTML anterior. */
           texto = texto.replace(/const APP_VERSAO\s*=\s*['"][^'"]+['"];/,
                                 "const APP_VERSAO = '" + VERSAO + "';");
           texto = texto.replace('</head>',
