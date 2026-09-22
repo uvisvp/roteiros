@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260920-13 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260920-14 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260920-13';
+    const APP_VERSAO = '20260922-01';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1306,7 +1306,51 @@ if(app==='distribuidoras-transportadoras'){
         if(window.DistributorAPI)window.DistributorAPI.allNCs=allNCs;
         if(state.view==='inspection')renderITab();
       })();`;
-      s=s.replace('</body>','<style>.dist-doc-card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fbfdfe}.dist-doc-card>div:first-child{margin-bottom:10px}.dist-doc-card b{display:block;color:var(--tone2)}.dist-doc-card small{color:var(--muted);font-size:.78rem}.section h4{margin:15px 0 8px;font-size:.95rem}.dist-card-menu .card{background:#eaf5fb!important;border:2px solid #79b4d1!important;box-shadow:0 5px 14px rgba(23,105,166,.14)!important}.dist-card-menu .card .ico{background:#1769a6!important;color:#fff!important}.dist-card-menu .card strong,.dist-card-menu .card em{color:#104f7d!important}.dist-card-menu .card:hover{background:#d9edf8!important;border-color:#1769a6!important;transform:translateY(-2px)!important}.dist-checklist-toggle{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-top:12px!important;padding:13px 14px!important;border:2px solid #1769a6!important;border-radius:11px!important;background:#dceff9!important;color:#104f7d!important;cursor:pointer!important;box-shadow:0 3px 10px rgba(23,105,166,.12)!important}.dist-checklist-toggle b{font-size:.9rem!important}.dist-checklist-toggle span{font-size:.74rem!important;text-align:right!important;color:#245f83!important}.dist-checklist-toggle:hover{background:#cce8f6!important;border-color:#0e568b!important}.dist-checklist-toggle::after{content:"⌄";font-size:1.1rem;font-weight:700}details[open]>.dist-checklist-toggle::after{content:"⌃"}.dist-ifa-callout{display:grid;gap:8px;margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:12px;background:#eaf5fb;color:#104f7d}.dist-ifa-callout span{font-size:.8rem}.dist-ifa-callout .btn{justify-self:start;background:#1769a6;color:#fff;border-color:#1769a6}.dist-ifa-result{display:grid;gap:3px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.dist-ifa-result span{font-size:.79rem;color:var(--muted)}.dist-thermal-list{margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:13px;background:#f2f9fd}.dist-thermal-card{margin-top:11px;padding:12px;border:1px solid #b9d6e6;border-radius:12px;background:#fff}.dist-thermal-card .statusline>.btn{min-height:34px;font-size:.78rem}@media(max-width:600px){.dist-checklist-toggle{align-items:flex-start!important;flex-wrap:wrap!important}.dist-checklist-toggle span{text-align:left!important;width:100%}}</style><scr'+'ipt>'+distTela1+'</scr'+'ipt></body>');
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style>.dist-doc-card{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fbfdfe}.dist-doc-card>div:first-child{margin-bottom:10px}.dist-doc-card b{display:block;color:var(--tone2)}.dist-doc-card small{color:var(--muted);font-size:.78rem}.section h4{margin:15px 0 8px;font-size:.95rem}.dist-card-menu .card{background:#eaf5fb!important;border:2px solid #79b4d1!important;box-shadow:0 5px 14px rgba(23,105,166,.14)!important}.dist-card-menu .card .ico{background:#1769a6!important;color:#fff!important}.dist-card-menu .card strong,.dist-card-menu .card em{color:#104f7d!important}.dist-card-menu .card:hover{background:#d9edf8!important;border-color:#1769a6!important;transform:translateY(-2px)!important}.dist-checklist-toggle{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-top:12px!important;padding:13px 14px!important;border:2px solid #1769a6!important;border-radius:11px!important;background:#dceff9!important;color:#104f7d!important;cursor:pointer!important;box-shadow:0 3px 10px rgba(23,105,166,.12)!important}.dist-checklist-toggle b{font-size:.9rem!important}.dist-checklist-toggle span{font-size:.74rem!important;text-align:right!important;color:#245f83!important}.dist-checklist-toggle:hover{background:#cce8f6!important;border-color:#0e568b!important}.dist-checklist-toggle::after{content:"⌄";font-size:1.1rem;font-weight:700}details[open]>.dist-checklist-toggle::after{content:"⌃"}.dist-ifa-callout{display:grid;gap:8px;margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:12px;background:#eaf5fb;color:#104f7d}.dist-ifa-callout span{font-size:.8rem}.dist-ifa-callout .btn{justify-self:start;background:#1769a6;color:#fff;border-color:#1769a6}.dist-ifa-result{display:grid;gap:3px;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}.dist-ifa-result span{font-size:.79rem;color:var(--muted)}.dist-thermal-list{margin:10px 0 13px;padding:12px;border:1px solid #78aeca;border-radius:13px;background:#f2f9fd}.dist-thermal-card{margin-top:11px;padding:12px;border:1px solid #b9d6e6;border-radius:12px;background:#fff}.dist-thermal-card .statusline>.btn{min-height:34px;font-size:.78rem}@media(max-width:600px){.dist-checklist-toggle{align-items:flex-start!important;flex-wrap:wrap!important}.dist-checklist-toggle span{text-align:left!important;width:100%}}</style><scr'+'ipt>'+distTela1+'</scr'+'ipt></body>');
+      var distNavAplicada=String.raw`(function(){
+        var grupos=[[],['pessoal','terceirizacao'],['recebimento','armazenamento','termolabeis','qt-area','qt-equip'],['expedicao','transporte','qt-veiculo','qt-rota'],['sgq','documentacao','fornecedores','autoinspecao','ifa-rastreabilidade'],['recolhimento','desvios','reclamacoes','residuos'],['sistemas','qualificacao-sistemas','controlados'],['cq_instalacoes','cq_atividades','cq_padroes','cq_oos','cq_liberacao']];
+        function cards(){
+          var api=window.DistributorAPI;if(!api)return;var estado=api.getState(),secoes=api.data.sections||[];
+          document.querySelectorAll('.dist-card-menu [data-dist-card]').forEach(function(card){
+            var n=Number(card.dataset.distCard),ids=grupos[n-1]||[],total=0,feitos=0;
+            ids.forEach(function(id){var sec=secoes.find(function(x){return x.id===id});if(!sec)return;(sec.questions||[]).forEach(function(q){total++;if(estado.answers&&estado.answers[q.id]&&estado.answers[q.id].status)feitos++})});
+            var texto=n===1?'Dados da inspeção':total+' verificações · '+feitos+' respondidas',pct=total?Math.round(feitos*100/total):0;
+            var linha=card.querySelector('.dist-card-progress');if(!linha){linha=document.createElement('span');linha.className='dist-card-progress';card.insertBefore(linha,card.querySelector('em'));}
+            var assinatura=texto+'|'+pct;if(linha.dataset.value!==assinatura){linha.dataset.value=assinatura;linha.innerHTML='<span>'+texto+'</span><i><b style="width:'+pct+'%"></b></i>';}
+            card.classList.toggle('dist-card-done',total>0&&feitos===total);
+          });
+        }
+        function evidencias(){
+          document.querySelectorAll('.q .evidence:not([data-evidence-ready])').forEach(function(box){
+            box.dataset.evidenceReady='1';var label=box.querySelector('label'),area=label&&label.querySelector('textarea');if(!label||!area)return;
+            var det=document.createElement('details');det.className='dist-evidence-entry';var sum=document.createElement('summary');sum.className='dist-evidence-toggle';
+            function titulo(){sum.textContent='✎ Evidência escrita'+(String(area.value||'').trim()?' · preenchida':' · tocar para escrever')}
+            titulo();area.addEventListener('input',titulo);det.appendChild(sum);det.appendChild(label);box.insertBefore(det,box.firstChild);
+          });
+        }
+        function aplicar(){cards();evidencias()}
+        var pendente=false;function agendar(){if(pendente)return;pendente=true;requestAnimationFrame(function(){pendente=false;aplicar()})}
+        document.addEventListener('click',agendar);document.addEventListener('change',agendar);document.addEventListener('input',agendar);
+        if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',aplicar);else aplicar();
+      })();`;
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="dist-nav-aplicada">.topin{min-height:48px;padding:5px 10px!important;gap:8px!important}.top .back{min-height:36px!important;padding:5px 9px!important;border-radius:9px!important;font-size:.78rem!important}.top .title b{font-size:.9rem!important}.top .title span{font-size:.68rem!important}.wrap{padding-top:10px!important}.subhead{margin-bottom:7px!important}.subhead h2{font-size:1rem!important}.subhead .btn{min-height:36px!important;padding:5px 9px!important}.tabs{position:sticky;top:48px;z-index:16;margin:0 -10px 10px!important;padding:6px 10px!important;background:rgba(244,249,252,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}.tab{min-height:34px!important;padding:5px 10px!important;font-size:.76rem!important}.dock{padding:6px 10px max(6px,env(safe-area-inset-bottom))!important}.dockin{grid-template-columns:42px minmax(110px,210px) 42px!important;gap:5px!important}.dockin .btn{min-height:38px!important;padding:5px 8px!important}.dist-card-menu,#home>.cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.dist-card-menu .card,#home>.cards .card{min-height:126px!important;padding:11px!important;border-radius:14px!important;gap:5px!important}.dist-card-menu .card .ico,#home>.cards .card .ico{width:34px!important;height:34px!important;border-radius:10px!important;font-size:16px!important}.dist-card-menu .card strong,#home>.cards .card strong{font-size:.88rem!important;line-height:1.2!important}.dist-card-menu .card>span:not(.ico),#home>.cards .card>span:not(.ico){font-size:.72rem!important;line-height:1.25!important}.dist-card-menu .card em,#home>.cards .card em{font-size:.7rem!important}.dist-card-progress{display:grid!important;gap:4px!important;color:#456477!important}.dist-card-progress i{display:block;height:4px;border-radius:999px;background:#cfe0ea;overflow:hidden}.dist-card-progress i b{display:block;height:100%;border-radius:inherit;background:#1769a6}.dist-card-done{border-color:#438b66!important;background:#eef8f2!important}.dist-card-done .dist-card-progress i b{background:#2f7d53!important}.dist-card-head{padding:10px!important}.dist-card-head h3{font-size:.98rem!important;margin-bottom:4px!important}.dist-card-head>.mini{margin:5px 0 0!important}.dist-nav{margin:4px 0 0!important}.dist-nav-b{padding:6px 8px!important;font-size:.72rem!important}.dist-evidence-entry{margin:0 0 8px;border:1px solid #cbd8e0;border-radius:10px;background:#f8fbfd;overflow:hidden}.dist-evidence-toggle{list-style:none;cursor:pointer;padding:9px 11px;color:#245f83;font-size:.78rem;font-weight:750}.dist-evidence-toggle::-webkit-details-marker{display:none}.dist-evidence-toggle::after{content:"＋";float:right}.dist-evidence-entry[open]>.dist-evidence-toggle::after{content:"−"}.dist-evidence-entry>label{display:block!important;padding:0 9px 9px}.dist-evidence-entry textarea{min-height:82px!important}.evidence>.toolbar{margin-top:6px!important}.evidence>.toolbar .btn{min-height:38px!important;font-size:.76rem!important;padding:6px 9px!important}@media(max-width:600px){.top .title span,.save{display:none!important}.top .title b{font-size:.78rem!important;line-height:1.15!important}.hero{padding:12px!important}.hero h1{font-size:1.1rem!important}.hero p{font-size:.78rem!important}.flow{margin-top:8px!important}.step{font-size:.64rem!important;padding:4px 6px!important}.dist-card-menu .card,#home>.cards .card{min-height:116px!important;padding:9px!important}.dist-card-menu .card>span:not(.ico),#home>.cards .card>span:not(.ico){display:none!important}.dist-card-menu .dist-card-progress{display:grid!important}.subhead{display:none!important}}</style><scr'+'ipt>'+distNavAplicada+'</scr'+'ipt></body>');
+      var distTerceiroNivel=String.raw`(function(){
+        DIST_CARDS[0][0]='Identificação';
+        function cabeca(card,titulo){return '<div class="panel dist-card-head"><h3>'+card+' · '+esc(DIST_CARDS[card-1][0])+'</h3>'+distNav(card)+'<p class="mini">'+esc(titulo||'Escolha um item para abrir sua tela de verificação.')+'</p></div>'}
+        function primeiraEtapa(){var t=document.createElement('template');t.innerHTML=distTela1View();return Array.from(t.content.querySelectorAll('details.section')).map(function(d,i){var s=d.querySelector(':scope > summary'),strong=s&&s.querySelector('strong'),small=s&&s.querySelector('small');return{id:d.dataset.sec||('identificacao-'+(i+1)),title:strong?strong.textContent.trim():('Item '+(i+1)),subtitle:small?small.textContent.trim():'',html:d.outerHTML}})}
+        function itens(card){if(card===1)return primeiraEtapa();return (DIST_CARDS[card-1][1]||[]).map(function(id){var sec=DATA.sections.find(function(x){return x.id===id});return sec?{id:id,title:sec.title,subtitle:sec.subtitle||'',sec:sec}:null}).filter(Boolean)}
+        function menu(card){var lista=itens(card);return cabeca(card,'Cada item abre em uma tela própria. O preenchimento continua integrado ao Anexo II e ao relatório.')+'<div class="panel"><div class="cards dist-subitem-menu">'+lista.map(function(x,i){var total=x.sec?(x.sec.questions||[]).length:0,feitos=x.sec?(x.sec.questions||[]).filter(function(q){return state.answers[q.id]&&state.answers[q.id].status}).length:0;return '<button class="card" data-dist-section="'+esc(x.id)+'"><span class="ico">'+(i+1)+'</span><strong>'+esc(x.title)+'</strong><span>'+esc(x.subtitle)+(total?' · '+feitos+'/'+total+' respondidos':'')+'</span><em>Abrir item →</em></button>'}).join('')+'</div></div>'}
+        function conteudoPrimeiro(item){var t=document.createElement('template');t.innerHTML=item.html;var d=t.content.querySelector('details.section');if(!d)return '';var s=d.querySelector(':scope > summary'),b=d.querySelector(':scope > .sectionbody');if(b)b.querySelectorAll('details.section-chk').forEach(function(chk){chk.open=true;chk.classList.add('dist-chk-fixed')});return '<div class="section dist-section-screen"><div class="dist-section-title">'+(s?s.innerHTML:'')+'</div>'+(b?b.outerHTML:'')+'</div>'}
+        function conteudoNormal(item){var t=document.createElement('template');t.innerHTML=sectionHtml(item.sec);var d=t.content.querySelector('details.section');if(!d)return '';var s=d.querySelector(':scope > summary'),b=d.querySelector(':scope > .sectionbody');if(b)b.querySelectorAll('details.section-chk').forEach(function(chk){chk.open=true;chk.classList.add('dist-chk-fixed')});return '<div class="section dist-section-screen"><div class="dist-section-title">'+(s?s.innerHTML:'')+'</div>'+(b?b.outerHTML:'')+'</div>'}
+        var roteiroAnterior=roteiroView;
+        roteiroView=function(){var card=Number(state.activeCard||0);if(!(card>=1&&card<=8)){state.activeSection=null;return roteiroAnterior()}var lista=itens(card),id=String(state.activeSection||''),item=lista.find(function(x){return x.id===id});if(!item)return menu(card);return cabeca(card,'Item '+(lista.indexOf(item)+1)+' de '+lista.length+' · use as setas inferiores para navegar.')+(card===1?conteudoPrimeiro(item):conteudoNormal(item))};
+        function salvarTela(id){state.activeSection=id||null;save();renderITab()}
+        document.addEventListener('click',function(e){var sec=e.target.closest&&e.target.closest('[data-dist-section]');if(sec){e.preventDefault();e.stopImmediatePropagation();salvarTela(sec.dataset.distSection);return}var card=e.target.closest&&e.target.closest('[data-dist-card]');if(card)state.activeSection=null},true);
+        var restaurarChkAnterior=distRestaurarChk;distRestaurarChk=function(){restaurarChkAnterior();document.querySelectorAll('details.section-chk.dist-chk-fixed').forEach(function(chk){chk.open=true})};
+        var dockAnterior=distDock;distDock=function(){dockAnterior();var emRoteiro=state.view==='inspection'&&state.itab==='roteiro',card=Number(state.activeCard||0),lista=card?itens(card):[],idx=lista.findIndex(function(x){return x.id===state.activeSection}),back=byId('dockBack'),next=byId('dockNext');if(!emRoteiro||!card)return;back.onclick=function(){if(state.activeSection){salvarTela(null)}else{state.activeCard=null;save();renderITab()}};next.onclick=function(){if(!state.activeSection){if(lista.length)salvarTela(lista[0].id);return}if(idx>=0&&idx<lista.length-1){salvarTela(lista[idx+1].id);return}state.activeSection=null;if(card<8)state.activeCard=card+1;else state.itab='anexo2';save();renderITab()}};
+        if(state.view==='inspection'&&state.itab==='roteiro')renderITab();
+      })();`;
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="dist-terceiro-nivel">.dist-subitem-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.dist-subitem-menu .card{min-height:132px!important;padding:11px!important;border-radius:14px!important;gap:6px!important;background:#fff!important;border:1px solid #b9d6e6!important}.dist-subitem-menu .card .ico{width:34px!important;height:34px!important;border-radius:10px!important;background:#1769a6!important;color:#fff!important;font-size:15px!important}.dist-subitem-menu .card strong{font-size:.88rem!important;line-height:1.22!important;color:#104f7d!important}.dist-subitem-menu .card>span:not(.ico){font-size:.72rem!important;line-height:1.3!important}.dist-subitem-menu .card em{font-size:.7rem!important}.dist-section-screen{overflow:visible!important}.dist-section-title{display:flex;gap:10px;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line);background:#f7fbfd}.dist-section-title strong{flex:1}.dist-section-title small{color:var(--muted);font-size:.75rem}.dist-section-screen>.sectionbody{display:block!important}.dist-section-screen details.section-chk.dist-chk-fixed>summary{display:none!important}.dist-section-screen details.section-chk.dist-chk-fixed>.questions,.dist-section-screen details.section-chk.dist-chk-fixed>*:not(summary){display:block!important}.dist-section-screen details.section-chk.dist-chk-fixed{border:0!important;margin-top:0!important}.dist-subitem-menu .card:nth-child(7){min-height:132px!important;width:auto!important;grid-column:auto!important}@media(max-width:600px){.dist-subitem-menu .card{min-height:112px!important;padding:9px!important}.dist-subitem-menu .card>span:not(.ico){font-size:.68rem!important}.dist-section-title{padding:10px}.dist-section-title strong{font-size:.9rem}}</style><scr'+'ipt>'+distTerceiroNivel+'</scr'+'ipt></body>');
     }
     if(!['drogaria','farmacia-manipulacao','central-consultas'].includes(app) && !/data-voltar-nucleo|id="backTop"|id="voltarNucleoApp"/.test(s)){
       s=s.replace(/(<header\b[^>]*>)/i,'$1<button type="button" data-voltar-nucleo class="native-back" aria-label="Voltar ao núcleo" title="Voltar ao núcleo" style="font:inherit;min-height:44px;padding:8px 12px;border:1px solid currentColor;border-radius:7px;background:transparent;color:inherit">← Voltar ao núcleo</button>');
@@ -1436,6 +1480,280 @@ if(app==='distribuidoras-transportadoras'){
          .replace(/Card \$\{active\} de 8/g,'Seção ${active} de 8')
          .replace(/Todos os cards/g,'Todas as seções')
          .replace(/Progresso do card/g,'Progresso da seção');
+      var drogariaTresNiveis=String.raw`(function(){
+        var drgItem='',drgPending='';
+        function textoTitulo(el,i){var t=el.querySelector(':scope > summary, :scope > h2, :scope > h3, :scope > legend')||el.querySelector('h2,h3,legend,summary');return String((t&&t.textContent)||('Item '+(i+1))).replace(/\s+/g,' ').trim()}
+        function descritores(){
+          var raw=cardOriginal(),t=document.createElement('template');t.innerHTML=raw;
+          function norm(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+          function corpoDetail(el){
+            var body=el.querySelector(':scope > .ui-subbody');
+            if(body)return body.innerHTML;
+            return Array.from(el.children).filter(function(n){return n.tagName!=='SUMMARY'}).map(function(n){return n.outerHTML}).join('')
+          }
+          function itemDetail(el,i){
+            return{id:String(el.dataset.uiFold||el.id||('sub-'+i)),title:textoTitulo(el,i),html:corpoDetail(el)}
+          }
+          function detailsRaiz(root){
+            return Array.from(root.querySelectorAll('details.ui-subsection')).filter(function(el){
+              return !el.parentElement.closest('details.ui-subsection')
+            })
+          }
+          var itens=[];
+
+          /* ÁREA FÍSICA: usa explicitamente as subseções area:*.
+             O erro anterior ocorria porque só os details "raiz" eram lidos,
+             enquanto as áreas reais estão aninhadas em um agrupador antigo. */
+          if(Number(active)===2){
+            var geral=Array.from(t.content.querySelectorAll('.box')).find(function(el){
+              return /informa[cç][oõ]es gerais/i.test(textoTitulo(el,0))
+            });
+            if(geral)itens.push({id:'area-geral',title:'Informações gerais',html:geral.outerHTML});
+            Array.from(t.content.querySelectorAll('details.ui-subsection[data-ui-fold^="area:"]')).forEach(function(el,i){
+              var key=String(el.dataset.uiFold||''),n=norm(textoTitulo(el,i));
+              if(key==='area:residuos'||n.indexOf('a empresa conta com as seguintes areas')>=0||n.indexOf('4.4 armazenamento')>=0)return;
+              itens.push(itemDetail(el,i))
+            });
+            /* Numeração visual contínua das áreas após a retirada do antigo 4.4.
+               IDs e vínculos internos permanecem intactos. */
+            itens.forEach(function(x,i){
+              if(i===0)return;
+              x.title=String(x.title).replace(/^\s*4\.\d+(?:\.\d+)?\.?\s*/, '4.'+i+' ')
+            });
+          } else {
+            /* Nas demais seções, cada subseção funcional é uma tela.
+               Se um agrupador antigo contém subseções reais, ele não vira tela. */
+            var all=Array.from(t.content.querySelectorAll('details.ui-subsection'));
+            var folhas=all.filter(function(el){
+              return !el.querySelector('details.ui-subsection')
+            });
+            (folhas.length?folhas:detailsRaiz(t.content)).forEach(function(el,i){itens.push(itemDetail(el,i))});
+
+            /* Blocos autônomos sem subseções continuam sendo telas próprias. */
+            Array.from(t.content.querySelectorAll('.box,.group,.room-box,.cold-box')).filter(function(el){
+              if(el.closest('details.ui-subsection'))return false;
+              if(el.querySelector('details.ui-subsection'))return false;
+              var p=el.parentElement&&el.parentElement.closest('.box,.group,.room-box,.cold-box');
+              return !p
+            }).forEach(function(el,i){
+              var title=textoTitulo(el,i),n=norm(title);
+              if(!n||n==='item '+(i+1))return;
+              itens.push({id:'bloco-'+i+'-'+(el.getAttribute('data-group')||el.getAttribute('data-room')||el.getAttribute('data-cold')||''),title:title,html:el.outerHTML})
+            });
+          }
+
+          if(Number(active)===4){
+            /* Ordem funcional definida para Controlados:
+               1 Classes; 2 SNGPC; estoque dentro de Conferência;
+               receitas de outra UF dentro de Dispensação/Escrituração. */
+            itens.unshift({
+              id:'controlados-classes',
+              title:'Classes de produtos comercializados',
+              html:'<div data-drg-classes-slot></div>'
+            });
+            var idxS=itens.findIndex(function(x){return norm(x.title).indexOf('sngpc')>=0});
+            if(idxS>1){var sng=itens.splice(idxS,1)[0];itens.splice(1,0,sng)}
+            itens.forEach(function(x){
+              var n=norm(x.title);
+              if(n.indexOf('conferencia de estoque por lote')>=0)x.title='Conferência de estoque'
+            })
+          }
+
+          if(!itens.length){
+            var panel=t.content.querySelector('.panel')||t.content.firstElementChild;
+            return panel?[{id:'item-1',title:(catalog.cards.find(function(c){return c.id===active})||{}).titulo||'Verificação',html:panel.innerHTML}]:[]
+          }
+
+          /* Deduplica apenas telas com o mesmo título normalizado. */
+          var vistos={};
+          itens=itens.filter(function(x){
+            var k=norm(x.title);
+            if(!k||vistos[k])return false;
+            vistos[k]=1;return true
+          });
+
+          /* PGRSS + conteúdo continuam uma tela única. */
+          var pgr=-1,conteudo=-1;
+          itens.forEach(function(x,i){
+            var n=norm(x.title);
+            if(n==='pgrss'||n.indexOf('plano de gerenciamento de residuos')>=0)pgr=i;
+            if(n.indexOf('conteudo do pgrss')>=0)conteudo=i
+          });
+          if(pgr>=0&&conteudo>=0&&pgr!==conteudo){
+            itens[pgr].html+=itens[conteudo].html;
+            itens[pgr].title='PGRSS e conteúdo do PGRSS';
+            itens.splice(conteudo,1)
+          }
+          return itens
+        }
+
+        function prepararHtml(html){
+          var t=document.createElement('template');t.innerHTML=html;
+
+          /* REGRA DO 3º NÍVEL DA DROGARIA:
+             nada estrutural permanece recolhível. Um details antigo vira
+             conteúdo visível da própria tela. "Não se aplica" é a forma de
+             dispensar o item, e não esconder/expandir conteúdo. */
+          function abrirDetails(root){
+            var ds=Array.from(root.querySelectorAll('details')).reverse();
+            ds.forEach(function(d){
+              if(d.classList.contains('detail')||d.classList.contains('drg-hint')){
+                d.open=true;
+                return
+              }
+              var wrap=document.createElement('section');
+              wrap.className='drg-static-subsection';
+              var sum=d.querySelector(':scope > summary');
+              if(sum){
+                var h=document.createElement('h3');
+                h.textContent=sum.textContent.trim();
+                wrap.appendChild(h)
+              }
+              Array.from(d.children).forEach(function(n){
+                if(n!==sum)wrap.appendChild(n.cloneNode(true))
+              });
+              d.replaceWith(wrap)
+            })
+          }
+          abrirDetails(t.content);
+          return t.innerHTML
+        }
+        function menu(itens){var sec=catalog.cards.find(function(c){return c.id===active});return '<div class="panel drg-level-head"><h2>'+esc(sec?sec.titulo:'Seção '+active)+'</h2><p class="muted">Escolha um item. Ele será aberto em uma tela própria e continuará alimentando as infrações e o relatório.</p></div><div class="drg-item-grid">'+itens.map(function(x,i){var t=document.createElement('template');t.innerHTML=x.html;var total=t.content.querySelectorAll('[data-question]').length,feitos=Array.from(t.content.querySelectorAll('[data-question]')).filter(function(q){return !!state.answers[q.dataset.question]}).length;return '<button type="button" class="drg-item-card" data-drg-item="'+esc(x.id)+'"><span class="drg-item-number">'+(i+1)+'</span><strong>'+esc(x.title)+'</strong>'+(total?'<small>'+feitos+'/'+total+' respondidos</small>':'<small>Abrir item</small>')+'<em>Abrir →</em></button>'}).join('')+'</div>'}
+        function tela(item,itens){var idx=itens.indexOf(item);return '<div class="panel drg-level-head"><h2>'+esc(item.title)+'</h2><div class="drg-level-toolbar" role="navigation" aria-label="Navegação dos itens"><button type="button" data-drg-items>☷ Itens</button><button type="button" data-drg-step="-1" '+(idx<=0?'disabled':'')+'>← Anterior</button><span class="badge">'+(idx+1)+' de '+itens.length+'</span><button type="button" data-drg-step="1" '+(idx>=itens.length-1?'disabled':'')+'>Próximo →</button></div></div><div class="panel drg-item-screen">'+prepararHtml(item.html)+'</div>'}
+        var card8=catalog.cards&&catalog.cards.find(function(c){return Number(c.id)===8});if(card8)card8.titulo='Transporte';
+        var cardOriginal=card;
+        card=function(){
+          /* Serviços Farmacêuticos já possui navegação própria e correta.
+             Não reinterpretar sua estrutura pelo paginador genérico. */
+          /* Serviços Farmacêuticos e Venda remota possuem renderizadores
+             próprios. Não passar nenhuma das duas seções pelo paginador
+             genérico do terceiro nível. */
+          if(Number(active)===5||Number(active)===8)return cardOriginal();
+          var itens=descritores();if(drgPending){var alvo=itens.find(function(x){var t=document.createElement('template');t.innerHTML=x.html;return !!t.content.querySelector('[data-question="'+CSS.escape(drgPending)+'"]')});if(alvo)drgItem=alvo.id;drgPending=''}if(itens.length===1){drgItem=itens[0].id;return tela(itens[0],itens)}var item=itens.find(function(x){return x.id===drgItem});return item?tela(item,itens):menu(itens)};
+        function abrir(id){drgItem=id||'';render();window.scrollTo({top:0,behavior:'instant'})}
+        document.addEventListener('drogaria:render',function(){
+          if(Number(active)!==4)return;
+          var extra=document.querySelector('#content .fb-controls');
+          if(!extra)return;
+
+          function nrm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+          function rangeByHeading(root,label,nextLabels){
+            var hs=Array.from(root.querySelectorAll('h2,h3,h4,strong,b')).filter(function(h){return nrm(h.textContent).indexOf(label)>=0});
+            if(!hs.length)return null;
+            var h=hs[0],box=document.createElement('div'),node=h;
+            while(node){
+              var next=node.nextElementSibling;
+              box.appendChild(node.cloneNode(true));
+              if(next && nextLabels.some(function(x){return nrm(next.textContent).indexOf(x)>=0 && /^(H2|H3|H4|STRONG|B)$/.test(next.tagName)}))break;
+              node=next
+            }
+            return box.innerHTML
+          }
+          var html=extra.innerHTML, tmp=document.createElement('div');tmp.innerHTML=html;
+          var classes=rangeByHeading(tmp,'classes de produtos comercializados',['sistema informatizado','sngpc','controle de estoque','receitas oriundas']);
+          var estoque=rangeByHeading(tmp,'controle de estoque',['receitas oriundas']);
+          var uf=rangeByHeading(tmp,'receitas oriundas de outra unidade federativa',[]);
+
+          var slot=document.querySelector('#content [data-drg-classes-slot]');
+          if(slot && classes)slot.innerHTML=classes;
+
+          /* SNGPC do complemento é descartado: a seção já possui tela própria. */
+
+          var tela=document.querySelector('#content .drg-item-screen');
+          var titulo=nrm(document.querySelector('#content .drg-level-head h2')?.textContent);
+          if(tela && titulo.indexOf('conferencia de estoque')>=0 && estoque){
+            var d=document.createElement('div');d.className='drg-moved-control';d.innerHTML=estoque;tela.appendChild(d)
+          }
+          if(tela && (titulo.indexOf('dispensacao')>=0||titulo.indexOf('escrituracao')>=0) && uf){
+            var d2=document.createElement('div');d2.className='drg-moved-control';d2.innerHTML=uf;tela.appendChild(d2)
+          }
+          extra.remove()
+        });
+
+
+
+        document.addEventListener('drogaria:render',function(){
+          /* Esta regra pertence exclusivamente a Controlados.
+             Serviços Farmacêuticos usa seu próprio módulo/render e não deve ser
+             reescrito aqui — isso preserva integralmente Venda remota. */
+          if(Number(active)!==4)return;
+          document.querySelectorAll('#content details:not(.detail):not(.drg-hint)').forEach(function(d){
+            d.open=true;
+            var sum=d.querySelector(':scope > summary');
+            if(sum){sum.style.pointerEvents='none';sum.setAttribute('aria-disabled','true')}
+          })
+        });
+
+        document.addEventListener('drogaria:render',function(){
+          if(Number(active)!==8)return;
+          document.querySelectorAll('#content details').forEach(function(d){
+            d.open=true;
+            var sum=d.querySelector(':scope > summary');
+            if(sum){sum.style.pointerEvents='none';sum.setAttribute('aria-disabled','true')}
+          })
+        });
+
+        document.addEventListener('drogaria:render',function(){
+          if(Number(active)!==5)return;
+          Array.from(document.querySelectorAll('#content details')).forEach(function(d){
+            var sum=d.querySelector(':scope > summary');
+            if(sum&&/^\s*servi[cç]os realizados\s*$/i.test(sum.textContent||'')){
+              d.open=true;
+              /* Mantém os botões visíveis; não altera Venda remota nem os demais conteúdos. */
+              sum.style.display='none'
+            }
+          })
+        });
+
+        document.addEventListener('click',function(e){var item=e.target.closest&&e.target.closest('[data-drg-item]');if(item){e.preventDefault();e.stopImmediatePropagation();abrir(item.dataset.drgItem);return}if(e.target.closest&&e.target.closest('[data-drg-items]')){e.preventDefault();e.stopImmediatePropagation();abrir('');return}var step=e.target.closest&&e.target.closest('[data-drg-step]');if(step&&!step.disabled){e.preventDefault();e.stopImmediatePropagation();var lista=descritores(),i=lista.findIndex(function(x){return x.id===drgItem}),alvo=lista[i+Number(step.dataset.drgStep)];if(alvo)abrir(alvo.id);return}var cardBtn=e.target.closest&&e.target.closest('[data-card]');if(cardBtn)drgItem='';var loc=e.target.closest&&e.target.closest('[data-locate]');if(loc)drgPending=loc.dataset.locate},true);
+        var navOriginal=drogariaNavigation;drogariaNavigation=function(){navOriginal();if(tab!=='roteiro'||!active)return;var itens=descritores(),idx=itens.findIndex(function(x){return x.id===drgItem}),back=byId('back'),next=byId('next');back.disabled=false;back.onclick=function(){if(drgItem){abrir('');return}var ids=catalog.cards.filter(function(c){return E.cardVisible(c.id,state)}).map(function(c){return c.id}),i=ids.indexOf(active);drgItem='';changeView('roteiro',i>0?ids[i-1]:0)};next.onclick=function(){if(!drgItem){if(itens.length)abrir(itens[0].id);return}if(idx>=0&&idx<itens.length-1){abrir(itens[idx+1].id);return}var ids=catalog.cards.filter(function(c){return E.cardVisible(c.id,state)}).map(function(c){return c.id}),n=ids[ids.indexOf(active)+1];drgItem='';changeView(n?'roteiro':'relatorio',n||0)}};
+        var mudarOriginal=changeView;changeView=function(t,c){if(t!=='roteiro'||Number(c)!==Number(active))drgItem='';return mudarOriginal(t,c)};
+        render();
+      })();`;
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="drogaria-tres-niveis">.ui-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.ui-card-grid>button{min-height:116px!important;padding:12px!important}.drg-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.drg-item-card{min-height:132px;padding:12px;border:1px solid #b9cbc2;border-radius:14px;background:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:6px}.drg-item-card:hover{background:var(--soft)}.drg-item-number{width:34px;height:34px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800}.drg-item-card strong{font-size:.9rem;line-height:1.25}.drg-item-card small{color:var(--muted);font-size:.72rem}.drg-item-card em{margin-top:auto;font-style:normal;font-size:.72rem;color:var(--ink);font-weight:750}.drg-level-head{padding:12px!important;margin-bottom:10px!important}.drg-level-head h2{font-size:1.05rem!important;margin:4px 0 9px!important}.drg-level-toolbar{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px;align-items:center}.drg-level-toolbar button{min-height:36px;padding:7px 9px}.drg-level-toolbar .badge{text-align:center}.drg-item-screen{padding:12px!important}.drg-item-screen details.drg-fixed-detail{display:block!important}.drg-item-screen details.drg-fixed-detail>summary{pointer-events:none;cursor:default;font-weight:750}.drg-item-screen details.drg-fixed-detail>summary::marker{content:""}.drg-item-screen details.detail>summary,.drg-item-screen details.drg-hint>summary{pointer-events:auto;cursor:pointer}.drg-item-screen .drg-static-subsection{margin:0 0 12px;padding:0;border:0}.drg-item-screen .drg-static-subsection>h3{margin:4px 0 10px;font-size:.98rem}.drg-item-screen .group{margin:0!important}.drg-item-screen .q{padding-left:0!important;padding-right:0!important}header{padding-top:10px!important;padding-bottom:8px!important}.dock{padding-top:6px!important;padding-bottom:max(6px,env(safe-area-inset-bottom))!important}.dock button{min-height:40px!important;padding:7px 10px!important}@media(max-width:620px){.ui-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ui-card-grid>button{min-height:104px!important;padding:9px!important}.drg-item-card{min-height:112px;padding:9px}.drg-item-card strong{font-size:.82rem}.drg-item-screen{padding:10px!important}.drg-level-toolbar{grid-template-columns:1fr 1fr}.drg-level-toolbar .badge{order:-1;grid-column:1/-1}.page{padding-top:10px!important}}.drg-item-screen .drg-static-subsection{display:block!important;margin:0 0 14px!important;padding:0!important;border:0!important;background:transparent!important}.drg-item-screen .drg-static-subsection>h3{display:block!important;margin:6px 0 10px!important}.drg-item-screen summary{cursor:default}</style><scr'+'ipt>'+drogariaTresNiveis+'</scr'+'ipt></body>');
+    }
+    if(app==='farmacia-manipulacao'){
+      var manipulacaoTresNiveis=String.raw`(function(){
+        var manItem='';
+        function itens(card){var c=APP_DATA.cards[card],out=[];if(card===1)out.push({id:'extra-caracterizacao',title:'Identificação e caracterização',html:renderCharacterization()});(c.sections||[]).forEach(function(s){out.push({id:'sec-'+s.code,title:s.code+' · '+s.title,section:s})});if(card===2){var treino=out.find(function(x){return /trein/i.test(x.title||'')});if(treino){treino.extraHtml=renderTraining()}else if(out.length){out[out.length-1].extraHtml=renderTraining()}}if(card===6){out.push({id:'extra-pops',title:'POPs e documentos',html:renderPops()});out.push({id:'extra-monitoramento',title:'Monitoramento do processo magistral',html:renderMonitoring()});out.push({id:'extra-rastreabilidade',title:'Rastreabilidade',html:renderTraceability()});out.push({id:'extra-estoque',title:'Conferência de estoque',html:renderStock()})}return out.filter(function(x){return x.section||String(x.html||'').trim()})}
+        function secao(s){var active=conditionActive(s.condition),manual=!!state.manualOpen['sec:'+s.code],show=active||manual,reqActive=s.requirements.filter(function(r){return conditionActive(r.condition)}).length,done=s.requirements.filter(function(r){return conditionActive(r.condition)&&state.responses[r.id]&&state.responses[r.id].status}).length;return '<div class="section open man-fixed-section" data-section="'+esc(s.code)+'"><div class="section-title"><span class="code">'+esc(s.code)+'</span><b>'+esc(s.title)+'</b><span class="meta">'+(active?done+'/'+reqActive:'não aplicável')+'</span></div><div class="section-body">'+(!active?'<div class="inactive">Este bloco não foi ativado pela caracterização: <b>'+esc(APP_DATA.conditionLabels[s.condition]||'condição específica')+'</b>. '+(manual?'Está aberto manualmente, sem alterar a caracterização.':'<button class="btn" data-manual-sec="'+esc(s.code)+'">Abrir mesmo assim</button>')+'</div>':'')+(show?s.requirements.map(function(r){return requirementHtml(r,manual)}).join(''):'')+(show?renderEnv(s.code,s.title)+renderEquipment(s.code)+renderBalance(s.code)+renderPlanChecklist(s.code):'')+'</div></div>'}
+        function menu(card,lista){var c=APP_DATA.cards[card];return '<div class="panel man-level-head"><h2>'+card+' · '+esc(c.title)+'</h2><p class="muted">Cada item abre em uma tela própria. O checklist permanece visível e integrado às infrações e ao relatório.</p></div><div class="man-item-grid">'+lista.map(function(x,i){var total=x.section?x.section.requirements.filter(function(r){return conditionActive(r.condition)}).length:0,done=x.section?x.section.requirements.filter(function(r){return conditionActive(r.condition)&&state.responses[r.id]&&state.responses[r.id].status}).length:0;return '<button type="button" class="man-item-card" data-man-item="'+esc(x.id)+'"><span class="man-item-number">'+(i+1)+'</span><strong>'+esc(x.title)+'</strong><small>'+(total?done+'/'+total+' respondidos':'Abrir item')+'</small><em>Abrir →</em></button>'}).join('')+'</div>'}
+        function evidencia(){document.querySelectorAll('#cardPanel .req .evidence:not([data-man-evidence])').forEach(function(box){box.dataset.manEvidence='1';var ta=box.querySelector('textarea');if(!ta)return;var d=document.createElement('details'),s=document.createElement('summary');d.className='man-evidence';function nome(){s.textContent='✎ Evidência escrita'+(String(ta.value||'').trim()?' · preenchida':' · tocar para escrever')}nome();ta.addEventListener('input',nome);d.appendChild(s);box.insertBefore(d,ta);d.appendChild(ta)})}
+        function mostrar(card,item,lista){var html=(item.section?secao(item.section):item.html)+(item.extraHtml||'');return '<div class="panel man-level-head"><div class="toolrow man-level-toolbar" role="navigation" aria-label="Navegação dos itens" style="display:flex;flex-wrap:nowrap;gap:6px;align-items:center;overflow-x:auto"><button type="button" class="btn" data-man-items>☷ Itens</button><button type="button" class="btn" data-man-step="-1" '+(lista.indexOf(item)<=0?'disabled':'')+'>← Anterior</button><span class="tag">'+(lista.indexOf(item)+1)+' de '+lista.length+'</span><button type="button" class="btn" data-man-step="1" '+(lista.indexOf(item)>=lista.length-1?'disabled':'')+'>Próximo →</button></div><h2>'+esc(item.title)+'</h2><p class="muted">Checklist aberto. Evidências escritas e orientações podem ser recolhidas.</p></div><div class="panel man-item-screen">'+html+'</div>'}
+        var renderCardOriginal=renderCard;
+        renderCard=function(n){var changed=state.openCard!==Number(n);state.openCard=Number(n);var lista=itens(Number(n)),item=lista.find(function(x){return x.id===manItem});$('#cardPanel').innerHTML=item?mostrar(Number(n),item,lista):menu(Number(n),lista);$('#cardGrid').hidden=true;pharmacyDock();updateMonitoringTags();evidencia();if(changed)window.scrollTo(0,0)};
+        function abrir(id){manItem=id||'';renderCard(state.openCard);save();window.scrollTo(0,0)}
+        document.addEventListener('click',function(e){var p=e.target.closest&&e.target.closest('[data-man-step]');if(!p||p.disabled)return;e.preventDefault();e.stopImmediatePropagation();var lista=itens(Number(state.openCard)),i=lista.findIndex(function(x){return x.id===manItem}),j=i+Number(p.dataset.manStep);if(j>=0&&j<lista.length)abrir(lista[j].id)},true);
+        document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-man-item],[data-man-items]');if(b){e.preventDefault();e.stopImmediatePropagation();abrir(b.dataset.manItem||'');return}if(e.target.closest&&e.target.closest('[data-open-card],[data-nav-card]'))manItem=''},true);
+        var dockOriginal=pharmacyDock;pharmacyDock=function(){dockOriginal();var card=state.activeTab==='roteiro'?Number(state.openCard):0;if(!card)return;var lista=itens(card),idx=lista.findIndex(function(x){return x.id===manItem}),d=$('#pharmacyDock');if(!d)return;var back=d.querySelector('[data-med-back]'),nextBtn=d.querySelector('[data-med-next]'),all=d.querySelector('[data-med-all]');if(!back||!nextBtn||!all)return;back.disabled=false;back.onclick=function(){if(manItem){abrir('');return}if(card>1){manItem='';renderCard(card-1)}else all.click();save();window.scrollTo(0,0)};nextBtn.onclick=function(){if(!manItem){if(lista.length)abrir(lista[0].id);return}if(idx>=0&&idx<lista.length-1){abrir(lista[idx+1].id);return}var ids=Object.keys(APP_DATA.cards).map(Number),next=ids[ids.indexOf(card)+1];manItem='';if(next)renderCard(next);else setTab('relatorio');save();window.scrollTo(0,0)};var oldAll=all.onclick;all.onclick=function(){manItem='';if(typeof oldAll==='function')oldAll.call(all);else{state.openCard=null;setTab('roteiro');$('#cardPanel').innerHTML='';$('#cardGrid').hidden=false;dockOriginal();save()}}};
+        var refreshOriginal=pharmacyRefresh;pharmacyRefresh=function(){renderCardGrid();if(state.openCard)renderCard(state.openCard);else $('#cardPanel').innerHTML='';renderReportForm();renderPreview();pharmacyDock()};
+        if(state.openCard)renderCard(state.openCard);else renderCardGrid();
+      })();`;
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="manipulacao-tres-niveis">#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#cardGrid>button{min-height:116px!important;padding:11px!important}.man-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.man-item-card{min-height:132px;padding:12px;border:1px solid var(--line2);border-radius:14px;background:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:6px}.man-item-number{width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}.man-item-card strong{font-size:.88rem;line-height:1.25}.man-item-card small{font-size:.72rem;color:var(--muted)}.man-item-card em{margin-top:auto;font-size:.72rem;font-style:normal;color:var(--brand-d);font-weight:750}.man-level-head{padding:12px!important;margin-bottom:10px!important}.man-level-head h2{margin:4px 0!important;font-size:1.03rem!important}.man-item-screen{padding:12px!important}.man-fixed-section>.section-body{display:block!important}.man-fixed-section>.section-title{cursor:default}.man-evidence{grid-column:1/-1;border:1px solid var(--line);border-radius:10px;background:#fbfcfd;overflow:hidden}.man-evidence>summary{cursor:pointer;padding:8px 10px;color:var(--brand-d);font-size:.75rem;font-weight:750}.man-evidence>textarea{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important}.man-item-screen .med-hint>summary{pointer-events:auto}.ui-header{min-height:48px!important}.ui-toolbar{min-height:48px!important}@media(max-width:620px){#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cardGrid>button,.man-item-card{min-height:108px!important;padding:9px!important}.man-item-card strong{font-size:.8rem}.man-item-screen{padding:9px!important}}</style><scr'+'ipt>'+manipulacaoTresNiveis+'</scr'+'ipt></body>');
+    }
+    if(app==='distribuidoras-transportadoras'||app==='drogaria'||app==='farmacia-manipulacao'){
+      var limparInspecaoTotal=String.raw`(function(){
+        function botao(){var host=document.querySelector('.topin,.ui-header,header');if(!host||host.querySelector('[data-clear-inspection-all]'))return;var b=document.createElement('button');b.type='button';b.className='clear-inspection-all';b.setAttribute('data-clear-inspection-all','1');b.setAttribute('aria-label','Limpar todos os dados da inspeção');b.title='Limpar todos os dados da inspeção';b.innerHTML='<span aria-hidden="true">⌫</span><b>Limpar tudo</b>';host.appendChild(b)}
+        async function limpar(){if(!confirm('Tem certeza de que deseja apagar TODOS os dados desta inspeção?\n\nEsta ação não pode ser desfeita.'))return;
+          try{
+            var modulo=document.documentElement.dataset.uvisApp;
+            if(modulo==='distribuidoras-transportadoras'){
+              if(window.RoteiroEvidence)for(var i=1;i<=8;i++)await RoteiroEvidence.clear('dist-card-'+i);
+              state=blank();save();renderHome();renderCycle();
+            }else if(modulo==='drogaria'){
+              if(window.RoteiroEvidence)for(var j=1;j<=8;j++)await RoteiroEvidence.clear('drogaria-card-'+j);
+              state=E.fresh();tab='roteiro';active=0;save();render();
+            }else if(modulo==='farmacia-manipulacao'){
+              if(window.RoteiroEvidence)for(var k=1;k<=6;k++)await RoteiroEvidence.clear('manipulacao-card-'+k);
+              state=freshState();state.openCard=null;state.activeTab='roteiro';save();renderCardGrid();$('#cardPanel').innerHTML='';setTab('roteiro');pharmacyRefresh();
+            }
+            alert('Todos os dados desta inspeção foram apagados.');
+          }catch(err){alert('Não foi possível concluir a limpeza total: '+String(err&&err.message||err))}
+        }
+        document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-clear-inspection-all]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();limpar()},true);
+        if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',botao);else botao();
+      })();`;
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="clear-inspection-all-style">.clear-inspection-all{margin-left:auto;min-height:36px!important;padding:6px 9px!important;border:1px solid #b9544d!important;border-radius:9px!important;background:#fff!important;color:#8b2f2a!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;font-size:.72rem!important;font-weight:800!important;white-space:nowrap}.clear-inspection-all:hover{background:#fff1ef!important}.clear-inspection-all span{font-size:1rem;line-height:1}.clear-inspection-all b{font:inherit}.ui-header .clear-inspection-all{grid-column:auto!important}.topin .clear-inspection-all{flex:0 0 auto}@media(max-width:560px){.clear-inspection-all{width:38px!important;min-width:38px!important;padding:5px!important}.clear-inspection-all b{display:none!important}}</style><scr'+'ipt>'+limparInspecaoTotal+'</scr'+'ipt></body>');
     }
     s = s.replace(/<!--css:([^>]+?)-->/g, function(m,f){
       try { return '<style>' + rec('rec--' + f) + '</style>'; } catch(e){ return ''; } });
