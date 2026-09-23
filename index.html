@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260920-31 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260920-33 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260920-31';
+    const APP_VERSAO = '20260920-33';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1933,6 +1933,9 @@ if(app==='distribuidoras-transportadoras'){
       +'<span class="n3-seta" aria-hidden="true">›</span></button>';
   }
   function pintar(){
+    if(pintando)return;pintando=true;try{pintarInterno()}finally{setTimeout(function(){pintando=false},0)}
+  }
+  function pintarInterno(){
     var box=container();if(!box)return;
     if(box.dataset.n3pronto==='1'&&box.querySelector('.n3-wrap'))return;
     var secoes=lerSecoes(box);
@@ -1993,31 +1996,32 @@ if(app==='distribuidoras-transportadoras'){
   function dock(bs,b,it,nivel1){
     var d=document.getElementById('n3-dock');
     if(!d){d=document.createElement('nav');d.id='n3-dock';d.setAttribute('aria-label','Navegação do roteiro');document.body.appendChild(d)}
+    var escreve=function(html){if(d.innerHTML!==html)d.innerHTML=html};
     var idx=b&&it?b.itens.indexOf(it):-1,ib=b?bs.indexOf(b):-1;
     var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;
     if(nivel1){
-      d.innerHTML='<span>'+(pronto?'Atividades selecionadas':'Selecione as atividades para montar o roteiro')+'</span>'
-        +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>';
+      escreve('<span>'+(pronto?'Atividades selecionadas':'Selecione as atividades para montar o roteiro')+'</span>'
+        +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>');
       return;
     }
     if(!b){
-      d.innerHTML='<span>'+bs.length+' blocos</span>'
-        +'<button type="button" class="n3-principal" data-n3-prox="primeiro">Começar →</button>';
+      escreve('<span>'+bs.length+' blocos</span>'
+        +'<button type="button" class="n3-principal" data-n3-prox="primeiro">Começar →</button>');
       return;
     }
     if(!it){
-      d.innerHTML='<button type="button" data-n3-ant'+(ib>0?'':' disabled')+'>← Bloco anterior</button>'
+      escreve('<button type="button" data-n3-ant'+(ib>0?'':' disabled')+'>← Bloco anterior</button>'
         +'<button type="button" data-n3-blocos>Voltar aos blocos</button>'
         +'<span>'+b.itens.length+(b.itens.length===1?' item':' itens')+'</span>'
-        +'<button type="button" class="n3-principal" data-n3-prox="primeiro">Primeiro item →</button>';
+        +'<button type="button" class="n3-principal" data-n3-prox="primeiro">Primeiro item →</button>');
       return;
     }
     var ultimoItem=idx===b.itens.length-1, ultimoBloco=ib===bs.length-1;
     var prox=!ultimoItem?{rot:'Próximo →',acao:'etapa'}:(!ultimoBloco?{rot:'Próximo bloco →',acao:'bloco'}:{rot:'Revisar inspeção',acao:'revisar'});
-    d.innerHTML='<button type="button" data-n3-ant>← Anterior</button>'
+    escreve('<button type="button" data-n3-ant>← Anterior</button>'
       +'<button type="button" data-n3-lista>Voltar aos itens</button>'
       +'<span>'+(idx+1)+' de '+b.itens.length+'</span>'
-      +'<button type="button" class="n3-principal" data-n3-prox="'+prox.acao+'">'+esc(prox.rot)+'</button>';
+      +'<button type="button" class="n3-principal" data-n3-prox="'+prox.acao+'">'+esc(prox.rot)+'</button>');
   }
   function contexto(){return ultimo&&ultimo.bs&&ultimo.bs.length?ultimo:null}
   function avancar(acao){
@@ -2124,7 +2128,13 @@ if(app==='distribuidoras-transportadoras'){
   },true);
 
   document.addEventListener('click',function(){setTimeout(function(){compactarCampos(document.querySelector('.n3-tela'))},0)},false);
-  var obs=new MutationObserver(function(){
+  var pintando=false;
+  var obs=new MutationObserver(function(muts){
+    if(pintando)return;
+    var soNosso=true;
+    for(var i=0;i<muts.length;i++){var t=muts[i].target;
+      if(!(t&&t.closest&&(t.id==='n3-dock'||t.closest('#n3-dock')||t.closest('.n3-wrap')))){soNosso=false;break}}
+    if(soNosso)return;
     var box=container();if(!box)return;
     if(box.dataset.n3pronto==='1'&&box.querySelector('.n3-wrap'))return;
     pintar();
@@ -2259,8 +2269,54 @@ if(app==='distribuidoras-transportadoras'){
       +'.man-item-card small,.drg-item-card small,.dist-card-menu .card small{grid-column:2;min-width:0;font-size:.76rem;color:#5b6b75}'
       +'.man-item-card em,.drg-item-card em{grid-column:3;grid-row:1/3;font-style:normal;font-size:0;line-height:1}'
       +'.man-item-card em:after,.drg-item-card em:after{content:"\u203A";font-size:1.4rem;color:#365B73}';
+    css.textContent+='html body [hidden],html body #cardGrid[hidden],html body .ui-card-grid[hidden],html body .dist-card-menu[hidden],html body .drg-item-grid[hidden],html body .man-item-grid[hidden]{display:none!important}'
+      +'.man-level-head,.drg-level-head,.dist-card-head{position:static!important;top:auto!important;box-shadow:none!important}'
+      +'.lvl-chips,.dist-chips{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;max-height:54px!important;margin:6px 0!important}';
     document.head.appendChild(css);
   }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar);else iniciar();
+})();
+
+(function(){
+  var TELAS=['.man-item-screen','.drg-item-screen','#inspection','#closing'];
+  function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
+  function preview(v){v=String(v||'').replace(/\s+/g,' ').trim();return v?(v.length>60?v.slice(0,60)+'…':v):''}
+  function compactar(){
+    TELAS.forEach(function(sel){
+      Array.prototype.forEach.call(document.querySelectorAll(sel),function(tela){
+        Array.prototype.forEach.call(tela.querySelectorAll('textarea'),function(c){
+          var det=c.closest('details');
+          if(det&&tela.contains(det)){
+            if(!det.dataset.medFechado){det.dataset.medFechado='1';if(!String(c.value||'').trim())det.open=false}
+            return;
+          }
+          if(c.dataset.medCampo)return;c.dataset.medCampo='1';
+          var alvo=c.closest('label')||c;
+          if(!alvo.parentNode)return;
+          var d=document.createElement('details');d.className='med-campo';
+          var sum=document.createElement('summary');
+          var titulo=(alvo.tagName==='LABEL'?alvo.textContent.replace(String(c.value||''),'').replace(/\s+/g,' ').trim():'')||c.getAttribute('placeholder')||c.getAttribute('aria-label')||'Escrever';
+          sum.innerHTML='<b>✎ '+esc(titulo.length>48?titulo.slice(0,48)+'…':titulo)+'</b><span>'+esc(preview(c.value)||'toque para escrever')+'</span>';
+          d.appendChild(sum);
+          alvo.parentNode.insertBefore(d,alvo);d.appendChild(alvo);
+          if(String(c.value||'').trim())d.open=true;
+          c.addEventListener('input',function(){var sp=sum.querySelector('span');if(sp)sp.textContent=preview(c.value)||'toque para escrever'});
+        });
+      });
+    });
+  }
+  function estilo(){
+    var css=document.createElement('style');css.id='med-campos';
+    css.textContent='.med-campo{border:1px solid #d7dee3;border-radius:10px;background:#fff;margin:8px 0}'
+      +'.med-campo>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;padding:9px 11px;font-size:.8rem}'
+      +'.med-campo>summary::-webkit-details-marker{display:none}'
+      +'.med-campo>summary b{color:#365B73;font-weight:700}'
+      +'.med-campo>summary span{color:#5b6b75;font-size:.76rem;min-width:0;overflow-wrap:anywhere}'
+      +'.med-campo label,.med-campo textarea{display:block;width:100%;box-sizing:border-box}'
+      +'.med-campo textarea{min-height:44px;font-size:16px;padding:8px;margin:0 11px 11px;width:calc(100% - 22px)}';
+    document.head.appendChild(css);
+  }
+  function iniciar(){estilo();compactar();document.addEventListener('click',function(){setTimeout(compactar,0)},false)}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar);else iniciar();
 })();
 `;
