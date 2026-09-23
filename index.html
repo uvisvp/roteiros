@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260920-29 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260920-30 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260920-29';
+    const APP_VERSAO = '20260920-30';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1924,8 +1924,8 @@ if(app==='distribuidoras-transportadoras'){
   function rotulo(x,i){return numerado(x.titulo)?x.titulo:((i+1)+' · '+x.titulo)}
   function resumoPerfil(){var r='';if(CFG.resumo)try{r=CFG.resumo()||''}catch(e){}return r}
   function barraTopo(texto,editar){
-    return '<div class="n3-topo-linha"><span>'+esc(texto)+'</span>'
-      +(editar?'<button type="button" class="n3-etapas" data-n3-perfil>Editar escopo</button>':'')+'</div>';
+    return '<div class="n3-topo-linha"><span class="n3-topo-txt">'+esc(texto)+'</span>'
+      +(editar?'<button type="button" class="n3-etapas" data-n3-perfil>Alterar atividades</button>':'')+'</div>';
   }
   function linha(num,titulo,apoio,attr){
     return '<button type="button" class="n3-linha" '+attr+'><span class="n3-num">'+esc(num)+'</span>'
@@ -1956,7 +1956,7 @@ if(app==='distribuidoras-transportadoras'){
     if(nivel1){estado.bloco=null;estado.item=null;b=null;it=null}
     if(b&&!it&&b.itens.length===1){it=b.itens[0];estado.item=it.id}
     if(nivel1){
-      alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+' · defina o escopo da inspeção',false);
+      alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+' · selecione as atividades',false);
     }else if(!b){
       alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+(resumoPerfil()?' · '+resumoPerfil():''),true)
         +'<div class="n3-lista">'+bs.map(function(x,i){
@@ -1996,7 +1996,7 @@ if(app==='distribuidoras-transportadoras'){
     var idx=b&&it?b.itens.indexOf(it):-1,ib=b?bs.indexOf(b):-1;
     var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;
     if(nivel1){
-      d.innerHTML='<span>'+(pronto?'Escopo definido':'Defina o escopo para montar o roteiro')+'</span>'
+      d.innerHTML='<span>'+(pronto?'Atividades selecionadas':'Selecione as atividades para montar o roteiro')+'</span>'
         +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>';
       return;
     }
@@ -2146,6 +2146,7 @@ if(app==='distribuidoras-transportadoras'){
       +'#n3-dock button{min-height:44px;padding:8px 10px;border:1px solid #cdd8de;border-radius:10px;background:#fff;color:#46515E;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}'+'#n3-dock .n3-principal{background:var(--n3-forte,#365B73);border-color:var(--n3-forte,#365B73);color:#fff;font-weight:800}'+'.n3-loc{position:sticky;top:var(--n3-topo,0px);z-index:31;display:flex;align-items:center;gap:8px;padding:8px 0;background:var(--n3-suave,#fff)}'+'.n3-loc span{flex:1 1 auto;min-width:0;font-size:.8rem;color:#3d4a53;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+'.n3-loc .n3-etapas{flex:0 0 auto;border:1px solid #cdd8de;border-radius:9px;background:#fff;padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer}'
       +'#n3-dock button[disabled]{opacity:.4}#n3-dock span{font-size:.78rem;color:#5b6b75;white-space:nowrap;padding:0 4px}'
       +'body{padding-bottom:76px!important}';
+    css.textContent+='.n3-lista{display:flex!important;flex-direction:column!important;gap:8px!important;margin:10px 0!important;padding:0!important}'+'.n3-linha{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;column-gap:10px!important;width:100%!important;max-width:none!important;text-align:left!important;padding:12px!important;border:1px solid #cdd8de!important;border-radius:12px!important;background:#fff!important;color:#1d2a33!important;min-height:60px!important;height:auto!important;box-shadow:none!important;font:inherit!important;white-space:normal!important}'+'.n3-linha .n3-txt{display:flex!important;flex-direction:column!important;gap:2px!important;min-width:0!important;text-align:left!important}'+'.n3-linha strong{display:block!important;font-size:.92rem!important;line-height:1.3!important;font-weight:700!important;color:#1d2a33!important;white-space:normal!important}'+'.n3-linha small{display:block!important;font-size:.76rem!important;color:#5b6b75!important;font-weight:500!important}'+'.n3-linha .n3-num{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:30px!important;height:30px!important;padding:0 7px!important;border-radius:9px!important;background:var(--n3-forte,#365B73)!important;color:#fff!important;font-weight:800!important;font-size:.82rem!important}'+'.n3-linha .n3-seta{font-size:1.4rem!important;color:var(--n3-forte,#365B73)!important;line-height:1!important}'+'.n3-topo-linha{position:sticky!important;top:var(--n3-topo,0px);z-index:31;display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;padding:10px 0!important;background:var(--n3-suave,#fff)!important}'+'.n3-topo-txt{flex:1 1 100%!important;min-width:0!important;font-size:.82rem!important;font-weight:700!important;color:#2b3740!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.35!important}'+'.n3-topo-linha .n3-etapas{flex:0 0 auto!important}'+'@media(min-width:720px){.n3-lista{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}';
     document.head.appendChild(css);
     aplicarVisual();pintar();window.addEventListener('resize',ajustarTopos);
     obs.observe(document.body,{childList:true,subtree:true});
@@ -2186,7 +2187,7 @@ if(app==='distribuidoras-transportadoras'){
  container:'#panel-roteiro',secaoSel:'section.route-section',
  cores:{forte:'#876B3F',suave:'#F4F1EB'},
  nome:'Produtos e correlatos',
- resumo:function(){var n=document.querySelector('#panel-roteiro .route-line span');return n?n.textContent.replace(/s+/g,' ').trim():''},
+ resumo:function(){var n=document.querySelector('#panel-roteiro .route-line span');return n?n.textContent.replace(/\s+/g,' ').trim():''},
  revisar:function(){var b=document.querySelector('[data-tab="relatorio"]');if(b)b.click()},
  cabecalho:{sel:'header.app-header',esconderDentro:['.title-copy p']},
  esconderSempre:[],
@@ -2207,7 +2208,7 @@ if(app==='distribuidoras-transportadoras'){
  cores:{forte:'#426551',suave:'#EEF2EF'},
  nome:'Serviços de alimentação',
  perfilPronto:function(){return !!document.querySelector('#p-roteiro details.trilha, #p-roteiro [data-n3-grupo]')},
- resumo:function(){var c=document.querySelectorAll('#p-roteiro details.bloco .chip.sel');return Array.prototype.map.call(c,function(x){return x.textContent.replace(/s+/g,' ').trim()}).join(' · ')},
+ resumo:function(){var c=document.querySelectorAll('#p-roteiro details.bloco .chip.sel');return Array.prototype.map.call(c,function(x){return x.textContent.replace(/\s+/g,' ').trim()}).join(' · ')},
  revisar:function(){var b=document.getElementById('t-relatorio');if(b)b.click()},
  cabecalho:{sel:'header',abas:'nav.abas',esconderDentro:['header > p']},
  esconderSempre:[],
@@ -2245,102 +2246,25 @@ if(app==='distribuidoras-transportadoras'){
       var pb=s.lastIndexOf('</body>');s=pb>=0?(s.slice(0,pb)+n3html+s.slice(pb)):(s+n3html);
     }
     var medPadrao=String.raw`(function(){
-  var CFG=window.UVIS_MED||{};
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
-  function txt(n){return n?n.textContent.replace(/\s+/g,' ').trim():''}
-  function preview(v){v=String(v||'').replace(/\s+/g,' ').trim();return v?(v.length>60?v.slice(0,60)+'…':v):''}
-
-  /* --- caixas de digitação recolhidas --- */
-  function compactar(){
-    (CFG.telas||[]).forEach(function(sel){
-      Array.prototype.forEach.call(document.querySelectorAll(sel),function(tela){
-        var campos=tela.querySelectorAll('textarea,input[type="text"]');
-        Array.prototype.forEach.call(campos,function(c){
-          var det=c.closest('details');
-          if(det&&tela.contains(det)){
-            if(!det.dataset.medFechado){det.dataset.medFechado='1';if(!String(c.value||'').trim())det.open=false}
-            return;
-          }
-          if(c.dataset.medCampo)return;c.dataset.medCampo='1';
-          var alvo=c.closest('label')||c;
-          var d=document.createElement('details');d.className='med-campo';
-          var sum=document.createElement('summary');
-          var titulo=(alvo.tagName==='LABEL'?txt(alvo).replace(String(c.value||''),'').trim():'')||c.getAttribute('placeholder')||c.getAttribute('aria-label')||'Escrever';
-          sum.innerHTML='<b>✎ '+esc(titulo.length>48?titulo.slice(0,48)+'…':titulo)+'</b><span>'+esc(preview(c.value)||'toque para escrever')+'</span>';
-          d.appendChild(sum);
-          alvo.parentNode.insertBefore(d,alvo);d.appendChild(alvo);
-          if(String(c.value||'').trim())d.open=true;
-          c.addEventListener('input',function(){var sp=sum.querySelector('span');if(sp)sp.textContent=preview(c.value)||'toque para escrever'});
-        });
-      });
-    });
-  }
-
-  /* --- localização: bloco › item --- */
-  function localizacao(){
-    (CFG.locais||[]).forEach(function(conf){
-      var tela=document.querySelector(conf.tela);if(!tela)return;
-      var bloco=txt(document.querySelector(conf.bloco)),item=txt(document.querySelector(conf.item));
-      if(!bloco&&!item)return;
-      var barra=tela.parentNode.querySelector('.med-loc');
-      if(!barra){barra=document.createElement('div');barra.className='med-loc';tela.parentNode.insertBefore(barra,tela)}
-      var novo='<span><b>'+esc(bloco||'Roteiro')+'</b>'+(item?' › '+esc(item.replace(/^\d+(\.\d+)*\s*·?\s*/,'')):'')+'</span>';
-      if(barra.innerHTML!==novo)barra.innerHTML=novo;
-    });
-  }
-
-  function aplicar(){compactar();localizacao()}
-
+  /* Núcleo de medicamentos: apenas a forma dos cartões muda — de quadrado para botão horizontal.
+     Nenhuma alteração de navegação, de campos ou do rodapé. */
   function iniciar(){
     var css=document.createElement('style');css.id='med-padrao';
     css.textContent=
-      /* menus em linhas */
       '.ui-card-grid,#cardGrid,.dist-card-menu,.drg-item-grid,.man-item-grid{display:flex!important;flex-direction:column!important;gap:8px!important}'
       +'@media(min-width:720px){.ui-card-grid,#cardGrid,.dist-card-menu,.drg-item-grid,.man-item-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}'
-      +'.man-item-card,.drg-item-card,#cardGrid>button,.ui-card-grid>button,.dist-card-menu>button{display:flex!important;flex-direction:row!important;align-items:center!important;gap:10px!important;text-align:left!important;min-height:56px!important;padding:12px!important;border-radius:12px!important}'
-      +'.man-item-card strong,.drg-item-card strong{flex:1 1 auto;min-width:0;font-size:.9rem;line-height:1.25}'
-      +'.man-item-card small,.drg-item-card small{flex:0 0 auto;font-size:.74rem;color:#5b6b75}'
-      +'.man-item-card em,.drg-item-card em{flex:0 0 auto;font-style:normal;font-size:0;line-height:1}'
-      +'.man-item-card em:after,.drg-item-card em:after{content:"›";font-size:1.3rem;color:#365B73}'
-      /* faixa de atalhos some: a localização basta */
-      +'.lvl-chips,.dist-chips{display:none!important}'
-      +'.med-loc{position:sticky;top:0;z-index:31;display:flex;align-items:center;gap:8px;padding:8px 0;background:#fff}'
-      +'.med-loc span{flex:1 1 auto;min-width:0;font-size:.82rem;color:#3d4a53;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
-      /* referência na linha da pergunta */
-      +'.req .med-refs,.q .med-refs{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:baseline}'
-      +'.req .req-text{display:inline}'
-      /* campos recolhidos */
-      +'.med-campo{border:1px solid #d7dee3;border-radius:10px;background:#fff;margin:8px 0}'
-      +'.med-campo>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;padding:9px 11px;font-size:.8rem}'
-      +'.med-campo>summary::-webkit-details-marker{display:none}'
-      +'.med-campo>summary b{color:#365B73;font-weight:700}'
-      +'.med-campo>summary span{color:#5b6b75;font-size:.76rem;min-width:0;overflow-wrap:anywhere}'
-      +'.med-campo label,.med-campo textarea,.med-campo input{display:block;width:100%;box-sizing:border-box}'
-      +'.med-campo textarea,.med-campo input{min-height:44px;font-size:16px;padding:8px;margin:0 11px 11px;width:calc(100% - 22px)}'
-      /* rodapé com rótulo */
-      +'.ui-toolbar button,.dockin button{flex-direction:column!important;gap:2px!important;height:auto!important;padding:6px 8px!important}'
-      +'.dockin{grid-template-columns:auto minmax(0,1fr) auto auto!important}'
-      +'.ui-toolbar .ui-back:after,.ui-toolbar .ui-clear:after,.ui-toolbar .ui-all:after,.ui-toolbar .ui-next:after,#dockBack:after,#distClear:after,#dockNext:after{display:block;font-size:.64rem;font-weight:700;line-height:1;margin-top:2px}'
-      +'.ui-toolbar .ui-back:after{content:"Anterior"}.ui-toolbar .ui-clear:after{content:"Limpar"}.ui-toolbar .ui-all:after{content:"Itens"}.ui-toolbar .ui-next:after{content:"Próximo"}'
-      +'#dockBack:after{content:"Anterior"}#distClear:after{content:"Limpar"}#dockNext:after{content:"Próximo"}';
+      +'.man-item-card,.drg-item-card,#cardGrid>button,.ui-card-grid>button,.dist-card-menu>button,.dist-card-menu .card{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;column-gap:10px!important;row-gap:2px!important;text-align:left!important;min-height:60px!important;height:auto!important;padding:12px!important;border-radius:12px!important}'
+      +'.man-item-card .man-item-number,.drg-item-card .drg-item-number,#cardGrid>button .card-num{grid-row:1/3;align-self:center}'
+      +'.man-item-card strong,.drg-item-card strong,.dist-card-menu .card strong{grid-column:2;min-width:0;font-size:.92rem;line-height:1.3}'
+      +'.man-item-card small,.drg-item-card small,.dist-card-menu .card small{grid-column:2;min-width:0;font-size:.76rem;color:#5b6b75}'
+      +'.man-item-card em,.drg-item-card em{grid-column:3;grid-row:1/3;font-style:normal;font-size:0;line-height:1}'
+      +'.man-item-card em:after,.drg-item-card em:after{content:"\u203A";font-size:1.4rem;color:#365B73}';
     document.head.appendChild(css);
-    aplicar();
-    document.addEventListener('click',function(){setTimeout(aplicar,0)},false);
-    new MutationObserver(function(){aplicar()}).observe(document.body,{childList:true,subtree:true});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar);else iniciar();
 })();
 `;
-    var medCfg={'drogaria':String.raw`window.UVIS_MED={
-  telas:['.drg-item-screen'],
-  locais:[{tela:'.drg-item-screen',bloco:'#sectionHeading',item:'.lvl-chips [aria-current="step"]'}]
- };`,'farmacia-manipulacao':String.raw`window.UVIS_MED={
-  telas:['.man-item-screen'],
-  locais:[{tela:'.man-item-screen',bloco:'#sectionHeading, #sectionNav [aria-current]',item:'.lvl-chips [aria-current="step"]'}]
- };`,'distribuidoras-transportadoras':String.raw`window.UVIS_MED={
-  telas:['#inspection','#closing'],
-  locais:[{tela:'#inspection',bloco:'.dist-nav button.on, .dist-nav [aria-current="step"]',item:'.dist-chips button.on'}]
- };`};
+    var medCfg={'drogaria':String.raw`window.UVIS_MED={};`,'farmacia-manipulacao':String.raw`window.UVIS_MED={};`,'distribuidoras-transportadoras':String.raw`window.UVIS_MED={};`};
     if(medCfg[app]){
       var medHtml='<scr'+'ipt>'+medCfg[app]+'</scr'+'ipt><scr'+'ipt>'+medPadrao+'</scr'+'ipt>';
       var pbm=s.lastIndexOf('</body>');s=pbm>=0?(s.slice(0,pbm)+medHtml+s.slice(pbm)):(s+medHtml);
