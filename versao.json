@@ -1,6 +1,6 @@
 {
-  "versao": "20260920-40",
+  "versao": "20260924-1",
   "banco": "13.1",
-  "correcoes": 4,
-  "notas": "Atualização da navegação interna dos núcleo de medicamentos. Preparação da publicação PWA da versão 20260920-40."
+  "correcoes": 1,
+  "notas": "Farmácia com Manipulação reorganizada em 12 blocos, com listas de irregularidades por ambiente, equipamentos, planilhas por nível, rastreabilidade das três formulações, monitoramento, relatório com frases por item e inventário de infrações revisado (Anexo VII + dispositivo, com texto oficial)."
 }
