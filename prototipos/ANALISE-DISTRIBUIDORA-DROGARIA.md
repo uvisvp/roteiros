@@ -81,3 +81,14 @@ Os componentes criados na Manipulação (cabeçalho do item, lista de irregulari
 - [POP-O-SNVS-011 — página do compilado de procedimentos SNVS (Anvisa)](https://www.gov.br/anvisa/pt-br/centraisdeconteudo/publicacoes/certificacao-e-fiscalizacao/compilado-procedimentos-SNVS/011)
 - [Anexo I POP-O-SNVS-011 — Modelo de relatório](https://www.gov.br/anvisa/pt-br/centraisdeconteudo/publicacoes/certificacao-e-fiscalizacao/compilado-procedimentos-SNVS/011/anexo-i-pop-o-snvs-011-modelo-de-relatorio-imp-distr-armaz-e-transportadora-med-rev-2.pdf/view)
 - [Compilado de Procedimentos SNVS](https://www.gov.br/anvisa/pt-br/centraisdeconteudo/publicacoes/certificacao-e-fiscalizacao/compilado-procedimentos-SNVS)
+
+---
+
+## 5. Etapa 1 implementada (versão 20260924-5)
+
+Código em `distribuidora-documentos.js`, injetado no módulo por `scripts/repack-distribuidora-docs.cjs`.
+
+- **Anexo II**: sem a seção de análise do plano; situação e estratégia de monitoramento sem marcação padrão (a emissão é bloqueada até a escolha); Matriz/Filial; todos os inspetores com código; tabela de assinaturas (observador, instituição, esfera); registro de entrega do formulário próprio (`delivery2`).
+- **Anexo I rev. 3 em Word**: itens 1 a 19 com numeração fixa, caixas ☒/☐, tabelas (pessoas contactadas, terceirização, qualificações térmicas, conferência de estoque, equipe), cabeçalho com órgão, cidade e data, rodapé com paginação. Itens 7 a 12 usam a “Descrição para o relatório” do bloco; sem ela, frases a partir das respostas Cumpre. As NCs saem sempre, com a numeração do Anexo II e a categoria. Fotos reduzidas (1000 px, JPEG) no anexo fotográfico, citadas no texto do item.
+- **Fluxo**: prévia a qualquer momento (tela e Word, com marca “PRÉVIA”) → Anexo II entregue → análise do plano de ação em Word próprio → par técnico e aprovação → relatório final único (Anexo I + Anexo A: análise do plano + registro fotográfico).
+- Nova aba **Relatório · Anexo I** no fechamento, com os campos que não vêm do roteiro (licença, AFE/AE com RE e atividades, itens 5, 6, 7 com tabela de prestadores, 8.1, “em atividade”, atuação da equipe) e a visão de como cada item sairá.
