@@ -212,7 +212,7 @@ function ddAnexoIMontar(o,fotos){
  it(10,'Transporte');blocoItem('10');sub('10.1',DD_TIT['10.1']);blocoItem('10.1');
  /* 11 */
  it(11,'Sistema de gestão da qualidade');blocoItem('11');
- for(const k of ['11.1','11.2','11.3','11.4','11.5','11.6','11.7','11.8','11.9']){sub(k,DD_TIT[k]);blocoItem(k)}
+ for(const k of ['11.1','11.2','11.3','11.4','11.5','11.6','11.7','11.8','11.9']){sub(k,DD_TIT[k]);blocoItem(k);if(k==='11.2'&&typeof ifaTabelaRelatorio==='function'){const t=ifaTabelaRelatorio();if(t){p('Amostragem de IFA e insumos verificada na inspeção:');nodes.push(t)}}}
  /* 12 */
  it(12,'Controle de qualidade');
  if(!(m.activities||[]).includes('Importar')&&!['12.1','12.2','12.3','12.4','12.5'].some(k=>ddPerguntas(k).some(x=>(state.answers[x.q.id]||{}).status)))p('Não se aplica: item exclusivo de estabelecimentos importadores, e o estabelecimento não realiza importação.');
