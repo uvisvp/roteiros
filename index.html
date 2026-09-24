@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260920-38 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260920-39 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -862,7 +862,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260920-38';
+    const APP_VERSAO = '20260920-39';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1731,7 +1731,7 @@ if(app==='distribuidoras-transportadoras'){
         var refreshOriginal=pharmacyRefresh;pharmacyRefresh=function(){renderCardGrid();if(state.openCard)renderCard(state.openCard);else $('#cardPanel').innerHTML='';renderReportForm();renderPreview();pharmacyDock()};
         if(state.openCard)renderCard(state.openCard);else renderCardGrid();
       })();`;
-      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="manipulacao-tres-niveis">#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#cardGrid>button{min-height:116px!important;padding:11px!important}.man-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.man-item-card{min-height:132px;padding:12px;border:1px solid var(--line2);border-radius:14px;background:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:6px}.man-item-number{min-width:34px;padding:0 6px;height:34px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}.man-item-card strong{font-size:.88rem;line-height:1.25}.man-item-card small{font-size:.72rem;color:var(--muted)}.man-item-card em{margin-top:auto;font-size:.72rem;font-style:normal;color:var(--brand-d);font-weight:750}.man-level-head{padding:8px 10px!important;margin-bottom:8px!important;position:static!important;background:#fff}.man-level-head .lvl-chips{margin-bottom:0!important}.man-level-head h2{margin:4px 0!important;font-size:1.03rem!important}.man-item-screen{padding:12px!important}.man-fixed-section>.section-body{display:block!important}.man-fixed-section>.section-title{cursor:default}.man-evidence{grid-column:1/-1;border:1px solid var(--line);border-radius:10px;background:#fbfcfd;overflow:hidden}.man-evidence>summary{cursor:pointer;padding:8px 10px;color:var(--brand-d);font-size:.75rem;font-weight:750}.man-evidence>textarea{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important}.man-item-screen .med-hint>summary{pointer-events:auto}.ui-header{min-height:48px!important}.ui-toolbar{min-height:48px!important}@media(max-width:620px){#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cardGrid>button,.man-item-card{min-height:108px!important;padding:9px!important}.man-item-card strong{font-size:.8rem}.man-item-screen{padding:9px!important}}</style><scr'+'ipt>'+manipulacaoTresNiveis+'</scr'+'ipt></body>');
+      s=s.replace(/<\/body>(?![\s\S]*<\/body>)/i,'<style id="manipulacao-tres-niveis">#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#cardGrid>button{min-height:116px!important;padding:11px!important}.man-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.man-item-card{min-height:132px;padding:12px;border:1px solid var(--line2);border-radius:14px;background:#fff;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:6px}.man-item-number{min-width:34px;padding:0 6px;height:34px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}.man-item-card strong{font-size:.88rem;line-height:1.25}.man-item-card small{font-size:.72rem;color:var(--muted)}.man-item-card em{margin-top:auto;font-size:.72rem;font-style:normal;color:var(--brand-d);font-weight:750}.man-level-head{padding:8px 10px!important;margin-bottom:8px!important;background:#fff}.man-level-head .lvl-chips{margin-bottom:0!important}.man-level-head h2{margin:4px 0!important;font-size:1.03rem!important}.man-item-screen{padding:12px!important}.man-fixed-section>.section-body{display:block!important}.man-fixed-section>.section-title{cursor:default}.man-evidence{grid-column:1/-1;border:1px solid var(--line);border-radius:10px;background:#fbfcfd;overflow:hidden}.man-evidence>summary{cursor:pointer;padding:8px 10px;color:var(--brand-d);font-size:.75rem;font-weight:750}.man-evidence>textarea{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important}.man-item-screen .med-hint>summary{pointer-events:auto}.ui-header{min-height:48px!important}.ui-toolbar{min-height:48px!important}@media(max-width:620px){#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#cardGrid>button,.man-item-card{min-height:108px!important;padding:9px!important}.man-item-card strong{font-size:.8rem}.man-item-screen{padding:9px!important}}</style><scr'+'ipt>'+manipulacaoTresNiveis+'</scr'+'ipt></body>');
     }
     if(app==='distribuidoras-transportadoras'||app==='drogaria'||app==='farmacia-manipulacao'){
       var limparInspecaoTotal=String.raw`(function(){
@@ -2275,7 +2275,7 @@ if(app==='distribuidoras-transportadoras'){
       +'.man-item-card em,.drg-item-card em{grid-column:3;grid-row:1/3;font-style:normal;font-size:0;line-height:1}'
       +'.man-item-card em:after,.drg-item-card em:after{content:"\u203A";font-size:1.4rem;color:#365B73}';
     css.textContent+='html body [hidden],html body #cardGrid[hidden],html body .ui-card-grid[hidden],html body .dist-card-menu[hidden],html body .drg-item-grid[hidden],html body .man-item-grid[hidden]{display:none!important}'
-      +'.man-level-head,.drg-level-head,.dist-card-head{position:static!important;top:auto!important;box-shadow:none!important}'
+      +'.drg-level-head,.dist-card-head{position:static!important;top:auto!important;box-shadow:none!important}'
       +'.lvl-chips,.dist-chips{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;max-height:54px!important;margin:6px 0!important}';
     if((window.UVIS_MED||{}).nucleo==='manipulacao'){
       var m=document.createElement('style');m.id='man-tela';
@@ -2292,7 +2292,27 @@ if(app==='distribuidoras-transportadoras'){
         +'.man-item-screen .med-refs>details.med-hint[open]{flex:1 1 100%}'
         +'.man-item-screen .seg button{padding:9px 6px!important}'
         +'.man-item-screen details.man-evidence>summary{padding:8px 10px!important;font-size:.78rem!important}';
+      m.textContent+='.man-item-screen .seg{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;overflow:visible!important}'
+        +'.man-item-screen .seg button{width:100%!important;min-width:0!important;padding:9px 4px!important;font-size:.78rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}'
+        +'.man-item-screen .seg button:last-child{border-right:0!important}'
+        +'#cardPanel,#view-roteiro,.ui-main,.uvis-layout main{overflow:visible!important}';
       document.head.appendChild(m);
+      var resumoEvid=function(){
+        document.querySelectorAll('.man-item-screen details.ui-evidence').forEach(function(d){
+          var sum=d.querySelector('summary');if(!sum)return;
+          var ta=d.querySelector('textarea'),fotos=d.querySelectorAll('img').length;
+          var partes=[];
+          if(ta&&String(ta.value||'').trim())partes.push('nota');
+          if(fotos)partes.push(fotos+(fotos>1?' fotos':' foto'));
+          var base='Anotações, documentos e fotos';
+          var novo=base+(partes.length?' · '+partes.join(', '):'');
+          if(sum.textContent.trim()!==novo)sum.textContent=novo;
+        });
+      };
+      resumoEvid();
+      document.addEventListener('input',function(){setTimeout(resumoEvid,0)},true);
+      document.addEventListener('click',function(){setTimeout(resumoEvid,0)},false);
+      new MutationObserver(function(){resumoEvid()}).observe(document.body,{childList:true,subtree:true});
     }
     document.head.appendChild(css);
   }
