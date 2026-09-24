@@ -50,7 +50,9 @@ function v2Tog(path,opts,cur){return '<div class="v2-tog">'+opts.map(([v,l,k])=>
 function v2Input(path,label,cls='',type='text',ph=''){const p=path.split('|');return '<label class="'+cls+'">'+esc(label)+'<input type="'+type+'" data-v2="'+esc(path)+'" value="'+esc(v2Get(p)??'')+'" placeholder="'+esc(ph)+'"></label>'}
 function v2Check(path,label){return '<label class="v2-check"><input type="checkbox" data-v2="'+esc(path)+'"'+(v2Get(path.split('|'))?' checked':'')+'><span>'+esc(label)+'</span></label>'}
 function v2Chip(path,label){return '<label class="chip"><input type="checkbox" data-v2="'+esc(path)+'"'+(v2Get(path.split('|'))?' checked':'')+'><span>'+esc(label)+'</span></label>'}
-function v2Photo(scope,kind,label){return '<button type="button" class="btn" data-med-photo="'+esc('v2:'+scope+':'+kind)+'">📷 '+esc(label||'Fotos')+'</button>'}
+/* Foto com marcador: a legenda registra de qual item e de qual documento a foto foi tirada. */
+function v2Photo(scope,kind,label,full){const lab=full||(v2ItemTitulo(scope)+' · '+(label||'Fotos'));return '<button type="button" class="btn v2-photo" data-med-photo="'+esc('v2:'+scope+':'+kind)+'" data-photo-label="'+esc(lab)+'">📷 '+esc(label||'Fotos')+'</button>'}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-med-photo][data-photo-label]');if(!b)return;const v=v2State();v.photoLabels=v.photoLabels||{};v.photoLabels[b.dataset.medPhoto]=b.dataset.photoLabel;save()},true);
 function v2Slug(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)}
 function v2Box(title,badge,body,cls='',open=false){return '<details class="v2-box '+cls+'" data-med-fechado="1" data-v2k="'+esc(title)+'"'+(open?' open':'')+'><summary><b>'+esc(title)+'</b>'+(badge?'<span class="tag">'+esc(badge)+'</span>':'')+'</summary><div class="v2-in">'+body+'</div></details>'}
 function v2ListItems(keys){return keys.flatMap(k=>V2.lists[k]||[])}
@@ -61,7 +63,7 @@ function v2Ncl(scope,c){
  const n=items.filter(x=>marks[x.id]==='I').length+(marks['x-'+kind]==='I'?1:0);
  const body='<p class="small muted">'+esc(c.sub||'')+'</p>'+items.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref)+'</small></div>'+v2Tog(['irr',scope,x.id].join('|'),IRR_OPTS,marks[x.id])+'</div>').join('')
   +'<div class="v2-row"><div><input data-v2="'+v2p('out',scope,kind)+'" value="'+esc(v2Val('out',scope,kind))+'" placeholder="Outra irregularidade — descrever"></div>'+v2Tog(['irr',scope,'x-'+kind].join('|'),[IRR_OPTS[0]],marks['x-'+kind])+'</div>'
-  +'<div class="toolrow">'+v2Photo(scope,kind)+'</div>';
+  +'<div class="toolrow">'+v2Photo(scope,kind,{amb:'Irregularidades do ambiente',reg:'Registros do laboratório',presc:'Receitas',rast:'Processo',mon:'Monitoramento'}[kind]||'Fotos')+'</div>';
  return v2Box(c.title,n?n+' marcada'+(n>1?'s':''):'nenhuma marcada',body,'v2-irr'+(n?' has':''));
 }
 function v2Equip(scope,c){
@@ -73,7 +75,7 @@ function v2Equip(scope,c){
    +'<div class="v2-grid">'+v2Input(base+'|marca','Marca / modelo')+v2Input(base+'|serie','Nº série / patrimônio')+v2Input(base+'|cal','Calibração válida até','','date')+'</div>'
    +irr.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref)+'</small></div>'+v2Tog(base+'|irr|'+x.id,IRR_OPTS,marks[x.id])+'</div>').join('')
    +'<div class="v2-row"><div><input data-v2="'+esc(base+'|outra')+'" value="'+esc(d.outra||'')+'" placeholder="Outra — descrever"></div>'+v2Tog(base+'|xI',[IRR_OPTS[0]],d.xI)+'</div>'
-   +'<div class="toolrow">'+v2Photo(scope,'eq-'+v2Slug(nm),'Foto do equipamento / etiqueta')+'<button type="button" class="read-btn" data-read-cal="'+esc('v2eq:'+scope+':'+nm)+'">📷 OCR do certificado</button></div></div></details>'}).join('');
+   +'<div class="toolrow">'+v2Photo(scope,'eq-'+v2Slug(nm),'Foto do equipamento / etiqueta',v2ItemTitulo(scope)+' · Equipamento: '+nm)+'<button type="button" class="read-btn" data-read-cal="'+esc('v2eq:'+scope+':'+nm)+'">📷 OCR do certificado</button></div></div></details>'}).join('');
  return v2Box('Equipamentos',names.length+' itens',rows+'<div class="toolrow"><button type="button" class="btn" data-v2-addeq="'+esc(scope)+'">+ Incluir equipamento</button></div>','v2-eqbox');
 }
 function v2Plan(){
@@ -81,7 +83,7 @@ function v2Plan(){
  return '<div class="v2-grid">'+v2Input('fields|plan|de','Período conferido — de','','date')+v2Input('fields|plan|ate','até','','date')+'</div>'+V2.plan.map(([g,t,ref,rows])=>{
   const vals=rows.map((_,i)=>p[g+'-'+i]),nc=vals.filter(v=>v==='NC').length,pa=vals.filter(v=>v==='P').length;
   return v2Box(t,(nc||pa)?(nc?nc+' não apresentada'+(nc>1?'s':''):'')+(nc&&pa?' · ':'')+(pa?pa+' parcial'+(pa>1?'is':''):''):rows.length+' itens','<p class="small muted">'+esc(ref)+'</p>'+rows.map((r,i)=>'<div class="v2-row"><div>'+esc(r)+'</div>'+v2Tog(['plan',g+'-'+i].join('|'),[['C','Completa','ok-on'],['P','Parcial','par-on'],['NC','Não','irr-on'],['NA','N/A','na-on']],p[g+'-'+i])+'</div>').join('')
-   +'<label class="v2-full">Observações — '+esc(t.toLowerCase())+'<textarea data-v2="'+v2p('obs','plan-'+g)+'">'+esc(v2Val('obs','plan-'+g))+'</textarea></label>')}).join('');
+   +'<label class="v2-full">Observações — '+esc(t.toLowerCase())+'<textarea data-v2="'+v2p('obs','plan-'+g)+'">'+esc(v2Val('obs','plan-'+g))+'</textarea></label><div class="toolrow">'+v2Photo('plan',g,'Planilhas — '+t,'2.4 Planilhas e registros · '+t)+'</div>')}).join('');
 }
 function v2Table(scope,c){
  const key=scope+'-'+v2Slug(c.title),rows=v2Get(['tables',key])||{},n=Math.max(c.rows,Object.keys(rows).length);
@@ -96,28 +98,29 @@ function v2Count(obj,list){return list.filter((_,i)=>obj&&obj[i]).length}
 function v2Rast(scope,c){
  const d=v2Get(['rast',scope])||{},b='rast|'+scope,ins=d.ins||{},nIns=Math.max(6,Object.keys(ins).length),rot=v2Rotulo();
  return v2Box('Identificação da preparação '+c.form,d.prod||'',
-   '<div class="v2-grid">'+v2Input(b+'|prod','Produto','v2-full')+v2Input(b+'|om','Ordem de manipulação nº')+v2Input(b+'|omData','de','','date')+v2Input(b+'|manip','Manipulado por')+'</div><div class="toolrow"><button type="button" class="read-btn" data-reader="ordem" data-target="'+esc('generic:'+scope+':om')+'">📄 Ler ordem de manipulação</button>'+v2Photo(scope,'om','Foto da ordem')+'</div>','',true)
+   '<div class="v2-grid">'+v2Input(b+'|prod','Produto','v2-full')+v2Input(b+'|om','Ordem de manipulação nº')+v2Input(b+'|omData','de','','date')+v2Input(b+'|manip','Manipulado por')+'</div><div class="toolrow"><button type="button" class="read-btn" data-reader="ordem" data-target="'+esc('generic:'+scope+':om')+'">📄 Ler ordem de manipulação</button>'+v2Photo(scope,'om','Ordem de manipulação')+'</div>','',true)
   +v2Box('Rastreabilidade — excipientes e insumos','lote · validade · fabricante · NF','<div style="overflow:auto"><table class="simple-table"><thead><tr><th>Excipiente / insumo</th><th>Lote</th><th>Validade</th><th>Fabricante</th><th>Nota fiscal</th></tr></thead><tbody>'
    +Array.from({length:nIns},(_,i)=>'<tr>'+['n','lote','val','fab','nf'].map(k=>'<td><input data-v2="'+v2p('rast',scope,'ins',i,k)+'" value="'+esc((ins[i]||{})[k]||'')+'"></td>').join('')+'</tr>').join('')
-   +'</tbody></table></div><div class="toolrow"><button type="button" class="btn" data-v2-addins="'+esc(scope+'|'+nIns)+'">+ Linha</button></div><p class="small muted">RDC 67/2007 · Anexo I · 8.1 e 8.4</p>')
+   +'</tbody></table></div><div class="toolrow"><button type="button" class="btn" data-v2-addins="'+esc(scope+'|'+nIns)+'">+ Linha</button></div><div class="toolrow">'+v2Photo(scope,'danfe','DANFE / nota fiscal')+v2Photo(scope,'laudo-forn','Laudo do fornecedor')+'</div><p class="small muted">RDC 67/2007 · Anexo I · 8.1 e 8.4</p>')
   +v2Box('Controle de qualidade do produto acabado',v2Count(d.ens,c.ensaios)+' de '+c.ensaios.length,c.ensaios.map((e,i)=>v2Check(b+'|ens|'+i,e)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 9.1.1, 9.1.2 e 9.1.3</p>')
-  +v2Box('Controle de qualidade da matéria-prima',v2Count(d.mp,ENS_MP)+' de '+ENS_MP.length,'<div class="v2-grid">'+v2Input(b+'|mpProd','Produto','v2-full')+v2Input(b+'|mpLote','Lote')+'</div>'+ENS_MP.map((e,i)=>v2Check(b+'|mp|'+i,e)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 7.3.10</p><div class="toolrow"><button type="button" class="read-btn" data-reader="cert_fornecedor" data-target="'+esc('generic:'+scope+':cert')+'">📄 Ler certificado de análise</button></div>')
-  +v2Box('Análise da rotulagem',v2Count(d.rot,rot)+' de '+rot.length,rot.map((e,i)=>v2Check(b+'|rot|'+i,e)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 12.1</p><div class="toolrow">'+v2Photo(scope,'rotulo','Foto do rótulo')+'</div>');
+  +v2Box('Controle de qualidade da matéria-prima',v2Count(d.mp,ENS_MP)+' de '+ENS_MP.length,'<div class="v2-grid">'+v2Input(b+'|mpProd','Produto','v2-full')+v2Input(b+'|mpLote','Lote')+'</div>'+ENS_MP.map((e,i)=>v2Check(b+'|mp|'+i,e)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 7.3.10</p><div class="toolrow">'+v2Photo(scope,'cq-farm','Certificado de CQ da farmácia')+v2Photo(scope,'laudo-mp','Laudo do fornecedor da matéria-prima')+'<button type="button" class="read-btn" data-reader="cert_fornecedor" data-target="'+esc('generic:'+scope+':cert')+'">📄 Ler certificado de análise</button></div>')
+  +v2Box('Análise da rotulagem',v2Count(d.rot,rot)+' de '+rot.length,rot.map((e,i)=>v2Check(b+'|rot|'+i,e)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 12.1</p><div class="toolrow">'+v2Photo(scope,'rotulo','Rótulo')+'</div>');
 }
 function v2Veg(scope){return [0,1].map(i=>{const b='veg|'+scope+'|'+i,d=v2Get(['veg',scope,i])||{};return v2Box('Matéria-prima vegetal '+(i+1),d.prod||'','<div class="v2-grid">'+v2Input(b+'|prod','Produto','v2-full')+v2Input(b+'|lote','Lote')+v2Input(b+'|val','Validade','','date')+v2Input(b+'|fab','Fabricante')+'</div>'
  +v2Check(b+'|laudo','Laudo do fornecedor contém os testes exigidos: caracteres organolépticos, materiais estranhos, contaminação microbiológica, umidade e cinzas totais')
- +'<h4 class="v2-h">Controle de qualidade da farmácia</h4><div class="v2-grid">'+v2Input(b+'|cert','Certificado nº')+'</div>'+VEG_T.map((t,j)=>v2Check(b+'|t|'+j,t)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 7.3.13</p><div class="toolrow"><button type="button" class="read-btn" data-reader="cert_fornecedor" data-target="'+esc('generic:'+scope+':veg'+i)+'">📄 Ler certificado</button>'+v2Photo(scope,'veg'+i)+'</div>',i===0)}).join('')}
+ +'<h4 class="v2-h">Controle de qualidade da farmácia</h4><div class="v2-grid">'+v2Input(b+'|cert','Certificado nº')+'</div>'+VEG_T.map((t,j)=>v2Check(b+'|t|'+j,t)).join('')+'<p class="small muted">RDC 67/2007 · Anexo I · 7.3.13</p><div class="toolrow"><button type="button" class="read-btn" data-reader="cert_fornecedor" data-target="'+esc('generic:'+scope+':veg'+i)+'">📄 Ler certificado</button></div><div class="toolrow">'+v2Photo(scope,'veg'+i+'-laudo','Laudo do fornecedor — MP vegetal '+(i+1))+v2Photo(scope,'veg'+i+'-cq','Certificado de CQ da farmácia — MP vegetal '+(i+1))+v2Photo(scope,'veg'+i+'-danfe','DANFE — MP vegetal '+(i+1))+'</div>',i===0)}).join('')}
 function v2Emb(scope){return [0,1].map(i=>{const b='emb|'+scope+'|'+i,d=v2Get(['emb',scope,i])||{};return v2Box('Embalagem '+(i+1),d.prod||'','<div class="v2-grid">'+v2Input(b+'|prod','Produto','v2-full')+v2Input(b+'|lote','Lote')+v2Input(b+'|val','Validade','','date')+v2Input(b+'|fab','Fabricante')+'</div>'
- +v2Check(b+'|laudo','Laudo de análise do fornecedor')+v2Check(b+'|cq','Controle de qualidade da farmácia')+'<div class="v2-grid">'+v2Input(b+'|cert','Certificado nº')+'</div><h4 class="v2-h">Análise das características</h4><div class="checks">'+['Cor','Dimensão','Peso','Volume','Defeitos'].map(x=>v2Chip(b+'|c|'+x,x)).join('')+'</div><p class="small muted">RDC 67/2007 · Anexo I · 7.3.2 e 7.1.9</p>',i===0)}).join('')}
+ +v2Check(b+'|laudo','Laudo de análise do fornecedor')+v2Check(b+'|cq','Controle de qualidade da farmácia')+'<div class="v2-grid">'+v2Input(b+'|cert','Certificado nº')+'</div><h4 class="v2-h">Análise das características</h4><div class="checks">'+['Cor','Dimensão','Peso','Volume','Defeitos'].map(x=>v2Chip(b+'|c|'+x,x)).join('')+'</div><p class="small muted">RDC 67/2007 · Anexo I · 7.3.2 e 7.1.9</p><div class="toolrow">'+v2Photo(scope,'emb'+i+'-laudo','Laudo do fornecedor — embalagem '+(i+1))+v2Photo(scope,'emb'+i+'-cq','Certificado de CQ da farmácia — embalagem '+(i+1))+v2Photo(scope,'emb'+i+'-danfe','DANFE — embalagem '+(i+1))+'</div>',i===0)}).join('')}
 function v2Mon(c){
  const b='mon|'+c.code,d=v2Get(['mon',c.code])||{},rows=d.rows||{};
- const one=i=>{const r='mon|'+c.code+'|rows|'+i;return c.kind==='agua'?'<div class="v2-grid">'+v2Input(r+'|cert','Certificado nº')+v2Input(r+'|coleta','Data de coleta','','date')+'</div>'
-  :'<h4 class="v2-h">Análise '+(i+1)+'</h4><div class="v2-grid">'+v2Input(r+'|prod','Produto','v2-full')+v2Input(r+'|cert','Certificado (produto acabado) nº')+v2Input(r+'|lote','Lote')+v2Input(r+'|manip','Manipulada em','','date')+v2Input(r+'|val','Validade','','date')+v2Input(r+'|receb','Recebimento da amostra','','date')+v2Input(r+'|ini','Início da análise','','date')+v2Input(r+'|fim','Término da análise','','date')+'</div>'};
+ const monTit=c.code+' '+c.title.split(' — ')[0],monItem=v2ItemTitulo('i'+c.code.split('.').slice(0,2).join('.'));const ph=i=>'<div class="toolrow">'+v2Photo('mon',c.code+'-a'+i,'Laudo da análise '+(i+1),monItem+' · '+monTit+' · laudo da análise '+(i+1))+'</div>';
+ const one=i=>{const r='mon|'+c.code+'|rows|'+i;return c.kind==='agua'?'<div class="v2-grid">'+v2Input(r+'|cert','Certificado nº')+v2Input(r+'|coleta','Data de coleta','','date')+'</div>'+ph(i)
+  :'<h4 class="v2-h">Análise '+(i+1)+'</h4><div class="v2-grid">'+v2Input(r+'|prod','Produto','v2-full')+v2Input(r+'|cert','Certificado (produto acabado) nº')+v2Input(r+'|lote','Lote')+v2Input(r+'|manip','Manipulada em','','date')+v2Input(r+'|val','Validade','','date')+v2Input(r+'|receb','Recebimento da amostra','','date')+v2Input(r+'|ini','Início da análise','','date')+v2Input(r+'|fim','Término da análise','','date')+'</div>'+ph(i)};
  const done=Array.from({length:c.n},(_,i)=>rows[i]&&(rows[i].cert||rows[i].prod)).filter(Boolean).length;
  return v2Box(c.code+' '+c.title,done+' de '+c.n,'<p class="small muted">'+esc(c.ref)+'</p>'+Array.from({length:c.n},(_,i)=>one(i)).join('')
   +'<div class="v2-grid">'+v2Input(b+'|emit','Emitidos por')+v2Input(b+'|cnpj','CNPJ')+v2Input(b+'|fb','Farmacopeia Brasileira — edição')+'<label>Resultado<select data-v2="'+esc(b+'|res')+'"><option value=""></option>'+['Amostra cumpre as especificações','Amostra não cumpre as especificações'].map(o=>'<option'+(d.res===o?' selected':'')+'>'+o+'</option>').join('')+'</select></label>'+v2Input(b+'|sign','Assinado por','v2-full')+'</div>'
   +['Periodicidade atendida','Rodízio de manipuladores, fármacos e dosagens','Laudos arquivados','Metodologia e especificação farmacopeica'].map((t,i)=>v2Check(b+'|chk|'+i,t)).join('')
-  +'<div class="toolrow"><button type="button" class="read-btn" data-reader="laudo" data-target="'+esc('generic:mon:'+c.code)+'">📄 Ler laudo / OCR</button>'+v2Photo('mon',c.code)+'</div>',done<c.n);
+  +'<div class="toolrow"><button type="button" class="read-btn" data-reader="laudo" data-target="'+esc('generic:mon:'+c.code)+'">📄 Ler laudo / OCR</button>'+v2Photo('mon',c.code,'Outros documentos',monItem+' · '+monTit+' · outros documentos')+'</div>',done<c.n);
 }
 function v2Ident(){
  const i=state.identity;
@@ -287,7 +290,9 @@ function renderInfra(){
 
 /* ---------- relatório ---------- */
 let v2Fotos=null,v2FotosCarga=null;
-function v2CarregarFotos(){if(v2FotosCarga)return v2FotosCarga;v2FotosCarga=(async()=>{const out=[];if(window.RoteiroEvidence)for(const n of Object.keys(APP_DATA.cards)){try{const all=await RoteiroEvidence.read('manipulacao-card-'+n);for(const[k,url]of Object.entries(all))out.push({card:Number(n),key:k,url})}catch(e){}}v2Fotos=out;renderPreview();return out})();return v2FotosCarga}
+/* Fotos do relatório: reduzidas (lado maior 1100 px, JPEG 0,7) para o Word/PDF não crescer demais; os originais ficam no aparelho. */
+function v2Reduz(url){return new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1100/Math.max(im.naturalWidth,im.naturalHeight));if(k>=1&&url.length<260000){res(url);return}const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.7))};im.onerror=()=>res(url);im.src=url})}
+function v2CarregarFotos(){if(v2FotosCarga)return v2FotosCarga;v2FotosCarga=(async()=>{const out=[];if(window.RoteiroEvidence)for(const n of Object.keys(APP_DATA.cards)){try{const all=await RoteiroEvidence.read('manipulacao-card-'+n);for(const[k,url]of Object.entries(all))out.push({card:Number(n),key:k,url:await v2Reduz(url)})}catch(e){}}v2Fotos=out;renderPreview();return out})();return v2FotosCarga}
 function v2InvalidarFotos(){v2Fotos=null;v2FotosCarga=null}
 function v2Lc(t){t=String(t||'');return /^.[a-zà-ú]/.test(t)?t.charAt(0).toLowerCase()+t.slice(1):t}
 function v2Cite(t){return String(t||'').replace(/RDC (\d)/,'RDC nº $1').replace(/ · /g,', ').replace(/(Anexo [IVX]+|RT), (\d[\d.]*)( e \d)/,'$1, itens $2$3').replace(/(Anexo [IVX]+|RT), (\d)/,'$1, item $2').replace(/^(.*), RT,/,'$1, Regulamento Técnico,')}
@@ -350,6 +355,29 @@ function v2ItemCorpo(n,card,s,addIrr){
  if(sitTxt.length)corpo='<p>'+sitTxt.join(' ')+'</p>'+corpo;
  return corpo;
 }
+/* Anexo fotográfico: fotos agrupadas por item, na ordem do roteiro, com o marcador de onde foram tiradas. */
+function v2FotoInfo(f){
+ const v=v2State(),id=f.key.split('::')[0],labels=v.photoLabels||{};let iid='',leg=labels[id]||'';
+ const reqs={};for(const card of Object.values(APP_DATA.cards))for(const s of card.sections)for(const q of s.requirements)reqs[q.id]=[s.item,s.itemNum+' '+s.itemTitle+' · '+q.text];
+ if(reqs[id]){iid=reqs[id][0];leg=leg||reqs[id][1]}
+ else if(id.startsWith('v2:')){const[,sc,k]=id.split(':');iid=sc==='mon'?'i'+k.split('.').slice(0,2).join('.'):sc==='plan'?'i2.4':sc;
+  const d=(v.rast||{})[sc];if(d&&(d.prod||d.om))leg+=' — '+[d.prod,d.om&&('OM nº '+d.om)].filter(Boolean).join(', ');
+  const m=/^(veg|emb)(\d)/.exec(k);if(m){const x=((v[m[1]]||{})[sc]||{})[m[2]]||{};if(x.prod||x.lote)leg+=' — '+[x.prod,x.lote&&('lote '+x.lote)].filter(Boolean).join(', ')}
+  const a=/^(\d+\.\d+\.\d+)-a(\d)$/.exec(k);if(a){const r=(((v.mon||{})[a[1]]||{}).rows||{})[a[2]]||{};if(r.cert)leg+=' — certificado '+r.cert}
+  if(!leg)leg=v2ItemTitulo(iid)}
+ else if(id.startsWith('pop:')){iid='i2.2';leg=leg||'2.2 Procedimentos Operacionais Padrão'}
+ else if(id.startsWith('trein:')){iid='i2.3';leg=leg||'2.3 Treinamento'}
+ const ts=parseInt((f.key.split('::')[1]||'').slice(0,8),36)||0;
+ return {iid,leg:leg||('Seção '+f.card),ts};
+}
+function v2AnexoFotos(){
+ const ordem={};let n=0;for(const c of Object.values(APP_DATA.cards))for(const s of c.sections)ordem[s.item]=n++;
+ const fotos=v2Fotos.map(f=>Object.assign({},f,v2FotoInfo(f))).filter(f=>!v2State().itemNA[f.iid]).sort((a,b)=>(a.card-b.card)||((ordem[a.iid]??999)-(ordem[b.iid]??999))||(a.ts-b.ts));
+ if(!fotos.length)return '';let h='<h3>Anexo fotográfico</h3><p>'+fotos.length+' foto'+(fotos.length>1?'s':'')+', agrupadas por item do roteiro. A legenda indica o item e o documento ou local fotografado. As fotos estão em resolução reduzida; os originais ficam no aparelho.</p>',grupo=null,k=0;
+ for(const f of fotos){if(f.iid!==grupo){grupo=f.iid;h+='<h4>'+esc(f.iid?v2ItemTitulo(f.iid):'Outras')+'</h4>'}k++;
+  h+='<figure class="v2-foto"><img src="'+f.url+'" alt="Foto '+k+'"><figcaption>Foto '+k+' — '+esc(f.leg)+'</figcaption></figure>'}
+ return h;
+}
 function renderPreview(){
  const root=$('#reportPreview');if(!root)return;const r=state.report,v=v2State(),c=state.char||{};
  const irr=[];const addIrr=(texto,cit)=>{irr.push({texto,cit});return irr.length};
@@ -390,9 +418,7 @@ function renderPreview(){
  num++;h+='<h3>'+num+' · Conclusão</h3><p>'+esc(r.conclusao||'Não informada.')+'</p>';
  num++;h+='<h3>'+num+' · Medidas adotadas</h3>'+medTable(Object.entries({'Auto de Infração':r.medidas.auto,'Termo de Interdição':r.medidas.interdicao,'Tipo de interdição':r.medidas.interdicao?r.medidas.tipo:'','Outros':r.medidas.outros}).filter(x=>String(x[1]||'').trim()));
  num++;h+='<h3>'+num+' · Equipe inspetora</h3>'+medTable(r.equipe.filter(x=>x.nome).map(x=>[x.nome,x.matricula]),['Nome','Matrícula']);
- if(v2Fotos&&v2Fotos.length){const req={};for(const card of Object.values(APP_DATA.cards))for(const s of card.sections)for(const q of s.requirements)req[q.id]=s.itemNum+' — '+q.text;
-  h+='<h3>Anexo fotográfico</h3>'+v2Fotos.map((f,i)=>{const id=f.key.split('::')[0];let leg=req[id];if(!leg&&id.startsWith('v2:')){const[,sc,k]=id.split(':');leg=v2ItemTitulo(sc)+(k?' — '+({amb:'irregularidades gerais',reg:'registros',presc:'prescrição',rast:'processo',mon:'monitoramento',rotulo:'rótulo',om:'ordem de manipulação'}[k]||k.replace(/^eq-/,'equipamento: ').replace(/-/g,' ')):'')}
-   return '<figure class="v2-foto"><img src="'+f.url+'" alt="Foto '+(i+1)+'"><figcaption>Foto '+(i+1)+' — '+esc(leg||('Seção '+f.card))+'</figcaption></figure>'}).join('')}
+ if(v2Fotos&&v2Fotos.length)h+=v2AnexoFotos();
  root.innerHTML=h;
  if(!v2Fotos&&state.activeTab==='relatorio')v2CarregarFotos();
 }
