@@ -2,7 +2,7 @@
 
 Protótipo: [`manipulacao-v2-prototipo.html`](manipulacao-v2-prototipo.html). Abre sozinho, sem o `index.html`. Nada é gravado. A navegação é a mesma de hoje: abas Roteiro / Infrações / Relatório, faixa de seções, cartões de item e a barra inferior (←, apagar, grade, →).
 
-## 0. Situação — implementado na versão 20260924-1
+## 0. Situação — implementado na versão 20260924-2
 
 O protótipo foi aprovado e a v2 está no `index.html`, em 12 blocos:
 
@@ -12,7 +12,7 @@ O protótipo foi aprovado e a v2 está no `index.html`, em 12 blocos:
 - **Relatório:** frase para Cumpre e para Não cumpre em cada pergunta. Não se aplica não gera texto. As seleções e os checklists viram texto e tabelas. As irregularidades são numeradas, com citação, e o anexo fotográfico sai com legenda. A exportação para Word inclui as fotos.
 - **Inspeção em andamento na v1:** as respostas são mantidas (ligadas ao id da pergunta) e as fotos das perguntas passam para o bloco novo. A limpeza total apaga as fotos das 12 seções.
 
-Decisões tomadas onde havia pendência: o DML ficou em Resíduos; a pesagem ficou no item 6.3; a Lei Municipal 13.725/2004 não foi incluída; a pergunta sobre saneantes cita a Lei 6.360/1976, art. 12, e precisa da sua confirmação. A pergunta "realiza venda remota?" virou seleção na Caracterização e abre o item 12.1.
+Decisões tomadas onde havia pendência: o DML ficou em Resíduos, que reúne só verificações físicas (PGRSS, cadastro de gerador e comprovantes de coleta são conferidos em Documentação 2.1); a pesagem ficou no item 6.3; a Lei Municipal 13.725/2004 não foi incluída; a pergunta sobre saneantes cita a Lei 6.360/1976, art. 12, e precisa da sua confirmação. A pergunta "realiza venda remota?" virou seleção na Caracterização e abre o item 12.1.
 
 Fontes: `scripts/manipulacao-v2/` (estrutura, frases, inventário), `farmacia-manipulacao-v2.js`, `farmacia-manipulacao-v2.css`. Para regenerar: `python3 scripts/manipulacao-v2/build_data.py && node scripts/repack-manipulacao-v2.cjs`.
 

@@ -1,6 +1,6 @@
 {
-  "versao": "20260924-1",
+  "versao": "20260924-2",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Farmácia com Manipulação reorganizada em 12 blocos, com listas de irregularidades por ambiente, equipamentos, planilhas por nível, rastreabilidade das três formulações, monitoramento, relatório com frases por item e inventário de infrações revisado (Anexo VII + dispositivo, com texto oficial)."
+  "notas": "Farmácia com Manipulação reorganizada em 12 blocos, com listas de irregularidades por ambiente, equipamentos, planilhas por nível, rastreabilidade das três formulações, monitoramento, relatório com frases por item, PGRSS conferido em Documentação e inventário de infrações revisado (Anexo VII + dispositivo, com texto oficial)."
 }

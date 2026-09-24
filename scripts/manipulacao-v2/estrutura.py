@@ -165,8 +165,12 @@ block('Documentação', 'Documentos, POPs, treinamento e planilhas', [
     item('2.1', 'Documentos apresentados', [
         note('Antigo 6.1. Saíram daqui, por redundância: AFE/AE (já no 1.1), PGRSS e SPRegula (bloco Resíduos), mapas/balanços e Livro de Receituário (bloco Receitas), contrato de laboratório (bloco Monitoramento), programa de treinamento (item 2.3).', 'mov'),
         {'t': 'docs', 'rows': [{'text': REQ[r]['text'], 'refs': [short(x) for x in REQ[r].get('refs', [])]} for r, _ in DOCS]},
+        q('r183', text='Apresentou PGRSS compatível com as atividades e os resíduos gerados?', refs=['RDC 67/2007 · RT · 5.2', 'RDC 222/2018 · art. 5º']),
+        q('r186', text='Apresentou cadastro de gerador de resíduos (SPRegula)? Registre o número.'),
+        nq('A coleta e a destinação são feitas por empresa licenciada, com comprovantes (CTR/manifesto) dos últimos meses?', ['RDC 222/2018 · art. 5º']),
+        {'t': 'doc', 'labels': ['📄 Ler PGRSS', '📄 Ler comprovante de coleta']},
         obs(),
-    ], origin='Antigo 6.1'),
+    ], origin='Antigo 6.1 + documentos de resíduos'),
     item('2.2', 'Procedimentos Operacionais Padrão', [
         {'t': 'pops', 'groups': [{'code': p['code'], 'title': p['title'], 'rows': [r['name'] for r in p['rows']]} for p in D['pops']]},
         obs(),
@@ -201,16 +205,12 @@ block('Pessoal e saúde ocupacional', 'Equipe, ASO, higiene, EPI e conduta', [
 ])
 
 # ───────────────────────── 4 RESÍDUOS
-block('Resíduos', 'PGRSS, coleta, abrigo e DML', [
-    item('4.1', 'Gerenciamento de resíduos', [
-        note('Adaptado do bloco de descarte da Drogaria.', 'mov'),
-        q('r183', text='Apresentou PGRSS compatível com as atividades e os resíduos gerados?', refs=['RDC 67/2007 · RT · 5.2', 'RDC 222/2018 · art. 5º']),
-        q('r186', text='Apresentou cadastro de gerador de resíduos (SPRegula)? Registre o número.'),
-        nq('A coleta e a destinação são feitas por empresa licenciada, com comprovantes (CTR/manifesto) dos últimos meses?', ['RDC 222/2018 · art. 5º']),
+block('Resíduos', 'Segregação, descarte, DML e abrigo', [
+    item('4.1', 'Segregação e descarte', [
+        note('Verificação física. O PGRSS, o cadastro de gerador e os comprovantes de coleta são conferidos em Documentação (2.1).', 'info'),
         nq('Os resíduos de medicamentos e insumos hormonais, antimicrobianos, citostáticos e demais do art. 59 são segregados e destinados como resíduo químico (Grupo B)?', ['RDC 222/2018 · art. 59']),
         nq('Insumos e produtos vencidos, reprovados ou devolvidos aguardam descarte segregados e identificados?', ['RDC 67/2007 · Anexo I · 4.2.4']),
         nq('O lixo e os resíduos da manipulação são esvaziados fora da área de manipulação?', ['RDC 67/2007 · Anexo I · 6.2']),
-        {'t': 'doc', 'labels': ['📄 Ler PGRSS', '📄 Ler comprovante de coleta']},
         obs(),
     ]),
     item('4.2', 'DML — Depósito de material de limpeza', [
