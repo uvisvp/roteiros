@@ -16,6 +16,16 @@ Decisões tomadas onde havia pendência: o DML ficou em Resíduos, que reúne s�
 
 Fontes: `scripts/manipulacao-v2/` (estrutura, frases, inventário), `farmacia-manipulacao-v2.js`, `farmacia-manipulacao-v2.css`. Para regenerar: `python3 scripts/manipulacao-v2/build_data.py && node scripts/repack-manipulacao-v2.cjs`.
 
+### Versão 20260924-3 — itens abertos e situação encontrada
+
+- Nenhum item é escondido pela caracterização; ela só mostra um aviso no item ("não declarado na caracterização").
+- Botão "Não se aplica a este estabelecimento" no item: marca as perguntas como Não se aplica, recolhe o conteúdo e o item não aparece no relatório. Pode ser desfeito.
+- Orientação curta no topo de todos os itens.
+- "Situação encontrada" em 15 itens em que a farmácia varia (guarda de controlados, DML, sanitários, copa, controlados no almoxarifado, lavagem, paramentação, controle de qualidade, pesagem, balança dos laboratórios, salas do Anexo III e entrega). A escolha gera a frase inicial do item no relatório e mostra a orientação legal correspondente (ex.: central de pesagem admitida pelo Anexo I, 5.1.3; nas salas do Anexo III a balança é obrigatória, item 2.8).
+- "Como sai no relatório" no pé de cada item, atualizado ao marcar.
+
+Fontes: `scripts/manipulacao-v2/orientacao.py`.
+
 ## 1. O que foi verificado no app atual (versão 20260920-40)
 
 | Problema relatado | Causa encontrada |

@@ -6,7 +6,7 @@
    Componentes gravam em state.v2 por caminho: data-v2="grupo|escopo|campo".
    ================================================================ */
 const V2=APP_DATA.v2;
-const V2_KEYS=['irr','eq','eqExtra','plan','obs','chips','fields','tables','rast','veg','emb','mon','out'];
+const V2_KEYS=['sit','sitout','itemNA','itemNAset','irr','eq','eqExtra','plan','obs','chips','fields','tables','rast','veg','emb','mon','out'];
 function v2State(){state.v2=state.v2||{};for(const k of V2_KEYS)state.v2[k]=state.v2[k]||{};return state.v2}
 function v2Get(path){let o=v2State();for(const k of path){if(o==null)return undefined;o=o[k]}return o}
 function v2Set(path,val){let o=v2State();for(let i=0;i<path.length-1;i++){o[path[i]]=o[path[i]]&&typeof o[path[i]]==='object'?o[path[i]]:{};o=o[path[i]]}if(val===undefined||val===''||val===false)delete o[path[path.length-1]];else o[path[path.length-1]]=val}
@@ -155,10 +155,30 @@ function v2Carac(){
  <div class="v2-grid">${v2Input('fields|carac|func','Nº de funcionários')}${v2Input('fields|carac|farm','Nº de farmacêuticos')}${v2Input('fields|carac|formulas','Média de fórmulas/dia')}${v2Input('fields|carac|sistema','Sistema informatizado')}${v2Input('fields|carac|filiais','Filiais')}</div>
  </div>`;
 }
+function v2Secao(iid){for(const[n,c]of Object.entries(APP_DATA.cards))for(const s of c.sections)if(s.item===iid)return {n,card:c,s};return null}
+function v2ItemHead(scope,c){
+ const v=v2State(),na=!!v.itemNA[scope],loc=v2Secao(scope),hint=loc&&loc.s.hint;let h='<div class="v2-head'+(na?' na':'')+'">';
+ const o=V2.orient[scope];if(o)h+='<div class="v2-orient"><b>Orientação do item.</b> '+esc(o)+'</div>';
+ if(hint&&!conditionActive(hint)&&!na)h+='<div class="v2-hint">Não declarado na caracterização ('+esc(APP_DATA.conditionLabels[hint]||hint)+'). Confirme; se não existir no estabelecimento, marque o item como Não se aplica.</div>';
+ if(c.na)h+='<div class="toolrow"><button type="button" class="btn v2-nabtn'+(na?' on':'')+'" data-v2-itemna="'+esc(scope)+'">'+(na?'↺ Item marcado como Não se aplica — desfazer':'Não se aplica a este estabelecimento')+'</button></div>';
+ if(na){h+='<p class="small muted">Este item não entra no relatório. As perguntas foram marcadas como Não se aplica.</p></div>';return h}
+ (V2.sit[scope]||[]).forEach((sq,qi)=>{const cur=(v.sit[scope]||{})[qi];
+  h+='<div class="v2-sit"><h4>Situação encontrada — '+esc(sq.q)+'</h4><div class="v2-tog v2-sitopts">'+sq.opts.map(([k,l])=>'<button type="button" data-v2t="'+esc(['sit',scope,qi,k].join('|'))+'" class="'+(cur===k?'ok-on':'')+'" aria-pressed="'+(cur===k)+'">'+esc(l)+'</button>').join('')+'</div>';
+  const op=sq.opts.find(x=>x[0]===cur);
+  if(cur==='outro')h+='<div class="v2-grid">'+v2Input(['sitout',scope,qi].join('|'),'Descreva o local ou arranjo encontrado','v2-full')+'</div>';
+  if(op&&op[3])h+='<div class="v2-hint ok">'+esc(op[3])+'</div>';
+  h+='</div>'});
+ return h+'</div>';
+}
+function v2PrevHtml(scope){const loc=v2Secao(scope);if(!loc)return '';const x=v2ItemCorpo(loc.n,loc.card,loc.s,()=>'…');return x||'<p class="muted">Ainda sem texto: responda as perguntas ou marque as listas.</p>'}
+function v2Preview(scope){return '<details class="v2-box v2-prevbox" data-med-fechado="1" data-v2k="prev:'+esc(scope)+'"><summary><b>Como sai no relatório</b></summary><div class="v2-in v2-prev" data-item="'+esc(scope)+'">'+v2PrevHtml(scope)+'</div></details>'}
+let v2PrevT=null;function v2RefreshPrev(){clearTimeout(v2PrevT);v2PrevT=setTimeout(()=>document.querySelectorAll('.v2-prev[data-item]').forEach(el=>{el.innerHTML=v2PrevHtml(el.dataset.item)}),150)}
 function manV2(f,item){
  const c=f&&f.c;if(!c)return '';const scope=f.into,sec=item&&item.sections&&item.sections[0];
  if(sec&&!conditionActive(sec.condition)&&!state.manualOpen['sec:'+sec.code])return '';
  switch(c.t){
+  case 'itemhead':return v2ItemHead(scope,c);
+  case 'preview':return v2Preview(scope);
   case 'note':return '<div class="notice v2-note">'+esc(c.text)+'</div>';
   case 'ident':return v2Ident();
   case 'carac':return v2Carac();
@@ -192,18 +212,23 @@ function v2Badge(btn){
  if(box.querySelector('[data-v2t^="plan|"]')){const nc=box.querySelectorAll('.irr-on').length,pa=box.querySelectorAll('.par-on').length,tot=box.querySelectorAll('.v2-row').length;tag.textContent=(nc||pa)?(nc?nc+' não apresentada'+(nc>1?'s':''):'')+(nc&&pa?' · ':'')+(pa?pa+' parcial'+(pa>1?'is':''):''):tot+' itens'}
 }
 document.addEventListener('click',e=>{
- const t=e.target.closest&&e.target.closest('[data-v2t],[data-v2-addeq],[data-v2-addrow],[data-v2-addins]');if(!t)return;
+ const t=e.target.closest&&e.target.closest('[data-v2t],[data-v2-addeq],[data-v2-addrow],[data-v2-addins],[data-v2-itemna]');if(!t)return;
+ if(t.dataset.v2Itemna){const iid=t.dataset.v2Itemna,v=v2State(),loc=v2Secao(iid),ids=loc?loc.s.requirements.map(r=>r.id):[];
+  if(v.itemNA[iid]){for(const id of (v.itemNAset[iid]||[]))if(state.responses[id]&&state.responses[id].status==='NA')state.responses[id].status='';delete v.itemNA[iid];delete v.itemNAset[iid]}
+  else{const set=[];for(const id of ids){const a=state.responses[id]=state.responses[id]||{};if(!a.status){a.status='NA';set.push(id)}}v.itemNA[iid]=true;v.itemNAset[iid]=set}
+  save();v2Rerender();return}
+ if(t.dataset.v2t&&t.dataset.v2t.startsWith('sit|')){const p=t.dataset.v2t.split('|'),val=p.pop();v2Set(p,v2Get(p)===val?undefined:val);save();const open=v2KeepOpen();v2Rerender();v2Reopen(open);return}
  if(t.dataset.v2t){const p=t.dataset.v2t.split('|'),v=p.pop(),on=v2Get(p)!==v;v2Set(p,on?v:undefined);
   t.parentNode.querySelectorAll('button').forEach(b=>{b.className='';b.setAttribute('aria-pressed','false')});
   if(on){const k={I:'irr-on',NC:'irr-on',NA:'na-on',C:'ok-on',P:'par-on'}[v];t.className=k;t.setAttribute('aria-pressed','true')}
-  v2Badge(t);save();return}
+  v2Badge(t);save();v2RefreshPrev();return}
  const open=v2KeepOpen();
  if(t.dataset.v2Addeq){const nm=(prompt('Nome do equipamento')||'').trim();if(!nm)return;const s=t.dataset.v2Addeq;const a=v2Get(['eqExtra',s])||[];if(!a.includes(nm))a.push(nm);v2Set(['eqExtra',s],a);open.push('eq:'+s+':'+nm)}
  else if(t.dataset.v2Addrow){const[k,n]=t.dataset.v2Addrow.split('|');v2Set(['tables',k,n,0],' ')}
  else if(t.dataset.v2Addins){const[s,n]=t.dataset.v2Addins.split('|');v2Set(['rast',s,'ins',n,'n'],' ')}
  save();v2Rerender();v2Reopen(open);
 });
-function v2Field(e){const t=e.target;if(!t||!t.dataset||!t.dataset.v2)return;const p=t.dataset.v2.split('|');v2Set(p,t.type==='checkbox'?t.checked:t.value);save();
+function v2Field(e){const t=e.target;if(!t||!t.dataset||!t.dataset.v2)return;const p=t.dataset.v2.split('|');v2Set(p,t.type==='checkbox'?t.checked:t.value);save();v2RefreshPrev();
  if(t.type==='checkbox'){const box=t.closest('details');const tag=box&&box.querySelector(':scope>summary .tag');if(tag&&/ de \d+$/.test(tag.textContent)){const all=box.querySelectorAll(':scope>.v2-in>.v2-check input');tag.textContent=[...all].filter(x=>x.checked).length+' de '+all.length}}}
 document.addEventListener('input',e=>{if(e.target.type!=='checkbox')v2Field(e)});
 document.addEventListener('change',e=>{if(e.target.type==='checkbox'||e.target.tagName==='SELECT')v2Field(e)});
@@ -270,6 +295,61 @@ function v2Ir(t,k){return esc(String(t).replace(/\.$/,''))+' (irregularidade '+k
 function v2Join(a){return a.length>1?a.slice(0,-1).join(', ')+' e '+a.at(-1):a[0]||''}
 function v2Ne(o){return Object.values(o||{}).some(v=>v&&typeof v==='object'?v2Ne(v):String(v??'').trim())}
 function v2ItemTitulo(iid){for(const[n,c]of Object.entries(APP_DATA.cards))for(const s of c.sections)if(s.item===iid)return s.itemNum+' '+s.itemTitle;return iid}
+function v2RefTxt(refs){return (refs||[]).map(x=>x.law+', '+String(x.device).replace(' · Item ',', item ').replace(' · ',', ')).join('; ')}
+/* Parágrafo(s) de um item no relatório. Não se aplica é omitido. */
+function v2ItemCorpo(n,card,s,addIrr){
+ const iid=s.item,v=v2State(),refTxt=v2RefTxt;if(v.itemNA[iid])return '';
+ let sitTxt=[];(V2.sit[iid]||[]).forEach((sq,qi)=>{const k=(v.sit[iid]||{})[qi];if(!k)return;const o=sq.opts.find(x=>x[0]===k);if(!o)return;if(k==='outro'){const t=((v.sitout[iid]||{})[qi]||'').trim();if(t)sitTxt.push(esc((sq.pre?sq.pre+' ':sq.q.replace(/\?$/,'')+': ')+t.replace(/\.$/,'')+'.'))}else sitTxt.push(esc(o[2]))});
+  let corpo='';const frases=[];
+  for(const q of s.requirements){if(!conditionActive(q.condition)&&!state.manualOpen[q.id])continue;const a=state.responses[q.id]||{};
+   if(a.status==='C')frases.push(esc(q.pos));
+   else if(a.status==='NC'){if(q.informativo)frases.push(esc(q.neg));else{const k=addIrr(v2ItemTitulo(iid)+': '+q.neg+(a.evidence&&a.evidence.trim()?' Evidência: '+a.evidence.trim().replace(/\s+/g,' ').replace(/\.$/,'')+'.':''),refTxt(q.refs));frases.push(v2Ir(q.neg,k))}}}
+  if(frases.length)corpo+='<p>'+frases.join(' ')+'</p>';
+  const extras=(card.extraItems||[]).filter(e=>e.into===iid);
+  for(const e of extras){const comp=e.c;
+   if(e.fn==='renderPops'){const pops=[];for(const ps of APP_DATA.pops)ps.rows.forEach((row,idx)=>{const d=state.pops[ps.code+'|'+idx];if(d&&d.status)pops.push([row.name,d.nr||'',manData(d.date),d.status])});if(pops.length){const pend=pops.filter(p=>p[3]==='Pendente');corpo+='<p>'+(pend.length?'Dos POPs conferidos, '+(pops.length-pend.length)+' foram apresentados; não foram apresentados: '+esc(v2Join(pend.map(p=>v2Lc(p[0]))))+'.':'Foram apresentados todos os '+pops.length+' POPs conferidos.')+'</p>'+medTable(pops,['POP','Nº / revisão','Data','Situação']);if(pend.length){const k=addIrr('POPs não apresentados: '+v2Join(pend.map(p=>v2Lc(p[0])))+'.','RDC nº 67/2007, Anexo I, item 8 e itens específicos de cada procedimento');corpo+='<p>(irregularidade '+k+')</p>'}}}
+   if(e.fn==='renderTraining'){const t=(state.training||[]).filter(v2Ne);if(t.length)corpo+=medTable(t.map(x=>[x.tema||'',manData(x.data),x.carga||'',x.n||'',x.efetividade||'']),['Treinamento','Data','Carga horária','Treinados','Efetividade'])}
+   if(e.fn==='renderStock'){const st=(state.stock||[]).filter(x=>x&&(x.substancia||x.lote||x.fisico||x.sistema));if(st.length)corpo+=medTable(st.map(x=>[x.substancia||'',x.lote||'',x.fisico||'',x.sistema||'']),['Substância / produto','Lote','Físico','Escriturado'])}
+   if(e.fn==='renderTraceability'){const ins=(state.insumos||[]).filter(v2Ne);if(ins.length)corpo+=medTable(ins.map(x=>[x.nome||'',x.lote||'',x.fornecedor||'',x.coa||'',x.obs||'']),['Matéria-prima','Lote','Fornecedor','Certificado','Observações'])}
+   if(!comp)continue;
+   if(comp.t==='ncl'){const marks=v.irr[iid]||{},items=v2ListItems(comp.lists).filter(x=>marks[x.id]==='I');const out=v.out[iid]||{};
+    const lst=items.map(x=>{const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return esc(v2Lc(x.t))+' (irregularidade '+k+')'});
+    if(marks['x-'+comp.kind]==='I'&&out[comp.kind]){const k=addIrr(v2ItemTitulo(iid)+': '+out[comp.kind]+'.','');lst.push(esc(out[comp.kind])+' (irregularidade '+k+')')}
+    if(lst.length)corpo+='<p>'+(comp.kind==='reg'?'Registros não apresentados: ':comp.kind==='amb'?'Irregularidades gerais do ambiente: ':esc(comp.title)+': ')+lst.join('; ')+'.</p>'}
+   if(comp.t==='equip'){const names=comp.names.concat(v.eqExtra[iid]||[]),rows=[];
+    for(const nm of names){const d=(v.eq[iid]||{})[nm];if(!d||!v2Ne(d))continue;const id=[d.marca,d.serie&&('série '+d.serie),d.cal&&('calibração até '+manData(d.cal))].filter(Boolean).join(' · ');
+     const ir=V2.lists.eq.filter(x=>(d.irr||{})[x.id]==='I');let sit;
+     if(d.has==='NC'){const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(nm)+' ausente.','RDC nº 67/2007, Anexo I, item 5.1.1');sit='Não possui (irregularidade '+k+')'}
+     else if(ir.length||(d.xI==='I'&&d.outra)){sit=ir.map(x=>{const k=addIrr(v2ItemTitulo(iid)+' — '+nm+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return x.t+' (irregularidade '+k+')'}).concat(d.xI==='I'&&d.outra?[d.outra+' (irregularidade '+addIrr(v2ItemTitulo(iid)+' — '+nm+': '+d.outra+'.','')+')']:[]).join('; ')}
+     else sit=d.has==='NA'?'Não se aplica':'Sem irregularidades';
+     rows.push([nm,id||'—',sit])}
+    if(rows.length)corpo+=medTable(rows,['Equipamento','Identificação','Situação'])}
+   if(comp.t==='plan'){const p=v.plan||{},fp=v.fields.plan||{};const partes=[];
+    for(const[g,t,ref,itens]of V2.plan){const com=[],par=[],nao=[];itens.forEach((it,i)=>{const s=p[g+'-'+i];if(s==='C')com.push(v2Lc(it));if(s==='P')par.push(v2Lc(it));if(s==='NC')nao.push(v2Lc(it))});
+     if(!com.length&&!par.length&&!nao.length)continue;let tx=t+': ';const seg=[];if(com.length)seg.push('completas — '+v2Join(com));if(par.length)seg.push('parciais — '+v2Join(par));if(nao.length){const k=addIrr('Planilhas de '+t.toLowerCase()+' não apresentadas: '+v2Join(nao)+'.',v2Cite(ref));seg.push('não apresentadas — '+v2Join(nao)+' (irregularidade '+k+')')}
+     if(par.length){const k=addIrr('Planilhas de '+t.toLowerCase()+' incompletas: '+v2Join(par)+'.',v2Cite(ref));seg[seg.length-(nao.length?2:1)]+=' (irregularidade '+k+')'}
+     partes.push(esc(tx+seg.join('; '))+'.'+(v.obs['plan-'+g]?' '+esc(v.obs['plan-'+g]):''))}
+    if(partes.length)corpo+='<p>'+(fp.de||fp.ate?'Planilhas do período de '+manData(fp.de)+' a '+manData(fp.ate)+'. ':'Planilhas conferidas. ')+partes.join(' ')+'</p>'}
+   if(comp.t==='table'){const key=iid+'-'+v2Slug(comp.title),rows=Object.values(v.tables[key]||{}).map(r=>comp.cols.map((_,j)=>String((r||{})[j]||'').trim())).filter(r=>r.some(Boolean));if(rows.length)corpo+='<p><b>'+esc(comp.title)+'</b></p>'+medTable(rows,comp.cols)}
+   if(comp.t==='rast'){const d=v.rast[iid];if(d&&v2Ne(d)){const rot=v2Rotulo(),ins=Object.values(d.ins||{}).filter(x=>x&&String(x.n||'').trim());
+     const ensF=comp.ensaios.filter((_,i)=>!(d.ens||{})[i]),rotF=rot.filter((_,i)=>!(d.rot||{})[i]);
+     corpo+='<p>Preparação '+esc(comp.form)+': '+esc(d.prod||'produto não informado')+(d.om?', ordem de manipulação nº '+esc(d.om):'')+(d.omData?' de '+manData(d.omData):'')+(d.manip?', manipulada por '+esc(d.manip):'')+'.</p>';
+     if(ins.length)corpo+=medTable(ins.map(x=>[x.n,x.lote||'',manData(x.val)||x.val||'',x.fab||'',x.nf||'']),['Excipiente / insumo','Lote','Validade','Fabricante','Nota fiscal']);
+     const cqp=Object.values(d.ens||{}).some(Boolean);if(cqp)corpo+='<p>'+(ensF.length?'Controle de qualidade do produto acabado sem: '+esc(v2Join(ensF.map(v2Lc)))+' (irregularidade '+addIrr('Preparação '+comp.form+': ensaios não realizados ou não registrados — '+v2Join(ensF.map(v2Lc))+'.','RDC nº 67/2007, Anexo I, itens 9.1.1 e 9.1.2')+').':'Controle de qualidade do produto acabado completo.')+'</p>';
+     const mpE=ENS_MP.filter((_,i)=>(d.mp||{})[i]);if(d.mpProd||mpE.length)corpo+='<p>Controle de qualidade da matéria-prima '+esc(d.mpProd||'')+(d.mpLote?' (lote '+esc(d.mpLote)+')':'')+': '+esc(mpE.length?v2Join(mpE.map(v2Lc)):'nenhum ensaio registrado')+'.</p>';
+     const rotP=Object.values(d.rot||{}).some(Boolean);if(rotP)corpo+='<p>'+(rotF.length?'Rótulo sem: '+esc(v2Join(rotF.map(v2Lc)))+' (irregularidade '+addIrr('Preparação '+comp.form+': rótulo sem '+v2Join(rotF.map(v2Lc))+'.','RDC nº 67/2007, Anexo I, item 12.1')+').':'O rótulo contém todas as informações exigidas.')+'</p>'}}
+   if(comp.t==='veg'||comp.t==='emb'){const arr=Object.values(v[comp.t][iid]||{}).filter(v2Ne);for(const d of arr){if(comp.t==='veg'){const ts=VEG_T.filter((_,j)=>(d.t||{})[j]);corpo+='<p>Matéria-prima vegetal '+esc(d.prod||'')+(d.lote?' (lote '+esc(d.lote)+')':'')+': '+(d.laudo?'laudo do fornecedor com os testes exigidos':'laudo do fornecedor sem todos os testes exigidos')+'; controle de qualidade da farmácia'+(d.cert?' (certificado '+esc(d.cert)+')':'')+': '+esc(ts.length?v2Join(ts.map(v2Lc)):'nenhum teste registrado')+'.</p>'}
+     else{const cs=Object.keys(d.c||{}).filter(k=>d.c[k]);corpo+='<p>Embalagem '+esc(d.prod||'')+(d.lote?' (lote '+esc(d.lote)+')':'')+': '+[d.laudo?'laudo do fornecedor':'',d.cq?'controle de qualidade da farmácia'+(d.cert?' (certificado '+esc(d.cert)+')':''):''].filter(Boolean).join(' e ')+(cs.length?'; análise de '+esc(v2Join(cs.map(v2Lc))):'')+'.</p>'}}}
+   if(comp.t==='mon'){const d=v.mon[comp.code];if(d&&v2Ne(d)){const rows=Object.values(d.rows||{}).filter(v2Ne);
+     corpo+='<p><b>'+esc(comp.code+' '+comp.title)+'</b></p>'+(comp.kind==='agua'?medTable(rows.map(x=>[x.cert||'',manData(x.coleta)]),['Certificado','Coleta']):medTable(rows.map(x=>[x.prod||'',x.cert||'',x.lote||'',manData(x.manip),manData(x.ini)+(x.fim?' a '+manData(x.fim):'')]),['Produto','Certificado','Lote','Manipulada em','Análise']))
+      +'<p>'+esc([d.emit&&('Emitidos por '+d.emit+(d.cnpj?', CNPJ '+d.cnpj:'')),d.fb&&('Farmacopeia Brasileira, '+d.fb+' edição'),d.res,d.sign&&('Assinado por '+d.sign)].filter(Boolean).join('. '))+(rows.length<comp.n?' Apresentadas '+rows.length+' de '+comp.n+' análises exigidas (irregularidade '+addIrr(comp.title.split(' — ')[0]+': apresentadas '+rows.length+' de '+comp.n+' análises.',comp.v2Cite(ref))+').':'')+'</p>';
+     if(d.res==='Amostra não cumpre as especificações')corpo+='<p>Resultado insatisfatório (irregularidade '+addIrr(comp.title.split(' — ')[0]+': resultado insatisfatório.',comp.v2Cite(ref))+').</p>'}}
+  }
+  const env=state.env[s.code];if(env&&v2Ne(env))corpo+=medTable(medObjectRows({'Temperatura/umidade no momento':env}));
+  if(v.obs[iid])corpo+='<p><b>Observações:</b> '+esc(v.obs[iid])+'</p>';
+ if(sitTxt.length)corpo='<p>'+sitTxt.join(' ')+'</p>'+corpo;
+ return corpo;
+}
 function renderPreview(){
  const root=$('#reportPreview');if(!root)return;const r=state.report,v=v2State(),c=state.char||{};
  const irr=[];const addIrr=(texto,cit)=>{irr.push({texto,cit});return irr.length};
@@ -299,54 +379,7 @@ function renderPreview(){
  for(const[n,card]of Object.entries(APP_DATA.cards)){
   let bloco='';
   for(const s of card.sections){
-   const iid=s.item,ativo=conditionActive(s.condition)||state.manualOpen['sec:'+s.code];if(!ativo)continue;
-   let corpo='';const frases=[];
-   for(const q of s.requirements){if(!conditionActive(q.condition)&&!state.manualOpen[q.id])continue;const a=state.responses[q.id]||{};
-    if(a.status==='C')frases.push(esc(q.pos));
-    else if(a.status==='NC'){if(q.informativo)frases.push(esc(q.neg));else{const k=addIrr(v2ItemTitulo(iid)+': '+q.neg+(a.evidence&&a.evidence.trim()?' Evidência: '+a.evidence.trim().replace(/\s+/g,' ').replace(/\.$/,'')+'.':''),refTxt(q.refs));frases.push(v2Ir(q.neg,k))}}}
-   if(frases.length)corpo+='<p>'+frases.join(' ')+'</p>';
-   const extras=(card.extraItems||[]).filter(e=>e.into===iid);
-   for(const e of extras){const comp=e.c;
-    if(e.fn==='renderPops'){const pops=[];for(const ps of APP_DATA.pops)ps.rows.forEach((row,idx)=>{const d=state.pops[ps.code+'|'+idx];if(d&&d.status)pops.push([row.name,d.nr||'',manData(d.date),d.status])});if(pops.length){const pend=pops.filter(p=>p[3]==='Pendente');corpo+='<p>'+(pend.length?'Dos POPs conferidos, '+(pops.length-pend.length)+' foram apresentados; não foram apresentados: '+esc(v2Join(pend.map(p=>v2Lc(p[0]))))+'.':'Foram apresentados todos os '+pops.length+' POPs conferidos.')+'</p>'+medTable(pops,['POP','Nº / revisão','Data','Situação']);if(pend.length){const k=addIrr('POPs não apresentados: '+v2Join(pend.map(p=>v2Lc(p[0])))+'.','RDC nº 67/2007, Anexo I, item 8 e itens específicos de cada procedimento');corpo+='<p>(irregularidade '+k+')</p>'}}}
-    if(e.fn==='renderTraining'){const t=(state.training||[]).filter(v2Ne);if(t.length)corpo+=medTable(t.map(x=>[x.tema||'',manData(x.data),x.carga||'',x.n||'',x.efetividade||'']),['Treinamento','Data','Carga horária','Treinados','Efetividade'])}
-    if(e.fn==='renderStock'){const st=(state.stock||[]).filter(x=>x&&(x.substancia||x.lote||x.fisico||x.sistema));if(st.length)corpo+=medTable(st.map(x=>[x.substancia||'',x.lote||'',x.fisico||'',x.sistema||'']),['Substância / produto','Lote','Físico','Escriturado'])}
-    if(e.fn==='renderTraceability'){const ins=(state.insumos||[]).filter(v2Ne);if(ins.length)corpo+=medTable(ins.map(x=>[x.nome||'',x.lote||'',x.fornecedor||'',x.coa||'',x.obs||'']),['Matéria-prima','Lote','Fornecedor','Certificado','Observações'])}
-    if(!comp)continue;
-    if(comp.t==='ncl'){const marks=v.irr[iid]||{},items=v2ListItems(comp.lists).filter(x=>marks[x.id]==='I');const out=v.out[iid]||{};
-     const lst=items.map(x=>{const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return esc(v2Lc(x.t))+' (irregularidade '+k+')'});
-     if(marks['x-'+comp.kind]==='I'&&out[comp.kind]){const k=addIrr(v2ItemTitulo(iid)+': '+out[comp.kind]+'.','');lst.push(esc(out[comp.kind])+' (irregularidade '+k+')')}
-     if(lst.length)corpo+='<p>'+(comp.kind==='reg'?'Registros não apresentados: ':comp.kind==='amb'?'Irregularidades gerais do ambiente: ':esc(comp.title)+': ')+lst.join('; ')+'.</p>'}
-    if(comp.t==='equip'){const names=comp.names.concat(v.eqExtra[iid]||[]),rows=[];
-     for(const nm of names){const d=(v.eq[iid]||{})[nm];if(!d||!v2Ne(d))continue;const id=[d.marca,d.serie&&('série '+d.serie),d.cal&&('calibração até '+manData(d.cal))].filter(Boolean).join(' · ');
-      const ir=V2.lists.eq.filter(x=>(d.irr||{})[x.id]==='I');let sit;
-      if(d.has==='NC'){const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(nm)+' ausente.','RDC nº 67/2007, Anexo I, item 5.1.1');sit='Não possui (irregularidade '+k+')'}
-      else if(ir.length||(d.xI==='I'&&d.outra)){sit=ir.map(x=>{const k=addIrr(v2ItemTitulo(iid)+' — '+nm+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return x.t+' (irregularidade '+k+')'}).concat(d.xI==='I'&&d.outra?[d.outra+' (irregularidade '+addIrr(v2ItemTitulo(iid)+' — '+nm+': '+d.outra+'.','')+')']:[]).join('; ')}
-      else sit=d.has==='NA'?'Não se aplica':'Sem irregularidades';
-      rows.push([nm,id||'—',sit])}
-     if(rows.length)corpo+=medTable(rows,['Equipamento','Identificação','Situação'])}
-    if(comp.t==='plan'){const p=v.plan||{},fp=v.fields.plan||{};const partes=[];
-     for(const[g,t,ref,itens]of V2.plan){const com=[],par=[],nao=[];itens.forEach((it,i)=>{const s=p[g+'-'+i];if(s==='C')com.push(v2Lc(it));if(s==='P')par.push(v2Lc(it));if(s==='NC')nao.push(v2Lc(it))});
-      if(!com.length&&!par.length&&!nao.length)continue;let tx=t+': ';const seg=[];if(com.length)seg.push('completas — '+v2Join(com));if(par.length)seg.push('parciais — '+v2Join(par));if(nao.length){const k=addIrr('Planilhas de '+t.toLowerCase()+' não apresentadas: '+v2Join(nao)+'.',v2Cite(ref));seg.push('não apresentadas — '+v2Join(nao)+' (irregularidade '+k+')')}
-      if(par.length){const k=addIrr('Planilhas de '+t.toLowerCase()+' incompletas: '+v2Join(par)+'.',v2Cite(ref));seg[seg.length-(nao.length?2:1)]+=' (irregularidade '+k+')'}
-      partes.push(esc(tx+seg.join('; '))+'.'+(v.obs['plan-'+g]?' '+esc(v.obs['plan-'+g]):''))}
-     if(partes.length)corpo+='<p>'+(fp.de||fp.ate?'Planilhas do período de '+manData(fp.de)+' a '+manData(fp.ate)+'. ':'Planilhas conferidas. ')+partes.join(' ')+'</p>'}
-    if(comp.t==='table'){const key=iid+'-'+v2Slug(comp.title),rows=Object.values(v.tables[key]||{}).map(r=>comp.cols.map((_,j)=>String((r||{})[j]||'').trim())).filter(r=>r.some(Boolean));if(rows.length)corpo+='<p><b>'+esc(comp.title)+'</b></p>'+medTable(rows,comp.cols)}
-    if(comp.t==='rast'){const d=v.rast[iid];if(d&&v2Ne(d)){const rot=v2Rotulo(),ins=Object.values(d.ins||{}).filter(x=>x&&String(x.n||'').trim());
-      const ensF=comp.ensaios.filter((_,i)=>!(d.ens||{})[i]),rotF=rot.filter((_,i)=>!(d.rot||{})[i]);
-      corpo+='<p>Preparação '+esc(comp.form)+': '+esc(d.prod||'produto não informado')+(d.om?', ordem de manipulação nº '+esc(d.om):'')+(d.omData?' de '+manData(d.omData):'')+(d.manip?', manipulada por '+esc(d.manip):'')+'.</p>';
-      if(ins.length)corpo+=medTable(ins.map(x=>[x.n,x.lote||'',manData(x.val)||x.val||'',x.fab||'',x.nf||'']),['Excipiente / insumo','Lote','Validade','Fabricante','Nota fiscal']);
-      const cqp=Object.values(d.ens||{}).some(Boolean);if(cqp)corpo+='<p>'+(ensF.length?'Controle de qualidade do produto acabado sem: '+esc(v2Join(ensF.map(v2Lc)))+' (irregularidade '+addIrr('Preparação '+comp.form+': ensaios não realizados ou não registrados — '+v2Join(ensF.map(v2Lc))+'.','RDC nº 67/2007, Anexo I, itens 9.1.1 e 9.1.2')+').':'Controle de qualidade do produto acabado completo.')+'</p>';
-      const mpE=ENS_MP.filter((_,i)=>(d.mp||{})[i]);if(d.mpProd||mpE.length)corpo+='<p>Controle de qualidade da matéria-prima '+esc(d.mpProd||'')+(d.mpLote?' (lote '+esc(d.mpLote)+')':'')+': '+esc(mpE.length?v2Join(mpE.map(v2Lc)):'nenhum ensaio registrado')+'.</p>';
-      const rotP=Object.values(d.rot||{}).some(Boolean);if(rotP)corpo+='<p>'+(rotF.length?'Rótulo sem: '+esc(v2Join(rotF.map(v2Lc)))+' (irregularidade '+addIrr('Preparação '+comp.form+': rótulo sem '+v2Join(rotF.map(v2Lc))+'.','RDC nº 67/2007, Anexo I, item 12.1')+').':'O rótulo contém todas as informações exigidas.')+'</p>'}}
-    if(comp.t==='veg'||comp.t==='emb'){const arr=Object.values(v[comp.t][iid]||{}).filter(v2Ne);for(const d of arr){if(comp.t==='veg'){const ts=VEG_T.filter((_,j)=>(d.t||{})[j]);corpo+='<p>Matéria-prima vegetal '+esc(d.prod||'')+(d.lote?' (lote '+esc(d.lote)+')':'')+': '+(d.laudo?'laudo do fornecedor com os testes exigidos':'laudo do fornecedor sem todos os testes exigidos')+'; controle de qualidade da farmácia'+(d.cert?' (certificado '+esc(d.cert)+')':'')+': '+esc(ts.length?v2Join(ts.map(v2Lc)):'nenhum teste registrado')+'.</p>'}
-      else{const cs=Object.keys(d.c||{}).filter(k=>d.c[k]);corpo+='<p>Embalagem '+esc(d.prod||'')+(d.lote?' (lote '+esc(d.lote)+')':'')+': '+[d.laudo?'laudo do fornecedor':'',d.cq?'controle de qualidade da farmácia'+(d.cert?' (certificado '+esc(d.cert)+')':''):''].filter(Boolean).join(' e ')+(cs.length?'; análise de '+esc(v2Join(cs.map(v2Lc))):'')+'.</p>'}}}
-    if(comp.t==='mon'){const d=v.mon[comp.code];if(d&&v2Ne(d)){const rows=Object.values(d.rows||{}).filter(v2Ne);
-      corpo+='<p><b>'+esc(comp.code+' '+comp.title)+'</b></p>'+(comp.kind==='agua'?medTable(rows.map(x=>[x.cert||'',manData(x.coleta)]),['Certificado','Coleta']):medTable(rows.map(x=>[x.prod||'',x.cert||'',x.lote||'',manData(x.manip),manData(x.ini)+(x.fim?' a '+manData(x.fim):'')]),['Produto','Certificado','Lote','Manipulada em','Análise']))
-       +'<p>'+esc([d.emit&&('Emitidos por '+d.emit+(d.cnpj?', CNPJ '+d.cnpj:'')),d.fb&&('Farmacopeia Brasileira, '+d.fb+' edição'),d.res,d.sign&&('Assinado por '+d.sign)].filter(Boolean).join('. '))+(rows.length<comp.n?' Apresentadas '+rows.length+' de '+comp.n+' análises exigidas (irregularidade '+addIrr(comp.title.split(' — ')[0]+': apresentadas '+rows.length+' de '+comp.n+' análises.',comp.v2Cite(ref))+').':'')+'</p>';
-      if(d.res==='Amostra não cumpre as especificações')corpo+='<p>Resultado insatisfatório (irregularidade '+addIrr(comp.title.split(' — ')[0]+': resultado insatisfatório.',comp.v2Cite(ref))+').</p>'}}
-   }
-   const env=state.env[s.code];if(env&&v2Ne(env))corpo+=medTable(medObjectRows({'Temperatura/umidade no momento':env}));
-   if(v.obs[iid])corpo+='<p><b>Observações:</b> '+esc(v.obs[iid])+'</p>';
+   const corpo=v2ItemCorpo(n,card,s,addIrr);
    if(corpo)bloco+='<h4>'+esc(s.itemNum+' '+s.itemTitle)+'</h4>'+corpo;
   }
   if(bloco){num++;h+='<h3>'+num+' · '+esc(card.title)+'</h3>'+bloco}

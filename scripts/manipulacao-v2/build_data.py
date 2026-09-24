@@ -10,6 +10,7 @@ SP = os.path.dirname(os.path.abspath(__file__)) + '/'
 sys.path.insert(0, SP)
 import estrutura  # noqa: E402
 from frases import F  # noqa: E402
+from orientacao import ORIENT, SIT, OUTRO, PRE  # noqa: E402
 
 V1 = json.load(open(SP + 'app-data-v1.json'))
 INV = json.load(open(SP + 'inventario-revisado.json'))
@@ -127,10 +128,13 @@ for b in estrutura.BLOCKS:
             extras.insert(0, {'fn': 'manV2', 'into': iid, 'antes': True, 'c': {'t': 'ident'}})
         if it['code'] == '2.3':
             extras.insert(len(extras) - 1, {'fn': 'renderTraining', 'into': iid})
-        sections.append({'code': 'v2-' + it['code'], 'num': it['code'], 'title': it['title'], 'condition': cond,
+        for rq in reqs:
+            if rq.get('condition'):
+                rq['hint'], rq['condition'] = rq['condition'], None
+        sections.append({'code': 'v2-' + it['code'], 'num': it['code'], 'title': it['title'], 'condition': None, 'hint': cond,
                          'item': iid, 'itemNum': it['code'], 'itemTitle': it['title'], 'requirements': reqs})
         if it['code'] == '10.6':
-            sections.append({'code': 'v2-10.7', 'num': '10.7', 'title': 'Verificação de matéria-prima', 'condition': None,
+            sections.append({'code': 'v2-10.7', 'num': '10.7', 'title': 'Verificação de matéria-prima', 'condition': None, 'hint': None,
                              'item': 'i10.7', 'itemNum': '10.7', 'itemTitle': 'Verificação de matéria-prima', 'requirements': []})
             extras.append({'fn': 'renderTraceability', 'into': 'i10.7'})
             item_block['i10.7'] = b['n']
@@ -143,6 +147,13 @@ for e in cards['1']['extraItems']:
 cards['1']['extraItems'] = [e for e in cards['1']['extraItems'] if e['c'].get('t') != 'skip'
                             and not (e['into'] == 'i1.1' and e['c'].get('t') in ('fields', 'doc', 'chips'))]
 cards['1']['extraItems'].insert(1, {'fn': 'manV2', 'into': 'i1.2', 'antes': True, 'c': {'t': 'carac'}})
+
+NO_NA = {'i1.1', 'i1.2', 'i2.1', 'i2.3', 'i3.1'}
+for c in cards.values():
+    heads = [{'fn': 'manV2', 'into': s['item'], 'antes': True, 'c': {'t': 'itemhead', 'na': s['item'] not in NO_NA}} for s in c['sections']]
+    tails = [{'fn': 'manV2', 'into': s['item'], 'c': {'t': 'preview'}} for s in c['sections']]
+    c['extraItems'] = heads + c['extraItems'] + tails
+SITDATA = {k: [{'q': q, 'pre': PRE.get(k, ''), 'opts': [list(o) for o in opts] + [list(OUTRO)]} for q, opts in v] for k, v in SIT.items()}
 
 # Listas de irregularidades com ids estáveis
 def lst(items, prefix):
@@ -193,7 +204,7 @@ data = dict(V1)
 data.update({
     'cards': cards, 'conditionLabels': labels, 'equipment': {}, 'monitorAreas': monitor_areas,
     'infractions': INV_ITEMS, 'infraTexts': INV['texts'],
-    'v2': {'lists': LISTS, 'plan': PLAN, 'itemBlock': item_block},
+    'v2': {'lists': LISTS, 'plan': PLAN, 'itemBlock': item_block, 'orient': ORIENT, 'sit': SITDATA},
     'meta': dict(V1['meta'], version=2, structure='12 blocos', infractions=len(INV_ITEMS)),
 })
 out = os.path.join(SP, '..', '..', 'farmacia-manipulacao-v2-dados.json')
