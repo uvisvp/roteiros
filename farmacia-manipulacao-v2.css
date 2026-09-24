@@ -1,0 +1,53 @@
+/* Manipulação v2 — quebra de texto em tablet: título em largura total, normas abaixo, respostas em 3 colunas sem corte. */
+html .man-item-screen .req{grid-template-columns:minmax(0,1fr)!important;display:grid!important}
+html .man-item-screen .req-text{overflow-wrap:break-word;line-height:1.4}
+html .man-item-screen .req .med-refs{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+html .man-item-screen .req .med-refs .med-ref{width:auto;max-width:100%;overflow-wrap:anywhere;white-space:normal}
+html .man-item-screen .req .med-refs .med-hint{flex:1 1 100%}
+html .man-item-screen .req .seg{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%;max-width:560px}
+html .man-item-screen .req .seg button{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;height:auto!important;min-height:44px!important;line-height:1.2!important}
+html .man-item-screen .med-hint p{overflow-wrap:break-word;white-space:normal}
+/* Componentes v2 */
+.v2-box{border:1px solid var(--line);border-radius:12px;background:#fff;margin:12px 0}
+.v2-box>summary{cursor:pointer;padding:11px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}
+.v2-box .tag.bad,.v2-eq .tag.bad{background:var(--badbg);color:var(--bad)}
+.v2-box.v2-irr{border-color:#efc9cd}.v2-box.v2-irr>summary{background:#fff7f8;border-radius:12px;color:#7c2530}
+.v2-box.v2-irr.has>summary .tag{background:var(--badbg);color:var(--bad)}
+.v2-box.v2-eqbox>summary{background:#f5f8fc;border-radius:12px}
+.v2-in{padding:4px 12px 12px}
+.v2-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #f0f2f4;font-size:.86rem;overflow-wrap:break-word}
+.v2-row:first-of-type{border-top:0}
+.v2-row small{display:block;color:#6a7a84;font-size:.7rem}
+.v2-row input{width:100%}
+.v2-tog{display:flex;gap:4px;flex-wrap:wrap}
+.v2-tog button{border:1px solid var(--line2);background:#fff;border-radius:8px;padding:6px 9px;font-size:.75rem;font-weight:700;min-height:36px;min-width:44px;color:#3d4d57}
+.v2-tog .irr-on{background:var(--badbg);border-color:#e3a6ad;color:var(--bad)}
+.v2-tog .na-on{background:var(--nabg);color:var(--na)}
+.v2-tog .ok-on{background:var(--okbg);border-color:#a9d7bd;color:var(--ok)}
+.v2-tog .par-on{background:var(--warnbg);border-color:#e7c98f;color:var(--warn)}
+.v2-eq{border:1px solid #e3e9ef;border-radius:10px;margin:7px 0}
+.v2-eq>summary{padding:9px 11px;cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.86rem}
+.v2-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0}
+.v2-grid label,.v2-obs,.v2-full{display:grid;gap:4px;font-size:.72rem;font-weight:700;color:#5f6e77}
+.v2-grid .v2-full,.v2-full{grid-column:1/-1}
+.v2-grid input,.v2-grid select,.v2-obs textarea,.v2-full textarea{width:100%;border:1px solid var(--line2);border-radius:9px;padding:8px 10px;font-size:.88rem;background:#fff}
+.v2-obs{margin:12px 0 4px}.v2-obs textarea,.v2-full textarea{min-height:64px}
+.v2-check{display:flex;gap:8px;align-items:flex-start;font-size:.86rem;padding:5px 0}
+.v2-check input{width:18px;height:18px;flex:0 0 18px;margin-top:2px}
+.v2-h{margin:12px 0 6px;font-size:.84rem}
+.v2-note{margin:8px 0}
+.v2-carac h3{margin:14px 0 6px}
+.v2-foto{margin:10px 0;break-inside:avoid}.v2-foto img{max-width:100%;max-height:360px;border:1px solid #999}.v2-foto figcaption{font-size:.8rem}
+@media(max-width:620px){.v2-grid{grid-template-columns:1fr}.v2-grid .v2-full{grid-column:auto}.v2-row{grid-template-columns:1fr}}
+/* Cabeçalho do item: orientação, aviso, situação encontrada, Não se aplica, prévia */
+.v2-head{margin:0 0 10px}
+.v2-orient{border:1px solid #cfdfe9;background:#f2f7fb;border-radius:11px;padding:9px 12px;font-size:.84rem;color:#27465a;margin:0 0 8px}
+.v2-hint{border:1px solid #efd9ad;background:#fff7e8;color:#7a5116;border-radius:10px;padding:8px 11px;font-size:.8rem;margin:8px 0}
+.v2-hint.ok{border-color:#cfe3de;background:#f5fbf9;color:#255e55}
+.v2-sit{border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin:8px 0;background:#fff}
+.v2-sit h4{margin:0 0 7px;font-size:.84rem}
+.v2-sitopts button{min-height:40px}
+.v2-nabtn.on{background:var(--nabg);color:var(--na);border-color:var(--na)}
+.man-item-screen:has(.v2-head.na)>*:not(.v2-head){display:none!important}
+.v2-prevbox{border-color:#c9d9ee}.v2-prevbox>summary{background:#eef4fb;border-radius:12px;color:#274b70}
+.v2-prev p{font-family:Georgia,"Times New Roman",serif;font-size:.9rem;line-height:1.5}
