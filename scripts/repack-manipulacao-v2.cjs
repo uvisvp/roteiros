@@ -44,7 +44,7 @@ if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
 for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons'])
   app = dropFunction(app, fn);
 /* 3. Código v2 antes da instalação */
-const code = fs.readFileSync(path.join(root, 'farmacia-manipulacao-v2.js'), 'utf8');
+const code = fs.readFileSync(path.join(root, 'saber-mais.js'), 'utf8') + '\n' + fs.readFileSync(path.join(root, 'farmacia-manipulacao-v2.js'), 'utf8');
 const anchor = '\npharmacyInstall();\nrenderCardGrid();';
 app = change(app, anchor, '\n' + START + '\n' + code + '\n' + END + anchor, 'instalação do módulo');
 /* 4. OCR de certificado vindo da lista de equipamentos v2 */

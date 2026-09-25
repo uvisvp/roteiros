@@ -13,7 +13,7 @@ let app = blocks.get(id);
 const START = '/*__DIST_DOCS_INICIO__*/', END = '/*__DIST_DOCS_FIM__*/';
 const i0 = app.indexOf(START);
 if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
-const code = ['distribuidora-textos.js', 'distribuidora-documentos.js', 'distribuidora-ifa.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n').replace(/<\/(script)/gi, '<\\/$1');
+const code = ['saber-mais.js', 'distribuidora-textos.js', 'distribuidora-documentos.js', 'distribuidora-ifa.js', 'distribuidora-navegacao.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n').replace(/<\/(script)/gi, '<\\/$1');
 const anchor = '\ndistInstall();\n';
 if (app.split(anchor).length !== 2) throw Error('Ponto de instalação do módulo não localizado de forma única');
 app = app.replace(anchor, () => '\n' + START + '\n' + code + '\n' + END + anchor);

@@ -99,3 +99,10 @@ Código em `distribuidora-documentos.js`, injetado no módulo por `scripts/repac
 - **Textos (etapa 2)** em `distribuidora-textos.js`: 25 NCs com redação do requisito descumprido; citações padronizadas; 4 ligações erradas com o inventário corrigidas; 2 perguntas sem dispositivo localizado passam a orientação (não geram NC).
 - **Drogaria** (`drogaria-relatorio-revisao.js` e `scripts/repack-drogaria-revisao.cjs`): relatório sem “não informado”, sem títulos vazios e com numeração sequencial; grade e faixa de itens sem “1 · 4.1”.
 - Pendente de verificação normativa: as citações da RDC nº 670/2022 e da RDC nº 1.039/2026 no controle de qualidade da importadora não constam do acervo integrado e não foram conferidas.
+
+## 7. Versão 20260925-1
+
+- **Para saber mais** (`saber-mais.js`): caixa recolhível com conceitos e referências técnicas por item — Farmacopeia Brasileira, USP, OMS (TRS 961 e 1052), ABNT (NBR 10004, 13853, 14725, 16401, ISO/IEC 17025), NR-7 e NR-32. Não é norma, não gera irregularidade e não entra no relatório.
+- **Distribuidora**: abas fixas Roteiro · Não conformidades (Anexo II) · Relatório (`distribuidora-navegacao.js`); orientação da pergunta não desloca mais a pergunta em tela larga; termo de inutilização e comprovante de coleta retirados (fora do escopo); citações do CQ conferidas no texto integral da RDC 670/2022 e da RDC 1.039/2026.
+- **Drogaria**: Cumpre / Não cumpre / Não se aplica nos requisitos cuja resposta negativa gera irregularidade (inclusive 25 requisitos das telas próprias, que antes só descreviam e agora geram irregularidade com o dispositivo do catálogo); Sim / Não nas perguntas descritivas; prévia “Como sai no relatório” por item; termo de inutilização fora do escopo.
+- **Testes do repositório** atualizados à estrutura atual e passando.

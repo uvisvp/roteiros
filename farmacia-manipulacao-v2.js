@@ -161,7 +161,7 @@ function v2Carac(){
 function v2Secao(iid){for(const[n,c]of Object.entries(APP_DATA.cards))for(const s of c.sections)if(s.item===iid)return {n,card:c,s};return null}
 function v2ItemHead(scope,c){
  const v=v2State(),na=!!v.itemNA[scope],loc=v2Secao(scope),hint=loc&&loc.s.hint;let h='<div class="v2-head'+(na?' na':'')+'">';
- const o=V2.orient[scope];if(o)h+='<div class="v2-orient"><b>Orientação do item.</b> '+esc(o)+'</div>';
+ const o=V2.orient[scope];if(o)h+='<div class="v2-orient"><b>Orientação do item.</b> '+esc(o)+'</div>';if(window.SaberMais)h+=SaberMais.html('manip',scope);
  if(hint&&!conditionActive(hint)&&!na)h+='<div class="v2-hint">Não declarado na caracterização ('+esc(APP_DATA.conditionLabels[hint]||hint)+'). Confirme; se não existir no estabelecimento, marque o item como Não se aplica.</div>';
  if(c.na)h+='<div class="toolrow"><button type="button" class="btn v2-nabtn'+(na?' on':'')+'" data-v2-itemna="'+esc(scope)+'">'+(na?'↺ Item marcado como Não se aplica — desfazer':'Não se aplica a este estabelecimento')+'</button></div>';
  if(na){h+='<p class="small muted">Este item não entra no relatório. As perguntas foram marcadas como Não se aplica.</p></div>';return h}
