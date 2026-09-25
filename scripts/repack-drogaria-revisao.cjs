@@ -15,7 +15,7 @@ function change(text, from, to, label) {
   if (!text.includes(from)) throw Error('Trecho esperado não localizado: ' + label);
   return text.replace(from, () => to);
 }
-for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js'], ['rec--drogaria-report-final.js', 'drogaria-report-final.js'], ['rec--drogaria-final-bridge.js', 'drogaria-final-bridge.js'], ['rec--drogaria-review.js', 'drogaria-review.js']]) {
+for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js'], ['rec--drogaria-report-final.js', 'drogaria-report-final.js'], ['rec--drogaria-final-bridge.js', 'drogaria-final-bridge.js'], ['rec--drogaria-review.js', 'drogaria-review.js'], ['rec--ocr-padrao.js', 'ocr-padrao.js'], ['rec--drogaria-ocr-politica.js', 'drogaria-ocr-politica.js']]) {
   const src = fs.readFileSync(path.join(root, arq), 'utf8');
   const enc = lz.compressToBase64(src);
   if (lz.decompressFromBase64(enc) !== src) throw Error('round-trip ' + arq);
@@ -24,9 +24,9 @@ for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relato
   if (re.test(html)) html = html.replace(re, () => tag);
   else html = change(html, '<script type="text/plain" id="rec--drogaria-report-final.js">', tag + '\n<script type="text/plain" id="rec--drogaria-report-final.js">', 'posição do bloco ' + arq);
 }
-{ const alvo = "'drogaria-report-final.js','saber-mais.js','drogaria-relatorio-revisao.js'].forEach";
+{ const alvo = "'drogaria-report-final.js','saber-mais.js','drogaria-relatorio-revisao.js','ocr-padrao.js','drogaria-ocr-politica.js'].forEach";
   if (!html.includes(alvo)) {
-    for (const de of ["'drogaria-report-final.js','drogaria-relatorio-revisao.js'].forEach", "'drogaria-report-final.js'].forEach"]) if (html.includes(de)) { html = html.replace(de, () => alvo); break; }
+    for (const de of ["'drogaria-report-final.js','saber-mais.js','drogaria-relatorio-revisao.js'].forEach", "'drogaria-report-final.js','drogaria-relatorio-revisao.js'].forEach", "'drogaria-report-final.js'].forEach"]) if (html.includes(de)) { html = html.replace(de, () => alvo); break; }
     if (!html.includes(alvo)) throw Error('carregador da Drogaria não localizado');
   } }
 /* numeração dupla */

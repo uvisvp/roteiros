@@ -247,6 +247,7 @@ block('Identificação e caracterização', 'Dados, autorizações e perfil das 
         chips('Atividades licenciadas (licença sanitária)', ['Manipular', 'Fracionar', 'Dispensar', 'Armazenar', 'Grupo I', 'Grupo II', 'Grupo III', 'Grupo V', 'Serviços farmacêuticos', 'Dispensação de industrializados'], other=True),
         note('As três perguntas abaixo eram o item 1.2 “AFE / AE”. Ficam aqui, logo depois dos dados de AFE/AE, sem tela própria.', 'mov'),
         q('r001'), q('r002'), q('r003'),
+        q('r175', text='Apresentou Certidão de Regularidade Técnica do CRF vigente, em nome do responsável técnico?'),
         obs(),
     ], origin='Antigo 1.1 renomeado; recebe as perguntas do antigo 1.2 AFE/AE.'),
     item('1.2', 'Caracterização', [
@@ -280,7 +281,6 @@ block('Documentação', 'Documentos, POPs, treinamento e planilhas', [
         chk('pgrss', 'Conteúdo do PGRSS', PGRSS, 'Confira no documento. Um ponto ausente gera irregularidade própria, com o inciso do art. 6º.'),
         q('r186', text='Apresentou cadastro de gerador de resíduos (SPRegula)? Registre o número.'),
         nq('A coleta e a destinação são feitas por empresa licenciada, com comprovantes (CTR/manifesto) dos últimos meses?', ['RDC 222/2018 · art. 5º']),
-        {'t': 'doc', 'labels': ['📄 Ler PGRSS', '📄 Ler comprovante de coleta']},
         obs(),
     ], origin='Antigo 6.1 + documentos de resíduos'),
     item('2.2', 'Procedimentos Operacionais Padrão', [
@@ -315,7 +315,7 @@ block('Pessoal e saúde ocupacional', 'Equipe, ASO, higiene, EPI e conduta', [
         nq('Os ASO periódicos estão dentro da periodicidade definida no PCMSO?', ['RDC 67/2007 · Anexo I · 3.3.1']),
         nq('Os ASO atestam aptidão para a função efetivamente exercida?', ['RDC 67/2007 · Anexo I · 3.3.1']),
         nq('Para quem manipula hormônios, antibióticos, citostáticos ou controlados, o ASO contempla os exames específicos previstos no PCMSO?', ['RDC 67/2007 · Anexo III · 2.12']),
-        {'t': 'table', 'title': 'Funcionários amostrados', 'cols': ['Nome', 'Função', 'ASO admissional', 'Último ASO periódico', 'Apto?'], 'rows': 3},
+        {'t': 'table', 'title': 'Funcionários amostrados', 'cols': ['Função', 'Iniciais', 'ASO admissional (data)', 'Último ASO periódico (data)', 'Apto?'], 'rows': 3},
         obs(),
     ]),
 ])

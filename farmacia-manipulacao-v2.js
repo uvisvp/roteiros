@@ -63,7 +63,7 @@ function v2Ncl(scope,c){
  const n=items.filter(x=>marks[x.id]==='I').length+(marks['x-'+kind]==='I'?1:0);
  const body='<p class="small muted">'+esc(c.sub||'')+'</p>'+items.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref)+'</small></div>'+v2Tog(['irr',scope,x.id].join('|'),IRR_OPTS,marks[x.id])+'</div>').join('')
   +'<div class="v2-row"><div><input data-v2="'+v2p('out',scope,kind)+'" value="'+esc(v2Val('out',scope,kind))+'" placeholder="Outra irregularidade — descrever"></div>'+v2Tog(['irr',scope,'x-'+kind].join('|'),[IRR_OPTS[0]],marks['x-'+kind])+'</div>'
-  +'<div class="toolrow">'+v2Photo(scope,kind,{amb:'Irregularidades do ambiente',reg:'Registros do laboratório',presc:'Receitas',rast:'Processo',mon:'Monitoramento'}[kind]||c.title||'Fotos')+'</div>';
+  +(/^p(resc|atm|glp|a$|b\d|c\d|ele)/.test(kind)?'<p class="small muted">Receitas e notificações: sem foto (sigilo do paciente). Registre só nº de registro, conselho do prescritor e, se preciso, as iniciais do paciente.</p>':'<div class="toolrow">'+v2Photo(scope,kind,{amb:'Irregularidades do ambiente',reg:'Registros do laboratório',rast:'Processo',mon:'Monitoramento'}[kind]||c.title||'Fotos')+'</div>');
  return v2Box(c.title,n?n+' marcada'+(n>1?'s':''):'nenhuma marcada',body,'v2-irr'+(n?' has':''));
 }
 /* Checklist Atende / Não atende / N/A: um ponto por linha; “Não atende” em ponto com citação vira irregularidade. */
@@ -472,3 +472,44 @@ function renderPreview(){
  root.innerHTML=h;
  if(!v2Fotos&&state.activeTab==='relatorio')v2CarregarFotos();
 }
+
+
+/* ---------- OCR padronizado (núcleo de Medicamentos) ----------
+   OCR só para licença sanitária, CRT e AVCB/CLCB; fichas digitadas para
+   calibração, controle de pragas, caixa d’água, mapas e SNGPC; os demais
+   documentos são conferidos pelos checklists e, se preciso, por foto.
+   ASO e receitas: sem OCR e sem foto. */
+const MAN_OCR={r175:'certidao_regularidade_crf',r185:'avcb_clcb'};
+const MAN_FICHA={r180:'caixa_agua',r181:'controle_pragas',r065:'controle_pragas',r189:'mapas',r202:'mapas',r042:'sngpc'};
+function manEvid(target,m,v){const a=state.responses[target]||(state.responses[target]={});a.evidence=[a.evidence,m.titulo+' — '+m.resumo].filter(Boolean).join('\n');a.document={...v};state.readings=state.readings||{};state.readings[target]={tipo:m.tipo,campos:v,em:new Date().toISOString()}}
+function manPronto(){save();if(state.openCard)renderCard(state.openCard);toast('Dados conferidos registrados.')}
+function openReader(type,target){
+ const ocr=(target==='identity'||type==='licenca')?'licenca_sanitaria':MAN_OCR[target];
+ if(ocr){OcrPadrao.ler(ocr,{onApply:(v,m)=>{
+  if(ocr==='licenca_sanitaria'){const map={razao_social:'razao',nome_fantasia:'fantasia',cnpj:'cnpj',numero_cevs_ou_cmvs:'cmvs',endereco:'endereco',responsavel_legal:'rl',cpf_responsavel_legal:'cpf',responsavel_tecnico:'rt',numero_conselho_responsavel_tecnico:'crf',atividades_licenciadas:'atividades',afe:'afe'};
+   for(const[k,c]of Object.entries(map))if(v[k])state.identity[c]=v[k];if(v.validade)state.identity.validade=m.iso(v.validade)||v.validade;state.readings=state.readings||{};state.readings.identity={tipo:ocr,campos:v}}
+  else{manEvid(target,m,v);if(ocr==='certidao_regularidade_crf'){if(v.responsavel_tecnico&&!state.identity.rt)state.identity.rt=v.responsavel_tecnico;if(v.numero_conselho_responsavel_tecnico&&!state.identity.crf)state.identity.crf=v.numero_conselho_responsavel_tecnico}}
+  manPronto()}});return}
+ const ficha=type==='calibracao'?'calibracao':MAN_FICHA[target];
+ if(ficha){OcrPadrao.ficha(ficha,{
+  foto:ficha==='calibracao'?(f=>RoteiroEvidence.save('manipulacao-card-'+(state.openCard||6),'cal-'+String(target).replace(/[^\w-]+/g,'-')+'::'+Date.now(),f)):null,
+  onApply:(v,m)=>{
+   if(ficha==='calibracao'){const cal=m.iso(v.validade);
+    if(target.startsWith('v2eq:')){const[,sc,nm]=target.split(':');if(cal)v2Set(['eq',sc,nm,'cal'],cal);if(v.instrumento&&!v2Get(['eq',sc,nm,'serie']))v2Set(['eq',sc,nm,'serie'],v.instrumento);v2Set(['eq',sc,nm,'certif'],m.resumo)}
+    else{const[kind,code,name]=target.split(':');const row=kind==='env'?(state.env[code]||(state.env[code]={})):((state.equipment[code]||(state.equipment[code]={}))[name]||(state.equipment[code][name]={}));if(v.numero)row.cert=v.numero;if(v.laboratorio)row.issuer=v.laboratorio;if(cal)row.valid=cal;const dc=m.iso(v.data);if(dc)row.calibracao=dc}}
+   else manEvid(target,m,v);
+   manPronto()}});return}
+ toast('Este documento é conferido pelo checklist do roteiro.');
+}
+/* Botões de leitura: só onde a regra permite; demais saem. Receitas (9.1): sem foto. */
+function manOcrPolitica(root){
+ root.querySelectorAll('[data-reader]').forEach(b=>{const t=b.dataset.target||'',ty=b.dataset.reader;
+  if(t==='identity'||MAN_OCR[t])b.textContent='📄 Ler documento (OCR)';
+  else if(MAN_FICHA[t])b.textContent='📝 Registrar dados do documento';
+  else b.remove()});
+ root.querySelectorAll('[data-read-cal]').forEach(b=>{b.textContent='📝 Certificado de calibração'});
+ const sec=v2Secao('i9.1'),rec=new Set(sec?sec.s.requirements.map(r=>r.id):[]);
+ const aso=v2Secao('i3.2');if(aso)aso.s.requirements.forEach(r=>rec.add(r.id));
+ root.querySelectorAll('[data-med-photo]').forEach(b=>{const k=b.dataset.medPhoto||'';if(/:i(9\.1|3\.2):/.test(k)||rec.has(k))b.remove()});
+}
+(function(){let t=null;const run=()=>{t=null;try{manOcrPolitica(document)}catch(e){}};new MutationObserver(()=>{if(!t)t=setTimeout(run,30)}).observe(document.documentElement,{childList:true,subtree:true});run()})();
