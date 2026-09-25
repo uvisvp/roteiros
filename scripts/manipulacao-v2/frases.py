@@ -222,7 +222,9 @@ F.update({
  'r207': ('Laudos insatisfatórios da água purificada geram medidas avaliadas por nova análise.', 'Laudos insatisfatórios da água purificada não geram medidas registradas e avaliadas por nova análise.'),
  'r205': ('As análises da água potável contemplam todos os parâmetros exigidos.', 'As análises da água potável não contemplam todos os parâmetros exigidos.'),
  'r206': ('Laudos insatisfatórios da água potável geram medidas registradas.', 'Laudos insatisfatórios da água potável não geram medidas registradas.'),
- 'r194': ('Há contrato com laboratório terceirizado para o monitoramento.', 'Não há contrato com laboratório terceirizado para o monitoramento.'),
+ 'r194': ('Há contrato vigente com o laboratório que realiza as análises do monitoramento.', 'Não há contrato vigente com o laboratório que realiza as análises do monitoramento.'),
+ 'n052': ('Há POP do monitoramento com cronograma das análises.', 'Não há POP do monitoramento com cronograma das análises.'),
+ 'n053': ('As amostras seguem sistema de rodízio de manipuladores, fármacos e dosagens.', 'As amostras não seguem sistema de rodízio de manipuladores, fármacos e dosagens.'),
  'r250': ('O laboratório das análises é licenciado e habilitado na REBLAS.', 'O laboratório das análises não é licenciado ou habilitado na REBLAS.'),
  # Venda remota e transporte
  'n041': ('Possui licença sanitária para a venda remota.', 'Realiza venda remota sem licença sanitária para a atividade.'),

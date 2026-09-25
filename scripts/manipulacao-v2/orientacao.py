@@ -51,7 +51,7 @@ ORIENT = {
  'i11.2': 'Bimestral: teor e uniformidade de conteúdo de fórmula com fármaco igual ou inferior a 25 mg, com prioridade abaixo de 5 mg.',
  'i11.3': 'Trimestral, em rodízio: uma análise completa de formulação de cada classe do Anexo III (hormônios, antibióticos, citostáticos e controlados).',
  'i11.4': 'Semestral: água potável, com todos os parâmetros exigidos.',
- 'i11.5': 'Laboratório contratado, habilitação REBLAS, rodízio das amostras (manipuladores, fármacos e dosagens — Anexo I, 9.2.5) e consolidação das irregularidades do monitoramento.',
+ 'i11.5': 'Peça o contrato com o laboratório, o POP com o cronograma das análises e os laudos. Compare os laudos com o cronograma (as análises foram feitas nos períodos previstos?) e veja se as amostras variam de manipulador, fármaco e dosagem (rodízio, Anexo I, 9.2.5). Se a pergunta do rodízio for Não conforme, use o checklist para dizer o que faltou.',
  'i12.1': 'Venda remota inclui pedidos por telefone, WhatsApp, site e aplicativos. Se a farmácia não realiza, marque Não se aplica.',
  'i12.2': 'Como os manipulados são conservados e levados até o paciente, inclusive termossensíveis.',
 }

@@ -40,6 +40,8 @@ NEW_IDS = {
     'A venda remota de controlados e/ou antimicrobianos segue a legislação vigente?': 'n043',
     'A entrega é feita por meio próprio ou transportadora contratada, com condições que preservem o produto?': 'n044',
     'As prescrições aviadas são de preparações magistrais, sem manipulação em substituição a medicamento industrializado prescrito (referência, genérico ou similar)?': 'n050',
+    'Há POP do monitoramento com cronograma das análises (periodicidade e fórmulas previstas em cada período)?': 'n052',
+    'As amostras seguem sistema de rodízio de manipuladores, fármacos e dosagens/concentrações?': 'n053',
     'A transformação de especialidade farmacêutica, quando ocorre, é excepcional (matéria-prima indisponível e sem especialidade na dose ou forma necessária) e justificada tecnicamente?': 'n051',
 }
 # A pergunta "realiza venda remota?" virou seleção na Caracterização.
@@ -161,7 +163,7 @@ SITDATA = {k: [{'q': q, 'pre': PRE.get(k, ''), 'opts': [list(o) for o in opts] +
 def lst(items, prefix):
     return [{'id': '%s%02d' % (prefix, i + 1), 't': t, 'ref': r} for i, (t, r) in enumerate(items)]
 
-MON_DROP = {'Amostras sem rodízio de manipuladores, fármacos e dosagens'}  # virou o checklist de rodízio (11.5)
+MON_DROP = {'Amostras sem rodízio de manipuladores, fármacos e dosagens', 'Sem POP da metodologia do monitoramento'}  # viraram perguntas n053 e n052  # virou o checklist de rodízio (11.5)
 LISTS = {'amb': lst(estrutura.G_AMB, 'a'), 'lab': lst(estrutura.G_LAB_EXTRA, 'l'), 'reg': lst(estrutura.REG_LAB, 'g'),
          'eq': lst(estrutura.EQ_IRR, 'e'), 'presc': [x for x in lst(estrutura.PRESC_IRR, 'p') if x['t'] not in estrutura.PRESC_DROP],
          'rast': lst(estrutura.RAST_IRR, 'r'), 'mon': [x for x in lst(estrutura.MON_IRR, 'm') if x['t'] not in MON_DROP]}

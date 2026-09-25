@@ -218,12 +218,12 @@ ABE = [
     ('Grupo B: caixa de retenção ou contenção para líquidos', 'o abrigo do Grupo B não tem caixa de retenção para líquidos', R222 + '36, III'),
     ('Grupo B: sistema elétrico e de combate a incêndio adequados', 'o abrigo do Grupo B não tem sistema elétrico e de combate a incêndio adequados', R222 + '36, IV'),
 ]
-ROD = [
-    ('Diferentes manipuladores', 'as amostras não contemplam rodízio de manipuladores', A67 + '9.2.5'),
-    ('Diferentes fármacos (fórmulas)', 'as amostras não contemplam rodízio de fármacos', A67 + '9.2.5'),
-    ('Diferentes dosagens / concentrações', 'as amostras não contemplam rodízio de dosagens ou concentrações', A67 + '9.2.5'),
+ROD = [  # detalhe da pergunta do rodízio (n053): informativo, para não duplicar a irregularidade
+    ('Diferentes manipuladores', 'as amostras não contemplam rodízio de manipuladores', None),
+    ('Diferentes fármacos (fórmulas)', 'as amostras não contemplam rodízio de fármacos', None),
+    ('Diferentes dosagens / concentrações', 'as amostras não contemplam rodízio de dosagens ou concentrações', None),
     ('Diferentes formas farmacêuticas', 'as amostras não contemplam rodízio de formas farmacêuticas', None),
-    ('Cronograma ou registro do rodízio', 'não há cronograma ou registro do rodízio', None),
+    ('Registro de qual manipulador preparou cada amostra enviada', 'não há registro do manipulador de cada amostra enviada', None),
 ]
 
 BLOCKS = []
@@ -629,9 +629,11 @@ block('Monitoramento do processo magistral', 'Mensal, bimestral, trimestral e se
         q('r205'), q('r206'),
         obs(),
     ]),
-    item('11.5', 'Laboratório e irregularidades do monitoramento', [
-        q('r194', tag='movido'), q('r250'),
-        chk('rod', 'Rodízio das amostras do monitoramento', ROD),
+    item('11.5', 'Laboratório contratado, cronograma e rodízio', [
+        q('r194', text='Há contrato vigente com o laboratório que realiza as análises do monitoramento do processo magistral?', tag='movido'), q('r250'),
+        nq('Há POP do monitoramento com cronograma das análises (periodicidade e fórmulas previstas em cada período)?', ['RDC 67/2007 · Anexo I · 9.2.6']),
+        nq('As amostras seguem sistema de rodízio de manipuladores, fármacos e dosagens/concentrações?', ['RDC 67/2007 · Anexo I · 9.2.5']),
+        chk('rod', 'Rodízio das amostras — o que foi conferido', ROD, 'Detalha a pergunta do rodízio: a irregularidade sai pela pergunta; aqui você registra o que faltou.'),
         {'t': 'ncl', 'title': 'Irregularidades no monitoramento', 'items': MON_IRR, 'sub': 'Marque o que foi constatado.'},
         obs(),
     ]),
