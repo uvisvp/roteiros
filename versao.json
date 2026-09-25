@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-7",
+  "versao": "20260925-8",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação, item 11.5 (Laboratório contratado, cronograma e rodízio): perguntas próprias sobre contrato vigente com o laboratório, POP com cronograma das análises e rodízio de manipuladores, fármacos e dosagens (Anexo I, 9.2.5), com checklist do que faltou no rodízio."
+  "notas": "Inspeções salvas: nos roteiros de Medicamentos (drogaria, manipulação, distribuidora), o botão Salvas no cabeçalho guarda a inspeção em andamento, com respostas e fotos, no aparelho e deixa o roteiro em branco para outra (até 5 por roteiro). A tela inicial ganhou o botão Inspeções salvas para retomar ou excluir."
 }
