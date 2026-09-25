@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-5",
+  "versao": "20260925-6",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: cada cartão de equipamento traz “O que é e como conferir” (balança analítica e semianalítica, capela e cabine de pesagem, pesos-padrão, vidrarias volumétricas e graduadas, gral e pistilo, estufa, pHmetro, picnômetro, encapsuladora, termo-higrômetro, geladeira, manômetro e outros). Área de lavagem ganhou orientação sobre limpeza de vidraria e utensílios."
+  "notas": "Manipulação: diferença entre balança analítica (0,1 mg, quatro casas) e semianalítica (1 mg, três casas) e uso da capela de proteção da balança (câmara com portas de vidro) sempre que se opera a analítica, com referência na USP <1251>."
 }
