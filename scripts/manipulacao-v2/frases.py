@@ -7,6 +7,7 @@ F = {
  'r021': ('A farmácia dispõe das áreas mínimas previstas, com infraestrutura adequada às atividades.', 'A farmácia não dispõe de todas as áreas mínimas previstas ou a infraestrutura não é adequada às atividades.'),
  'r027': ('A área de descanso/refeitório é separada dos demais ambientes.', 'A área de descanso/refeitório não é separada dos demais ambientes.'),
  # Documentação
+ 'r175': ('Apresentou Certidão de Regularidade Técnica do CRF vigente, em nome do responsável técnico.', 'Não apresentou Certidão de Regularidade Técnica do CRF vigente em nome do responsável técnico.'),
  'r176': ('Apresentou Manual de Boas Práticas de Manipulação, com organograma e fluxograma.', 'Não apresentou Manual de Boas Práticas de Manipulação completo (com organograma e fluxograma).'),
  'r177': ('Apresentou Manual de Boas Práticas Farmacêuticas.', 'Não apresentou Manual de Boas Práticas Farmacêuticas.'),
  'r178': ('Apresentou PCMSO e registros dos exames médicos admissionais e periódicos.', 'Não apresentou PCMSO e/ou os registros dos exames médicos admissionais e periódicos.'),

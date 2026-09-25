@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-8",
+  "versao": "20260925-9",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Inspeções salvas: nos roteiros de Medicamentos (drogaria, manipulação, distribuidora), o botão Salvas no cabeçalho guarda a inspeção em andamento, com respostas e fotos, no aparelho e deixa o roteiro em branco para outra (até 5 por roteiro). A tela inicial ganhou o botão Inspeções salvas para retomar ou excluir."
+  "notas": "OCR padronizado no núcleo de Medicamentos: leitura automática só para licença sanitária, CRT do CRF, AVCB/CLCB e DANFE, com o mesmo motor nos três roteiros. Controle de pragas, caixa d’água, calibração (com foto), mapas e SNGPC viram ficha digitada. ASO e receitas sem leitura e sem foto (LGPD e sigilo). Distribuidora ganhou OCR de licença, CRT e AVCB/CLCB na identificação; manipulação ganhou a pergunta da CRT."
 }

@@ -41,15 +41,13 @@ if (!app.includes('"structure":"12 blocos"')) throw Error('APP_DATA não substit
 const START = '/*__MANIP_V2_INICIO__*/', END = '/*__MANIP_V2_FIM__*/';
 const i0 = app.indexOf(START);
 if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
-for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons'])
+for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons', 'openReader'])
   app = dropFunction(app, fn);
 /* 3. Código v2 antes da instalação */
-const code = fs.readFileSync(path.join(root, 'saber-mais.js'), 'utf8') + '\n' + fs.readFileSync(path.join(root, 'farmacia-manipulacao-v2.js'), 'utf8');
+const code = ['saber-mais.js', 'drogaria-ocr-tools.js', 'ocr-padrao.js', 'farmacia-manipulacao-v2.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
 const anchor = '\npharmacyInstall();\nrenderCardGrid();';
 app = change(app, anchor, '\n' + START + '\n' + code + '\n' + END + anchor, 'instalação do módulo');
-/* 4. OCR de certificado vindo da lista de equipamentos v2 */
-app = change(app, "else if(target.startsWith('pop:'))",
-  "else if(target.startsWith('v2eq:')){const [,sc,nm]=target.split(':');const vals={marca:[f.fabricante,f.modelo].filter(Boolean).join(' '),serie:f.numero_serie_patrimonio,cal:MedTools.iso(f.validade_proxima_calibracao)};for(const [k,v] of Object.entries(vals))if(v)v2Set(['eq',sc,nm,k],v);}\n  else if(target.startsWith('pop:'))", 'openReader v2eq');
+/* 4. (removido) o leitor antigo foi substituído por openReader do OCR padronizado (farmacia-manipulacao-v2.js) */
 /* 5. Fotos: invalida o cache do anexo fotográfico */
 app = change(app, "await MedTools.photo('manipulacao-card-'+state.openCard,b.dataset.medPhoto,()=>toast('Fotos atualizadas.'))",
   "await MedTools.photo('manipulacao-card-'+state.openCard,b.dataset.medPhoto,()=>{v2InvalidarFotos();toast('Fotos atualizadas.')})", 'fotos');
