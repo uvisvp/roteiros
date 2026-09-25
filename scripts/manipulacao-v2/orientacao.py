@@ -13,11 +13,12 @@ ORIENT = {
  'i3.2': 'Faça amostragem de pelo menos três funcionários da manipulação. No ASO, confira data, aptidão para a função e, para quem manipula substâncias do Anexo III, os exames específicos previstos no PCMSO.',
  'i4.1': 'Verificação física: como os resíduos são separados e para onde vão dentro da farmácia. Resíduos de hormônios, antimicrobianos e citostáticos são Grupo B (químicos), não lixo comum.',
  'i4.2': 'O DML pode ser sala própria ou local designado e identificado em outra área. O que importa é não misturar material de limpeza com matérias-primas, embalagens ou produtos.',
+ 'i4.4': 'Abrigo externo é onde os resíduos aguardam a coleta externa (RDC 222/2018, art. 35). Em condomínio ou shopping costuma ser comum; avalie o que a farmácia usa. Os pontos do Grupo B (art. 36) valem para o abrigo de químicos.',
  'i4.3': 'Abrigo temporário é onde os coletores aguardam a coleta. Pode não existir em farmácias pequenas que entregam os resíduos diretamente à coleta; nesse caso marque Não se aplica.',
  'i5.1': 'A guarda das preparações prontas nem sempre fica na recepção: pode estar em área interna ou sala adjacente. Indique onde foi verificada e avalie as condições nesse local.',
  'i5.2': 'Só se a farmácia dispensa medicamentos industrializados. Aplicam-se as regras da RDC 44/2009 para esses produtos.',
  'i5.3': 'Só se a farmácia presta serviços farmacêuticos (aferições, injetáveis etc.). Os documentos da sala (declaração, registros) também são conferidos aqui.',
- 'i5.4': 'Em galerias e shoppings o sanitário pode ser de uso comum do edifício. Avalie acesso, itens de higiene e ausência de comunicação direta com áreas de manipulação.',
+ 'i5.4': 'Inclua um cartão por sanitário e informe o uso (clientes, funcionários), o tipo (unissex, masculino, feminino) e se é adaptado para PCD. O checklist de cada um mostra onde está a não conformidade. Em galerias e shoppings o sanitário pode ser de uso comum do edifício.',
  'i5.5': 'O vestiário é para guarda de pertences e troca de uniforme; não confunda com a sala de paramentação (item 6.1).',
  'i5.6': 'A copa deve ser separada dos demais ambientes. Abra a geladeira: medicamentos, insumos ou amostras junto a alimentos são irregularidade.',
  'i5.7': 'Área de descanso separada e sem guarda de materiais. Se não existir, marque Não se aplica.',
@@ -35,7 +36,7 @@ ORIENT = {
  'i7.5': 'A balança é obrigatória dentro da sala: a pesagem de citostáticos deve ser feita na própria sala (Anexo III, 2.8). Central de pesagem não se aplica aqui.',
  'i7.6': 'Sala exclusiva, em área com baixa incidência de odores e radiação. Confira alcoômetro, balança exclusiva, inativação de vidraria e rastreabilidade das matrizes.',
  'i8.1': 'Peça os laudos de QP, QI, QO e QD e a data da última requalificação. Os registros de limpeza e troca de filtros são conferidos em cada laboratório.',
- 'i9.1': 'Faça amostragem de receitas aviadas (comuns, controladas e antimicrobianos). Marque as irregularidades encontradas; cada marca vira frase no relatório.',
+ 'i9.1': 'Faça amostragem de receitas aviadas. Abra só os tipos de receituário amostrados (antimicrobianos, GLP-1, listas A, B1, B2, C1, C2/C3, C5, eletrônico) e marque o que foi constatado; as normas são as mesmas da Drogaria, com as vedações próprias da manipulação (Portaria 344, art. 29; RDC 67, RT 5.12 e 5.13).',
  'i9.2': 'Compare a ordem de manipulação com a prescrição: fármacos, concentrações, quantidades, cálculos registrados e aprovação do farmacêutico.',
  'i9.3': 'SNGPC, balanços, livros e confronto de estoque físico com o escriturado, por amostragem.',
  'i9.4': 'Carimbo nas receitas aviadas, repetição amparada na duração do tratamento e orientação ao paciente.',
@@ -50,7 +51,7 @@ ORIENT = {
  'i11.2': 'Bimestral: teor e uniformidade de conteúdo de fórmula com fármaco igual ou inferior a 25 mg, com prioridade abaixo de 5 mg.',
  'i11.3': 'Trimestral, em rodízio: uma análise completa de formulação de cada classe do Anexo III (hormônios, antibióticos, citostáticos e controlados).',
  'i11.4': 'Semestral: água potável, com todos os parâmetros exigidos.',
- 'i11.5': 'Laboratório contratado, habilitação REBLAS e consolidação das irregularidades do monitoramento.',
+ 'i11.5': 'Laboratório contratado, habilitação REBLAS, rodízio das amostras (manipuladores, fármacos e dosagens — Anexo I, 9.2.5) e consolidação das irregularidades do monitoramento.',
  'i12.1': 'Venda remota inclui pedidos por telefone, WhatsApp, site e aplicativos. Se a farmácia não realiza, marque Não se aplica.',
  'i12.2': 'Como os manipulados são conservados e levados até o paciente, inclusive termossensíveis.',
 }
@@ -59,12 +60,18 @@ OUTRO = ('outro', 'Outro local / arranjo', '', '')
 SIT = {
  'i4.2': [('Onde fica o DML?', [
    ('sala', 'Sala própria', 'O DML é sala própria.', ''),
-   ('local', 'Local designado em outra área', 'O material de limpeza fica em local designado e identificado, dentro de outra área.', 'Confira se o local é identificado e não mistura material de limpeza com matérias-primas, embalagens ou produtos.')])],
+   ('armario', 'Armário identificado em outra área', 'O material de limpeza fica em armário identificado, dentro de outra área.', 'Confira se o armário é exclusivo e identificado e se não há matérias-primas, embalagens ou produtos junto.'),
+   ('prat', 'Prateleira ou área delimitada em outra área', 'O material de limpeza fica em prateleira ou área delimitada, dentro de outra área.', 'Confira se o local é identificado e não mistura material de limpeza com matérias-primas, embalagens ou produtos.'),
+   ('nao', 'Sem local designado', 'Não há local designado para o material de limpeza.', 'Marque “Não atende” no primeiro ponto do checklist do DML (Anexo I, 4.10).')])],
  'i5.1': [('Onde fica a guarda das preparações com controlados?', [
    ('disp', 'Na área de dispensação', 'As preparações com substâncias controladas ficam guardadas na área de dispensação.', ''),
    ('interna', 'Em área interna', 'As preparações com substâncias controladas ficam guardadas em área interna.', 'Avalie as condições de guarda no local indicado; registre em Anotações qual é a área.'),
    ('adjacente', 'Em sala adjacente', 'As preparações com substâncias controladas ficam guardadas em sala adjacente à dispensação.', 'Avalie as condições de guarda no local indicado.'),
    ('nao', 'Não há preparações com controlados', 'Não há preparações com substâncias controladas aguardando dispensação.', 'Marque Não se aplica na pergunta sobre armário com chave.')])],
+ 'i4.4': [('Como é o abrigo externo?', [
+   ('proprio', 'Abrigo próprio da farmácia', 'A farmácia dispõe de abrigo externo próprio.', ''),
+   ('comum', 'Abrigo do condomínio, galeria ou shopping', 'Os resíduos vão para o abrigo externo do condomínio/edifício.', 'Avalie o abrigo usado pela farmácia; registre em Anotações quem o administra.'),
+   ('nao', 'Sem abrigo externo (entrega direta à coleta)', 'Não há abrigo externo; os resíduos são entregues diretamente à coleta.', 'Admissível para pequenos geradores quando o fluxo de coleta justifica. Marque Não se aplica no item, se for o caso.')])],
  'i5.4': [('Onde ficam os sanitários?', [
    ('proprio', 'Dentro da farmácia', 'Os sanitários ficam dentro da farmácia.', ''),
    ('comum', 'Área comum do edifício (galeria, shopping)', 'Os sanitários são de uso comum do edifício.', 'Avalie acesso e itens de higiene no sanitário comum usado pelos funcionários.')])],
@@ -108,7 +115,7 @@ SIT['i12.2'] = [('Como é feita a entrega ao paciente?', [
 
 # Início da frase do relatório quando a opção escolhida é "Outro".
 PRE = {
- 'i4.2': 'O material de limpeza fica em', 'i5.1': 'As preparações com substâncias controladas ficam guardadas em',
+ 'i4.2': 'O material de limpeza fica em', 'i4.4': 'Os resíduos aguardam a coleta externa em', 'i5.1': 'As preparações com substâncias controladas ficam guardadas em',
  'i5.4': 'Os sanitários ficam em', 'i5.6': 'As refeições são feitas em', 'i5.8': 'As substâncias sujeitas a controle especial ficam em',
  'i5.9': 'A lavagem de embalagens e utensílios é feita em', 'i6.1': 'A paramentação é feita em', 'i6.2': 'O controle de qualidade funciona em',
  'i6.3': 'A pesagem é feita em', 'i6.4': 'As pesagens deste laboratório são feitas em', 'i6.5': 'As pesagens deste laboratório são feitas em',

@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-3",
+  "versao": "20260925-4",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Para saber mais ampliado: SNCR e receituário eletrônico (RDC 873/2024 e RDC 1.000/2025), validade das receitas, prazos de guarda de documentos, fator de correção, ensaios de matéria-prima, suplementos técnicos da OMS e guias da Anvisa. Drogaria: retirada a exigência de envio à vigilância em 72 h de notificação de outra UF, revogada pela RDC 873/2024."
+  "notas": "Manipulação: sanitários por unidade (uso, tipo, PCD e checklist próprio); checklists de área de lavagem, DML, conteúdo do PGRSS, registros e conteúdo do treinamento, resíduos químicos perigosos, abrigo temporário, novo item de abrigo externo e rodízio do monitoramento; amostragem de receitas no padrão da Drogaria, por tipo de receituário, e perguntas sobre substituição e transformação de industrializados (RT 5.12 e 5.13)."
 }

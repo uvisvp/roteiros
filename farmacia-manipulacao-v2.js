@@ -6,7 +6,7 @@
    Componentes gravam em state.v2 por caminho: data-v2="grupo|escopo|campo".
    ================================================================ */
 const V2=APP_DATA.v2;
-const V2_KEYS=['sit','sitout','itemNA','itemNAset','irr','eq','eqExtra','plan','obs','chips','fields','tables','rast','veg','emb','mon','out'];
+const V2_KEYS=['sit','sitout','itemNA','itemNAset','irr','eq','eqExtra','plan','obs','chips','fields','tables','rast','veg','emb','mon','out','chk','unid'];
 function v2State(){state.v2=state.v2||{};for(const k of V2_KEYS)state.v2[k]=state.v2[k]||{};return state.v2}
 function v2Get(path){let o=v2State();for(const k of path){if(o==null)return undefined;o=o[k]}return o}
 function v2Set(path,val){let o=v2State();for(let i=0;i<path.length-1;i++){o[path[i]]=o[path[i]]&&typeof o[path[i]]==='object'?o[path[i]]:{};o=o[path[i]]}if(val===undefined||val===''||val===false)delete o[path[path.length-1]];else o[path[path.length-1]]=val}
@@ -63,8 +63,30 @@ function v2Ncl(scope,c){
  const n=items.filter(x=>marks[x.id]==='I').length+(marks['x-'+kind]==='I'?1:0);
  const body='<p class="small muted">'+esc(c.sub||'')+'</p>'+items.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref)+'</small></div>'+v2Tog(['irr',scope,x.id].join('|'),IRR_OPTS,marks[x.id])+'</div>').join('')
   +'<div class="v2-row"><div><input data-v2="'+v2p('out',scope,kind)+'" value="'+esc(v2Val('out',scope,kind))+'" placeholder="Outra irregularidade — descrever"></div>'+v2Tog(['irr',scope,'x-'+kind].join('|'),[IRR_OPTS[0]],marks['x-'+kind])+'</div>'
-  +'<div class="toolrow">'+v2Photo(scope,kind,{amb:'Irregularidades do ambiente',reg:'Registros do laboratório',presc:'Receitas',rast:'Processo',mon:'Monitoramento'}[kind]||'Fotos')+'</div>';
+  +'<div class="toolrow">'+v2Photo(scope,kind,{amb:'Irregularidades do ambiente',reg:'Registros do laboratório',presc:'Receitas',rast:'Processo',mon:'Monitoramento'}[kind]||c.title||'Fotos')+'</div>';
  return v2Box(c.title,n?n+' marcada'+(n>1?'s':''):'nenhuma marcada',body,'v2-irr'+(n?' has':''));
+}
+/* Checklist Atende / Não atende / N/A: um ponto por linha; “Não atende” em ponto com citação vira irregularidade. */
+const CHK_OPTS=[['C','Atende','ok-on'],['NC','Não atende','irr-on'],['NA','N/A','na-on']];
+function v2ChkRows(base,items,marks){return items.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref||'Informativo — não gera irregularidade')+'</small></div>'+v2Tog(base+'|'+x.id,CHK_OPTS,marks[x.id])+'</div>').join('')}
+function v2ChkBadge(items,marks){const f=items.filter(x=>marks[x.id]).length,n=items.filter(x=>marks[x.id]==='NC').length;return f?(n?n+' não atende'+(n>1?'m':''):'sem não conformidade')+' · '+f+'/'+items.length:items.length+' pontos'}
+function v2Chk(scope,c){const marks=v2Get(['chk',scope,c.key])||{};
+ return v2Box(c.title,v2ChkBadge(c.items,marks),'<p class="small muted">'+esc(c.sub||'')+'</p>'+v2ChkRows(['chk',scope,c.key].join('|'),c.items,marks)+'<div class="toolrow">'+v2Photo(scope,'chk-'+c.key,c.title)+'</div>','v2-chk'+(Object.values(marks).includes('NC')?' has':''));
+}
+const UNID_USO=[['','— uso —'],['clientes','Clientes'],['funcionarios','Funcionários'],['ambos','Clientes e funcionários']],UNID_TIPO=[['','— tipo —'],['unissex','Unissex'],['masculino','Masculino'],['feminino','Feminino']];
+function v2Sel(path,opts){const cur=v2Get(path.split('|'))||'';return '<select data-v2="'+esc(path)+'">'+opts.map(([v,l])=>'<option value="'+esc(v)+'"'+(cur===v?' selected':'')+'>'+esc(l)+'</option>').join('')+'</select>'}
+function v2UnidNome(d,i){const u={clientes:'clientes',funcionarios:'funcionários',ambos:'clientes e funcionários'}[d.uso],t=d.tipo;return 'Sanitário '+(i+1)+(u||t||d.pcd?' — '+[u&&('de '+u),t,d.pcd&&'adaptado PCD'].filter(Boolean).join(', '):'')}
+function v2UnidLista(scope,c){const o=v2Get(['unid',scope,c.key])||{};const n=Math.max(1,...Object.keys(o).map(k=>Number(k)+1));return Array.from({length:n},(_,i)=>o[i]||{}).map((d,i)=>[i,d]).filter(([,d])=>!d.del)}
+function v2Unid(scope,c){
+ const lista=v2UnidLista(scope,c);
+ const rows=lista.map(([i,d])=>{const base=['unid',scope,c.key,i].join('|'),marks=d.chk||{},n=Object.values(marks).filter(v=>v==='NC').length;
+  return '<details class="v2-eq" data-med-fechado="1" data-v2k="'+esc('unid:'+scope+':'+i)+'"><summary><b>'+esc(v2UnidNome(d,lista.findIndex(x=>x[0]===i)))+'</b><span class="tag'+(n?' bad':'')+'">'+v2ChkBadge(c.items,marks)+'</span></summary><div class="v2-in">'
+   +'<div class="v2-grid"><label>Uso'+v2Sel(base+'|uso',UNID_USO)+'</label><label>Tipo'+v2Sel(base+'|tipo',UNID_TIPO)+'</label>'+v2Input(base+'|local','Localização','','text','Ex.: fundos, área comum do shopping')+'</div>'
+   +v2Check(base+'|pcd','Adaptado para pessoa com deficiência (PCD)')
+   +v2ChkRows(base+'|chk',c.items,marks)
+   +'<div class="v2-row"><div><input data-v2="'+esc(base+'|outra')+'" value="'+esc(d.outra||'')+'" placeholder="Outra não conformidade — descrever"></div>'+v2Tog(base+'|xI',[IRR_OPTS[0]],d.xI)+'</div>'
+   +'<div class="toolrow">'+v2Photo(scope,'unid-'+c.key+'-'+i,'Fotos',v2ItemTitulo(scope)+' · Sanitário '+(i+1))+'<button type="button" class="btn" data-v2-delunid="'+esc(scope+'|'+c.key+'|'+i)+'">Remover este sanitário</button></div></div></details>'}).join('');
+ return v2Box(c.title,lista.length+' sanitário'+(lista.length>1?'s':''),'<p class="small muted">Um cartão por sanitário. O checklist de cada um indica onde está a não conformidade.</p>'+rows+'<div class="toolrow"><button type="button" class="btn" data-v2-addunid="'+esc(scope+'|'+c.key)+'">+ Incluir sanitário</button></div>','v2-eqbox',true);
 }
 function v2Equip(scope,c){
  const extra=v2Get(['eqExtra',scope])||[],names=c.names.concat(extra),irr=V2.lists.eq;
@@ -191,6 +213,8 @@ function manV2(f,item){
   case 'doc':return '<div class="toolrow">'+c.labels.map(l=>'<button type="button" class="read-btn" data-reader="generico" data-target="'+esc('generic:'+scope+':'+v2Slug(l))+'">'+esc(l)+'</button>').join('')+'</div>';
   case 'ncl':return v2Ncl(scope,c);
   case 'equip':return v2Equip(scope,c);
+  case 'chk':return v2Chk(scope,c);
+  case 'unid':return v2Unid(scope,c);
   case 'plan':return v2Plan();
   case 'table':return v2Table(scope,c);
   case 'rast':return v2Rast(scope,c);
@@ -207,6 +231,11 @@ function v2KeepOpen(){return [...document.querySelectorAll('#cardPanel details[o
 function v2Reopen(list){document.querySelectorAll('#cardPanel details[data-v2k]').forEach(d=>{if(list.includes(d.dataset.v2k))d.open=true})}
 /* Atualiza o selo do quadro sem redesenhar a tela (a lista continua aberta). */
 function v2Badge(btn){
+ if(btn.dataset.v2t&&(btn.dataset.v2t.startsWith('chk|')||btn.dataset.v2t.startsWith('unid|'))){const p=btn.dataset.v2t.split('|');p.pop();p.pop();const marks=v2Get(p)||{};
+  const holder=btn.dataset.v2t.startsWith('unid|')?btn.closest('.v2-eq'):btn.closest('.v2-box');const tag=holder&&holder.querySelector(':scope>summary .tag');
+  if(tag){const rows=[...holder.querySelectorAll(':scope>.v2-in>.v2-row [data-v2t$="|C"]')].filter(b=>/^(chk|unid)\|/.test(b.dataset.v2t));const tot=rows.length,f=rows.filter(b=>b.parentNode.querySelector('.ok-on,.irr-on,.na-on')).length,n=rows.filter(b=>b.parentNode.querySelector('.irr-on')).length;
+   tag.textContent=f?(n?n+' não atende'+(n>1?'m':''):'sem não conformidade')+' · '+f+'/'+tot:tot+' pontos';tag.classList.toggle('bad',!!n);holder.classList.toggle('has',!!n)}
+  return}
  const eq=btn.closest('.v2-eq');
  if(eq){const tag=eq.querySelector(':scope>summary .tag'),n=eq.querySelectorAll('.v2-in .irr-on:not([data-v2t$="|has|NC"])').length,has=eq.querySelector('[data-v2t$="|has|C"].ok-on,[data-v2t$="|has|NC"].irr-on,[data-v2t$="|has|NA"].na-on');
   const hv=has?has.dataset.v2t.split('|').pop():'';tag.textContent=hv==='NC'?'não possui':n?n+' irregularidade'+(n>1?'s':''):hv==='C'?'sem irregularidades':'não conferido';tag.classList.toggle('bad',!!n||hv==='NC');return}
@@ -215,7 +244,7 @@ function v2Badge(btn){
  if(box.querySelector('[data-v2t^="plan|"]')){const nc=box.querySelectorAll('.irr-on').length,pa=box.querySelectorAll('.par-on').length,tot=box.querySelectorAll('.v2-row').length;tag.textContent=(nc||pa)?(nc?nc+' não apresentada'+(nc>1?'s':''):'')+(nc&&pa?' · ':'')+(pa?pa+' parcial'+(pa>1?'is':''):''):tot+' itens'}
 }
 document.addEventListener('click',e=>{
- const t=e.target.closest&&e.target.closest('[data-v2t],[data-v2-addeq],[data-v2-addrow],[data-v2-addins],[data-v2-itemna]');if(!t)return;
+ const t=e.target.closest&&e.target.closest('[data-v2t],[data-v2-addeq],[data-v2-addrow],[data-v2-addins],[data-v2-itemna],[data-v2-addunid],[data-v2-delunid]');if(!t)return;
  if(t.dataset.v2Itemna){const iid=t.dataset.v2Itemna,v=v2State(),loc=v2Secao(iid),ids=loc?loc.s.requirements.map(r=>r.id):[];
   if(v.itemNA[iid]){for(const id of (v.itemNAset[iid]||[]))if(state.responses[id]&&state.responses[id].status==='NA')state.responses[id].status='';delete v.itemNA[iid];delete v.itemNAset[iid]}
   else{const set=[];for(const id of ids){const a=state.responses[id]=state.responses[id]||{};if(!a.status){a.status='NA';set.push(id)}}v.itemNA[iid]=true;v.itemNAset[iid]=set}
@@ -227,6 +256,8 @@ document.addEventListener('click',e=>{
   v2Badge(t);save();v2RefreshPrev();return}
  const open=v2KeepOpen();
  if(t.dataset.v2Addeq){const nm=(prompt('Nome do equipamento')||'').trim();if(!nm)return;const s=t.dataset.v2Addeq;const a=v2Get(['eqExtra',s])||[];if(!a.includes(nm))a.push(nm);v2Set(['eqExtra',s],a);open.push('eq:'+s+':'+nm)}
+ else if(t.dataset.v2Addunid){const[s,k]=t.dataset.v2Addunid.split('|');const o=v2Get(['unid',s,k])||{};const n=Math.max(1,...Object.keys(o).map(x=>Number(x)+1));if(!o[0])v2Set(['unid',s,k,0,'novo'],true);v2Set(['unid',s,k,n,'novo'],true);open.push('unid:'+s+':'+n)}
+ else if(t.dataset.v2Delunid){const[s,k,i]=t.dataset.v2Delunid.split('|');if(!confirm('Remover este sanitário e as marcações dele?'))return;v2Set(['unid',s,k,i],{del:true})}
  else if(t.dataset.v2Addrow){const[k,n]=t.dataset.v2Addrow.split('|');v2Set(['tables',k,n,0],' ')}
  else if(t.dataset.v2Addins){const[s,n]=t.dataset.v2Addins.split('|');v2Set(['rast',s,'ins',n,'n'],' ')}
  save();v2Rerender();v2Reopen(open);
@@ -302,6 +333,16 @@ function v2Ne(o){return Object.values(o||{}).some(v=>v&&typeof v==='object'?v2Ne
 function v2ItemTitulo(iid){for(const[n,c]of Object.entries(APP_DATA.cards))for(const s of c.sections)if(s.item===iid)return s.itemNum+' '+s.itemTitle;return iid}
 function v2RefTxt(refs){return (refs||[]).map(x=>x.law+', '+String(x.device).replace(' · Item ',', item ').replace(' · ',', ')).join('; ')}
 /* Parágrafo(s) de um item no relatório. Não se aplica é omitido. */
+/* Texto do checklist: pontos atendidos em lista; cada “Não atende” com citação vira irregularidade própria. */
+function v2ChkTexto(iid,titulo,items,m,addIrr,curto){
+ const ok=items.filter(x=>m[x.id]==='C'),nc=items.filter(x=>m[x.id]==='NC'&&!x.info),inf=items.filter(x=>m[x.id]==='NC'&&x.info);if(!ok.length&&!nc.length&&!inf.length)return '';
+ const ctx=iid.includes(' — ')?v2ItemTitulo(iid.split(' — ')[0])+' — '+iid.split(' — ')[1]:v2ItemTitulo(iid);
+ const cap=t=>t.charAt(0).toUpperCase()+t.slice(1);const out=[];
+ if(ok.length)out.push((curto?'Atende: ':'Atende aos pontos: ')+esc(v2Join(ok.map(x=>v2Lc(x.t))))+'.');
+ nc.forEach(x=>{const k=addIrr(ctx+': '+x.neg+'.',v2Cite(x.ref));out.push(esc(cap(x.neg))+' (irregularidade '+k+').')});
+ inf.forEach(x=>out.push(esc(cap(x.neg))+'.'));
+ return out.join(' ');
+}
 function v2ItemCorpo(n,card,s,addIrr){
  const iid=s.item,v=v2State(),refTxt=v2RefTxt;if(v.itemNA[iid])return '';
  let sitTxt=[];(V2.sit[iid]||[]).forEach((sq,qi)=>{const k=(v.sit[iid]||{})[qi];if(!k)return;const o=sq.opts.find(x=>x[0]===k);if(!o)return;if(k==='outro'){const t=((v.sitout[iid]||{})[qi]||'').trim();if(t)sitTxt.push(esc((sq.pre?sq.pre+' ':sq.q.replace(/\?$/,'')+': ')+t.replace(/\.$/,'')+'.'))}else sitTxt.push(esc(o[2]))});
@@ -318,9 +359,17 @@ function v2ItemCorpo(n,card,s,addIrr){
    if(e.fn==='renderTraceability'){const ins=(state.insumos||[]).filter(v2Ne);if(ins.length)corpo+=medTable(ins.map(x=>[x.nome||'',x.lote||'',x.fornecedor||'',x.coa||'',x.obs||'']),['Matéria-prima','Lote','Fornecedor','Certificado','Observações'])}
    if(!comp)continue;
    if(comp.t==='ncl'){const marks=v.irr[iid]||{},items=v2ListItems(comp.lists).filter(x=>marks[x.id]==='I');const out=v.out[iid]||{};
-    const lst=items.map(x=>{const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return esc(v2Lc(x.t))+' (irregularidade '+k+')'});
+    const rec=/^p(?!resc)/.test(comp.kind);const lst=items.map(x=>{const k=addIrr(v2ItemTitulo(iid)+': '+v2Lc(x.t)+'.',v2Cite(x.ref));return esc(v2Lc(rec?x.t.replace(/^[A-C]\d?( tópico)?: /,''):x.t))+' (irregularidade '+k+')'});
     if(marks['x-'+comp.kind]==='I'&&out[comp.kind]){const k=addIrr(v2ItemTitulo(iid)+': '+out[comp.kind]+'.','');lst.push(esc(out[comp.kind])+' (irregularidade '+k+')')}
     if(lst.length)corpo+='<p>'+(comp.kind==='reg'?'Registros não apresentados: ':comp.kind==='amb'?'Irregularidades gerais do ambiente: ':esc(comp.title)+': ')+lst.join('; ')+'.</p>'}
+   if(comp.t==='chk'){const m=((v.chk[iid]||{})[comp.key])||{};const tx=v2ChkTexto(iid,comp.title,comp.items,m,addIrr);if(tx)corpo+='<p><b>'+esc(comp.title)+'.</b> '+tx+'</p>'}
+   if(comp.t==='unid'){const lista=v2UnidLista(iid,comp).filter(([,d])=>v2Ne(Object.assign({},d,{novo:''})));if(lista.length){const rows=[];
+     const conta={};lista.forEach(([,d])=>{const u={clientes:'de clientes',funcionarios:'de funcionários',ambos:'de clientes e funcionários'}[d.uso]||'de uso não informado';conta[u]=(conta[u]||0)+1});
+     corpo+='<p>Foram verificados '+lista.length+' sanitário'+(lista.length>1?'s':'')+': '+esc(v2Join(Object.entries(conta).map(([u,q])=>q+' '+u)))+'.</p>';
+     lista.forEach(([i,d],k)=>{const nome='Sanitário '+(k+1);const car=[{clientes:'Clientes',funcionarios:'Funcionários',ambos:'Clientes e funcionários'}[d.uso],d.tipo&&d.tipo.charAt(0).toUpperCase()+d.tipo.slice(1),d.pcd&&'adaptado PCD',d.local].filter(Boolean).join(' · ')||'—';
+      let sit=v2ChkTexto(iid+' — '+nome,'',comp.items,d.chk||{},addIrr,true);if(d.xI==='I'&&d.outra){const kk=addIrr(v2ItemTitulo(iid)+' — '+nome+': '+d.outra.trim().replace(/\.$/,'')+'.','');sit+=(sit?' ':'')+esc(d.outra.trim().replace(/\.$/,''))+' (irregularidade '+kk+').'}
+      rows.push([nome,car,sit||'Não conferido'])});
+     corpo+=medTable(rows,['Sanitário','Caracterização','Situação'])}}
    if(comp.t==='equip'){const names=comp.names.concat(v.eqExtra[iid]||[]),rows=[];
     for(const nm of names){const d=(v.eq[iid]||{})[nm];if(!d||!v2Ne(d))continue;const id=[d.marca,d.serie&&('série '+d.serie),d.cal&&('calibração até '+manData(d.cal))].filter(Boolean).join(' · ');
      const ir=V2.lists.eq.filter(x=>(d.irr||{})[x.id]==='I');let sit;

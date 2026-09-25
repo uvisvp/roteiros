@@ -39,6 +39,8 @@ NEW_IDS = {
     'Apresentou POP de venda remota?': 'n042',
     'A venda remota de controlados e/ou antimicrobianos segue a legislação vigente?': 'n043',
     'A entrega é feita por meio próprio ou transportadora contratada, com condições que preservem o produto?': 'n044',
+    'As prescrições aviadas são de preparações magistrais, sem manipulação em substituição a medicamento industrializado prescrito (referência, genérico ou similar)?': 'n050',
+    'A transformação de especialidade farmacêutica, quando ocorre, é excepcional (matéria-prima indisponível e sem especialidade na dose ou forma necessária) e justificada tecnicamente?': 'n051',
 }
 # A pergunta "realiza venda remota?" virou seleção na Caracterização.
 DROP_TEXT = {'O estabelecimento realiza venda remota (solicitação por telefone, internet ou aplicativo)?'}
@@ -159,15 +161,22 @@ SITDATA = {k: [{'q': q, 'pre': PRE.get(k, ''), 'opts': [list(o) for o in opts] +
 def lst(items, prefix):
     return [{'id': '%s%02d' % (prefix, i + 1), 't': t, 'ref': r} for i, (t, r) in enumerate(items)]
 
+MON_DROP = {'Amostras sem rodízio de manipuladores, fármacos e dosagens'}  # virou o checklist de rodízio (11.5)
 LISTS = {'amb': lst(estrutura.G_AMB, 'a'), 'lab': lst(estrutura.G_LAB_EXTRA, 'l'), 'reg': lst(estrutura.REG_LAB, 'g'),
-         'eq': lst(estrutura.EQ_IRR, 'e'), 'presc': lst(estrutura.PRESC_IRR, 'p'), 'rast': lst(estrutura.RAST_IRR, 'r'),
-         'mon': lst(estrutura.MON_IRR, 'm')}
+         'eq': lst(estrutura.EQ_IRR, 'e'), 'presc': [x for x in lst(estrutura.PRESC_IRR, 'p') if x['t'] not in estrutura.PRESC_DROP],
+         'rast': lst(estrutura.RAST_IRR, 'r'), 'mon': [x for x in lst(estrutura.MON_IRR, 'm') if x['t'] not in MON_DROP]}
+for k, _, it in estrutura.RECEITAS:
+    LISTS[k] = lst(it, k)
+TITLES = {k: t for k, t, _ in estrutura.RECEITAS}
 LIST_OF = {id(estrutura.G_AMB): 'amb', id(estrutura.REG_LAB): 'reg', id(estrutura.PRESC_IRR): 'presc',
            id(estrutura.RAST_IRR): 'rast', id(estrutura.MON_IRR): 'mon'}
 for c in cards.values():
     for e in c['extraItems']:
         comp = e.get('c')
         if not comp:
+            continue
+        if comp['t'] == 'ncl' and comp.get('key'):
+            comp.pop('items'); comp['lists'] = [comp['key']]; comp['kind'] = comp.pop('key')
             continue
         if comp['t'] == 'ncl':
             n_amb = len(estrutura.G_AMB)
