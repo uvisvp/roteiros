@@ -84,7 +84,7 @@
       +q('alteracao_estrutural','Houve alteração significativa das áreas físicas desde a última inspeção?',true)
       +'<label class="field"><span>Considerações gerais adicionais</span><textarea data-s1-path="meta.consideracoes_gerais" rows="4">'+esc(m.consideracoes_gerais||'')+'</textarea></label>'
       +(asoList.length?'<p class="muted">ASOs adicionados: '+asoList.length+'.</p>':'')
-      +'<h3>Documentos apresentados / lidos</h3>'+documentList(state)+'</section></div>';
+      +'<h3>Documentos apresentados</h3>'+documentList(state)+'</section></div>';
   }
 
   function ensureDialog(){let d=document.getElementById('drogaria-section1-dialog');if(d)return d;d=document.createElement('dialog');d.id='drogaria-section1-dialog';d.className='med-tools-dialog';document.body.append(d);return d;}

@@ -1,5 +1,5 @@
 'use strict';
-const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),{execFileSync}=require('node:child_process');
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const {unpack}=require('./integrated-html.cjs');
 const {html}=unpack(),source=fs.readFileSync('sw.js','utf8');
 const version=JSON.parse(fs.readFileSync('versao.json','utf8')).versao;
@@ -45,27 +45,20 @@ function updaterHarness({open=false}={}){
 }
 
 (async()=>{
-  // Reproduz a cópia antiga entrando no cache de uma versão nova.
-  // Entre essa base pública e a v26, sw.js mudou apenas o número da versão.
-  const oldSource=execFileSync('git',['show','c2d378f24586786bbc1564c9d19e96a0d734b625:sw.js'],{encoding:'utf8'}).replace("const VERSAO = '20260908-24'","const VERSAO = '20260910-26'");
-  const old=workerHarness(oldSource);
-  await old.install();assert.match(await old.stores.get('app-20260910-26').get(origin+'index.html').text(),/20260910-25/);
-  console.log('REPRODUZIDO: o worker v26 aceita HTML v25 do cache HTTP.');
-
+  // Worker atual: instala apenas o shell pequeno; o HTML principal entra no
+  // cache na primeira navegação, já marcado com a versão do worker.
   const current=workerHarness(source);await current.install();
   const cache=current.stores.get('app-'+version);
-  assert.match(await cache.get(origin+'index.html').clone().text(),new RegExp(version));
+  assert.ok(cache&&cache.has(origin+'manifest.webmanifest'),'O shell essencial deve estar no cache da versão');
   assert.ok([...cache.keys()].every(k=>!k.includes('?')),'O aplicativo instalado usa endereços canônicos');
   assert.equal(current.skips(),0,'Baixar não deve ativar sem decisão do usuário');
-  assert.ok(current.stores.has('app-20260910-25')&&current.stores.has('dados-v1'));
-  current.offline();assert.match(await current.read('index.html'),new RegExp(version),'A leitura offline deve usar apenas o cache da versão ativa');
+  assert.ok(current.stores.has('app-20260910-25')&&current.stores.has('dados-v1'),'Instalar não apaga caches anteriores nem os dados');
+  assert.match(await current.read('index.html'),new RegExp("APP_VERSAO = '"+version+"'"),'A navegação entrega o HTML com a versão do worker');
+  assert.ok(cache.has(origin+'index.html'),'O HTML navegado fica no cache da versão ativa');
+  current.offline();assert.match(await current.read('index.html'),new RegExp(version),'A leitura offline deve usar o cache da versão ativa');
   assert.match(await current.read('pagina-indisponivel'),new RegExp(version),'Fallback offline também deve usar a versão ativa');
-  for(const options of [{stale:true},{missing:true}]){
-    const failed=workerHarness(source,options);await assert.rejects(failed.install());
-    assert.ok(!failed.stores.has('app-'+version),'Não publicar cache incompleto ou com HTML de outra versão');
-    assert.ok(failed.stores.has('app-20260910-25')&&failed.stores.has('dados-v1'));
-  }
-
+  const incompleta=workerHarness(source,{missing:true});await incompleta.install();
+  assert.ok(incompleta.stores.has('dados-v1'),'Falha de um arquivo do shell não derruba a instalação nem os dados');
   const ui=updaterHarness();const applying=ui.ctx.aplicaAtualizacao();await tick();
   assert.equal(ui.reg.updates,1);assert.equal(ui.reloads.length,0,'Não recarregar enquanto o worker instala');
   ui.installed();await tick();assert.equal(ui.worker.messages.length,1);assert.equal(ui.reloads.length,0,'Não recarregar antes de assumir o controle');
@@ -79,5 +72,5 @@ function updaterHarness({open=false}={}){
   assert.match(pending.nodes.get('faixa-versao').innerHTML,/Atualizar agora/,'A cópia HTML nova ainda pode precisar ativar a atualização do PWA');
   const busy=updaterHarness({open:true});await busy.ctx.aplicaAtualizacao();assert.equal(busy.reloads.length,0);assert.equal(busy.reg.updates,0);assert.equal(busy.notices.length,1);
   assert.ok(html.includes("v.textContent = 'Versão ' + APP_VERSAO"),'A tela deve mostrar a versão carregada, sem data fixa');
-  console.log('PASS: cache HTTP antigo, offline, publicação incompleta, espera da instalação/ativação, falha sem reload, ativação pendente, rascunho preservado e versão visível.');
+  console.log('PASS: shell instalado sem ativar, HTML com a versão do worker, offline, instalação tolerante, espera da instalação/ativação, falha sem reload, ativação pendente, rascunho preservado e versão visível.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

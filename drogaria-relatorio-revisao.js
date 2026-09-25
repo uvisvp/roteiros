@@ -71,6 +71,7 @@
     try{if(typeof api.render==='function')api.render()}catch(e){}
     return true;
   }
-  var tent=0;(function vai(){if(instalar())return;if(++tent<400)setTimeout(vai,25)})();
-  window.DrogariaRelatorioRevisao={revisar:revisar};
+  var tent=0;function vai(){if(instalar())return;if(++tent<400)setTimeout(vai,25)}vai();
+  try{document.addEventListener('DOMContentLoaded',function(){instalar()})}catch(e){}
+  window.DrogariaRelatorioRevisao={revisar:revisar,instalar:instalar};
 })();

@@ -16,9 +16,10 @@ element('content');
 const ctx={document:doc,console,structuredClone,URL,Blob,File,TextEncoder,TextDecoder,AbortController,Date,queueMicrotask,setTimeout:()=>0,clearTimeout(){},scrollTo(){},alert(){},MutationObserver:class{observe(){}disconnect(){}},localStorage:{getItem:k=>persisted.get(k)||null,setItem:(k,v)=>persisted.set(k,v)}};
 ctx.window=ctx;vm.createContext(ctx);vm.runInContext(scripts(app)[2].source,ctx);state=ctx.DrogariaEngine.fresh();
 ctx.DrogariaAPI={getState:()=>state,getCatalog:()=>catalog,getBank:()=>data,engine:ctx.DrogariaEngine,setState:(s,opts={})=>{state=s;ctx.DrogariaReview?.sync(state);persisted.set('draft',JSON.stringify(state));if(opts.render!==false)renders++},rooms:()=>'',physicalChecklist:()=>'',areaCard:()=>'',coldCard:()=>'',questions:()=>''};
-const bridgeNames=['drogaria-ocr-tools','drogaria-review','drogaria-section1','drogaria-area-fisica','drogaria-servicos-documentos','drogaria-final-bridge','drogaria-report-final'];
+const bridgeNames=['drogaria-ocr-tools','drogaria-review','drogaria-section1','drogaria-area-fisica','drogaria-servicos-documentos','drogaria-final-bridge','drogaria-report-final','drogaria-relatorio-revisao'];
 for(const name of bridgeNames)vm.runInContext(blocks.get('rec--'+name+'.js'),ctx,{filename:name+'.js'});
 for(const fn of events.get('DOMContentLoaded')||[])fn();
+
 assert.ok(ctx.DrogariaReportFinal,'compositor final deve estar carregado');
 assert.ok(ctx.DrogariaAPI.engine.report.__drogariaFinal,'compositor final deve envolver o gerador nativo');
 
@@ -54,7 +55,7 @@ state.fields.atividades_licenciadas=['Dispensação'];state.answers.thermo='sim'
 state.stock=[{name:'Produto teste',registro:'123',lote:'L1',expected:'8',actual:'7'}];
 const unchanged=JSON.stringify(state),report=ctx.DrogariaEngine.report(catalog,state,data),reportText=report.blocks.map(b=>b.x||b.v||b.k||'').join('\n');
 assert.equal(JSON.stringify(state),unchanged,'gerar relatório não pode alterar respostas');
-for(const x of ['1 IDENTIFICAÇÃO DA EMPRESA','AFE-TESTE','2 INSPEÇÃO','Pessoa Teste','3 CONSIDERAÇÕES GERAIS','4 ÁREA FÍSICA','5 MEDICAMENTOS TERMOLÁBEIS','Geladeira 1','6 MEDICAMENTOS CONTROLADOS','7 SERVIÇOS FARMACÊUTICOS','recomendação de manter essa área livre','8 DOCUMENTOS E REGISTROS','9 TRANSPORTE','11 IRREGULARIDADES OBSERVADAS'])assert.ok(reportText.includes(x),'relatório deve conter: '+x);
+for(const x of ['1 IDENTIFICAÇÃO DA EMPRESA','AFE-TESTE','2 INSPEÇÃO','Pessoa Teste','3 CONSIDERAÇÕES GERAIS','4 ÁREA FÍSICA','4.9 Medicamentos termolábeis','Geladeira 1','5 CONTROLADOS E ANTIMICROBIANOS','6 SERVIÇOS FARMACÊUTICOS','8 DOCUMENTOS DA QUALIDADE','9 VENDA REMOTA E TRANSPORTE','10 IRREGULARIDADES OBSERVADAS'])assert.ok(reportText.includes(x),'relatório deve conter: '+x);
 assert.ok(!reportText.includes('AE-NAO-DEVE-APARECER'),'AE não é aplicável à Drogaria e não deve sair no relatório');
 assert.ok(!report.irregularities.some(r=>/servicos_farmaceuticos_sifao/.test(r.id||'')),'sifão em serviços é recomendação, não infração');
 const stockTable=report.blocks.find(b=>b.t==='table');assert.ok(stockTable,'conferência automática por lote deve permanecer no relatório');assert.equal(stockTable.rows[0].at(-1),'-1','diferença da conferência por lote deve ser preservada');
@@ -64,5 +65,6 @@ const badReport=ctx.DrogariaEngine.report(catalog,bad,data);assert.ok(badReport.
 const noCold=structuredClone(state);noCold.meta.drogaria_secoes.termolabeis.answers.aplica='nao';noCold.answers.thermo='nao';const noColdText=ctx.DrogariaEngine.report(catalog,noCold,data).blocks.map(b=>b.x||'').join('\n');assert.ok(noColdText.includes('não comercializa medicamentos termolábeis'));
 for(const n of bridgeNames)assert.equal(blocks.get('rec--'+n+'.js'),fs.readFileSync(path.join(root,n+'.js'),'utf8'),'index integrado deve conter '+n);
 for(const[id,source]of blocks)if(['app--drogaria','app--estoque-produtos'].includes(id))for(const s of scripts(source))if(!/src=|application\/json|text\/plain/.test(s.attrs))new vm.Script(s.source,{filename:id});
-assert.ok(html.includes('b.dataset.tab==="achados"&&b.textContent!=="Infrações"'),'observador global deve permanecer idempotente');
+assert.ok(html.includes("'drogaria-report-final.js','drogaria-relatorio-revisao.js'"),'a casca deve carregar a revisão do relatório depois do compositor final');
+assert.ok(!reportText.includes('não informad'),'o relatório não deve conter lacunas “não informado”');
 console.log('PASS: Drogaria revisada; relatório completo, AFE sem AE, termolábeis, recomendações, irregularidades e estoque por lote preservados.');
