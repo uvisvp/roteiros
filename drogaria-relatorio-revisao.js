@@ -75,3 +75,19 @@
   try{document.addEventListener('DOMContentLoaded',function(){instalar()})}catch(e){}
   window.DrogariaRelatorioRevisao={revisar:revisar,instalar:instalar};
 })();
+
+/* Para saber mais (Drogaria): caixa de conceitos no topo do item ou da seção aberta. */
+(function(){
+  'use strict';
+  function aplicar(){
+    if(!window.SaberMais)return;
+    var alvo=document.querySelector('#content .drg-item-screen')||document.querySelector('#content .sd-panel')||document.querySelector('#content .fb-panel');
+    if(!alvo||alvo.querySelector(':scope > .sm-box'))return;
+    var chip=document.querySelector('#content .lvl-chips [aria-current="step"]'),aba=document.querySelector('button[data-card][aria-current="page"]');
+    var chave=[aba&&aba.textContent,chip&&chip.textContent,(alvo.querySelector('h2,h3')||{}).textContent].filter(Boolean).join(' ');
+    var h=SaberMais.html('drog',chave);if(h)alvo.insertAdjacentHTML('afterbegin',h);
+  }
+  var t=0;function agenda(){clearTimeout(t);t=setTimeout(aplicar,60)}
+  try{new MutationObserver(agenda).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
+  try{document.addEventListener('drogaria:render',agenda)}catch(e){}
+})();

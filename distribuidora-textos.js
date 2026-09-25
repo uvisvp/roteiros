@@ -67,3 +67,6 @@ const DIST_REV_OK=['q159','q190','q195','q227','q229','q278','q282','q284','q290
  add('RDC Anvisa nº 1.039/2026','Boas Práticas para Laboratórios Analíticos. Art. 4º, § 3º: laboratórios de controle de qualidade de medicamentos seguem o guia da OMS (TRS 1052, Anexo 4, 2024).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00001039&seqAto=000&valorAno=2026&orgao=RDC/DC/ANVISA/MS&cod_menu=1696&cod_modulo=134');
  add('RDC Anvisa nº 166/2017','Validação de métodos analíticos.','');
 })();
+
+/* Para saber mais: conceitos e referências técnicas no início de cada bloco */
+(function(){const old=sectionHtml;sectionHtml=function(sec){let h=old(sec);const sm=sec&&window.SaberMais?SaberMais.html('dist',sec.id):'';if(!sm)return h;const i=h.indexOf('<details class="section-chk"');return i>=0?h.slice(0,i)+sm+h.slice(i):h.replace('<div class="sectionbody">','<div class="sectionbody">'+sm)}})();
