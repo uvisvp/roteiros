@@ -22,7 +22,7 @@ F = {
  'r195': ('Apresentou programa de manutenção preventiva de equipamentos, purificador, exaustores e ar-condicionado.', 'Não apresentou programa de manutenção preventiva dos equipamentos.'),
  'r201': ('Apresentou POP/ficha de especificação da água purificada e potável.', 'Não apresentou POP/ficha de especificação da água purificada e potável.'),
  # Treinamento
- 'r016': ('Há programa de treinamento baseado em levantamento de necessidades, com registros completos.', 'Não há programa de treinamento com os registros exigidos.'),
+ 'r016': ('Há programa de treinamento de todo o pessoal, elaborado com base em levantamento de necessidades.', 'Não há programa de treinamento de todo o pessoal elaborado com base em levantamento de necessidades.'),
  'r017': ('Todo o pessoal, inclusive de limpeza e manutenção, recebeu treinamento inicial e continuado.', 'Não foi comprovado treinamento inicial e continuado de todo o pessoal.'),
  'r018': ('Foram realizados treinamentos específicos para as atividades dos anexos exercidas.', 'Não foram comprovados treinamentos específicos para as atividades dos anexos exercidas.'),
  'r019': ('Os treinamentos incluem procedimentos em caso de acidente/incidente e informações sobre riscos.', 'Os treinamentos não incluem procedimentos em caso de acidente/incidente e informações sobre riscos.'),
@@ -213,6 +213,8 @@ F.update({
  'r036': ('A dispensação de preparações sob controle especial atende à legislação específica.', 'Há dispensação de preparação sob controle especial em desacordo com a legislação específica.'),
  'r241': ('As receitas aviadas são carimbadas com identificação, data e número de registro.', 'Há receita aviada sem carimbo com identificação, data e número de registro.'),
  'r242': ('A repetição de receita está amparada na duração indicada ou em confirmação registrada do prescritor.', 'Há repetição de receita sem duração indicada e sem confirmação registrada do prescritor.'),
+ 'n050': ('Não foi constatada manipulação em substituição a medicamento industrializado prescrito.', 'Foi constatada manipulação de preparação em substituição a medicamento industrializado prescrito.'),
+ 'n051': ('A transformação de especialidade farmacêutica, quando ocorre, é excepcional e justificada tecnicamente.', 'Há transformação de especialidade farmacêutica fora das hipóteses excepcionais ou sem justificativa técnica.'),
  'n031': ('A dispensação é feita com orientação farmacêutica.', 'A dispensação não é feita com orientação farmacêutica.'),
  # Monitoramento
  'r203': ('Há POP de amostragem e periodicidade das análises de água.', 'Não há POP de amostragem e periodicidade das análises de água.'),
