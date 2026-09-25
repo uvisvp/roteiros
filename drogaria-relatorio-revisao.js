@@ -91,3 +91,74 @@
   try{new MutationObserver(agenda).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
   try{document.addEventListener('drogaria:render',agenda)}catch(e){}
 })();
+
+/* Respostas: nos requisitos (resposta negativa gera irregularidade), os botões
+   passam a Cumpre / Não cumpre / Não se aplica. Perguntas descritivas e de
+   escopo (“realiza vacinação?”, “há venda remota?”) continuam Sim / Não.
+   Os valores gravados não mudam (sim / nao / nsa). */
+(function(){
+  'use strict';
+  var REQ={
+    s1:['lic_match','team_uniform','rt_present','rt_id'],
+    area_geral:['acesso'],
+    area_recebimento:['area_identificada','conferencia','pop'],
+    area_dispensacao:['extintor','higienizacao','monitoramento','termohigrometro','planilha','organizacao','mips','genericos'],
+    area_armazenamento:['organizado','piso_parede','luz','monitoramento','inflamaveis'],
+    area_vencidos:['segregacao'],area_dml:['armazenamento'],area_refeitorio:['separado'],area_sanitarios:['itens'],
+    termolabeis:['pop'],
+    documentos_qualidade:['treinamentos','pop_aquisicao','pop_vencimento','criterios','distribuidores','licenca_fornecedor'],
+    documentos_rastreabilidade:['registro_receita','correspondencia_sistema'],
+    documentos_remota:['licenca','pop','remota_classes_legal','site_portaria344'],
+    documentos_descarte:['pgrss','coleta_servicos'],
+    servicos_farmaceuticos:['licenca','ambiente','lavatório','primeiros_socorros','materiais','perfuro','orientacao','epi','limpeza','rede_publica','declaracao','injecao','vacinacao'],
+    transporte:['licenca_entrega','controle_temperatura','qualificacao']
+  };
+  var ROT={sim:'Cumpre',nao:'Não cumpre',nsa:'Não se aplica'};
+  var catalogo=null;
+  function cat(){if(catalogo)return catalogo;try{var c=window.DrogariaAPI&&DrogariaAPI.getCatalog&&DrogariaAPI.getCatalog();if(c&&c.perguntas){catalogo={};c.perguntas.forEach(function(q){catalogo[q.id]=q})}}catch(e){}return catalogo||{}}
+  function ehReq(bt){
+    var d=bt.dataset,v,p;
+    if(d.s1Answer){p=d.s1Answer.split('|');return REQ.s1.indexOf(p[0])>=0}
+    v=d.afAnswer||d.sdAnswer||d.fbAnswer;
+    if(v){p=v.split('|');return (REQ[p[0]]||[]).indexOf(p[1])>=0}
+    if(d.answer!=null&&d.value){var id=String(d.answer).split(/::|@|#/)[0],q=cat()[id]||cat()[d.answer];return !!(q&&q.gera_irregularidade&&!q.informativo&&q.tipo!=='escopo')}
+    return false;
+  }
+  function valor(bt){var d=bt.dataset;if(d.value)return d.value;var v=d.s1Answer||d.afAnswer||d.sdAnswer||d.fbAnswer||'';return v.split('|').pop()}
+  function aplicar(){
+    document.querySelectorAll('#content [data-s1-answer],#content [data-af-answer],#content [data-sd-answer],#content [data-fb-answer],#content button[data-answer][data-value]').forEach(function(bt){
+      if(bt.dataset.drgRot)return;var v=valor(bt);if(!ROT[v])return;
+      if(ehReq(bt)){bt.textContent=ROT[v];bt.dataset.drgRot='req'}else bt.dataset.drgRot='desc';
+    });
+    /* Termo de inutilização: fora do escopo da inspeção */
+    document.querySelectorAll('#content [data-sd-answer^="documentos_descarte|termo|"]').forEach(function(bt){var q=bt.closest('.q')||bt.parentElement&&bt.parentElement.parentElement;if(q&&!q.hidden)q.hidden=true});
+  }
+  var t=0;function agenda(){clearTimeout(t);t=setTimeout(aplicar,40)}
+  try{new MutationObserver(agenda).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
+})();
+
+/* Prévia por item: “Como sai no relatório”, no fim do item aberto. */
+(function(){
+  'use strict';
+  function sn(t){return String(t||'').replace(/^\s*\d+(?:\.\d+)*\.?\s+/,'').replace(/^\d+\s*·\s*/,'').trim().toLowerCase()}
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var ultimo='';
+  function aplicar(){
+    var tela=document.querySelector('#content .drg-item-screen');if(!tela||!window.DrogariaAPI||!DrogariaAPI.report)return;
+    var chip=document.querySelector('#content .lvl-chips [aria-current="step"]');if(!chip)return;
+    var alvo=sn(chip.textContent),estado='';try{estado=JSON.stringify(DrogariaAPI.getState())}catch(e){}
+    var chave=alvo+'|'+estado.length+'|'+estado.slice(-200);var box=tela.querySelector(':scope > .drg-previa');
+    if(box&&box.dataset.chave===chave)return;
+    var r;try{r=DrogariaAPI.report()}catch(e){return}
+    var bl=r&&r.blocks||[],i=bl.findIndex(function(b){return (b.t==='h2'||b.t==='h1')&&sn(b.x)===alvo}),corpo=[];
+    if(i>=0)for(var j=i+1;j<bl.length&&bl[j].t!=='h1'&&bl[j].t!=='h2';j++)corpo.push(bl[j]);
+    var irr=(r.irregularities||[]).filter(function(x){return sn(x.grupo)===alvo});
+    var html='<details class="drg-previa" data-chave="'+esc(chave)+'"'+(box&&box.open?' open':'')+'><summary>👁 Como sai no relatório</summary>'+
+      (corpo.length?corpo.map(function(b){return b.t==='kv'?'<p><b>'+esc(b.k)+':</b> '+esc(b.v)+'</p>':'<p>'+esc(b.x||'')+'</p>'}).join(''):'<p class="muted">Ainda sem texto para este item: responda as perguntas.</p>')+
+      (irr.length?'<p><b>Irregularidades deste item:</b></p><ul>'+irr.map(function(x){return '<li>'+esc(x.frase_relatorio)+'</li>'}).join('')+'</ul>':'')+'</details>';
+    if(box)box.outerHTML=html;else tela.insertAdjacentHTML('beforeend',html);
+  }
+  var t=0;function agenda(){clearTimeout(t);t=setTimeout(aplicar,120)}
+  try{new MutationObserver(function(m){if(m.every(function(x){return x.target.closest&&x.target.closest('.drg-previa')}))return;agenda()}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed']})}catch(e){}
+  try{var st=document.createElement('style');st.textContent='.drg-previa{border:1px dashed #9fb3c2;border-radius:10px;background:#fbfcfd;margin:12px 0 4px;padding:0 12px}.drg-previa>summary{cursor:pointer;padding:9px 0;font-weight:700;color:#365B73;font-size:.86rem}.drg-previa p,.drg-previa li{font-size:.84rem;line-height:1.5;margin:0 0 7px}.drg-previa .muted{color:#6b7780;font-style:italic}';(document.head||document.documentElement).appendChild(st)}catch(e){}
+})();

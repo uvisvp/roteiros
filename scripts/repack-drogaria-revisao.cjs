@@ -15,7 +15,7 @@ function change(text, from, to, label) {
   if (!text.includes(from)) throw Error('Trecho esperado não localizado: ' + label);
   return text.replace(from, () => to);
 }
-for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js']]) {
+for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js'], ['rec--drogaria-report-final.js', 'drogaria-report-final.js']]) {
   const src = fs.readFileSync(path.join(root, arq), 'utf8');
   const enc = lz.compressToBase64(src);
   if (lz.decompressFromBase64(enc) !== src) throw Error('round-trip ' + arq);

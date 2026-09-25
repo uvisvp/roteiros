@@ -62,9 +62,10 @@ const stockTable=report.blocks.find(b=>b.t==='table');assert.ok(stockTable,'conf
 
 const bad=structuredClone(state);bad.meta.drogaria_secoes.area_refeitorio.answers.pia='sim';bad.meta.drogaria_secoes.termolabeis.items[0].nc_higienizacao=true;bad.meta.drogaria_secoes.documentos_qualidade.answers.pop_vencimento='nao';
 const badReport=ctx.DrogariaEngine.report(catalog,bad,data);assert.ok(badReport.irregularities.some(r=>r.id==='final_refeitorio_sifao'));assert.ok(badReport.irregularities.some(r=>/final_cold_t1_nc_higienizacao/.test(r.id)));assert.ok(badReport.irregularities.some(r=>/pop_vencimento/.test(r.id)));
+const reqBad=structuredClone(state);reqBad.meta.drogaria_secoes.area_dispensacao.answers.extintor='nao';assert.ok(ctx.DrogariaEngine.report(catalog,reqBad,data).irregularities.some(r=>r.id==='final_req_area_dispensacao_extintor'),'requisito com Não cumpre deve gerar irregularidade');
 const noCold=structuredClone(state);noCold.meta.drogaria_secoes.termolabeis.answers.aplica='nao';noCold.answers.thermo='nao';const noColdText=ctx.DrogariaEngine.report(catalog,noCold,data).blocks.map(b=>b.x||'').join('\n');assert.ok(noColdText.includes('não comercializa medicamentos termolábeis'));
 for(const n of bridgeNames)assert.equal(blocks.get('rec--'+n+'.js'),fs.readFileSync(path.join(root,n+'.js'),'utf8'),'index integrado deve conter '+n);
 for(const[id,source]of blocks)if(['app--drogaria','app--estoque-produtos'].includes(id))for(const s of scripts(source))if(!/src=|application\/json|text\/plain/.test(s.attrs))new vm.Script(s.source,{filename:id});
-assert.ok(html.includes("'drogaria-report-final.js','drogaria-relatorio-revisao.js'"),'a casca deve carregar a revisão do relatório depois do compositor final');
+assert.ok(html.includes("'drogaria-report-final.js','saber-mais.js','drogaria-relatorio-revisao.js'"),'a casca deve carregar a revisão do relatório depois do compositor final');
 assert.ok(!reportText.includes('não informad'),'o relatório não deve conter lacunas “não informado”');
 console.log('PASS: Drogaria revisada; relatório completo, AFE sem AE, termolábeis, recomendações, irregularidades e estoque por lote preservados.');
