@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-6",
+  "versao": "20260925-7",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: diferença entre balança analítica (0,1 mg, quatro casas) e semianalítica (1 mg, três casas) e uso da capela de proteção da balança (câmara com portas de vidro) sempre que se opera a analítica, com referência na USP <1251>."
+  "notas": "Manipulação, item 11.5 (Laboratório contratado, cronograma e rodízio): perguntas próprias sobre contrato vigente com o laboratório, POP com cronograma das análises e rodízio de manipuladores, fármacos e dosagens (Anexo I, 9.2.5), com checklist do que faltou no rodízio."
 }
