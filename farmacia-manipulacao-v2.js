@@ -94,6 +94,7 @@ function v2Equip(scope,c){
   const base=['eq',scope,nm].join('|');
   return '<details class="v2-eq" data-med-fechado="1" data-v2k="'+esc('eq:'+scope+':'+nm)+'"><summary><b>'+esc(nm)+'</b><span class="tag'+(n?' bad':'')+'">'+(d.has==='NC'?'não possui':n?n+' irregularidade'+(n>1?'s':''):d.has==='C'?'sem irregularidades':'não conferido')+'</span></summary><div class="v2-in">'
    +v2Tog(base+'|has',[['C','Possui','ok-on'],['NC','Não possui','irr-on'],['NA','N/A','na-on']],d.has)
+   +(window.SaberMais&&SaberMais.equip?SaberMais.equip(nm):'')
    +'<div class="v2-grid">'+v2Input(base+'|marca','Marca / modelo')+v2Input(base+'|serie','Nº série / patrimônio')+v2Input(base+'|cal','Calibração válida até','','date')+'</div>'
    +irr.map(x=>'<div class="v2-row"><div>'+esc(x.t)+'<small>'+esc(x.ref)+'</small></div>'+v2Tog(base+'|irr|'+x.id,IRR_OPTS,marks[x.id])+'</div>').join('')
    +'<div class="v2-row"><div><input data-v2="'+esc(base+'|outra')+'" value="'+esc(d.outra||'')+'" placeholder="Outra — descrever"></div>'+v2Tog(base+'|xI',[IRR_OPTS[0]],d.xI)+'</div>'
