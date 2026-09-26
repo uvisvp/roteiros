@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260926-18 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260926-19 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -863,7 +863,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260926-18';
+    const APP_VERSAO = '20260926-19';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -2047,6 +2047,10 @@ if(app==='distribuidoras-transportadoras'){
   document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
   document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
   document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
   function avancar(acao){
     var c=contexto();if(!c)return;
     var bs=c.bs,b=c.b,it=c.it;
@@ -2221,7 +2225,7 @@ if(app==='distribuidoras-transportadoras'){
  cores:{forte:'#876B3F',suave:'#F4F1EB'},
  nome:'Produtos e correlatos',
  perfilPronto:function(){var s=document.querySelector('#panel-roteiro [data-start]');return !s||!s.disabled},
- resumo:function(){var n=document.querySelector('#panel-roteiro .route-line span');return n?n.textContent.replace(/\s+/g,' ').trim():''},
+ resumo:function(){var CURTO={cls_disp:'Dispositivos/IVD',cls_cosm:'Cosméticos',cls_san:'Saneantes'};var t=document.querySelector('#panel-roteiro .trilha .type-card.active strong')||document.querySelector('header.app-header .p-ident b');var c=[].map.call(document.querySelectorAll('#panel-roteiro [data-flag]:checked'),function(x){var s=x.closest('label')&&x.closest('label').querySelector('strong');return CURTO[x.dataset.flag]||(s?s.textContent.trim():'')}).filter(Boolean);return [t?t.textContent.trim():''].concat(c).filter(Boolean).join(' · ')},
  revisar:function(){var b=document.querySelector('[data-tab="relatorio"]');if(b)b.click()},
  cabecalho:{sel:'header.app-header',esconderDentro:['.title-copy p']},
  esconderSempre:[],
