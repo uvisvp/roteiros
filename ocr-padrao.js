@@ -3,8 +3,8 @@
    a extração é exata e o dado é reaproveitado — licença sanitária, Certidão de
    Regularidade Técnica do CRF, AVCB/CLCB e DANFE. Motor: DrogariaOcrTools.
    Os demais documentos viram FICHA digitada (poucos campos, sem OCR), checklist
-   no próprio roteiro ou foto para análise posterior. ASO e receitas não têm OCR
-   nem foto (dados pessoais e sigilo do paciente).
+   no próprio roteiro ou foto para análise posterior. ASO e receitas não têm OCR;
+   as fotos continuam livres em todos os itens.
    API:
      OcrPadrao.ler(tipo, {titulo, onApply})   tipo ∈ OcrPadrao.OCR
      OcrPadrao.ficha(tipo, {titulo, valores, onApply, foto})   tipo ∈ OcrPadrao.FICHAS

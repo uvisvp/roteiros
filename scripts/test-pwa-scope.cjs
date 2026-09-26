@@ -7,7 +7,7 @@ const {html,blocks}=unpack();
 const baseRef=process.env.PWA_BASE||'origin/main';
 const base=unpackText(execFileSync('git',['show',baseRef+':index.html'],{encoding:'utf8',maxBuffer:40*1024*1024}));
 const allowed=new Set(['app--drogaria','app--estoque-produtos','app--distribuidoras-transportadoras','app--farmacia-manipulacao']);
-for(const id of base.blocks.keys())if(/^rec--(drogaria-|saber-mais)/.test(id))allowed.add(id);
+for(const id of base.blocks.keys())if(/^rec--(drogaria-|saber-mais|ocr-padrao|medicamentos-banco)/.test(id))allowed.add(id);
 for(const[id,source]of base.blocks)if(!allowed.has(id))assert.equal(blocks.get(id),source,'Módulo fora do núcleo de medicamentos alterado em relação a '+baseRef+': '+id);
 assert.deepEqual(visaLocal(blocks.get('app--drogaria')),visaLocal(base.blocks.get('app--drogaria')),'Banco normativo/catálogo integrado não devem ser reescritos');
 const sw=fs.readFileSync('sw.js','utf8'),version=JSON.parse(fs.readFileSync('versao.json','utf8')).versao;
