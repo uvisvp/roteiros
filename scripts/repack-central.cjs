@@ -17,6 +17,9 @@ troca("[r.main,r.alerts,r.irregular]=await Promise.all([baseByRegistro(v),alerts
   "[r.main,r.alerts,r.irregular]=await Promise.all([baseByRegistro(v),alerts('registro',v),irregular('registro',v)]);if(!r.main.length&&v.length===13){const v9=v.slice(0,9);r.main=(await baseByRegistro(v9)).map(x=>({...x,observacao:'Localizado pelo registro do produto ('+v9+'). O número informado ('+v+') é o registro da apresentação.'}))}}", 'registro de 13 dígitos');
 troca("const order=['produto',", "const order=['observacao','produto',", 'ordem');
 troca("const field={produto:'Produto',", "const field={observacao:'Observação',produto:'Produto',", 'rótulo');
+/* Procedência da base: sem o endereço do repositório. */
+const repo = "\n     +'<b>Repositório</b><span><a href=\"'+esc(m.repo)+'\" target=\"_blank\" rel=\"noopener noreferrer\">'+esc(m.repo)+'</a></span>'";
+if (app.includes(repo)) app = app.replace(repo, '');
 const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip');
 html = html.replace(re, () => m[1] + enc + m[3]);
 fs.writeFileSync(file, html);
