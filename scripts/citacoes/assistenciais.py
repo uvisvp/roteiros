@@ -22,6 +22,11 @@
 3. "Portaria SMS nº 266/2025, com a alteração da Portaria SMS nº 456/2025": a
    Portaria 456 só mudou a vigência (art. 45); o banco já tem o texto
    consolidado. Cita-se a Portaria 266 (texto consolidado).
+4. SAICA e demais acolhimentos não são estabelecimentos de assistência à saúde:
+   são de interesse indireto da saúde (art. 69 da Lei nº 13.725/2004, como já diz
+   o enquadramento). Neles, os arts. 61 a 68 (Capítulo dos estabelecimentos de
+   assistência à saúde) passam a art. 69; ILPI, Centro Dia, CT e SRT seguem nos
+   arts. 61 a 68.
 
 Uso: python3 assistenciais.py <modulo.txt> <banco.json> <normas.json> <saida.txt>
 """
@@ -175,6 +180,54 @@ NORM_P3 = {'n': 'Portaria de Consolidação GM/MS nº 3/2017 — Anexo V, Títul
 NORM_757 = 'Revogou a Portaria GM/MS nº 3.588/2017 e repristinou, no Anexo V da Portaria de Consolidação nº 3/2017, o art. 77, parágrafo único, o art. 80, § 1º (SRT Tipo I com até 8 moradores), e o Anexo 4.'
 
 
+INDIRETOS = ('saica', 'demais')
+RE_LEI_ANTES = re.compile(r'(arts?\. )(\d+(?:(?:, | e )\d+)*)( da ' + re.escape(LEI) + ')')
+RE_LEI_DEPOIS = re.compile(r'(' + re.escape(LEI) + r', )(arts?\. )(\d+(?:(?:, | e )\d+)*)(?=[,;.]|$)')
+
+
+def lista_69(nums):
+    """'63 e 65 e 68' → '69'; '50 e 67' → '50 e 69'. None se nada muda."""
+    ns = [int(x) for x in re.findall(r'\d+', nums)]
+    if not any(61 <= n <= 68 for n in ns):
+        return None
+    out = []
+    for n in ns:
+        n = 69 if 61 <= n <= 68 else n
+        if n not in out:
+            out.append(n)
+    out.sort()
+    txt = [str(n) for n in out]
+    return ('art. ' if len(txt) == 1 else 'arts. ') + (txt[0] if len(txt) == 1 else ', '.join(txt[:-1]) + ' e ' + txt[-1])
+
+
+def texto_69(l):
+    def antes(m):
+        novo = lista_69(m.group(2))
+        if novo is None:
+            return m.group(0)
+        if m.group(1)[0] == 'A':
+            novo = novo[0].upper() + novo[1:]
+        return novo + m.group(3)
+
+    def depois(m):
+        novo = lista_69(m.group(3))
+        return m.group(0) if novo is None else m.group(1) + novo
+    return RE_LEI_DEPOIS.sub(depois, RE_LEI_ANTES.sub(antes, l))
+
+
+def refs_69(refs, ref):
+    out, pos = [], None
+    for r in refs:
+        if r['law'] == L and re.fullmatch(r'a6[1-8](pu|p\d+|-.*)?', r['node'] or ''):
+            if pos is None:
+                pos = len(out)
+            continue
+        out.append(r)
+    if pos is not None and not any(r['law'] == L and r['node'] == 'a69' for r in out):
+        out.insert(pos, ref(L, 'a69'))
+    return out
+
+
 def rotulo(law, node, nos):
     """Rótulo do botão: 'Art. 80, § 1º', 'Art. 84, II, “c”', 'Anexo 4 — SRT Tipo II'."""
     if node.startswith('anx'):
@@ -295,7 +348,7 @@ def revisar(s, banco, normas):
                 sp = S.get((sv['id'], k, i))
                 if not sp:
                     continue
-                if it['l'] == sp['l']:
+                if it['l'] == (texto_69(sp['l']) if sv['id'] in INDIRETOS else sp['l']):
                     continue                                   # já aplicado
                 refs = []
                 for r in it['refs']:
@@ -310,6 +363,16 @@ def revisar(s, banco, normas):
                 it['refs'] = lei + outros
                 it['l'] = sp['l']
                 st['itens'] += 1
+        # interesse indireto da saúde: arts. 61 a 68 → art. 69
+        if sv['id'] in INDIRETOS:
+            for k in ('doc', 'rot', 'inf'):
+                for it in sv[k]:
+                    l, refs = texto_69(it['l']), refs_69(it['refs'], ref)
+                    if l != it['l'] or refs != it['refs']:
+                        it['l'], it['refs'] = l, refs
+                        st['itens'] += 1
+                    if re.search(r'\bart[s]?\. [^;]*\b6[1-8]\b[^;]*13\.725|13\.725/2004, arts?\. [\d ,e]*\b6[1-8]\b', it['l']):
+                        raise SystemExit('arts. 61 a 68 restantes em %s: %s' % (sv['id'], it['l']))
         # lista de normas do serviço
         for n in sv['norm']:
             if n.get('lawId') in NORM_E:
@@ -357,6 +420,10 @@ def revisar(s, banco, normas):
         if faltam:
             raise SystemExit('dispositivos ausentes em %s: %s' % (law, faltam))
 
+    # no banco, o art. 69 traz colado o título do capítulo seguinte ("DAS DOENÇAS E AGRAVOS À SAÚDE")
+    for n in laws[L]['nos']:
+        if n['id'] == 'a69':
+            n['x'] = re.sub(r'\s+E AGRAVOS À SAÚDE$', '', n['x'])
     laws.pop(OLD3090, None)
     D['cited'].pop(OLD3090, None)
     for law, nodes in usados.items():
