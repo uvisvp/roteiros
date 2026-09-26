@@ -218,6 +218,22 @@ ABE = [
     ('Grupo B: caixa de retenção ou contenção para líquidos', 'o abrigo do Grupo B não tem caixa de retenção para líquidos', R222 + '36, III'),
     ('Grupo B: sistema elétrico e de combate a incêndio adequados', 'o abrigo do Grupo B não tem sistema elétrico e de combate a incêndio adequados', R222 + '36, IV'),
 ]
+MBPM = [
+    ('Diretrizes da empresa para o gerenciamento da qualidade', 'o Manual de Boas Práticas de Manipulação não apresenta as diretrizes de gerenciamento da qualidade', A67 + '15.3'),
+    ('Organograma com a estrutura organizacional e de pessoal', 'o Manual não apresenta organograma com a estrutura organizacional e de pessoal', 'RDC 67/2007 · Anexo I · 3'),
+    ('Atribuições e responsabilidades do RT, manipuladores e controle de qualidade', 'o Manual não descreve as atribuições e responsabilidades do pessoal', None),
+    ('Fluxograma das atividades e das áreas', 'o Manual não apresenta fluxograma das atividades e das áreas', None),
+    ('Coerente com os grupos e as formas farmacêuticas efetivamente manipulados', 'o Manual não corresponde aos grupos e às formas farmacêuticas efetivamente manipulados', A67 + '15.3'),
+    ('Aprovado, assinado e datado pelo RT, com controle de revisão', 'o Manual não está aprovado, assinado e datado pelo responsável técnico', A67 + '15.5.5'),
+]
+POPF = [
+    ('Aprovados, assinados e datados pelo RT ou pessoa por ele autorizada', 'há POP sem aprovação, assinatura ou data do responsável técnico', A67 + '15.5.5'),
+    ('Alterações com o conteúdo original preservado e o motivo justificado', 'há POP alterado sem preservar o conteúdo original ou sem justificar o motivo', A67 + '15.5.5'),
+    ('Treinamento dos funcionários nos POPs registrado', 'não há registro de treinamento dos funcionários nos POPs', A67 + '3.2'),
+    ('POPs de limpeza disponíveis e de fácil acesso no local de uso', 'os POPs de limpeza e sanitização não estão disponíveis e de fácil acesso no local', 'RDC 67/2007 · Anexo I · 6'),
+    ('Revisão periódica prevista', 'não há previsão de revisão periódica dos POPs', None),
+    ('Conteúdo corresponde à prática observada', 'o conteúdo dos POPs não corresponde à prática observada', None),
+]
 ROD = [  # detalhe da pergunta do rodízio (n053): informativo, para não duplicar a irregularidade
     ('Diferentes manipuladores', 'as amostras não contemplam rodízio de manipuladores', None),
     ('Diferentes fármacos (fórmulas)', 'as amostras não contemplam rodízio de fármacos', None),
@@ -277,6 +293,7 @@ block('Documentação', 'Documentos, POPs, treinamento e planilhas', [
     item('2.1', 'Documentos apresentados', [
         note('Antigo 6.1. Saíram daqui, por redundância: AFE/AE (já no 1.1), PGRSS e SPRegula (bloco Resíduos), mapas/balanços e Livro de Receituário (bloco Receitas), contrato de laboratório (bloco Monitoramento), programa de treinamento (item 2.3).', 'mov'),
         {'t': 'docs', 'rows': [{'text': REQ[r]['text'], 'refs': [short(x) for x in REQ[r].get('refs', [])]} for r, _ in DOCS]},
+        chk('mbpm', 'Manual de Boas Práticas de Manipulação — conteúdo', MBPM, 'Confira no Manual. Um ponto ausente com citação gera irregularidade própria.'),
         q('r183', text='Apresentou PGRSS compatível com as atividades e os resíduos gerados?', refs=['RDC 67/2007 · RT · 5.2', 'RDC 222/2018 · art. 5º']),
         chk('pgrss', 'Conteúdo do PGRSS', PGRSS, 'Confira no documento. Um ponto ausente gera irregularidade própria, com o inciso do art. 6º.'),
         q('r186', text='Apresentou cadastro de gerador de resíduos (SPRegula)? Registre o número.'),
@@ -285,6 +302,7 @@ block('Documentação', 'Documentos, POPs, treinamento e planilhas', [
     ], origin='Antigo 6.1 + documentos de resíduos'),
     item('2.2', 'Procedimentos Operacionais Padrão', [
         {'t': 'pops', 'groups': [{'code': p['code'], 'title': p['title'], 'rows': [r['name'] for r in p['rows']]} for p in D['pops']]},
+        chk('popf', 'Requisitos formais dos POPs (amostragem)', POPF),
         obs(),
     ], origin='Antigo 6.2'),
     item('2.3', 'Treinamento', [
