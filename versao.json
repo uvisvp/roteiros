@@ -1,6 +1,6 @@
 {
-  "versao": "20260925-9",
+  "versao": "20260926-1",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "OCR padronizado no núcleo de Medicamentos: leitura automática só para licença sanitária, CRT do CRF, AVCB/CLCB e DANFE, com o mesmo motor nos três roteiros. Controle de pragas, caixa d’água, calibração (com foto), mapas e SNGPC viram ficha digitada. ASO e receitas sem leitura e sem foto (LGPD e sigilo). Distribuidora ganhou OCR de licença, CRT e AVCB/CLCB na identificação; manipulação ganhou a pergunta da CRT."
+  "notas": "Checklists de documentos: drogaria com os POPs mínimos da RDC 44/2009 (art. 86, um a um) e requisitos formais dos POPs (art. 87); manipulação com checklist de conteúdo do Manual de Boas Práticas de Manipulação (Anexo I, 3, 15.3 e 15.5.5) e requisitos formais dos POPs. Drogaria: saem os leitores de PGRSS e POPs dos serviços; fica o de DANFE."
 }

@@ -25,12 +25,14 @@
  window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-ocr]');if(!b)return;var v=b.dataset.ocr||'',k=chave(v),id=k.split('@')[0];
   if(v.indexOf('document:')===0){if(FICHA[id]){e.preventDefault();e.stopImmediatePropagation();ficha(k);return}if(!OCR[id]){e.preventDefault();e.stopImmediatePropagation()}return}
   if(/^stock:/.test(v)){e.preventDefault();e.stopImmediatePropagation()}},true);
+ window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-sd-doc]');if(b&&String(b.dataset.sdDoc||'').split('|')[1]!=='danfe_nfe'){e.preventDefault();e.stopImmediatePropagation()}},true);
  window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-s1-read="aso"]');if(b){e.preventDefault();e.stopImmediatePropagation()}},true);
  function politica(){
   document.querySelectorAll('[data-ocr]').forEach(function(b){var v=b.dataset.ocr||'',id=chave(v).split('@')[0];
    if(v==='document:geral'||/^stock:/.test(v)){b.remove();return}
    if(v.indexOf('document:')===0){if(OCR[id])b.textContent='📄 Ler documento (OCR)';else if(FICHA[id])b.textContent='📝 Registrar dados do documento';else b.remove()}});
   document.querySelectorAll('[data-s1-read="aso"]').forEach(function(b){b.remove()});
+  document.querySelectorAll('[data-sd-doc]').forEach(function(b){var t=String(b.dataset.sdDoc||'').split('|')[1];if(t==='danfe_nfe')b.textContent='📄 Ler DANFE / nota fiscal (OCR)';else b.remove()});
  }
  var t=null;new MutationObserver(function(){if(!t)t=setTimeout(function(){t=null;try{politica()}catch(x){}},30)}).observe(document.documentElement,{childList:true,subtree:true});
  try{politica()}catch(x){}

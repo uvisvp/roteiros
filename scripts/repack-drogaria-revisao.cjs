@@ -15,7 +15,7 @@ function change(text, from, to, label) {
   if (!text.includes(from)) throw Error('Trecho esperado não localizado: ' + label);
   return text.replace(from, () => to);
 }
-for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js'], ['rec--drogaria-report-final.js', 'drogaria-report-final.js'], ['rec--drogaria-final-bridge.js', 'drogaria-final-bridge.js'], ['rec--drogaria-review.js', 'drogaria-review.js'], ['rec--ocr-padrao.js', 'ocr-padrao.js'], ['rec--drogaria-ocr-politica.js', 'drogaria-ocr-politica.js']]) {
+for (const [id, arq] of [['rec--drogaria-relatorio-revisao.js', 'drogaria-relatorio-revisao.js'], ['rec--saber-mais.js', 'saber-mais.js'], ['rec--drogaria-report-final.js', 'drogaria-report-final.js'], ['rec--drogaria-final-bridge.js', 'drogaria-final-bridge.js'], ['rec--drogaria-review.js', 'drogaria-review.js'], ['rec--drogaria-servicos-documentos.js', 'drogaria-servicos-documentos.js'], ['rec--ocr-padrao.js', 'ocr-padrao.js'], ['rec--drogaria-ocr-politica.js', 'drogaria-ocr-politica.js']]) {
   const src = fs.readFileSync(path.join(root, arq), 'utf8');
   const enc = lz.compressToBase64(src);
   if (lz.decompressFromBase64(enc) !== src) throw Error('round-trip ' + arq);
