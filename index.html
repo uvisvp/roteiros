@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260926-8 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260926-9 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -863,7 +863,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260926-8';
+    const APP_VERSAO = '20260926-9';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -1928,8 +1928,8 @@ if(app==='distribuidoras-transportadoras'){
   function resumoPerfil(){var r='';if(CFG.resumo)try{r=CFG.resumo()||''}catch(e){}return r}
   function barraTopo(texto,editar){
     return '<div class="n3-topo-linha"><span class="n3-topo-txt">'+esc(texto)+'</span>'
-      +(editar?'<span class="n3-topo-ajuda">Toque para incluir ou retirar atividades. O roteiro é montado a partir delas.</span>'
-        +'<button type="button" class="n3-editar" data-n3-perfil>✎ Alterar atividades</button>':'')+'</div>';
+      +(editar?'<span class="n3-topo-ajuda">O roteiro mostra só o que se aplica ao perfil escolhido.</span>'
+        +'<button type="button" class="n3-editar" data-n3-perfil>✎ Alterar perfil</button>':'')+'</div>';
   }
   function linha(num,titulo,apoio,attr){
     return '<button type="button" class="n3-linha" '+attr+'><span class="n3-num">'+esc(num)+'</span>'
@@ -1945,7 +1945,7 @@ if(app==='distribuidoras-transportadoras'){
     var secoes=lerSecoes(box);
     if(!secoes.length){
       delete box.dataset.n3pronto;
-      if(CFG.perfilPronto&&!CFG.perfilPronto()){aplicarVisual();apoio(true);ajustarTopos();dock([],null,null,true)}
+      if(CFG.perfilPronto&&!CFG.perfilPronto()){estado.perfil=true;aplicarVisual();apoio(true);ajustarTopos();dock([],null,null,true)}
       return}
     (CFG.esconder||[]).forEach(function(sel){
       Array.prototype.forEach.call(box.querySelectorAll(sel),function(n){n.hidden=true;n.style.display='none'});
@@ -1959,13 +1959,13 @@ if(app==='distribuidoras-transportadoras'){
 
     var alvo=document.createElement('div');alvo.className='n3-wrap';
     var perfilPronto=CFG.perfilPronto?!!CFG.perfilPronto():true;
-    var nivel1=estado.perfil||!perfilPronto;
+    if(!perfilPronto)estado.perfil=true;var nivel1=estado.perfil||!perfilPronto;
     if(nivel1){estado.bloco=null;estado.item=null;b=null;it=null;
       (CFG.recolher||[]).forEach(function(sel){Array.prototype.forEach.call(document.querySelectorAll(sel),function(n){if('open' in n){n.open=true;delete n.dataset.n3recolhido}})});
     }
     if(b&&!it&&b.itens.length===1){it=b.itens[0];estado.item=it.id}
     if(nivel1){
-      alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+' · selecione as atividades',false);
+      alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+' · defina o perfil do serviço',false);
     }else if(!b){
       alvo.innerHTML=barraTopo((CFG.nome||'Roteiro')+(resumoPerfil()?' · '+resumoPerfil():''),true)
         +'<div class="n3-lista">'+bs.map(function(x,i){
@@ -2006,7 +2006,7 @@ if(app==='distribuidoras-transportadoras'){
     var idx=b&&it?b.itens.indexOf(it):-1,ib=b?bs.indexOf(b):-1;
     var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;
     if(nivel1){
-      escreve('<span>'+(pronto?'Atividades selecionadas':'Selecione as atividades para montar o roteiro')+'</span>'
+      escreve('<span>'+(pronto?'Perfil definido':'Defina o perfil para montar o roteiro')+'</span>'
         +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>');
       return;
     }
@@ -2030,6 +2030,7 @@ if(app==='distribuidoras-transportadoras'){
       +'<button type="button" class="n3-principal" data-n3-prox="'+prox.acao+'">'+esc(prox.rot)+'</button>');
   }
   function contexto(){return ultimo&&ultimo.bs&&ultimo.bs.length?ultimo:null}
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
   function avancar(acao){
     var c=contexto();if(!c)return;
     var bs=c.bs,b=c.b,it=c.it;

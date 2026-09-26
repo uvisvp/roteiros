@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-8",
+  "versao": "20260926-9",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Estética: abas com nomes claros (Estética — interesse à saúde, Serviço de saúde, Relatório com o número de selecionadas), explicação de qual inventário usar, busca no inventário funcionando e etiquetas de citação completas (ex.: “Art. 90, § 1º” em vez de “§ 1º”)."
+  "notas": "Odontologia, Serviços de alimentação e Produtos: o perfil não salta mais sozinho para os blocos ao escolher a tipologia — a tela fica no perfil até “Abrir roteiro →”, permitindo completar organização, processamento e características; “Aplicar perfil e ir ao roteiro” (alimentação) passa a abrir os blocos; textos falam em “perfil” em vez de “atividades”."
 }
