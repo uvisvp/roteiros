@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-16",
+  "versao": "20260926-17",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos (telas mais limpas, por nível): cabeçalho fixo em uma linha (← Núcleo · ✎ Perfil); cartão do CNAE e “Consultar regularização” só no perfil e na lista de blocos, não mais em cada etapa; sai a faixa repetida “Produtos e correlatos / Alterar perfil” e a “Base legal” que repetia o botão de citação; campo “Objetivo / tipo da inspeção” alinhado aos demais quadros; rodapé sem botão cortado e oculto nas abas Infrações e Relatório. Caixa de citação: norma não aparece mais duas vezes (aviso de anexo vazio) e alíneas de inciso aparecem como “a”, “b”… em vez do código interno."
+  "notas": "Produtos: corrigido o travamento — com “Dispositivos/IVD” marcado, o quadro do POP-O-SNVS-013 se redesenhava sem parar (~15 mil alterações por segundo), deixando o app lento ou parado, sobretudo ao ir ao Relatório; “✎ Perfil” volta a funcionar em qualquer tela; nas etapas e itens aparece a barra “Bloco n de N” com todos os blocos. Inspeções salvas: além de Medicamentos, agora em Alimentos (inspeção do estabelecimento), Produtos (as três trilhas; retoma na trilha certa), Serviços assistenciais e Odontologia, com respostas e fotos; o botão Inspeções salvas saiu da tela inicial e fica na tela de cada núcleo (e o botão Salvas dentro de cada roteiro)."
 }

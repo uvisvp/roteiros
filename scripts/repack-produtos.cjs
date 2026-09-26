@@ -21,6 +21,11 @@ const trocaTodas = (de, para, rot) => { if (!app.includes(de)) { if (app.include
   const ini = 'window.ROTEIRO_CONFIG=', i = app.indexOf(ini); if (i < 0) throw Error('ROTEIRO_CONFIG não localizado');
   const f = app.indexOf(';</script>', i); if (f < 0) throw Error('fim do ROTEIRO_CONFIG não localizado');
   app = app.slice(0, i + ini.length) + JSON.stringify(novo) + app.slice(f); }
+/* POP-O-SNVS-013 (quadro “Tipo e saída da inspeção”): o quadro reescrevia o próprio HTML a cada
+   mutação da página, e a reescrita é outra mutação — laço contínuo (~15 mil mutações/s) sempre que
+   “Dispositivos/IVD” estava marcado, deixando o app lento/travado. Só redesenha se o conteúdo mudou. */
+troca("box.innerHTML=html(st);const sel=box.querySelector('#pop13Objetivo');if(sel)sel.value=st.objetivo||'';updateSummary(box,st)}",
+  "const h13=html(st);if(box.__h13===h13)return;box.__h13=h13;box.innerHTML=h13;const sel=box.querySelector('#pop13Objetivo');if(sel)sel.value=st.objetivo||'';updateSummary(box,st)}", 'pop13 render');
 troca('"cnaeMap": {"fab_cosm": {', '"cnaeMap": {"fabricante": {', 'cnaeMap fabricante');
 trocaTodas("const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked')||/dispositivos\\/IVD|dispositivos médicos.*diagnóstico in vitro/i.test(document.body?.innerText||'');",
   "const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked');", 'hasDisp');
