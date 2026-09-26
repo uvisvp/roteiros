@@ -29,5 +29,17 @@
  document.addEventListener('input',function(e){if(e.target&&e.target.id==='filtro')setTimeout(filtra,0)},true);
  var f=$('filtro');if(f)f.placeholder='Buscar infração, tema ou norma em todo o inventário';
  document.head.insertAdjacentHTML('beforeend','<style id="en-style">html body #caixaBusca.en-on{display:block!important}#caixaBusca.en-on label[for=buscaEscopo],#caixaBusca.en-on #buscaEscopo{display:none!important}#caixaBusca.en-on #filtro{display:block!important;width:100%;box-sizing:border-box;min-height:42px;padding:8px 12px;border:1px solid #b8c7d1;border-radius:10px;font:inherit}.en-aj{margin:10px 12px;padding:10px 12px;border:1px solid #d8e2e8;border-radius:10px;background:#f5f8fa;font-size:.86rem;line-height:1.45;color:#34495a}</style>');
- try{tudo();rotulos()}catch(e){}
+ /* 5. faixa inferior (celular): o corpo reservava 76 px + área segura, mas a barra
+    tem ~57 px, sobrando uma faixa vazia sob “Ver selecionadas”. A reserva passa a
+    ser a altura real da barra, que agora inclui a área segura. O botão grande
+    “Ver selecionadas” repetia o ☰ da barra: sai, e os ícones ganham nome. */
+ var NOMES={prev:'Anterior',consulta:'Consulta',selecionadas:'Selecionadas',next:'Próximo'};
+ function barra(){var tb=document.getElementById('uvis-estetica-toolbar');if(!tb)return;
+  tb.querySelectorAll('[data-est-nav]').forEach(function(b){var k=b.getAttribute('data-est-nav');if(!NOMES[k])return;var sp=b.querySelector('.en-rot');if(!sp){sp=document.createElement('span');sp.className='en-rot';b.appendChild(sp)}
+   var n=(k==='selecionadas'&&typeof escolhidas!=='undefined')?escolhidas.size:0;var t=NOMES[k]+(n?' ('+n+')':'');if(sp.textContent!==t)sp.textContent=t});
+  document.documentElement.style.setProperty('--en-barra',Math.ceil(tb.getBoundingClientRect().height)+'px')}
+ var oC2=atualizarContagens;atualizarContagens=function(){var r=oC2.apply(this,arguments);try{barra()}catch(e){}return r};
+ window.addEventListener('resize',function(){try{barra()}catch(e){}});
+ document.head.insertAdjacentHTML('beforeend','<style id="en-barra-style">html[data-uvis-app="estetica"] #uvis-estetica-toolbar{padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))!important;min-height:0!important}html[data-uvis-app="estetica"] #uvis-estetica-toolbar button{flex-direction:column;gap:2px;min-height:50px!important}html[data-uvis-app="estetica"] #uvis-estetica-toolbar .en-rot{font:600 11px/1.1 system-ui;letter-spacing:0;white-space:nowrap}@media (max-width:600px){html[data-uvis-app="estetica"] body{padding-bottom:var(--en-barra,60px)!important}html[data-uvis-app="estetica"] #acoesMobile{display:none!important}}</style>');
+ try{tudo();rotulos();barra();setTimeout(barra,300)}catch(e){}
 })();
