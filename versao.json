@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-19",
+  "versao": "20260926-20",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: a faixa do perfil na lista de blocos mostra a trilha e as classes marcadas (ex.: Atacadista / distribuidor · Dispositivos/IVD · Cosméticos), como na Odontologia."
+  "notas": "Inspeções salvas: exportar e importar em arquivo (cópia de segurança ou troca de aparelho); nos Serviços assistenciais, cada modalidade salva separadamente. SAICA e demais acolhimentos: Lei 13.725, art. 69 (interesse indireto da saúde) no lugar dos arts. 61 a 68. Odontologia: “Para saber mais” sobre climatização (split, NBR 7256, PMOC) e sanitário acessível (NBR 9050)."
 }
