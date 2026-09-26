@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-21",
+  "versao": "20260926-22",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Central de Consultas: a procedência da base não mostra mais o endereço do repositório."
+  "notas": "Medicamentos (Para saber mais): notificação de retinoides — no Estado de São Paulo, receita para paciente em idade fértil vale no máximo 7 dias (Portaria CVS nº 23/2003, art. 4º)."
 }
