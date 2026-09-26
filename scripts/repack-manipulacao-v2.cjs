@@ -44,7 +44,7 @@ if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
 for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons', 'openReader'])
   app = dropFunction(app, fn);
 /* 3. Código v2 antes da instalação */
-const code = ['saber-mais.js', 'drogaria-ocr-tools.js', 'ocr-padrao.js', 'farmacia-manipulacao-v2.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
+const code = ['saber-mais.js', 'drogaria-ocr-tools.js', 'ocr-padrao.js', 'medicamentos-banco.js', 'farmacia-manipulacao-v2.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
 const anchor = '\npharmacyInstall();\nrenderCardGrid();';
 app = change(app, anchor, '\n' + START + '\n' + code + '\n' + END + anchor, 'instalação do módulo');
 /* 4. (removido) o leitor antigo foi substituído por openReader do OCR padronizado (farmacia-manipulacao-v2.js) */

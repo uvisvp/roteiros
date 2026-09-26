@@ -1508,8 +1508,16 @@
     const target = digits(cnpj);
     if (!cnpjValid(target)) throw new Error('CNPJ inválido.');
     const rows = (await getJson('afe_ae/' + target.slice(0, 3) + '.json') || []).filter(row => digits(row.cnpj) === target);
-    const afe = unique(rows.flatMap(row => [row.autorizacao, row.afe, row.numero_afe]).filter(Boolean));
-    const ae = unique(rows.flatMap(row => [row.autorizacao_especial, row.ae, row.numero_ae]).filter(Boolean));
+    /* A base traz uma linha por autorização: o tipo (AFE/AE) está em row.tipo e o número em row.autorizacao.
+       autorizacao_especial é só um indicador S/N. Prioriza a classe Medicamento e as autorizações ativas. */
+    const isAe = row => String(row.tipo || '').toUpperCase() === 'AE';
+    const rank = row => (/medicament/i.test(row.classe || '') ? 0 : 1) + (/ativ/i.test(row.situacao || '') && !/inativ/i.test(row.situacao || '') ? 0 : 2);
+    const ordered = rows.slice().sort((a, b) => rank(a) - rank(b));
+    const afeRows = ordered.filter(row => !isAe(row)), aeRows = ordered.filter(isAe);
+    const medRows = afeRows.filter(row => /medicament/i.test(row.classe || ''));
+    const afe = unique((medRows.length ? medRows : afeRows).map(row => row.autorizacao || row.afe || row.numero_afe).filter(Boolean));
+    const ae = unique(aeRows.map(row => row.autorizacao || row.ae || row.numero_ae).filter(Boolean));
+    const acts = unique((medRows.length ? medRows : afeRows).flatMap(row => String(row.atividade_tipo || row.atividade || row.atividades || '').split(/[,;]/)).map(x => x.trim()).filter(Boolean));
     return {
       source: 'Base pública Anvisa — AFE/AE',
       queriedAt: new Date().toISOString(),
@@ -1517,7 +1525,8 @@
       razao_social: firstOf(rows[0], ['razao_social', 'razao', 'empresa', 'nome_empresarial']),
       numero_afe: afe,
       numero_ae: ae,
-      atividades: allOf(rows, ['atividade', 'atividades', 'descricao_atividade']),
+      atividades: acts,
+      autorizacoes: ordered.map(row => ({ tipo: isAe(row) ? 'AE' : 'AFE', numero: row.autorizacao || '', classe: row.classe || '', situacao: row.situacao || '', atividades: row.atividade_tipo || '', publicacao: row.data_publicacao || '', processo: row.processo || '' })),
       raw: rows
     };
   }
