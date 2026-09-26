@@ -9,6 +9,9 @@ const id = 'app--alimentos-integrado';
 const re = new RegExp('(<script type="text/plain" id="' + id + '">)([\\s\\S]*?)(</script>)');
 const m = html.match(re); if (!m) throw Error(id);
 let app = lz.decompressFromBase64(m[2]); if (!app) throw Error('descompactação');
+const troca = (de, para, rot) => { if (app.includes(para)) return; const n = app.split(de).length - 1; if (n !== 1) throw Error('Trecho ' + rot + ' encontrado ' + n + ' vezes'); app = app.replace(de, () => para); };
+/* GTIN: o código é só validado; o título não pode sugerir que o produto foi encontrado. */
+troca("g.produto || 'Produto localizado por GTIN'", "g.produto || 'GTIN válido — sem consulta de produto'", 'título do GTIN');
 const START = '<!--ROTULAGEM_INICIO-->', END = '<!--ROTULAGEM_FIM-->';
 const i0 = app.indexOf(START); if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
 const code = fs.readFileSync(path.join(root, 'rotulagem-melhorias.js'), 'utf8').replace(/<\/(script)/gi, '<\\/$1');

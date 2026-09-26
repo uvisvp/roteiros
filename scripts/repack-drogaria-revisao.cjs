@@ -59,6 +59,15 @@ html = change(html, `return '<button type="button" class="drg-item-card" data-dr
   troca("registro:'Registro Anvisa',texto:'Texto reconhecido'}", "registro:'Registro Anvisa',processo:'Processo Anvisa',texto:'Texto reconhecido'}", 'rótulo do processo');
   troca("save();byId('modal').close();render();if(ocrTarget.startsWith('supplier:')&&validateCnpj(ocrFields.cnpj))",
     "save();byId('modal').close();render();if(ocrTarget.startsWith('stock:')&&(ocrFields.ean||ocrFields.registro||ocrFields.processo)){const alvo=ocrTarget;setTimeout(async()=>{openQuery(alvo);await productSearch()},60)}if(ocrTarget.startsWith('supplier:')&&validateCnpj(ocrFields.cnpj))", 'consulta automática após OCR');
+  /* Apresentações por registro (índice apresentacoes_registro, da CMED): a consulta do estoque
+     por registro de 9 dígitos lista uma linha por apresentação; com 13 dígitos, só a apresentação
+     impressa na embalagem. */
+  troca("async function productSearch(){",
+    "async function expandeApresentacoes(rs,n){if(!queryTarget.startsWith('stock:'))return rs;const out=[];for(const x of rs){if(x.apresentacao||x._base!=='medicamentos'){out.push(x);continue}const reg=digits(x.registro);let aps=[];try{const d=await visaJSON('indices/apresentacoes_registro/'+reg.slice(0,4)+'.json');aps=(d&&d[reg])||[]}catch(e){}if(n.length===13){const f=aps.filter(a=>a.registro_apresentacao===n);if(f.length)aps=f}if(!aps.length){out.push(x);continue}aps.forEach(a=>{const e=(a.eans||[]).map(v=>String(v).replace(/^0+(?=\\d{13}$)/,'')).find(v=>/^7/.test(v))||'';out.push({...x,apresentacao:a.apresentacao,registro_apresentacao:a.registro_apresentacao,laboratorio:a.laboratorio||x.laboratorio,ean:e||x.ean})})}return out}\nasync function productSearch(){", 'função de apresentações');
+  troca("queryResults=results;state.queries.push({kind:queryTarget,value:n,",
+    "results=await expandeApresentacoes(results,n);queryResults=results;state.queries.push({kind:queryTarget,value:n,", 'expande apresentações');
+  troca("<strong>${esc(firstVal(x,['produto','nome_produto','nome_comercial','nome']))}</strong><small>Registro ${esc(x.registro)}",
+    "<strong>${esc(firstVal(x,['produto','nome_produto','nome_comercial','nome']))}</strong>${x.apresentacao?`<small>${esc(x.apresentacao)}${x.registro_apresentacao?' · reg. apres. '+esc(x.registro_apresentacao):''}${x.laboratorio?' · '+esc(x.laboratorio):''}</small>`:''}<small>Registro ${esc(x.registro)}", 'apresentação na lista');
   const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip ' + id);
   html = html.replace(re, () => m[1] + enc + m[3]);
 }

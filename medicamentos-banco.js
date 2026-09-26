@@ -5,8 +5,10 @@
      número de row.autorizacao (autorizacao_especial é só indicador S/N).
    - Nomes de medicamentos (comercial e princípio ativo) e de IFA, para a
      conferência de estoque (sugestão ao digitar 3 letras).
+   - Apresentações por registro (índice da CMED).
    API: MedBanco.consultaCnpj(cnpj,{onApply}), MedBanco.afeAe(cnpj),
-        MedBanco.nomes(termo,tipo), MedBanco.sugerir(input,{tipo,onPick}). */
+        MedBanco.nomes(termo,tipo), MedBanco.sugerir(input,{tipo,onPick}),
+        MedBanco.apresentacoes(registro). */
 (function(){
  if(window.MedBanco)return;
  var BASE='https://uvisvp.github.io/base-vigilancia/dados/';
@@ -55,5 +57,8 @@
    caixa.addEventListener('mousedown',function(e){e.preventDefault()});
    caixa.addEventListener('click',function(e){var b=e.target.closest('[data-i]');if(!b)return;var x=lst[+b.dataset.i];fecha();input.dataset.mbPausa='1';if(op.onPick)op.onPick(x,input);else{input.value=x.nome;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}))}})}).catch(function(){fecha()})},250)});
   input.addEventListener('blur',function(){setTimeout(function(){if(alvo===input)fecha()},200)})}
- window.MedBanco={afeAe:afeAe,consultaCnpj:consultaCnpj,nomes:nomes,sugerir:sugerir};
+ /* ---------- Apresentações por registro (índice da CMED) ---------- */
+ function apresentacoes(registro){var r=dig(registro).slice(0,9);if(r.length!==9)return Promise.resolve([]);
+  return json('indices/apresentacoes_registro/'+r.slice(0,4)+'.json').then(function(d){return ((d&&d[r])||[]).map(function(a){var e=(a.eans||[]).map(function(v){return String(v).replace(/^0+(?=\d{13}$)/,'')}).filter(function(v){return /^7/.test(v)})[0]||'';return {registro_apresentacao:a.registro_apresentacao||'',apresentacao:a.apresentacao||'',produto:a.produto||'',laboratorio:a.laboratorio||'',ean:e}})}).catch(function(){return []})}
+ window.MedBanco={afeAe:afeAe,consultaCnpj:consultaCnpj,nomes:nomes,sugerir:sugerir,apresentacoes:apresentacoes};
 })();
