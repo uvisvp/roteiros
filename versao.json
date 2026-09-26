@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-6",
+  "versao": "20260926-7",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Central de Consultas testada em todos os modos. Correções: registro de 13 dígitos (registro da apresentação, da embalagem) passa a localizar o produto pelos 9 primeiros dígitos; IFA por nome sem resultado na base pública de IFA (que tem poucos registros) mostra os medicamentos registrados com aquele princípio ativo."
+  "notas": "Serviços assistenciais simplificado: três abas (Roteiro, Infrações, Relatório), com Documentos, Inspeção e Dimensionamento de pessoal como atalhos dentro do Roteiro; cabeçalho do serviço compacto (enquadramento, norma e CNAE em “Sobre este serviço”); contagem única nos grupos."
 }
