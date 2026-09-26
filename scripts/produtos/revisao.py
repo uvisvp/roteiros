@@ -20,7 +20,7 @@ Critérios da revisão (conferidos no texto das normas do banco normativo):
   básicos” (repetia outras etapas) saem; itens que eram instruções de uso
   (enquadramento por classe, escopo) viram texto de apoio.
 """
-import json, os, copy
+import json, os, copy, re
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 O = json.load(open(os.path.join(AQUI, 'config-original.json'), encoding='utf-8'))
@@ -332,5 +332,21 @@ ids = [i['id'] for s in sections for i in s['items']]
 assert len(ids) == len(set(ids)), [k for k in ids if ids.count(k) > 1]
 iids = [i['id'] for i in infractions]
 assert len(iids) == len(set(iids))
+# Forma das citações lida pelo motor de citações (nuc--citacoes.js): "art. 28, II, “d”" abre o
+# inciso com as alíneas; "inciso II, alínea d" não é reconhecido e aparecia como não localizado.
+def forma(t):
+    t = re.sub(r'inciso ([IVX]+), alíneas ([a-z]) e ([a-z])\b', r'\1, “\2” e “\3”', t)
+    t = re.sub(r'inciso ([IVX]+), alínea ([a-z])\b', r'\1, “\2”', t)
+    # qualificador entre parênteses depois do dispositivo quebra a leitura do dispositivo
+    for q, por in (('fabricante', 'no fabricante'), ('distribuidor e transportador', 'no distribuidor e no transportador'),
+                   ('distribuidor', 'no distribuidor'), ('dispositivos/IVD', 'em dispositivos/IVD'),
+                   ('demais atividades', 'nas demais atividades')):
+        t = t.replace(' (' + q + ')', ', ' + por)
+    return t.replace('arts. 125, 126, parágrafo único, e 127', 'arts. 125 a 127')
+for sec in sections:
+    for it in sec['items']:
+        it['legal'] = forma(it['legal'])
+for inf in infractions:
+    inf['legal'] = forma(inf['legal'])
 json.dump(cfg, open(os.path.join(AQUI, 'config-revisado.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('seções', len(sections), 'itens', len(ids), 'infrações', len(infractions))
