@@ -1,0 +1,2503 @@
+{
+ "id": "produtos-correlatos",
+ "title": "Inspeção — Produtos",
+ "shortTitle": "Produtos",
+ "eyebrow": "Núcleo de produtos",
+ "mark": "NP",
+ "theme": "#876B3F",
+ "themeInk": "#FFFFFF",
+ "themeSoft": "#FAF3EA",
+ "themeWash": "#FCF8F2",
+ "backHref": "../nucleos/produtos.html",
+ "storageKey": "uvis-produtos-v2",
+ "startEyebrow": "Trilha de inspeção",
+ "startTitle": "Atividade selecionada — siga as etapas do roteiro",
+ "startDescription": "A atividade vem definida pelo cartão do núcleo. Fabricante é exclusivo para cosméticos. Na distribuição, marque todas as classes comercializadas; quando houver produtos para saúde, defina também o objetivo da inspeção e o modelo de relatório do POP-O-SNVS-013 rev. 9.",
+ "reportTitle": "Relatório de inspeção — produtos e correlatos",
+ "profile": {
+  "typeLabel": "Atividade",
+  "typePrompt": "Atividade inspecionada",
+  "typeHelp": "O cartão do núcleo já traz a atividade selecionada.",
+  "qsMap": {
+   "fabricante": "fabricante",
+   "fab_cosm": "fabricante",
+   "atacadista": "distribuidor",
+   "distribuidora": "distribuidor",
+   "transportadora": "transportadora"
+  },
+  "types": [
+   {
+    "id": "fabricante",
+    "mark": "FB",
+    "label": "Fabricante de cosméticos",
+    "description": "No escopo da UVIS, o perfil Fabricante é exclusivo para cosméticos, produtos de higiene e perfumes. Fabricantes de dispositivos médicos/IVD e de saneantes não entram nesta trilha.",
+    "spotlight": [
+     "Fabricante — somente cosméticos",
+     "BPF específica de cosméticos",
+     "Relatório próprio desta atividade"
+    ]
+   },
+   {
+    "id": "distribuidor",
+    "mark": "DA",
+    "label": "Atacadista / distribuidor",
+    "description": "Distribuição e armazenamento podem abranger as classes de produtos atendidas pela UVIS. Quando houver dispositivos médicos/IVD, aplicar a trilha específica de produtos para saúde e escolher o modelo de relatório do POP-O-SNVS-013 rev. 9.",
+    "spotlight": [
+     "Todas as classes distribuídas",
+     "Produtos para saúde: POP-O-SNVS-013 rev. 9",
+     "NC e risco: POP-O-SNVS-016 rev. 5"
+    ]
+   },
+   {
+    "id": "transportadora",
+    "mark": "TR",
+    "label": "Transportador",
+    "description": "Transporte de produtos sujeitos à vigilância sanitária. O POP-O-SNVS-013 rev. 9 não é aplicado automaticamente ao transportador; os requisitos permanecem vinculados à classe transportada, à AFE e às condições de conservação aplicáveis.",
+    "spotlight": [
+     "AFE e classe transportada",
+     "Proteção e conservação da carga",
+     "Rastreabilidade de coleta e entrega"
+    ]
+   }
+  ],
+  "selectors": [],
+  "flags": [
+   {
+    "id": "cls_disp",
+    "label": "Dispositivos médicos e produtos para diagnóstico in vitro",
+    "description": "Dispositivos médicos e IVD. No atacadista/distribuidor, esta seleção habilita a organização da inspeção conforme o POP-O-SNVS-013 rev. 9 e a categorização de NC do POP-O-SNVS-016 rev. 5.",
+    "when": {
+     "types": [
+      "distribuidor",
+      "transportadora"
+     ]
+    }
+   },
+   {
+    "id": "cls_cosm",
+    "label": "Cosméticos, produtos de higiene e perfumes",
+    "description": "No fabricante esta classe é fixa; no atacadista e no transportador marque quando houver essa classe.",
+    "when": {
+     "types": [
+      "fabricante",
+      "distribuidor",
+      "transportadora"
+     ]
+    }
+   },
+   {
+    "id": "cls_san",
+    "label": "Saneantes",
+    "description": "Somente distribuição/transporte neste aplicativo; não há roteiro de fabricante de saneantes.",
+    "when": {
+     "types": [
+      "distribuidor",
+      "transportadora"
+     ]
+    }
+   },
+   {
+    "id": "ae344",
+    "label": "Movimenta substâncias sujeitas a controle especial"
+   },
+   {
+    "id": "temp",
+    "label": "Produtos que exigem controle de temperatura"
+   },
+   {
+    "id": "terc",
+    "label": "Há etapas ou serviços terceirizados"
+   }
+  ],
+  "fields": [
+   {
+    "id": "establishment",
+    "label": "Estabelecimento",
+    "placeholder": "Razão social"
+   },
+   {
+    "id": "cnpj",
+    "label": "CNPJ",
+    "placeholder": "CNPJ"
+   }
+  ],
+  "requiredAnyFlags": [
+   "cls_disp",
+   "cls_cosm",
+   "cls_san"
+  ],
+  "qsFlags": {
+   "fab_cosm": {
+    "cls_cosm": true,
+    "cls_disp": false,
+    "cls_san": false
+   },
+   "fabricante": {
+    "cls_cosm": true,
+    "cls_disp": false,
+    "cls_san": false
+   }
+  }
+ },
+ "sections": [
+  {
+   "id": "lic",
+   "title": "1. Licenciamento, AFE e responsabilidade técnica",
+   "description": "Confirme o enquadramento antes de percorrer o estabelecimento.",
+   "items": [
+    {
+     "id": "l1",
+     "text": "Licença sanitária municipal vigente e compatível com a atividade e o endereço inspecionado.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 90.",
+     "critical": true
+    },
+    {
+     "id": "l2",
+     "text": "As atividades efetivamente exercidas correspondem às atividades e classes de produtos abrangidas pela AFE/AE e pelo licenciamento sanitário aplicável.",
+     "legal": "RDC Anvisa nº 16/2014, art. 3º, caput e parágrafo único."
+    },
+    {
+     "id": "l3",
+     "text": "AFE compatível com a classe de produto e as atividades efetivamente exercidas; conferir matriz/filial conforme o regime aplicável.",
+     "legal": "RDC Anvisa nº 16/2014, art. 3º e art. 10, §§ 1º e 2º.",
+     "critical": true
+    },
+    {
+     "id": "l4",
+     "text": "Quando a atividade for transporte, confirme se há AFE ou se o caso se enquadra especificamente na dispensa para transporte entre comércio varejista e consumidor final.",
+     "legal": "RDC Anvisa nº 16/2014, art. 5º, inciso VI e parágrafo único.",
+     "critical": true,
+     "when": {
+      "types": [
+       "transportadora"
+      ]
+     }
+    },
+    {
+     "id": "l5",
+     "text": "AE concedida para as substâncias sujeitas a controle especial movimentadas.",
+     "legal": "RDC Anvisa nº 16/2014, art. 4º.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "ae344"
+      ]
+     }
+    },
+    {
+     "id": "l6",
+     "text": "Responsável técnico habilitado e vínculo/documentação compatíveis com a atividade e a classe de produto, quando exigidos pela legislação aplicável.",
+     "legal": "Legislação específica da atividade e da classe de produto; para fabricante de cosméticos, RDC Anvisa nº 48/2013, Anexo II, item 11.9."
+    },
+    {
+     "id": "l7",
+     "text": "Alterações cadastrais e de AFE/AE foram peticionadas nos procedimentos e prazos aplicáveis; mudança de responsável técnico ou legal é informada para atualização cadastral no prazo regulamentar.",
+     "legal": "RDC Anvisa nº 16/2014, art. 11, § 1º; art. 15, inciso III, alíneas d e f; e art. 22, incisos VI a VIII."
+    },
+    {
+     "id": "l8",
+     "text": "No perfil Fabricante, este roteiro é destinado exclusivamente a fabricantes de cosméticos, produtos de higiene e perfumes; fabricantes de dispositivos médicos/IVD e de saneantes estão fora do escopo definido para este aplicativo.",
+     "legal": "Escopo operacional do roteiro.",
+     "when": {
+      "types": [
+       "fabricante"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "reg",
+   "title": "2. Regularidade dos produtos",
+   "description": "Verificação por amostragem do que está no estabelecimento.",
+   "items": [
+    {
+     "id": "r1",
+     "text": "Dispositivos médicos (não IVD) regularizados conforme a classe de risco: classes I e II por notificação; classes III e IV por registro, observadas as regras e exceções aplicáveis.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 50; RDC Anvisa nº 751/2022, arts. 2º, 5º, 6º e 7º.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    },
+    {
+     "id": "r1ivd",
+     "text": "Dispositivos médicos para diagnóstico in vitro (IVD) regularizados segundo a RDC nº 830/2023; conferir classe de risco e regime de notificação ou registro.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 50; RDC Anvisa nº 830/2023, dispositivos de classificação de risco e de notificação/registro aplicáveis.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    },
+    {
+     "id": "r2",
+     "text": "Cosméticos, produtos de higiene e perfumes regularizados, com rotulagem e embalagem conformes.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 50; RDC Anvisa nº 907/2024, arts. 34 e 35.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     }
+    },
+    {
+     "id": "r3",
+     "text": "Saneantes regularizados conforme a classificação: risco 1 por notificação e risco 2 por registro, com rotulagem correspondente.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 50; RDC Anvisa nº 989/2025, arts. 8º e 12, com as alterações vigentes.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_san"
+      ]
+     }
+    },
+    {
+     "id": "r4",
+     "text": "Produtos dentro do prazo de validade, com embalagem íntegra e identificação legível.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50."
+    },
+    {
+     "id": "r5",
+     "text": "Não há produto sem procedência comprovada, sem rotulagem ou de fornecedor não autorizado.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46, 49 e 50.",
+     "critical": true
+    }
+   ]
+  },
+  {
+   "id": "classe_aplicacao",
+   "title": "3. Enquadramento regulatório por classe",
+   "description": "Este bloco evita aplicar a RDC nº 665/2022 fora de sua abrangência.",
+   "items": [
+    {
+     "id": "ca1",
+     "text": "Para dispositivos médicos, diferencie produto médico geral (RDC nº 751/2022) de IVD (RDC nº 830/2023). Para a atividade de distribuição/armazenagem, aplique o recorte de BPF da RDC nº 665/2022 previsto no art. 2º, § 2º.",
+     "legal": "RDC Anvisa nº 665/2022, art. 2º, caput, § 2º e § 6º; RDC Anvisa nº 751/2022, arts. 5º a 7º; RDC Anvisa nº 830/2023, dispositivos aplicáveis.",
+     "when": {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    },
+    {
+     "id": "ca2",
+     "text": "Para cosméticos, produtos de higiene e perfumes, utilizar o bloco específico de BPF do fabricante quando essa atividade e essa classe estiverem selecionadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3; RDC Anvisa nº 907/2024, arts. 34 e 35.",
+     "when": {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     }
+    },
+    {
+     "id": "ca3",
+     "text": "A seleção de saneantes não autoriza aplicar automaticamente a RDC nº 665/2022; devem ser observadas as normas próprias da classe e da atividade.",
+     "legal": "RDC Anvisa nº 989/2025, arts. 8º e 12, com as alterações vigentes.",
+     "when": {
+      "types": [
+       "distribuidor",
+       "transportadora"
+      ],
+      "flagsAll": [
+       "cls_san"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "f_gq",
+   "title": "3. Gestão da qualidade",
+   "description": "Sistema, garantia da qualidade, validação e estabilidade.",
+   "items": [
+    {
+     "id": "fgq1",
+     "text": "Sistema de gestão da qualidade estabelecido, documentado e implementado, com política e responsabilidades definidas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.2."
+    },
+    {
+     "id": "fgq2",
+     "text": "Sistema de Garantia da Qualidade mantido, com instalações, equipamentos e pessoal compatíveis com as atividades.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 3.3.1 a 3.3.3."
+    },
+    {
+     "id": "fgq3",
+     "text": "Produtos não são vendidos nem entregues ao consumo antes de concluídas todas as etapas de controle e liberação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.3.4.",
+     "critical": true
+    },
+    {
+     "id": "fgq4",
+     "text": "Desvios reportados, investigados e registrados, com ação corretiva quando necessário.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.3.4."
+    },
+    {
+     "id": "fgq5",
+     "text": "Critérios definidos para qualificação de fornecedores.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.3.5."
+    },
+    {
+     "id": "fgq6",
+     "text": "Protocolos e relatórios de validação com critérios de aceitação, aprovados pela Garantia da Qualidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 3.4.1 a 3.4.5."
+    },
+    {
+     "id": "fgq7",
+     "text": "Necessidade de revalidação avaliada a cada mudança, com periodicidade definida.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.5."
+    },
+    {
+     "id": "fgq8",
+     "text": "Estudo de estabilidade dos produtos, com metodologias, condições e registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.6."
+    },
+    {
+     "id": "p48_3",
+     "text": "A empresa possui sistema de Gestão e Garantia da Qualidade documentado, implementado e mantido, com responsabilidades definidas e controles capazes de assegurar a conformidade dos produtos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_bpf",
+   "title": "4. Requisitos básicos de boas práticas",
+   "description": "Definição, controle e registro dos processos.",
+   "items": [
+    {
+     "id": "fb1",
+     "text": "Processos de fabricação claramente definidos e sistematicamente revisados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 4.1."
+    },
+    {
+     "id": "fb2",
+     "text": "Etapas críticas controladas e, quando possível, validadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 4.1."
+    },
+    {
+     "id": "fb3",
+     "text": "Área de fabricação provida da infraestrutura exigida, incluindo pessoal treinado, instalações, equipamentos e depósitos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 4.1."
+    },
+    {
+     "id": "fb4",
+     "text": "Registros de produção demonstram que as etapas dos procedimentos foram seguidas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 4.1."
+    },
+    {
+     "id": "fb5",
+     "text": "Procedimento de recolhimento de lote implantado.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 4.1."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_saude",
+   "title": "5. Saúde, higiene, vestuário e conduta",
+   "description": "Pessoal e fontes de contaminação.",
+   "items": [
+    {
+     "id": "fs1",
+     "text": "Exames de saúde admissionais e periódicos realizados conforme procedimento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.2."
+    },
+    {
+     "id": "fs2",
+     "text": "Pessoal treinado nas práticas de higiene pessoal.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.3."
+    },
+    {
+     "id": "fs3",
+     "text": "Pessoa com suspeita ou confirmação de enfermidade ou lesão exposta afastada do manuseio.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.4.",
+     "critical": true
+    },
+    {
+     "id": "fs4",
+     "text": "Paramentação limpa e adequada a cada área e atividade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.7."
+    },
+    {
+     "id": "fs5",
+     "text": "EPC e EPI disponibilizados conforme as atividades.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.8."
+    },
+    {
+     "id": "fs6",
+     "text": "Proibição de fumar, comer, beber ou manter alimentos e medicamentos pessoais nas áreas de produção, controle de qualidade e armazenamento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.9."
+    },
+    {
+     "id": "fs7",
+     "text": "Visitantes e pessoas não treinadas acessam a produção paramentados e acompanhados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 5.11."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_rec",
+   "title": "6. Reclamações e cosmetovigilância",
+   "description": "Recebimento, investigação e registro.",
+   "items": [
+    {
+     "id": "fr1",
+     "text": "Reclamações investigadas e registradas conforme procedimento escrito, com participação do Controle de Qualidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6.1."
+    },
+    {
+     "id": "fr2",
+     "text": "Pessoa ou setor designado para receber reclamações e adotar medidas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6.3."
+    },
+    {
+     "id": "fr3",
+     "text": "Procedimento escrito prevê as ações, inclusive a hipótese de recolhimento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6.4."
+    },
+    {
+     "id": "fr4",
+     "text": "Registros de reclamações revisados regularmente para detectar problemas recorrentes.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6.6."
+    },
+    {
+     "id": "fr5",
+     "text": "Sistema de cosmetovigilância implantado.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6.7; RDC Anvisa nº 894/2024, arts. 6º, 18 e 19.",
+     "critical": true
+    },
+    {
+     "id": "p48_6",
+     "text": "Reclamações e informações sobre possíveis desvios de qualidade são registradas, investigadas e acompanhadas conforme procedimentos escritos, com participação do Controle da Qualidade e sistema de cosmetovigilância.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 6."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_recolhe",
+   "title": "7. Recolhimento de produtos",
+   "description": "Retirada do mercado e destino.",
+   "items": [
+    {
+     "id": "fx1",
+     "text": "Sistema capaz de retirar imediata e efetivamente do mercado produto com desvio de qualidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.1.",
+     "critical": true
+    },
+    {
+     "id": "fx2",
+     "text": "Responsável designado pela coordenação do recolhimento; RT informado.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.2."
+    },
+    {
+     "id": "fx3",
+     "text": "Procedimentos escritos, conferidos e atualizados, com destino dos produtos recolhidos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.3."
+    },
+    {
+     "id": "fx4",
+     "text": "Autoridades sanitárias informadas da decisão de recolhimento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.4.",
+     "critical": true
+    },
+    {
+     "id": "fx5",
+     "text": "Reconciliação entre quantidade distribuída e resgatada, com relatório final.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.5."
+    },
+    {
+     "id": "fx6",
+     "text": "Produtos recolhidos identificados e armazenados em área segregada e segura.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7.6."
+    },
+    {
+     "id": "p48_7",
+     "text": "Existe sistema documentado e efetivo para o recolhimento de produtos com desvio de qualidade que possa oferecer risco, com responsável designado, registros e controle da destinação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 7."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_dev",
+   "title": "8. Devolução",
+   "description": "Recebimento e destinação.",
+   "items": [
+    {
+     "id": "fd1",
+     "text": "Pessoa ou setor designado para receber devoluções.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 8.1."
+    },
+    {
+     "id": "fd2",
+     "text": "Procedimento de recebimento, armazenamento e investigação das causas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 8.2."
+    },
+    {
+     "id": "fd3",
+     "text": "Produtos devolvidos inspecionados ou analisados antes de definido o destino final.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 8.3."
+    },
+    {
+     "id": "fd4",
+     "text": "Registros dos resultados da inspeção e dos destinos finais.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 8.4."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_auto",
+   "title": "9. Autoinspeção e auditoria interna",
+   "description": "Programa, frequência e ações.",
+   "items": [
+    {
+     "id": "fa1",
+     "text": "Procedimento escrito de autoinspeção abrangendo os aspectos exigidos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9.2."
+    },
+    {
+     "id": "fa2",
+     "text": "Equipe formada por profissionais qualificados com conhecimento em BPF.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9.3."
+    },
+    {
+     "id": "fa3",
+     "text": "Autoinspeção realizada ao menos uma vez ao ano.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9.4."
+    },
+    {
+     "id": "fa4",
+     "text": "Relatório com resultados, conclusões, ações corretivas e prazos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9.5."
+    },
+    {
+     "id": "fa5",
+     "text": "Ações corretivas implementadas e acompanhadas conforme plano de ação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9.6."
+    },
+    {
+     "id": "p48_9",
+     "text": "São realizadas autoinspeções ou auditorias internas, ao menos anualmente, por equipe qualificada, com relatório, plano de ação e acompanhamento das medidas corretivas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 9."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_doc",
+   "title": "10. Documentação e registros",
+   "description": "Controle, retenção e rastreabilidade.",
+   "items": [
+    {
+     "id": "fo1",
+     "text": "Documentação elaborada, aprovada, atualizada e distribuída conforme procedimento, com controle de emissão e revisão.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.4."
+    },
+    {
+     "id": "fo2",
+     "text": "Registros alterados permitem identificar o dado anterior, assinados e datados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.5."
+    },
+    {
+     "id": "fo3",
+     "text": "Registros de produção e controle retidos por no mínimo um ano após o vencimento do lote.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.7."
+    },
+    {
+     "id": "fo4",
+     "text": "Registros de uso, limpeza, sanitização e manutenção dos equipamentos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.8."
+    },
+    {
+     "id": "fo5",
+     "text": "Fórmula padrão/mestra para cada produto, com o conteúdo mínimo exigido.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.9.",
+     "critical": true
+    },
+    {
+     "id": "fo6",
+     "text": "Registro de produção por lote, baseado na fórmula padrão vigente, com rastreabilidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.10.",
+     "critical": true
+    },
+    {
+     "id": "fo7",
+     "text": "POPs existentes e implementados para recebimento, identificação, amostragem, numeração de lote, ensaios, limpeza, armazenamento, calibração e controle de pragas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 10.11."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_pes",
+   "title": "11. Pessoal",
+   "description": "Estrutura, treinamento e responsabilidades.",
+   "items": [
+    {
+     "id": "fp1",
+     "text": "Organograma atualizado e responsabilidades funcionais documentadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 11.1."
+    },
+    {
+     "id": "fp2",
+     "text": "Número suficiente de pessoas treinadas e qualificadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 11.2."
+    },
+    {
+     "id": "fp3",
+     "text": "Programa escrito de treinamento, com planejamento e registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 11.3 e 11.6."
+    },
+    {
+     "id": "fp4",
+     "text": "Treinamento específico para quem manipula materiais tóxicos e inflamáveis.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 11.5."
+    },
+    {
+     "id": "fp5",
+     "text": "Responsáveis pela produção e pelo controle de qualidade são independentes entre si.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 11.8.",
+     "critical": true
+    },
+    {
+     "id": "fp6",
+     "text": "Responsabilidade técnica exercida por profissional habilitado, com substituto designado na ausência.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 11.9.",
+     "critical": true
+    },
+    {
+     "id": "fp7",
+     "text": "Responsabilidades funcionais definidas para documentos, higiene, calibração, fornecedores, armazenamento e validações.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 11.10 a 11.12."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_inst",
+   "title": "12. Instalações",
+   "description": "Projeto, conservação e proteção.",
+   "items": [
+    {
+     "id": "fi1",
+     "text": "Planta arquitetônica aprovada pela autoridade sanitária competente.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.1."
+    },
+    {
+     "id": "fi2",
+     "text": "Instalações projetadas e mantidas de modo a evitar contaminação cruzada e acúmulo de sujidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.2."
+    },
+    {
+     "id": "fi3",
+     "text": "Limpeza e sanitização das áreas conforme procedimento, com registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.3."
+    },
+    {
+     "id": "fi4",
+     "text": "Instalações em bom estado de conservação, higiene e limpeza, inclusive os arredores.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 12.4 e 12.6."
+    },
+    {
+     "id": "fi5",
+     "text": "Proteção contra entrada de insetos e animais, com programa de prevenção e registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.8."
+    },
+    {
+     "id": "fi6",
+     "text": "Instalações de segurança contra incêndio, com extintores em número suficiente e acesso livre.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.9."
+    },
+    {
+     "id": "fi7",
+     "text": "Raticidas, inseticidas e sanitizantes utilizados sem contaminar equipamentos, matérias-primas e produtos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.10."
+    },
+    {
+     "id": "fi8",
+     "text": "Ralos projetados para prevenir refluxo; canais abertos evitados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12.11."
+    },
+    {
+     "id": "p48_12",
+     "text": "As instalações são compatíveis com as atividades, com organização e fluxo adequados, mantidas em condições que permitam limpeza, conservação e prevenção de contaminações e misturas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 12."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_agua",
+   "title": "13. Sistema e instalações de água",
+   "description": "Especificação, tratamento e monitoramento.",
+   "items": [
+    {
+     "id": "fw1",
+     "text": "Especificações físico-químicas e microbiológicas da água definidas, atendendo no mínimo aos padrões de potabilidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13.2.",
+     "critical": true
+    },
+    {
+     "id": "fw2",
+     "text": "Tubulações de transporte de água em bom estado de conservação e limpeza.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13.3."
+    },
+    {
+     "id": "fw3",
+     "text": "Procedimentos e registros de operação, limpeza, sanitização e manutenção do sistema de água.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13.5."
+    },
+    {
+     "id": "fw4",
+     "text": "Monitoramento periódico da qualidade da água nos pontos críticos, com registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13.6.",
+     "critical": true
+    },
+    {
+     "id": "fw5",
+     "text": "Investigação e ação corretiva documentadas para resultados fora da especificação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13.7.1."
+    },
+    {
+     "id": "p48_13",
+     "text": "O sistema de água assegura quantidade e qualidade adequadas, com especificações definidas, monitoramento periódico, manutenção, limpeza, sanitização e registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 13."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_aux",
+   "title": "14. Áreas auxiliares",
+   "description": "Separação em relação à produção.",
+   "items": [
+    {
+     "id": "fx11",
+     "text": "Salas de descanso, refeitório, vestiários, sanitários e manutenção separados das áreas de produção.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 14.1."
+    },
+    {
+     "id": "fx12",
+     "text": "Vestiários e sanitários suficientes, higienizados e sem comunicação direta com produção e armazenamento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 14.2."
+    },
+    {
+     "id": "fx13",
+     "text": "Área de manutenção separada; ferramentas guardadas em local reservado.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 14.3."
+    },
+    {
+     "id": "fx14",
+     "text": "Tubulações de água, vapor, gás, ar comprimido e eletricidade identificadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 14.4."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_arm",
+   "title": "15. Recebimento e armazenamento",
+   "description": "Organização, status e conservação.",
+   "items": [
+    {
+     "id": "fm1",
+     "text": "Áreas com capacidade para estoque ordenado por categoria e por status.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.1."
+    },
+    {
+     "id": "fm2",
+     "text": "Condições de estocagem asseguradas; temperatura e umidade verificadas, monitoradas e registradas quando exigidas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.2."
+    },
+    {
+     "id": "fm3",
+     "text": "Pisos, paredes e tetos de fácil limpeza e em bom estado de conservação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.3."
+    },
+    {
+     "id": "fm4",
+     "text": "Almoxarifado protegido contra roedores, insetos, aves e outros animais.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.4."
+    },
+    {
+     "id": "fm5",
+     "text": "Balanças calibradas periodicamente, com registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.7."
+    },
+    {
+     "id": "fm6",
+     "text": "Materiais reprovados, recolhidos e devolvidos identificados e armazenados em área restrita ou segregada.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.9.",
+     "critical": true
+    },
+    {
+     "id": "fm7",
+     "text": "Materiais com risco de incêndio, explosão ou perigosos estocados em área segura, segregada e identificada.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.12.",
+     "critical": true
+    },
+    {
+     "id": "fm8",
+     "text": "Rotatividade de estoque pela regra do primeiro que expira, primeiro que sai.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.13."
+    },
+    {
+     "id": "fm9",
+     "text": "Inventários periódicos realizados, com registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.15."
+    },
+    {
+     "id": "fm10",
+     "text": "Materiais e produtos isolados do piso e afastados das paredes.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.16."
+    },
+    {
+     "id": "fm11",
+     "text": "Materiais em quarentena identificados como tal antes da liberação pelo controle de qualidade.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.19."
+    },
+    {
+     "id": "fm12",
+     "text": "Etiquetas de identificação com nome, lote do fornecedor e da empresa, situação, validade e fornecedor.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.21."
+    },
+    {
+     "id": "fm13",
+     "text": "Matérias-primas recebidas com os respectivos laudos de análise do fabricante ou fornecedor.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15.29."
+    },
+    {
+     "id": "p48_15",
+     "text": "O recebimento e o armazenamento de materiais e produtos são realizados com identificação, inspeção, segregação, controle de situação, validade, condições ambientais e rastreabilidade adequados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 15."
+    },
+    {
+     "id": "p48_19",
+     "text": "São mantidas amostras de retenção dos produtos acabados, em embalagem adequada, identificadas, armazenadas nas condições especificadas e em quantidade suficiente para as análises previstas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 19."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_amo",
+   "title": "16. Amostragem de materiais",
+   "description": "Área, plano e identificação.",
+   "items": [
+    {
+     "id": "fn1",
+     "text": "Amostragem realizada em área definida, por pessoas autorizadas, evitando contaminação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 16.1."
+    },
+    {
+     "id": "fn2",
+     "text": "Amostras representativas; lotes distintos amostrados separadamente.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 16.2."
+    },
+    {
+     "id": "fn3",
+     "text": "Número de recipientes e tamanho da amostra baseados em plano de amostragem.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 16.3."
+    },
+    {
+     "id": "fn4",
+     "text": "Amostras e recipientes amostrados identificados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 16.6 e 16.7."
+    },
+    {
+     "id": "fn5",
+     "text": "POP de amostragem com o conteúdo mínimo exigido.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 16.8."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_prod",
+   "title": "17. Produção, equipamentos, processos e embalagem",
+   "description": "Produção de cosméticos: áreas, equipamentos, pesagem, elaboração, envase, embalagem, rotulagem e controles em processo.",
+   "items": [
+    {
+     "id": "fp1",
+     "text": "Áreas produtivas com espaço, instalações, equipamentos, materiais, pessoal treinado, procedimentos aprovados e controle em processo compatíveis com as operações.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 17.2 a 17.6.",
+     "critical": true
+    },
+    {
+     "id": "fp2",
+     "text": "Temperatura e umidade são monitoradas, registradas e controladas quando necessárias à estabilidade dos materiais e produtos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.9."
+    },
+    {
+     "id": "fp3",
+     "text": "Equipamentos são adequados, identificados, limpos e sanitizados; equipamentos em desuso ou com defeito são retirados ou claramente identificados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 17.18.1 e 17.18.5 a 17.18.7."
+    },
+    {
+     "id": "fp4",
+     "text": "Existe programa de manutenção preventiva dos equipamentos, com registro das atividades realizadas.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.18.8."
+    },
+    {
+     "id": "fp5",
+     "text": "Balanças e recipientes de medida são calibrados regularmente conforme programa preestabelecido, com periodicidade definida e registros.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.17.4.",
+     "critical": true
+    },
+    {
+     "id": "fp6",
+     "text": "Cada lote é produzido conforme ordem de fabricação correspondente à Fórmula Padrão/Mestra e com documentação, matérias-primas e equipamentos disponíveis e aprovados antes do início da operação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 17.19.1 e 17.19.3.",
+     "critical": true
+    },
+    {
+     "id": "fp7",
+     "text": "Controles em processo e limites de aceitação estão definidos em procedimentos escritos; resultados fora do limite são comunicados e investigados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.19.8.",
+     "critical": true
+    },
+    {
+     "id": "fp8",
+     "text": "Reprocessamento somente ocorre mediante procedimento autorizado e avaliação de riscos, sem comprometer especificações/qualidade, com registro e rastreabilidade do lote.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.19.9.",
+     "critical": true
+    },
+    {
+     "id": "fp9",
+     "text": "Produtos semi-elaborados ou a granel, quando o processo não é contínuo, permanecem em área definida, nas condições especificadas e dentro do tempo máximo de estocagem estabelecido.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.19.10."
+    },
+    {
+     "id": "fp10",
+     "text": "Envase, embalagem e rotulagem são realizados em área apropriada, com controles para prevenir misturas, trocas e erros de identificação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 17.20."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_cq",
+   "title": "18. Controle da qualidade",
+   "description": "Independência, procedimentos, equipamentos, registros, especificações, ensaios e liberação.",
+   "items": [
+    {
+     "id": "fcq1",
+     "text": "A empresa possui laboratório de Controle da Qualidade integrante da Garantia da Qualidade, próprio e independente da produção; terceirizações seguem a legislação aplicável.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 18.1.",
+     "critical": true
+    },
+    {
+     "id": "fcq2",
+     "text": "Análises seguem procedimentos escritos; instrumentos de precisão são calibrados; há equipamentos adequados, pessoal qualificado e registros dos ensaios e desvios.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 18.2.",
+     "critical": true
+    },
+    {
+     "id": "fcq3",
+     "text": "Responsabilidades do Controle/Garantia da Qualidade estão definidas e documentadas, incluindo aprovação/reprovação, registros, investigação de reclamações, devoluções e resultados fora de especificação.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 18.3."
+    },
+    {
+     "id": "fcq4",
+     "text": "Laboratório de Controle da Qualidade é separado das áreas de produção; ensaios microbiológicos contam com instalações independentes.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 18.4."
+    },
+    {
+     "id": "fcq5",
+     "text": "Especificações, procedimentos de amostragem, métodos de ensaio, registros e certificados analíticos necessários ao controle estão disponíveis e controlados.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 18.8 a 18.13."
+    },
+    {
+     "id": "fcq6",
+     "text": "Matérias-primas, materiais de embalagem e produtos acabados somente são liberados quando atendem aos critérios e especificações estabelecidos.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, itens 18.16 e 18.23 a 18.26.",
+     "critical": true
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "f_ret",
+   "title": "19. Amostras de retenção",
+   "description": "Retenção de amostras de matérias-primas e produtos acabados conforme critérios e período definidos.",
+   "items": [
+    {
+     "id": "frt1",
+     "text": "São mantidas amostras de retenção identificadas e em quantidade suficiente para as análises previstas, nas condições e pelo período definidos no regulamento/procedimento.",
+     "legal": "RDC Anvisa nº 48/2013, Anexo II, item 19."
+    }
+   ],
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "d_fluxo",
+   "title": "Atacadista — 3. Recebimento e fornecedores",
+   "description": "Comece pela origem do produto e pelo que efetivamente entra no estoque.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ]
+   },
+   "items": [
+    {
+     "id": "df1",
+     "text": "Fornecedores e titulares dos produtos são identificados e a procedência pode ser comprovada por documentação fiscal e sanitária.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "df2",
+     "text": "No recebimento, são conferidos identificação do produto, lote quando aplicável, validade, integridade da embalagem e condições de transporte.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46, 49 e 50."
+    },
+    {
+     "id": "df3",
+     "text": "Produtos avariados, vencidos, devolvidos, recolhidos, suspeitos ou não conformes são identificados e segregados para impedir distribuição indevida.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46, 49 e 50."
+    },
+    {
+     "id": "df4",
+     "text": "Para dispositivos/IVD, o recebimento e a aceitação seguem procedimentos documentados compatíveis com a RDC nº 665/2022.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 79 a 81.",
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "d_store",
+   "title": "Atacadista — 4. Armazenamento e conservação",
+   "description": "Percorra fisicamente o estoque e compare as condições com as exigidas para cada classe.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ]
+   },
+   "items": [
+    {
+     "id": "ds1",
+     "text": "Áreas de armazenamento estão limpas, organizadas, em condições de evitar mistura, dano, contaminação e troca de produtos.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "ds2",
+     "text": "A segregação física ou por sistema impede a disponibilização de produtos vencidos, interditados, devolvidos, recolhidos ou não conformes.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46, 49 e 50."
+    },
+    {
+     "id": "ds3",
+     "text": "As condições de temperatura, umidade, luz e demais requisitos de conservação seguem a rotulagem, instruções do fabricante e especificações do produto.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50.",
+     "critical": true
+    },
+    {
+     "id": "ds4",
+     "text": "Quando há produto termossensível, os instrumentos e registros permitem demonstrar manutenção das condições especificadas durante o armazenamento.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "temp"
+      ]
+     }
+    },
+    {
+     "id": "ds5",
+     "text": "Para dispositivos/IVD, armazenamento, manuseio e distribuição seguem os controles específicos da RDC nº 665/2022.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 80 a 83.",
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "d_trace",
+   "title": "Atacadista — 5. Rastreabilidade, devoluções e recolhimento",
+   "description": "Verifique se é possível reconstruir o caminho do lote/produto e agir diante de problema.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ]
+   },
+   "items": [
+    {
+     "id": "dr1",
+     "text": "Os registros permitem identificar entrada, fornecedor, lote ou identificação aplicável, quantidade e destino dos produtos distribuídos.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "dr2",
+     "text": "Existe fluxo documentado para devoluções e produtos não conformes, com avaliação antes de eventual retorno ao estoque comercializável.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "dr3",
+     "text": "A empresa consegue localizar produtos distribuídos e executar bloqueio/recolhimento quando determinado pelo titular ou pela autoridade sanitária.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46, 50 e 55.",
+     "critical": true
+    },
+    {
+     "id": "dr4",
+     "text": "Para dispositivos/IVD, reclamações, ações corretivas/preventivas e ações de campo são tratadas conforme os requisitos específicos aplicáveis.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 120 e 121; RDC Anvisa nº 551/2021, art. 12.",
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "d_docs",
+   "title": "Atacadista — 6. Documentos, reclamações e rotina",
+   "description": "Feche a trilha verificando se a rotina pode ser demonstrada por documentos e registros.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ]
+   },
+   "items": [
+    {
+     "id": "dd1",
+     "text": "Procedimentos e registros correspondem às atividades realmente executadas: recebimento, armazenamento, separação, expedição, devolução, reclamação e recolhimento.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "dd2",
+     "text": "Pessoal envolvido nas operações recebeu orientação/treinamento compatível com sua função e com os produtos manuseados.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 46."
+    },
+    {
+     "id": "dd3",
+     "text": "Reclamações de qualidade e eventos recebidos são registrados e encaminhados ao titular/fabricante responsável pela regularização, quando cabível.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55."
+    },
+    {
+     "id": "dd4",
+     "text": "Quando distribui cosméticos, as reclamações relacionadas à segurança são encaminhadas ao titular para tratamento no sistema de cosmetovigilância.",
+     "legal": "RDC Anvisa nº 894/2024.",
+     "when": {
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     }
+    },
+    {
+     "id": "dd5",
+     "text": "Quando distribui saneantes, a regularização do produto é conferida conforme risco 1/notificação ou risco 2/registro e eventuais alterações vigentes.",
+     "legal": "RDC Anvisa nº 989/2025, arts. 8º e 12, e IN Anvisa nº 394/2025, com alterações da RDC nº 1.040/2026 e IN nº 468/2026.",
+     "when": {
+      "flagsAll": [
+       "cls_san"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "d_sq",
+   "title": "3. Sistema da qualidade e responsabilidade gerencial — dispositivos/IVD",
+   "description": "Sistema da qualidade aplicável ao fabricante e, no recorte mínimo do art. 2º, § 2º, ao distribuidor de dispositivos/IVD.",
+   "items": [
+    {
+     "id": "dq1",
+     "text": "Sistema de qualidade estabelecido e mantido, com instruções e procedimentos próprios.",
+     "legal": "RDC Anvisa nº 665/2022, art. 4º.",
+     "critical": true
+    },
+    {
+     "id": "dq2",
+     "text": "Política de qualidade descrita em manual e compreendida por quem pode afetar a qualidade do produto.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 5º a 7º."
+    },
+    {
+     "id": "dq3",
+     "text": "Estrutura organizacional representada em organograma, com responsabilidades e autoridade definidas.",
+     "legal": "RDC Anvisa nº 665/2022, art. 8º."
+    },
+    {
+     "id": "dq4",
+     "text": "Representante da gerência designado por documento, responsável pelo sistema de qualidade.",
+     "legal": "RDC Anvisa nº 665/2022, art. 9º."
+    },
+    {
+     "id": "dq5",
+     "text": "Revisão gerencial em intervalos definidos, documentada, considerando auditorias, reclamações e ações corretivas.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 10 a 12."
+    },
+    {
+     "id": "dq6",
+     "text": "Pessoal em número suficiente, com treinamento conduzido por pessoas qualificadas e documentado.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 13 a 15.",
+     "critical": true
+    },
+    {
+     "id": "dq7",
+     "text": "Consultores com qualificação suficiente, contratados conforme o controle de compras.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 16 e 17."
+    },
+    {
+     "id": "dq8",
+     "text": "Critérios de avaliação de fornecedores definidos, com registro de fornecedores aprovados.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 22 e 23.",
+     "critical": true
+    },
+    {
+     "id": "dq9",
+     "text": "Acordo documentado em que o fornecedor se compromete a notificar alterações no produto ou serviço.",
+     "legal": "RDC Anvisa nº 665/2022, art. 24."
+    },
+    {
+     "id": "dq10",
+     "text": "Registros de pedidos de compra referenciando especificações, revisados e aprovados antes da liberação.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 25 a 27."
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "d_doc",
+   "title": "4. Documentos e registros da qualidade — dispositivos/IVD",
+   "description": "Controle, guarda e retenção.",
+   "items": [
+    {
+     "id": "dd1",
+     "text": "Procedimentos de controle de documentos assegurando versões corretas e compreendidas.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 28 a 30."
+    },
+    {
+     "id": "dd2",
+     "text": "Registro de alteração de documentos com descrição, documentos afetados, responsável e datas.",
+     "legal": "RDC Anvisa nº 665/2022, art. 32."
+    },
+    {
+     "id": "dd3",
+     "text": "Relação de documentos vigentes, permitindo identificar a situação atual.",
+     "legal": "RDC Anvisa nº 665/2022, art. 33."
+    },
+    {
+     "id": "dd4",
+     "text": "Documentos legíveis, guardados contra dano e perda, com cópia de segurança dos arquivos digitais.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 34 e 35."
+    },
+    {
+     "id": "dd5",
+     "text": "Registros mantidos por período equivalente à vida útil do produto e nunca inferior a dois anos.",
+     "legal": "RDC Anvisa nº 665/2022, art. 37.",
+     "critical": true
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "d_inst",
+   "title": "7. Instalações, ambiente, higiene e pessoal — dispositivos/IVD",
+   "description": "RDC nº 665/2022 no recorte aplicável à atividade selecionada.",
+   "items": [
+    {
+     "id": "di1",
+     "text": "Instalações projetadas para fluxo adequado de pessoas e prevenção de trocas e contaminação.",
+     "legal": "RDC Anvisa nº 665/2022, art. 67.",
+     "critical": true
+    },
+    {
+     "id": "di2",
+     "text": "Condições ambientais adequadas, com controles monitorados e registrados.",
+     "legal": "RDC Anvisa nº 665/2022, art. 68."
+    },
+    {
+     "id": "di3",
+     "text": "Procedimentos de limpeza e sanitização, com programação compatível.",
+     "legal": "RDC Anvisa nº 665/2022, art. 69."
+    },
+    {
+     "id": "di4",
+     "text": "Pessoal em contato com o produto limpo, saudável e vestido adequadamente; afastamento quando a condição de saúde puder afetar o produto.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 70 e 71."
+    },
+    {
+     "id": "di5",
+     "text": "Consumo de alimentos e bebidas restrito a locais específicos, fora das áreas de produto.",
+     "legal": "RDC Anvisa nº 665/2022, art. 72."
+    },
+    {
+     "id": "di6",
+     "text": "Procedimentos que evitem contaminação por materiais de limpeza e substâncias perigosas.",
+     "legal": "RDC Anvisa nº 665/2022, art. 73."
+    },
+    {
+     "id": "di7",
+     "text": "Programa de controle de pragas, com agentes químicos que não afetem a qualidade do produto.",
+     "legal": "RDC Anvisa nº 665/2022, art. 74.",
+     "critical": true
+    },
+    {
+     "id": "di8",
+     "text": "Tratamento e destinação de resíduos conforme a legislação vigente.",
+     "legal": "RDC Anvisa nº 665/2022, art. 75."
+    },
+    {
+     "id": "di9",
+     "text": "Cumprimento das normas de saúde do trabalhador, com EPI compatível.",
+     "legal": "RDC Anvisa nº 665/2022, art. 77."
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "d_arm",
+   "title": "8. Manuseio, armazenamento, distribuição e rastreabilidade — dispositivos/IVD",
+   "description": "Controles da RDC nº 665/2022 para dispositivos médicos e IVD.",
+   "items": [
+    {
+     "id": "da1",
+     "text": "Procedimentos que evitem trocas, danos e deterioração em qualquer etapa do manuseio.",
+     "legal": "RDC Anvisa nº 665/2022, art. 107.",
+     "critical": true
+    },
+    {
+     "id": "da2",
+     "text": "Somente produtos identificados como aprovados são utilizados ou distribuídos.",
+     "legal": "RDC Anvisa nº 665/2022, art. 108.",
+     "critical": true
+    },
+    {
+     "id": "da3",
+     "text": "Produto mais próximo do vencimento distribuído primeiro; produto com validade expirada não é distribuído.",
+     "legal": "RDC Anvisa nº 665/2022, art. 109.",
+     "critical": true
+    },
+    {
+     "id": "da4",
+     "text": "Identificação que previna trocas durante o armazenamento.",
+     "legal": "RDC Anvisa nº 665/2022, art. 110."
+    },
+    {
+     "id": "da5",
+     "text": "Condições físicas e ambientais de armazenamento que previnam dano ou deterioração.",
+     "legal": "RDC Anvisa nº 665/2022, art. 111.",
+     "critical": true
+    },
+    {
+     "id": "da6",
+     "text": "Registros de distribuição com nome e endereço do consignatário, identificação e quantidade expedida, data e controle numérico.",
+     "legal": "RDC Anvisa nº 665/2022, art. 112.",
+     "critical": true
+    },
+    {
+     "id": "da7",
+     "text": "Identificação dos produtos em todas as fases de armazenamento e distribuição.",
+     "legal": "RDC Anvisa nº 665/2022, art. 113."
+    },
+    {
+     "id": "da8",
+     "text": "Número de série ou lote registrado em documento próprio.",
+     "legal": "RDC Anvisa nº 665/2022, art. 114.",
+     "critical": true
+    },
+    {
+     "id": "da9",
+     "text": "Produtos não conformes e devolvidos identificados, avaliados, segregados e com disposição documentada.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 115 a 118.",
+     "critical": true
+    },
+    {
+     "id": "da12",
+     "text": "Temperatura e umidade verificadas, monitoradas e registradas quando exigidas pelo produto.",
+     "legal": "RDC Anvisa nº 665/2022, art. 111.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "temp"
+      ]
+     }
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "d_capa",
+   "title": "9. Reclamações, CAPA, auditoria e ações de campo — dispositivos/IVD",
+   "description": "Tratamento de não conformidades e pós-mercado para dispositivos/IVD.",
+   "items": [
+    {
+     "id": "dc1",
+     "text": "Procedimentos de análise de dados, investigação de causa e ação corretiva e preventiva, com registro.",
+     "legal": "RDC Anvisa nº 665/2022, art. 120, incisos I a VII e §§ 1º e 2º."
+    },
+    {
+     "id": "dc2",
+     "text": "Previsão de recolhimento e ações de campo para produtos já distribuídos.",
+     "legal": "RDC Anvisa nº 665/2022, art. 120, inciso VIII; RDC Anvisa nº 551/2021, art. 12.",
+     "critical": true
+    },
+    {
+     "id": "dc3",
+     "text": "Reclamações recebidas, documentadas, avaliadas, investigadas e arquivadas por unidade designada.",
+     "legal": "RDC Anvisa nº 665/2022, art. 121, incisos I a V e § 1º."
+    },
+    {
+     "id": "dc4",
+     "text": "Reclamação relativa a óbito, lesão ou ameaça à saúde pública examinada imediatamente.",
+     "legal": "RDC Anvisa nº 665/2022, art. 121, § 2º.",
+     "critical": true
+    },
+    {
+     "id": "dc5",
+     "text": "Auditorias de qualidade conduzidas e documentadas por pessoas sem responsabilidade direta sobre a matéria auditada.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 122 a 124."
+    },
+    {
+     "id": "dc6",
+     "text": "Queixas técnicas e eventos adversos recebidos pelo distribuidor são documentados e encaminhados ao detentor da regularização, mantendo a rastreabilidade do tratamento.",
+     "legal": "RDC Anvisa nº 665/2022, art. 121, incisos I a V e § 1º.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "d_at",
+   "title": "10. Instalação e assistência técnica — dispositivos/IVD",
+   "description": "Aplicável quando a empresa instala ou dá assistência a dispositivos médicos.",
+   "items": [
+    {
+     "id": "dt1",
+     "text": "Instruções e procedimentos de instalação estabelecidos e disponíveis com o produto.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 125, 126, parágrafo único, e 127.",
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    },
+    {
+     "id": "dt2",
+     "text": "Registros de assistência técnica com produto, controle, data, prestador, descrição e resultados.",
+     "legal": "RDC Anvisa nº 665/2022, art. 129.",
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    },
+    {
+     "id": "dt3",
+     "text": "Análise periódica dos registros, com ação corretiva quando houver tendência de falha, óbito ou lesão grave.",
+     "legal": "RDC Anvisa nº 665/2022, art. 130.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    }
+   ],
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "t_veic",
+   "title": "3. Veículos e proteção da carga",
+   "description": "Condições físicas e operacionais do transporte, vinculadas à classe transportada e às condições de conservação do produto.",
+   "items": [
+    {
+     "id": "tv1",
+     "text": "Relação de veículos próprios e terceirizados compatível com as classes transportadas.",
+     "legal": "RDC Anvisa nº 16/2014, art. 3º."
+    },
+    {
+     "id": "tv4",
+     "text": "Carga protegida contra intempéries, poeira e animais durante o transporte e as operações de carga e descarga.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50; condições de conservação definidas pelo fabricante/detentor da regularização.",
+     "critical": true
+    },
+    {
+     "id": "tv5",
+     "text": "Cargas incompatíveis segregadas; produto perigoso não transportado junto com produto sujeito a vigilância sem separação.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50; Resolução ANTT nº 5.998/2022, quando aplicável ao transporte de produtos perigosos.",
+     "critical": true
+    },
+    {
+     "id": "tv7",
+     "text": "Contratos de terceirização definindo responsabilidades sobre a carga.",
+     "legal": "RDC Anvisa nº 16/2014, conforme atividade autorizada; contrato e responsabilidades conforme o serviço efetivamente terceirizado.",
+     "when": {
+      "flagsAll": [
+       "terc"
+      ]
+     }
+    }
+   ],
+   "when": {
+    "types": [
+     "transportadora"
+    ]
+   }
+  },
+  {
+   "id": "t_temp",
+   "title": "4. Temperatura e instrumentos",
+   "description": "Aplicável somente quando o produto exigir condição controlada de temperatura.",
+   "items": [
+    {
+     "id": "tt1",
+     "text": "Equipamento de refrigeração dimensionado e em funcionamento para a carga transportada.",
+     "legal": "Condições de conservação definidas pelo fabricante/detentor da regularização; Lei Municipal nº 13.725/2004, art. 50.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "temp"
+      ]
+     }
+    },
+    {
+     "id": "tt2",
+     "text": "Termômetros calibrados, de fácil leitura, com registro da temperatura durante o transporte.",
+     "legal": "Condições de conservação definidas para o produto; registros e calibração conforme procedimento da empresa e norma específica da classe.",
+     "critical": true,
+     "when": {
+      "flagsAll": [
+       "temp"
+      ]
+     }
+    },
+    {
+     "id": "tt3",
+     "text": "Qualificação térmica do compartimento realizada quando exigida, com protocolo e resultados registrados.",
+     "legal": "Norma específica da classe transportada e requisitos técnicos definidos para assegurar as condições de conservação do produto.",
+     "when": {
+      "flagsAll": [
+       "temp"
+      ]
+     }
+    }
+   ],
+   "when": {
+    "types": [
+     "transportadora"
+    ]
+   }
+  },
+  {
+   "id": "t_rast",
+   "title": "5. Rastreabilidade, ocorrências e capacitação",
+   "description": "Rastreabilidade operacional do serviço de transporte e tratamento de ocorrências.",
+   "items": [
+    {
+     "id": "tr1",
+     "text": "Registro de coleta e entrega com identificação do destinatário, quantidade, data e controle numérico.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 50; documentação operacional do transporte e da cadeia de fornecimento.",
+     "critical": true
+    },
+    {
+     "id": "tr2",
+     "text": "Rastreabilidade por lote ou número de série da carga transportada.",
+     "legal": "Identificação por lote ou número de série conforme rotulagem e documentação do produto transportado.",
+     "critical": true
+    },
+    {
+     "id": "tr3",
+     "text": "Tratamento documentado de devoluções, avarias, extravios e roubos, com segregação do produto afetado.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50; procedimento da empresa para ocorrências e produtos potencialmente comprometidos.",
+     "critical": true
+    },
+    {
+     "id": "tr4",
+     "text": "Quando acionada em recolhimento ou outra ocorrência, a transportadora preserva a identificação, segregação e rastreabilidade da carga conforme as instruções documentadas do contratante e as condições do produto.",
+     "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50."
+    },
+    {
+     "id": "tr5",
+     "text": "Capacitação documentada dos trabalhadores envolvidos no transporte e no manuseio.",
+     "legal": "RDC Anvisa nº 16/2014, conforme atividade autorizada; procedimentos internos e requisitos específicos da classe transportada."
+    }
+   ],
+   "when": {
+    "types": [
+     "transportadora"
+    ]
+   }
+  }
+ ],
+ "infractions": [
+  {
+   "id": "p01",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "ATENÇÃO PRIORITÁRIA — Por iniciar ou manter a atividade sem licença sanitária municipal, ou sem requerer sua renovação no prazo.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 90."
+  },
+  {
+   "id": "p02",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "Por exercer atividade diversa daquela licenciada, ou em endereço diverso do constante da licença.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 90 e 92."
+  },
+  {
+   "id": "p03",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "ATENÇÃO PRIORITÁRIA — Por realizar atividade sujeita à Autorização de Funcionamento sem AFE vigente na Anvisa.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 90, c/c RDC Anvisa nº 16/2014, art. 3º."
+  },
+  {
+   "id": "p04",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "Por manter AFE incompatível com a classe de produto ou com a atividade efetivamente realizada.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 90, c/c RDC Anvisa nº 16/2014, art. 3º."
+  },
+  {
+   "id": "p05",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "ATENÇÃO PRIORITÁRIA — Por movimentar substâncias sujeitas a controle especial sem Autorização Especial.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 90, c/c Portaria SVS/MS nº 344/1998 e RDC Anvisa nº 16/2014.",
+   "when": {
+    "flagsAll": [
+     "ae344"
+    ]
+   }
+  },
+  {
+   "id": "p06",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "Por funcionar sem responsável técnico habilitado, ou sem substituto formalmente designado durante sua ausência.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 92; para fabricante de cosméticos, c/c RDC Anvisa nº 48/2013, Anexo II, item 11.9; nos demais perfis, observar a legislação profissional e sanitária aplicável à atividade/classe."
+  },
+  {
+   "id": "p07",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "Por deixar de peticionar previamente à Anvisa alteração de razão social, endereço, responsável técnico ou representante legal.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 90, c/c RDC Anvisa nº 16/2014."
+  },
+  {
+   "id": "p08",
+   "group": "1. Licenciamento, AFE e responsabilidade técnica",
+   "text": "Por deixar de exibir à autoridade sanitária documento exigido, ou por dificultar a ação de vigilância.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 100 e 109."
+  },
+  {
+   "id": "p09",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter, expor ou distribuir dispositivo médico ou produto para diagnóstico in vitro sem notificação ou registro na Anvisa.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50, c/c RDC Anvisa nº 751/2022.",
+   "when": {
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p10",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter, expor ou distribuir cosmético, produto de higiene ou perfume sem regularização na Anvisa.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50, c/c RDC Anvisa nº 907/2024.",
+   "when": {
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p11",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter, expor ou distribuir saneante sem regularização na Anvisa.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50, c/c RDC Anvisa nº 989/2025.",
+   "when": {
+    "flagsAll": [
+     "cls_san"
+    ]
+   }
+  },
+  {
+   "id": "p12",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter ou distribuir produto com prazo de validade expirado.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50."
+  },
+  {
+   "id": "p13",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "Por manter ou distribuir produto com embalagem violada, danificada ou com identificação ilegível.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50."
+  },
+  {
+   "id": "p14",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter produto sem procedência comprovada, sem rotulagem ou recebido de fornecedor não autorizado.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 50, c/c Lei Federal nº 6.360/1976 e Decreto Federal nº 8.077/2013."
+  },
+  {
+   "id": "p15",
+   "group": "2. Regularidade e rotulagem dos produtos",
+   "text": "Por manter ou distribuir produto com rotulagem ou instruções de uso em desacordo com a norma da classe.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 50, c/c RDC nº 751/2022, RDC nº 907/2024 ou RDC nº 989/2025."
+  },
+  {
+   "id": "p16",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por fabricar sem sistema de gestão da qualidade estabelecido, documentado e implementado.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 3.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p17",
+   "group": "3. Boas práticas de fabricação",
+   "text": "ATENÇÃO PRIORITÁRIA — Por liberar produto ao consumo antes de concluídas as etapas de controle e liberação.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c RDC nº 48/2013, Anexo II, item 3.3.4.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p18",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por deixar de manter fórmula padrão ou registro de produção por lote, impedindo a rastreabilidade.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, itens 10.9 e 10.10.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p19",
+   "group": "3. Boas práticas de fabricação",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter instalações em condição que permita contaminação cruzada, acúmulo de sujidade ou acesso de animais.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55, c/c RDC nº 48/2013, Anexo II, item 12.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p20",
+   "group": "3. Boas práticas de fabricação",
+   "text": "ATENÇÃO PRIORITÁRIA — Por utilizar água sem especificação definida ou sem monitoramento da qualidade nos pontos críticos.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 13.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p21",
+   "group": "3. Boas práticas de fabricação",
+   "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de laboratório de controle da qualidade próprio e independente da produção, nem de terceirização regular.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 18.1.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p22",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por deixar de reter amostras de produtos acabados na quantidade e pelo prazo exigidos.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 19.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p23",
+   "group": "3. Boas práticas de fabricação",
+   "text": "ATENÇÃO PRIORITÁRIA — Por manter pessoa com enfermidade ou lesão exposta manuseando matéria-prima, embalagem ou produto.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55, c/c RDC nº 48/2013, Anexo II, item 5.4.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p24",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por não realizar autoinspeção anual, ou por não implementar as ações corretivas do relatório.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 9.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p25",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por manter os responsáveis pela produção e pelo controle de qualidade sem independência entre si.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, item 11.8.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p26",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por deixar de calibrar balanças e instrumentos de medição, ou de manter os respectivos registros.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 48/2013, Anexo II, itens 15.7 e 17.17.4.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p27",
+   "group": "3. Boas práticas de fabricação",
+   "text": "Por reprocessar produto sem procedimento autorizado, sem avaliação de risco ou sem registro.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c RDC nº 48/2013, Anexo II, item 17.19.9.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p28",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "ATENÇÃO PRIORITÁRIA — Por armazenar produto em condição que não preserve sua integridade, ou sem o controle de temperatura e umidade exigido.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c RDC nº 665/2022, art. 111, ou RDC Anvisa nº 48/2013, Anexo II, item 15.2.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "p29",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "ATENÇÃO PRIORITÁRIA — Por deixar de segregar e identificar produtos reprovados, vencidos, avariados, devolvidos, recolhidos ou interditados.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c RDC nº 665/2022, arts. 115 a 118.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p30",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "ATENÇÃO PRIORITÁRIA — Por distribuir produto não aprovado, com validade expirada ou sem verificação de conformidade.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 49 e 50, c/c RDC nº 665/2022, arts. 108 e 109.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p31",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "Por não manter registros de distribuição que permitam identificar destinatário, quantidade, data e lote.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 665/2022, arts. 112 e 114.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p32",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "Por armazenar produto diretamente sobre o piso, encostado às paredes ou em desacordo com o empilhamento seguro.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 15.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p33",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "ATENÇÃO PRIORITÁRIA — Por transportar produto em veículo sujo, deteriorado ou sem revestimento lavável no compartimento de carga.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c condições de conservação, higiene e transporte definidas pelo fabricante/titular da regularização e pela legislação específica da classe transportada.",
+   "when": {
+    "types": [
+     "transportadora"
+    ]
+   }
+  },
+  {
+   "id": "p34",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "Por transportar produto sujeito a vigilância junto com carga incompatível ou perigosa, sem segregação.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c condições de conservação e incompatibilidades definidas pelo fabricante/titular da regularização e pela legislação específica da classe transportada.",
+   "when": {
+    "types": [
+     "transportadora"
+    ]
+   }
+  },
+  {
+   "id": "p35",
+   "group": "4. Armazenamento, distribuição e transporte",
+   "text": "ATENÇÃO PRIORITÁRIA — Por transportar produto termolábil sem equipamento de refrigeração em funcionamento ou sem registro de temperatura.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c condições de temperatura e conservação definidas pelo fabricante/titular da regularização e pela legislação específica da classe transportada.",
+   "when": {
+    "types": [
+     "transportadora"
+    ],
+    "flagsAll": [
+     "temp"
+    ]
+   }
+  },
+  {
+   "id": "p36",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de sistema capaz de recolher produto do mercado, ou por não executar o recolhimento determinado.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 50, c/c RDC nº 665/2022, art. 120, e RDC nº 48/2013, Anexo II, item 7.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "p37",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "Por deixar de comunicar à autoridade sanitária a decisão de recolhimento de produto.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55, c/c RDC nº 48/2013, Anexo II, item 7.4.",
+   "when": {
+    "types": [
+     "fabricante"
+    ],
+    "flagsAll": [
+     "cls_cosm"
+    ]
+   }
+  },
+  {
+   "id": "p38",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "Por não registrar, investigar ou arquivar reclamações sobre desvio de qualidade.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 665/2022, art. 121, e RDC nº 48/2013, Anexo II, item 6.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "p39",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "ATENÇÃO PRIORITÁRIA — Por deixar de examinar imediatamente reclamação relativa a óbito, lesão ou ameaça à saúde pública.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55, c/c RDC nº 665/2022, art. 121.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p40",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "Por deixar de registrar, avaliar ou encaminhar ao detentor da regularização reclamação, queixa técnica ou evento adverso recebido sobre dispositivo médico/IVD.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55; RDC Anvisa nº 665/2022, art. 121, incisos I a V e § 1º.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p41",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "Por não manter sistema de cosmetovigilância, ou por não encaminhar ao titular as reclamações recebidas.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 55, c/c RDC nº 48/2013, Anexo II, item 6.7, e RDC Anvisa nº 894/2024.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "p42",
+   "group": "5. Qualidade, reclamações e recolhimento",
+   "text": "Por não manter documentos e registros pelo prazo exigido, impedindo a verificação pela autoridade sanitária.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 100, c/c RDC nº 665/2022, art. 37.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p43",
+   "group": "6. Pessoal, higiene e resíduos",
+   "text": "Por manter pessoal sem treinamento documentado para as atividades desempenhadas.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 665/2022, art. 15, ou RDC nº 48/2013, Anexo II, item 11.3.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "p44",
+   "group": "6. Pessoal, higiene e resíduos",
+   "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de programa de controle de pragas, ou por aplicar agentes químicos que afetem a qualidade do produto.",
+   "legal": "Lei Municipal nº 13.725/2004, arts. 46 e 55, c/c RDC nº 665/2022, art. 74.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p45",
+   "group": "6. Pessoal, higiene e resíduos",
+   "text": "Por dar destinação irregular a resíduos, efluentes ou embalagens de produtos.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 31, c/c RDC nº 665/2022, art. 75.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p46",
+   "group": "6. Pessoal, higiene e resíduos",
+   "text": "Por não fornecer equipamento de proteção individual compatível com a atividade.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 665/2022, art. 77.",
+   "when": {
+    "types": [
+     "distribuidor"
+    ],
+    "flagsAll": [
+     "cls_disp"
+    ]
+   }
+  },
+  {
+   "id": "p47",
+   "group": "6. Pessoal, higiene e resíduos",
+   "text": "Por permitir consumo de alimentos ou bebidas em área de produção, armazenamento ou controle de qualidade.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC nº 665/2022, art. 72, ou RDC nº 48/2013, Anexo II, item 5.9.",
+   "when": {
+    "any": [
+     {
+      "types": [
+       "fabricante"
+      ],
+      "flagsAll": [
+       "cls_cosm"
+      ]
+     },
+     {
+      "types": [
+       "distribuidor"
+      ],
+      "flagsAll": [
+       "cls_disp"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "aut100",
+   "group": "Infrações autônomas",
+   "text": "Obstrução, dificultação ou impedimento da ação da autoridade sanitária durante a inspeção.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 100."
+  },
+  {
+   "id": "aut109",
+   "group": "Infrações autônomas",
+   "text": "Desobediência de interdição: entrega, uso, comercialização ou desinterdição sem liberação da autoridade competente.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 109, §§ 1º e 2º."
+  }
+ ],
+ "norms": [
+  {
+   "title": "Lei Municipal nº 13.725/2004.",
+   "description": "Código Sanitário do Município de São Paulo. Dispositivos usados no roteiro e no inventário.",
+   "url": "https://legislacao.prefeitura.sp.gov.br/lei-13725-de-09-de-janeiro-de-2004/consolidado"
+  },
+  {
+   "title": "RDC Anvisa nº 16/2014.",
+   "description": "AFE e AE. No roteiro é usada para enquadramento da atividade e autorização de funcionamento.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000016&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2014"
+  },
+  {
+   "title": "RDC Anvisa nº 48/2013.",
+   "description": "Boas Práticas de Fabricação de produtos de higiene pessoal, cosméticos e perfumes — exclusiva da trilha Fabricante de cosméticos neste aplicativo.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000048&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2013"
+  },
+  {
+   "title": "RDC Anvisa nº 665/2022.",
+   "description": "BPF de dispositivos médicos e IVD. Neste núcleo, aplicada à trilha de atacadista/distribuidor quando houver dispositivos/IVD.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000665&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2022"
+  },
+  {
+   "title": "RDC Anvisa nº 751/2022.",
+   "description": "Classificação de risco e regimes de notificação e registro de dispositivos médicos não IVD. Classes I e II: notificação; classes III e IV: registro.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000751&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2022"
+  },
+  {
+   "title": "RDC Anvisa nº 907/2024.",
+   "description": "Regularização de cosméticos, produtos de higiene e perfumes. Os grupos do art. 34 exigem registro; os demais seguem a via de isenção de registro/notificação, observadas regras específicas.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000907&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2024"
+  },
+  {
+   "title": "RDC Anvisa nº 894/2024.",
+   "description": "Boas Práticas de Cosmetovigilância, quando aplicável ao titular e ao fluxo de reclamações relacionado a cosméticos.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000894&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2024"
+  },
+  {
+   "title": "RDC Anvisa nº 989/2025.",
+   "description": "Regularização e classificação de saneantes: risco 1 por notificação e risco 2 por registro; considerar as alterações vigentes de 2026.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000989&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
+  },
+  {
+   "title": "RDC Anvisa nº 830/2023.",
+   "description": "Classificação de risco, notificação, registro, rotulagem e instruções de uso de dispositivos médicos para diagnóstico in vitro (IVD).",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9434&cod_modulo=310&numeroAto=00000830&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2023"
+  },
+  {
+   "title": "RDC Anvisa nº 551/2021.",
+   "description": "Ações de campo de produtos para saúde. Substituiu a RDC nº 23/2012. Para o distribuidor, o art. 12 exige o encaminhamento do mapa de distribuição e de outras informações solicitadas ao detentor da regularização.",
+   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&codTipo=&cod_menu=1696&cod_modulo=134&desItem=&desItemFim=&numeroAto=00000551&orgao=RDC%2FDC%2FANVISA%2FMS&pesquisa=true&seqAto=000&tipo=RDC&valorAno=2021",
+   "staticCitations": [
+    {
+     "label": "art. 12",
+     "text": "Os distribuidores de produtos para a saúde devem encaminhar para o detentor de registro, em tempo hábil, o mapa de distribuição e outras informações solicitadas para a notificação e execução de ações de campo."
+    }
+   ]
+  }
+ ]
+}
