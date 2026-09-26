@@ -42,5 +42,23 @@ html = html.replace(re, () => m[1] + enc + m[3]);
   if (!rg.includes(para)) { if (!rg.includes(de)) throw Error('infractionCatalog não localizado'); rg = rg.replace(de, para); }
   const renc = lz.compressToBase64(rg); if (lz.decompressFromBase64(renc) !== rg) throw Error('round-trip ' + rid);
   html = html.replace(rre, () => rm[1] + renc + rm[3]); }
+/* Caixa de citação (comum a todos os módulos): quando a citação tem “Anexo II, item 15.2”, o motor
+   devolve duas leituras da mesma norma — o aviso de anexo e o item. O aviso só aparece se a norma
+   não tiver nenhum dispositivo localizado (antes a RDC 48/2013 surgia duas vezes, uma vazia). */
+{ const uid = 'rec--uvis-ui.js';
+  const ure = new RegExp('(<script type="text/plain" id="' + uid.replace(/[.]/g, '\\.') + '">)([\\s\\S]*?)(</script>)');
+  const um = html.match(ure); if (!um) throw Error(uid);
+  let ui = lz.decompressFromBase64(um[2]); if (!ui) throw Error('descompactação ' + uid);
+  const de = "return Citacoes.deTexto(text).flatMap(b=>(b.resolucoes||[]).map(r=>({law:r.norma?.label||b.norma?.l,device:r.referencia||'',resolution:r})));";
+  const para = "const out=Citacoes.deTexto(text).flatMap(b=>(b.resolucoes||[]).map(r=>({law:r.norma?.label||b.norma?.l,device:r.referencia||'',resolution:r})));\n    return out.filter(x=>!(x.resolution&&x.resolution.semDispositivo&&out.some(y=>y!==x&&y.resolution&&y.resolution.norma&&x.resolution.norma&&y.resolution.norma.id===x.resolution.norma.id&&(y.resolution.dispositivos||[]).length)));";
+  if (!ui.includes(para)) { if (ui.split(de).length !== 2) throw Error('trecho fromText não único'); ui = ui.replace(de, () => para);
+    const enc = lz.compressToBase64(ui); if (lz.decompressFromBase64(enc) !== ui) throw Error('round-trip ' + uid);
+    html = html.replace(ure, () => um[1] + enc + um[3]); }
+  /* Alínea dentro de inciso (id “a28-ii-a”) aparecia com o código interno do banco. */
+  const de2 = 'if(r.resolution){Citacoes.render(a,r.resolution);';
+  const para2 = 'if(r.resolution){Citacoes.render(a,r.resolution);a.querySelectorAll("*").forEach(x=>{if(x.children.length)return;const t=x.textContent.trim();if(!/^a\\d+[a-z0-9]*(-[a-z]+\\d*)+$/.test(t))return;const ps=t.split("-"),u=ps[ps.length-1].replace(/b\\d*$/,"")||ps[ps.length-1];x.textContent=ps.length<3&&/^[ivxlc]+$/.test(u)?u.toUpperCase():"“"+u+"”"});';
+  if (!ui.includes(para2)) { if (ui.split(de2).length !== 2) throw Error('trecho render não único'); ui = ui.replace(de2, () => para2);
+    const enc2 = lz.compressToBase64(ui); if (lz.decompressFromBase64(enc2) !== ui) throw Error('round-trip ' + uid);
+    html = html.replace(ure, () => um[1] + enc2 + um[3]); } }
 fs.writeFileSync(file, html);
 console.log('Produtos: navegação e trilha ajustadas.');
