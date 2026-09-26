@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-14",
+  "versao": "20260926-15",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: roteiro refeito por perfil (licença e regularidade; fabricante; distribuidor com base na RDC 16/2014 art. 28; dispositivos e IVD pela RDC 665/2022 com artigos corrigidos; transportadora com Lei 13.725 art. 91) e lista de infrações revista (responsável técnico pelo art. 93, e não 92; sem os itens automáticos “Não atendimento ao requisito”); corrigido o compartilhamento de respostas entre itens de mesmo código. Serviços assistenciais: removidos botões de citação que abriam artigo de outra norma e criados os que faltavam. Odontologia: três botões que abriam o artigo errado. Alimentação: reservatório de água passa a citar os itens 11.5 e 11.6."
+  "notas": "Banco de legislação: entram a RDC Anvisa nº 551/2021 (ações de campo — Produtos), a Resolução Conjunta nº 6/2020 CMDCA-SP/COMAS-SP em texto literal (antes era síntese), a Portaria GM/MS nº 757/2023 e a Portaria de Consolidação GM/MS nº 3/2017, Anexo V (SRT). Serviços assistenciais: a SRT deixa de citar a Portaria nº 3.090/2011 (sem texto no app) e passa à Portaria de Consolidação nº 3/2017, na redação repristinada pela Portaria nº 757/2023 (Tipo I até 8 moradores); o art. 22 da Lei nº 13.725/2004 saiu dos itens onde havia dispositivo próprio (arts. 61, 63 e 65) e ficou, com o inciso II, só na guarda de saneantes e no AVCB de SAICA e demais acolhimentos; comunicação de violência passa a citar ECA e Estatuto da Pessoa Idosa; todo botão de citação abre texto existente. Produtos e Alimentação: citações reescritas para o motor localizar alínea e item (antes apareciam como não localizados). Odontologia: item de cilindros deixa de citar a RDC nº 50/2002, que não está no banco."
 }

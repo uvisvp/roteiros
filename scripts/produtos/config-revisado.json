@@ -187,7 +187,7 @@
     {
      "id": "l6",
      "text": "Responsável técnico legalmente habilitado, com registro no conselho de classe e presente durante o funcionamento; no fabricante, substituto designado para as ausências.",
-     "legal": "Lei Municipal nº 13.725/2004, art. 93; RDC Anvisa nº 16/2014, art. 27, inciso I, alínea e (fabricante) ou art. 28, inciso I, alínea e (demais atividades); no fabricante, RDC Anvisa nº 48/2013, Anexo II, item 11.9.",
+     "legal": "Lei Municipal nº 13.725/2004, art. 93; RDC Anvisa nº 16/2014, art. 27, I, “e”, no fabricante ou art. 28, I, “e”, nas demais atividades; no fabricante, RDC Anvisa nº 48/2013, Anexo II, item 11.9.",
      "critical": true
     },
     {
@@ -198,7 +198,7 @@
     {
      "id": "l8",
      "text": "Serviços terceirizados contratados somente com empresas autorizadas e licenciadas, com contrato ou documento equivalente.",
-     "legal": "RDC Anvisa nº 16/2014, art. 27, inciso I, alínea f (fabricante) ou art. 28, inciso I, alínea d (demais atividades).",
+     "legal": "RDC Anvisa nº 16/2014, art. 27, I, “f”, no fabricante ou art. 28, I, “d”, nas demais atividades.",
      "when": {
       "flagsAll": [
        "terc"
@@ -978,18 +978,18 @@
     {
      "id": "df1",
      "text": "Há mecanismo que assegure que fornecedores e clientes estejam regularizados (AFE e licença sanitária), com registros da verificação.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea l; Lei Federal nº 6.360/1976, art. 2º.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “l”; Lei Federal nº 6.360/1976, art. 2º.",
      "critical": true
     },
     {
      "id": "df5",
      "text": "Áreas de recebimento e expedição adequadas e protegidas contra variações climáticas.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea k."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “k”."
     },
     {
      "id": "df2",
      "text": "No recebimento são conferidos identificação do produto, lote, validade, integridade da embalagem e condições de transporte, conforme procedimento escrito.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea d."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “d”."
     },
     {
      "id": "df4",
@@ -1016,18 +1016,18 @@
     {
      "id": "ds1",
      "text": "Instalações, equipamentos e instrumentos adequados às atividades, com qualificação e calibração quando exigidas (termômetros, câmaras, climatização).",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea a."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “a”."
     },
     {
      "id": "ds3",
      "text": "Condições de higiene, armazenamento e operação adequadas ao produto (temperatura, umidade e luz conforme a rotulagem), sem risco de contaminação ou alteração.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea c.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “c”.",
      "critical": true
     },
     {
      "id": "ds4",
      "text": "Produtos que exigem controle de temperatura: registros contínuos demonstram a faixa especificada durante o armazenamento.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alíneas a e c.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “a” e “c”.",
      "critical": true,
      "when": {
       "flagsAll": [
@@ -1038,18 +1038,18 @@
     {
      "id": "ds2",
      "text": "Produtos vencidos, avariados, devolvidos, recolhidos ou interditados identificados e segregados, sem possibilidade de expedição.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea d.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “d”.",
      "critical": true
     },
     {
      "id": "ds6",
      "text": "Sistema de controle de estoque que permite emitir inventários periódicos.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea g."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “g”."
     },
     {
      "id": "ds7",
      "text": "Produtos sujeitos a controle especial em área separada, identificada e de acesso restrito.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea f.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “f”.",
      "critical": true,
      "when": {
       "flagsAll": [
@@ -1083,17 +1083,17 @@
     {
      "id": "dq11",
      "text": "Sistema da qualidade estabelecido, com procedimentos operacionais padrão aprovados para recepção, identificação, estoque, armazenamento e produtos devolvidos ou recolhidos.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alíneas d e i."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “d” e “i”."
     },
     {
      "id": "dq12",
      "text": "Sistema formal de investigação de desvios de qualidade, com causas identificadas e medidas preventivas e corretivas registradas.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea h."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “h”."
     },
     {
      "id": "dq13",
      "text": "Programa de autoinspeção com abrangência, frequência, responsáveis e ações decorrentes das não conformidades.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea e."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “e”."
     },
     {
      "id": "dr1",
@@ -1126,12 +1126,12 @@
     {
      "id": "dd2",
      "text": "Pessoal qualificado e capacitado para as atividades, com registros de treinamento.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea b."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “b”."
     },
     {
      "id": "dd6",
      "text": "Manual de Boas Práticas de Distribuição e Armazenagem disponível e compatível com a rotina.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso I, alínea f.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, I, “f”.",
      "when": {
       "flagsAll": [
        "cls_disp"
@@ -1141,7 +1141,7 @@
     {
      "id": "dd7",
      "text": "Plano de gerenciamento de resíduos implantado (produtos vencidos, avariados e embalagens).",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea j; Lei Municipal nº 13.725/2004, art. 31."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “j”; Lei Municipal nº 13.725/2004, art. 31."
     }
    ],
    "when": {
@@ -1460,7 +1460,7 @@
     {
      "id": "dt1",
      "text": "Instruções e procedimentos de instalação estabelecidos e disponíveis com o produto.",
-     "legal": "RDC Anvisa nº 665/2022, arts. 125, 126, parágrafo único, e 127.",
+     "legal": "RDC Anvisa nº 665/2022, arts. 125 a 127.",
      "when": {
       "flagsAll": [
        "cls_disp"
@@ -1512,25 +1512,25 @@
     {
      "id": "tv1",
      "text": "Relação atualizada dos veículos próprios e de terceiros, com os equipamentos necessários às condições de transporte de cada produto.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea m.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “m”.",
      "critical": true
     },
     {
      "id": "tv4",
      "text": "Compartimento de carga limpo, conservado e que protege contra intempéries, poeira e animais, inclusive na carga e descarga.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea c; Lei Municipal nº 13.725/2004, art. 46.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “c”; Lei Municipal nº 13.725/2004, art. 46.",
      "critical": true
     },
     {
      "id": "tv5",
      "text": "Cargas incompatíveis segregadas; produto perigoso transportado segundo o regulamento próprio, sem contato com produto sujeito à vigilância sanitária.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea c; Resolução ANTT nº 5.998/2022, quando houver produto perigoso.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “c”; Resolução ANTT nº 5.998/2022, quando houver produto perigoso.",
      "critical": true
     },
     {
      "id": "tv7",
      "text": "Terceirização do transporte somente com empresas autorizadas e licenciadas, com responsabilidades sobre a carga definidas em contrato.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso I, alínea d.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, I, “d”.",
      "when": {
       "flagsAll": [
        "terc"
@@ -1552,7 +1552,7 @@
     {
      "id": "tt1",
      "text": "Equipamento de refrigeração ou isolamento térmico dimensionado e em funcionamento para a carga transportada.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea m.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “m”.",
      "critical": true,
      "when": {
       "flagsAll": [
@@ -1563,7 +1563,7 @@
     {
      "id": "tt2",
      "text": "Registradores ou termômetros calibrados, com registro da temperatura durante todo o trajeto.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea a.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “a”.",
      "critical": true,
      "when": {
       "flagsAll": [
@@ -1574,7 +1574,7 @@
     {
      "id": "tt3",
      "text": "Qualificação térmica do compartimento ou da embalagem realizada, com protocolo e resultados.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea a.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “a”.",
      "when": {
       "flagsAll": [
        "temp"
@@ -1602,23 +1602,23 @@
     {
      "id": "tr3",
      "text": "Devoluções, avarias, extravios, roubos e desvios de temperatura investigados e registrados, com segregação do produto afetado.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea h.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “h”.",
      "critical": true
     },
     {
      "id": "tr6",
      "text": "Procedimentos operacionais padrão para recebimento, identificação, guarda temporária e entrega da carga.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea d."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “d”."
     },
     {
      "id": "tr5",
      "text": "Motoristas e ajudantes capacitados para o manuseio e a conservação da carga, com registros.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea b."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “b”."
     },
     {
      "id": "tr7",
      "text": "Programa de autoinspeção com abrangência, frequência, responsáveis e ações decorrentes.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea e."
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “e”."
     }
    ],
    "when": {
@@ -1668,7 +1668,7 @@
    "id": "p06",
    "group": "1. Licença, AFE e responsável técnico",
    "text": "Por funcionar sem responsável técnico legalmente habilitado presente, ou, no fabricante, sem substituto designado.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 93, c/c RDC Anvisa nº 16/2014, art. 27 ou 28, inciso I, alínea e; no fabricante, RDC Anvisa nº 48/2013, Anexo II, item 11.9."
+   "legal": "Lei Municipal nº 13.725/2004, art. 93, c/c RDC Anvisa nº 16/2014, art. 27 ou 28, I, “e”; no fabricante, RDC Anvisa nº 48/2013, Anexo II, item 11.9."
   },
   {
    "id": "p07",
@@ -1680,7 +1680,7 @@
    "id": "p48",
    "group": "1. Licença, AFE e responsável técnico",
    "text": "Por contratar serviço terceirizado com empresa não autorizada ou não licenciada.",
-   "legal": "RDC Anvisa nº 16/2014, art. 27, inciso I, alínea f, ou art. 28, inciso I, alínea d.",
+   "legal": "RDC Anvisa nº 16/2014, art. 27, I, “f”, ou art. 28, I, “d”.",
    "when": {
     "flagsAll": [
      "terc"
@@ -1916,7 +1916,7 @@
    "id": "p28",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por armazenar produto em condição que não preserve sua integridade, ou sem o controle de temperatura e umidade exigido.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 15.2 (fabricante), RDC Anvisa nº 16/2014, art. 28, inciso II, alínea c (distribuidor), e RDC Anvisa nº 665/2022, art. 111 (dispositivos/IVD).",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 15.2, no fabricante, RDC Anvisa nº 16/2014, art. 28, II, “c”, no distribuidor, e RDC Anvisa nº 665/2022, art. 111, em dispositivos/IVD.",
    "when": {
     "types": [
      "fabricante",
@@ -1928,7 +1928,7 @@
    "id": "p29",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por deixar de segregar e identificar produtos reprovados, vencidos, avariados, devolvidos, recolhidos ou interditados.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 15.9 (fabricante), RDC Anvisa nº 16/2014, art. 28, inciso II, alínea d (distribuidor), e RDC Anvisa nº 665/2022, arts. 115 a 118 (dispositivos/IVD).",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 15.9, no fabricante, RDC Anvisa nº 16/2014, art. 28, II, “d”, no distribuidor, e RDC Anvisa nº 665/2022, arts. 115 a 118, em dispositivos/IVD.",
    "when": {
     "types": [
      "fabricante",
@@ -1982,7 +1982,7 @@
    "id": "p49",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de mecanismo que assegure a regularidade sanitária de fornecedores e clientes.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea l.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “l”.",
    "when": {
     "types": [
      "distribuidor"
@@ -1993,7 +1993,7 @@
    "id": "p50",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "Por não dispor de procedimentos operacionais padrão de recepção, identificação, estoque e armazenamento de produtos acabados, devolvidos ou recolhidos.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea d.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “d”.",
    "when": {
     "types": [
      "distribuidor",
@@ -2005,7 +2005,7 @@
    "id": "p51",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "Por não dispor de sistema de controle de estoque que permita inventários periódicos.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea g.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “g”.",
    "when": {
     "types": [
      "distribuidor"
@@ -2016,7 +2016,7 @@
    "id": "p52",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por armazenar produto sujeito a controle especial fora de área separada, identificada e de acesso restrito.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea f.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “f”.",
    "when": {
     "types": [
      "distribuidor"
@@ -2041,7 +2041,7 @@
    "id": "p33",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por transportar produto em veículo sujo, deteriorado ou que não proteja a carga contra intempéries, poeira e animais.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, inciso II, alíneas c e m.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, II, “c” e “m”.",
    "when": {
     "types": [
      "transportadora"
@@ -2052,7 +2052,7 @@
    "id": "p34",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "Por transportar produto sujeito à vigilância sanitária junto com carga incompatível ou perigosa, sem segregação.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, inciso II, alínea c, e Resolução ANTT nº 5.998/2022.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, II, “c”, e Resolução ANTT nº 5.998/2022.",
    "when": {
     "types": [
      "transportadora"
@@ -2063,7 +2063,7 @@
    "id": "p35",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "ATENÇÃO PRIORITÁRIA — Por transportar produto que exige temperatura controlada sem equipamento em funcionamento ou sem registro de temperatura.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alíneas a e m.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “a” e “m”.",
    "when": {
     "types": [
      "transportadora"
@@ -2077,7 +2077,7 @@
    "id": "p36",
    "group": "5. Qualidade, reclamações e recolhimento",
    "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de sistema capaz de recolher produto do mercado, ou por não executar o recolhimento determinado.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 7.1 (fabricante) e RDC Anvisa nº 665/2022, art. 120, inciso VIII (dispositivos/IVD).",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, item 7.1, no fabricante e RDC Anvisa nº 665/2022, art. 120, inciso VIII, em dispositivos/IVD.",
    "when": {
     "any": [
      {
@@ -2143,7 +2143,7 @@
    "id": "p54",
    "group": "5. Qualidade, reclamações e recolhimento",
    "text": "Por não dispor de sistema formal de investigação de desvios de qualidade, com medidas preventivas e corretivas.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea h.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “h”.",
    "when": {
     "types": [
      "distribuidor",
@@ -2155,7 +2155,7 @@
    "id": "p55",
    "group": "5. Qualidade, reclamações e recolhimento",
    "text": "Por não dispor de programa de autoinspeção com abrangência, frequência e responsáveis definidos.",
-   "legal": "RDC Anvisa nº 16/2014, art. 28, inciso II, alínea e.",
+   "legal": "RDC Anvisa nº 16/2014, art. 28, II, “e”.",
    "when": {
     "types": [
      "distribuidor",
@@ -2235,13 +2235,13 @@
    "id": "p43",
    "group": "6. Pessoal, higiene e resíduos",
    "text": "Por manter pessoal sem capacitação documentada para as atividades desempenhadas.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, itens 11.3 e 11.6 (fabricante), RDC Anvisa nº 16/2014, art. 28, inciso II, alínea b (distribuidor e transportador), ou RDC Anvisa nº 665/2022, art. 15 (dispositivos/IVD)."
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, itens 11.3 e 11.6, no fabricante, RDC Anvisa nº 16/2014, art. 28, II, “b”, no distribuidor e no transportador, ou RDC Anvisa nº 665/2022, art. 15, em dispositivos/IVD."
   },
   {
    "id": "p44",
    "group": "6. Pessoal, higiene e resíduos",
    "text": "ATENÇÃO PRIORITÁRIA — Por não dispor de programa de controle de pragas, ou por aplicar agentes químicos que afetem a qualidade do produto.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, itens 12.8 e 12.10 (fabricante), ou RDC Anvisa nº 665/2022, art. 74 (dispositivos/IVD).",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 48/2013, Anexo II, itens 12.8 e 12.10, no fabricante, ou RDC Anvisa nº 665/2022, art. 74, em dispositivos/IVD.",
    "when": {
     "any": [
      {
@@ -2267,7 +2267,7 @@
    "id": "p45",
    "group": "6. Pessoal, higiene e resíduos",
    "text": "Por não dispor de plano de gerenciamento de resíduos ou dar destinação irregular a resíduos, efluentes ou embalagens.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 31, c/c RDC Anvisa nº 48/2013, Anexo II, item 17.21 (fabricante), RDC Anvisa nº 16/2014, art. 28, inciso II, alínea j (distribuidor), ou RDC Anvisa nº 665/2022, art. 75 (dispositivos/IVD).",
+   "legal": "Lei Municipal nº 13.725/2004, art. 31, c/c RDC Anvisa nº 48/2013, Anexo II, item 17.21, no fabricante, RDC Anvisa nº 16/2014, art. 28, II, “j”, no distribuidor, ou RDC Anvisa nº 665/2022, art. 75, em dispositivos/IVD.",
    "when": {
     "types": [
      "fabricante",
