@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-1",
+  "versao": "20260926-2",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Checklists de documentos: drogaria com os POPs mínimos da RDC 44/2009 (art. 86, um a um) e requisitos formais dos POPs (art. 87); manipulação com checklist de conteúdo do Manual de Boas Práticas de Manipulação (Anexo I, 3, 15.3 e 15.5.5) e requisitos formais dos POPs. Drogaria: saem os leitores de PGRSS e POPs dos serviços; fica o de DANFE."
+  "notas": "Banco: consulta de AFE/AE corrigida nos três roteiros de Medicamentos — AFE e AE separadas pelo tipo da autorização, com classe, situação, atividades e datas, e escolha da autorização a aplicar (antes a AE aparecia como “N” e as atividades não eram lidas). Conferência de estoque sugere nomes de medicamentos e IFA a partir de 3 letras (drogaria e manipulação), com indicação da lista da Portaria 344."
 }

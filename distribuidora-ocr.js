@@ -25,5 +25,10 @@
   document.querySelectorAll('article.dist-doc-card').forEach(function(a){if(a.querySelector('[data-dist-ocr]'))return;var i=a.querySelector('[data-path^="distDocs."]');if(!i)return;var doc=i.dataset.path.split('.')[1];if(!TIPO[doc])return;
    var b=document.createElement('button');b.type='button';b.className='btn';b.dataset.distOcr=doc;b.textContent='📄 Ler documento (OCR)';var h=a.querySelector(':scope>div');(h||a).appendChild(b)})}
  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-dist-ocr]');if(!b)return;e.preventDefault();var doc=b.dataset.distOcr;OcrPadrao.ler(TIPO[doc],{onApply:function(v,m){aplica(doc,v,m)}})});
+ /* AFE/AE puxadas do banco, separadas por tipo */
+ window.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-dist-company]');if(!b||!window.MedBanco)return;e.preventDefault();e.stopImmediatePropagation();
+  MedBanco.consultaCnpj(state.meta.cnpj,{onApply:function(r){poe('meta.company',r.razao,1);poe('meta.fantasy',r.fantasia,1);
+   [['afe',r.afe],['ae',r.ae]].forEach(function(p){var k=p[0],x=p[1];if(!x)return;setPath('distDocs.'+k+'.status','Possui');poe('distDocs.'+k+'.number',x.numero);poe('distDocs.'+k+'.process',x.processo);poe('distDocs.'+k+'.statusOfficial',x.situacao);poe('distDocs.'+k+'.authorizationDate',String(x.autorizacao||'').slice(0,10));poe('distDocs.'+k+'.publicationDate',String(x.publicacao||'').slice(0,10));poe('distDocs.'+k+'.class',x.classe);poe('distDocs.'+k+'.activities',x.atividades);poe('distDocs.'+k+'.sourceUpdate',String(x.carga||'').slice(0,10))});
+   state.readings=state.readings||{};state.readings.company={afe:r.afe,ae:r.ae,todas:r.todas,queriedAt:r.consulta};save();if(typeof renderITab==='function')renderITab()}})},true);
  var t=null;new MutationObserver(function(){if(!t)t=setTimeout(function(){t=null;try{politica()}catch(x){}},30)}).observe(document.documentElement,{childList:true,subtree:true});
 })();

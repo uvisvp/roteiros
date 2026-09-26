@@ -513,3 +513,11 @@ function manOcrPolitica(root){
  root.querySelectorAll('[data-med-photo]').forEach(b=>{const k=b.dataset.medPhoto||'';if(/:i(9\.1|3\.2):/.test(k)||rec.has(k))b.remove()});
 }
 (function(){let t=null;const run=()=>{t=null;try{manOcrPolitica(document)}catch(e){}};new MutationObserver(()=>{if(!t)t=setTimeout(run,30)}).observe(document.documentElement,{childList:true,subtree:true});run()})();
+
+/* ---------- Banco: AFE/AE por CNPJ e nomes na conferência de estoque ---------- */
+window.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-company]');if(!b||!window.MedBanco)return;e.preventDefault();e.stopImmediatePropagation();
+ MedBanco.consultaCnpj(state.identity.cnpj,{onApply:r=>{const i=state.identity;if(r.razao&&!i.razao)i.razao=r.razao;if(r.fantasia&&!i.fantasia)i.fantasia=r.fantasia;
+  if(r.afe){i.afe=r.afe.numero;if(r.afe.publicacao)i.afeData=String(r.afe.publicacao).slice(0,10)}
+  if(r.ae){i.ae=r.ae.numero;if(r.ae.publicacao)i.aeData=String(r.ae.publicacao).slice(0,10)}
+  state.queries=state.queries||{};state.queries.identity={afe:r.afe,ae:r.ae,todas:r.todas,queriedAt:r.consulta};manPronto()}})},true);
+(function(){let t=null;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=null;if(!window.MedBanco)return;document.querySelectorAll('input[data-stock$="|substancia"]').forEach(inp=>MedBanco.sugerir(inp,{tipo:'ambos'}))},60)}).observe(document.documentElement,{childList:true,subtree:true})})();
