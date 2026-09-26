@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-17",
+  "versao": "20260926-18",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: corrigido o travamento — com “Dispositivos/IVD” marcado, o quadro do POP-O-SNVS-013 se redesenhava sem parar (~15 mil alterações por segundo), deixando o app lento ou parado, sobretudo ao ir ao Relatório; “✎ Perfil” volta a funcionar em qualquer tela; nas etapas e itens aparece a barra “Bloco n de N” com todos os blocos. Inspeções salvas: além de Medicamentos, agora em Alimentos (inspeção do estabelecimento), Produtos (as três trilhas; retoma na trilha certa), Serviços assistenciais e Odontologia, com respostas e fotos; o botão Inspeções salvas saiu da tela inicial e fica na tela de cada núcleo (e o botão Salvas dentro de cada roteiro)."
+  "notas": "Produtos: o perfil sai do cabeçalho e fica como na Odontologia — é a primeira tela do roteiro e, na lista de blocos, a faixa do perfil traz “✎ Alterar perfil”."
 }
