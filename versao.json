@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-2",
+  "versao": "20260926-3",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Banco: consulta de AFE/AE corrigida nos três roteiros de Medicamentos — AFE e AE separadas pelo tipo da autorização, com classe, situação, atividades e datas, e escolha da autorização a aplicar (antes a AE aparecia como “N” e as atividades não eram lidas). Conferência de estoque sugere nomes de medicamentos e IFA a partir de 3 letras (drogaria e manipulação), com indicação da lista da Portaria 344."
+  "notas": "Fotos livres de novo em todos os itens da manipulação (inclusive receitas e ASO) e retirado o aviso de fotos da drogaria. O OCR continua restrito a licença, CRT, AVCB/CLCB e DANFE."
 }
