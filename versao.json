@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-10",
+  "versao": "20260926-11",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: cabeçalho com o nome da trilha; CNAE correto do fabricante de cosméticos; um só botão “✎ Alterar perfil”, que abre a trilha; passo de atividade fixa removido; bloco do POP-O-SNVS-013 só com dispositivos/IVD marcados e logo após as classes; marcar uma classe não salta mais para os blocos; distribuidor em dois blocos (geral e dispositivos/IVD). Rotulagem de alimentos: leitura por foto com “Usar no formulário” (texto, ingredientes, lote, validade, CNPJ, registro, porção, açúcares adicionados, gordura saturada e sódio); busca inteligente reconhece CNPJ, GTIN, processo e registro e já consulta; subtítulos sem numeração conflitante, identificação em duas colunas, fontes legais recolhidas e etapa de suplementos só para suplemento."
+  "notas": "Manipulação: sai a pergunta de comprovantes de coleta e destinação de resíduos (n010). Drogaria: a consulta do estoque por registro lista as apresentações da CMED (apresentação, registro de 13 dígitos, laboratório e EAN). Distribuidora: a conferência de estoque sugere nomes de medicamentos do banco e, escolhido o registro, as apresentações. Rotulagem de alimentos: busca de alimento por nome ou marca (índice novo da base), também pela busca inteligente; o resultado de GTIN deixa claro que o código é só validado."
 }
