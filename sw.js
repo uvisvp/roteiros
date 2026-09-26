@@ -1,7 +1,7 @@
 /* Service worker — Inspeção Sanitária / UVIS */
 'use strict';
 
-const VERSAO = '20260926-11';
+const VERSAO = '20260926-12';
 const CACHE_APP = 'app-' + VERSAO;
 const CACHE_DADOS = 'dados-v1';
 
