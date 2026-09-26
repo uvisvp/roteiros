@@ -45,5 +45,9 @@ troca("var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;\n    if(nivel1){\n
   const b = html.indexOf(' blocos:[', i), f = html.indexOf('\n};`', b); if (b < 0 || f < 0) throw Error('blocos de produtos');
   const novo = " blocos:[['Licença e regularidade',['lic','reg']],\n  ['Fabricante — qualidade, pessoal e documentos',['f_gq','f_pes','f_saude','f_doc','f_rec','f_recolhe','f_auto']],\n  ['Fabricante — instalações, produção e controle',['f_inst','f_agua','f_arm','f_prod','f_cq']],\n  ['Distribuidor — recebimento, armazenamento e qualidade',['d_rec','d_arm','d_qual','d_pes']],\n  ['Distribuidor — dispositivos médicos e IVD (RDC 665/2022)',['d_sq','d_doc','d_inst','d_man','d_capa','d_at']],\n  ['Transportadora',['t_veic','t_temp','t_rast']]]";
   html = html.slice(0, b) + novo + html.slice(f); }
+/* 10. Produtos: a faixa do perfil na lista de blocos mostra a trilha e as classes marcadas
+   (como na Odontologia: “Odontologia · Ambiente sem anestesia”). Antes: só “Produtos e correlatos”. */
+troca("resumo:function(){var n=document.querySelector('#panel-roteiro .route-line span');return n?n.textContent.replace(/\\s+/g,' ').trim():''},\n revisar:function(){var b=document.querySelector('[data-tab=\"relatorio\"]')",
+  "resumo:function(){var CURTO={cls_disp:'Dispositivos/IVD',cls_cosm:'Cosméticos',cls_san:'Saneantes'};var t=document.querySelector('#panel-roteiro .trilha .type-card.active strong')||document.querySelector('header.app-header .p-ident b');var c=[].map.call(document.querySelectorAll('#panel-roteiro [data-flag]:checked'),function(x){var s=x.closest('label')&&x.closest('label').querySelector('strong');return CURTO[x.dataset.flag]||(s?s.textContent.trim():'')}).filter(Boolean);return [t?t.textContent.trim():''].concat(c).filter(Boolean).join(' · ')},\n revisar:function(){var b=document.querySelector('[data-tab=\"relatorio\"]')", 'resumo de produtos');
 fs.writeFileSync(file, html);
 console.log('Casca: navegação em três níveis ajustada.');

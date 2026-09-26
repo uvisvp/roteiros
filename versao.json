@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-18",
+  "versao": "20260926-19",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: o perfil sai do cabeçalho e fica como na Odontologia — é a primeira tela do roteiro e, na lista de blocos, a faixa do perfil traz “✎ Alterar perfil”."
+  "notas": "Produtos: a faixa do perfil na lista de blocos mostra a trilha e as classes marcadas (ex.: Atacadista / distribuidor · Dispositivos/IVD · Cosméticos), como na Odontologia."
 }
