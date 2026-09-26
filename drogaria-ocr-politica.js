@@ -3,7 +3,8 @@
    e DANFE (fornecedores). Fichas digitadas, sem OCR: controle de pragas,
    certificados de calibração (com foto), SNGPC e mapas/balanços. Sem leitura:
    ASO (checklist por amostragem, LGPD), POPs, Manual e PGRSS (checklists),
-   embalagens do estoque (dados vêm do banco) e “extrair texto” genérico.
+   e “extrair texto” genérico. Embalagem do estoque: OCR lê registro, processo
+   ou EAN e o banco completa nome, fabricante e apresentação.
    Carregado depois de drogaria-review.js. */
 (function(){
  if(window.__drgOcrPolitica||!window.OcrPadrao)return;window.__drgOcrPolitica=true;
@@ -24,12 +25,13 @@
  /* antes dos demais ouvintes (fase de captura na window) */
  window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-ocr]');if(!b)return;var v=b.dataset.ocr||'',k=chave(v),id=k.split('@')[0];
   if(v.indexOf('document:')===0){if(FICHA[id]){e.preventDefault();e.stopImmediatePropagation();ficha(k);return}if(!OCR[id]){e.preventDefault();e.stopImmediatePropagation()}return}
-  if(/^stock:/.test(v)){e.preventDefault();e.stopImmediatePropagation()}},true);
+},true);
  window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-sd-doc]');if(b&&String(b.dataset.sdDoc||'').split('|')[1]!=='danfe_nfe'){e.preventDefault();e.stopImmediatePropagation()}},true);
  window.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('[data-s1-read="aso"]');if(b){e.preventDefault();e.stopImmediatePropagation()}},true);
  function politica(){
   document.querySelectorAll('[data-ocr]').forEach(function(b){var v=b.dataset.ocr||'',id=chave(v).split('@')[0];
-   if(v==='document:geral'||/^stock:/.test(v)){b.remove();return}
+   if(v==='document:geral'){b.remove();return}
+   if(/^stock:/.test(v)){b.textContent='📷 Ler registro, processo ou EAN da embalagem (OCR)';return}
    if(v.indexOf('document:')===0){if(OCR[id])b.textContent='📄 Ler documento (OCR)';else if(FICHA[id])b.textContent='📝 Registrar dados do documento';else b.remove()}});
   document.querySelectorAll('[data-s1-read="aso"]').forEach(function(b){b.remove()});
   if(window.MedBanco)document.querySelectorAll('input[data-path^="stock."][data-path$=".name"]').forEach(function(inp){MedBanco.sugerir(inp,{tipo:'medicamento',onPick:function(x,el){el.value=x.nome+(x.ativo?' ('+x.ativo+')':'');el.dispatchEvent(new Event('input',{bubbles:true}));var i=el.dataset.path.split('.')[1],r=document.querySelector('input[data-path="stock.'+i+'.registro"]');if(r&&x.registro&&!r.value){r.value=x.registro;r.dispatchEvent(new Event('input',{bubbles:true}))}}})});

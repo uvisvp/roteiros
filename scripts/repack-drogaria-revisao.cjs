@@ -53,6 +53,12 @@ html = change(html, `return '<button type="button" class="drg-item-card" data-dr
     "name:[firstVal(x,['produto','nome_produto','nome_comercial','nome']),x.apresentacao].filter(Boolean).join(' — '),registro:x.registro_apresentacao||x.registro||'',", 'apresentação no nome');
   troca("fabricante:firstVal(x,['fabricante','empresa','razao_social','detentor'])",
     "fabricante:firstVal(x,['fabricante','laboratorio','empresa','razao_social','detentor'])", 'laboratório');
+  /* OCR da embalagem (estoque): lê EAN, registro Anvisa (só dígitos) e processo; ao aplicar, já consulta o banco. */
+  troca(" if(target.startsWith('stock:')){const candidates=text.match(/\\b\\d{8,14}\\b/g)||[];return {ean:candidates.find(gtinValid)||'',registro:(text.match(/(?:registro|MS)\\s*[:.]?\\s*([\\d. -]{9,20})/i)||[])[1]||'',name:'',lote:(text.match(/(?:lote|lot)\\s*[:.]?\\s*([A-Z0-9-]+)/i)||[])[1]||'',nf:''}}",
+    " if(target.startsWith('stock:')){const candidates=text.match(/\\b\\d{8,14}\\b/g)||[];const ean=candidates.find(x=>x.length>=12&&/^7/.test(x)&&gtinValid(x))||candidates.find(gtinValid)||'';const rg=(text.match(/(?:reg(?:istro)?\\.?\\s*(?:no?\\s*)?(?:m\\.?\\s?s\\.?|anvisa)?|\\bm\\.?\\s?s\\.?)\\s*(?:n[º°o.]*)?\\s*[:.\\-]?\\s*(\\d[\\d .\\-]{7,20}\\d)/i)||[])[1]||'';const pr=(text.match(/\\b(25\\d{3}[.\\s]?\\d{6}[\\/\\s]?\\d{4}[-\\s]?\\d{2})\\b/)||[])[1]||'';return {ean,registro:rg.replace(/\\D/g,'').slice(0,13),processo:pr.replace(/\\D/g,''),name:'',lote:(text.match(/(?:lote|lot)\\s*[:.]?\\s*([A-Z0-9-]+)/i)||[])[1]||'',nf:''}}", 'OCR da embalagem');
+  troca("registro:'Registro Anvisa',texto:'Texto reconhecido'}", "registro:'Registro Anvisa',processo:'Processo Anvisa',texto:'Texto reconhecido'}", 'rótulo do processo');
+  troca("save();byId('modal').close();render();if(ocrTarget.startsWith('supplier:')&&validateCnpj(ocrFields.cnpj))",
+    "save();byId('modal').close();render();if(ocrTarget.startsWith('stock:')&&(ocrFields.ean||ocrFields.registro||ocrFields.processo)){const alvo=ocrTarget;setTimeout(async()=>{openQuery(alvo);await productSearch()},60)}if(ocrTarget.startsWith('supplier:')&&validateCnpj(ocrFields.cnpj))", 'consulta automática após OCR');
   const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip ' + id);
   html = html.replace(re, () => m[1] + enc + m[3]);
 }
