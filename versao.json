@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-5",
+  "versao": "20260926-6",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria, conferência de estoque: volta o OCR da embalagem, que agora lê EAN, registro Anvisa (13 ou 9 dígitos, só números) e número do processo; ao aplicar, a consulta ao banco abre sozinha e preenche nome, fabricante, processo e situação (e a apresentação, quando lido o EAN)."
+  "notas": "Central de Consultas testada em todos os modos. Correções: registro de 13 dígitos (registro da apresentação, da embalagem) passa a localizar o produto pelos 9 primeiros dígitos; IFA por nome sem resultado na base pública de IFA (que tem poucos registros) mostra os medicamentos registrados com aquele princípio ativo."
 }

@@ -398,6 +398,23 @@
           return true;
         });
 
+      /* A exportação pública de IFA da Anvisa tem poucos registros: sem resultado,
+         mostra os medicamentos registrados com esse princípio ativo. */
+      if (tipo === 'ifa' && !items.length) {
+        try {
+          const alt = await fetchIndex('medicamento', n.slice(0, 3), n);
+          const vistos = new Set();
+          const meds = (alt.payload.registros || [])
+            .filter(x => x.tipo === 'medicamento' && compact(x.termo).startsWith(n))
+            .filter(x => { const id = x.registro + '|' + x.processo; if (vistos.has(id)) return false; vistos.add(id); return true; });
+          if (meds.length) {
+            render(meds, raw, await manifest('medicamento', alt.pasta), 'medicamento', alt.pasta);
+            const h = $('results');
+            if (h) h.insertAdjacentHTML('afterbegin', '<div class="empty">A base pública de IFA da Anvisa tem poucos registros e não localizou “' + esc(raw) + '”. Abaixo, os medicamentos registrados com este princípio ativo.</div>');
+            return;
+          }
+        } catch (e) { /* segue para a mensagem padrão */ }
+      }
       render(items, raw, man, tipo, achado.pasta);
     } catch (err) {
       if (host) {
