@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-11",
+  "versao": "20260926-12",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: sai a pergunta de comprovantes de coleta e destinação de resíduos (n010). Drogaria: a consulta do estoque por registro lista as apresentações da CMED (apresentação, registro de 13 dígitos, laboratório e EAN). Distribuidora: a conferência de estoque sugere nomes de medicamentos do banco e, escolhido o registro, as apresentações. Rotulagem de alimentos: busca de alimento por nome ou marca (índice novo da base), também pela busca inteligente; o resultado de GTIN deixa claro que o código é só validado."
+  "notas": "Serviços de alimentação: em “✎ Alterar perfil” as opções de tipo, forma de operação e processos voltaram a aparecer (uma regra que escondia a barra de atalhos das seções escondia também o perfil); “Abrir roteiro →” da barra inferior fica habilitado e aplica o perfil escolhido, sem precisar do botão “Aplicar perfil”."
 }

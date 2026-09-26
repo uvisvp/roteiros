@@ -721,7 +721,7 @@
 
     <footer class="app-footer">
       
-      <span class="build"><span id="casca-versao">v20260926-11 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
+      <span class="build"><span id="casca-versao">v20260926-12 JS desligado</span><button class="vstate" id="versao-estado" type="button">Verificar atualização</button></span>
     </footer>
   </main>
 
@@ -863,7 +863,7 @@
        Nunca atualiza com inspeção em andamento.
        Nunca apaga rascunho — o service worker só mexe em cache.
        ========================================================= */
-    const APP_VERSAO = '20260926-11';
+    const APP_VERSAO = '20260926-12';
     let registroSW = null, novaVersao = APP_VERSAO, atualizando = false;
 
     function inspecaoEmAndamento() {
@@ -2005,9 +2005,10 @@ if(app==='distribuidoras-transportadoras'){
     var escreve=function(html){if(d.innerHTML!==html)d.innerHTML=html};
     var idx=b&&it?b.itens.indexOf(it):-1,ib=b?bs.indexOf(b):-1;
     var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;
+    var aplicavel=!pronto&&(function(){var box=container();return !!(box&&[].some.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled}))})();
     if(nivel1){
-      escreve('<span>'+(pronto?'Perfil definido':'Defina o perfil para montar o roteiro')+'</span>'
-        +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>');
+      escreve('<span>'+(pronto?'Perfil definido':aplicavel?'Escolha o perfil e abra o roteiro':'Defina o perfil para montar o roteiro')+'</span>'
+        +'<button type="button" class="n3-principal" data-n3-prox="roteiro"'+(pronto||aplicavel?'':' disabled')+'>Abrir roteiro →</button>');
       return;
     }
     if(!b){
@@ -2030,6 +2031,15 @@ if(app==='distribuidoras-transportadoras'){
       +'<button type="button" class="n3-principal" data-n3-prox="'+prox.acao+'">'+esc(prox.rot)+'</button>');
   }
   function contexto(){return ultimo&&ultimo.bs&&ultimo.bs.length?ultimo:null}
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
+  document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('#n3-dock button');if(!b||!/Abrir roteiro/i.test(b.textContent||''))return;var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok)return;var box=container();var ap=box&&[].filter.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled})[0];if(ap){e.preventDefault();e.stopImmediatePropagation();ap.click()}},true);
   document.addEventListener('click',function(e){var b=e.target&&e.target.closest&&e.target.closest('button');if(!b||b.closest('#n3-dock')||!/ir ao roteiro|iniciar verifica/i.test(b.textContent||''))return;setTimeout(function(){var ok=CFG.perfilPronto?!!CFG.perfilPronto():true;if(ok){estado.perfil=false;estado.bloco=null;estado.item=null;repintar();window.scrollTo(0,0)}},120)});
   function avancar(acao){
     var c=contexto();if(!c)return;
@@ -2246,7 +2256,7 @@ if(app==='distribuidoras-transportadoras'){
    limpar.parentNode.insertBefore(det,limpar);det.appendChild(limpar);limpar.style.marginLeft='0';
   }
  },
- esconder:['.bloco > .chips'],
+ esconder:['#p-roteiro > div > .bloco > .chips'],
  mapaDeLinhas:function(){
   if(window.__saMapa)return window.__saMapa;
   var el=document.getElementById('roteiro-sa-config');if(!el)return null;
