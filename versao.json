@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-7",
+  "versao": "20260926-8",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Serviços assistenciais simplificado: três abas (Roteiro, Infrações, Relatório), com Documentos, Inspeção e Dimensionamento de pessoal como atalhos dentro do Roteiro; cabeçalho do serviço compacto (enquadramento, norma e CNAE em “Sobre este serviço”); contagem única nos grupos."
+  "notas": "Estética: abas com nomes claros (Estética — interesse à saúde, Serviço de saúde, Relatório com o número de selecionadas), explicação de qual inventário usar, busca no inventário funcionando e etiquetas de citação completas (ex.: “Art. 90, § 1º” em vez de “§ 1º”)."
 }
