@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-12",
+  "versao": "20260926-13",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Serviços de alimentação: em “✎ Alterar perfil” as opções de tipo, forma de operação e processos voltaram a aparecer (uma regra que escondia a barra de atalhos das seções escondia também o perfil); “Abrir roteiro →” da barra inferior fica habilitado e aplica o perfil escolhido, sem precisar do botão “Aplicar perfil”."
+  "notas": "Estética (celular): some a faixa vazia sob “Ver selecionadas” — a reserva inferior passa a ter a altura real da barra, que agora inclui a área segura do aparelho; o botão grande “Ver selecionadas” saiu (repetia o ☰ da barra) e os ícones da barra ganharam nome: Anterior, Consulta, Selecionadas (n), Próximo."
 }
