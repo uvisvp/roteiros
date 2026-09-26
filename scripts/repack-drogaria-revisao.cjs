@@ -39,5 +39,22 @@ html = change(html, `return '<button type="button" class="drg-item-card" data-dr
   const j = html.indexOf(velho, i), k2 = html.indexOf(novo, i), fim = html.indexOf('</button>', i) + 12;
   if (!(k2 >= 0 && k2 < fim)) { if (j < 0 || j > fim) throw Error('rótulo da faixa da Drogaria não localizado'); html = html.slice(0, j) + novo + html.slice(j + velho.length); }
 }
+/* Conferência de estoque: registro de 13 dígitos (registro + apresentação, como impresso na
+   embalagem) consulta pelo registro do produto (9 primeiros); a apresentação e o laboratório
+   vindos da CMED (consulta por EAN) entram no campo “Produto / apresentação”. */
+{ const id = 'app--drogaria';
+  const re = new RegExp('(<script type="text/plain" id="' + id + '">)([\\s\\S]*?)(</script>)');
+  const m = html.match(re); if (!m) throw Error(id);
+  let app = lz.decompressFromBase64(m[2]); if (!app) throw Error('descompactação ' + id);
+  const troca = (de, para, rot) => { if (app.includes(para)) return; if (!app.includes(de)) throw Error('Trecho não localizado: ' + rot); app = app.replace(de, () => para); };
+  troca("let results;if(queryTarget.startsWith('stock:')&&gtinValid(n)){",
+    "let results;const n9=queryTarget.startsWith('stock:')&&n.length===13&&/^1/.test(n)?n.slice(0,9):'';if(n9){const man=await getVisaManifest(),prefix=Number(man.bases?.medicamentos?.prefixo_fragmento||man.bases?.medicamentos?.prefixo||4),data=await visaJSON('medicamentos/'+n9.slice(0,prefix)+'.json');results=(data||[]).filter(x=>digits(x.registro)===n9).map(x=>({...x,_base:'medicamentos',registro_apresentacao:n}))}else if(queryTarget.startsWith('stock:')&&gtinValid(n)){", 'busca por registro de 13 dígitos');
+  troca("name:firstVal(x,['produto','nome_produto','nome_comercial','nome']),registro:x.registro||'',",
+    "name:[firstVal(x,['produto','nome_produto','nome_comercial','nome']),x.apresentacao].filter(Boolean).join(' — '),registro:x.registro_apresentacao||x.registro||'',", 'apresentação no nome');
+  troca("fabricante:firstVal(x,['fabricante','empresa','razao_social','detentor'])",
+    "fabricante:firstVal(x,['fabricante','laboratorio','empresa','razao_social','detentor'])", 'laboratório');
+  const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip ' + id);
+  html = html.replace(re, () => m[1] + enc + m[3]);
+}
 fs.writeFileSync(file, html);
 console.log('Drogaria: revisão do relatório e da numeração aplicada.');

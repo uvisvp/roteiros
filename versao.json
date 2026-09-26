@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-3",
+  "versao": "20260926-4",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Fotos livres de novo em todos os itens da manipulação (inclusive receitas e ASO) e retirado o aviso de fotos da drogaria. O OCR continua restrito a licença, CRT, AVCB/CLCB e DANFE."
+  "notas": "Drogaria, conferência de estoque: o registro de 13 dígitos impresso na embalagem (registro + apresentação) passa a localizar o produto; a consulta por código de barras (EAN) preenche também a apresentação e o laboratório."
 }
