@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-9",
+  "versao": "20260926-10",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Odontologia, Serviços de alimentação e Produtos: o perfil não salta mais sozinho para os blocos ao escolher a tipologia — a tela fica no perfil até “Abrir roteiro →”, permitindo completar organização, processamento e características; “Aplicar perfil e ir ao roteiro” (alimentação) passa a abrir os blocos; textos falam em “perfil” em vez de “atividades”."
+  "notas": "Produtos: cabeçalho com o nome da trilha; CNAE correto do fabricante de cosméticos; um só botão “✎ Alterar perfil”, que abre a trilha; passo de atividade fixa removido; bloco do POP-O-SNVS-013 só com dispositivos/IVD marcados e logo após as classes; marcar uma classe não salta mais para os blocos; distribuidor em dois blocos (geral e dispositivos/IVD). Rotulagem de alimentos: leitura por foto com “Usar no formulário” (texto, ingredientes, lote, validade, CNPJ, registro, porção, açúcares adicionados, gordura saturada e sódio); busca inteligente reconhece CNPJ, GTIN, processo e registro e já consulta; subtítulos sem numeração conflitante, identificação em duas colunas, fontes legais recolhidas e etapa de suplementos só para suplemento."
 }
