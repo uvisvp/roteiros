@@ -1,6 +1,6 @@
 {
-  "versao": "20260926-13",
+  "versao": "20260926-14",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Estética (celular): some a faixa vazia sob “Ver selecionadas” — a reserva inferior passa a ter a altura real da barra, que agora inclui a área segura do aparelho; o botão grande “Ver selecionadas” saiu (repetia o ☰ da barra) e os ícones da barra ganharam nome: Anterior, Consulta, Selecionadas (n), Próximo."
+  "notas": "Produtos: roteiro refeito por perfil (licença e regularidade; fabricante; distribuidor com base na RDC 16/2014 art. 28; dispositivos e IVD pela RDC 665/2022 com artigos corrigidos; transportadora com Lei 13.725 art. 91) e lista de infrações revista (responsável técnico pelo art. 93, e não 92; sem os itens automáticos “Não atendimento ao requisito”); corrigido o compartilhamento de respostas entre itens de mesmo código. Serviços assistenciais: removidos botões de citação que abriam artigo de outra norma e criados os que faltavam. Odontologia: três botões que abriam o artigo errado. Alimentação: reservatório de água passa a citar os itens 11.5 e 11.6."
 }

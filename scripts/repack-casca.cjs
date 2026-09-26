@@ -25,7 +25,7 @@ if (!html.includes("aplicavel?'Escolha o perfil")) troca("(pronto?'Atividades se
 troca("nome:'Produtos e correlatos',\n resumo:", "nome:'Produtos e correlatos',\n perfilPronto:function(){var s=document.querySelector('#panel-roteiro [data-start]');return !s||!s.disabled},\n resumo:", 'perfil pronto de produtos');
 /* 5. Produtos: o bloco do distribuidor tinha 10 etapas misturando a trilha geral e a
       de dispositivos/IVD; vira dois blocos. Títulos sem prefixo repetido. */
-troca("['Distribuidor',['d_fluxo','d_store','d_trace','d_docs','d_sq','d_doc','d_inst','d_arm','d_capa','d_at']]", "['Distribuidor — recebimento, armazenamento e rastreabilidade',['d_fluxo','d_store','d_trace','d_docs']],\n  ['Distribuidor — dispositivos médicos e IVD (RDC 665/2022)',['d_sq','d_doc','d_inst','d_arm','d_capa','d_at']]", 'blocos do distribuidor');
+/* (a divisão do bloco do distribuidor foi incorporada ao item 9) */
 troca("tituloDaSecao:function(n){var h=n.querySelector('h3');return h?h.textContent.replace(/^\\s*\\d+\\.\\s*/,'').trim():n.id},\n progressoDaSecao:function(n){var p=n.querySelector('.section-head > span')", "tituloDaSecao:function(n){var h=n.querySelector('h3');return h?h.textContent.replace(/^\\s*(Atacadista|Fabricante|Transportadora)\\s*—\\s*/,'').replace(/^\\s*\\d+\\.\\s*/,'').replace(/\\s*—\\s*dispositivos\\/IVD\\s*$/,'').trim():n.id},\n progressoDaSecao:function(n){var p=n.querySelector('.section-head > span')", 'títulos de produtos');
 /* 6. Serviços de alimentação: a regra que esconde a barra de atalhos das seções
       (“35 verificações para este perfil”) pegava também as opções do perfil
@@ -40,5 +40,10 @@ troca("function contexto(){return ultimo&&ultimo.bs&&ultimo.bs.length?ultimo:nul
       próprio de aplicar, fica habilitado (o item 7 aplica o perfil e abre os blocos). */
 troca("var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;\n    if(nivel1){\n      escreve('<span>'+(pronto?'Perfil definido':'Defina o perfil para montar o roteiro')+'</span>'\n        +'<button type=\"button\" class=\"n3-principal\" data-n3-prox=\"roteiro\"'+(pronto?'':' disabled')+'>Abrir roteiro →</button>');",
   "var pronto=CFG.perfilPronto?!!CFG.perfilPronto():true;\n    var aplicavel=!pronto&&(function(){var box=container();return !!(box&&[].some.call(box.querySelectorAll('button'),function(x){return /aplicar perfil|iniciar verifica/i.test(x.textContent||'')&&!x.disabled}))})();\n    if(nivel1){\n      escreve('<span>'+(pronto?'Perfil definido':aplicavel?'Escolha o perfil e abra o roteiro':'Defina o perfil para montar o roteiro')+'</span>'\n        +'<button type=\"button\" class=\"n3-principal\" data-n3-prox=\"roteiro\"'+(pronto||aplicavel?'':' disabled')+'>Abrir roteiro →</button>');", 'botão habilitado com aplicar');
+/* 9. Produtos: blocos da navegação conforme o roteiro revisado (scripts/produtos/revisao.py). */
+{ const ini = "'produtos-correlatos':String.raw`", i = html.indexOf(ini); if (i < 0) throw Error('n3 de produtos');
+  const b = html.indexOf(' blocos:[', i), f = html.indexOf('\n};`', b); if (b < 0 || f < 0) throw Error('blocos de produtos');
+  const novo = " blocos:[['Licença e regularidade',['lic','reg']],\n  ['Fabricante — qualidade, pessoal e documentos',['f_gq','f_pes','f_saude','f_doc','f_rec','f_recolhe','f_auto']],\n  ['Fabricante — instalações, produção e controle',['f_inst','f_agua','f_arm','f_prod','f_cq']],\n  ['Distribuidor — recebimento, armazenamento e qualidade',['d_rec','d_arm','d_qual','d_pes']],\n  ['Distribuidor — dispositivos médicos e IVD (RDC 665/2022)',['d_sq','d_doc','d_inst','d_man','d_capa','d_at']],\n  ['Transportadora',['t_veic','t_temp','t_rast']]]";
+  html = html.slice(0, b) + novo + html.slice(f); }
 fs.writeFileSync(file, html);
 console.log('Casca: navegação em três níveis ajustada.');
