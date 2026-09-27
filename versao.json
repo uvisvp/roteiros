@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-01",
+  "versao": "20260927-02",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "“Como sai no relatório” refeito e presente em todos os roteiros de inspeção (drogaria, distribuidora, alimentos, produtos, serviços assistenciais, odontologia; a manipulação já tinha): mostra as frases que o item gera no relatório. Drogaria e manipulação: corrigido redesenho contínuo dos botões de leitura de documento."
+  "notas": "Drogaria (Para saber mais em controlados): escrituração, BMPO trimestral e anual, RMNRA mensal; uso único e dispensação parcial no SNCR conforme a cartilha da Anvisa (set/2026); CPF do paciente no lugar do endereço (RDC 1.000/2025), com a exceção dos anabolizantes."
 }
