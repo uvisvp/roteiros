@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-04",
+  "versao": "20260927-05",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Fotos fora do relatório Word: botão Fotos (ao lado de Salvas) emite o relatório fotográfico em PDF à parte, duas fotos por página, com a legenda do ponto do roteiro. Drogaria, manipulação, distribuidora, alimentos, produtos e serviços assistenciais. Alimentos e galeria da drogaria passam a guardar a foto reduzida."
+  "notas": "Drogaria e manipulação: avaliação de risco com a lista do relatório (não se aplica, baixo, satisfatório com restrições, satisfatório, insatisfatório, insatisfatório com interdição parcial ou total)."
 }
