@@ -20,7 +20,7 @@
  if(window.UvisSalvas)return;
  var LIMITE=5;
  var CFG={
-  'drogaria':{nome:'Drogaria',nucleo:'Medicamentos',ls:['drogaria-inspecao-v4','drogaria-inspecao-v3','uvis-previa-drogaria'],fotos:['drogaria-']},
+  'drogaria':{nome:'Drogaria',nucleo:'Medicamentos',ls:['drogaria-inspecao-v4','drogaria-inspecao-v3','uvis-previa-drogaria'],fotos:['drogaria-'],fotosDb:{db:'drogaria-fotos-evidencia-v1',store:'photos',key:'key'}},
   'farmacia-manipulacao':{nome:'Farmácia com Manipulação',nucleo:'Medicamentos',ls:['uvisvp_manipulacao_v1'],fotos:['manipulacao-']},
   'distribuidoras-transportadoras':{nome:'Distribuidora / transportadora',nucleo:'Medicamentos',ls:['uvis-dist-bpdiat-v2','dist-anexo2-campos-v1','distribuidoras-transportadoras-v2','uvis-previa-distribuidoras-transportadoras'],fotos:['dist-']},
   'servicos-alimentacao-roteiro':{nome:'Inspeção do estabelecimento',nucleo:'Alimentos',ls:['uvis-alimentos-estab-v1','uvis-previa-servicos-alimentacao-roteiro'],fotos:[]},

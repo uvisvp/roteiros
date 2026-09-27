@@ -238,7 +238,7 @@ function ddAnexoIMontar(o,fotos){
  med.forEach(p);ddParas(state.plan.measures).forEach(t=>p(t));if(!med.length&&!ddTem(state.plan.measures))p('Não informado.');
  /* 16 */
  it(16,'Anexos');
- const anexos=[];if(nc.ncs.length)anexos.push(o.final?'Anexo A — Análise do plano de ação.':'Análise do plano de ação — será anexada na versão final do relatório.');if(fotos.list.length)anexos.push((o.final&&nc.ncs.length?'Anexo B':'Anexo A')+' — Registro fotográfico ('+fotos.list.length+' foto'+(fotos.list.length>1?'s':'')+').');
+ const anexos=[];if(nc.ncs.length)anexos.push(o.final?'Anexo A — Análise do plano de ação.':'Análise do plano de ação — será anexada na versão final do relatório.');if(fotos.list.length)anexos.push((o.final&&nc.ncs.length?'Anexo B':'Anexo A')+' — Registro fotográfico ('+fotos.list.length+' foto'+(fotos.list.length>1?'s':'')+'), em arquivo PDF à parte.');
  anexos.forEach(p);ddParas(state.plan.attachments).forEach(t=>p(t));if(!anexos.length&&!ddTem(state.plan.attachments))p('Não há.');
  /* 17 */
  it(17,'Equipe inspetora');
@@ -330,7 +330,8 @@ function ddAnexoIPendencias(final){
 
 /* ---------- Saídas ---------- */
 function ddNomeArq(base){return base+'_'+String(state.meta.company||'estabelecimento').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,40)+'.docx'}
-function ddAnexoFotos(nodes,fotos,letra){if(!fotos.list.length)return;nodes.push({k:'title',t:'ANEXO '+letra+' — REGISTRO FOTOGRÁFICO',pb:true},{k:'sub',t:'As legendas indicam o item do relatório e a verificação em que cada foto foi registrada; o número da foto é citado no texto do item.',after:120},{k:'photos',list:fotos.list})}
+/* Fotos: não entram no Word; o registro fotográfico é emitido em PDF à parte (botão Fotos, relatorio-fotos.js), com a mesma numeração citada no texto. */
+function ddAnexoFotos(nodes,fotos,letra){}
 async function ddPrevia(baixar){
  const r=await ddAnexoI({final:false}),nodes=r.nodes.slice();ddAnexoFotos(nodes,r.fotos,'A');
  if(!baixar){ddModal('Prévia do relatório — Anexo I',nodes,ddAnexoIPendencias(false));return}
