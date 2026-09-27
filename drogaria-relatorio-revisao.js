@@ -137,28 +137,4 @@
   try{new MutationObserver(agenda).observe(document.documentElement,{childList:true,subtree:true})}catch(e){}
 })();
 
-/* Prévia por item: “Como sai no relatório”, no fim do item aberto. */
-(function(){
-  'use strict';
-  function sn(t){return String(t||'').replace(/^\s*\d+(?:\.\d+)*\.?\s+/,'').replace(/^\d+\s*·\s*/,'').trim().toLowerCase()}
-  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  var ultimo='';
-  function aplicar(){
-    var tela=document.querySelector('#content .drg-item-screen');if(!tela||!window.DrogariaAPI||!DrogariaAPI.report)return;
-    var chip=document.querySelector('#content .lvl-chips [aria-current="step"]');if(!chip)return;
-    var alvo=sn(chip.textContent),estado='';try{estado=JSON.stringify(DrogariaAPI.getState())}catch(e){}
-    var chave=alvo+'|'+estado.length+'|'+estado.slice(-200);var box=tela.querySelector(':scope > .drg-previa');
-    if(box&&box.dataset.chave===chave)return;
-    var r;try{r=DrogariaAPI.report()}catch(e){return}
-    var bl=r&&r.blocks||[],i=bl.findIndex(function(b){return (b.t==='h2'||b.t==='h1')&&sn(b.x)===alvo}),corpo=[];
-    if(i>=0)for(var j=i+1;j<bl.length&&bl[j].t!=='h1'&&bl[j].t!=='h2';j++)corpo.push(bl[j]);
-    var irr=(r.irregularities||[]).filter(function(x){return sn(x.grupo)===alvo});
-    var html='<details class="drg-previa" data-chave="'+esc(chave)+'"'+(box&&box.open?' open':'')+'><summary>👁 Como sai no relatório</summary>'+
-      (corpo.length?corpo.map(function(b){return b.t==='kv'?'<p><b>'+esc(b.k)+':</b> '+esc(b.v)+'</p>':'<p>'+esc(b.x||'')+'</p>'}).join(''):'<p class="muted">Ainda sem texto para este item: responda as perguntas.</p>')+
-      (irr.length?'<p><b>Irregularidades deste item:</b></p><ul>'+irr.map(function(x){return '<li>'+esc(x.frase_relatorio)+'</li>'}).join('')+'</ul>':'')+'</details>';
-    if(box)box.outerHTML=html;else tela.insertAdjacentHTML('beforeend',html);
-  }
-  var t=0;function agenda(){clearTimeout(t);t=setTimeout(aplicar,120)}
-  try{new MutationObserver(function(m){if(m.every(function(x){return x.target.closest&&x.target.closest('.drg-previa')}))return;agenda()}).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['aria-pressed']})}catch(e){}
-  try{var st=document.createElement('style');st.textContent='.drg-previa{border:1px dashed #9fb3c2;border-radius:10px;background:#fbfcfd;margin:12px 0 4px;padding:0 12px}.drg-previa>summary{cursor:pointer;padding:9px 0;font-weight:700;color:#365B73;font-size:.86rem}.drg-previa p,.drg-previa li{font-size:.84rem;line-height:1.5;margin:0 0 7px}.drg-previa .muted{color:#6b7780;font-style:italic}';(document.head||document.documentElement).appendChild(st)}catch(e){}
-})();
+/* Prévia por item (“Como sai no relatório”): ver previa-relatorio.js, comum a todos os roteiros. */

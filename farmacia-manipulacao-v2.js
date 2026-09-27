@@ -504,10 +504,11 @@ function openReader(type,target){
 /* Botões de leitura: só onde a regra permite; demais saem. Fotos continuam livres em todos os itens. */
 function manOcrPolitica(root){
  root.querySelectorAll('[data-reader]').forEach(b=>{const t=b.dataset.target||'',ty=b.dataset.reader;
-  if(t==='identity'||MAN_OCR[t])b.textContent='📄 Ler documento (OCR)';
-  else if(MAN_FICHA[t])b.textContent='📝 Registrar dados do documento';
+  const rot=x=>{if(b.textContent!==x)b.textContent=x};
+  if(t==='identity'||MAN_OCR[t])rot('📄 Ler documento (OCR)');
+  else if(MAN_FICHA[t])rot('📝 Registrar dados do documento');
   else b.remove()});
- root.querySelectorAll('[data-read-cal]').forEach(b=>{b.textContent='📝 Certificado de calibração'});
+ root.querySelectorAll('[data-read-cal]').forEach(b=>{if(b.textContent!=='📝 Certificado de calibração')b.textContent='📝 Certificado de calibração'});
 }
 (function(){let t=null;const run=()=>{t=null;try{manOcrPolitica(document)}catch(e){}};new MutationObserver(()=>{if(!t)t=setTimeout(run,30)}).observe(document.documentElement,{childList:true,subtree:true});run()})();
 

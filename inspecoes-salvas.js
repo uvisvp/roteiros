@@ -20,13 +20,13 @@
  if(window.UvisSalvas)return;
  var LIMITE=5;
  var CFG={
-  'drogaria':{nome:'Drogaria',nucleo:'Medicamentos',ls:['drogaria-inspecao-v4','drogaria-inspecao-v3'],fotos:['drogaria-']},
+  'drogaria':{nome:'Drogaria',nucleo:'Medicamentos',ls:['drogaria-inspecao-v4','drogaria-inspecao-v3','uvis-previa-drogaria'],fotos:['drogaria-']},
   'farmacia-manipulacao':{nome:'Farmácia com Manipulação',nucleo:'Medicamentos',ls:['uvisvp_manipulacao_v1'],fotos:['manipulacao-']},
-  'distribuidoras-transportadoras':{nome:'Distribuidora / transportadora',nucleo:'Medicamentos',ls:['uvis-dist-bpdiat-v2','dist-anexo2-campos-v1','distribuidoras-transportadoras-v2'],fotos:['dist-']},
-  'servicos-alimentacao-roteiro':{nome:'Inspeção do estabelecimento',nucleo:'Alimentos',ls:['uvis-alimentos-estab-v1'],fotos:[]},
-  'produtos-correlatos':{nome:'Produtos e correlatos',nucleo:'Produtos',ls:['uvis-produtos-v2','uvis-produtos-pop13-v1','uvis-produtos-pop13-capa-v1','uvis-produtos-pop13-report-v1'],fotos:['uvis-produtos'],barra:'header.app-header .p-acoes'},
-  'servicos-assistenciais':{nome:'Serviços assistenciais',nucleo:'Serviços assistenciais',ls:['uvis.servicos-assistenciais.v12'],fotos:[],fotosDb:{db:'uvis-assistenciais-fotos-v1',store:'photos',key:'key',indice:'scope'},barra:'.topbar .top-actions',modalidade:true},
-  'odontologia':{nome:'Odontologia',nucleo:'Odontologia',ls:['odonto-rdc1002-v1'],fotos:[]}
+  'distribuidoras-transportadoras':{nome:'Distribuidora / transportadora',nucleo:'Medicamentos',ls:['uvis-dist-bpdiat-v2','dist-anexo2-campos-v1','distribuidoras-transportadoras-v2','uvis-previa-distribuidoras-transportadoras'],fotos:['dist-']},
+  'servicos-alimentacao-roteiro':{nome:'Inspeção do estabelecimento',nucleo:'Alimentos',ls:['uvis-alimentos-estab-v1','uvis-previa-servicos-alimentacao-roteiro'],fotos:[]},
+  'produtos-correlatos':{nome:'Produtos e correlatos',nucleo:'Produtos',ls:['uvis-produtos-v2','uvis-produtos-pop13-v1','uvis-produtos-pop13-capa-v1','uvis-produtos-pop13-report-v1','uvis-previa-produtos-correlatos'],fotos:['uvis-produtos'],barra:'header.app-header .p-acoes'},
+  'servicos-assistenciais':{nome:'Serviços assistenciais',nucleo:'Serviços assistenciais',ls:['uvis.servicos-assistenciais.v12','uvis-previa-servicos-assistenciais'],fotos:[],fotosDb:{db:'uvis-assistenciais-fotos-v1',store:'photos',key:'key',indice:'scope'},barra:'.topbar .top-actions',modalidade:true},
+  'odontologia':{nome:'Odontologia',nucleo:'Odontologia',ls:['odonto-rdc1002-v1','uvis-previa-odontologia'],fotos:[]}
  };
  function $(id){return document.getElementById(id)}
  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
