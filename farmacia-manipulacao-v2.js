@@ -464,7 +464,7 @@ function renderPreview(){
  }
  num++;h+='<h3>'+num+' · Irregularidades observadas</h3>'+(irr.length?'<ol>'+irr.map(x=>'<li>'+esc(x.texto)+(x.cit?' <i>'+esc(x.cit.replace(/\.$/,''))+'.</i>':'')+'</li>').join('')+'</ol>':'<p>Nenhuma irregularidade registrada.</p>');
  num++;h+='<h3>'+num+' · Documentação pendente</h3>'+medTable(r.pending.filter(x=>x.doc).map(x=>[x.doc,manData(x.prazo)]),['Documento','Prazo']);
- num++;h+='<h3>'+num+' · Considerações finais e avaliação de risco</h3><p>'+esc(r.consideracoes||'Não informado.')+'</p>';
+ num++;h+='<h3>'+num+' · Considerações finais e avaliação de risco</h3>'+(r.risco?'<p><b>Avaliação de risco:</b> '+esc(r.risco)+'.</p>':'')+'<p>'+esc(r.consideracoes||(r.risco?'':'Não informado.'))+'</p>';
  num++;h+='<h3>'+num+' · Conclusão</h3><p>'+esc(r.conclusao||'Não informada.')+'</p>';
  num++;h+='<h3>'+num+' · Medidas adotadas</h3>'+medTable(Object.entries({'Auto de Infração':r.medidas.auto,'Termo de Interdição':r.medidas.interdicao,'Tipo de interdição':r.medidas.interdicao?r.medidas.tipo:'','Outros':r.medidas.outros}).filter(x=>String(x[1]||'').trim()));
  num++;h+='<h3>'+num+' · Equipe inspetora</h3>'+medTable(r.equipe.filter(x=>x.nome).map(x=>[x.nome,x.matricula]),['Nome','Matrícula']);
