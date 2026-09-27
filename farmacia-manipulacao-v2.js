@@ -468,7 +468,8 @@ function renderPreview(){
  num++;h+='<h3>'+num+' · Conclusão</h3><p>'+esc(r.conclusao||'Não informada.')+'</p>';
  num++;h+='<h3>'+num+' · Medidas adotadas</h3>'+medTable(Object.entries({'Auto de Infração':r.medidas.auto,'Termo de Interdição':r.medidas.interdicao,'Tipo de interdição':r.medidas.interdicao?r.medidas.tipo:'','Outros':r.medidas.outros}).filter(x=>String(x[1]||'').trim()));
  num++;h+='<h3>'+num+' · Equipe inspetora</h3>'+medTable(r.equipe.filter(x=>x.nome).map(x=>[x.nome,x.matricula]),['Nome','Matrícula']);
- if(v2Fotos&&v2Fotos.length)h+=v2AnexoFotos();
+ /* Fotos: não entram no Word; saem no relatório fotográfico em PDF (botão Fotos, relatorio-fotos.js). */
+ if(v2Fotos&&v2Fotos.length)h+='<h3>Registro fotográfico</h3><p>'+v2Fotos.length+' foto'+(v2Fotos.length>1?'s':'')+' registrada'+(v2Fotos.length>1?'s':'')+' na inspeção, emitida'+(v2Fotos.length>1?'s':'')+' em relatório fotográfico à parte (PDF), com a legenda do item do roteiro.</p>';
  root.innerHTML=h;
  if(!v2Fotos&&state.activeTab==='relatorio')v2CarregarFotos();
 }

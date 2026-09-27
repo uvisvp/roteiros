@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-03",
+  "versao": "20260927-04",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria (controlados): aquisições posteriores só para receita de retenção em tratamento prolongado (RDC 471/2021, arts. 9º e 13; IN 360/2025)."
+  "notas": "Fotos fora do relatório Word: botão Fotos (ao lado de Salvas) emite o relatório fotográfico em PDF à parte, duas fotos por página, com a legenda do ponto do roteiro. Drogaria, manipulação, distribuidora, alimentos, produtos e serviços assistenciais. Alimentos e galeria da drogaria passam a guardar a foto reduzida."
 }

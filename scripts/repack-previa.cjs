@@ -19,7 +19,7 @@ for (const a of APPS) {
   const re = new RegExp('(<script type="text/plain" id="' + id + '">)([\\s\\S]*?)(</script>)');
   const m = html.match(re); if (!m) throw Error(id);
   let app = lz.decompressFromBase64(m[2]); if (!app) throw Error('descompactação ' + id);
-  for (const [de, para] of GANCHOS[a] || []) { if (app.includes(para)) continue; if (app.split(de).length !== 2) throw Error('gancho não localizado em ' + id); app = app.replace(de, () => para); }
+  for (const [de, para] of GANCHOS[a] || []) { if (app.includes(para) || (para.includes('window.__uvsRelTexto') && app.includes('window.__uvsRelTexto'))) continue; if (app.split(de).length !== 2) throw Error('gancho não localizado em ' + id); app = app.replace(de, () => para); }
   const i0 = app.indexOf(START); if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
   const k = app.lastIndexOf('</body>'); if (k < 0) throw Error('</body> não localizado em ' + id);
   app = app.slice(0, k) + START + '<script>' + code + '</script>' + END + app.slice(k);

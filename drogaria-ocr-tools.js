@@ -1627,9 +1627,24 @@
   function photoKey(scope, id) { return String(scope) + '|' + String(id); }
   function newPhotoId() { return 'foto_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8); }
 
+  /* Guarda a foto reduzida (lado maior 1600 px, JPEG 0,85): cerca de 300 KB em vez dos 3 a 5 MB do original. */
+  async function compactPhoto(file) {
+    try {
+      const url = URL.createObjectURL(file), im = new Image();
+      await new Promise((ok, no) => { im.onload = ok; im.onerror = no; im.src = url; });
+      URL.revokeObjectURL(url);
+      const k = Math.min(1, 1600 / Math.max(im.naturalWidth, im.naturalHeight));
+      if (k >= 1 && file.size < 600 * 1024) return file;
+      const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      const blob = await new Promise(ok => c.toBlob(ok, 'image/jpeg', .85));
+      return blob ? new File([blob], (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' }) : file;
+    } catch (_) { return file; }
+  }
   async function savePhoto(scope, file, { id = newPhotoId(), section = '', caption = '' } = {}) {
     if (!file || !(file.type || '').startsWith('image/')) throw new Error('Selecione uma fotografia.');
     if (file.size > 25 * 1024 * 1024) throw new Error('A foto excede 25 MB. Use uma imagem menor para preservar o armazenamento local.');
+    file = await compactPhoto(file);
     const record = {
       key: photoKey(scope, id), id, scope: String(scope), section: trim(section), caption: trim(caption),
       blob: file, filename: file.name || (id + '.jpg'), mime: file.type || 'image/jpeg', size: file.size,
