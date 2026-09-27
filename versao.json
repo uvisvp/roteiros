@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-05",
+  "versao": "20260927-06",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria e manipulação: avaliação de risco com a lista do relatório (não se aplica, baixo, satisfatório com restrições, satisfatório, insatisfatório, insatisfatório com interdição parcial ou total)."
+  "notas": "Drogaria: licença específica de vacinação e de EAC — com resposta “sim”, campo para o número (sem validade) e registro no relatório; com “não”, nada sai."
 }
