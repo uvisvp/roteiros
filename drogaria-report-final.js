@@ -169,10 +169,14 @@
       kv(B,'1.7. Licença de Funcionamento CEVS/CMVS nº',m.cevs); kv(B,'Válida até',fmtDate(m.lic_validade)); kv(B,'Atividades licenciadas',(s.fields?.atividades_licenciadas||[]).join('; '));
       kv(B,'1.8. Autorização de Funcionamento — AFE nº',m.afe); kv(B,'Atividades autorizadas',(m.atividades_autorizadas||[]).join('; '));
     }
-    for(const [key,label] of [['vacinacao','Licença sanitária específica — vacinação'],['eac','Licença sanitária específica — EAC']]){
-      const d=m.licencas_especificas?.[key]?.campos;if(!d)continue;
-      const bits=[d.numero_cevs_ou_cmvs&&`CEVS/CMVS ${d.numero_cevs_ou_cmvs}`,d.cnae&&`CNAE ${d.cnae}`,d.atividade_economica,d.validade&&key==='vacinacao'&&`válida até ${fmtDate(d.validade)}`].filter(Boolean);
-      kv(B,label,bits.join(' — '));
+    /* Licença específica: sai quando a equipe responde que possui (com o número digitado ou lido da foto); “não” não sai. Sem validade. */
+    const A1=s.answers||{};
+    for(const [key,label,resp,num,serv] of [['vacinacao','Licença sanitária específica — vacinação',A1.vaccine_licensed,m.lic_vacinacao,'o serviço de vacinação'],['eac','Licença sanitária específica — EAC',A1.eac_licensed,m.lic_eac,'a execução de Exames de Análises Clínicas (EAC)']]){
+      if(resp==='nao')continue;
+      const d=m.licencas_especificas?.[key]?.campos||{};const numero=num||d.numero_cevs_ou_cmvs;
+      if(resp!=='sim'&&!numero)continue;
+      const bits=['Possui licença sanitária específica para '+serv,numero&&`CEVS/CMVS nº ${numero}`,d.cnae&&`CNAE ${d.cnae}`,d.atividade_economica].filter(Boolean);
+      kv(B,label,bits.join(' — ')+'.');
     }
   }
   function section2(B,s){
