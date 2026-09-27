@@ -81,8 +81,8 @@
     if(no(a.rt_id))addIssue(out,'final_s1_rt_id',1,'Considerações gerais','O farmacêutico presente não possuía identificação específica por uniforme ou crachá.',["rdc-44-2009::artigo::17::paragrafo::unico"]);
     /* Atividade com licenciamento específico realizada sem a licença (RDC 44/2009, art. 61, §§ 2º e 3º). */
     const A0=s.answers||{};
-    if(yes(A0.vaccine)&&no(A0.vaccine_licensed))addIssue(out,'final_s1_vacina_sem_licenca',1,'Considerações gerais','O estabelecimento realiza serviço de vacinação sem licença sanitária específica para a atividade.',['rdc-44-2009::artigo::61::paragrafo::3']);
-    if(yes(A0.eac)&&no(A0.eac_licensed))addIssue(out,'final_s1_eac_sem_licenca',1,'Considerações gerais','O estabelecimento executa Exames de Análises Clínicas (EAC) sem licença sanitária específica para a atividade.',['rdc-44-2009::artigo::61::paragrafo::3']);
+    if(yes(A0.vaccine)&&no(A0.vaccine_licensed))addIssue(out,'final_s1_vacina_sem_licenca',1,'Considerações gerais','O estabelecimento realiza serviço de vacinação sem licença sanitária específica para a atividade.',['rdc-44-2009::artigo::61::paragrafo::3','rdc-197-2017::artigo::4']);
+    if(yes(A0.eac)&&no(A0.eac_licensed))addIssue(out,'final_s1_eac_sem_licenca',1,'Considerações gerais','O estabelecimento executa Exames de Análises Clínicas (EAC) sem licença sanitária específica para a atividade.',['rdc-44-2009::artigo::61::paragrafo::3','rdc-978-2025::artigo::63']);
     
     const ag=sec(s,'area_geral'); if(no(ag.answers.acesso))addIssue(out,'final_area_acesso',2,'4 Área Física','O acesso ao estabelecimento não é independente e não se enquadra nas exceções aplicáveis.',["rdc-44-2009::artigo::13"]);
     structuralIssues(s,out);
