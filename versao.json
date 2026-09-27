@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-07",
+  "versao": "20260927-08",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria: vacinação ou EAC sem licença específica vira irregularidade (RDC 44/2009, art. 61, § 3º); SNGPC, transmissão e conferência de estoque (com a lista de medicamentos) saem no relatório e na prévia. Prévia “Como sai no relatório” passa a mostrar tabelas (também na odontologia)."
+  "notas": "Drogaria: RDC 197/2017 (vacinação) e RDC 978/2025 (EAC) incluídas no banco da drogaria; a falta de licença específica passa a citar RDC 197/2017, art. 4º, e RDC 978/2025, art. 63, além da RDC 44/2009; botões de citação nas perguntas de licença."
 }
