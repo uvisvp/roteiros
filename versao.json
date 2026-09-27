@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-06",
+  "versao": "20260927-07",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria: licença específica de vacinação e de EAC — com resposta “sim”, campo para o número (sem validade) e registro no relatório; com “não”, nada sai."
+  "notas": "Drogaria: vacinação ou EAC sem licença específica vira irregularidade (RDC 44/2009, art. 61, § 3º); SNGPC, transmissão e conferência de estoque (com a lista de medicamentos) saem no relatório e na prévia. Prévia “Como sai no relatório” passa a mostrar tabelas (também na odontologia)."
 }

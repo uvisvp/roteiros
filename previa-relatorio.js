@@ -29,7 +29,7 @@
 
  /* ---------------- adaptadores ---------------- */
  function blocos(bs){var out=[];(bs||[]).forEach(function(b){if(!b)return;
-   if(b.t==='h1'||b.t==='h2'||b.t==='h3')out.push({x:limpa(b.x),h:true});else if(b.t==='kv')out.push({x:limpa(b.k)+': '+limpa(b.v)});else if(b.x)out.push({x:limpa(b.x)})});return out}
+   if(b.t==='h1'||b.t==='h2'||b.t==='h3')out.push({x:limpa(b.x),h:true});else if((b.t==='table'||b.t==='tbl')&&Array.isArray(b.rows)){var cab=b.head||b.headers;b.rows.forEach(function(r){var cel=(Array.isArray(r)?r:[r]).map(function(c){return limpa(c&&typeof c==='object'?(c.x||c.text||c.t||''):c)});out.push({x:Array.isArray(cab)&&cab.length===cel.length?cel.map(function(v,i){return v?limpa(cab[i])+': '+v:''}).filter(Boolean).join(' · '):cel.filter(Boolean).join(' · ')})})}else if(b.t==='kv')out.push({x:limpa(b.k)+': '+limpa(b.v)});else if(b.x)out.push({x:limpa(b.x)})});return out}
  function visivel(e){return !!(e&&(e.offsetParent||e.getClientRects().length))}
  /* camada de três níveis da casca (Odontologia, Alimentos, Produtos): o item é a etapa aberta */
  function itemN3(){var e=window.__n3estado;if(!e||!e.item)return null;var tela=[].filter.call(document.querySelectorAll('.n3-tela'),visivel)[0];if(!tela)return null;
@@ -91,7 +91,9 @@
  function confere(){var ls=linhas();if(!ls)return;var agora=conta(ls);
   if(antes&&itemEvt){var novas=[],forma=function(x){return x.replace(/\d+/g,'#')},saiu={};
    Object.keys(antes).forEach(function(x){if(!agora[x])saiu[forma(x)]=x});
-   Object.keys(agora).forEach(function(x){if(agora[x]>(antes[x]||0))novas.push(x)});
+   /* frases genéricas do relatório não pertencem a item nenhum */
+   var GEN=/^(Não foram registradas irregularidades|Nenhuma irregularidade|Não informad[oa]\.?$|Não há\.?$|Nenhum item|Nada a registrar)/i;
+   Object.keys(agora).forEach(function(x){if(agora[x]>(antes[x]||0)&&!GEN.test(x))novas.push(x)});
    var mudou=false;
    novas.forEach(function(x){var velha=saiu[forma(x)];
     /* frase que só trocou um número (contagens, totais): fica com quem já tinha a anterior */
