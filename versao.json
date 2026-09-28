@@ -1,6 +1,6 @@
 {
-  "versao": "20260928-03",
+  "versao": "20260928-04",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: cabeçalho volta ao padrão dos roteiros de Medicamentos (faixa azul-escura, seta de voltar, título branco e botões de fotos e Salvas no mesmo estilo da drogaria e da manipulação)."
+  "notas": "Distribuidora: abas Roteiro, Não conformidades e Relatório compactas, numa linha só como na drogaria; título do cabeçalho encurtado para “Distribuidora / Transportadora”."
 }
