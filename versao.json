@@ -1,6 +1,6 @@
 {
-  "versao": "20260928-04",
+  "versao": "20260928-05",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: abas Roteiro, Não conformidades e Relatório compactas, numa linha só como na drogaria; título do cabeçalho encurtado para “Distribuidora / Transportadora”."
+  "notas": "Drogaria: relatório e prévia passam a trazer todos os itens respondidos — resíduos (armazenamento, abrigos temporário e externo, conteúdo do PGRSS), serviços farmacêuticos, área física (planilha, organização, genéricos, MIPs, termohigrômetro, DML, armários), documentos da qualidade, venda remota, transporte, SNGPC e amostragem de receitas."
 }
