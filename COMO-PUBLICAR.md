@@ -1,6 +1,6 @@
 # Publicar o aplicativo
 
-Versão 20260928-03, publicada no GitHub Pages (branch main).
+Versão 20260928-04, publicada no GitHub Pages (branch main).
 
 Na primeira publicação, mantenha `index.html`, `manifest.webmanifest`, `sw.js`, `versao.json` e os cinco arquivos PNG na mesma raiz. Para atualização de código, normalmente basta substituir `index.html`, `sw.js` e `versao.json`; envie também a documentação somente quando ela mudar.
 

@@ -23,10 +23,17 @@ const CSS = '<style id="dist-cabecalho">'
   + 'header.top .title span{color:#ffffffb3}'
   + 'header.top .save{color:#ffffffcc}'
   + '@media(max-width:760px){header.top .title span{display:none}}'
+  /* abas principais no tamanho das da drogaria */
+  + '.dist-topnav button{min-height:46px!important;padding:6px 4px!important;font-size:.92rem!important;line-height:1.2!important}'
+  + '.dist-topnav button small{display:inline!important;font-size:.7rem!important;margin-left:3px}'
+  + '@media(max-width:560px){.dist-topnav{display:flex!important}.dist-topnav button{flex:1 1 auto!important;font-size:.86rem!important;white-space:nowrap!important;padding:6px 8px!important}.dist-topnav button small{display:none!important}}'
   + '</style>';
+const velho = /<style id="dist-cabecalho">[\s\S]*?<\/style>/;
+if (velho.test(app)) app = app.replace(velho, () => CSS);
 function troca(de, para, rot) { if (app.includes(para)) return; if (app.split(de).length !== 2) throw Error('Trecho não localizado de forma única: ' + rot); app = app.replace(de, () => para); }
 troca('<header class="top"><div class="topin"><button class="back" id="backTop">← Voltar ao núcleo</button>',
   CSS + '<header class="top"><div class="topin"><button class="back" id="backTop" aria-label="Voltar ao núcleo" title="Voltar ao núcleo">' + SETA + '</button>', 'cabeçalho');
+troca('<div class="title"><b>Distribuidora / Transportadora de medicamentos</b>', '<div class="title"><b>Distribuidora / Transportadora</b>', 'título');
 const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip ' + id);
 html = html.replace(re, () => m[1] + enc + m[3]);
 fs.writeFileSync(file, html);
