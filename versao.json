@@ -1,6 +1,6 @@
 {
-  "versao": "20260927-08",
+  "versao": "20260928-01",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria: RDC 197/2017 (vacinação) e RDC 978/2025 (EAC) incluídas no banco da drogaria; a falta de licença específica passa a citar RDC 197/2017, art. 4º, e RDC 978/2025, art. 63, além da RDC 44/2009; botões de citação nas perguntas de licença."
+  "notas": "Apagar a inspeção agora apaga também as fotos: “Nova inspeção” da drogaria e “Apagar todos os dados” (drogaria, manipulação, distribuidora) limpam fotos dos itens, galeria e prévia. Novo botão “Apagar tudo” no painel Salvas de cada roteiro (produtos, serviços assistenciais por modalidade, odontologia, alimentos e medicamentos), sem afetar as inspeções salvas."
 }

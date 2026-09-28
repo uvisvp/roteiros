@@ -14,6 +14,9 @@
    modalidade.
    Exportar/Importar: as salvas viram um arquivo .json (com as fotos) para
    cópia de segurança ou para passar a outro aparelho.
+   Apagar tudo: no painel Salvas de cada roteiro, apaga a inspeção em andamento
+   (respostas e fotos) sem tocar nas salvas. O botão “Nova inspeção” da drogaria
+   e da manipulação chama UvisSalvas.novaInspecao para apagar também as fotos.
    Limite: LIMITE salvas por roteiro.
    Inserido no index.html por scripts/repack-inspecoes-salvas.cjs. */
 (function(){
@@ -102,6 +105,15 @@
  }
  function excluir(id,app){if(!confirm('Excluir esta inspeção salva, com respostas e fotos? Não há como desfazer.'))return;tiraSalva(id).then(function(){app?painel(app,'',ultimoMod):painel('',nucleoLista())})}
 
+ /* apaga a inspeção em andamento (respostas e fotos); as salvas não são tocadas */
+ function apagarTudo(app,mod,modNome){
+  if(!confirm('Apagar tudo '+(mod?'da modalidade '+(modNome||mod):'deste roteiro')+'? Respostas e fotos da inspeção em andamento serão apagadas deste aparelho. As inspeções salvas não são afetadas. Não há como desfazer.'))return Promise.resolve();
+  var ab=atual(app);return descarrega().then(function(){return limpaAtual(app,mod)}).then(function(){fecha();reabre(app,ab,mod);aviso((mod?'Modalidade':'Roteiro')+' em branco: respostas e fotos apagadas.')}).catch(function(e){aviso('Não foi possível apagar: '+(e&&e.message||e));reabre(app,ab,mod)});
+ }
+ /* chamado de dentro do roteiro pelo botão “Nova inspeção” do próprio app: apaga as fotos e a prévia */
+ function novaInspecao(app){if(!CFG[app])return Promise.resolve();CFG[app].ls.forEach(function(k){if(k.indexOf('uvis-previa-')===0)localStorage.removeItem(k)});
+  return fotosDe(app).then(function(f){if(!f.length)return;return tx(EVI[0],EVI[1],EVI[2],'readwrite',function(s){f.forEach(function(x){s.delete(x.key)})})}).then(function(){return limpaFotosDb(app)})}
+
  /* ---------- exportar / importar (arquivo .json) ---------- */
  var FORMATO='uvis-inspecoes-salvas';
  function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=function(){no(r.error)};r.readAsDataURL(b)})}
@@ -129,19 +141,20 @@
  function fecha(){var f=$('uvs-fundo');if(f)f.remove()}
  function modal(titulo,html){estilo();fecha();var f=document.createElement('div');f.id='uvs-fundo';f.innerHTML='<section id="uvs-caixa" role="dialog" aria-modal="true" aria-label="'+esc(titulo)+'"><header><h2>'+esc(titulo)+'</h2><button type="button" class="x" data-uvs-fecha aria-label="Fechar">×</button></header><div id="uvs-corpo">'+html+'</div></section>';
   f.addEventListener('click',function(e){var t=e.target;if(t===f||t.closest('[data-uvs-fecha]')){fecha();return}var b=t.closest('[data-uvs]');if(!b)return;var a=b.dataset.uvs,id=b.dataset.id,app=b.dataset.app;
-   if(a==='salvar')salvarENova(app,b.dataset.mod||'',b.dataset.modNome||'');else if(a==='exportar')exportar(app,b.dataset.nucleo||'',b.dataset.mod||'');else if(a==='importar')importar(app,b.dataset.nucleo||'',b.dataset.mod||'');else if(a==='retomar')retomar(id);else if(a==='excluir')excluir(id,b.dataset.painel||'');else if(a==='guardar'||a==='descartar'){if(a==='descartar'&&!confirm('Descartar a inspeção em andamento? Respostas e fotos dela serão apagadas.'))return;retomar(id,a)}});
+   if(a==='salvar')salvarENova(app,b.dataset.mod||'',b.dataset.modNome||'');else if(a==='exportar')exportar(app,b.dataset.nucleo||'',b.dataset.mod||'');else if(a==='importar')importar(app,b.dataset.nucleo||'',b.dataset.mod||'');else if(a==='retomar')retomar(id);else if(a==='apagar')apagarTudo(app,b.dataset.mod||'',b.dataset.modNome||'');else if(a==='excluir')excluir(id,b.dataset.painel||'');else if(a==='guardar'||a==='descartar'){if(a==='descartar'&&!confirm('Descartar a inspeção em andamento? Respostas e fotos dela serão apagadas.'))return;retomar(id,a)}});
   document.body.appendChild(f)}
  var tAviso;function aviso(t){estilo();var a=$('uvs-aviso');if(!a){a=document.createElement('div');a.id='uvs-aviso';a.setAttribute('role','status');document.body.appendChild(a)}a.textContent=t;clearTimeout(tAviso);tAviso=setTimeout(function(){a.remove()},4500)}
  function linha(s,painelApp){var rot=s.modNome?s.modNome:s.trilha&&s.trilha!==(CFG[s.app]||{}).nome?s.trilha:(CFG[s.app]?CFG[s.app].nome:s.app);return '<div class="uvs-item"><div><b>'+esc(s.nome)+'</b><small>'+(painelApp&&!s.trilha&&!s.modNome?'':esc(rot)+' · ')+'salva em '+esc(dataBR(s.criado))+(s.nFotos?' · '+s.nFotos+' foto'+(s.nFotos>1?'s':''):'')+'</small></div><div class="uvs-acoes"><button type="button" class="uvs-btn pri" data-uvs="retomar" data-id="'+esc(s.id)+'">Retomar</button><button type="button" class="uvs-btn del" data-uvs="excluir" data-id="'+esc(s.id)+'" data-painel="'+esc(painelApp||'')+'">Excluir</button></div></div>'}
  /* app = painel de um roteiro (aberto de dentro dele); nucleo = salvas dos roteiros daquele núcleo (tela do núcleo) */
  function arquivo(app,nucleo,mod){var at=' data-app="'+esc(app||'')+'" data-nucleo="'+esc(nucleo||'')+'" data-mod="'+esc(mod||'')+'"';return '<h3>Arquivo</h3><p class="nota">Cópia de segurança ou troca de aparelho: exporta as salvas '+(app?'deste '+(mod?'roteiro nesta modalidade':'roteiro'):'deste núcleo')+' (com fotos) para um arquivo .json, que pode ser importado depois. O arquivo tem dados da inspeção: guarde-o com o mesmo cuidado dos documentos do processo.</p><div class="uvs-acoes"><button type="button" class="uvs-btn" data-uvs="exportar"'+at+'>⬇ Exportar</button><button type="button" class="uvs-btn" data-uvs="importar"'+at+'>⬆ Importar arquivo</button></div>'}
+ function apagaBloco(app,mod,modNome){return '<h3>Inspeção em andamento</h3><p class="nota">Apaga respostas e fotos '+(mod?'desta modalidade':'deste roteiro')+' neste aparelho, sem salvar. As inspeções salvas continuam guardadas.</p><div class="uvs-acoes"><button type="button" class="uvs-btn del" data-uvs="apagar" data-app="'+esc(app)+'" data-mod="'+esc(mod||'')+'" data-mod-nome="'+esc(modNome||'')+'">🗑 Apagar tudo</button></div>'}
  var ultimoMod=null;
  function painel(app,nucleo,modIn){return salvas().then(function(todas){
   if(app&&CFG[app]){var m=modIn!==undefined?modIn:modAtual(app),mod=m&&m.id||'',com=CFG[app].modalidade;ultimoMod=m||null;
    if(com&&!mod){var dd=todas.filter(function(x){return x.app===app});
     modal('Inspeções salvas — '+CFG[app].nome,'<p class="nota">Cada modalidade (ILPI, Centro Dia, CT, SRT, SAICA, demais) é salva separadamente. Abra a modalidade para salvar a inspeção em andamento dela.</p><h3>Salvas ('+dd.length+')</h3>'+(dd.length?dd.map(function(s){return linha(s,'')}).join(''):'<p class="uvs-vazio">Nenhuma inspeção salva.</p>')+arquivo(app,'',''));return}
    var d=todas.filter(function(x){return x.app===app&&(!com||(x.mod||'')===mod)}),onde=com?'nesta modalidade':'neste roteiro';
-   modal('Inspeções salvas — '+(com?m.nome:CFG[app].nome),'<p class="nota">Guarda a inspeção em andamento neste aparelho (respostas e fotos) e deixa '+(com?'a modalidade':'o roteiro')+' em branco para outra. Até '+LIMITE+' salvas '+(com?'por modalidade':'por roteiro')+'; ao finalizar, retome, gere o relatório e depois limpe.</p><div class="uvs-acoes"><button type="button" class="uvs-btn pri" data-uvs="salvar" data-app="'+esc(app)+'" data-mod="'+esc(mod)+'" data-mod-nome="'+esc(com?m.nome:'')+'"'+(d.length>=LIMITE?' disabled title="Limite atingido"':'')+'>💾 Salvar esta e começar outra</button></div><h3>Salvas '+onde+' ('+d.length+' de '+LIMITE+')</h3>'+(d.length?d.map(function(s){return linha(s,app)}).join(''):'<p class="uvs-vazio">Nenhuma inspeção salva '+onde+'.</p>')+arquivo(app,'',mod));return}
+   modal('Inspeções salvas — '+(com?m.nome:CFG[app].nome),'<p class="nota">Guarda a inspeção em andamento neste aparelho (respostas e fotos) e deixa '+(com?'a modalidade':'o roteiro')+' em branco para outra. Até '+LIMITE+' salvas '+(com?'por modalidade':'por roteiro')+'; ao finalizar, retome, gere o relatório e depois limpe.</p><div class="uvs-acoes"><button type="button" class="uvs-btn pri" data-uvs="salvar" data-app="'+esc(app)+'" data-mod="'+esc(mod)+'" data-mod-nome="'+esc(com?m.nome:'')+'"'+(d.length>=LIMITE?' disabled title="Limite atingido"':'')+'>💾 Salvar esta e começar outra</button></div><h3>Salvas '+onde+' ('+d.length+' de '+LIMITE+')</h3>'+(d.length?d.map(function(s){return linha(s,app)}).join(''):'<p class="uvs-vazio">Nenhuma inspeção salva '+onde+'.</p>')+apagaBloco(app,mod,com?m.nome:'')+arquivo(app,'',mod));return}
   var html='<p class="nota">Inspeções guardadas neste aparelho para finalizar depois. Ao retomar, a inspeção volta para o roteiro; se houver outra em andamento nele, você escolhe guardá-la ou descartá-la. Para salvar a inspeção em andamento, use o botão Salvas dentro do roteiro.</p>';
   Object.keys(CFG).filter(function(k){return !nucleo||CFG[k].nucleo===nucleo}).forEach(function(k){var d=todas.filter(function(x){return x.app===k});html+='<h3>'+esc(CFG[k].nome)+' ('+d.length+(CFG[k].modalidade?'; até '+LIMITE+' por modalidade':' de '+LIMITE)+')</h3>'+(d.length?d.map(function(s){return linha(s,'')}).join(''):'<p class="uvs-vazio">Nenhuma.</p>')});
   modal('Inspeções salvas'+(nucleo?' — '+nucleo:''),html+arquivo('',nucleo,''))}).catch(function(e){aviso('Não foi possível ler as salvas: '+(e&&e.message||e))})}
@@ -173,7 +186,7 @@
   b.addEventListener('click',function(e){e.preventDefault();painel('',n)});c.appendChild(b);contaHome()}
  function inicia(){iniciaQuadro();var lc=$('lista-corpo');if(lc)new MutationObserver(function(){setTimeout(iniciaLista,0)}).observe(lc,{childList:true});iniciaLista();
   var velhaHome=$('abrir-salvas');if(velhaHome&&!velhaHome.dataset.uvsNucleo)velhaHome.remove()}
- window.UvisSalvas={painel:painel,exportar:exportar,importar:importar,salvarENova:salvarENova,retomar:retomar,salvas:salvas,conta:contaHome,CFG:CFG,LIMITE:LIMITE};
+ window.UvisSalvas={apagarTudo:apagarTudo,novaInspecao:novaInspecao,painel:painel,exportar:exportar,importar:importar,salvarENova:salvarENova,retomar:retomar,salvas:salvas,conta:contaHome,CFG:CFG,LIMITE:LIMITE};
  var _fecha=fecha;fecha=function(){_fecha();contaHome()};
  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',inicia):inicia();
 })();
