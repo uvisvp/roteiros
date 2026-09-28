@@ -169,9 +169,9 @@
   b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></svg><span>Salvas</span>';
   var st=d.createElement('style');st.textContent='#uvs-botao{position:fixed;top:6px;right:10px;z-index:2147483000;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px;border-radius:9px;border:1px solid #ffffff80;background:#ffffff1f;color:#fff;font:600 13px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer}#uvs-botao:active{background:#ffffff40}#uvs-botao.uvs-fluxo{position:static;min-height:34px;padding:4px 11px;border-radius:999px}#uvs-botao.uvs-claro{position:static;flex:0 0 auto;margin-left:auto;border-color:#aabdc9;background:#fff;color:#294c62}@media(max-width:560px){#uvs-botao{padding:6px 9px}#uvs-botao span{display:none}}@media print{#uvs-botao{display:none!important}}';d.head.appendChild(st);
   b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();painel(app)});
-  /* Cabeçalho claro (distribuidora): o botão entra no fluxo da barra, em cor escura. */
-  var barra=d.querySelector('header.top .topin'),propria=CFG[app].barra&&d.querySelector(CFG[app].barra);
-  if(barra){b.className='uvs-claro';barra.appendChild(b)}else if(propria){b.className='uvs-fluxo';propria.appendChild(b)}else d.body.appendChild(b)}
+  /* A distribuidora usa o cabeçalho escuro dos demais roteiros de Medicamentos: botão fixo, como na drogaria. */
+  var propria=CFG[app].barra&&d.querySelector(CFG[app].barra);
+  if(propria){b.className='uvs-fluxo';propria.appendChild(b)}else d.body.appendChild(b)}
  function iniciaQuadro(){var q=$('quadro');if(!q||q.dataset.uvsLigado)return;q.dataset.uvsLigado='1';q.addEventListener('load',function(){setTimeout(injeta,300);setTimeout(injeta,1500)})}
 
  /* ---------- botão na tela do núcleo (lista de roteiros) ---------- */

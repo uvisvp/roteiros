@@ -1,6 +1,6 @@
 {
-  "versao": "20260928-02",
+  "versao": "20260928-03",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Ao abrir o PDF de fotos ou o Word gerado e fechar o arquivo, se o app recarregar, ele volta ao roteiro em que se estava trabalhando (e não à tela inicial)."
+  "notas": "Distribuidora: cabeçalho volta ao padrão dos roteiros de Medicamentos (faixa azul-escura, seta de voltar, título branco e botões de fotos e Salvas no mesmo estilo da drogaria e da manipulação)."
 }
