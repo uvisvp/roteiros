@@ -1,6 +1,6 @@
 {
-  "versao": "20260928-01",
+  "versao": "20260928-02",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Apagar a inspeção agora apaga também as fotos: “Nova inspeção” da drogaria e “Apagar todos os dados” (drogaria, manipulação, distribuidora) limpam fotos dos itens, galeria e prévia. Novo botão “Apagar tudo” no painel Salvas de cada roteiro (produtos, serviços assistenciais por modalidade, odontologia, alimentos e medicamentos), sem afetar as inspeções salvas."
+  "notas": "Ao abrir o PDF de fotos ou o Word gerado e fechar o arquivo, se o app recarregar, ele volta ao roteiro em que se estava trabalhando (e não à tela inicial)."
 }
