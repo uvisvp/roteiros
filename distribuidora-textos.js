@@ -70,3 +70,28 @@ const DIST_REV_OK=['q159','q190','q195','q227','q229','q278','q282','q284','q290
 
 /* Para saber mais: conceitos e referências técnicas no início de cada bloco */
 (function(){const old=sectionHtml;sectionHtml=function(sec){let h=old(sec);const sm=sec&&window.SaberMais?SaberMais.html('dist',sec.id):'';if(!sm)return h;const i=h.indexOf('<details class="section-chk"');return i>=0?h.slice(0,i)+sm+h.slice(i):h.replace('<div class="sectionbody">','<div class="sectionbody">'+sm)}})();
+/* Checklist de perguntas da tela de item: sempre aberto. O título dele fica escondido
+   (dist-chk-fixed), então qualquer toque que o fechasse (no iPhone, ao abrir “Para saber
+   mais” ou uma orientação) deixava a tela sem as perguntas e sem como reabrir. */
+(function(){
+ document.addEventListener('toggle',function(e){const t=e.target;if(!t||!t.matches||!t.matches('details.section-chk.dist-chk-fixed')||t.open)return;t.open=true;try{DIST_CHK_ABERTOS[t.getAttribute('data-chk')]=true}catch(_){}} ,true);
+ new MutationObserver(function(ms){ms.forEach(function(m){const t=m.target;if(m.attributeName==='open'&&t.matches&&t.matches('details.section-chk.dist-chk-fixed')&&!t.open)t.open=true})}).observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['open']});
+})();
+/* Normas e POPs: link oficial de todos os atos citados no roteiro e no inventário. */
+(function(){
+ const POP='https://www.gov.br/anvisa/pt-br/centraisdeconteudo/publicacoes/certificacao-e-fiscalizacao/compilado-procedimentos-SNVS/';
+ const legis=(n,a)=>'https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto='+String(n).padStart(8,'0')+'&seqAto=000&valorAno='+a+'&orgao=RDC/DC/ANVISA/MS&cod_menu=1696&cod_modulo=134';
+ const url={
+  'POP-O-SNVS-011':POP+'011','POP-O-SNVS-032':POP+'0032-pop-o-snvs-032','POP-O-SNVS-023':POP+'0023-pop-o-snvs-023',
+  'RDC Anvisa nº 430/2020':'https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000430&seqAto=000&valorAno=2020&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542',
+  'RDC Anvisa nº 166/2017':legis(166,2017)};
+ DATA.sources.forEach(s=>{if(!s.url&&url[s.name])s.url=url[s.name]});
+ const add=(name,role,u)=>{if(!DATA.sources.some(s=>s.name===name))DATA.sources.push({name,rev:'—',vigencia:'vigente',role,url:u})};
+ add('RDC Anvisa nº 653/2022','Altera a RDC nº 430/2020 (Boas Práticas de Distribuição, Armazenagem e Transporte de Medicamentos).',legis(653,2022));
+ add('RDC Anvisa nº 32/2010','Altera o regulamento técnico da RDC nº 204/2006 (insumos farmacêuticos).',legis(32,2010));
+ add('RDC Anvisa nº 359/2020','Delimitação do regime de regularização citada na verificação documental.',legis(359,2020));
+ add('RDC Anvisa nº 16/2014','Autorização de Funcionamento (AFE) e Autorização Especial (AE).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&codTipo=&cod_menu=1696&cod_modulo=134&desItem=&desItemFim=&numeroAto=00000016&orgao=RDC%2FDC%2FANVISA%2FMS&pesquisa=true&seqAto=000&tipo=RDC&valorAno=2014');
+ add('RDC Anvisa nº 222/2018','Gerenciamento dos resíduos de serviços de saúde.','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&codTipo=&cod_menu=1696&cod_modulo=134&desItem=&desItemFim=&link=S&numeroAto=00000222&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2018');
+ add('Portaria SVS/MS nº 344/1998','Substâncias e medicamentos sujeitos a controle especial.','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&codTipo=&cod_menu=1696&cod_modulo=134&desItem=&desItemFim=&link=S&numeroAto=00000344&orgao=SVS%2FMS&seqAto=000&tipo=POR&valorAno=1998');
+ add('Lei Municipal nº 13.725/2004','Código Sanitário do Município de São Paulo: base sancionatória.','https://legislacao.prefeitura.sp.gov.br/lei-13725-de-09-de-janeiro-de-2004');
+})();
