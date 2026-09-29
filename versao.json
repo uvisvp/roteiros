@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-08",
+  "versao": "20260929-09",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: sai a barra “Inventário de infrações / Normas” do roteiro; as não conformidades ficam na aba própria e cada item já traz a fonte oficial."
+  "notas": "Produtos: “Tipo de inspeção” (categorias do POP-O-SNVS-013: Boas Práticas, CTO, monitoramento de plano de ação, investigativa, outro) no item 1.1 Identificação das três trilhas; sai no relatório e é o mesmo campo do fluxo de dispositivos médicos/IVD."
 }

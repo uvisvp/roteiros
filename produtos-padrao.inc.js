@@ -89,11 +89,21 @@
       + etapa.items.map((it, i) => puPergunta(it, i + 1)).join("")
       + `<div class="actions pu-acoes-item"><button type="button" class="btn" data-pu-na-etapa="${attr(etapa.id)}">Marcar pendentes como Não se aplica</button></div>`;
   }
+  /* Tipo de inspeção (categorias do POP-O-SNVS-013): o mesmo campo do fluxo de dispositivos
+     (uvis-produtos-pop13-v1 · objetivo), agora visível nas três trilhas; sai no relatório. */
+  const TIPOS_INSP = [["boas_praticas", "Boas Práticas (conforme a atividade)"], ["cto", "Condições Técnicas Operacionais (CTO)"], ["monitoramento", "Monitoramento de plano de ação"], ["investigativa", "Investigativa / fiscalização"], ["outro", "Outro"]];
+  const POP13 = "uvis-produtos-pop13-v1";
+  function pop13Le() { try { return JSON.parse(localStorage.getItem(POP13) || "{}") || {}; } catch (e) { return {}; } }
+  function pop13Grava(mud) { const st = Object.assign(pop13Le(), mud); try { localStorage.setItem(POP13, JSON.stringify(st)); } catch (e) {} return st; }
+  function tipoInspTexto(st) { st = st || pop13Le(); const t = TIPOS_INSP.find((x) => x[0] === st.objetivo); if (!t) return ""; return st.objetivo === "outro" ? (String(st.outro || "").trim() || "Outro") : t[1]; }
+  function sincTipoInsp() { const t = tipoInspTexto(); if ((state.meta.tipo_inspecao || "") !== t) { state.meta.tipo_inspecao = t; saveState(); } }
+  if (PADRAO && !(cfg.profile.fields || []).some((f) => f.id === "tipo_inspecao")) { cfg.profile.fields = [{ id: "tipo_inspecao", label: "Tipo de inspeção", virtual: true }].concat(cfg.profile.fields || []); }
   function puDados(el, id) {
     if (id === "ident") {
       const fixo = typeDef();
       el.innerHTML = `<div class="pu-bloco"><h3>Atividade inspecionada</h3><p>${esc(fixo?.label || "Não definida")}${fixo?.description ? " — " + esc(fixo.description) : ""}</p><p class="pu-q-ajuda">A atividade vem do cartão escolhido no núcleo. Para outra atividade, volte ao núcleo e abra o cartão correspondente.</p></div>
-        <div class="pu-bloco"><h3>Dados do estabelecimento</h3><div class="pu-campos">${(cfg.profile.fields || []).map((f) => `<label>${esc(f.label)}${f.multiline ? `<textarea data-meta="${attr(f.id)}" placeholder="${attr(f.placeholder || "")}">${esc(state.meta[f.id] || "")}</textarea>` : `<input data-meta="${attr(f.id)}" value="${attr(state.meta[f.id] || "")}" placeholder="${attr(f.placeholder || "")}">`}</label>`).join("")}</div></div>`;
+        <div class="pu-bloco"><h3>Tipo de inspeção</h3><p>Categorias do POP-O-SNVS-013 (Anvisa). Sai no relatório.</p><div class="pu-campos"><label>Objetivo / tipo da inspeção<select data-pu-tipo-insp><option value="">Selecione…</option>${TIPOS_INSP.map(([v, l]) => `<option value="${v}"${pop13Le().objetivo === v ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>${pop13Le().objetivo === "outro" ? `<label>Descrever o objetivo<input data-pu-tipo-outro value="${attr(pop13Le().outro || "")}"></label>` : ""}</div></div>
+        <div class="pu-bloco"><h3>Dados do estabelecimento</h3><div class="pu-campos">${(cfg.profile.fields || []).filter((f) => !f.virtual).map((f) => `<label>${esc(f.label)}${f.multiline ? `<textarea data-meta="${attr(f.id)}" placeholder="${attr(f.placeholder || "")}">${esc(state.meta[f.id] || "")}</textarea>` : `<input data-meta="${attr(f.id)}" value="${attr(state.meta[f.id] || "")}" placeholder="${attr(f.placeholder || "")}">`}</label>`).join("")}</div></div>`;
     } else if (id === "classes") {
       const flags = (cfg.profile.flags || []).filter((f) => matches(f.when));
       el.innerHTML = `<div class="pu-bloco"><h3>O que o estabelecimento movimenta</h3><p>Marque as classes e características presentes. Todas as etapas continuam no roteiro; o que não se aplicar é marcado como “Não se aplica”.</p><div class="pu-marcas">${flags.map((f) => `<label class="pu-marca"><input type="checkbox" data-flag="${attr(f.id)}" ${state.profile.flags[f.id] ? "checked" : ""}><span><strong>${esc(f.label)}</strong>${f.description ? `<small>${esc(f.description)}</small>` : ""}</span></label>`).join("")}</div></div>`;
@@ -139,7 +149,7 @@
       },
       contagem: (id) => id === "roteiro" ? counts().nc : id === "infracoes" ? infractionCatalog().filter((i) => matchesInfraction(i.when) && state.selectedInfractions[i.id]).length : 0,
       limpar: async (s, it) => {
-        if (s.id === "dados") { if (!it || it.id === "ident") state.meta = clone(DEFAULT_STATE.meta); if (!it || it.id === "classes") state.profile.flags = { ...defaultFlags }; saveState(); return; }
+        if (s.id === "dados") { if (!it || it.id === "ident") { state.meta = clone(DEFAULT_STATE.meta); pop13Grava({ objetivo: "", outro: "" }); } if (!it || it.id === "classes") state.profile.flags = { ...defaultFlags }; saveState(); return; }
         const ids = (it ? [it.id] : s.itens.map((x) => x.id));
         for (const eid of ids) { const e = puEtapa(eid); for (const item of e?.items || []) { delete state.answers[item._id]; delete state.notes[item._id]; if (itemPhotos[item._id]) { delete itemPhotos[item._id]; try { await RoteiroEvidence.remove(cfg.storageKey, item._id); } catch (err) {} } } }
         saveState(); puRedesenhaItem();
@@ -158,6 +168,18 @@
         toast("Todos os itens aplicáveis foram respondidos."); return;
       }
     });
+    /* tipo de inspeção: grava no mesmo estado do POP-O-SNVS-013 e na identificação do relatório */
+    document.addEventListener("change", (e) => {
+      const t = e.target;
+      if (t.matches && t.matches("[data-pu-tipo-insp]")) { pop13Grava({ objetivo: t.value }); sincTipoInsp(); puRedesenhaItem(); }
+      else if (t.id === "pop13Objetivo") { setTimeout(sincTipoInsp, 0); }
+    });
+    document.addEventListener("input", (e) => {
+      const t = e.target;
+      if (t.matches && t.matches("[data-pu-tipo-outro]")) { pop13Grava({ outro: t.value }); sincTipoInsp(); }
+      else if (t.id === "pop13Outro") { setTimeout(sincTipoInsp, 0); }
+    });
+    sincTipoInsp();
     /* título do cabeçalho acompanha a atividade */
     sincronizarCnae();
   }
