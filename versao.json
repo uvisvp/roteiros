@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-13",
+  "versao": "20260929-14",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: um erro na prévia do relatório não trava mais o app — navegação, barras e demais telas continuam funcionando (era o que acontecia no aparelho com o monitoramento do bloco 11 preenchido pela metade, já corrigido na versão anterior)."
+  "notas": "Manipulação: ← volta ao item anterior; 6.3 vira Equipamentos obrigatórios (central de pesagem, pHmetro, ponto de fusão, densidade, vidrarias); equipamentos dos laboratórios só descritivos; atividades da AFE/AE; campos de AVCB, CRT, SP Regula e outros documentos; relatório sem \"(irregularidade n)\" no texto; temperatura e umidade em frase; estoque com unidade e diferença automática; CQ por insumo na rastreabilidade; laboratório contratado único no monitoramento; entrega com múltipla escolha; CPF formatado. OCR da certidão do CRF mais preciso e horário com todas as linhas."
 }
