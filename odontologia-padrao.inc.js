@@ -70,8 +70,24 @@ function odoPergunta(s,i,n,porSala){
   +`<div class="cite pu-cit-odo">${uvisOdontoCitation(i.ch,i.c)}</div></div>`
   +`<div class="pu-resp" role="group" aria-label="Resultado">${[['ok','Cumpre'],['nao','Não cumpre'],['na','Não se aplica']].map(([v,l])=>`<button type="button" data-a="${esc(i.id)}" data-v="${v}" aria-pressed="${a===v}">${l}</button>`).join('')}</div>`
   +(a==='nao'?`<div class="pu-bloco pu-nc">${assessmentHtml(i)}</div>`:'')
+  +odoFotoHtml(i.id)
   +`</div>`;
 }
+/* Fotos por verificação: reduzidas e guardadas junto com as respostas (entram nas Salvas);
+   saem à parte no relatório fotográfico em PDF (botão Fotos do cabeçalho). */
+let odoFotoAberta='';
+function odoFotoHtml(id){const f=state.fotos&&state.fotos[id];
+ return `<details class="pu-mais"${odoFotoAberta===id?' open':''}><summary>Foto${f?' ✓':''}</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-odo-foto="${esc(id)}">📷 ${f?'Trocar foto':'Tirar ou anexar foto'}</button>${f?`<button type="button" class="pu-btn" data-odo-sem-foto="${esc(id)}">Remover foto</button>`:''}</div>${f?`<img class="photo-thumb" alt="Foto vinculada à verificação" src="${esc(f)}">`:''}<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>`}
+function odoFoto(id){const fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.setAttribute('capture','environment');fi.style.display='none';
+ fi.onchange=()=>{const f=fi.files&&fi.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>(window.__uvsReduzFoto||((u,cb)=>cb(u)))(r.result,url=>{state.fotos=state.fotos||{};const antes=state.fotos[id];state.fotos[id]=url;let ok=true;
+   try{save();ok=(localStorage.getItem(STORE)||'').indexOf(url.slice(-40))>=0}catch(e){ok=false}
+   if(!ok){if(antes)state.fotos[id]=antes;else delete state.fotos[id];try{save()}catch(e){}alert('Não há mais espaço para fotos neste aparelho. Gere o relatório fotográfico e remova fotos antigas.')}
+   odoFotoAberta=id;odoRedesenha()});
+  r.readAsDataURL(f);fi.remove()};
+ document.body.appendChild(fi);fi.click()}
+window.__uvsFotosMeta=()=>({estab:state.meta.company||'',data:state.meta.date||''});
+window.__uvsFotosItens=()=>{const out=[];DATA.route.forEach(s=>s.items.forEach(i=>{const f=state.fotos&&state.fotos[i.id];if(f)out.push({src:f,legenda:s.title+' — '+String(i.t).replace(/\s+/g,' ').slice(0,160)})}));return out};
 /* Ambiente finalístico: “uma resposta abre outra” — as exigências de área e instalação dependem
    do tipo de sala; o serviço pode ter mais de um (ex.: consultório Classe I + sala de imagem). */
 const ODO_SALAS=['amb','classe1','classe1_sed','classe2','coletivo','imagem','cco'];
@@ -139,7 +155,7 @@ function iniciaPadrao(){
   contagem:id=>id==='roteiro'?counts().nao:id==='infracoes'?nSel():0,
   limpar:(s,it)=>{
    if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id==='perfil'){state.p=structuredClone(DEF.p);state.assessment={};delete state.salas;delete state.salasMarcadas}}
-   else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id]})});
+   else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id];delete state.fotos?.[i.id]})});
    save();renderProfile();renderMeta();
   },
   depois:n=>{if(n.aba==='roteiro')ui.tab='roteiro'}
@@ -156,6 +172,8 @@ function iniciaPadrao(){
    const salas=odoSalas();
    alvo.forEach(s=>s.items.forEach(i=>{if(state.a[i.id]&&modo!=='todos')return;if((modo==='fora'||modo==='perfil')&&!odoFora(s,i))return;if(modo==='salas'&&!(odoDaSala(i)&&salas.length&&!i.when.tip.some(t=>salas.includes(t))))return;state.a[i.id]='na'}));
    save();odoRedesenha();return}
+  const fb=e.target.closest('[data-odo-foto]');if(fb){odoFoto(fb.dataset.odoFoto);return}
+  const sf=e.target.closest('[data-odo-sem-foto]');if(sf){if(confirm('Remover a foto desta verificação?')){delete state.fotos[sf.dataset.odoSemFoto];save();odoFotoAberta=sf.dataset.odoSemFoto;odoRedesenha()}return}
   if(e.target.closest('[data-odo-gen]')){openGen();return}
   if(e.target.closest('[data-odo-pendente]')){for(const s of odoSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}toast('Todas as verificações foram respondidas.');return}
  });

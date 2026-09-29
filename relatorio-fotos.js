@@ -100,6 +100,11 @@
    meta:function(){return window.__uvsFotosMeta?window.__uvsFotosMeta():{}},
    fotos:function(){return Promise.resolve(window.__uvsFotosItens?window.__uvsFotosItens():[])}
   },
+  'odontologia':{
+   titulo:'Relatório fotográfico — Odontologia',
+   meta:function(){return window.__uvsFotosMeta?window.__uvsFotosMeta():{}},
+   fotos:function(){return Promise.resolve(window.__uvsFotosItens?window.__uvsFotosItens():[])}
+  },
   'produtos-correlatos':{
    titulo:'Relatório fotográfico — Produtos',
    meta:function(){return window.__uvsFotosMeta?window.__uvsFotosMeta():{}},
