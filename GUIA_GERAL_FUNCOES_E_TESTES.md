@@ -81,12 +81,24 @@ Quando o campo permitir, a consulta pode começar pela chave ou número da DANFE
 - Relatório final segue o ciclo: inspeção, Anexo II, plano de ação, análise por NC, minuta, par, aprovação e Anexo I.
 - OCR, fotos, documentos e campos de fornecedor/estoque permanecem disponíveis onde o item permitir.
 
+### Padrão de navegação (Produtos, Alimentos, Odontologia, Serviços assistenciais)
+
+Os quatro núcleos usam a mesma tela da drogaria e da manipulação (componente `padrao-uvis.js`):
+
+- cabeçalho na cor do núcleo, com voltar, título centralizado e os botões Fotos e Salvas;
+- abas Roteiro, Infrações e Relatório;
+- faixa de seções (Todas + seções) e três níveis: lista de seções › grade de itens numerados (1.1, 1.2…) › tela do item, com a faixa de itens da seção;
+- rodapé fixo: ← anterior, limpar (item ou seção), grade (todas as seções), → próximo; o voltar do celular volta um nível e cada tela nova começa no topo;
+- respostas **Cumpre / Não cumpre / Não se aplica** (nos documentos dos serviços assistenciais: Apresentou / Não apresentou / Não se aplica); o texto do relatório não mudou;
+- foto, nota e fontes ficam recolhidas em “Foto, nota e fontes” / “Foto”;
+- a Seção 1 reúne identificação e perfil. **O perfil não esconde verificações**: o que depende de tipo, processo ou característica não marcada aparece com o aviso “Fora do perfil marcado” e pode ser marcado como “Não se aplica” (por pergunta, por item ou, em Odontologia, de uma vez no Perfil do serviço);
+- layout fluido para celular (6,1″ a 6,7″), tablet de 10,1″ e computador, sem rolagem horizontal e com botões de pelo menos 40 px.
+
 ### Alimentos e serviços de alimentação
 
-- Roteiro por tipo de estabelecimento.
-- Inventário de infrações independente do roteiro.
-- Citações legislativas clicáveis e centralizadas.
-- Relatório de inspeção com campos descritivos e exportação.
+- Seção 1: identificação, tipo de serviço e forma de operação, processos presentes.
+- Seções 2 a 6, no percurso da visita: documentos; estrutura, água, resíduos e higiene; recebimento e armazenamento; manipulação, preparo e exposição; transporte e encerramento. Cada bloco da Portaria SMS nº 2.619/2011 é um item.
+- Inventário de infrações independente do roteiro; relatório com texto, cópia e Word.
 
 ### Estética e beleza
 
@@ -96,21 +108,22 @@ Quando o campo permitir, a consulta pode começar pela chave ou número da DANFE
 
 ### Serviços assistenciais
 
-- Seleção da modalidade assistencial.
-- Guias, documentos, roteiro, inventário, calculadora quando aplicável e relatório.
-- Citações e recomendações descritivas no padrão visual comum.
+- Cada modalidade (ILPI, Centro Dia, Comunidade Terapêutica, Residência Terapêutica, SAICA, Demais acolhimentos) é um cartão na tela do núcleo.
+- Seção 1: estabelecimento e “Sobre este serviço” (enquadramento, alerta, CNAE); em Demais acolhimentos, a modalidade é escolhida ali antes de liberar as demais seções.
+- Seções Documentos e Inspeção (cada grupo é um item) e Dimensionamento de pessoal quando houver calculadora.
+- Salvas por modalidade: salvar, apagar e retomar mexem só na modalidade aberta.
 
 ### Odontologia
 
-- Roteiro por serviço odontológico.
-- Referências legislativas uniformes.
-- Relatório de verificação em Word.
+- Seção 1: identificação e perfil do serviço (situação, tipologia, organização, processamento, características).
+- Seções: licenciamento e apoio; assistência, equipamentos e radiologia; processamento de dispositivos médicos; qualidade, resíduos e atendimento externo. Cada etapa da RDC nº 1.002/2025 é um item.
+- “Não cumpre” abre evidência e conclusão do fiscal; relatório de verificação e tabela de infrações em Word.
 
 ### Produtos e correlatos
 
-- Trilhas para fabricante, atacadista/distribuidor e transportador.
-- Roteiro, inventário e relatório conforme a atividade escolhida.
-- Consultas e citações disponíveis nos campos aplicáveis.
+- Trilhas para fabricante, atacadista/distribuidor e transportador, escolhidas no cartão do núcleo.
+- Seção 1 “Dados da inspeção”: identificação, classes e características (não escondem etapas), enquadramento, CNAE, consultas e fluxo do POP-O-SNVS-013.
+- Demais seções agrupam as etapas por tema; inventário e relatório conforme a atividade.
 
 ## Teste geral passo a passo
 
@@ -128,6 +141,9 @@ Quando o campo permitir, a consulta pode começar pela chave ou número da DANFE
 12. No PWA publicado, instale o aplicativo, desligue a rede e confirme que a interface e os módulos incorporados abrem offline.
 13. Ligue a rede novamente, use **Verificar atualização** e confirme que a caixa informa a versão/correções e não apaga o rascunho.
 14. Confira no celular a faixa inferior, os botões de foto e a caixa de citação.
+15. Em Produtos, Alimentos, Odontologia e Serviços assistenciais, percorra os itens com **→** até o fim, volte com **←** e com o voltar do celular, e confira que cada resposta aparece na prévia “Como sai no relatório”.
+
+Suíte automatizada: `node scripts/e2e/todos.cjs` (funções comuns, relatórios de Medicamentos e navegação padrão dos quatro núcleos); por núcleo, `node scripts/e2e/padrao.cjs <núcleo> <app> <título> [qs]`.
 
 ## Varredura automatizada realizada
 

@@ -1,0 +1,129 @@
+/* Padrão UVIS — complemento de uvis-layout.css para os núcleos que usam padrao-uvis.js.
+   Cor do núcleo só no cabeçalho (--pu-cor); o resto segue a paleta da drogaria. */
+html.pu-ativo{--pu-cor:var(--ui-navy)}
+html.pu-ativo body{margin:0;background:var(--ui-canvas)}
+.pu-ativo .pu-header{grid-template-columns:48px minmax(0,1fr) auto;background:var(--pu-cor);min-height:calc(var(--app-header-h) + var(--top-safe))}
+.pu-ativo .pu-header h1{font-size:clamp(.9rem,2.2vw,1.12rem);text-transform:uppercase;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;padding:0 4px}
+.pu-ativo .pu-acoes{display:flex;gap:8px;align-items:center;justify-content:flex-end;min-width:44px}
+.pu-ativo .pu-acoes #uvs-botao,.pu-ativo .pu-acoes #uvs-fotos{position:static!important;min-width:44px;min-height:44px;margin:0!important;padding:6px 10px!important;border:1px solid #ffffff80!important;border-radius:9px!important;background:#ffffff1f!important;color:#fff!important}
+.pu-ativo .pu-abas button{position:relative}
+.pu-ativo .pu-secoes button,.pu-ativo .pu-faixa button{width:auto!important;max-width:none;flex:0 0 auto!important;white-space:nowrap!important}
+.pu-ativo .pu-faixa button{max-width:280px}
+.pu-ativo .pu-n{display:inline-block;margin-left:6px;min-width:20px;padding:1px 6px;border-radius:10px;background:#e7eef3;color:var(--ui-navy);font-size:.72rem;line-height:1.5}
+.pu-ativo .pu-n[hidden]{display:none}
+.pu-ativo .pu-main{padding-top:14px}
+.pu-ativo.pu-sem-rodape .pu-main{padding-bottom:32px}
+.pu-ativo .pu-desc{color:var(--ui-muted);font-size:.9rem;margin:0 0 12px}
+.pu-ativo .pu-prog{color:#5b7a8c!important;font-weight:600!important}
+.pu-ativo .pu-topo{margin:0 0 6px}
+/* grade de itens da seção */
+.pu-ativo .pu-itens{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:6px 0 16px}
+.pu-ativo .pu-item-card{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:start;min-height:96px;padding:14px;text-align:left;border:1px solid #bed4e3;border-radius:13px;background:#fff;color:var(--ui-navy);box-shadow:0 2px 5px #304F6305}
+.pu-ativo .pu-item-card:hover{border-color:var(--ui-blue);background:#f7fbfe}
+.pu-ativo .pu-item-card.pu-completo{border-color:#9ccab4;background:#f6fbf8}
+.pu-ativo .pu-num{grid-row:1/3;display:grid;place-items:center;min-width:42px;height:42px;padding:0 6px;border-radius:10px;background:var(--ui-blue);color:#fff;font-weight:700;font-size:.92rem}
+.pu-ativo .pu-item-card.pu-completo .pu-num{background:#1f7a52}
+.pu-ativo .pu-item-txt strong{display:block;font-size:.98rem;line-height:1.35}
+.pu-ativo .pu-item-txt small{display:block;margin-top:4px;color:var(--ui-muted);font-size:.8rem;line-height:1.4}
+.pu-ativo .pu-abrir{grid-column:2;justify-self:end;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--ui-blue)}
+/* faixa de itens (tela do item) */
+.pu-ativo .pu-faixa{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin:0 0 4px;scrollbar-width:thin;scroll-padding:0 40%}
+.pu-ativo .pu-faixa button{flex:0 0 auto;min-height:40px;max-width:260px;padding:8px 12px;border:1px solid #d7e0e5;border-radius:9px;background:#fff;color:#35556a;font-size:.84rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pu-ativo .pu-faixa button[aria-current=step]{background:var(--ui-blue);border-color:var(--ui-blue);color:#fff;box-shadow:0 0 0 2px rgba(29,78,107,.25)}
+.pu-ativo .pu-cab-item{font-size:1rem}
+.pu-ativo .pu-conteudo{padding-bottom:8px}
+.pu-ativo .pu-erro{color:#9b2c3c}
+/* perguntas no padrão (usadas pelos adaptadores) */
+.pu-ativo .pu-q{padding:16px 0;border-bottom:1px solid #e3eaf0}
+.pu-ativo .pu-q:last-child{border-bottom:0}
+.pu-ativo .pu-q-texto{font-size:.98rem;line-height:1.6;font-weight:550;margin:0 0 6px}
+.pu-ativo .pu-q-ajuda{font-size:.86rem;color:var(--ui-muted);margin:0 0 6px}
+.pu-ativo .pu-tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.pu-ativo .pu-tag{font-size:.74rem;font-weight:700;padding:2px 8px;border-radius:10px;background:#fbe9e4;color:#94372a}
+.pu-ativo .pu-resp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 6px}
+.pu-ativo .pu-resp button{min-height:46px;padding:8px 6px;border:1px solid #c7d5de;border-radius:8px;background:#fff;color:#466070;font-size:.9rem;font-weight:600;line-height:1.2}
+.pu-ativo .pu-resp button[aria-pressed=true][data-v=sim],.pu-ativo .pu-resp button[aria-pressed=true][data-v=yes],.pu-ativo .pu-resp button[aria-pressed=true][data-v=C],.pu-ativo .pu-resp button[aria-pressed=true][data-v=ok]{background:#13764f;border-color:#13764f;color:#fff}
+.pu-ativo .pu-resp button[aria-pressed=true][data-v=nao],.pu-ativo .pu-resp button[aria-pressed=true][data-v=no],.pu-ativo .pu-resp button[aria-pressed=true][data-v=NC]{background:#b03749;border-color:#b03749;color:#fff}
+.pu-ativo .pu-resp button[aria-pressed=true][data-v=na],.pu-ativo .pu-resp button[aria-pressed=true][data-v=nsa],.pu-ativo .pu-resp button[aria-pressed=true][data-v=NA]{background:#5d6e7a;border-color:#5d6e7a;color:#fff}
+.pu-ativo .pu-mais{margin:8px 0 0;border:1px solid #c7e2e0;border-radius:8px;background:#f6fbfb}
+.pu-ativo .pu-mais>summary{min-height:44px;display:flex;align-items:center;padding:8px 12px;color:#096f74;font-weight:600;font-size:.86rem;cursor:pointer}
+.pu-ativo .pu-mais>div{padding:0 12px 12px}
+.pu-ativo .pu-mais textarea{width:100%;min-height:80px}
+.pu-ativo .pu-campos{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.pu-ativo .pu-campos label,.pu-ativo .pu-campo{display:grid;gap:4px;font-size:.86rem;font-weight:600;color:var(--ui-ink)}
+.pu-ativo .pu-campos input,.pu-ativo .pu-campos select,.pu-ativo .pu-campos textarea{width:100%}
+.pu-ativo .pu-marcas{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:8px 0}
+.pu-ativo .pu-marca{display:flex;gap:10px;align-items:flex-start;min-height:44px;padding:10px 12px;border:1px solid var(--ui-line);border-radius:9px;background:#fafcfd;font-size:.9rem;cursor:pointer}
+.pu-ativo .pu-marca input{margin-top:3px;width:18px;height:18px}
+.pu-ativo .pu-marca small{display:block;color:var(--ui-muted);font-size:.78rem;margin-top:2px}
+.pu-ativo .pu-bloco{background:#fff;border:1px solid var(--ui-line);border-radius:12px;padding:16px;margin:0 0 14px}
+.pu-ativo .pu-bloco>h3{margin:0 0 6px;font-size:1rem;color:var(--ui-navy)}
+.pu-ativo .pu-bloco>p{margin:0 0 10px;color:var(--ui-muted);font-size:.88rem}
+@media(max-width:700px){
+ .pu-ativo .pu-itens{grid-template-columns:1fr;gap:9px}
+ .pu-ativo .pu-item-card{min-height:84px;padding:12px}
+ .pu-ativo .pu-resp button{font-size:.84rem}
+ .pu-ativo .ui-card-grid.pu-secoes-grade button{min-height:120px}
+}
+@media(min-width:701px) and (max-width:1024px){
+ .pu-ativo .ui-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media print{.pu-ativo .pu-rodape,.pu-ativo .pu-chrome,.pu-ativo .pu-faixa{display:none!important}}
+/* conteúdo herdado dos módulos (caixas de destaque, linha de resumo, folha do relatório) */
+.pu-ativo .hero{background:#fff!important;color:var(--ui-ink)!important;border:1px solid var(--ui-line)!important;box-shadow:none!important;border-radius:12px!important;padding:14px 16px!important;margin:0 0 12px!important;background-image:none!important}
+.pu-ativo .hero h2{color:var(--ui-navy)!important;font-size:1.05rem!important;margin:2px 0 6px!important}
+.pu-ativo .hero p{color:var(--ui-muted)!important;font-size:.9rem!important;margin:0!important}
+.pu-ativo .hero .eyebrow{color:#5b7a8c!important;font-size:.74rem!important;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:0 0 4px!important}
+.pu-ativo .route-line{display:flex!important;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.pu-ativo .route-line span{display:inline-block;padding:4px 10px;border-radius:12px;background:#eef3f7;color:#35556a;font-size:.8rem;font-weight:600}
+.pu-ativo .print-sheet.active{position:fixed!important;inset:0!important;z-index:300!important;overflow:auto!important;background:#fff!important;margin:0!important}
+.pu-ativo .print-sheet .print-bar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:8px;padding:calc(8px + var(--top-safe)) 12px 8px;background:#fff;border-bottom:1px solid var(--ui-line)}
+.pu-ativo .print-sheet .print-bar button{min-height:44px;padding:8px 14px;border:1px solid #bdd5e2;border-radius:8px;background:#fff;color:var(--ui-blue);font-weight:650}
+.pu-ativo .print-sheet .print-bar .print-now{background:var(--ui-blue);color:#fff;border-color:var(--ui-blue)}
+.pu-ativo .pu-legado{background:transparent;border:0;padding:0;margin:0}
+.pu-ativo .pu-acoes #uvs-botao span,.pu-ativo .pu-acoes #uvs-fotos span{display:none!important}
+.pu-ativo .pu-acoes #uvs-botao,.pu-ativo .pu-acoes #uvs-fotos{width:44px;justify-content:center;padding:0!important;display:inline-flex!important;align-items:center}
+.pu-ativo .pu-header{padding-right:max(10px,env(safe-area-inset-right))!important}
+/* telas antigas substituídas pelo padrão (ocultas já no carregamento) */
+html.pu-ativo body>[data-pu-oculto],html.pu-ativo[data-uvis-app="servicos-alimentacao-roteiro"] body>header,html.pu-ativo[data-uvis-app="servicos-alimentacao-roteiro"] body>nav.abas,html.pu-ativo[data-uvis-app="servicos-alimentacao-roteiro"] body>main{display:none!important}
+html.pu-ativo[data-uvis-app="servicos-alimentacao-roteiro"] main.pu-main{max-width:none}
+.pu-ativo .pu-btn{min-height:44px;padding:8px 14px;border:1px solid #bdd5e2;border-radius:8px;background:#fff;color:var(--ui-blue);font-size:.88rem;font-weight:650;line-height:1.25;cursor:pointer}
+.pu-ativo .pu-btn:hover{background:#f1f7fc}
+.pu-ativo .pu-acoes-item,.pu-ativo .pu-foto-acoes{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.pu-ativo .pu-foto-acoes{margin:4px 0 10px}
+.pu-ativo .pu-tag-leve{background:#eef3f7;color:#35556a}
+.pu-ativo .pu-aviso{border-color:#e7cf9c;background:#fdf8ec}
+.pu-ativo .pu-mais .photo-thumb{display:block;max-width:min(100%,260px);max-height:200px;border-radius:8px;margin:0 0 10px;border:1px solid var(--ui-line)}
+.pu-ativo .pu-mais textarea{box-sizing:border-box;padding:8px;border:1px solid #c7d5de;border-radius:8px;font:inherit;font-weight:400}
+.pu-ativo .pu-campos input,.pu-ativo .pu-campos select{box-sizing:border-box;min-height:44px;padding:8px 10px;border:1px solid #c7d5de;border-radius:8px;font:inherit;font-weight:400;background:#fff}
+.pu-ativo .pu-campo b{display:block;font-size:1.05rem;color:var(--ui-navy)}
+.pu-ativo .pu-cit:empty{display:none}
+.pu-ativo .pu-cit{margin:2px 0 4px}
+.pu-ativo .pu-cit button{min-height:40px!important;padding:6px 10px!important;text-align:left}
+html.pu-ativo[data-uvis-app="odontologia"] body>header.top,html.pu-ativo[data-uvis-app="odontologia"] body>main,html.pu-ativo[data-uvis-app="odontologia"] body>.dock{display:none!important}
+.pu-ativo .pu-q .cite{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0}
+.pu-ativo .pu-q [data-legal]{min-height:40px!important;border:1px solid #b8c7d2;border-radius:999px;background:#fff;color:#23475f;padding:7px 12px;font-weight:700;font-size:.84rem;cursor:pointer}
+.pu-ativo .pu-nc{margin:10px 0 0;background:#fbf3f4;border-color:#e4c3c9}
+.pu-ativo .pu-nc label{display:grid;gap:4px;font-size:.86rem;font-weight:600;margin:0 0 8px}
+.pu-ativo .pu-nc textarea,.pu-ativo .pu-nc select{box-sizing:border-box;width:100%;min-height:44px;padding:8px;border:1px solid #c7d5de;border-radius:8px;font:inherit;font-weight:400;background:#fff}
+.pu-ativo .pu-btn-pri{background:var(--ui-blue);border-color:var(--ui-blue);color:#fff}
+.pu-ativo .pu-btn-pri:hover{background:var(--ui-navy)}
+.pu-ativo #pfields .chip,.pu-ativo #pfields select{min-height:44px}
+.pu-ativo .meta-grid.pu-campos input{box-sizing:border-box;min-height:44px;padding:8px 10px;border:1px solid #c7d5de;border-radius:8px;font:inherit;font-weight:400;background:#fff;width:100%}
+.pu-ativo .meta-grid.pu-campos label{display:grid;gap:4px;font-size:.86rem;font-weight:600}
+html.pu-ativo[data-uvis-app="servicos-assistenciais"] body>header,html.pu-ativo[data-uvis-app="servicos-assistenciais"] body>main#app,html.pu-ativo[data-uvis-app="servicos-assistenciais"] #bottom{display:none!important}
+html.pu-ativo[data-uvis-app="servicos-assistenciais"] body{padding-bottom:0!important}
+.pu-ativo .pu-inf-grupo{margin:0 0 10px;background:#fff;border-color:var(--ui-line)}
+.pu-ativo .pu-inf-grupo>summary{color:var(--ui-navy);font-size:.92rem}
+.pu-ativo .pu-q .refbtn,.pu-ativo .pu-q .extref{display:inline-flex;align-items:center;min-height:40px;padding:7px 12px;border:1px solid #b8c7d2;border-radius:999px;background:#fff;color:#23475f;font-weight:700;font-size:.84rem;text-decoration:none;cursor:pointer}
+.pu-ativo .pu-mais .photo-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pu-ativo .pu-mais .photo-label,.pu-ativo .pu-mais .remove-photo{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid #bdd5e2;border-radius:8px;background:#fff;color:var(--ui-blue);font-weight:650;font-size:.88rem;cursor:pointer}
+.pu-ativo .pu-mais .photo-label{position:relative;overflow:hidden}.pu-ativo .pu-mais .photo-label input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.pu-ativo .pu-mais .thumb{max-width:min(100%,220px);max-height:180px;border-radius:8px}
+.pu-ativo .pu-campos select{box-sizing:border-box;min-height:44px;padding:8px 10px;border:1px solid #c7d5de;border-radius:8px;font:inherit;font-weight:400;background:#fff;width:100%}
+/* abas Infrações/Relatório com o painel antigo: sem moldura dupla nem recuo */
+.pu-ativo .pu-aba-conteudo>.panel{padding:0!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.pu-ativo .pu-aba-conteudo .inventory-body{padding:0!important}
+.pu-ativo #p-infracoes .toolbar{display:flex!important;flex-wrap:wrap!important;gap:8px!important;align-items:stretch}
+.pu-ativo #p-infracoes .toolbar .search{flex:1 1 100%!important;min-width:0;min-height:44px}
+.pu-ativo #p-infracoes .toolbar .filter{flex:1 1 auto;min-height:44px}
