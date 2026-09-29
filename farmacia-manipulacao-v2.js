@@ -155,9 +155,9 @@ function v2Rast(scope,c){
   +v2Refs('RDC 67/2007 · Anexo I · 7.3.10')+'<div class="toolrow"><button type="button" class="read-btn" data-reader="cert_fornecedor" data-target="'+esc('generic:'+scope+':cert')+'">📄 Ler certificado de análise</button></div>';
  return v2Box('Identificação da preparação '+c.form,d.prod||'',
    '<div class="v2-grid">'+v2Input(b+'|prod','Produto','v2-full')+v2Input(b+'|om','Ordem de manipulação nº')+v2Input(b+'|omData','de','','date')+v2Input(b+'|manip','Manipulado por')+'</div><div class="toolrow"><button type="button" class="read-btn" data-reader="ordem" data-target="'+esc('generic:'+scope+':om')+'">📄 Ler ordem de manipulação</button>'+v2Photo(scope,'om','Ordem de manipulação')+'</div>','',true)
-  +v2Box('Rastreabilidade — excipientes e insumos','lote · validade · fabricante · nota fiscal','<div style="overflow:auto"><table class="simple-table v2-rast-tab"><thead><tr><th>Excipiente / insumo</th><th>Lote</th><th>Validade</th><th>Fabricante</th><th>Nota fiscal</th><th>CQ</th></tr></thead><tbody>'
-   +Array.from({length:nIns},(_,i)=>'<tr>'+['n','lote','val','fab','nf'].map(k=>'<td><input'+(k==='val'?' type="date"':'')+' data-v2="'+v2p('rast',scope,'ins',i,k)+'" value="'+esc((ins[i]||{})[k]||'')+'"></td>').join('')+'<td><button type="button" class="btn v2-cqbtn" data-v2-cq="'+esc(scope+'|'+i)+'" title="Abrir o controle de qualidade desta matéria-prima">＋ CQ</button></td></tr>').join('')
-   +'</tbody></table></div><div class="toolrow"><button type="button" class="btn" data-v2-addins="'+esc(scope+'|'+nIns)+'">+ Linha</button></div><div class="toolrow">'+v2Photo(scope,'danfe','DANFE / nota fiscal')+v2Photo(scope,'laudo-forn','Laudo do fornecedor')+'</div>'+v2Refs('RDC 67/2007 · Anexo I · 8.1 e 8.4'))
+  +v2Box('Rastreabilidade — excipientes e insumos','lote · validade · fabricante · nota fiscal','<div class="v2-ins-lista">'
+   +Array.from({length:nIns},(_,i)=>'<div class="v2-ins">'+[['n','Excipiente / insumo'],['lote','Lote'],['val','Validade'],['fab','Fabricante'],['nf','Nota fiscal']].map(([k,l])=>'<label class="v2-ins-'+k+'">'+l+'<input'+(k==='val'?' type="date"':'')+' data-v2="'+v2p('rast',scope,'ins',i,k)+'" value="'+esc((ins[i]||{})[k]||'')+'"></label>').join('')+'<button type="button" class="btn v2-cqbtn" data-v2-cq="'+esc(scope+'|'+i)+'" title="Abrir o controle de qualidade desta matéria-prima">＋ CQ</button></div>').join('')
+   +'</div><div class="toolrow"><button type="button" class="btn" data-v2-addins="'+esc(scope+'|'+nIns)+'">+ Insumo</button></div><div class="toolrow">'+v2Photo(scope,'danfe','DANFE / nota fiscal')+v2Photo(scope,'laudo-forn','Laudo do fornecedor')+'</div>'+v2Refs('RDC 67/2007 · Anexo I · 8.1 e 8.4'))
   +v2Box('Controle de qualidade do produto acabado',v2Count(d.ens,c.ensaios)+' de '+c.ensaios.length,c.ensaios.map((e,i)=>v2Check(b+'|ens|'+i,e)).join('')+v2Refs('RDC 67/2007 · Anexo I · 9.1.1, 9.1.2 e 9.1.3'))
   +v2Box(cqBox,typed.length?nCq+' de '+typed.length+' insumos':'sem insumos na tabela',cqCorpo)
   +v2Box('Análise da rotulagem',v2Count(d.rot,rot)+' de '+rot.length,rot.map((e,i)=>v2Check(b+'|rot|'+i,e)).join('')+v2Refs('RDC 67/2007 · Anexo I · 12.1')+'<div class="toolrow">'+v2Photo(scope,'rotulo','Rótulo')+'</div>');
@@ -203,13 +203,27 @@ function v2Ident(){
  </div>`;
 }
 /* Atividades da AFE/AE: seleção + outras; a consulta ao banco da Anvisa marca as que vierem na autorização. */
-const ATIV_AFE=['Armazenar','Dispensar','Fracionar','Manipular'];
-function v2Ativ(k){const o=v2Get(['chips','i1.1',k])||{},sel=ATIV_AFE.filter(x=>o[x]),out=String(v2Get(['fields','i1.1',k+'Outras'])||'').trim();return v2Join(sel.map(v2Lc).concat(out?[out]:[]))}
+/* Atividades da AFE/AE com os nomes oficiais da Anvisa (dados abertos). A consulta pelo CNPJ marca
+   exatamente as que constam da autorização; atividade fora da lista vira opção marcada. */
+const ATIV_OF={afe:['Comércio','Dispensação de medicamentos não sujeitos ao controle especial','Dispensação de medicamentos contendo substâncias sujeitas ao controle especial','Fracionamento','Manipulação de produtos magistrais','Manipulação de produtos oficinais','Manipulação de produtos estéreis','Prestação de Serviços Farmacêuticos','Ervanário','Dispensação de gases medicinais não sujeitos a controle especial'],ae:['Manipular']};
+const V2_ATIV_VELHAS=['Armazenar','Dispensar','Fracionar','Manipular'];
+function v2AtivOpcoes(k){const o=v2Get(['chips','i1.1',k])||{},base=ATIV_OF[k];return base.concat(Object.keys(o).filter(x=>!base.includes(x)&&!(k==='afe'&&V2_ATIV_VELHAS.includes(x))))}
+function v2Ativ(k){const o=v2Get(['chips','i1.1',k])||{},sel=v2AtivOpcoes(k).filter(x=>o[x]),out=String(v2Get(['fields','i1.1',k+'Outras'])||'').trim();return v2Join(sel.map((x,n)=>n?v2Lc(x):x).concat(out?[out]:[]))}
 function v2AtivHtml(k,titulo){const i=state.identity;
  return '<div class="v2-ativ"><h4 class="v2-h">'+esc(titulo)+'</h4><div class="field-grid" style="padding:0">'+charField(k,k.toUpperCase()+' nº',i[k])+charField(k+'Data',k.toUpperCase()+' publicada em',i[k+'Data'],'date')+'</div>'
-  +'<p class="small muted">Atividades autorizadas'+(k==='ae'?' (substâncias sujeitas a controle especial)':'')+':</p><div class="checks">'+ATIV_AFE.map(x=>v2Chip('chips|i1.1|'+k+'|'+x,x)).join('')+'</div><div class="v2-grid">'+v2Input('fields|i1.1|'+k+'Outras','Outras atividades','v2-full')+(k==='ae'?v2Input('fields|i1.1|aeClasses','Classes / listas autorizadas (Portaria 344/1998)','v2-full','text','Ex.: listas A, B, C'):'')+'</div></div>'}
-function v2AtivBanco(k,txt){if(!txt)return;const o={},resto=[];String(txt).split(/\s*[,;\/]\s*|\s+e\s+/).map(x=>x.trim()).filter(Boolean).forEach(x=>{const m=ATIV_AFE.find(a=>a.toLowerCase()===x.toLowerCase()||x.toLowerCase().startsWith(a.toLowerCase().slice(0,6)));if(m)o[m]=true;else resto.push(x.toLowerCase())});
- if(Object.keys(o).length)v2Set(['chips','i1.1',k],o);if(resto.length)v2Set(['fields','i1.1',k+'Outras'],resto.join(', '))}
+  +'<p class="small muted">Atividades autorizadas'+(k==='ae'?' (substâncias sujeitas a controle especial)':'')+'. Ao digitar o CNPJ, as que constam da autorização na base Anvisa são marcadas sozinhas; confira.</p><div class="checks">'+v2AtivOpcoes(k).map(x=>v2Chip('chips|i1.1|'+k+'|'+x,x)).join('')+'</div><div class="v2-grid">'+v2Input('fields|i1.1|'+k+'Outras','Outras atividades','v2-full')+(k==='ae'?v2Input('fields|i1.1|aeClasses','Classes / listas autorizadas (Portaria 344/1998)','v2-full','text','Ex.: listas A, B, C'):'')+'</div></div>'}
+function v2AtivBanco(k,txt){if(!txt)return;const n=x=>String(x).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim(),o={};
+ String(txt).split(/\s*[,;]\s*/).filter(Boolean).forEach(x=>{const m=ATIV_OF[k].find(a=>n(a)===n(x));o[m||x.trim()]=true});
+ v2Set(['chips','i1.1',k],o);v2Set(['fields','i1.1',k+'Outras'],undefined)}
+/* CNPJ completo: consulta a base Anvisa e preenche AFE/AE ativas (nº, data, atividades) se ainda vazias. */
+let v2CnpjT=null,v2CnpjFeito='';
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.dataset||t.dataset.ident!=='cnpj'||!window.MedBanco||!MedBanco.afeAe)return;const d=t.value.replace(/\D/g,'');if(d.length!==14||d===v2CnpjFeito)return;
+ clearTimeout(v2CnpjT);v2CnpjT=setTimeout(()=>{v2CnpjFeito=d;MedBanco.afeAe(d).then(r=>{const i=state.identity,ch=v2Get(['chips','i1.1'])||{};let mud=false;
+  const pega=l=>(l||[]).find(x=>x.ativa)||null,afe=pega(r.afe),ae=pega(r.ae);
+  if(afe&&!i.afe&&!v2Ne(ch.afe)){i.afe=afe.numero;if(afe.publicacao)i.afeData=String(afe.publicacao).slice(0,10);v2AtivBanco('afe',afe.atividades);mud=true}
+  if(ae&&!i.ae&&!v2Ne(ch.ae)){i.ae=ae.numero;if(ae.publicacao)i.aeData=String(ae.publicacao).slice(0,10);v2AtivBanco('ae',ae.atividades);if(ae.classe&&!v2Get(['fields','i1.1','aeClasses']))v2Set(['fields','i1.1','aeClasses'],ae.classe);mud=true}
+  if(r.razao&&!i.razao){i.razao=r.razao;mud=true}
+  if(mud){save();if(state.openCard)renderCard(state.openCard);toast('AFE/AE preenchidas pela base Anvisa. Confira.')}}).catch(()=>{v2CnpjFeito=''})},600)});
 const SBIT_LIST=['Ácido valproico','Aminofilina','Carbamazepina','Ciclosporina','Clindamicina','Clonidina','Clozapina','Colchicina','Digitoxina','Digoxina','Disopiramida','Fenitoína','Lítio','Minoxidil','Oxcarbazepina','Prazosina','Primidona','Procainamida','Quinidina','Teofilina','Varfarina','Verapamil'];
 const BASES_LIST=['Creme não iônico','Creme aniônico','Gel de natrosol','Gel de carbopol','Loção','Pomada','Xarope simples','Veículo oral','Shampoo base'];
 const EXCIP_LIST=['Celulose microcristalina','Amido','Lactose','Talco','Estearato de magnésio','Dióxido de silício','Excipiente padrão SBIT'];

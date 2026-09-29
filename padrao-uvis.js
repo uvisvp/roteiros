@@ -103,7 +103,7 @@
   if((b=e.target.closest('[data-pu-item]'))){vai({aba:'roteiro',secao:nav.secao,item:b.dataset.puItem});return}
   if((b=e.target.closest('[data-pu-nav]'))){var a=b.dataset.puNav,L=linear(),i=L.findIndex(function(x){return x.secao===nav.secao&&x.item===nav.item});
    if(a==='todas')vai({aba:'roteiro',secao:null,item:null});
-   else if(a==='ant'){if(nav.item){if(i>0&&L[i-1].secao===nav.secao)vai({item:L[i-1].item});else vai({item:null})}else vai({secao:null,item:null})}
+   else if(a==='ant'){/* ← volta ao item anterior; no primeiro item (ou na tela da seção), ao último item da seção anterior */var j=nav.item?i:L.findIndex(function(x){return x.secao===nav.secao});if(j>0)vai({secao:L[j-1].secao,item:L[j-1].item});else if(nav.item)vai({item:null});else vai({secao:null,item:null})}
    else if(a==='prox'){if(nav.item){if(i<L.length-1)vai({secao:L[i+1].secao,item:L[i+1].item})}else if(nav.secao){var s=acha(nav.secao);if(s&&s.itens[0])vai({item:s.itens[0].id})}else{var s0=secoes()[0];if(s0)vai({secao:s0.id,item:null})}}
    else if(a==='limpar'&&cfg.limpar){var s2=acha(nav.secao),it=s2&&nav.item&&s2.itens.filter(function(x){return x.id===nav.item})[0];if(confirm(it?'Limpar as respostas deste item?':'Limpar as respostas desta seção?')){try{cfg.limpar(s2,it||null)}catch(err){console.error(err)}desenha(false)}}
    return}}

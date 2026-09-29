@@ -62,3 +62,10 @@ html .man-item-screen .med-hint p{overflow-wrap:break-word;white-space:normal}
 .v2-ativ .v2-h{margin-top:4px}
 .v2-docdados{margin:8px 0 4px;padding:8px 10px;border:1px dashed #cfdfe9;border-radius:10px;background:#f8fbfd}
 .v2-env .field-grid .span3 b{display:block;margin-top:4px;color:#27465a}
+/* Rastreabilidade: um bloco por insumo, campos com rótulo e tamanho de toque */
+.v2-ins{display:grid;grid-template-columns:2.2fr 1fr 1.3fr 1.6fr 1.1fr auto;gap:8px 10px;align-items:end;padding:10px 0;border-bottom:1px solid var(--line)}
+.v2-ins label{display:grid;gap:4px;font-size:.72rem;font-weight:700;color:#5f6e77;min-width:0}
+.v2-ins input{width:100%;min-height:44px;border:1px solid var(--line2);border-radius:9px;padding:8px 10px;font-size:.95rem;background:#fff;box-sizing:border-box}
+.v2-ins .v2-cqbtn{min-height:44px}
+@media(max-width:1000px){.v2-ins{grid-template-columns:repeat(6,minmax(0,1fr))}.v2-ins-n{grid-column:span 4}.v2-ins-lote{grid-column:span 2}.v2-ins-val,.v2-ins-fab{grid-column:span 2}.v2-ins-nf{grid-column:span 1}.v2-ins .v2-cqbtn{grid-column:span 1}}
+@media(max-width:560px){.v2-ins{grid-template-columns:repeat(2,minmax(0,1fr))}.v2-ins-n{grid-column:1/-1}.v2-ins-lote,.v2-ins-val,.v2-ins-fab,.v2-ins-nf{grid-column:span 1}.v2-ins .v2-cqbtn{grid-column:1/-1}}
