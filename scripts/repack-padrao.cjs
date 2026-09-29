@@ -145,5 +145,11 @@ html = troca(html, "back.onclick=function(){if(state.activeSection){salvarTela(n
   ap = troca(ap, 'function analiseData(){', "function line(t,titulo,texto){var ico={ok:'✓',warn:'!',bad:'✕',info:'i'}[t]||'•',rot={ok:'sem alerta',warn:'conferir',bad:'possível irregularidade',info:'informação'}[t]||'';return '<div class=\"line '+t+'\"><span class=\"ico\">'+ico+'</span><div><strong>'+esc(titulo)+'</strong><small>'+esc(texto)+'</small></div><span class=\"tag '+t+'\">'+rot+'</span></div>'}\nfunction analiseData(){", 'line() da análise de produtos');
   bloco(id, ap); }
 
+/* 14 — Drogaria: pedido para abrir bloco que não existe mais (o 3 foi fundido) volta à grade
+   em vez de parar a navegação. */
+{ const id = 'app--drogaria'; let dg = lerBloco(id);
+  dg = troca(dg, "function changeView(t,c=0){save();tab=t;active=c;", "function changeView(t,c=0){if(c&&!catalog.cards.some(x=>x.id===Number(c)))c=0;save();tab=t;active=c;", 'bloco inexistente na drogaria');
+  bloco(id, dg); }
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
