@@ -148,3 +148,6 @@ html.pu-ativo[data-uvis-app="servicos-assistenciais"] body{padding-bottom:0!impo
 .pu-ativo #pfields .chip{color:#35505f;background:#fff;border:1px solid #c7d5de;font-size:.86rem}
 .pu-ativo #pfields .chip.on{background:var(--pu-cor)!important;border-color:var(--pu-cor)!important;color:#fff!important}
 .pu-ativo #pfields .chip.on::before{content:'✓ '}
+.pu-ativo .pu-salas .pu-marcas{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.pu-ativo .pu-outras-salas{margin:16px 0 0;background:#f7f8f9;border-color:var(--ui-line)}
+.pu-ativo .pu-outras-salas>summary{color:#4a5d68}

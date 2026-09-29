@@ -112,5 +112,10 @@ bloco('rec--padrao-uvis.css', fs.readFileSync(path.join(root, 'padrao-uvis.css')
   const para = '"Serviços assistenciais":' + JSON.stringify(M.map(([n, d, s]) => [n, d, 'servicos-assistenciais', 'servico=' + s]));
   if (!html.includes(para)) { if (html.split(de).length !== 2) throw Error('cartão de serviços assistenciais não localizado'); html = html.replace(de, () => para); } }
 
+/* 9 — Distribuidora: só aparência no tamanho do padrão (distribuidora-visual.css), sem tocar no módulo */
+bloco('rec--distribuidora-visual.css', fs.readFileSync(path.join(root, 'distribuidora-visual.css'), 'utf8'));
+html = troca(html, "    if(app==='servicos-alimentacao-roteiro'){\n      cab += '<style>\\n'",
+  "    if(app==='distribuidoras-transportadoras'){cab += '<style id=\"dist-visual-padrao\">'+rec('rec--distribuidora-visual.css')+'</style>';}\n    if(app==='servicos-alimentacao-roteiro'){\n      cab += '<style>\\n'", 'visual da distribuidora');
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
