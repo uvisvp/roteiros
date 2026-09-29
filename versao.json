@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-14",
+  "versao": "20260929-15",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: ← volta ao item anterior; 6.3 vira Equipamentos obrigatórios (central de pesagem, pHmetro, ponto de fusão, densidade, vidrarias); equipamentos dos laboratórios só descritivos; atividades da AFE/AE; campos de AVCB, CRT, SP Regula e outros documentos; relatório sem \"(irregularidade n)\" no texto; temperatura e umidade em frase; estoque com unidade e diferença automática; CQ por insumo na rastreabilidade; laboratório contratado único no monitoramento; entrega com múltipla escolha; CPF formatado. OCR da certidão do CRF mais preciso e horário com todas as linhas."
+  "notas": "Todos os núcleos: ← volta ao item anterior (no primeiro item, ao último item do bloco anterior). Manipulação: atividades da AFE/AE com os nomes oficiais da Anvisa, marcadas ao digitar o CNPJ; rastreabilidade com campos maiores e rotulados."
 }
