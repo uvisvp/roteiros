@@ -117,5 +117,13 @@ bloco('rec--distribuidora-visual.css', fs.readFileSync(path.join(root, 'distribu
 html = troca(html, "    if(app==='servicos-alimentacao-roteiro'){\n      cab += '<style>\\n'",
   "    if(app==='distribuidoras-transportadoras'){cab += '<style id=\"dist-visual-padrao\">'+rec('rec--distribuidora-visual.css')+'</style>';}\n    if(app==='servicos-alimentacao-roteiro'){\n      cab += '<style>\\n'", 'visual da distribuidora');
 
+/* 10 — Distribuidora, tela de item: o checklist de perguntas deixa de ser <details> (título
+   escondido) e vira um bloco comum. No iPhone, abrir “Para saber mais” ou uma orientação
+   chegava a fechá-lo, e as perguntas sumiam sem como reabrir. */
+{ const de = "chk.open=true;chk.classList.add('dist-chk-fixed')";
+  const para = "var dv=chk.ownerDocument.createElement('div');dv.className='section-chk dist-chk-fixed dist-chk-bloco';dv.setAttribute('data-chk',chk.getAttribute('data-chk')||'');[].slice.call(chk.childNodes).forEach(function(n){if(!(n.nodeType===1&&n.tagName==='SUMMARY'))dv.appendChild(n)});chk.replaceWith(dv)";
+  if (html.includes(de)) { const n = html.split(de).length - 1; if (n !== 2) throw Error('checklist da distribuidora: ' + n + ' ocorrências'); html = html.split(de).join(para); }
+  else if (!html.includes(para)) throw Error('checklist da distribuidora não localizado'); }
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
