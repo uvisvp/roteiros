@@ -1,0 +1,22 @@
+/* Distribuidora/transportadora: só aparência, no tamanho do Padrão UVIS (cartões, respostas, barra inferior).
+   Não altera navegação, campos nem textos. Injetado pela casca (scripts/repack-padrao.cjs). */
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+@media(min-width:701px){html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;column-gap:12px!important;row-gap:3px!important;align-items:start!important;align-content:start!important;min-height:84px!important;height:auto!important;padding:14px!important;text-align:left!important;border:1px solid #bed4e3!important;border-radius:13px!important;background:#fff!important;box-shadow:0 2px 5px #304F6305!important;color:#1d3b4d!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card:hover,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card:hover{background:#f7fbfe!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card>.ico,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card>.ico{grid-row:1/span 4!important;display:grid!important;place-items:center!important;width:42px!important;min-width:42px!important;height:42px!important;margin:0!important;border-radius:10px!important;font-size:.92rem!important;font-weight:700!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card>*:not(.ico),html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card>*:not(.ico){grid-column:2!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card>strong,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card>strong{font-size:.98rem!important;line-height:1.35!important;margin:0!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card>span:not(.ico):not(.dist-card-progress),html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card>span:not(.ico){font-size:.8rem!important;line-height:1.4!important;color:#5b6f7c!important;margin:0!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dist-card-menu>.card>em,html[data-uvis-app="distribuidoras-transportadoras"] .dist-subitem-menu>.card>em{justify-self:end!important;margin-top:6px!important;font-size:.8rem!important;font-style:normal!important;font-weight:700!important;color:#1d4e6b!important}
+/* respostas: três botões iguais, como no padrão */
+html[data-uvis-app="distribuidoras-transportadoras"] .seg{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin:10px 0 6px!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .seg>button{min-height:46px!important;padding:8px 6px!important;border-radius:8px!important;font-size:.9rem!important;font-weight:600!important;line-height:1.2!important}
+/* barra inferior: botões do mesmo tamanho do padrão */
+html[data-uvis-app="distribuidoras-transportadoras"] .dock .dockin{display:flex!important;gap:8px!important;align-items:stretch!important;padding:6px 8px!important;max-width:1200px;margin:0 auto}
+html[data-uvis-app="distribuidoras-transportadoras"] .dock .dockin>button{flex:1 1 0!important;min-height:50px!important;margin:0!important;border-radius:10px!important;font-size:.95rem!important;font-weight:650!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dock #dockBack,html[data-uvis-app="distribuidoras-transportadoras"] .dock #dockNext{font-size:1.35rem!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dock #distClear{color:#a23d4c!important}
+html[data-uvis-app="distribuidoras-transportadoras"] .dock{background:#fff!important;border-top:1px solid #dfe6ea!important}
+/* botões Fotos e Salvas ficam fixos no canto do cabeçalho: o aviso “Salvo agora” não passa por baixo deles */
+@media(min-width:561px){html[data-uvis-app="distribuidoras-transportadoras"] .topin #saveStatus{margin-right:215px!important}}

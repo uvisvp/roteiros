@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-02",
+  "versao": "20260929-03",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Odontologia: características do perfil voltam a aparecer quando marcadas. Alimentos: é possível marcar várias atividades e formas de operação no mesmo local (o relatório lista todas). Nos quatro núcleos novos, a faixa de itens e o título do item ficam fixos no topo, as verificações fora do perfil ficam destacadas em amarelo e os destaques seguem a cor do núcleo."
+  "notas": "Odontologia: no Ambiente finalístico, marque as salas existentes (várias, se houver) e aparecem só as exigências de área e instalação desses tipos de sala; as demais ficam recolhidas, com botão para marcar como Não se aplica. Distribuidora: cartões, botões de resposta e barra inferior no mesmo tamanho dos demais roteiros (só aparência)."
 }

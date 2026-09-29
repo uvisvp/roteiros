@@ -63,8 +63,8 @@ function odoSecoes(){
  return lista;
 }
 
-function odoPergunta(s,i,n){
- const a=state.a[i.id]||'',fora=odoFora(s,i);
+function odoPergunta(s,i,n,porSala){
+ const a=state.a[i.id]||'',fora=porSala&&odoDaSala(i)?'':odoFora(s,i);
  return `<div class="pu-q${fora?' pu-q-fora':''}" data-odo-q="${esc(i.id)}"><div><p class="pu-q-texto item-t"><b>${n}.</b> ${esc(i.t)}</p>`
   +(fora?`<div class="pu-tags"><span class="pu-tag pu-tag-fora">Fora do perfil marcado</span></div><p class="pu-q-ajuda">Depende de: ${esc(fora)}. Se não existir no serviço, marque “Não se aplica”.</p>`:'')
   +`<div class="cite pu-cit-odo">${uvisOdontoCitation(i.ch,i.c)}</div></div>`
@@ -72,7 +72,24 @@ function odoPergunta(s,i,n){
   +(a==='nao'?`<div class="pu-bloco pu-nc">${assessmentHtml(i)}</div>`:'')
   +`</div>`;
 }
+/* Ambiente finalístico: “uma resposta abre outra” — as exigências de área e instalação dependem
+   do tipo de sala; o serviço pode ter mais de um (ex.: consultório Classe I + sala de imagem). */
+const ODO_SALAS=['amb','classe1','classe1_sed','classe2','coletivo','imagem','cco'];
+function odoSalas(){if(!Array.isArray(state.salas)||(!state.salas.length&&!state.salasMarcadas))state.salas=ODO_SALAS.includes(state.p.tip)?[state.p.tip]:[];return state.salas}
+const odoDaSala=i=>!!(i.when&&i.when.tip&&Object.keys(i.when).length===1);
+function odoItemSalas(el,s){
+ const salas=odoSalas(),mostra=i=>!odoDaSala(i)||!salas.length||i.when.tip.some(t=>salas.includes(t));
+ const vis=[],outras=[];s.items.forEach((i,k)=>(mostra(i)?vis:outras).push([i,k+1]));
+ const pend=outras.filter(([i])=>!state.a[i.id]).length;
+ el.innerHTML=`<p class="pu-desc">${esc(s.place||'')}</p>`
+  +`<div class="pu-bloco pu-salas"><h3>Salas existentes no serviço</h3><p>Marque todos os tipos de sala do estabelecimento. As exigências de área e instalação de cada tipo aparecem abaixo; as dos demais tipos ficam recolhidas no fim.</p><div class="pu-marcas">`
+  +ODO_SALAS.map(t=>`<label class="pu-marca"><input type="checkbox" data-odo-sala="${esc(t)}"${salas.includes(t)?' checked':''}><span><strong>${esc(LBL[t]||t)}</strong></span></label>`).join('')+`</div></div>`
+  +vis.map(([i,n])=>odoPergunta(s,i,n,true)).join('')
+  +(outras.length?`<details class="pu-mais pu-outras-salas"><summary>Exigências de outros tipos de sala (${outras.length}${pend?' · '+pend+' pendente(s)':''})</summary><div>${pend?`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="salas">Marcar as ${pend} pendentes como Não se aplica</button></div>`:''}${outras.map(([i,n])=>odoPergunta(s,i,n,true)).join('')}</div></details>`:'')
+  +`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="pendentes">Marcar pendentes como Não se aplica</button></div>`;
+}
 function odoItemEtapa(el,s){
+ if(s.id==='fin')return odoItemSalas(el,s);
  const fora=s.items.filter(i=>odoFora(s,i)&&!state.a[i.id]).length,motivo=odoMotivo(s.when);
  el.innerHTML=`<p class="pu-desc">${esc(s.place||'')}</p>`
   +(motivo?`<div class="pu-bloco pu-aviso"><p><b>Fora do perfil marcado</b> (${esc(motivo)}). Se a etapa não existir no serviço, marque tudo como “Não se aplica”.</p><button type="button" class="pu-btn" data-odo-na="todos">Marcar tudo como Não se aplica</button></div>`:'')
@@ -121,7 +138,7 @@ function iniciaPadrao(){
    else if(id==='relatorio')odoRelatorio(el)},
   contagem:id=>id==='roteiro'?counts().nao:id==='infracoes'?nSel():0,
   limpar:(s,it)=>{
-   if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id==='perfil'){state.p=structuredClone(DEF.p);state.assessment={}}}
+   if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id==='perfil'){state.p=structuredClone(DEF.p);state.assessment={};delete state.salas;delete state.salasMarcadas}}
    else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id]})});
    save();renderProfile();renderMeta();
   },
@@ -136,11 +153,13 @@ function iniciaPadrao(){
   const na=e.target.closest('[data-odo-na]');
   if(na){const modo=na.dataset.odoNa,n=UvisPadrao.estado();
    const alvo=modo==='perfil'?DATA.route:[odoEtapa(n.item)].filter(Boolean);
-   alvo.forEach(s=>s.items.forEach(i=>{if(state.a[i.id]&&modo!=='todos')return;if((modo==='fora'||modo==='perfil')&&!odoFora(s,i))return;state.a[i.id]='na'}));
+   const salas=odoSalas();
+   alvo.forEach(s=>s.items.forEach(i=>{if(state.a[i.id]&&modo!=='todos')return;if((modo==='fora'||modo==='perfil')&&!odoFora(s,i))return;if(modo==='salas'&&!(odoDaSala(i)&&salas.length&&!i.when.tip.some(t=>salas.includes(t))))return;state.a[i.id]='na'}));
    save();odoRedesenha();return}
   if(e.target.closest('[data-odo-gen]')){openGen();return}
   if(e.target.closest('[data-odo-pendente]')){for(const s of odoSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}toast('Todas as verificações foram respondidas.');return}
  });
  raiz.addEventListener('input',e=>{if(e.target.matches('[data-meta]'))UvisPadrao.atualiza()});
+ raiz.addEventListener('change',e=>{const c=e.target.closest('[data-odo-sala]');if(!c)return;const l=odoSalas(),t=c.dataset.odoSala,p=l.indexOf(t);if(c.checked&&p<0)l.push(t);if(!c.checked&&p>=0)l.splice(p,1);state.salasMarcadas=true;save();odoRedesenha()});
 }
 if(ODO_PADRAO)iniciaPadrao();
