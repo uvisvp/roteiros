@@ -9,7 +9,7 @@ const [nucleo,app,titulo,qs,setup]=process.argv.slice(2);
  const conta=()=>f.evaluate(RX=>{const re=new RegExp(RX);const s=new Set();document.querySelectorAll('button').forEach(b=>{if(b.offsetParent&&re.test(b.textContent.trim()))s.add(b.parentElement)});return s.size},RX);
  let telas=0,abertos=0,prob=0;const vistos=new Set();
  for(let tela=0;tela<140;tela++){telas++;
-  const alvos=await f.evaluate(()=>{const l=[...document.querySelectorAll('summary,[data-pop-orient],button.pop-o-btn')].filter(s=>s.offsetParent&&!s.closest('.uvs-previa')&&/saber mais|orienta|o que (é|verificar)|conceitos|^i$/i.test((s.textContent||'').trim()+' '+(s.getAttribute('title')||'')));l.forEach((s,i)=>s.dataset.smT=i);return l.map(s=>(s.textContent||'').trim().slice(0,50))});
+  const alvos=await f.evaluate(()=>{const l=[...document.querySelectorAll('summary,[data-pop-orient],button.pop-o-btn')].filter(s=>s.offsetParent&&!s.closest('.uvs-previa')&&/saber mais|orienta|o que (é|verificar)|conceitos|classe de risco|categorizadas|^i$/i.test((s.textContent||'').trim()+' '+(s.getAttribute('title')||'')));l.forEach((s,i)=>s.dataset.smT=i);return l.map(s=>(s.textContent||'').trim().slice(0,50))});
   const titulo=await f.evaluate(()=>(document.querySelector('[aria-current=step],[aria-current=page].lvl-chip,.dist-section-title strong,h2,h3')||{}).textContent||'').catch(()=>'');
   for(let i=0;i<alvos.length;i++){const antes=await conta();
    for(const vez of [1,2]){await f.evaluate(i=>{const s=document.querySelector('[data-sm-t="'+i+'"]');if(s){s.scrollIntoView({block:'center'});s.click()}},i);await p.waitForTimeout(300);
