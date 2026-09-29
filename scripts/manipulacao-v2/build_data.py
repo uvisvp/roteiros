@@ -43,7 +43,16 @@ NEW_IDS = {
     'Há POP do monitoramento com cronograma das análises (periodicidade e fórmulas previstas em cada período)?': 'n052',
     'As amostras seguem sistema de rodízio de manipuladores, fármacos e dosagens/concentrações?': 'n053',
     'A transformação de especialidade farmacêutica, quando ocorre, é excepcional (matéria-prima indisponível e sem especialidade na dose ou forma necessária) e justificada tecnicamente?': 'n051',
+    'A central de pesagem dispõe de balanças com capacidade e sensibilidade compatíveis com as quantidades pesadas?': 'n060',
+    'Cada laboratório possui pelo menos uma balança com capacidade e sensibilidade compatíveis com as quantidades pesadas?': 'n061',
+    'Possui pHmetro para a determinação de pH no controle de qualidade?': 'n062',
+    'Possui aparelho de ponto de fusão?': 'n063',
+    'Possui termômetro calibrado para a determinação do ponto de fusão?': 'n064',
+    'Possui picnômetro ou densímetro para a determinação de densidade?': 'n065',
+    'Possui vidrarias graduadas (provetas, pipetas, balões volumétricos) em quantidade suficiente?': 'n066',
 }
+# Perguntas que só aparecem conforme a resposta anterior (precedência)
+REQ_COND = {'n060': 'pesagem_central', 'n061': 'pesagem_lab'}
 # A pergunta "realiza venda remota?" virou seleção na Caracterização.
 DROP_TEXT = {'O estabelecimento realiza venda remota (solicitação por telefone, internet ou aplicativo)?'}
 
@@ -98,7 +107,8 @@ def requirement(p):
 ICONS = ['building', 'folder', 'people', 'clear', 'plan', 'lab', 'bottle', 'cold', 'note', 'shield', 'menu', 'truck']
 cards, labels = {}, dict(V1['conditionLabels'])
 labels.update({'copa': 'Possui copa / refeitório', 'descanso': 'Possui área de descanso', 'anexo3': 'Manipula substâncias do Anexo III',
-               'remota': 'Realiza venda remota', 'sbit': 'Manipula substâncias de baixo índice terapêutico (Grupo II)'})
+               'remota': 'Realiza venda remota', 'sbit': 'Manipula substâncias de baixo índice terapêutico (Grupo II)',
+               'pesagem_central': 'Possui central de pesagem', 'pesagem_lab': 'Não possui central de pesagem'})
 item_block = {}
 for b in estrutura.BLOCKS:
     n = str(b['n'])
@@ -135,6 +145,8 @@ for b in estrutura.BLOCKS:
         for rq in reqs:
             if rq.get('condition'):
                 rq['hint'], rq['condition'] = rq['condition'], None
+            if rq['id'] in REQ_COND:
+                rq['condition'] = REQ_COND[rq['id']]
         sections.append({'code': 'v2-' + it['code'], 'num': it['code'], 'title': it['title'], 'condition': None, 'hint': cond,
                          'item': iid, 'itemNum': it['code'], 'itemTitle': it['title'], 'requirements': reqs})
         if it['code'] == '10.6':
@@ -152,12 +164,14 @@ cards['1']['extraItems'] = [e for e in cards['1']['extraItems'] if e['c'].get('t
                             and not (e['into'] == 'i1.1' and e['c'].get('t') in ('fields', 'doc', 'chips'))]
 cards['1']['extraItems'].insert(1, {'fn': 'manV2', 'into': 'i1.2', 'antes': True, 'c': {'t': 'carac'}})
 
-NO_NA = {'i1.1', 'i1.2', 'i2.1', 'i2.3', 'i3.1'}
+NO_NA = {'i1.1', 'i1.2', 'i2.1', 'i2.3', 'i3.1', 'i6.3'}
 for c in cards.values():
     heads = [{'fn': 'manV2', 'into': s['item'], 'antes': True, 'c': {'t': 'itemhead', 'na': s['item'] not in NO_NA}} for s in c['sections']]
     tails = [{'fn': 'manV2', 'into': s['item'], 'c': {'t': 'preview'}} for s in c['sections']]
     c['extraItems'] = heads + c['extraItems'] + tails
-SITDATA = {k: [{'q': q, 'pre': PRE.get(k, ''), 'opts': [list(o) for o in opts] + [list(OUTRO)]} for q, opts in v] for k, v in SIT.items()}
+NO_OUTRO = {'i6.3'}          # pergunta de sim/não: sem “Outro”
+SIT_MULTI = {'i12.2'}        # várias formas podem coexistir
+SITDATA = {k: [dict({'q': q, 'pre': PRE.get(k, ''), 'opts': [list(o) for o in opts] + ([] if k in NO_OUTRO else [list(OUTRO)])}, **({'multi': True} if k in SIT_MULTI else {})) for q, opts in v] for k, v in SIT.items()}
 
 # Listas de irregularidades com ids estáveis
 def lst(items, prefix):
@@ -165,7 +179,8 @@ def lst(items, prefix):
 
 MON_DROP = {'Amostras sem rodízio de manipuladores, fármacos e dosagens', 'Sem POP da metodologia do monitoramento'}  # viraram perguntas n053 e n052  # virou o checklist de rodízio (11.5)
 LISTS = {'amb': lst(estrutura.G_AMB, 'a'), 'lab': lst(estrutura.G_LAB_EXTRA, 'l'), 'reg': lst(estrutura.REG_LAB, 'g'),
-         'eq': lst(estrutura.EQ_IRR, 'e'), 'presc': [x for x in lst(estrutura.PRESC_IRR, 'p') if x['t'] not in estrutura.PRESC_DROP],
+         'eq': [x for x in lst(estrutura.EQ_IRR, 'e') if not x['t'].startswith('Ausente')],
+         'regGel': lst(estrutura.REG_GEL, 'gg'), 'regSens': lst(estrutura.REG_SENS, 'gs'), 'presc': [x for x in lst(estrutura.PRESC_IRR, 'p') if x['t'] not in estrutura.PRESC_DROP],
          'rast': lst(estrutura.RAST_IRR, 'r'), 'mon': [x for x in lst(estrutura.MON_IRR, 'm') if x['t'] not in MON_DROP]}
 for k, _, it in estrutura.RECEITAS:
     LISTS[k] = lst(it, k)
@@ -176,6 +191,8 @@ for c in cards.values():
     for e in c['extraItems']:
         comp = e.get('c')
         if not comp:
+            continue
+        if comp['t'] == 'ncl' and comp.get('lists'):
             continue
         if comp['t'] == 'ncl' and comp.get('key'):
             comp.pop('items'); comp['lists'] = [comp['key']]; comp['kind'] = comp.pop('key')

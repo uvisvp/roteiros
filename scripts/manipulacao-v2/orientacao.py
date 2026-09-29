@@ -26,7 +26,7 @@ ORIENT = {
  'i5.9': 'A lavagem pode ocorrer em área própria ou dentro do laboratório, desde que em horário distinto da manipulação e com procedimento escrito (Anexo I, 4.9).',
  'i6.1': 'A sala de paramentação dá acesso às áreas de pesagem e manipulação. Dois ambientes (barreira sujo/limpo) são preferenciais, não obrigatórios.',
  'i6.2': 'O controle de qualidade pode ser sala própria, área identificada ou ser centralizado em outro estabelecimento da mesma empresa (RT 5.5). Confira equipamentos, calibração e registros das análises.',
- 'i6.3': 'A pesagem pode ser sala exclusiva, local específico dentro do laboratório ou central de pesagem que atende os laboratórios (Anexo I, 4.4 e 5.1.3). Em qualquer caso: exaustão e limpeza prévia das embalagens.',
+ 'i6.3': 'Equipamentos exigidos para a pesagem e para os ensaios mínimos de matéria-prima (Anexo I, 5.1.3 e 7.3.10: pH, ponto de fusão, densidade, volume e peso). A balança pode estar em cada laboratório ou em central de pesagem. A falta de equipamento obrigatório é capitulada aqui; nos laboratórios, os equipamentos são só descritos.',
  'i6.4': 'Laboratório de semissólidos e líquidos, totalmente segregado. A balança pode estar no laboratório ou em central de pesagem (Anexo I, 5.1.3). Confira a água purificada em uso (menos de 24 horas).',
  'i6.5': 'Laboratório de sólidos, totalmente segregado, com exaustão nas etapas com pós. A balança pode estar no laboratório ou em central de pesagem (Anexo I, 5.1.3).',
  'i7.1': 'Só se manipula substâncias de baixo índice terapêutico (Anexo II). Pontos críticos: dupla checagem na pesagem, perfil de dissolução, diluição geométrica e monitoramento.',
@@ -93,10 +93,9 @@ SIT = {
    ('sala', 'Sala própria', 'O controle de qualidade funciona em sala própria.', ''),
    ('area', 'Área identificada em outro ambiente', 'O controle de qualidade funciona em área identificada dentro de outro ambiente.', ''),
    ('central', 'Centralizado em outro estabelecimento da empresa', 'O controle de qualidade é centralizado em outro estabelecimento da mesma empresa.', 'Permitido pelo RT 5.5, sem prejuízo dos controles em processo nesta farmácia. Registre o endereço em Anotações; os equipamentos avaliados aqui são os do controle em processo.')])],
- 'i6.3': [('Como é feita a pesagem?', [
-   ('sala', 'Sala exclusiva de pesagem', 'A pesagem é feita em sala exclusiva.', ''),
-   ('local', 'Local específico dentro do laboratório', 'A pesagem é feita em local específico dentro do laboratório de manipulação.', ''),
-   ('central', 'Central de pesagem que atende os laboratórios', 'A pesagem é feita em central de pesagem que atende os laboratórios.', 'Admitida pelo Anexo I, 5.1.3. Avalie aqui as balanças da central; nos laboratórios de sólidos e semissólidos marque a balança como central.')])],
+ 'i6.3': [('A farmácia possui central de pesagem?', [
+   ('central', 'Sim — central de pesagem que atende os laboratórios', 'A farmácia possui central de pesagem que atende os laboratórios.', 'Admitida pelo Anexo I, 5.1.3. Responda abaixo sobre as balanças da central.'),
+   ('lab', 'Não — balança em cada laboratório', 'A farmácia não possui central de pesagem; as pesagens são feitas nos laboratórios.', 'Responda abaixo se cada laboratório possui balança compatível (Anexo I, 5.1.3; Anexo VII, 5.3).')])],
  'i6.4': [('Onde fica a balança usada neste laboratório?', [
    ('lab', 'No próprio laboratório', 'O laboratório dispõe de balança própria.', ''),
    ('central', 'Na central de pesagem (item 6.3)', 'As pesagens deste laboratório são feitas na central de pesagem.', 'Admitido pelo Anexo I, 5.1.3. A falta de balança aqui não é irregularidade; marque Não se aplica na pergunta sobre balança e avalie as balanças no item 6.3.')])],
@@ -109,7 +108,7 @@ for cab, nome in (('i7.3', 'hormônios'), ('i7.4', 'antibióticos'), ('i7.5', 'c
         ('ante', 'Sala dedicada com antecâmara', 'A manipulação de ' + nome + ' é feita em sala dedicada, com antecâmara.', ''),
         ('exc', 'Sala dedicada na exceção do item 2.7.3', 'A manipulação de ' + nome + ' é feita em sala dedicada, na exceção prevista no Anexo III, 2.7.3.', 'Confira se a solução adotada atende integralmente aos itens 2.7.3.1 e 2.7.3.2.')])]
 SIT['i12.2'] = [('Como é feita a entrega ao paciente?', [
-    ('balcao', 'Só retirada no balcão', 'As preparações são retiradas pelo paciente na farmácia.', ''),
+    ('balcao', 'Retirada no balcão', 'As preparações são retiradas pelo paciente na farmácia.', ''),
     ('propria', 'Entrega com veículo ou entregador próprio', 'A entrega é feita por meio próprio da farmácia.', ''),
     ('terceiro', 'Entrega por transportadora ou aplicativo', 'A entrega é feita por transportadora ou aplicativo contratado.', 'Confira o contrato e as condições de transporte, inclusive dos termossensíveis.')])]
 
