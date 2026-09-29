@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-11",
+  "versao": "20260929-12",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: os botões Fotos e Salvas ficam dentro do cabeçalho e sobem com ele; ao rolar a tela não aparecem mais por cima da aba Relatório."
+  "notas": "Manipulação: o item 11.1 Monitoramento mensal (e os demais do bloco 11) não abria quando havia análise preenchida com menos de 3 laudos ou resultado insatisfatório; o mesmo erro travava o relatório. Corrigido."
 }
