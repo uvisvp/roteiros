@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-09",
+  "versao": "20260929-10",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos: “Tipo de inspeção” (categorias do POP-O-SNVS-013: Boas Práticas, CTO, monitoramento de plano de ação, investigativa, outro) no item 1.1 Identificação das três trilhas; sai no relatório e é o mesmo campo do fluxo de dispositivos médicos/IVD."
+  "notas": "Distribuidora: caixas de orientação nos itens — classes de desvio de qualidade (POP-O-SNVS-023 rev. 6, Anexo I) e NCs previamente categorizadas (POP-O-SNVS-032, Anexo I); pergunta “Há produto com desvio de qualidade ou falsificação?” nos itens com Não cumpre, que prepara o alerta rápido com prazo de 72 h; painel único de alerta rápido na aba Fluxo SNVS · POP 23, com um Anexo II por produto."
 }
