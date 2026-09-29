@@ -9,7 +9,7 @@ const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
 const root = path.join(__dirname, '..'), file = path.join(root, 'index.html');
 let {html, lz} = unpack(file);
-const APPS = ['drogaria', 'farmacia-manipulacao', 'distribuidoras-transportadoras', 'servicos-alimentacao-roteiro', 'produtos-correlatos', 'servicos-assistenciais'];
+const APPS = ['drogaria', 'farmacia-manipulacao', 'distribuidoras-transportadoras', 'servicos-alimentacao-roteiro', 'produtos-correlatos', 'servicos-assistenciais', 'odontologia'];
 const START = '<!--FOTOS_PDF_INICIO-->', END = '<!--FOTOS_PDF_FIM-->';
 const code = fs.readFileSync(path.join(root, 'relatorio-fotos.js'), 'utf8').replace(/<\/(script)/gi, '<\\/$1');
 const NOTA = "foto(s) registrada(s) na inspeção, emitida(s) em relatório fotográfico à parte (PDF), com a legenda do item do roteiro.";

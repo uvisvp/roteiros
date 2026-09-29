@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-16",
+  "versao": "20260929-17",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Varredura geral: Análise de produtos volta a analisar e gerar Word; manipulação (10.7) “Acrescentar matéria-prima” redesenha a tela; botão limpar sem seção aberta não dá erro (produtos, alimentos, odontologia, assistenciais); drogaria protegida contra bloco inexistente."
+  "notas": "Odontologia: foto em cada verificação (câmera ou galeria), guardada com a inspeção, e relatório fotográfico em PDF pelo botão Fotos do cabeçalho."
 }
