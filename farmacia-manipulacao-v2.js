@@ -184,14 +184,17 @@ function v2Mon(c){
   +['Periodicidade atendida','Rodízio de manipuladores, fármacos e dosagens','Laudos arquivados','Metodologia e especificação farmacopeica'].map((t,i)=>v2Check(b+'|chk|'+i,t)).join('')
   +'<div class="toolrow"><button type="button" class="read-btn" data-reader="laudo" data-target="'+esc('generic:mon:'+c.code)+'">📄 Ler laudo / OCR</button>'+v2Photo('mon',c.code,'Outros documentos',monItem+' · '+monTit+' · outros documentos')+'</div>',done<c.n);
 }
+/* CPF digitado ou colado sai no formato oficial 000.000.000-00. */
+function v2Cpf(x){const d=String(x||'').replace(/\D/g,'').slice(0,11);return d.length<4?d:d.length<7?d.slice(0,3)+'.'+d.slice(3):d.length<10?d.slice(0,3)+'.'+d.slice(3,6)+'.'+d.slice(6):d.slice(0,3)+'.'+d.slice(3,6)+'.'+d.slice(6,9)+'-'+d.slice(9)}
+document.addEventListener('input',e=>{const t=e.target;if(t&&t.dataset&&t.dataset.ident==='cpf'){const f=v2Cpf(t.value);if(f!==t.value)t.value=f}},true);
 function v2Ident(){
- const i=state.identity;
+ const i=state.identity;if(i.cpf&&/^\d{11}$/.test(String(i.cpf).replace(/\D/g,'')))i.cpf=v2Cpf(i.cpf);
  return `<div class="field-grid">
  ${charField("razao","Razão Social",i.razao,"text","span2")}${charField("fantasia","Nome Fantasia",i.fantasia)}
  ${charField("cnpj","CNPJ",i.cnpj)}<div class="field"><button class="btn" data-company>Buscar CNPJ na base Anvisa</button><button class="read-btn" data-reader="licenca" data-target="identity">📄 Licença / 📷 OCR</button></div>${charField("cmvs","Licença Sanitária / CMVS",i.cmvs)}
  ${charField("endereco","Endereço",i.endereco,"text","span2")}${charField("validade","Validade da licença",i.validade,"date")}
  ${charField("fone","Fone",i.fone)}${charField("email","E-mail",i.email)}${charField("horario","Horário de funcionamento",i.horario)}
- ${charField("rl","Responsável Legal",i.rl)}${charField("cpf","CPF",i.cpf)}${charField("rt","Responsável Técnico",i.rt)}
+ ${charField("rl","Responsável Legal",i.rl)}${charField("cpf","CPF do responsável legal",i.cpf).replace('<input ','<input inputmode="numeric" maxlength="14" placeholder="000.000.000-00" ')}${charField("rt","Responsável Técnico",i.rt)}
  ${charField("crf","CRF/SP",i.crf)}
  ${charField("atividades","Atividades licenciadas (licença sanitária)",i.atividades,"text","span2")}
  </div>${v2AtivHtml('afe','AFE — autorização de funcionamento')}${v2AtivHtml('ae','AE — autorização especial')}<div class="field-grid">
@@ -645,8 +648,8 @@ function openReader(type,target){
  const ocr=(target==='identity'||type==='licenca')?'licenca_sanitaria':MAN_OCR[target];
  if(ocr){OcrPadrao.ler(ocr,{onApply:(v,m)=>{
   if(ocr==='licenca_sanitaria'){const map={razao_social:'razao',nome_fantasia:'fantasia',cnpj:'cnpj',numero_cevs_ou_cmvs:'cmvs',endereco:'endereco',responsavel_legal:'rl',cpf_responsavel_legal:'cpf',responsavel_tecnico:'rt',numero_conselho_responsavel_tecnico:'crf',atividades_licenciadas:'atividades',afe:'afe'};
-   for(const[k,c]of Object.entries(map))if(v[k])state.identity[c]=v[k];if(v.validade)state.identity.validade=m.iso(v.validade)||v.validade;state.readings=state.readings||{};state.readings.identity={tipo:ocr,campos:v}}
-  else{manEvid(target,m,v);if(ocr==='certidao_regularidade_crf'){if(v.responsavel_tecnico&&!state.identity.rt)state.identity.rt=v.responsavel_tecnico;if(v.numero_conselho_responsavel_tecnico&&!state.identity.crf)state.identity.crf=v.numero_conselho_responsavel_tecnico}}
+   for(const[k,c]of Object.entries(map))if(v[k])state.identity[c]=v[k];if(state.identity.cpf)state.identity.cpf=v2Cpf(state.identity.cpf);if(v.validade)state.identity.validade=m.iso(v.validade)||v.validade;state.readings=state.readings||{};state.readings.identity={tipo:ocr,campos:v}}
+  else{manEvid(target,m,v);if(ocr==='certidao_regularidade_crf'){if(v.rotina&&!state.identity.horario)state.identity.horario=String(v.rotina).split(/\n+/).map(x=>x.trim()).filter(Boolean).join('; ');if(v.responsavel_tecnico&&!state.identity.rt)state.identity.rt=v.responsavel_tecnico;if(v.numero_conselho_responsavel_tecnico&&!state.identity.crf)state.identity.crf=v.numero_conselho_responsavel_tecnico}}
   manPronto()}});return}
  const ficha=type==='calibracao'?'calibracao':MAN_FICHA[target];
  if(ficha){OcrPadrao.ficha(ficha,{
