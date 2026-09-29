@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-12",
+  "versao": "20260929-13",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Manipulação: o item 11.1 Monitoramento mensal (e os demais do bloco 11) não abria quando havia análise preenchida com menos de 3 laudos ou resultado insatisfatório; o mesmo erro travava o relatório. Corrigido."
+  "notas": "Manipulação: um erro na prévia do relatório não trava mais o app — navegação, barras e demais telas continuam funcionando (era o que acontecia no aparelho com o monitoramento do bloco 11 preenchido pela metade, já corrigido na versão anterior)."
 }
