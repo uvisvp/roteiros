@@ -34,6 +34,9 @@
  /* camada de três níveis da casca (Odontologia, Alimentos, Produtos): o item é a etapa aberta */
  function itemN3(){var e=window.__n3estado;if(!e||!e.item)return null;var tela=[].filter.call(document.querySelectorAll('.n3-tela'),visivel)[0];if(!tela)return null;
   var h=tela.querySelector('h2,h3');return {chave:'n3:'+(e.bloco||'')+'|'+e.item,titulo:txt(h),alvo:tela}}
+ /* tela padrão (padrao-uvis.js): o item é a tela aberta */
+ function itemPadrao(){if(!window.UvisPadrao||!document.documentElement.classList.contains('pu-ativo'))return null;var n=UvisPadrao.estado();if(n.aba!=='roteiro'||!n.item)return null;var c=document.getElementById('pu-conteudo'),h=document.querySelector('.pu-cab-item');if(!c)return null;return {chave:'pu:'+n.secao+'|'+n.item,titulo:txt(h),alvo:c}}
+ function itemPadraoOuN3(){return itemPadrao()||itemN3()}
  var A={
   'drogaria':{
    ok:function(){return window.DrogariaAPI&&DrogariaAPI.report},
@@ -53,17 +56,17 @@
   'odontologia':{
    ok:function(){return typeof reportBlocks==='function'},
    linhas:function(){var o={};try{o=typeof opts==='function'?(opts().rep||{}):{}}catch(e){}return blocos(reportBlocks(o))},
-   item:itemN3
+   item:itemPadraoOuN3
   },
   'servicos-alimentacao-roteiro':{
    ok:function(){return typeof window.__uvsRelTexto==='function'},
    linhas:function(){return String(window.__uvsRelTexto()||'').split('\n').filter(function(l){return l.trim()}).map(function(l){return {x:limpa(l),h:!/^\s/.test(l)&&!/[:\]]/.test(l)}})},
-   item:itemN3
+   item:itemPadraoOuN3
   },
   'produtos-correlatos':{
    ok:function(){return typeof window.__uvsRelLinhas==='function'},
    linhas:function(){return window.__uvsRelLinhas()},
-   item:itemN3
+   item:itemPadraoOuN3
   },
   'servicos-assistenciais':{
    ok:function(){try{return typeof mark==='function'&&typeof status==='function'}catch(e){return false}},
@@ -71,9 +74,9 @@
     ['doc','rot'].forEach(function(k){(current[k]||[]).forEach(function(it,i){var st=mark(k,i);if(st)out.push({x:limpa(it.i)+' — '+status(k,st)+'. Base legal: '+limpa(it.l)})})});
     (current.inf||[]).forEach(function(it,i){if(mark('inf',i)==='SEL')out.push({x:'Infração selecionada: '+limpa(it.i)+' — '+limpa(it.l)})});return out},
    /* vários grupos podem estar abertos ao mesmo tempo: uma prévia por grupo aberto */
-   itens:function(){var sc=typeof scope==='function'?scope():'';return [].filter.call(document.querySelectorAll('#content section.group'),function(g){return !g.classList.contains('closed')&&visivel(g)}).map(function(g){
+   itens:function(){var pp=itemPadrao();if(pp)return [pp];var sc=typeof scope==='function'?scope():'';return [].filter.call(document.querySelectorAll('#content section.group'),function(g){return !g.classList.contains('closed')&&visivel(g)}).map(function(g){
      return {chave:sc+'|'+(typeof tab!=='undefined'?tab:'')+'|'+(g.dataset.groupSection||txt(g.querySelector('h3'))),titulo:g.dataset.groupSection||'',alvo:g.querySelector('.items')||g}})},
-   chaveDe:function(t){var g=t&&t.closest&&t.closest('#content section.group');if(!g)return null;var sc=typeof scope==='function'?scope():'';return sc+'|'+(typeof tab!=='undefined'?tab:'')+'|'+(g.dataset.groupSection||txt(g.querySelector('h3')))}
+   chaveDe:function(t){var pp=itemPadrao();if(pp)return pp.chave;var g=t&&t.closest&&t.closest('#content section.group');if(!g)return null;var sc=typeof scope==='function'?scope():'';return sc+'|'+(typeof tab!=='undefined'?tab:'')+'|'+(g.dataset.groupSection||txt(g.querySelector('h3')))}
   }
  };
  window.UvsPreviaAdaptadores=A;

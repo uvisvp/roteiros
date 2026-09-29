@@ -26,10 +26,10 @@
   'drogaria':{nome:'Drogaria',nucleo:'Medicamentos',ls:['drogaria-inspecao-v4','drogaria-inspecao-v3','uvis-previa-drogaria'],fotos:['drogaria-'],fotosDb:{db:'drogaria-fotos-evidencia-v1',store:'photos',key:'key'}},
   'farmacia-manipulacao':{nome:'Farmácia com Manipulação',nucleo:'Medicamentos',ls:['uvisvp_manipulacao_v1'],fotos:['manipulacao-']},
   'distribuidoras-transportadoras':{nome:'Distribuidora / transportadora',nucleo:'Medicamentos',ls:['uvis-dist-bpdiat-v2','dist-anexo2-campos-v1','distribuidoras-transportadoras-v2','uvis-previa-distribuidoras-transportadoras'],fotos:['dist-']},
-  'servicos-alimentacao-roteiro':{nome:'Inspeção do estabelecimento',nucleo:'Alimentos',ls:['uvis-alimentos-estab-v1','uvis-previa-servicos-alimentacao-roteiro'],fotos:[]},
-  'produtos-correlatos':{nome:'Produtos e correlatos',nucleo:'Produtos',ls:['uvis-produtos-v2','uvis-produtos-pop13-v1','uvis-produtos-pop13-capa-v1','uvis-produtos-pop13-report-v1','uvis-previa-produtos-correlatos'],fotos:['uvis-produtos'],barra:'header.app-header .p-acoes'},
-  'servicos-assistenciais':{nome:'Serviços assistenciais',nucleo:'Serviços assistenciais',ls:['uvis.servicos-assistenciais.v12','uvis-previa-servicos-assistenciais'],fotos:[],fotosDb:{db:'uvis-assistenciais-fotos-v1',store:'photos',key:'key',indice:'scope'},barra:'.topbar .top-actions',modalidade:true},
-  'odontologia':{nome:'Odontologia',nucleo:'Odontologia',ls:['odonto-rdc1002-v1','uvis-previa-odontologia'],fotos:[]}
+  'servicos-alimentacao-roteiro':{nome:'Inspeção do estabelecimento',nucleo:'Alimentos',ls:['uvis-alimentos-estab-v1','uvis-previa-servicos-alimentacao-roteiro'],fotos:[],barra:'.pu-header .pu-acoes'},
+  'produtos-correlatos':{nome:'Produtos e correlatos',nucleo:'Produtos',ls:['uvis-produtos-v2','uvis-produtos-pop13-v1','uvis-produtos-pop13-capa-v1','uvis-produtos-pop13-report-v1','uvis-previa-produtos-correlatos'],fotos:['uvis-produtos'],barra:'.pu-header .pu-acoes'},
+  'servicos-assistenciais':{nome:'Serviços assistenciais',nucleo:'Serviços assistenciais',ls:['uvis.servicos-assistenciais.v12','uvis-previa-servicos-assistenciais'],fotos:[],fotosDb:{db:'uvis-assistenciais-fotos-v1',store:'photos',key:'key',indice:'scope'},barra:'.pu-header .pu-acoes,.topbar .top-actions',modalidade:true},
+  'odontologia':{nome:'Odontologia',nucleo:'Odontologia',ls:['odonto-rdc1002-v1','uvis-previa-odontologia'],fotos:[],barra:'.pu-header .pu-acoes'}
  };
  function $(id){return document.getElementById(id)}
  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -65,7 +65,12 @@
   function busca(o,d){if(!o||typeof o!=='object'||d>4)return;for(var i=0;i<pri.length&&!achado;i++){var v=o[pri[i]];if(typeof v==='string'&&v.trim())achado=v.trim()}if(!cnpj&&typeof o.cnpj==='string'&&o.cnpj.trim())cnpj=o.cnpj.trim();for(var k in o)if(!achado&&o[k]&&typeof o[k]==='object')busca(o[k],d+1)}
   Object.keys(r.ls).forEach(function(k){try{busca(JSON.parse(r.ls[k]),0)}catch(e){}});return achado||(cnpj?'CNPJ '+cnpj:'')}
  /* Há conteúdo de inspeção? Fotos, nome do estabelecimento ou alguma resposta marcada. */
- function temConteudo(r){if(r.fotos.length||(r.fotosDb&&r.fotosDb.length))return true;if(!Object.keys(r.ls).length)return false;if(nomeDe(r))return true;
+ /* “branco” de cada roteiro: estado que o próprio app grava ao abrir vazio (a distribuidora,
+    por exemplo, grava marcas internas de migração). Igual ao branco = sem inspeção em andamento. */
+ function chaveBranco(app,mod){return 'uvis-branco-'+app+(mod?'|'+mod:'')}
+ function anotaBranco(app,mod){setTimeout(function(){retrato(app,mod).then(function(r){if(r.fotos.length||(r.fotosDb&&r.fotosDb.length))return;try{localStorage.setItem(chaveBranco(app,mod),JSON.stringify(r.ls))}catch(e){}}).catch(function(){})},3500)}
+ function ehBranco(r,app){if(!app)return false;try{var b=localStorage.getItem(chaveBranco(app,r.mod||''));return b!=null&&b===JSON.stringify(r.ls)}catch(e){return false}}
+ function temConteudo(r,app){if(r.fotos.length||(r.fotosDb&&r.fotosDb.length))return true;if(ehBranco(r,app))return false;if(!Object.keys(r.ls).length)return false;if(nomeDe(r))return true;
   return Object.keys(r.ls).some(function(k){return /"(status|resposta|answer|valor)"\s*:\s*"(C|NC|NA|sim|nao|nsa|conforme|[^"]{2,})"/i.test(r.ls[k])||/"(responses|answers|respostas|a)"\s*:\s*\{\s*"/.test(r.ls[k])||/":"(C|NC|NA|yes|no|na)"/.test(r.ls[k])})}
  function limpaAtual(app,mod){if(mod)return limpaMod(app,mod);var c=CFG[app];c.ls.forEach(function(k){localStorage.removeItem(k)});return fotosDe(app).then(function(f){if(!f.length)return;return tx(EVI[0],EVI[1],EVI[2],'readwrite',function(s){f.forEach(function(x){s.delete(x.key)})})}).then(function(){return limpaFotosDb(app)})}
  function limpaMod(app,mod){CFG[app].ls.forEach(function(k){var v=localStorage.getItem(k);if(v==null)return;var o=lsObj(v);Object.keys(o).forEach(function(x){if(daMod(x,mod))delete o[x]});localStorage.setItem(k,JSON.stringify(o))});
@@ -76,7 +81,7 @@
  function appAberto(){var t=$('tela-app');return t&&t.classList.contains('on')?t.dataset.uvisApp:''}
  function descarrega(){var q=$('quadro');if(!q)return Promise.resolve();try{q.removeAttribute('srcdoc');q.src='about:blank'}catch(e){}return espera(150)}
  /* reabre na mesma trilha em que foi salva (Produtos tem três trilhas no mesmo roteiro) */
- function reabre(app,abrir,mod){var c=CFG[app],a=abrir||{};if(window.__cascaAbrirRoteiro){window.__cascaAbrirRoteiro(c.nucleo,app,a.titulo||c.nome,a.qs||'');abreMod(mod)}else location.reload()}
+ function reabre(app,abrir,mod){var c=CFG[app],a=abrir||{};if(c.modalidade&&mod&&!/(^|&)servico=/.test(a.qs||''))a={titulo:a.titulo,qs:'servico='+String(mod).split('|')[0]};if(window.__cascaAbrirRoteiro){window.__cascaAbrirRoteiro(c.nucleo,app,a.titulo||c.nome,a.qs||'');abreMod(mod)}else location.reload()}
  function atual(app){var a=window.__cascaAtual;return a&&a.app===app?{titulo:a.titulo,qs:a.qs}:null}
  function dataBR(iso){try{var d=new Date(iso);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch(e){return iso}}
  function novoId(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -88,18 +93,18 @@
   var voltar=appAberto()===app,ab=atual(app),reabre0=reabre;reabre=function(x){reabre0(x,ab,mod)};
   var devolve=function(v){reabre=reabre0;return v};
   return descarrega().then(function(){return Promise.all([retrato(app,mod),salvas()])}).then(function(v){var r=v[0],todas=v[1].filter(function(x){return x.app===app&&(x.mod||'')===(mod||'')});
-   if(!temConteudo(r)){aviso('Não há dados nesta inspeção para salvar.');if(voltar)reabre(app);return}
+   if(!temConteudo(r,app)){aviso('Não há dados nesta inspeção para salvar.');if(voltar)reabre(app);return}
    if(todas.length>=LIMITE){aviso('Limite de '+LIMITE+' inspeções salvas '+(mod?'nesta modalidade':'neste roteiro')+'. Retome ou exclua uma salva antes.');if(voltar)reabre(app);return}
    var nome=prompt('Nome para identificar esta inspeção salva:',nomeDe(r)||'');if(nome===null){if(voltar)reabre(app);return}
-   return poeSalva(registro(app,r,nome.trim(),modNome)).then(function(){return limpaAtual(app,mod)}).then(function(){fecha();reabre(app);aviso('Inspeção salva no aparelho. '+(mod?'A modalidade':'O roteiro')+' está em branco para a próxima.')})
+   return poeSalva(registro(app,r,nome.trim(),modNome)).then(function(){return limpaAtual(app,mod)}).then(function(){fecha();reabre(app);anotaBranco(app,mod);aviso('Inspeção salva no aparelho. '+(mod?'A modalidade':'O roteiro')+' está em branco para a próxima.')})
   }).catch(function(e){aviso('Não foi possível salvar: '+(e&&e.message||e));if(voltar)reabre(app)}).then(devolve,devolve);
  }
  function retomar(id,modoAtual){
   return pegaSalva(id).then(function(s){if(!s)return;var app=s.app,mod=s.mod||'';
    return descarrega().then(function(){return retrato(app,mod)}).then(function(atual){
-    if(temConteudo(atual)&&!modoAtual){fecha();escolha(s,atual);return}
+    if(temConteudo(atual,app)&&!modoAtual){fecha();escolha(s,atual);return}
     var passo=Promise.resolve();
-    if(modoAtual==='guardar'&&temConteudo(atual))passo=poeSalva(registro(app,atual,'',s.modNome));
+    if(modoAtual==='guardar'&&temConteudo(atual,app))passo=poeSalva(registro(app,atual,'',s.modNome));
     return passo.then(function(){return limpaAtual(app,mod)}).then(function(){return gravaAtual(app,s)}).then(function(){return tiraSalva(id)}).then(function(){fecha();reabre(app,s.abrir,mod);aviso('Inspeção retomada: '+s.nome+'.')});
    })}).catch(function(e){aviso('Não foi possível retomar: '+(e&&e.message||e))});
  }
@@ -108,11 +113,11 @@
  /* apaga a inspeção em andamento (respostas e fotos); as salvas não são tocadas */
  function apagarTudo(app,mod,modNome){
   if(!confirm('Apagar tudo '+(mod?'da modalidade '+(modNome||mod):'deste roteiro')+'? Respostas e fotos da inspeção em andamento serão apagadas deste aparelho. As inspeções salvas não são afetadas. Não há como desfazer.'))return Promise.resolve();
-  var ab=atual(app);return descarrega().then(function(){return limpaAtual(app,mod)}).then(function(){fecha();reabre(app,ab,mod);aviso((mod?'Modalidade':'Roteiro')+' em branco: respostas e fotos apagadas.')}).catch(function(e){aviso('Não foi possível apagar: '+(e&&e.message||e));reabre(app,ab,mod)});
+  var ab=atual(app);return descarrega().then(function(){return limpaAtual(app,mod)}).then(function(){fecha();reabre(app,ab,mod);anotaBranco(app,mod);aviso((mod?'Modalidade':'Roteiro')+' em branco: respostas e fotos apagadas.')}).catch(function(e){aviso('Não foi possível apagar: '+(e&&e.message||e));reabre(app,ab,mod)});
  }
  /* chamado de dentro do roteiro pelo botão “Nova inspeção” do próprio app: apaga as fotos e a prévia */
  function novaInspecao(app){if(!CFG[app])return Promise.resolve();CFG[app].ls.forEach(function(k){if(k.indexOf('uvis-previa-')===0)localStorage.removeItem(k)});
-  return fotosDe(app).then(function(f){if(!f.length)return;return tx(EVI[0],EVI[1],EVI[2],'readwrite',function(s){f.forEach(function(x){s.delete(x.key)})})}).then(function(){return limpaFotosDb(app)})}
+  return fotosDe(app).then(function(f){if(!f.length)return;return tx(EVI[0],EVI[1],EVI[2],'readwrite',function(s){f.forEach(function(x){s.delete(x.key)})})}).then(function(){return limpaFotosDb(app)}).then(function(){anotaBranco(app,'')})}
 
  /* ---------- exportar / importar (arquivo .json) ---------- */
  var FORMATO='uvis-inspecoes-salvas';

@@ -1,6 +1,6 @@
 {
-  "versao": "20260928-05",
+  "versao": "20260929-01",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria: relatório e prévia passam a trazer todos os itens respondidos — resíduos (armazenamento, abrigos temporário e externo, conteúdo do PGRSS), serviços farmacêuticos, área física (planilha, organização, genéricos, MIPs, termohigrômetro, DML, armários), documentos da qualidade, venda remota, transporte, SNGPC e amostragem de receitas."
+  "notas": "Produtos, Alimentos, Odontologia e Serviços assistenciais passam a usar a mesma navegação da drogaria: seções, itens numerados e tela do item, com ← e → no rodapé, voltar do celular e layout ajustado para celular, tablet e computador. Respostas Cumpre / Não cumpre / Não se aplica. O perfil não esconde mais verificações: o que não se aplica é marcado como Não se aplica. Serviços assistenciais: cada modalidade abre direto pelo cartão do núcleo."
 }

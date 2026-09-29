@@ -31,9 +31,7 @@ trocaTodas("const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:che
   "const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked');", 'hasDisp');
 const START = '<!--PRODUTOS_NAV_INICIO-->', END = '<!--PRODUTOS_NAV_FIM-->';
 const i0 = app.indexOf(START); if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
-const code = fs.readFileSync(path.join(root, 'produtos-navegacao.js'), 'utf8').replace(/<\/(script)/gi, '<\\/$1');
-const k = app.lastIndexOf('</body>'); if (k < 0) throw Error('</body> não localizado');
-app = app.slice(0, k) + START + '<script>' + code + '</script>' + END + app.slice(k);
+/* produtos-navegacao.js foi substituído pela tela padrão (produtos-padrao.inc.js, scripts/repack-padrao.cjs): só remove o bloco antigo. */
 const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip');
 html = html.replace(re, () => m[1] + enc + m[3]);
 /* Inventário: o roteiro-guiado acrescentava, para Produtos, uma “infração” por item do
