@@ -139,5 +139,17 @@ html = troca(html, "back.onclick=function(){if(drgItem){abrir('');return}var ids
 html = troca(html, "back.onclick=function(){if(state.activeSection){salvarTela(null)}else{state.activeCard=null;save();renderITab()}};",
   "back.onclick=function(){if(state.activeSection&&idx>0){salvarTela(lista[idx-1].id);return}if(card>1){var l2=itens(card-1);state.activeCard=card-1;state.activeSection=l2.length?l2[l2.length-1].id:null;save();renderITab();window.scrollTo(0,0);return}if(state.activeSection){salvarTela(null)}else{state.activeCard=null;save();renderITab()}};", 'voltar da distribuidora');
 
+/* 13 — Análise de produtos: line() era chamada e nunca definida — “Analisar regularização” e
+   “Gerar relatório Word” paravam com erro. */
+{ const id = 'app--analise-produtos'; let ap = lerBloco(id);
+  ap = troca(ap, 'function analiseData(){', "function line(t,titulo,texto){var ico={ok:'✓',warn:'!',bad:'✕',info:'i'}[t]||'•',rot={ok:'sem alerta',warn:'conferir',bad:'possível irregularidade',info:'informação'}[t]||'';return '<div class=\"line '+t+'\"><span class=\"ico\">'+ico+'</span><div><strong>'+esc(titulo)+'</strong><small>'+esc(texto)+'</small></div><span class=\"tag '+t+'\">'+rot+'</span></div>'}\nfunction analiseData(){", 'line() da análise de produtos');
+  bloco(id, ap); }
+
+/* 14 — Drogaria: pedido para abrir bloco que não existe mais (o 3 foi fundido) volta à grade
+   em vez de parar a navegação. */
+{ const id = 'app--drogaria'; let dg = lerBloco(id);
+  dg = troca(dg, "function changeView(t,c=0){save();tab=t;active=c;", "function changeView(t,c=0){if(c&&!catalog.cards.some(x=>x.id===Number(c)))c=0;save();tab=t;active=c;", 'bloco inexistente na drogaria');
+  bloco(id, dg); }
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
