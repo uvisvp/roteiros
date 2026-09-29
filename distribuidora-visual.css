@@ -20,7 +20,6 @@ html[data-uvis-app="distribuidoras-transportadoras"] .dock #distClear{color:#a23
 html[data-uvis-app="distribuidoras-transportadoras"] .dock{background:#fff!important;border-top:1px solid #dfe6ea!important}
 /* botões Fotos e Salvas ficam fixos no canto do cabeçalho: o aviso “Salvo agora” não passa por baixo deles */
 @media(min-width:561px){html[data-uvis-app="distribuidoras-transportadoras"] .topin #saveStatus{margin-right:215px!important}}
-/* barra interna: “Roteiro” já é a aba principal; ficam Inventário de infrações e Normas, centralizados */
-html[data-uvis-app="distribuidoras-transportadoras"] #inspectionTabs [data-itab="roteiro"]{display:none!important}
-html[data-uvis-app="distribuidoras-transportadoras"] #inspectionTabs{display:flex!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap}
-html[data-uvis-app="distribuidoras-transportadoras"] #inspectionTabs .tab{min-height:44px!important;padding:8px 18px!important;font-size:.9rem!important}
+/* barra interna (Inventário de infrações / Normas) removida: o inventário repete a aba
+   Não conformidades e cada item do roteiro já traz a fonte oficial. */
+html[data-uvis-app="distribuidoras-transportadoras"] #inspectionTabs{display:none!important}

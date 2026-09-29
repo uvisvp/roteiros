@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-07",
+  "versao": "20260929-08",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Drogaria: no relatório, o conteúdo do PGRSS sai em um parágrafo só — “O PGRSS contempla: …” e “O PGRSS não contempla: …”; itens marcados como Não se aplica não aparecem."
+  "notas": "Distribuidora: sai a barra “Inventário de infrações / Normas” do roteiro; as não conformidades ficam na aba própria e cada item já traz a fonte oficial."
 }
