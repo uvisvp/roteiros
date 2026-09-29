@@ -132,5 +132,12 @@ html = troca(html, "    if(app==='servicos-alimentacao-roteiro'){\n      cab += 
     'function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){} try{updateSummary();}catch(e){console.error(e)} try{renderPreview();}catch(e){console.error(e)}}', 'save da manipulação');
   bloco(id, fm); }
 
+/* 12 — Drogaria e distribuidora: ← volta ao item anterior (no primeiro item do bloco, ao último
+   item do bloco anterior), como → já avança item a item. */
+html = troca(html, "back.onclick=function(){if(drgItem){abrir('');return}var ids=catalog.cards.filter(function(c){return E.cardVisible(c.id,state)}).map(function(c){return c.id}),i=ids.indexOf(active);drgItem='';changeView('roteiro',i>0?ids[i-1]:0)};",
+  "back.onclick=function(){if(drgItem&&idx>0){abrir(itens[idx-1].id);return}var ids=catalog.cards.filter(function(c){return E.cardVisible(c.id,state)}).map(function(c){return c.id}),i=ids.indexOf(active);drgItem='';if(i>0){changeView('roteiro',ids[i-1]);var l2=descritores();if(l2.length>1){drgItem=l2[l2.length-1].id;render();window.scrollTo({top:0,behavior:'instant'})}return}changeView('roteiro',0)};", 'voltar da drogaria');
+html = troca(html, "back.onclick=function(){if(state.activeSection){salvarTela(null)}else{state.activeCard=null;save();renderITab()}};",
+  "back.onclick=function(){if(state.activeSection&&idx>0){salvarTela(lista[idx-1].id);return}if(card>1){var l2=itens(card-1);state.activeCard=card-1;state.activeSection=l2.length?l2[l2.length-1].id:null;save();renderITab();window.scrollTo(0,0);return}if(state.activeSection){salvarTela(null)}else{state.activeCard=null;save();renderITab()}};", 'voltar da distribuidora');
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
