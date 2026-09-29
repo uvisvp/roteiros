@@ -80,7 +80,13 @@ REG_LAB = [
     ['Sem registro de troca de filtros do exaustor', 'RDC 67/2007 · Anexo I · 5.3'],
     ['Sem registro de temperatura e umidade da sala', 'RDC 67/2007 · Anexo I · 8.8'],
     ['Sem registro de verificação diária da balança', 'RDC 67/2007 · Anexo I · 5.2.2'],
+]
+REG_GEL = [
     ['Sem registro de temperatura da geladeira', 'RDC 67/2007 · Anexo I · 7.4.3'],
+    ['Sem registro de limpeza da geladeira', 'RDC 67/2007 · Anexo I · 6.1'],
+]
+REG_SENS = [
+    ['Sem planilha de aferição do diferencial de pressão da sala/cabine', 'RDC 67/2007 · Anexo III · 2.7.2'],
 ]
 
 
@@ -88,8 +94,10 @@ def irreg(extra=None, title='Irregularidades gerais do ambiente'):
     return {'t': 'ncl', 'title': title, 'items': G_AMB + (extra or []), 'sub': 'Marque só o que foi constatado neste ambiente. O que não for marcado não entra no relatório.'}
 
 
-def regs():
-    return {'t': 'ncl', 'title': 'Registros e planilhas do laboratório', 'items': REG_LAB, 'sub': 'Registros que deveriam estar disponíveis neste laboratório.'}
+def regs(*extra, base=True):
+    """Registros do ambiente. extra: 'gel' (há geladeira), 'sens' (sala de sensibilizantes)."""
+    return {'t': 'ncl', 'title': 'Registros e planilhas do laboratório' if base else 'Registros e planilhas', 'lists': (['reg'] if base else []) + ['reg' + x.capitalize() for x in extra],
+            'kind': 'reg', 'sub': 'Registros que deveriam estar disponíveis neste ambiente. Marque só o que não foi apresentado.'}
 
 
 EQ_IRR = [
@@ -264,6 +272,7 @@ block('Identificação e caracterização', 'Dados, autorizações e perfil das 
         note('As três perguntas abaixo eram o item 1.2 “AFE / AE”. Ficam aqui, logo depois dos dados de AFE/AE, sem tela própria.', 'mov'),
         q('r001'), q('r002'), q('r003'),
         q('r175', text='Apresentou Certidão de Regularidade Técnica do CRF vigente, em nome do responsável técnico?'),
+        q('r186', text='Apresentou o cadastro de gerador de resíduos no SP Regula (AMLURB)? Registre o número.'),
         obs(),
     ], origin='Antigo 1.1 renomeado; recebe as perguntas do antigo 1.2 AFE/AE.'),
     item('1.2', 'Caracterização', [
@@ -296,7 +305,6 @@ block('Documentação', 'Documentos, POPs, treinamento e planilhas', [
         chk('mbpm', 'Manual de Boas Práticas de Manipulação — conteúdo', MBPM, 'Confira no Manual. Um ponto ausente com citação gera irregularidade própria.'),
         q('r183', text='Apresentou PGRSS compatível com as atividades e os resíduos gerados?', refs=['RDC 67/2007 · RT · 5.2', 'RDC 222/2018 · art. 5º']),
         chk('pgrss', 'Conteúdo do PGRSS', PGRSS, 'Confira no documento. Um ponto ausente gera irregularidade própria, com o inciso do art. 6º.'),
-        q('r186', text='Apresentou cadastro de gerador de resíduos (SPRegula)? Registre o número.'),
         obs(),
     ], origin='Antigo 6.1 + documentos de resíduos'),
     item('2.2', 'Procedimentos Operacionais Padrão', [
@@ -385,23 +393,33 @@ block('Áreas físicas', 'Dispensação, apoio, almoxarifado e lavagem', [
         q('r078'), q('r079'), q('r080'), q('r081'), q('r082'), q('r252'), q('r083'), q('r084'), q('r085'), q('r086'),
         q('r187'), q('r254'), q('r087'), q('r090'), q('r091'),
         equip(['Geladeira', 'Termo-higrômetro']),
-        irreg(), obs()], origin='Antigo 4.7 (Laboratórios)'),
+        irreg(), regs('gel', base=False), obs()], origin='Antigo 4.7 (Laboratórios)'),
     item('5.9', 'Área de lavagem', [q('r092'), q('r093'), chk('lav', 'Área de lavagem — condições', LAV), irreg(), obs()], origin='Antigo 4.8 (Laboratórios)'),
 ])
 
 # ───────────────────────── 6 LABORATÓRIOS
 LAB_CQ = ['Balança analítica', 'pHmetro', 'Aparelho de ponto de fusão', 'Pesos padrão', 'Picnômetro / densímetro', 'Estufa', 'Vidrarias graduadas', 'Termo-higrômetro', 'Capela de exaustão']
-LAB_SOL = ['Balança analítica', 'Balança semianalítica', 'Encapsuladora', 'Termo-higrômetro', 'Sistema de exaustão / capela', 'Utensílios (espátulas, gral e pistilo)', 'Vidrarias graduadas']
-LAB_SEMI = ['Balança semianalítica', 'Agitador / misturador', 'Chapa aquecedora / banho-maria', 'pHmetro', 'Geladeira', 'Termo-higrômetro', 'Vidrarias graduadas', 'Utensílios (espátulas, gral e pistilo)']
+LAB_SOL = ['Balança analítica', 'Balança semianalítica', 'Encapsuladora', 'Termo-higrômetro', 'Sistema de exaustão / capela', 'Utensílios', 'Vidrarias graduadas']
+LAB_SEMI = ['Balança semianalítica', 'Agitador / misturador', 'Chapa aquecedora / banho-maria', 'pHmetro', 'Geladeira', 'Termo-higrômetro', 'Vidrarias graduadas', 'Utensílios']
 block('Laboratórios', 'Paramentação, CQ, pesagem e salas de manipulação', [
     item('6.1', 'Paramentação', [q('r060'), q('r061'), q('r062'), irreg(), obs()], origin='Saiu de Áreas físicas (antigo 4.5)'),
     item('6.2', 'Controle de qualidade', [q('r067'), q('r068'), q('r069'), q('r070'), q('r071'), q('r072'), q('r073'), q('r074'), q('r075'), q('r076'), q('r077'),
                                           equip(LAB_CQ), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.6'),
-    item('6.3', 'Pesagem', [q('r088'), q('r089'), equip(['Balança analítica', 'Balança semianalítica', 'Sistema de exaustão']), irreg(G_LAB_EXTRA), regs(), obs()], origin='Perguntas que estavam no Almoxarifado'),
+    item('6.3', 'Equipamentos obrigatórios', [
+        note('Aqui a falta de equipamento obrigatório gera irregularidade. Nos laboratórios, a lista de equipamentos é só descritiva. Responda primeiro se há central de pesagem.', 'info'),
+        nq('A central de pesagem dispõe de balanças com capacidade e sensibilidade compatíveis com as quantidades pesadas?', ['RDC 67/2007 · Anexo I · 5.1.3', 'RDC 67/2007 · Anexo VII · 5.6']),
+        nq('Cada laboratório possui pelo menos uma balança com capacidade e sensibilidade compatíveis com as quantidades pesadas?', ['RDC 67/2007 · Anexo I · 5.1.3', 'RDC 67/2007 · Anexo VII · 5.3']),
+        q('r088'), q('r089'),
+        nq('Possui pHmetro para a determinação de pH no controle de qualidade?', ['RDC 67/2007 · Anexo I · 7.3.10', 'RDC 67/2007 · Anexo I · 5.1.1']),
+        nq('Possui aparelho de ponto de fusão?', ['RDC 67/2007 · Anexo I · 7.3.10', 'RDC 67/2007 · Anexo I · 5.1.1']),
+        nq('Possui termômetro calibrado para a determinação do ponto de fusão?', ['RDC 67/2007 · Anexo I · 7.3.10', 'RDC 67/2007 · Anexo I · 5.2.1']),
+        nq('Possui picnômetro ou densímetro para a determinação de densidade?', ['RDC 67/2007 · Anexo I · 7.3.10', 'RDC 67/2007 · Anexo I · 5.1.1']),
+        nq('Possui vidrarias graduadas (provetas, pipetas, balões volumétricos) em quantidade suficiente?', ['RDC 67/2007 · Anexo I · 5.1.1']),
+        equip(['Balança analítica', 'Balança semianalítica', 'Sistema de exaustão']), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 6.3 Pesagem'),
     item('6.4', 'Semissólidos e líquidos', [q('r095'), q('r096'), q('r097'), q('r098'), q('r099'), q('r100'), q('r101'),
-                                            equip(LAB_SEMI), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.9', cond='Semissólidas ou líquidas'),
+                                            equip(LAB_SEMI), irreg(G_LAB_EXTRA), regs('gel'), obs()], origin='Antigo 4.9', cond='Semissólidas ou líquidas'),
     item('6.5', 'Sólidos', [q('r102'), q('r103'), q('r104'), q('r105'), q('r106'), q('r107'), q('r108'), q('r110'), q('r111'), q('r112'), q('r243'),
-                            note('r109 (peso médio com DP e CV) foi para Rastreabilidade e CQ, junto com os ensaios do item 9.1.1.', 'mov'),
+                            note('r109 (peso médio com desvio padrão e coeficiente de variação) foi para Rastreabilidade e CQ, junto com os ensaios do item 9.1.1.', 'mov'),
                             equip(LAB_SOL), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.10', cond='Sólidas'),
 ])
 
@@ -410,9 +428,9 @@ SENS_EQ = ['Balança de uso exclusivo', 'Manômetro de diferencial de pressão',
 block('Baixo índice terapêutico, sensibilizantes e homeopatia', 'Anexos II, III e V da RDC 67/2007', [
     item('7.1', 'Substâncias de baixo índice terapêutico', [q(r) for r in ['r156', 'r157', 'r158', 'r159', 'r160', 'r161', 'r162', 'r163', 'r164', 'r165', 'r166', 'r167', 'r168', 'r169', 'r170', 'r171', 'r172', 'r173', 'r174']] + [irreg(G_LAB_EXTRA), obs()], origin='Antigo 4.13 (sem alteração de perguntas)', cond='Grupo II'),
     item('7.2', 'Sensibilizantes — requisitos comuns', [q(r) for r in ['r119', 'r120', 'r121', 'r122', 'r123', 'r124', 'r125', 'r126']] + [obs()], origin='Antigo 4.11', cond='Grupo III'),
-    item('7.3', 'Cabine de hormônios', [q(r) for r in ['r127', 'r128', 'r129', 'r130', 'r131', 'r132', 'r133']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.11.1', cond='Hormônios'),
-    item('7.4', 'Cabine de antibióticos', [q(r) for r in ['r134', 'r135', 'r136', 'r137', 'r138', 'r139', 'r140']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.11.2', cond='Antibióticos'),
-    item('7.5', 'Cabine de citostáticos', [q(r) for r in ['r141', 'r142', 'r143', 'r144', 'r145', 'r146', 'r147']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs(), obs()], origin='Antigo 4.11.3', cond='Citostáticos'),
+    item('7.3', 'Cabine de hormônios', [q(r) for r in ['r127', 'r128', 'r129', 'r130', 'r131', 'r132', 'r133']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs('sens'), obs()], origin='Antigo 4.11.1', cond='Hormônios'),
+    item('7.4', 'Cabine de antibióticos', [q(r) for r in ['r134', 'r135', 'r136', 'r137', 'r138', 'r139', 'r140']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs('sens'), obs()], origin='Antigo 4.11.2', cond='Antibióticos'),
+    item('7.5', 'Cabine de citostáticos', [q(r) for r in ['r141', 'r142', 'r143', 'r144', 'r145', 'r146', 'r147']] + [equip(SENS_EQ), irreg(G_LAB_EXTRA), regs('sens'), obs()], origin='Antigo 4.11.3', cond='Citostáticos'),
     item('7.6', 'Homeopatia', [q(r) for r in ['r148', 'r149', 'r150', 'r151', 'r152', 'r153', 'r154', 'r155', 'r236', 'r237']] + [equip(['Balança de uso exclusivo', 'Alcoômetro de Gay-Lussac', 'Estufa de inativação', 'Termo-higrômetro']), irreg(G_LAB_EXTRA), obs()], origin='Antigo 4.12', cond='Grupo V'),
 ])
 
@@ -583,7 +601,7 @@ def rast(code, title, form, ensaios, cond):
     ], cond=cond)
 
 
-ENS_SOL = ['Descrição', 'Aspecto', 'Caracteres organolépticos', 'Peso médio (com DP e CV)', 'Informações assinadas e aprovadas pelo farmacêutico']
+ENS_SOL = ['Descrição', 'Aspecto', 'Caracteres organolépticos', 'Peso médio, com desvio padrão (DP) e coeficiente de variação (CV)', 'Informações assinadas e aprovadas pelo farmacêutico']
 ENS_SEMI = ['Descrição', 'Aspecto', 'Caracteres organolépticos', 'pH (quando aplicável)', 'Peso', 'Informações assinadas e aprovadas pelo farmacêutico']
 ENS_LIQ = ['Descrição', 'Aspecto', 'Caracteres organolépticos', 'pH (quando aplicável)', 'Peso ou volume antes do envase', 'Informações assinadas e aprovadas pelo farmacêutico']
 RAST_IRR = [
@@ -627,26 +645,31 @@ MON_IRR = [
 ]
 block('Monitoramento do processo magistral', 'Mensal, bimestral, trimestral e semestral', [
     item('11.1', 'Monitoramento mensal', [
+        {'t': 'lab'},
         {'t': 'mon', 'code': '11.1.1', 'title': 'Pureza microbiológica de bases galênicas e preparações magistrais e oficinais — últimas 3 análises', 'n': 3, 'kind': 'produto', 'ref': 'RDC 67/2007 · Anexo I · 11.2.4'},
         {'t': 'mon', 'code': '11.1.2', 'title': 'Água purificada — últimas 3 análises', 'n': 3, 'kind': 'agua', 'ref': 'RDC 67/2007 · Anexo I · 7.5.2.2'},
         q('r203'), q('r204'), q('r207'),
         obs(),
     ]),
     item('11.2', 'Monitoramento bimestral', [
+        {'t': 'lab'},
         {'t': 'mon', 'code': '11.2.1', 'title': 'Teor e uniformidade de conteúdo — fármaco(s) ≤ 25 mg (prioridade < 5 mg) — últimas 3 análises', 'n': 3, 'kind': 'produto', 'ref': 'RDC 67/2007 · Anexo I · 9.2.3 e 9.2.3.1'},
         obs(),
     ], cond='Sólidas'),
     item('11.3', 'Monitoramento trimestral', [
+        {'t': 'lab'},
         {'t': 'mon', 'code': '11.3.1', 'title': 'Teor e uniformidade de conteúdo de cada classe terapêutica (pode ser rodiziada) — últimas 3 análises', 'n': 3, 'kind': 'produto', 'ref': 'RDC 67/2007 · Anexo III · 2.16 e 2.16.1'},
         note('O monitoramento trimestral de diluídos de SBIT (r171/r248) continua no item 7.1. A r248 citava o Anexo I 9.2.2, que foi revogado pela RDC 87/2008.', 'warn'),
         obs(),
     ], cond='Grupo III'),
     item('11.4', 'Monitoramento semestral', [
+        {'t': 'lab'},
         {'t': 'mon', 'code': '11.4.1', 'title': 'Água potável — últimas 2 análises', 'n': 2, 'kind': 'agua', 'ref': 'RDC 67/2007 · Anexo I · 7.5.1.3'},
         q('r205'), q('r206'),
         obs(),
     ]),
     item('11.5', 'Laboratório contratado, cronograma e rodízio', [
+        {'t': 'lab'},
         q('r194', text='Há contrato vigente com o laboratório que realiza as análises do monitoramento do processo magistral?', tag='movido'), q('r250'),
         nq('Há POP do monitoramento com cronograma das análises (periodicidade e fórmulas previstas em cada período)?', ['RDC 67/2007 · Anexo I · 9.2.6']),
         nq('As amostras seguem sistema de rodízio de manipuladores, fármacos e dosagens/concentrações?', ['RDC 67/2007 · Anexo I · 9.2.5']),

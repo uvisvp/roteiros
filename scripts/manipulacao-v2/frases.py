@@ -235,4 +235,11 @@ F.update({
  'r239': ('Os termossensíveis são mantidos e transportados em temperatura compatível.', 'Os termossensíveis não são mantidos ou transportados em temperatura compatível.'),
  'r240': ('Os manipulados não são armazenados ou transportados com materiais incompatíveis.', 'Os manipulados são armazenados ou transportados com materiais incompatíveis.'),
  'n044': ('A entrega preserva as condições do produto.', 'A entrega não preserva as condições do produto.'),
+ 'n060': ('A central de pesagem dispõe de balanças com capacidade e sensibilidade compatíveis com as quantidades pesadas.', 'A central de pesagem não dispõe de balanças com capacidade e sensibilidade compatíveis com as quantidades pesadas.'),
+ 'n061': ('Cada laboratório possui balança com capacidade e sensibilidade compatíveis com as quantidades pesadas.', 'Não há balança com capacidade e sensibilidade compatíveis em cada laboratório, e a farmácia não possui central de pesagem.'),
+ 'n062': ('Possui pHmetro para o controle de qualidade.', 'Não possui pHmetro para a determinação de pH no controle de qualidade.'),
+ 'n063': ('Possui aparelho de ponto de fusão.', 'Não possui aparelho de ponto de fusão.'),
+ 'n064': ('Possui termômetro calibrado para a determinação do ponto de fusão.', 'Não possui termômetro calibrado para a determinação do ponto de fusão.'),
+ 'n065': ('Possui picnômetro ou densímetro para a determinação de densidade.', 'Não possui picnômetro nem densímetro para a determinação de densidade.'),
+ 'n066': ('Possui vidrarias graduadas em quantidade suficiente.', 'Não possui vidrarias graduadas em quantidade suficiente.'),
 })

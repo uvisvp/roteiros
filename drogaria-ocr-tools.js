@@ -495,6 +495,15 @@
         if (m && l.replace(/[^\p{L}]/gu, '').length <= 8) { out.numero_certidao = m[1]; break; }
       }
     }
+    if (!out.numero_certidao) {
+      // Caixa "Reg Nº" com rótulo mal lido: número de 4 a 6 dígitos no fim da linha, depois de coluna ou rótulo.
+      for (let i = top; i < Math.min(lines.length, top + 12); i++) {
+        const l = fixDigits(lines[i]);
+        if (/\d{8,}|\d{2}\.\d{3}\.\d{3}|endere|cep\b/i.test(l)) continue;
+        const m = l.match(/(?:^|[\s:])(\d{4,6})\s*$/);
+        if (m && (/ {3}/.test(l) || l.replace(/[^\p{L}]/gu, '').length <= 8)) { out.numero_certidao = m[1]; break; }
+      }
+    }
 
     // Razão social e CNPJ.
     out.razao_social = after(lines, /razao social/, { stop: /\bcnpj\b|endereco|\s{3,}/ });
@@ -510,7 +519,7 @@
     if (validCnpj) out.cnpj = validCnpj.value;
 
     // Ramo de atividade.
-    const ramoRx = /\b(drogaria|farmacia(?: de manipulacao| com manipulacao| sem manipulacao| hospitalar)?|dispensario de medicamentos|posto de medicamentos|distribuidora|importadora)\b/;
+    const ramoRx = /\b(drogaria|farmacia(?: de manipulacao| com manipulacao| sem manipulacao| hospitalar| alopatica e homeopatica| alopatica| homeopatica| magistral)?|dispensario de medicamentos|posto de medicamentos|distribuidora|importadora)\b/;
     const ramoHit = findLine(lines, /ramo\s+d[aeo]\s+a\w*/, top);
     const ramoScope = ramoHit ? lines.slice(ramoHit.i, ramoHit.i + 3) : lines.slice(top, top + 20);
     for (const l of ramoScope) {
@@ -537,10 +546,10 @@
     // Horário do estabelecimento: linhas antes do bloco do RT (rótulo ou primeira pessoa).
     const firstPerson = lines.findIndex((l, i) => i > top && personLine(l));
     const hoursEnd = Math.min(...[rtHead && rtHead.i, subHead && subHead.i, firstPerson > top ? firstPerson : null, endAll].filter(v => typeof v === 'number'));
-    const hourRx = /^\W*(r[o0][dt]?[il1]n[ao]|p[lt]?[al][nm][td][a]?[o0d]\w?|horario)\b/;
+    const hourRx = /^\W*(r?[o0][dt]?[il1]n[ao]\w?|p[lt]?[al][nm][td][a]?[o0d]\w?|horario)\b/;
     const hours = lines.slice(top, hoursEnd).filter(l => hourRx.test(nk(l)) && /\d{1,2}\s?[:h.)]\s?\d{2}/.test(l))
       .map(l => clean(l.replace(/\s{3,}.*$/, ''))
-        .replace(/^\W*r\w{4,6}\s*[:;]/i, 'Rotina:').replace(/^\W*p\w{5,8}\s*[:;]/i, 'Plantão:')
+        .replace(/^\W*r?[o0]t\w{2,5}\s*[:;]/i, 'Rotina:').replace(/^\W*p\w{5,8}\s*[:;]/i, 'Plantão:')
         .replace(/(\d)\s*h(?=\s)/g, '$1'));
     out.rotina = unique(hours).join('\n');
 
@@ -553,11 +562,24 @@
       const p = lines.slice(top, endAll).map(personLine).find(Boolean);
       if (p) { out.responsavel_tecnico = p.name; out.numero_conselho_responsavel_tecnico = p.crf; }
     }
+    const usados = new Set([out.numero_conselho_responsavel_tecnico].filter(Boolean));
+    const crfPerto = i => {
+      for (const d of [-1, 1, -2, 2, -3]) {
+        const l = lines[i + d]; if (l == null || personLine(l)) continue;
+        const m = fixDigits(l).match(/^[^\p{L}\d]*(?:c?rf\W*|farmac\S*\W*)?(\d{4,6})[^\d]*$/iu);
+        if (m && !usados.has(m[1])) { usados.add(m[1]); return m[1]; }
+      }
+      return '';
+    };
+    if (out.responsavel_tecnico && !out.numero_conselho_responsavel_tecnico) {
+      const i = lines.findIndex(l => { const p = personLine(l); return p && p.name === out.responsavel_tecnico; });
+      if (i >= 0) out.numero_conselho_responsavel_tecnico = crfPerto(i);
+    }
     if (subHead) {
-      const subs = lines.slice(subHead.i, endAll).map(personLine).filter(Boolean);
+      const subs = lines.slice(subHead.i, endAll).map((l, k) => { const p = personLine(l); if (p && !p.crf) p.crf = crfPerto(subHead.i + k); return p; }).filter(Boolean);
       if (subs.length) {
         out.responsavel_tecnico_substituto = subs.map(p => p.name).join('; ');
-        out.numero_conselho_responsavel_tecnico_substituto = subs.map(p => p.crf || '?').join('; ');
+        out.numero_conselho_responsavel_tecnico_substituto = subs.some(p => p.crf) ? subs.map(p => p.crf || '?').join('; ') : '';
       }
     }
 
@@ -938,7 +960,8 @@
         if (v.length > cur.value.length && r.quality >= cur.weight / cur.count) cur.value = v;
         votes.set(k, cur);
       });
-      const best = [...votes.values()].sort((a, b) => b.count - a.count || b.weight - a.weight)[0];
+      const all = [...votes.values()], completos = all.filter(x => !/\?/.test(x.value));
+      const best = (completos.length ? completos : all).sort((a, b) => b.count - a.count || b.weight - a.weight)[0];
       if (best) out[key] = best.value;
     }
     return out;

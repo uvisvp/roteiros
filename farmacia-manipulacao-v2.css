@@ -51,3 +51,14 @@ html .man-item-screen .med-hint p{overflow-wrap:break-word;white-space:normal}
 .man-item-screen:has(.v2-head.na)>*:not(.v2-head){display:none!important}
 .v2-prevbox{border-color:#c9d9ee}.v2-prevbox>summary{background:#eef4fb;border-radius:12px;color:#274b70}
 .v2-prev p{font-family:Georgia,"Times New Roman",serif;font-size:.9rem;line-height:1.5}
+/* Irregularidade: número sobrescrito só na prévia do item */
+.v2-irn{font-size:.68em;color:#a33;font-weight:700;margin-left:1px}
+.v2-refs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.v2-rast-tab td:last-child{width:1%;white-space:nowrap}.v2-cqbtn{min-height:36px;padding:6px 10px;font-size:.8rem;white-space:nowrap}
+.v2-est td.v2-dif{font-weight:700;white-space:nowrap}.v2-est td.v2-dif.bad{color:var(--bad)}
+.v2-est select{min-width:64px}
+.v2-eq-leg{margin:6px 0 8px}
+.v2-ativ{border:1px solid var(--line);border-radius:12px;padding:8px 11px;margin:10px 0;background:#fff}
+.v2-ativ .v2-h{margin-top:4px}
+.v2-docdados{margin:8px 0 4px;padding:8px 10px;border:1px dashed #cfdfe9;border-radius:10px;background:#f8fbfd}
+.v2-env .field-grid .span3 b{display:block;margin-top:4px;color:#27465a}

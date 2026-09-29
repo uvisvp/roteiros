@@ -41,7 +41,7 @@ if (!app.includes('"structure":"12 blocos"')) throw Error('APP_DATA não substit
 const START = '/*__MANIP_V2_INICIO__*/', END = '/*__MANIP_V2_FIM__*/';
 const i0 = app.indexOf(START);
 if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);
-for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons', 'openReader'])
+for (const fn of ['conditionActive', 'renderCardGrid', 'pharmacyClear', 'renderInfra', 'renderPreview', 'inventoryType', 'inventoryNormButtons', 'openReader', 'renderEnv', 'renderStock', 'renderReportForm'])
   app = dropFunction(app, fn);
 /* 3. Código v2 antes da instalação */
 const code = ['saber-mais.js', 'drogaria-ocr-tools.js', 'ocr-padrao.js', 'medicamentos-banco.js', 'farmacia-manipulacao-v2.js'].map(f => fs.readFileSync(path.join(root, f), 'utf8')).join('\n');
@@ -72,6 +72,9 @@ blocks.set('app--farmacia-manipulacao', app);
 html = html.split("if(card===1)out.push({id:'extra-caracterizacao',num:'1.1',title:'Identificação e caracterização',fns:['renderCharacterization'],sections:[]});").join('');
 if (html.includes("if(card===1)out.push({id:'extra-caracterizacao'")) throw Error('item 1.1 antigo permanece');
 html = change(html, "return typeof window[nome]==='function'?window[nome]():''}", "return typeof window[nome]==='function'?window[nome](f,item):''}", 'exec com contexto');
+/* Toolbar: ← volta ao item anterior (na primeira tela do bloco, ao último item do bloco anterior) */
+html = change(html, "back.onclick=function(){if(manItem){abrir('');return}if(card>1){manItem='';renderCard(card-1)}else all.click();save();window.scrollTo(0,0)};",
+  "back.onclick=function(){var ids=Object.keys(APP_DATA.cards).map(Number),prev=ids[ids.indexOf(card)-1];if(manItem&&idx>0){abrir(lista[idx-1].id);return}if(prev){var l2=itens(prev);manItem=l2.length?l2[l2.length-1].id:'';renderCard(prev);save();manRolar();return}if(manItem){abrir('');return}all.click();save();window.scrollTo(0,0)};", 'voltar ao item anterior');
 html = change(html, "for(var k=1;k<=6;k++)await RoteiroEvidence.clear('manipulacao-card-'+k)", "for(var k=1;k<=12;k++)await RoteiroEvidence.clear('manipulacao-card-'+k)", 'limpeza total');
 
 for (const [id, source] of [['app--farmacia-manipulacao', app]]) {
