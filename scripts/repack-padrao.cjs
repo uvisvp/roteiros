@@ -125,5 +125,12 @@ html = troca(html, "    if(app==='servicos-alimentacao-roteiro'){\n      cab += 
   if (html.includes(de)) { const n = html.split(de).length - 1; if (n !== 2) throw Error('checklist da distribuidora: ' + n + ' ocorrências'); html = html.split(de).join(para); }
   else if (!html.includes(para)) throw Error('checklist da distribuidora não localizado'); }
 
+/* 11 — Manipulação: um erro na prévia do relatório não pode travar o app. save() roda a cada
+   ação e redesenhava a prévia sem proteção: um erro ali parava navegação, barras e relatório. */
+{ const id = 'app--farmacia-manipulacao'; let fm = lerBloco(id);
+  fm = troca(fm, 'function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){} updateSummary(); renderPreview();}',
+    'function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){} try{updateSummary();}catch(e){console.error(e)} try{renderPreview();}catch(e){console.error(e)}}', 'save da manipulação');
+  bloco(id, fm); }
+
 fs.writeFileSync(file, html);
 console.log('Padrão UVIS aplicado a: ' + PADRAO_APPS.join(', '));
