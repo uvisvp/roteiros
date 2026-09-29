@@ -80,7 +80,7 @@
  function botoes(){var t=$('.pu-rodape',raiz);if(!t)return;var r=nav.aba==='roteiro';t.hidden=!r;document.documentElement.classList.toggle('pu-sem-rodape',!r);if(!r)return;
   var L=linear(),i=L.findIndex(function(x){return x.secao===nav.secao&&x.item===nav.item});
   var ant=t.querySelector('[data-pu-nav=ant]'),prox=t.querySelector('[data-pu-nav=prox]'),lim=t.querySelector('[data-pu-nav=limpar]');
-  ant.disabled=!nav.secao;prox.disabled=nav.item?i>=L.length-1:!secoes().length;lim.disabled=!nav.secao||!cfg.limpar}
+  ant.disabled=!nav.secao;prox.disabled=nav.item?i>=L.length-1:!secoes().length;lim.disabled=!nav.secao||!cfg.limpar||nav.aba!=='roteiro'||!acha(nav.secao)}
 
  function abas(){[].forEach.call(raiz.querySelectorAll('[data-pu-aba]'),function(b){b.setAttribute('aria-selected',String(b.dataset.puAba===nav.aba))});
   if(cfg.contagem)[].forEach.call(raiz.querySelectorAll('[data-pu-n]'),function(s){var n=0;try{n=cfg.contagem(s.dataset.puN)||0}catch(e){}s.textContent=n;s.hidden=!n})}
@@ -105,7 +105,7 @@
    if(a==='todas')vai({aba:'roteiro',secao:null,item:null});
    else if(a==='ant'){/* ← volta ao item anterior; no primeiro item (ou na tela da seção), ao último item da seção anterior */var j=nav.item?i:L.findIndex(function(x){return x.secao===nav.secao});if(j>0)vai({secao:L[j-1].secao,item:L[j-1].item});else if(nav.item)vai({item:null});else vai({secao:null,item:null})}
    else if(a==='prox'){if(nav.item){if(i<L.length-1)vai({secao:L[i+1].secao,item:L[i+1].item})}else if(nav.secao){var s=acha(nav.secao);if(s&&s.itens[0])vai({item:s.itens[0].id})}else{var s0=secoes()[0];if(s0)vai({secao:s0.id,item:null})}}
-   else if(a==='limpar'&&cfg.limpar){var s2=acha(nav.secao),it=s2&&nav.item&&s2.itens.filter(function(x){return x.id===nav.item})[0];if(confirm(it?'Limpar as respostas deste item?':'Limpar as respostas desta seção?')){try{cfg.limpar(s2,it||null)}catch(err){console.error(err)}desenha(false)}}
+   else if(a==='limpar'&&cfg.limpar){var s2=acha(nav.secao),it=s2&&nav.item&&s2.itens.filter(function(x){return x.id===nav.item})[0];if(!s2){desenha(false);return}if(confirm(it?'Limpar as respostas deste item?':'Limpar as respostas desta seção?')){try{cfg.limpar(s2,it||null)}catch(err){console.error(err)}desenha(false)}}
    return}}
 
  window.UvisPadrao={

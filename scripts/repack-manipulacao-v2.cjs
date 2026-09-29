@@ -66,6 +66,10 @@ app = change(app, '<option ${r.efetividade==="NC"?"selected":""}>NC</option></se
 const css = fs.readFileSync(path.join(root, 'farmacia-manipulacao-v2.css'), 'utf8');
 app = app.replace(/<style id="man-v2-style">[\s\S]*?<\/style>/, '');
 app = change(app, '</head>', '<style id="man-v2-style">' + css + '</style></head>', 'head');
+/* 9. Verificação de matéria-prima (10.7): render() não existe neste módulo — o botão
+   “Acrescentar matéria-prima” e a troca de natureza paravam com erro sem redesenhar a tela. */
+app = change(app, " else state.insumos.splice(+b.dataset.delInsumo,1);\n save();render();", " else state.insumos.splice(+b.dataset.delInsumo,1);\n save();if(state.openCard)renderCard(state.openCard);", 'matéria-prima: acrescentar');
+app = change(app, "save();if(k==='natureza')render();return}", "save();if(k==='natureza'&&state.openCard)renderCard(state.openCard);return}", 'matéria-prima: natureza');
 blocks.set('app--farmacia-manipulacao', app);
 
 /* Casca: itens com contexto, sem o item automático 1.1 antigo, limpeza total em 12 seções */
