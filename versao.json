@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-03",
+  "versao": "20260929-04",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Odontologia: no Ambiente finalístico, marque as salas existentes (várias, se houver) e aparecem só as exigências de área e instalação desses tipos de sala; as demais ficam recolhidas, com botão para marcar como Não se aplica. Distribuidora: cartões, botões de resposta e barra inferior no mesmo tamanho dos demais roteiros (só aparência)."
+  "notas": "iPhone/iPad: o PDF de fotos e os arquivos Word não abrem mais por cima do app (fechar no X travava). Quando o arquivo fica pronto aparece a caixa “Arquivo pronto”; o botão Abrir / compartilhar abre a folha do iOS (Arquivos, Pré-Visualização, WhatsApp…) e o app continua na mesma tela."
 }
