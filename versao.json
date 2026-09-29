@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-01",
+  "versao": "20260929-02",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos, Alimentos, Odontologia e Serviços assistenciais passam a usar a mesma navegação da drogaria: seções, itens numerados e tela do item, com ← e → no rodapé, voltar do celular e layout ajustado para celular, tablet e computador. Respostas Cumpre / Não cumpre / Não se aplica. O perfil não esconde mais verificações: o que não se aplica é marcado como Não se aplica. Serviços assistenciais: cada modalidade abre direto pelo cartão do núcleo."
+  "notas": "Odontologia: características do perfil voltam a aparecer quando marcadas. Alimentos: é possível marcar várias atividades e formas de operação no mesmo local (o relatório lista todas). Nos quatro núcleos novos, a faixa de itens e o título do item ficam fixos no topo, as verificações fora do perfil ficam destacadas em amarelo e os destaques seguem a cor do núcleo."
 }

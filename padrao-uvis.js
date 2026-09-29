@@ -50,6 +50,9 @@
    +'<main class="ui-main pu-main" id="pu-main" tabindex="-1"></main>'
    +'<nav class="ui-toolbar pu-rodape" aria-label="Navegação"><button type="button" data-pu-nav="ant" aria-label="Anterior" title="Anterior">'+icone('back')+'</button><button type="button" class="ui-clear" data-pu-nav="limpar" aria-label="Limpar dados desta tela" title="Limpar dados desta tela">'+icone('clear')+'</button><button type="button" class="ui-all" data-pu-nav="todas" aria-label="Todas as seções" title="Todas as seções">'+icone('menu')+'</button><button type="button" class="ui-next" data-pu-nav="prox" aria-label="Próximo" title="Próximo">'+icone('next')+'</button></nav>';
   raiz.addEventListener('click',clique);
+  /* altura real do cabeçalho fixo: a faixa de itens e o título do item ficam logo abaixo dele */
+  var ch=$('.pu-chrome',raiz),mede=function(){if(ch)document.documentElement.style.setProperty('--pu-chrome-h',ch.getBoundingClientRect().height+'px')};mede();
+  try{new ResizeObserver(mede).observe(ch)}catch(e){window.addEventListener('resize',mede)}
   window.addEventListener('popstate',function(e){var s=e.state&&e.state.pu;if(!s)return;nav={aba:s.aba,secao:s.secao,item:s.item};desenha(false)});
  }
 
@@ -67,8 +70,8 @@
    +'<div class="pu-itens">'+s.itens.map(function(it,k){var t=it.total||0,f=it.feitos||0;return '<button type="button" class="pu-item-card'+(t&&f>=t?' pu-completo':'')+'" data-pu-item="'+esc(it.id)+'"><span class="pu-num">'+(it.numero||((idx+1)+'.'+(k+1)))+'</span><span class="pu-item-txt"><strong>'+esc(it.titulo)+'</strong>'+(it.resumo?'<small>'+esc(it.resumo)+'</small>':'')+'<small class="pu-prog">'+(t?f+'/'+t+' respondidos':'Abrir item')+'</small></span><span class="pu-abrir" aria-hidden="true">Abrir →</span></button>'}).join('')+'</div>';}
 
  function telaItem(m,s,it){var idx=secoes().findIndex(function(x){return x.id===s.id}),k=s.itens.findIndex(function(x){return x.id===it.id});
-  m.innerHTML='<div class="pu-faixa" role="tablist" aria-label="Itens da seção">'+s.itens.map(function(x,j){return '<button type="button" data-pu-item="'+esc(x.id)+'"'+(x.id===it.id?' aria-current="step"':'')+'>'+esc(x.numero||((idx+1)+'.'+(j+1)))+' · '+esc(x.curto||x.titulo)+'</button>'}).join('')+'</div>'
-   +'<div class="ui-section-heading pu-cab-item">'+esc(it.numero||((idx+1)+'.'+(k+1)))+' '+esc(it.titulo)+'</div><div class="pu-conteudo" id="pu-conteudo"></div>';
+  m.innerHTML='<div class="pu-fixo"><div class="pu-faixa" role="tablist" aria-label="Itens da seção">'+s.itens.map(function(x,j){return '<button type="button" data-pu-item="'+esc(x.id)+'"'+(x.id===it.id?' aria-current="step"':'')+'>'+esc(x.numero||((idx+1)+'.'+(j+1)))+' · '+esc(x.curto||x.titulo)+'</button>'}).join('')+'</div>'
+   +'<div class="ui-section-heading pu-cab-item">'+esc(it.numero||((idx+1)+'.'+(k+1)))+' '+esc(it.titulo)+'</div></div><div class="pu-conteudo" id="pu-conteudo"></div>';
   var c=$('#pu-conteudo',m);try{cfg.item(s,it,c)}catch(e){console.error(e);c.innerHTML='<p class="pu-erro">Não foi possível abrir este item.</p>'}
   var at=m.querySelector('.pu-faixa [aria-current=step]');if(at&&at.scrollIntoView)try{at.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}}
 

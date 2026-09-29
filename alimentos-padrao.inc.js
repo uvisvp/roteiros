@@ -22,10 +22,29 @@ function saEsc(s) { return UvisPadrao.esc(s); }
 function saBloco(id) { return (cfg.sections || []).filter(function (s) { return s.id === id; })[0]; }
 function saTitulo(s) { return String(s.title || s.id).replace(/^\s*\d+\.\s*/, ''); }
 function saFeitos(b) { return (b.items || []).filter(function (i) { return st.resp[i.id]; }).length; }
-function saTipo() { return (cfg.profile.types || []).filter(function (x) { return x.id === st.tipo; })[0]; }
+/* várias atividades e formas de operação no mesmo local (mercado + padaria + açougue + restaurante…) */
+function saTipos() { if (!Array.isArray(st.tipos)) st.tipos = st.tipo ? [st.tipo] : []; return st.tipos; }
+function saValores(id) { var v = st.valores[id]; if (!Array.isArray(v)) v = st.valores[id] = v ? [v] : []; return v; }
+function saRotuloTipos() { return saTipos().map(function (id) { var t = (cfg.profile.types || []).filter(function (x) { return x.id === id; })[0]; return t ? t.label : ''; }).filter(Boolean).join('; '); }
+function saTipo() { var r = saRotuloTipos(); return r ? { label: r } : null; }
+function saCasa(w) {
+  if (!w) return true;
+  if (w.any && w.any.length && !w.any.some(saCasa)) return false;
+  if (w.all && w.all.length && !w.all.every(saCasa)) return false;
+  var tipos = saTipos();
+  if (w.types && w.types.length && !w.types.some(function (t) { return tipos.indexOf(t) >= 0; })) return false;
+  if (w.notTypes && tipos.length && tipos.every(function (t) { return w.notTypes.indexOf(t) >= 0; })) return false;
+  if (w.flagsAll && !w.flagsAll.every(function (f) { return st.flags[f]; })) return false;
+  if (w.flagsAny && !w.flagsAny.some(function (f) { return st.flags[f]; })) return false;
+  if (w.values) for (var k in w.values) if (Object.prototype.hasOwnProperty.call(w.values, k)) {
+    var esp = [].concat(w.values[k]), sel = saValores(k);
+    if (!sel.some(function (v) { return esp.indexOf(v) >= 0; })) return false;
+  }
+  return true;
+}
 /* por que a verificação pode não se aplicar ao perfil marcado */
 function saForaDoPerfil(when) {
-  if (!when || !st.tipo || casaPerfil(when)) return '';
+  if (!when || !saTipos().length || saCasa(when)) return '';
   var nomes = [];
   (function junta(w) {
     if (!w) return;
@@ -33,7 +52,7 @@ function saForaDoPerfil(when) {
       var d = (cfg.profile.flags || []).filter(function (x) { return x.id === f; })[0];
       if (d && !st.flags[f] && nomes.indexOf(d.label) < 0) nomes.push(d.label);
     });
-    if (w.types && w.types.indexOf(st.tipo) < 0) nomes.push('tipo de serviço: ' + w.types.map(function (t) { var d = (cfg.profile.types || []).filter(function (x) { return x.id === t; })[0]; return d ? d.label : t; }).join(' / '));
+    if (w.types && !w.types.some(function (t) { return saTipos().indexOf(t) >= 0; })) nomes.push('atividade: ' + w.types.map(function (t) { var d = (cfg.profile.types || []).filter(function (x) { return x.id === t; })[0]; return d ? d.label : t; }).join(' / '));
     if (w.values) Object.keys(w.values).forEach(function (k) { var sel = (cfg.profile.selectors || []).filter(function (x) { return x.id === k; })[0]; if (sel) nomes.push(sel.label.toLowerCase()); });
     (w.any || []).concat(w.all || []).forEach(junta);
   })(when);
@@ -43,10 +62,10 @@ function saForaDoPerfil(when) {
 function saSecoes() {
   var tipo = saTipo(), campos = cfg.profile.fields || [];
   var perfil = { id: 'perfil', titulo: 'Perfil e identificação', curto: 'Perfil', icone: 'building',
-    resumo: (tipo ? tipo.label : 'Tipo de serviço não escolhido') + (st.meta.establishment ? ' · ' + st.meta.establishment : ''),
+    resumo: (tipo ? tipo.label : 'Atividades não marcadas') + (st.meta.establishment ? ' · ' + st.meta.establishment : ''),
     itens: [
       { id: 'ident', titulo: 'Identificação do estabelecimento', curto: 'Identificação', feitos: campos.filter(function (f) { return st.meta[f.id]; }).length, total: campos.length },
-      { id: 'tipo', titulo: 'Tipo de serviço e forma de operação', curto: 'Tipo de serviço', resumo: tipo ? tipo.label : 'Escolha a atividade predominante', feitos: (st.tipo ? 1 : 0) + (cfg.profile.selectors || []).filter(function (s) { return st.valores[s.id]; }).length, total: 1 + (cfg.profile.selectors || []).length },
+      { id: 'tipo', titulo: 'Atividades e formas de operação', curto: 'Atividades', resumo: tipo ? tipo.label : 'Marque as atividades exercidas no local', feitos: (saTipos().length ? 1 : 0) + (cfg.profile.selectors || []).filter(function (s) { return saValores(s.id).length; }).length, total: 1 + (cfg.profile.selectors || []).length },
       { id: 'processos', titulo: 'Processos presentes no local', curto: 'Processos', resumo: 'Registro do que existe no local. Não esconde verificações.', feitos: Object.keys(st.flags).some(function (k) { return st.flags[k]; }) ? 1 : 0, total: 1 }
     ] };
   var lista = [perfil];
@@ -61,8 +80,8 @@ function saSecoes() {
 
 function saPergunta(it, n) {
   var v = st.resp[it.id] || '', fora = saForaDoPerfil(it.when), foto = st.fotos && st.fotos[it.id], nota = st.notas[it.id];
-  var h = '<div class="pu-q" data-sa-q="' + saEsc(it.id) + '"><p class="pu-q-texto"><b>' + n + '.</b> ' + saEsc(it.text) + '</p>';
-  if (it.critical || fora) h += '<div class="pu-tags">' + (it.critical ? '<span class="pu-tag">Prioritário</span>' : '') + (fora ? '<span class="pu-tag pu-tag-leve">Fora do perfil marcado</span>' : '') + '</div>';
+  var h = '<div class="pu-q' + (fora ? ' pu-q-fora' : '') + '" data-sa-q="' + saEsc(it.id) + '"><p class="pu-q-texto"><b>' + n + '.</b> ' + saEsc(it.text) + '</p>';
+  if (it.critical || fora) h += '<div class="pu-tags">' + (it.critical ? '<span class="pu-tag">Prioritário</span>' : '') + (fora ? '<span class="pu-tag pu-tag-fora">Fora do perfil marcado</span>' : '') + '</div>';
   if (fora) h += '<p class="pu-q-ajuda">Depende de: ' + saEsc(fora) + '. Se não existir no local, marque “Não se aplica”.</p>';
   h += '<div class="pu-cit"></div>';
   h += '<div class="pu-resp" role="group" aria-label="Resposta">' + SA_RESP.map(function (r) { return '<button type="button" data-sa-resp="' + saEsc(it.id) + '" data-v="' + r[0] + '" aria-pressed="' + (v === r[0]) + '">' + r[1] + '</button>'; }).join('') + '</div>';
@@ -98,13 +117,14 @@ function saPerfil(el, id) {
     }).join('') + '</div></div>';
     if (window.padraoCnaeHost) el.appendChild(window.padraoCnaeHost);
   } else if (id === 'tipo') {
-    var t = saTipo();
-    el.innerHTML = '<div class="pu-bloco"><h3>' + saEsc(cfg.startTitle || 'Que serviço está sendo inspecionado?') + '</h3><p>' + saEsc(cfg.profile.typeHelp || '') + '</p><div class="pu-marcas">'
-      + (cfg.profile.types || []).map(function (x) { return '<label class="pu-marca"><input type="radio" name="sa-tipo" data-sa-tipo="' + saEsc(x.id) + '"' + (st.tipo === x.id ? ' checked' : '') + '><span><strong>' + saEsc(x.label) + '</strong>' + (x.description ? '<small>' + saEsc(x.description) + '</small>' : '') + '</span></label>'; }).join('')
-      + '</div>' + (t && t.spotlight && t.spotlight.length ? '<p class="pu-q-ajuda">Pontos de atenção: ' + saEsc(t.spotlight.join(' · ')) + '</p>' : '') + '</div>'
+    var sel = saTipos();
+    el.innerHTML = '<div class="pu-bloco"><h3>Atividades do estabelecimento</h3><p>Marque todas as atividades exercidas no local (por exemplo, mercado com padaria, açougue e restaurante).</p><div class="pu-marcas">'
+      + (cfg.profile.types || []).map(function (x) { return '<label class="pu-marca"><input type="checkbox" data-sa-tipo="' + saEsc(x.id) + '"' + (sel.indexOf(x.id) >= 0 ? ' checked' : '') + '><span><strong>' + saEsc(x.label) + '</strong>' + (x.description ? '<small>' + saEsc(x.description) + '</small>' : '') + '</span></label>'; }).join('')
+      + '</div>' + sel.map(function (id) { var t = (cfg.profile.types || []).filter(function (x) { return x.id === id; })[0]; return t && t.spotlight && t.spotlight.length ? '<p class="pu-q-ajuda"><b>' + saEsc(t.label) + ':</b> ' + saEsc(t.spotlight.join(' · ')) + '</p>' : ''; }).join('') + '</div>'
       + (cfg.profile.selectors || []).map(function (s) {
-        return '<div class="pu-bloco"><h3>' + saEsc(s.label) + '</h3>' + (s.help ? '<p>' + saEsc(s.help) + '</p>' : '') + '<div class="pu-marcas">'
-          + (s.options || []).map(function (o) { return '<label class="pu-marca"><input type="radio" name="sa-sel-' + saEsc(s.id) + '" data-sa-valor="' + saEsc(s.id) + '" value="' + saEsc(o.id) + '"' + (st.valores[s.id] === o.id ? ' checked' : '') + '><span><strong>' + saEsc(o.label) + '</strong></span></label>'; }).join('') + '</div></div>';
+        var v = saValores(s.id);
+        return '<div class="pu-bloco"><h3>' + saEsc(s.label.replace(/^Forma principal de operação$/, 'Formas de operação')) + '</h3><p>' + saEsc(s.help || 'Marque todas as que ocorrem no local.') + '</p><div class="pu-marcas">'
+          + (s.options || []).map(function (o) { return '<label class="pu-marca"><input type="checkbox" data-sa-valor="' + saEsc(s.id) + '" value="' + saEsc(o.id) + '"' + (v.indexOf(o.id) >= 0 ? ' checked' : '') + '><span><strong>' + saEsc(o.label) + '</strong></span></label>'; }).join('') + '</div></div>';
       }).join('');
   } else if (id === 'processos') {
     el.innerHTML = '<div class="pu-bloco"><h3>Processos presentes no local</h3><p>Marque o que existe. Todas as verificações continuam no roteiro; as ligadas a processo não marcado aparecem com o aviso “Fora do perfil marcado”.</p><div class="pu-marcas">'
@@ -162,7 +182,7 @@ function iniciaPadrao() {
   st = carregaEstado();
   ['body > header', 'body > nav.abas', 'body > main'].forEach(function (q) { var n = document.querySelector(q); if (n) { n.hidden = true; n.setAttribute('data-pu-oculto', ''); } });
   var raiz = document.createElement('div'); raiz.id = 'pu-raiz'; document.body.insertBefore(raiz, document.body.firstChild);
-  var semTipo = !st.tipo;
+  var semTipo = !saTipos().length;
   UvisPadrao.monta({
     raiz: raiz,
     titulo: cfg.shortTitle || 'Serviços de alimentação',
@@ -181,7 +201,7 @@ function iniciaPadrao() {
       if (s.id === 'perfil') {
         var ini = estadoInicial();
         if (!it || it.id === 'ident') st.meta = ini.meta;
-        if (!it || it.id === 'tipo') { st.tipo = ''; st.valores = {}; }
+        if (!it || it.id === 'tipo') { st.tipo = ''; st.tipos = []; st.valores = {}; }
         if (!it || it.id === 'processos') st.flags = ini.flags;
       } else {
         (it ? [it.id] : s.itens.map(function (x) { return x.id; })).forEach(function (bid) {
@@ -225,8 +245,8 @@ function iniciaPadrao() {
   });
   raizEl.addEventListener('change', function (e) {
     var t = e.target;
-    if (t.dataset.saTipo) { st.tipo = t.dataset.saTipo; salva(); saRedesenha(); }
-    else if (t.dataset.saValor) { st.valores[t.dataset.saValor] = t.value; salva(); UvisPadrao.atualiza(); }
+    if (t.dataset.saTipo) { var ts = saTipos(), p = ts.indexOf(t.dataset.saTipo); if (t.checked && p < 0) ts.push(t.dataset.saTipo); if (!t.checked && p >= 0) ts.splice(p, 1); st.tipo = ts[0] || ''; salva(); saRedesenha(); }
+    else if (t.dataset.saValor) { var vs = saValores(t.dataset.saValor), q = vs.indexOf(t.value); if (t.checked && q < 0) vs.push(t.value); if (!t.checked && q >= 0) vs.splice(q, 1); salva(); UvisPadrao.atualiza(); }
     else if (t.dataset.saFlag) { st.flags[t.dataset.saFlag] = t.checked; salva(); UvisPadrao.atualiza(); }
     else if (t.dataset.saMeta) UvisPadrao.atualiza();
   });

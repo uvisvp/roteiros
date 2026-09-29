@@ -65,8 +65,8 @@ function odoSecoes(){
 
 function odoPergunta(s,i,n){
  const a=state.a[i.id]||'',fora=odoFora(s,i);
- return `<div class="pu-q" data-odo-q="${esc(i.id)}"><div><p class="pu-q-texto item-t"><b>${n}.</b> ${esc(i.t)}</p>`
-  +(fora?`<div class="pu-tags"><span class="pu-tag pu-tag-leve">Fora do perfil marcado</span></div><p class="pu-q-ajuda">Depende de: ${esc(fora)}. Se não existir no serviço, marque “Não se aplica”.</p>`:'')
+ return `<div class="pu-q${fora?' pu-q-fora':''}" data-odo-q="${esc(i.id)}"><div><p class="pu-q-texto item-t"><b>${n}.</b> ${esc(i.t)}</p>`
+  +(fora?`<div class="pu-tags"><span class="pu-tag pu-tag-fora">Fora do perfil marcado</span></div><p class="pu-q-ajuda">Depende de: ${esc(fora)}. Se não existir no serviço, marque “Não se aplica”.</p>`:'')
   +`<div class="cite pu-cit-odo">${uvisOdontoCitation(i.ch,i.c)}</div></div>`
   +`<div class="pu-resp" role="group" aria-label="Resultado">${[['ok','Cumpre'],['nao','Não cumpre'],['na','Não se aplica']].map(([v,l])=>`<button type="button" data-a="${esc(i.id)}" data-v="${v}" aria-pressed="${a===v}">${l}</button>`).join('')}</div>`
   +(a==='nao'?`<div class="pu-bloco pu-nc">${assessmentHtml(i)}</div>`:'')
