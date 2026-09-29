@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-04",
+  "versao": "20260929-05",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "iPhone/iPad: o PDF de fotos e os arquivos Word não abrem mais por cima do app (fechar no X travava). Quando o arquivo fica pronto aparece a caixa “Arquivo pronto”; o botão Abrir / compartilhar abre a folha do iOS (Arquivos, Pré-Visualização, WhatsApp…) e o app continua na mesma tela."
+  "notas": "Distribuidora: abrir “Para saber mais” ou uma orientação não esconde mais as perguntas do item. A barra interna fica só com Inventário de infrações e Normas (o Roteiro já é a aba principal). Normas: link oficial dos POPs 011, 023 e 032 e de todos os atos citados."
 }
