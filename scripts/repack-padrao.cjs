@@ -74,6 +74,10 @@ bloco('rec--padrao-uvis.css', fs.readFileSync(path.join(root, 'padrao-uvis.css')
   else { const de = /\r?\nmonta\(\);\r?\nwindow\.CARD_ESTABELECIMENTO = \{ monta: monta \};/;
     if (!de.test(sa)) throw Error('fim do roteiro de alimentos não localizado');
     sa = sa.replace(de, () => '\n' + INI + '\n' + frag + '\n' + FIM + '\nif (PADRAO) iniciaPadrao(); else monta();\nwindow.CARD_ESTABELECIMENTO = { monta: monta };'); }
+  /* relatório: todas as atividades e formas de operação marcadas (o perfil passou a aceitar várias) */
+  sa = troca(sa, "  if (tipo) L.push('Tipo de serviço: ' + tipo.label);",
+    "  var tiposSel = (Array.isArray(st.tipos) && st.tipos.length ? st.tipos : (st.tipo ? [st.tipo] : [])).map(function (id) { var t = cfg.profile.types.filter(function (x) { return x.id === id; })[0]; return t ? t.label : ''; }).filter(Boolean);\n  if (tiposSel.length) L.push((tiposSel.length > 1 ? 'Atividades: ' : 'Tipo de serviço: ') + tiposSel.join('; '));\n  (cfg.profile.selectors || []).forEach(function (sel) { var v = [].concat(st.valores[sel.id] || []), r = (sel.options || []).filter(function (o) { return v.indexOf(o.id) >= 0; }).map(function (o) { return o.label; }); if (r.length) L.push((r.length > 1 ? 'Formas de operação' : sel.label) + ': ' + r.join('; ')); });",
+    'relatório de alimentos: atividades');
   bloco(id, sa); }
 
 /* 7 — Odontologia: tela padrão (odontologia-padrao.inc.js) depois da montagem original; a caixa

@@ -127,3 +127,24 @@ html.pu-ativo[data-uvis-app="servicos-assistenciais"] body{padding-bottom:0!impo
 .pu-ativo #p-infracoes .toolbar{display:flex!important;flex-wrap:wrap!important;gap:8px!important;align-items:stretch}
 .pu-ativo #p-infracoes .toolbar .search{flex:1 1 100%!important;min-width:0;min-height:44px}
 .pu-ativo #p-infracoes .toolbar .filter{flex:1 1 auto;min-height:44px}
+/* faixa de itens + título do item fixos abaixo do cabeçalho */
+.pu-ativo .pu-fixo{position:sticky;top:var(--pu-chrome-h,var(--nav-stack-h));z-index:60;margin:-14px -20px 12px;padding:10px 20px 0;background:var(--ui-canvas);border-bottom:1px solid var(--ui-line);box-shadow:0 4px 8px -6px #304F6340}
+.pu-ativo .pu-fixo .pu-faixa{margin:0;padding:0 0 8px}
+.pu-ativo .pu-fixo .pu-cab-item{position:static;margin:0;padding:4px 0 10px;min-height:0;border:0;background:transparent}
+@media(max-width:700px){.pu-ativo .pu-fixo{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}}
+/* cor do núcleo nos destaques (respostas mantêm verde / vermelho / cinza) */
+.pu-ativo .pu-num{background:var(--pu-cor)}
+.pu-ativo .pu-faixa button[aria-current=step],.pu-ativo .ui-sections.pu-secoes button[aria-current=page]{background:var(--pu-cor)!important;border-color:var(--pu-cor)!important;color:#fff!important;box-shadow:none}
+.pu-ativo .pu-q-texto>b{color:var(--pu-cor)}
+.pu-ativo .pu-abas button[aria-selected=true]{color:var(--pu-cor);border-bottom-color:var(--pu-cor)}
+.pu-ativo .pu-item-card:hover{border-color:var(--pu-cor)}
+.pu-ativo .pu-rodape .ui-next{background:var(--pu-cor)}
+.pu-ativo .pu-btn-pri{background:var(--pu-cor);border-color:var(--pu-cor)}
+.pu-ativo .pu-marca input,.pu-ativo .pu-campos input[type=checkbox]{accent-color:var(--pu-cor)}
+/* verificação fora do perfil marcado: destaque, sem esconder */
+.pu-ativo .pu-q.pu-q-fora{margin:0 -10px;padding:14px 10px 14px 12px;border-left:4px solid #c9962b;background:#fdf8ec}
+.pu-ativo .pu-q.pu-q-fora .pu-tag-fora{background:#c9962b;color:#fff}
+/* Odontologia: características do perfil (chips) legíveis quando marcadas */
+.pu-ativo #pfields .chip{color:#35505f;background:#fff;border:1px solid #c7d5de;font-size:.86rem}
+.pu-ativo #pfields .chip.on{background:var(--pu-cor)!important;border-color:var(--pu-cor)!important;color:#fff!important}
+.pu-ativo #pfields .chip.on::before{content:'✓ '}
