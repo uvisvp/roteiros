@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-06",
+  "versao": "20260929-07",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: as perguntas de cada item deixam de ficar dentro de um bloco recolhível; abrir “Para saber mais” ou uma orientação no iPhone não as esconde mais."
+  "notas": "Drogaria: no relatório, o conteúdo do PGRSS sai em um parágrafo só — “O PGRSS contempla: …” e “O PGRSS não contempla: …”; itens marcados como Não se aplica não aparecem."
 }
