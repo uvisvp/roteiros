@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-05",
+  "versao": "20260929-06",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Distribuidora: abrir “Para saber mais” ou uma orientação não esconde mais as perguntas do item. A barra interna fica só com Inventário de infrações e Normas (o Roteiro já é a aba principal). Normas: link oficial dos POPs 011, 023 e 032 e de todos os atos citados."
+  "notas": "Distribuidora: as perguntas de cada item deixam de ficar dentro de um bloco recolhível; abrir “Para saber mais” ou uma orientação no iPhone não as esconde mais."
 }
