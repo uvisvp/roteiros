@@ -10,6 +10,8 @@ const PASSOS=[
  ['alimentos: navegação padrão e relatório',['padrao.cjs','Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento']],
  ['odontologia: navegação padrão e relatório',['padrao.cjs','Odontologia','odontologia','Odontologia']],
  ['serviços assistenciais (ILPI): navegação padrão e relatório',['padrao.cjs','Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi']],
+ ['academias e piscinas: navegação padrão e relatório',['padrao.cjs','Serviços','academia-piscina','Academias e piscinas']],
+ ['academias e piscinas: perfil, infrações, foto, citação e Word',['academia.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Distribuidora / transportadora']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Distribuidora / transportadora'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]
 ];

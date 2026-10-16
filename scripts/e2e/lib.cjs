@@ -21,6 +21,8 @@ async function passos(f,p,lista,ms=800){for(const s of lista){await f.evaluate(s
 const TEXTO={
   drogaria:()=>DrogariaAPI.report().blocks.map(b=>(b.x||'')+(b.k||'')+(b.v||'')+(b.rows?JSON.stringify(b.rows):'')).join('\n'),
   'farmacia-manipulacao':()=>{try{renderPreview()}catch(e){}const r=document.querySelector('#reportPreview');return r?r.innerText:''},
+  /* motor roteiro-simples (academias e piscinas): texto da aba Relatório */
+  'academia-piscina':()=>{const e=UvisPadrao.estado();UvisPadrao.vai({aba:'relatorio'});const r=document.querySelector('.rs-relatorio'),t=r?r.innerText:'';UvisPadrao.vai(e);return t},
   padrao:()=>JSON.stringify(window.UvsPrevia?UvsPrevia.linhas():[])
 };
 function texto(f,app){return f.evaluate(TEXTO[app]||TEXTO.padrao)}

@@ -1,0 +1,81 @@
+/* Roteiro simples — complementos ao padrao-uvis.css (a cor vem de --pu-cor). */
+.rs-campos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rs-campo{display:flex;flex-direction:column;gap:5px;margin:0;border:0;padding:0;font-size:.86rem;color:#45565f}
+.rs-campo>span,.rs-campo>legend{font-weight:650;color:#34444d}
+.rs-campo input,.rs-campo select,.rs-campo textarea{width:100%;min-height:44px;padding:9px 11px;border:1px solid #c9d5dc;border-radius:9px;background:#fff;color:#1b262d;font:inherit;font-size:.95rem}
+.rs-campo textarea{min-height:72px;resize:vertical}
+.rs-largo{grid-column:1/-1}
+.rs-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px 12px;margin-top:4px}
+.rs-checks label{display:flex;align-items:center;gap:9px;min-height:44px;padding:6px 10px;border:1px solid #dbe3e8;border-radius:9px;background:#fff;color:#1b262d;cursor:pointer}
+.rs-checks input{width:20px;height:20px;accent-color:var(--pu-cor,#1E5A8A)}
+.rs-cits{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.rs-cit{min-height:32px;padding:4px 10px;border:1px solid #cfdbe3;border-radius:8px;background:#f3f7fa;color:var(--pu-cor,#1E5A8A);font:inherit;font-size:.78rem;font-weight:650;cursor:pointer}
+.rs-cit:hover{border-color:var(--pu-cor,#1E5A8A)}
+.rs-nc label{display:flex;flex-direction:column;gap:6px;font-size:.86rem;color:#5b2330;font-weight:600}
+.rs-nc small{font-weight:400;color:#6b4c52}
+.rs-nc textarea{width:100%;min-height:60px;padding:9px 11px;border:1px solid #e3c2c8;border-radius:9px;font:inherit;font-size:.93rem}
+.rs-foto{display:block;max-width:100%;max-height:260px;margin-top:10px;border-radius:8px;border:1px solid #d6e0e6}
+.rs-previa p{margin:0 0 6px;color:#26343d;font-size:.9rem;line-height:1.5}
+.rs-inf{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid #dbe3e8;border-radius:10px;background:#fff;margin:8px 0;cursor:pointer}
+.rs-inf input{flex:0 0 auto;width:22px;height:22px;margin-top:2px;accent-color:var(--pu-cor,#1E5A8A)}
+.rs-inf span{display:flex;flex-direction:column;gap:4px}
+.rs-inf b{font-weight:600;color:#1b262d;font-size:.92rem;line-height:1.4}
+.rs-inf small{color:#5a6972;font-size:.8rem}
+.rs-inf em{align-self:flex-start;padding:2px 8px;border-radius:999px;background:#fbeaec;color:#8a2a3a;font-style:normal;font-size:.72rem;font-weight:700}
+.rs-sug{border-color:#e3b9c0;background:#fffafa}
+.rs-relatorio{font-size:.9rem;line-height:1.55}
+.rs-relatorio p{margin:0 0 8px}
+.rs-r-tit{margin:4px 0 2px;text-align:center;font-size:1.05rem;color:var(--pu-cor,#1E5A8A)}
+.rs-r-sub{text-align:center;color:#4a5a64;font-size:.85rem}
+.rs-r-h1{margin:18px 0 8px;padding:6px 8px;background:#eef3f6;border-radius:6px;font-size:.9rem;color:#1b262d}
+.rs-r-h2{margin:12px 0 6px;padding-bottom:3px;border-bottom:2px solid var(--pu-cor,#1E5A8A);font-size:.88rem;color:var(--pu-cor,#1E5A8A)}
+.rs-r-num{padding-left:18px;text-indent:-18px}
+.rs-r-small{color:#5a6a72;font-style:italic;font-size:.84rem}
+.rs-r-tab{overflow-x:auto}
+.rs-r-tab table{width:100%;border-collapse:collapse;font-size:.82rem}
+.rs-r-tab th,.rs-r-tab td{border:1px solid #d6dee3;padding:6px 8px;text-align:left;vertical-align:top}
+.rs-r-tab th{background:#eef3f6}
+#rs-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,28,36,.45)}
+#rs-modal.on{display:flex}
+.rs-modal-caixa{width:min(680px,100%);max-height:85vh;display:flex;flex-direction:column;border-radius:14px;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.25);overflow:hidden}
+.rs-modal-caixa header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--pu-cor,#1E5A8A);color:#fff}
+.rs-modal-caixa header b{flex:1;font-size:.92rem}
+.rs-modal-caixa header button{min-width:44px;min-height:44px;border:0;background:transparent;color:#fff;font-size:1.6rem;cursor:pointer}
+.rs-modal-corpo{padding:14px 16px;overflow:auto;font-size:.9rem;line-height:1.55;color:#1b262d}
+.rs-modal-corpo p{margin:0 0 8px}
+#rs-aviso{position:fixed;left:50%;bottom:86px;z-index:1001;max-width:min(92vw,520px);padding:10px 16px;border-radius:10px;background:#1f2f38;color:#fff;font-size:.88rem;transform:translateX(-50%);opacity:0;pointer-events:none;transition:opacity .2s}
+#rs-aviso.on{opacity:1}
+.rs-eqs{display:flex;flex-direction:column;gap:12px}
+.rs-eq{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid #dbe3e8;border-radius:10px;background:#fff}
+.rs-eq-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#1b262d}
+.rs-eq-busca{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end}
+.rs-eq-busca .pu-btn{min-height:44px}
+.rs-eq-msg{margin:0;padding:8px 10px;border-radius:8px;background:#eef4f8;color:#26343d;font-size:.86rem;line-height:1.4}
+.rs-eq-ok{background:#e8f5ec;color:#1d5b33}
+.rs-eq-aviso{background:#fdf3e3;color:#7a4b0c}
+@media(max-width:640px){.rs-campos{grid-template-columns:1fr}.rs-eq-busca{grid-template-columns:1fr}.rs-checks{grid-template-columns:1fr}}
+
+/* orientação técnica e itens de consulta */
+.rs-orient ul{margin:6px 0 4px;padding-left:18px}.rs-orient li{margin:6px 0;line-height:1.45}
+.rs-fonte{display:block;color:var(--pu-muted,#5b6b78);font-size:.8rem;margin-top:2px}
+.rs-consulta h4{margin:14px 0 6px;font-size:.95rem}.rs-consulta p{margin:6px 0}
+.rs-tab{overflow-x:auto;-webkit-overflow-scrolling:touch}.rs-tab table{border-collapse:collapse;width:100%;font-size:.84rem}.rs-tab td:first-child{white-space:normal;min-width:72px}
+.rs-tab th,.rs-tab td{border:1px solid #d5dde3;padding:6px 8px;text-align:left;vertical-align:top}.rs-tab th{background:#eef3f6}
+/* relatório em preto e branco (D.estilo = 'pb') */
+.rs-pb .rs-r-tit,.rs-pb .rs-r-sub,.rs-pb .rs-r-h1,.rs-pb .rs-r-h2,.rs-pb .rs-r-small{color:#000;background:none;border:0;font-style:normal}
+.rs-pb .rs-r-h1,.rs-pb .rs-r-h2{padding-left:0}
+.rs-pb .rs-r-tab th{background:none}
+.rs-pb .rs-r-tab th,.rs-pb .rs-r-tab td{border-color:#000}
+/* checklist sob a resposta (q.checks) */
+.rs-sub{margin-top:8px;border:1px dashed #c6d2da;border-radius:10px;padding:8px 10px}
+.rs-sub legend{font-size:.8rem;font-weight:700;color:#4f6270;padding:0 4px}
+.rs-relatorio.rs-pb .rs-r-tit,.rs-relatorio.rs-pb .rs-r-sub,.rs-relatorio.rs-pb .rs-r-h1,.rs-relatorio.rs-pb .rs-r-h2,.rs-relatorio.rs-pb p,.rs-relatorio.rs-pb td,.rs-relatorio.rs-pb th{color:#000!important;background:none!important;border-bottom-color:transparent}
+.rs-relatorio.rs-pb .rs-r-tab th,.rs-relatorio.rs-pb .rs-r-tab td{border:1px solid #000!important}
+
+/* Apagar dados da inspeção (tela inicial do roteiro) — mesmo visual da Drogaria */
+.rs-apagar{grid-column:1/-1;margin-top:14px;padding:14px;border:1px dashed #d9a39e;border-radius:14px;background:#fffaf9;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;text-align:left}
+.rs-apagar-txt{flex:1 1 240px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.rs-apagar-txt strong{color:#8b2f2a;font-size:.92rem}
+.rs-apagar-txt span{color:#6b5a58;font-size:.76rem;line-height:1.35}
+.pu-secoes-grade .rs-apagar .rs-apagar-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto!important;min-width:0!important;min-height:42px!important;height:auto!important;padding:9px 14px!important;border:1.5px solid #b9544d!important;border-radius:10px!important;background:#fff!important;color:#8b2f2a!important;box-shadow:none!important;font:inherit;font-size:.82rem!important;font-weight:800!important;text-align:center!important;cursor:pointer;white-space:nowrap}
+.pu-secoes-grade .rs-apagar .rs-apagar-btn:hover,.pu-secoes-grade .rs-apagar .rs-apagar-btn:focus-visible{background:#b9544d!important;color:#fff!important}

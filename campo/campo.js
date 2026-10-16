@@ -121,7 +121,7 @@
   return 't:'+rotuloGrupo(p).slice(0,120)}
  function caixaGrupo(p){return p.closest('.q,.req,.rs-q,.qmain,.pu-q')||p.parentElement}
  function rotuloGrupo(p){var cx=caixaGrupo(p),cl=cx.cloneNode(true);[].forEach.call(cl.querySelectorAll('button,textarea,input,select,details,.cmp-pbtn,.uvs-previa'),function(e){e.remove()});return limpa(cl.textContent).slice(0,220)}
- var CSSP='.cmp-pbtn{display:inline-flex;align-items:center;gap:6px;margin:8px 0 2px;padding:6px 10px;border-radius:8px;border:1px dashed #b7791f;background:#fffaf0;color:#8a5a14;font:600 12px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer}.cmp-pbtn.on{border-style:solid;background:#fdf0d5;color:#6b4410}.cmp-pend{box-shadow:inset 4px 0 0 #d69e2e!important;background-image:linear-gradient(#fffaf0,#fffaf0)!important}';
+ var CSSP='.cmp-pbtn{display:inline-flex;align-items:center;gap:6px;margin:8px 0 2px;min-height:40px;padding:6px 12px;border-radius:8px;border:1px dashed #b7791f;background:#fffaf0;color:#8a5a14;font:600 12px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;cursor:pointer}.cmp-pbtn.on{border-style:solid;background:#fdf0d5;color:#6b4410}.cmp-pend{box-shadow:inset 4px 0 0 #d69e2e!important;background-image:linear-gradient(#fffaf0,#fffaf0)!important}';
  function varre(){if(varre.ocupado)return;varre.ocupado=true;
   try{grupos().forEach(function(p){var k=chaveGrupo(p),nx=p.nextElementSibling,on=!!C.pend[k];
    var btn=nx&&nx.classList&&nx.classList.contains('cmp-pbtn')?nx:null;
