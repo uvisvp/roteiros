@@ -1,6 +1,6 @@
 {
-  "versao": "20260929-17",
+  "versao": "20261016-18",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Odontologia: foto em cada verificação (câmera ou galeria), guardada com a inspeção, e relatório fotográfico em PDF pelo botão Fotos do cabeçalho."
+  "notas": "Todos os núcleos: microfone para ditar texto em todas as caixas de texto (fala números como algarismos); fotos de evidência com data, hora e localização gravadas na imagem e marcação com seta e círculo; validação de CNPJ; botão Campo (pendências, achados, redação, verificações, revisão das fotos); cópia automática da inspeção em andamento."
 }
