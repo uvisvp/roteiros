@@ -32,6 +32,7 @@ function asPergunta(kind,i,n){
  const it=current[kind][i],st=mark(kind,i),foto=photoIndex.get(photoItem(kind,i));
  return `<div class="pu-q" data-as-q="${kind}|${i}"><p class="pu-q-texto"><b>${n}.</b> ${esc(it.i)}</p><div class="cite">${refButtons(it)}</div>`
   +`<div class="pu-resp" role="group" aria-label="Resultado">${AS_VAL[kind].map(([v,l])=>`<button type="button" data-as-mark="${v}" data-kind="${kind}" data-index="${i}" data-v="${v}" aria-pressed="${st===v}">${l}</button>`).join('')}</div>`
+  +`<label class="pu-anot">Anotação <small>(digite ou dite)</small><textarea rows="2" data-as-nota="${kind}|${i}" placeholder="Opcional: o que foi visto ou conferido">${esc(saved[scope()+'|nota|'+kind+'|'+i]||'')}</textarea></label>`
   +`<details class="pu-mais"><summary>Foto${foto?' ✓':''}</summary><div>${photoHtml(kind,i)}</div></details></div>`;
 }
 function asItemGrupo(el,kind,g){
@@ -108,7 +109,7 @@ async function asInicia(id){
   if(t.closest('[data-as-pendente]')){for(const s of asSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}alert('Todas as verificações foram respondidas.');return}
  });
  raiz.addEventListener('toggle',e=>{const d=e.target.closest&&e.target.closest('[data-as-inf]');if(d){if(d.open)asInfAbertos.add(d.dataset.asInf);else asInfAbertos.delete(d.dataset.asInf)}},true);
- raiz.addEventListener('input',e=>{const t=e.target;if(t.dataset.asMeta){meta()[t.dataset.asMeta]=t.value;persist();UvisPadrao.atualiza()}});
+ raiz.addEventListener('input',e=>{const t=e.target;if(t.dataset.asMeta){meta()[t.dataset.asMeta]=t.value;persist();UvisPadrao.atualiza()}if(t.dataset.asNota){const kn=scope()+'|nota|'+t.dataset.asNota;if(t.value.trim())saved[kn]=t.value;else delete saved[kn];persist()}});
  raiz.addEventListener('change',async e=>{const t=e.target;
   if(t.matches('[data-photo]')){onPhoto(t);return}
   if(t.matches('[data-as-sub]')){profile().subtype=t.value;persist();await loadPhotos();asRedesenha();if(t.value)UvisPadrao.vai({aba:'roteiro',secao:null,item:null});return}

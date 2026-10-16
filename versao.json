@@ -1,6 +1,6 @@
 {
-  "versao": "20261016-19",
+  "versao": "20261016-20",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Alimentos — leitura automática do rótulo: lê texto claro sobre fundo escuro e tabelas com grade; monta a tabela nutricional por mais de uma leitura, recupera vírgulas pela conta 100 g × porção e pelo %VD e marca leituras duvidosas; confere os dizeres com o texto de todas as fotos; indica o que é obrigatório e o que vale só quando aplicável (alergênicos, lactose, fenilalanina, tartrazina, corante e aroma artificiais, transgênicos, lupa frontal). Citações: norma fora do banco leva à busca na fonte oficial."
+  "notas": "Caixa de texto (digitada ou ditada) em cada pergunta: Odontologia e Serviços assistenciais ganham “Anotação” em toda verificação, que sai no relatório junto do resultado; Estética ganha “Constatação” em cada infração marcada, que sai no relatório; na Drogaria, “Anotação e evidência” fica disponível antes de responder e também no NSA."
 }
