@@ -70,11 +70,13 @@ function odoPergunta(s,i,n,porSala){
   +`<div class="cite pu-cit-odo">${uvisOdontoCitation(i.ch,i.c)}</div></div>`
   +`<div class="pu-resp" role="group" aria-label="Resultado">${[['ok','Cumpre'],['nao','Não cumpre'],['na','Não se aplica']].map(([v,l])=>`<button type="button" data-a="${esc(i.id)}" data-v="${v}" aria-pressed="${a===v}">${l}</button>`).join('')}</div>`
   +(a==='nao'?`<div class="pu-bloco pu-nc">${assessmentHtml(i)}</div>`:'')
+  +odoNotaHtml(i)
   +odoFotoHtml(i.id)
   +`</div>`;
 }
 /* Fotos por verificação: reduzidas e guardadas junto com as respostas (entram nas Salvas);
    saem à parte no relatório fotográfico em PDF (botão Fotos do cabeçalho). */
+function odoNotaHtml(i){const a=state.a[i.id]||'',nc=a==='nao';return `<label class="pu-anot">${nc?'Evidência da constatação':'Anotação'} <small>(digite ou dite)</small><textarea rows="2" data-evidence="${esc(i.id)}" placeholder="${nc?'O que foi constatado, onde, documento conferido…':'Opcional: o que foi visto ou conferido'}">${esc(state.evidence?.[i.id]||'')}</textarea></label>`}
 let odoFotoAberta='';
 function odoFotoHtml(id){const f=state.fotos&&state.fotos[id];
  return `<details class="pu-mais"${odoFotoAberta===id?' open':''}><summary>Foto${f?' ✓':''}</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-odo-foto="${esc(id)}">📷 ${f?'Trocar foto':'Tirar ou anexar foto'}</button>${f?`<button type="button" class="pu-btn" data-odo-sem-foto="${esc(id)}">Remover foto</button>`:''}</div>${f?`<img class="photo-thumb" alt="Foto vinculada à verificação" src="${esc(f)}">`:''}<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>`}
