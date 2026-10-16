@@ -12,6 +12,10 @@ const PASSOS=[
  ['serviços assistenciais (ILPI): navegação padrão e relatório',['padrao.cjs','Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi']],
  ['academias e piscinas: navegação padrão e relatório',['padrao.cjs','Serviços','academia-piscina','Academias e piscinas']],
  ['academias e piscinas: perfil, infrações, foto, citação e Word',['academia.cjs']],
+ ['vacinação em drogaria: navegação padrão e relatório',['padrao.cjs','Serviços','vacinacao-drogaria','Vacinação em drogaria']],
+ ['vacinação em unidade básica de saúde: navegação padrão e relatório',['padrao.cjs','Serviços','vacinacao-ubs','Vacinação em Unidade Básica de Saúde']],
+ ['vacinação em serviço privado: navegação padrão e relatório',['padrao.cjs','Serviços','vacinacao-privado','Vacinação em serviço privado']],
+ ['vacinação: grupo em Serviços e adequação por serviço',['vacina.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Distribuidora / transportadora']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Distribuidora / transportadora'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]
 ];

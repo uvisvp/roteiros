@@ -10,48 +10,16 @@
    Idempotente. Uso: node scripts/repack-academia.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
+const {pagina, gravaBloco} = require('./roteiro-simples-pagina.cjs');
 const root = path.join(__dirname, '..'), file = path.join(root, 'index.html');
 const APP = 'academia-piscina', COR = '#5452AA';
 let {html, lz, blocks} = unpack(file);
 const le = f => fs.readFileSync(path.join(root, f), 'utf8');
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
-
-/* ---------- dados e validação ---------- */
-const D = require(path.join(root, 'academia', 'roteiro.cjs'));
-const LEGAL = JSON.parse(le('academia/legislacao.json'));
-const refs = new Set();
-D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
-D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
-const legal = {};
-for (const r of refs) { if (!LEGAL[r]) throw Error(`dispositivo sem texto (${r}); rode scripts/academia-legislacao.cjs`); legal[r] = LEGAL[r]; }
-const ids = D.secoes.flatMap(s => s.itens.flatMap(i => (i.perguntas || []).map(q => q.id)));
-const rep = ids.filter((x, i) => ids.indexOf(x) !== i);
-if (rep.length) throw Error('perguntas com id repetido: ' + rep.join(', '));
-const campos = new Set(D.secoes.flatMap(s => s.itens.flatMap(i => (i.campos || []).map(c => c.id))));
-for (const s of D.secoes) for (const i of s.itens) for (const q of i.perguntas || []) {
-  for (const f of q.inf || []) if (!D.infracoes.some(x => x.id === f)) throw Error(`infração inexistente ${f} em ${q.id}`);
-  if (q.naSe && !campos.has(q.naSe.campo)) throw Error(`naSe com campo inexistente em ${q.id}`);
-}
-for (const x of D.infracoes) if (!D.secoes.some(s => s.itens.some(i => (i.perguntas || []).some(q => (q.inf || []).includes(x.id))))) throw Error('infração sem pergunta: ' + x.id);
 
 /* ---------- página do app ---------- */
-const dados = JSON.stringify({...D, cor: COR, legal}).replace(/<\//g, '<\\/');
-const pagina = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>${esc(D.titulo)}</title>`
-  + `<style>${le('roteiro-simples/roteiro-simples.css')}</style></head><body>`
-  + `<script>${blocks.get('rec--jszip.js')}</script>`
-  + `<script>${le('relatorio-fotos.js')}</script>`
-  + `<script>window.ROTEIRO=${dados};</script>`
-  + `<script>${le('roteiro-simples/roteiro-simples.js')}</script></body></html>`;
-const enc = lz.compressToBase64(pagina);
-if (lz.decompressFromBase64(enc) !== pagina) throw Error('round-trip do bloco');
-const tag = `<script type="text/plain" id="app--${APP}">`;
-const reBloco = new RegExp(`<script type="text/plain" id="app--${APP}">[\\s\\S]*?</script>\\n?`);
-if (reBloco.test(html)) html = html.replace(reBloco, () => tag + enc + '</script>\n');
-else {
-  const ancora = '<script type="text/plain" id="app--central-consultas">';
-  if (html.split(ancora).length !== 2) throw Error('âncora do bloco');
-  html = html.replace(ancora, () => tag + enc + '</script>\n' + ancora);
-}
+const D = require(path.join(root, 'academia', 'roteiro.cjs'));
+const {legal, html: pag} = pagina(D, JSON.parse(le('academia/legislacao.json')), COR, blocks);
+html = gravaBloco(html, lz, APP, pag);
 
 /* ---------- casca ---------- */
 function insere(depois, novo, rotulo, ja) {

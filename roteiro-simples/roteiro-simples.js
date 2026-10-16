@@ -34,6 +34,7 @@
  function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
  function nNC(){ return ORDEM.filter(function(id){ return st.r[id] === 'nc' && visivel(PERG[id]); }).length; }
  function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); }); return s; }
+ function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
  function lista(xs){ return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1]; }
 
  /* ---------- citações ---------- */
@@ -227,13 +228,19 @@
  function blocos(){ var B = [], R = D.relatorio, sec = 0, irr = [];
   B.push({t: 'title', x: R.titulo}, {t: 'sub', x: R.subtitulo});
   B.push({t: 'h1', x: (++sec) + ' IDENTIFICAÇÃO'});
-  D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
+  /* c.rel === false: campo só de perfil, fora do relatório. c.desc {valor: texto}: o perfil
+     vira uma frase com o que o estabelecimento faz ou tem (só as respostas com texto);
+     '{campo}' no texto puxa o desc de outro campo. Título da frase: D.perfilRotulo. */
+  var descr = function(c){ var t = c.desc && c.desc[st.meta[c.id]]; return t ? t.replace(/\{(\w+)\}/g, function(m, k){ var o = campoPorId(k); return o && o.desc && o.desc[st.meta[k]] || ''; }) : ''; };
+  var faz = [];
+  D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.desc && c.rel !== false){ var t = descr(c); if(t) faz.push(t); return; } if(c.rel === false) return; var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
+  if(faz.length) B.push({t: 'kv', k: D.perfilRotulo || 'Atividades e estrutura', v: lista(faz)});
   B.push({t: 'h1', x: (++sec) + ' OBJETIVO E LEGISLAÇÃO DE REFERÊNCIA'}, {t: 'p', x: R.objetivo});
   D.normas.forEach(function(n){ B.push({t: 'num', n: '•', x: n[0] + ' — ' + n[1]}); });
   B.push({t: 'h1', x: (++sec) + ' VERIFICAÇÕES REALIZADAS'});
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
-   s.itens.forEach(function(it){ var ps = perguntasDe(it).filter(function(q){ return st.r[q.id]; }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
+   s.itens.forEach(function(it){ var ps = perguntasDe(it).filter(function(q){ return st.r[q.id] && !(D.relSemNa && st.r[q.id] === 'na'); }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
     var fr = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }).map(frase), na = ps.filter(function(q){ return st.r[q.id] === 'na' && typeof q.na !== 'string'; });
     partes.push({t: 'h2', x: sec + '.' + (ns + 1) + '.' + (partes.filter(function(p){ return p.t === 'h2'; }).length + 1) + ' ' + it.titulo});
     cps.forEach(function(b){ partes.push(b); });

@@ -1,0 +1,100 @@
+{
+ "regularidade": [
+  {
+   "t": "O Calendário Nacional de Vacinação afixado deve ser o vigente; confira a data da Instrução Normativa do Ministério da Saúde. O item “Calendários de vacinação”, ao fim deste roteiro, traz o calendário para consulta.",
+   "f": "RDC Anvisa nº 197/2017; Ministério da Saúde (Calendário Nacional de Vacinação)"
+  }
+ ],
+ "pessoal": [
+  {
+   "t": "Vacinador capacitado em técnica de aplicação, rede de frio e atendimento a eventos adversos; RT com habilitação legal; trabalhadores vacinados (hepatite B, tétano, difteria).",
+   "f": "RDC Anvisa nº 197/2017; NR-32 (Segurança e saúde no trabalho em serviços de saúde)"
+  }
+ ],
+ "sala": [
+  {
+   "t": "A sala de vacinação é área semicrítica e exclusiva para administrar imunobiológicos. Área mínima de 6 m² (RDC 50/2002); recomendada de 9 m². Acessível a pessoas com deficiência.",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)"
+  },
+  {
+   "t": "Piso e paredes lisos, contínuos e laváveis; teto com forro resistente à lavagem; bancada de material não poroso; ralos com tampa; iluminação, temperatura e ventilação adequadas (ar-condicionado).",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)"
+  },
+  {
+   "t": "Duas pias: uma para lavar materiais e caixas térmicas (cuba funda) e outra exclusiva para as mãos, com torneira sem contato manual, sabonete líquido e papel-toalha. Tomada exclusiva e aterrada para cada equipamento, a no mínimo 1,30 m do piso.",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)"
+  },
+  {
+   "t": "Equipamentos e insumos básicos: câmara refrigerada cadastrada na Anvisa, exclusiva para imunobiológicos; freezer para bobinas; termômetro de momento, máxima e mínima com cabo extensor para cada caixa térmica e câmara (mais um reserva); caixa coletora de perfurocortantes com suporte; álcool 70%; lixeira com pedal; maca ou acesso a maca para emergência.",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)"
+  }
+ ],
+ "ambientes": [
+  {
+   "t": "Limpeza concorrente da sala de vacinação pelo menos duas vezes ao dia (área semicrítica) e sempre que necessário; limpeza terminal no mínimo a cada 15 dias (piso, teto, paredes, portas, janelas, mobiliário, luminárias e filtros do ar-condicionado); panos exclusivos para piso e demais superfícies.",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)"
+  },
+  {
+   "t": "Limpeza das câmaras refrigeradas mensalmente ou conforme o uso, de preferência no início da semana e com estoque reduzido, seguindo o fabricante e remanejando as vacinas antes.",
+   "f": "Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024); Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  }
+ ],
+ "refrigeracao": [
+  {
+   "t": "É proibido guardar vacinas em refrigerador de uso doméstico ou frigobar. O equipamento deve ser câmara científica refrigerada regularizada na Anvisa (ou pré-qualificada pela OMS), de uso exclusivo para imunobiológicos; o freezer científico, quando houver, guarda só as bobinas reutilizáveis. Encontrado equipamento doméstico, a substituição deve ser imediata.",
+   "f": "RDC Anvisa nº 197/2017, art. 10, § 2º; Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  },
+  {
+   "t": "A câmara refrigerada opera entre 2 °C e 8 °C, com set point de 5 °C; deve ter registrador eletrônico de temperatura contínuo, controlador de alta e baixa temperatura com alarme visual e sonoro e bateria, e ventilação por ar forçado.",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  },
+  {
+   "t": "Leitura e registro da temperatura no mapa diário, no mínimo duas vezes ao dia (início e fim da jornada); datalogger em paralelo ao registrador do equipamento; verificação diária de porta, alarmes e alimentação elétrica ao fim do expediente; calibração periódica (e após intervenção) por laboratório da Rede Brasileira de Calibração (RBC/Inmetro).",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  },
+  {
+   "t": "Equipamento longe da luz solar direta, em ambiente ventilado, com no mínimo 15 cm livres ao redor; identificado, com “mapa ilustrativo” (vacina, lote, laboratório, validade, quantidade) e organização “primeiro a vencer, primeiro a sair”; plano de contingência para falha de energia ou do equipamento, conhecido pela equipe.",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  }
+ ],
+ "produtos": [
+  {
+   "t": "Vacinas regularizadas na Anvisa e adquiridas de distribuidor com AFE; frascos multidose abertos usados dentro do prazo da bula, com data e hora de abertura anotadas.",
+   "f": "RDC Anvisa nº 197/2017; bula do produto"
+  }
+ ],
+ "transporte": [
+  {
+   "t": "Caixa térmica de poliuretano (na sala de vacinação, capacidade mínima de 12 litros) com bobinas reutilizáveis ambientadas: retiradas do freezer até sumir a névoa e confirmado 0 °C com termômetro de cabo extensor, secas antes de entrar na caixa; vacinas mantidas entre 2 °C e 8 °C.",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  },
+  {
+   "t": "Datalogger em todas as caixas térmicas durante o transporte, mesmo nas qualificadas, posicionado no centro da carga; registro das temperaturas e das intercorrências.",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  }
+ ],
+ "registros": [
+  {
+   "t": "Registre em caderneta/comprovante: vacina, dose, lote, validade, data, local e vacinador; e no sistema de informação definido pelo Ministério da Saúde.",
+   "f": "RDC Anvisa nº 197/2017"
+  }
+ ],
+ "notificacoes": [
+  {
+   "t": "Eventos supostamente atribuíveis à vacinação ou imunização (ESAVI) e erros de imunização devem ser notificados no sistema indicado pelo Ministério da Saúde (e-SUS Notifica).",
+   "f": "Manual de Vigilância Epidemiológica de Eventos Supostamente Atribuíveis à Vacinação ou Imunização (Ministério da Saúde, 4ª ed.)"
+  }
+ ],
+ "extramuros": [
+  {
+   "t": "Na vacinação extramuros, mantenha a cadeia de frio (caixa térmica com bobinas ambientadas e datalogger), o registro das doses e o material para atendimento de reações; confira a comunicação/autorização exigida pela vigilância local.",
+   "f": "RDC Anvisa nº 197/2017; Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  }
+ ],
+ "civp": [
+  {
+   "t": "O Certificado Internacional de Vacinação ou Profilaxia segue o Regulamento Sanitário Internacional; para febre amarela, a dose única vale por toda a vida (Anexo 7 do RSI, emenda em vigor desde 2016). Confira o credenciamento do serviço para emissão.",
+   "f": "Regulamento Sanitário Internacional (RSI 2005), Anexo 7; Anvisa"
+  }
+ ]
+}

@@ -45,7 +45,9 @@ const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
  ok(/Academia Teste/.test(rel),'relatório: identificação');
  ok(/Não há placa visível[\s\S]*Fundamento: Lei Municipal nº 11\.383\/1993, art\. 2º-C/.test(rel),'relatório: irregularidade com fundamento');
  ok(/ENQUADRAMENTO[\s\S]*placa de aviso[\s\S]*art\. 2º-B/.test(rel),'relatório: enquadramento (art. 2º-B)');
- ok(/Não se aplicam ao estabelecimento|não possui piscina/i.test(rel),'relatório: Não se aplica do perfil');
+ ok(!/Não se aplica|não possui piscina|Possui piscina|piscina:/i.test(rel),'relatório: sem “Não se aplica” nem perfil negativo');
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'perfil'}));await p.waitForTimeout(300);await f.selectOption('select[data-rs-meta="p_avaliacao"]','sim');await p.waitForTimeout(200);
+ ok(/Atividades e estrutura: avaliação física/.test(await T.texto(f,'academia-piscina')),'relatório: perfil descreve o que faz');
  // Word
  await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(400);
  const dl=p.waitForEvent('download',{timeout:15000}).catch(e=>{console.log(String(e).slice(0,200));return null});await f.click('[data-rs-word]');await p.waitForTimeout(800);await f.evaluate(()=>{const x=[...document.querySelectorAll('button')].find(b=>/Emitir mesmo assim/.test(b.textContent));if(x)x.click()});const d=await dl;if(!d)console.log(await f.evaluate(()=>document.body.innerText.slice(-200)));

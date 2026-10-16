@@ -32,6 +32,9 @@ module.exports = {
   tituloCurto: 'Academias e piscinas',
   store: 'uvis-academia-piscina-v1',
   naSempre: true,
+  /* relatório descreve só o que o estabelecimento faz: perfil pelas respostas “Sim” e sem as verificações “Não se aplica” */
+  relSemNa: true,
+  perfilRotulo: 'Atividades e estrutura',
   relatorio: {
     titulo: 'RELATÓRIO DE INSPEÇÃO SANITÁRIA',
     subtitulo: 'Estabelecimento de atividades físicas e esportivas — academias, clubes e piscinas de uso coletivo (Portaria SMS nº 1.101/2015)',
@@ -66,17 +69,17 @@ module.exports = {
         {id: 'perfil', titulo: 'Perfil do estabelecimento', curto: 'Perfil',
           descricao: 'Responda o que existe no local. O que for “Não” passa a “Não se aplica” no roteiro (pode ser alterado depois).',
           campos: [
-            {id: 'p_piscina', rotulo: 'Possui piscina?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_uso', rotulo: 'Uso da piscina', tipo: 'select', rel: false, opcoes: [['restrito', 'Coletivo restrito (alunos, sócios, hóspedes)'], ['publico', 'Público (população em geral)']]},
-            {id: 'p_sauna', rotulo: 'Possui sauna, banheira ou ofurô?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_lutas', rotulo: 'Oferece lutas esportivas?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_avaliacao', rotulo: 'Faz avaliação física / antropométrica?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_quadra', rotulo: 'Possui quadras esportivas?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_alimentos', rotulo: 'Manipula alimentos no local (lanchonete, cozinha)?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_trocador', rotulo: 'Possui trocador de fraldas?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_federado', rotulo: 'Atende atletas federados (entidade federativa)?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_dea', rotulo: 'Clube ou academia com mais de 1.000 sócios?', tipo: 'select', opcoes: SN, rel: false},
-            {id: 'p_alternativa', rotulo: 'Usa água de solução alternativa (poço, caminhão-pipa)?', tipo: 'select', opcoes: SN, rel: false}
+            {id: 'p_piscina', rotulo: 'Possui piscina?', tipo: 'select', opcoes: SN, desc: {sim: 'piscina{p_uso}'}},
+            {id: 'p_uso', rotulo: 'Uso da piscina', tipo: 'select', rel: false, desc: {restrito: ' de uso coletivo restrito', publico: ' de uso público'}, opcoes: [['restrito', 'Coletivo restrito (alunos, sócios, hóspedes)'], ['publico', 'Público (população em geral)']]},
+            {id: 'p_sauna', rotulo: 'Possui sauna, banheira ou ofurô?', tipo: 'select', opcoes: SN, desc: {sim: 'sauna ou banheira'}},
+            {id: 'p_lutas', rotulo: 'Oferece lutas esportivas?', tipo: 'select', opcoes: SN, desc: {sim: 'lutas esportivas'}},
+            {id: 'p_avaliacao', rotulo: 'Faz avaliação física / antropométrica?', tipo: 'select', opcoes: SN, desc: {sim: 'avaliação física'}},
+            {id: 'p_quadra', rotulo: 'Possui quadras esportivas?', tipo: 'select', opcoes: SN, desc: {sim: 'quadras esportivas'}},
+            {id: 'p_alimentos', rotulo: 'Manipula alimentos no local (lanchonete, cozinha)?', tipo: 'select', opcoes: SN, desc: {sim: 'manipulação de alimentos'}},
+            {id: 'p_trocador', rotulo: 'Possui trocador de fraldas?', tipo: 'select', opcoes: SN, desc: {sim: 'trocador de fraldas'}},
+            {id: 'p_federado', rotulo: 'Atende atletas federados (entidade federativa)?', tipo: 'select', opcoes: SN, desc: {sim: 'atendimento a atletas federados'}},
+            {id: 'p_dea', rotulo: 'Clube ou academia com mais de 1.000 sócios?', tipo: 'select', opcoes: SN, desc: {sim: 'mais de 1.000 sócios'}},
+            {id: 'p_alternativa', rotulo: 'Usa água de solução alternativa (poço, caminhão-pipa)?', tipo: 'select', opcoes: SN, desc: {sim: 'abastecimento de água por solução alternativa'}}
           ]}
       ]
     },
