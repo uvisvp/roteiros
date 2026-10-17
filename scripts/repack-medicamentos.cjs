@@ -532,6 +532,22 @@ blocoAltera('rec--drogaria-report-final.js', s => {
     "['licenca','Os serviços farmacêuticos prestados não estão indicados na licença sanitária.',['rdc-44-2009::artigo::61::paragrafo::3','" + LM(1) + "']]", 'drogaria: serviços sem licença + Lei 13.725');
 });
 
+/* 7w. Drogaria — dados registrados que não chegavam ao relatório (teste
+   drogaria-relatorio, 17/10/2026): os pavimentos sumiam quando o tipo de imóvel
+   não era escolhido (a frase “instalado em configuração não informada” é
+   descartada), e as perguntas de 7u (treinamento sobre EPI, guarda por 5 anos,
+   sítio eletrônico na AFE) só escreviam quando a resposta era “Não”. */
+blocoAltera('rec--drogaria-report-final.js', s => {
+  s = trocaEm(s, "let intro=`O estabelecimento está instalado em ${instal}`+(pav.length?` e conta com ${sentenceList(pav)}`:'')+'.';",
+    "let intro=f.tipo_instalacao?`O estabelecimento está instalado em ${instal}`+(pav.length?` e conta com ${sentenceList(pav)}`:'')+'.':(pav.length?`O estabelecimento ocupa: ${sentenceList(pav)}.`:'');", 'drogaria: pavimentos sem tipo de imóvel');
+  s = trocaEm(s, "p(B,intro);if(window.__drgSuperReport)", "if(intro.trim())p(B,intro.trim());if(window.__drgSuperReport)", 'drogaria: frase da área física');
+  s = trocaEm(s, "yn(B,a,[['licenca_fornecedor',",
+    "yn(B,a,[['treino_epi','Há registro de treinamento inicial e continuado do pessoal, inclusive da limpeza, sobre autocuidado, uso e descarte de EPI e conduta em acidentes.','Não há registro de treinamento do pessoal sobre autocuidado, uso e descarte de EPI e conduta em acidentes.'],"
+    + "['guarda_5anos','A documentação é mantida no estabelecimento por, no mínimo, 5 anos, à disposição da vigilância sanitária.','A documentação não é mantida no estabelecimento pelo prazo mínimo de 5 anos.'],['licenca_fornecedor',", 'drogaria: 7u no texto da qualidade');
+  return trocaEm(s, "yn(B,a,[['licenca','Possui licença sanitária para a oferta do serviço de venda remota.',",
+    "yn(B,a,[['site_afe','O endereço do sítio eletrônico consta da Autorização de Funcionamento, e o site não faz propaganda de medicamentos sob prescrição nem usa listas de preços com apelo publicitário.','O endereço do sítio eletrônico não consta da Autorização de Funcionamento, ou o site faz propaganda de medicamentos sob prescrição ou usa listas de preços com apelo publicitário.'],['licenca','Possui licença sanitária para a oferta do serviço de venda remota.',", 'drogaria: 7u no texto da venda remota');
+});
+
 /* Catálogo igual ao do site Medicamentos: Drogaria (drogaria, EAC e vacinação),
    Farmácia com manipulação e Atacadista de medicamentos (distribuidora/
    transportadora e gases medicinais). EAC (Serviço Tipo I) e Vacinação são os
