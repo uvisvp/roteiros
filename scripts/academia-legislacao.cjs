@@ -44,6 +44,8 @@ function dispositivo(id) {
 const refs = new Set();
 D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
 D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
+/* citações dos campos (inventário por ambiente: c.r e as de cada irregularidade) */
+D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); })));
 
 const cache = {};
 function norma(chave) {

@@ -1,7 +1,7 @@
 'use strict';
 /* Página de um roteiro no motor roteiro-simples (roteiro-simples/, cópia do
    site Medicamentos): valida os dados e devolve o HTML do bloco app--<app>.
-   Usado por repack-academia.cjs e repack-vacina.cjs. */
+   Usado por repack-academia, repack-vacina, repack-eac e repack-medicamentos. */
 const fs = require('node:fs'), path = require('node:path');
 const root = path.join(__dirname, '..');
 const le = f => fs.readFileSync(path.join(root, f), 'utf8');
@@ -11,6 +11,8 @@ function valida(D, LEGAL) {
   const refs = new Set();
   D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
   D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
+  /* citações dos campos (inventário por ambiente: c.r e as de cada irregularidade) */
+  D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); })));
   const legal = {};
   for (const r of refs) { if (!LEGAL[r]) throw Error(`${D.app}: dispositivo sem texto (${r})`); legal[r] = LEGAL[r]; }
   const ids = D.secoes.flatMap(s => s.itens.flatMap(i => (i.perguntas || []).map(q => q.id)));
@@ -31,6 +33,8 @@ function pagina(D, LEGAL, cor, blocks) {
     + `<style>${le('roteiro-simples/roteiro-simples.css')}</style></head><body>`
     + `<script>${blocks.get('rec--jszip.js')}</script>`
     + `<script>${le('relatorio-fotos.js')}</script>`
+    /* D.ocr: leitor de documentos (certidão do conselho etc.), o mesmo motor da drogaria */
+    + (D.ocr ? ['rec--drogaria-ocr-tools.js', 'rec--ocr-extractors.js', 'rec--ocr-padrao.js'].map(b => `<script>${blocks.get(b).replace(/<\/script/gi, '<\\/script')}</script>`).join('') : '')
     + `<script>window.ROTEIRO=${dados};</script>`
     + `<script>${le('roteiro-simples/roteiro-simples.js')}</script></body></html>`};
 }

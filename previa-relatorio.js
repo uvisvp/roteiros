@@ -71,7 +71,11 @@
   'servicos-assistenciais':{
    ok:function(){try{return typeof mark==='function'&&typeof status==='function'}catch(e){return false}},
    linhas:function(){var out=[];if(!current)return out;
-    ['doc','rot'].forEach(function(k){(current[k]||[]).forEach(function(it,i){var st=mark(k,i);if(st)out.push({x:limpa(it.i)+' — '+status(k,st)+'. Base legal: '+limpa(it.l)})})});
+    /* como no relatório descritivo: a frase da constatação (com os pontos não atendidos do checklist) e, na irregularidade, o fundamento */
+    var F=window.UvsFrase||function(t){return t},D=window.UvsFrase&&UvsFrase.doc;
+    ['doc','rot'].forEach(function(k){(current[k]||[]).forEach(function(it,i){var st=mark(k,i);if(!st)return;
+     var fr=st==='NA'?'Não se aplica: '+limpa(it.i):((st==='NC'&&window.UvsPontos&&UvsPontos.frase(current.id+'|'+it.i))||(k==='doc'&&D?D(it.i,st==='C'?'c':'nc','O estabelecimento'):F(it.i,st==='C'?'c':'nc')));
+     out.push({x:limpa(fr)+(st==='NC'?' Fundamento: '+limpa(it.l):'')})})});
     (current.inf||[]).forEach(function(it,i){if(mark('inf',i)==='SEL')out.push({x:'Infração selecionada: '+limpa(it.i)+' — '+limpa(it.l)})});return out},
    /* vários grupos podem estar abertos ao mesmo tempo: uma prévia por grupo aberto */
    itens:function(){var pp=itemPadrao();if(pp)return [pp];var sc=typeof scope==='function'?scope():'';return [].filter.call(document.querySelectorAll('#content section.group'),function(g){return !g.classList.contains('closed')&&visivel(g)}).map(function(g){

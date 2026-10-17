@@ -1,0 +1,3925 @@
+{
+ "title": "Manipulação de estéreis",
+ "subtitle": "RDC 67/2007, Anexo IV — roteiro do Anexo VII, item 18",
+ "icon": "lab",
+ "sections": [
+  {
+   "code": "v2-13.1",
+   "num": "13.1",
+   "title": "Condições gerais",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.1",
+   "itemNum": "13.1",
+   "itemTitle": "Condições gerais",
+   "requirements": [
+    {
+     "id": "e18_1_1",
+     "text": "É realizado o efetivo monitoramento de todo o processo de preparação, de modo a garantir ao paciente a qualidade da preparação a ser administrada? (Anexo VII 18.1.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 2.2",
+       "text": "2.2. É indispensável o efetivo monitoramento de todo o processo de preparação, de modo a garantir ao paciente a qualidade da preparação a ser administrada.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.1.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há monitoramento efetivo de todo o processo de preparação dos estéreis.",
+     "neg": "Não há monitoramento efetivo de todo o processo de preparação dos estéreis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_1_2",
+     "text": "A farmácia manipula produtos usados em terapia antineoplásica? (Anexo VII 18.1.2: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 2.4",
+       "text": "2.4. Para a manipulação de produtos usados em terapia antineoplásica devem ser obedecidas as disposições da RDC nº 220 de setembro de 2004, contempladas neste Anexo, ou qualquer outra que venha alterá-la ou substituí-la.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 2.5",
+       "text": "2.5. A manipulação de antineoplásicos e outras substâncias com reconhecido risco químico deve seguir critérios rígidos de utilização de equipamentos de proteção coletiva (Cabine de Segurança Biológica) e individual, procedimentos de conservação e transporte, prevenção e tratamento em caso de acidentes, de acordo com legislação específica.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.1.2"
+      }
+     ],
+     "informativo": true,
+     "pos": "A farmácia manipula produtos usados em terapia antineoplásica.",
+     "neg": "A farmácia não manipula produtos usados em terapia antineoplásica.",
+     "classe": "INF"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.2",
+   "num": "13.2",
+   "title": "Pessoal, higiene e conduta",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.2",
+   "itemNum": "13.2",
+   "itemTitle": "Pessoal, higiene e conduta",
+   "requirements": [
+    {
+     "id": "e18_2_1",
+     "text": "Todo o pessoal envolvido com a manipulação de estéreis conhece os princípios das Boas Práticas de Manipulação de Produtos Estéreis? (Anexo VII 18.2.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.1",
+       "text": "3.1. Treinamento. Além de atender aos requisitos descritos no item 3.2 do Anexo I, todo pessoal deve conhecer os princípios das BPMPE.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "O pessoal envolvido conhece os princípios das Boas Práticas de Manipulação de Produtos Estéreis.",
+     "neg": "Não foi comprovado que o pessoal envolvido conhece os princípios das Boas Práticas de Manipulação de Produtos Estéreis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_2",
+     "text": "O acesso às áreas de preparação de estéreis é restrito aos operadores diretamente envolvidos? (Anexo VII 18.2.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.2.1",
+       "text": "3.2.1. O acesso de pessoas às áreas de preparação de formulações estéreis deve ser restrito aos operadores diretamente envolvidos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "O acesso às áreas de preparação de estéreis é restrito aos operadores envolvidos.",
+     "neg": "O acesso às áreas de preparação de estéreis não é restrito aos operadores envolvidos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_3",
+     "text": "Os manipuladores de produtos estéreis atendem a um alto nível de higiene? (Anexo VII 18.2.3: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.2.2",
+       "text": "3.2.2. Os manipuladores de produtos estéreis devem atender a um alto nível de higiene e particularmente devem ser instruídos a lavar corretamente às mãos e antebraços, com escovação das unhas, utilizando anti-séptico padronizado, antes de entrar na área de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os manipuladores de estéreis atendem a alto nível de higiene.",
+     "neg": "Os manipuladores de estéreis não atendem ao nível de higiene exigido.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_4",
+     "text": "Os manipuladores são instruídos a lavar mãos e antebraços, com escovação das unhas e antisséptico padronizado, antes de entrar na área de manipulação? (Anexo VII 18.2.4: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.2.2",
+       "text": "3.2.2. Os manipuladores de produtos estéreis devem atender a um alto nível de higiene e particularmente devem ser instruídos a lavar corretamente às mãos e antebraços, com escovação das unhas, utilizando anti-séptico padronizado, antes de entrar na área de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os manipuladores são instruídos a lavar mãos e antebraços, com escovação das unhas e antisséptico padronizado, antes de entrar na área.",
+     "neg": "Os manipuladores não são instruídos a lavar mãos e antebraços, com escovação das unhas e antisséptico padronizado, antes de entrar na área.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_5",
+     "text": "Os operadores da inspeção visual fazem exames oftalmológicos periódicos e têm intervalos de descanso frequentes? (Anexo VII 18.2.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.2.3",
+       "text": "3.2.3. Os operadores que fazem a inspeção visual devem ser submetidos a exames oftalmológicos periódicos e ter intervalos de descanso freqüentes no período de trabalho.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os operadores da inspeção visual fazem exames oftalmológicos periódicos e têm intervalos de descanso.",
+     "neg": "Os operadores da inspeção visual não fazem exames oftalmológicos periódicos ou não têm intervalos de descanso.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.3",
+   "num": "13.3",
+   "title": "Vestuário e paramentação",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.3",
+   "itemNum": "13.3",
+   "itemTitle": "Vestuário e paramentação",
+   "requirements": [
+    {
+     "id": "e18_2_6",
+     "text": "Os funcionários da manipulação de estéreis estão uniformizados de forma a proteger a preparação contra contaminação? (Anexo VII 18.2.6: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.1",
+       "text": "3.3.1. Os funcionários envolvidos na manipulação de preparações estéreis devem estar adequadamente uniformizados para assegurar a proteção da preparação contra a contaminação e os uniformes devem ser trocados a cada sessão de manipulação para garantir a higiene apropriada.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os funcionários estão uniformizados de forma a proteger a preparação contra contaminação.",
+     "neg": "Os funcionários não estão uniformizados de forma a proteger a preparação contra contaminação.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_7",
+     "text": "Os uniformes são trocados a cada sessão de manipulação? (Anexo VII 18.2.7: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.1",
+       "text": "3.3.1. Os funcionários envolvidos na manipulação de preparações estéreis devem estar adequadamente uniformizados para assegurar a proteção da preparação contra a contaminação e os uniformes devem ser trocados a cada sessão de manipulação para garantir a higiene apropriada.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os uniformes são trocados a cada sessão de manipulação.",
+     "neg": "Os uniformes não são trocados a cada sessão de manipulação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_8",
+     "text": "A colocação de uniformes e calçados e a higiene para entrar nas áreas classificadas são feitas em sala específica de paramentação? (Anexo VII 18.2.8: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.2",
+       "text": "3.3.2. A colocação dos uniformes e calçados, bem como a higiene preparatória para entrada nas áreas classificadas, devem ser realizadas em sala especificamente destinada para paramentação e seguir procedimento estabelecido para evitar contaminação microbiana e por partículas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "A paramentação para as áreas classificadas é feita em sala específica.",
+     "neg": "A paramentação para as áreas classificadas não é feita em sala específica.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_9",
+     "text": "A paramentação segue procedimento estabelecido para evitar contaminação microbiana e por partículas? (Anexo VII 18.2.9: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.2",
+       "text": "3.3.2. A colocação dos uniformes e calçados, bem como a higiene preparatória para entrada nas áreas classificadas, devem ser realizadas em sala especificamente destinada para paramentação e seguir procedimento estabelecido para evitar contaminação microbiana e por partículas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "A paramentação segue procedimento estabelecido.",
+     "neg": "A paramentação não segue procedimento estabelecido.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_10",
+     "text": "Os uniformes e calçados das áreas classificadas cobrem completamente o corpo? (Anexo VII 18.2.10: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.3",
+       "text": "3.3.3. Os uniformes e calçados utilizados nas áreas classificadas devem cobrir completamente o corpo, constituindo barreira à liberação de partículas provenientes da respiração, tosse, espirro, suor, pele e cabelo.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.10"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os uniformes e calçados das áreas classificadas cobrem completamente o corpo.",
+     "neg": "Os uniformes e calçados das áreas classificadas não cobrem completamente o corpo.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_11",
+     "text": "O tecido dos uniformes das áreas classificadas não libera partículas ou fibras? (Anexo VII 18.2.11: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.4",
+       "text": "3.3.4. O tecido dos uniformes utilizados nas áreas classificadas não deve liberar partículas ou fibras e deve proteger quanto à liberação de partículas naturais do corpo.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.11"
+      }
+     ],
+     "informativo": false,
+     "pos": "O tecido dos uniformes das áreas classificadas não libera partículas ou fibras.",
+     "neg": "O tecido dos uniformes das áreas classificadas libera partículas ou fibras.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_12",
+     "text": "Os uniformes da sala de manipulação, inclusive máscaras e luvas, são estéreis? (Anexo VII 18.2.12: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.5",
+       "text": "3.3.5. Os uniformes usados na sala de manipulação, inclusive máscaras e luvas, devem ser estéreis e substituídos a cada sessão de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.12"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os uniformes da sala de manipulação, inclusive máscaras e luvas, são estéreis.",
+     "neg": "Os uniformes da sala de manipulação, máscaras ou luvas não são estéreis.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_13",
+     "text": "Os uniformes da sala de manipulação são substituídos a cada sessão de manipulação? (Anexo VII 18.2.13: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.5",
+       "text": "3.3.5. Os uniformes usados na sala de manipulação, inclusive máscaras e luvas, devem ser estéreis e substituídos a cada sessão de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.13"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os uniformes da sala de manipulação são substituídos a cada sessão.",
+     "neg": "Os uniformes da sala de manipulação não são substituídos a cada sessão.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_14",
+     "text": "As luvas estéreis são trocadas a cada 2 horas de manipulação e sempre que sua integridade estiver comprometida? (Anexo VII 18.2.14: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.6",
+       "text": "3.3.6. Deve ser assegurado que as luvas estéreis sejam trocadas a cada duas horas de trabalho de manipulação, e sempre que sua integridade estiver comprometida.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.14"
+      }
+     ],
+     "informativo": false,
+     "pos": "As luvas estéreis são trocadas a cada 2 horas e sempre que comprometidas.",
+     "neg": "As luvas estéreis não são trocadas a cada 2 horas ou quando comprometidas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_15",
+     "text": "Os uniformes reutilizáveis ficam separados, em ambiente fechado, até serem lavados e esterilizados? (Anexo VII 18.2.15: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.7",
+       "text": "3.3.7. Os uniformes reutilizáveis devem ser mantidos separados, em ambiente fechado, até que sejam apropriadamente lavados e esterilizados, sob a responsabilidade da empresa.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.15"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os uniformes reutilizáveis ficam separados, em ambiente fechado, até a lavagem e esterilização.",
+     "neg": "Os uniformes reutilizáveis não ficam separados em ambiente fechado até a lavagem e esterilização.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_16",
+     "text": "A lavagem e a esterilização dos uniformes são feitas sob responsabilidade da empresa? (Anexo VII 18.2.16: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.7",
+       "text": "3.3.7. Os uniformes reutilizáveis devem ser mantidos separados, em ambiente fechado, até que sejam apropriadamente lavados e esterilizados, sob a responsabilidade da empresa.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.16"
+      }
+     ],
+     "informativo": false,
+     "pos": "A lavagem e a esterilização dos uniformes são feitas sob responsabilidade da empresa.",
+     "neg": "A lavagem e a esterilização dos uniformes não estão sob responsabilidade da empresa.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_2_17",
+     "text": "A lavagem e a esterilização dos uniformes são feitas por empresa terceirizada? (Anexo VII 18.2.17: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.7.1",
+       "text": "3.3.7.1. A lavagem e esterilização dos uniformes podem ser realizadas por empresa terceirizada, por meio de contrato formal.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.17"
+      }
+     ],
+     "informativo": true,
+     "pos": "A lavagem e a esterilização dos uniformes são terceirizadas.",
+     "neg": "A lavagem e a esterilização dos uniformes são feitas pela própria farmácia.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_2_17_1",
+     "text": "Quando terceirizadas, há contrato formal para a lavagem e esterilização dos uniformes? (Anexo VII 18.2.17.1: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.7.1",
+       "text": "3.3.7.1. A lavagem e esterilização dos uniformes podem ser realizadas por empresa terceirizada, por meio de contrato formal.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.17.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há contrato formal para a lavagem e esterilização terceirizada dos uniformes.",
+     "neg": "Recomenda-se formalizar em contrato a lavagem e esterilização terceirizada dos uniformes.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_2_18",
+     "text": "A lavagem e a esterilização dos uniformes seguem procedimentos escritos? (Anexo VII 18.2.18: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.8",
+       "text": "3.3.8. O processo de lavagem e esterilização dos uniformes deve ser validado e seguir procedimentos escritos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.18"
+      }
+     ],
+     "informativo": false,
+     "pos": "A lavagem e a esterilização dos uniformes seguem procedimentos escritos.",
+     "neg": "A lavagem e a esterilização dos uniformes não seguem procedimentos escritos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_2_18_1",
+     "text": "O processo de lavagem e esterilização dos uniformes está validado? (Anexo VII 18.2.18.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 3.3.8",
+       "text": "3.3.8. O processo de lavagem e esterilização dos uniformes deve ser validado e seguir procedimentos escritos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.2.18.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "O processo de lavagem e esterilização dos uniformes está validado.",
+     "neg": "O processo de lavagem e esterilização dos uniformes não está validado.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.4",
+   "num": "13.4",
+   "title": "Áreas, acabamento e sanitização",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.4",
+   "itemNum": "13.4",
+   "itemTitle": "Áreas, acabamento e sanitização",
+   "requirements": [
+    {
+     "id": "e18_3_1",
+     "text": "A área de preparação de estéreis foi projetada e construída ou adaptada segundo padrões técnicos, com infraestrutura adequada às operações? (Anexo VII 18.3.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.1",
+       "text": "4.1. A farmácia destinada à manipulação de preparações estéreis deve ser localizada, projetada e construída ou adaptada segundo padrões técnicos, contando com uma infra-estrutura adequada às operações desenvolvidas, para assegurar a qualidade das preparações.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A área de preparação de estéreis tem infraestrutura adequada às operações.",
+     "neg": "A área de preparação de estéreis não tem infraestrutura adequada às operações.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_2",
+     "text": "Além das áreas comuns, há sala de limpeza, higienização e esterilização; sala ou local de pesagem; sala exclusiva de manipulação e envase; área de revisão; área de quarentena, rotulagem e embalagem; e antecâmara de paramentação? (Anexo VII 18.3.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.2",
+       "text": "4.2. A farmácia deve possuir, além das áreas comuns referidas no Anexo I, no mínimo, as seguintes áreas/salas:\na) sala de limpeza, higienização e esterilização;\nb) sala ou local de pesagem;\nc) sala de manipulação e envase exclusiva;\nd) área para revisão;\ne) área para quarentena, rotulagem e embalagem;\nf) sala de paramentação específica (antecâmara).",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.3",
+       "text": "4.3. As farmácias que somente realizam reconstituição, transferência, incorporação ou fracionamento de especialidades farmacêuticas, devem atender às disposições do item 4.2., no que couber.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A farmácia dispõe das salas e áreas exigidas para estéreis.",
+     "neg": "A farmácia não dispõe de todas as salas e áreas exigidas para estéreis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_3",
+     "text": "Nas salas de pesagem, manipulação e envase, as superfícies são revestidas de material resistente aos sanitizantes? (Anexo VII 18.3.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.4",
+       "text": "4.4. Nas salas de pesagem, manipulação e envase, todas as superfícies devem ser revestidas de material resistente aos agentes sanitizantes, lisas e impermeáveis para evitar acúmulo de partículas e microorganismos, possuindo cantos arredondados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "As superfícies das salas de pesagem, manipulação e envase resistem aos sanitizantes.",
+     "neg": "As superfícies das salas de pesagem, manipulação e envase não resistem aos sanitizantes.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_4",
+     "text": "As superfícies são lisas e impermeáveis, com cantos arredondados? (Anexo VII 18.3.4: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.4",
+       "text": "4.4. Nas salas de pesagem, manipulação e envase, todas as superfícies devem ser revestidas de material resistente aos agentes sanitizantes, lisas e impermeáveis para evitar acúmulo de partículas e microorganismos, possuindo cantos arredondados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "As superfícies são lisas e impermeáveis, com cantos arredondados.",
+     "neg": "As superfícies não são lisas e impermeáveis ou não têm cantos arredondados.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_5",
+     "text": "As salas de pesagem, manipulação e envase evitam superfícies de difícil limpeza? (Anexo VII 18.3.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.5",
+       "text": "4.5. As salas de pesagem, manipulação e envase devem ser projetadas de modo a evitar superfícies de difícil limpeza e não podem ser usadas portas corrediças.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "As salas de pesagem, manipulação e envase não têm superfícies de difícil limpeza.",
+     "neg": "As salas de pesagem, manipulação e envase têm superfícies de difícil limpeza.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_6",
+     "text": "Não há portas corrediças nessas salas? (Anexo VII 18.3.6: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.5",
+       "text": "4.5. As salas de pesagem, manipulação e envase devem ser projetadas de modo a evitar superfícies de difícil limpeza e não podem ser usadas portas corrediças.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "Não há portas corrediças nas salas de pesagem, manipulação e envase.",
+     "neg": "Há portas corrediças nas salas de pesagem, manipulação e envase.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_7",
+     "text": "Os tetos rebaixados, quando existem, são completamente vedados? (Anexo VII 18.3.7: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.6",
+       "text": "4.6. Os tetos rebaixados devem ser completamente vedados para evitar a contaminação proveniente do espaço entre o teto original e o teto de rebaixamento.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os tetos rebaixados são completamente vedados.",
+     "neg": "Os tetos rebaixados não são completamente vedados.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_8",
+     "text": "As tubulações das salas de pesagem, manipulação e envase são embutidas na parede? (Anexo VII 18.3.8: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.7",
+       "text": "4.7. As tubulações instaladas nas salas de pesagem, manipulação e envase devem ser embutidas na parede.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "As tubulações das salas de pesagem, manipulação e envase são embutidas.",
+     "neg": "Há tubulações aparentes nas salas de pesagem, manipulação e envase.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_9",
+     "text": "É feito o controle da contaminação ambiental do ar e das superfícies, com parâmetros estabelecidos e procedimento escrito? (Anexo VII 18.3.9: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.8",
+       "text": "4.8. Sistematicamente deve-se proceder ao controle do nível de contaminação ambiental do ar e das superfícies, através de parâmetros estabelecidos, seguindo procedimento escrito e com registros dos resultados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "É feito o controle da contaminação do ar e das superfícies, com parâmetros e procedimento escrito.",
+     "neg": "Não é feito o controle da contaminação do ar e das superfícies com parâmetros e procedimento escrito.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_10",
+     "text": "Há registros dos resultados do controle da contaminação do ar e das superfícies? (Anexo VII 18.3.10: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.8",
+       "text": "4.8. Sistematicamente deve-se proceder ao controle do nível de contaminação ambiental do ar e das superfícies, através de parâmetros estabelecidos, seguindo procedimento escrito e com registros dos resultados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.10"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros do controle da contaminação do ar e das superfícies.",
+     "neg": "Não há registros do controle da contaminação do ar e das superfícies.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_11",
+     "text": "Nas áreas classificadas é usado mais de um tipo de desinfetante, com alternância periódica? (Anexo VII 18.3.11: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.9",
+       "text": "4.9. A sanitização das áreas classificadas constitui aspecto particularmente importante e por isso devem ser utilizados mais de um tipo de desinfetante, com alternância periódica.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.11"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há alternância periódica de desinfetantes nas áreas classificadas.",
+     "neg": "Não há alternância periódica de desinfetantes nas áreas classificadas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_12",
+     "text": "A sanitização é monitorada periodicamente para detectar microrganismos persistentes ou resistentes? (Anexo VII 18.3.12: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.10",
+       "text": "4.10. Deve ser procedido monitoramento periódico, através de parâmetros estabelecidos, do processo de sanitização para detectar o surgimento de microorganismos persistentes ou resistentes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.12"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sanitização é monitorada periodicamente quanto a microrganismos persistentes ou resistentes.",
+     "neg": "A sanitização não é monitorada quanto a microrganismos persistentes ou resistentes.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_13",
+     "text": "Não há pia nem ralo, mesmo sifonados, nas salas de pesagem e de manipulação e envase? (Anexo VII 18.3.13: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.11",
+       "text": "4.11. Na sala de pesagem, e sala de manipulação e envase não é permitido o uso de pia e ralo, mesmo sifonados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.13"
+      }
+     ],
+     "informativo": false,
+     "pos": "Não há pia nem ralo nas salas de pesagem e de manipulação e envase.",
+     "neg": "Há pia ou ralo nas salas de pesagem ou de manipulação e envase.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_3_14",
+     "text": "O acesso às salas de limpeza e esterilização, pesagem e manipulação e envase é feito por antecâmara? (Anexo VII 18.3.14: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.12",
+       "text": "4.12. O acesso às salas de limpeza, higienização e esterilização; pesagem; manipulação e envase deve ser realizado por meio de antecâmara.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.14"
+      }
+     ],
+     "informativo": false,
+     "pos": "O acesso às salas de limpeza e esterilização, pesagem e manipulação é feito por antecâmara.",
+     "neg": "O acesso às salas de limpeza e esterilização, pesagem ou manipulação não é feito por antecâmara.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.5",
+   "num": "13.5",
+   "title": "Salas classificadas e antecâmara",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.5",
+   "itemNum": "13.5",
+   "itemTitle": "Salas classificadas e antecâmara",
+   "requirements": [
+    {
+     "id": "e18_3_15",
+     "text": "A sala de lavagem, esterilização e despirogenização dos recipientes vazios é separada das demais? (Anexo VII 18.3.15: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.1",
+       "text": "4.13.1. A sala destinada à lavagem, esterilização e despirogenização dos recipientes vazios deve ser separada e possuir classificação ISO 8 (100.000 partículas/ pé cúbico ar).",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.15"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de lavagem, esterilização e despirogenização de recipientes é separada.",
+     "neg": "A sala de lavagem, esterilização e despirogenização de recipientes não é separada.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_15_1",
+     "text": "Essa sala tem classificação ISO 8? (Anexo VII 18.3.15.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.1",
+       "text": "4.13.1. A sala destinada à lavagem, esterilização e despirogenização dos recipientes vazios deve ser separada e possuir classificação ISO 8 (100.000 partículas/ pé cúbico ar).",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.15.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de lavagem e esterilização de recipientes tem classificação ISO 8.",
+     "neg": "A sala de lavagem e esterilização de recipientes não tem classificação ISO 8 comprovada.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_16",
+     "text": "A limpeza e a higienização de medicamentos e produtos para saúde usados na manipulação de estéreis também são feitas em área ISO 8? (Anexo VII 18.3.16: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.2",
+       "text": "4.13.2. A limpeza e higienização de medicamentos, produtos farmacêuticos e produtos para saúde utilizados na manipulação de produtos estéreis também deve ser realizada em área classe ISO 8.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.16"
+      }
+     ],
+     "informativo": false,
+     "pos": "A limpeza de medicamentos e produtos para saúde usados na manipulação é feita em área ISO 8.",
+     "neg": "A limpeza de medicamentos e produtos para saúde usados na manipulação não é feita em área ISO 8.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_17",
+     "text": "A sala de limpeza é contígua à de manipulação, com passagem de dupla porta para entrada de material? (Anexo VII 18.3.17: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.3",
+       "text": "4.13.3. A sala deve ser contígua à área de manipulação e dotada de passagem de dupla porta para a entrada de material em condição de segurança.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.17"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de limpeza é contígua à de manipulação, com passagem de dupla porta.",
+     "neg": "A sala de limpeza não é contígua à de manipulação ou não tem passagem de dupla porta.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_18",
+     "text": "Há meios e equipamentos para limpar e esterilizar os materiais antes da entrada na sala de manipulação? (Anexo VII 18.3.18: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.4",
+       "text": "4.13.4. Deve dispor de meios e equipamentos para limpeza e esterilização dos materiais antes de sua entrada na sala de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.18"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há meios para limpar e esterilizar os materiais antes da entrada na sala de manipulação.",
+     "neg": "Não há meios para limpar e esterilizar os materiais antes da entrada na sala de manipulação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_19",
+     "text": "A sala de pesagem tem classificação ISO 7? (Anexo VII 18.3.19: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.14.1",
+       "text": "4.14.1. A sala onde é realizada a pesagem deve possuir Classe ISO 7 (10.000 partículas/ pé cúbico de ar) para garantir baixa contagem microbiana e de partículas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.19"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de pesagem tem classificação ISO 7.",
+     "neg": "A sala de pesagem não tem classificação ISO 7 comprovada.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_20",
+     "text": "A sala de manipulação e envase de estéreis é independente e exclusiva? (Anexo VII 18.3.20: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.15.1",
+       "text": "4.15.1. A sala destinada à manipulação e envase de preparações estéreis deve ser independente e exclusiva, dotada de filtros de ar para retenção de partículas e microorganismos, garantindo os níveis recomendados - Classe ISO 5 (100 partículas/ pé cúbico de ar) ou sob fluxo laminar, Classe ISO 5 (100 partículas/ pé cúbico de ar), em área Classe ISO 7 e possuir pressão positiva em relação às salas adjacentes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.20"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de manipulação e envase de estéreis é independente e exclusiva.",
+     "neg": "A sala de manipulação e envase de estéreis não é independente e exclusiva.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_3_20_1",
+     "text": "A manipulação ocorre em ambiente ISO 5 (sala ISO 5 ou fluxo laminar ISO 5 em área ISO 7), com filtros de ar? (Anexo VII 18.3.20.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.15.1",
+       "text": "4.15.1. A sala destinada à manipulação e envase de preparações estéreis deve ser independente e exclusiva, dotada de filtros de ar para retenção de partículas e microorganismos, garantindo os níveis recomendados - Classe ISO 5 (100 partículas/ pé cúbico de ar) ou sob fluxo laminar, Classe ISO 5 (100 partículas/ pé cúbico de ar), em área Classe ISO 7 e possuir pressão positiva em relação às salas adjacentes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.20.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A manipulação ocorre em ambiente ISO 5, com filtração do ar.",
+     "neg": "A manipulação não ocorre em ambiente ISO 5 comprovado.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_3_20_2",
+     "text": "A sala de manipulação tem pressão positiva em relação às salas adjacentes? (Anexo VII 18.3.20.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.15.1",
+       "text": "4.15.1. A sala destinada à manipulação e envase de preparações estéreis deve ser independente e exclusiva, dotada de filtros de ar para retenção de partículas e microorganismos, garantindo os níveis recomendados - Classe ISO 5 (100 partículas/ pé cúbico de ar) ou sob fluxo laminar, Classe ISO 5 (100 partículas/ pé cúbico de ar), em área Classe ISO 7 e possuir pressão positiva em relação às salas adjacentes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.20.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de manipulação tem pressão positiva em relação às adjacentes.",
+     "neg": "A sala de manipulação não tem pressão positiva em relação às adjacentes.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_21",
+     "text": "Há área específica de revisão, com iluminação e contraste adequados à inspeção dos produtos envasados? (Anexo VII 18.3.21: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.16.1",
+       "text": "4.16.1. Deve existir área específica para revisão, com condições de iluminação e contraste adequadas à realização da inspeção dos produtos envasados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.21"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há área de revisão com iluminação e contraste adequados.",
+     "neg": "Não há área de revisão com iluminação e contraste adequados.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_22",
+     "text": "A área de quarentena, rotulagem e embalagem é suficiente para operações racionais e ordenadas? (Anexo VII 18.3.22: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.17.1",
+       "text": "4.17.1. A área destinada à quarentena, rotulagem e embalagem das preparações deve ser suficiente para garantir as operações de forma racional e ordenada.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.22"
+      }
+     ],
+     "informativo": false,
+     "pos": "A área de quarentena, rotulagem e embalagem é suficiente.",
+     "neg": "A área de quarentena, rotulagem e embalagem é insuficiente.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_23",
+     "text": "A antecâmara tem câmaras fechadas, com barreira sujo/limpo para troca de roupa? (Anexo VII 18.3.23: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.1",
+       "text": "4.18.1. A sala de paramentação deve possuir câmaras fechadas, preferencialmente com dois ambientes (barreira sujo/limpo) para troca de roupa.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.23"
+      }
+     ],
+     "informativo": false,
+     "pos": "A antecâmara tem barreira sujo/limpo para troca de roupa.",
+     "neg": "Recomenda-se dotar a antecâmara de barreira sujo/limpo para troca de roupa.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_3_24",
+     "text": "As portas da antecâmara e das salas classificadas impedem a abertura simultânea? (Anexo VII 18.3.24: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.2",
+       "text": "4.18.2. As portas de acesso à sala de paramentação e salas classificadas devem possuir dispositivos de segurança que impeçam a abertura simultânea das mesmas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.24"
+      }
+     ],
+     "informativo": false,
+     "pos": "As portas da antecâmara e das salas classificadas impedem a abertura simultânea.",
+     "neg": "Recomenda-se instalar dispositivo que impeça a abertura simultânea das portas da antecâmara e das salas classificadas.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_3_25",
+     "text": "A antecâmara é ventilada com ar filtrado? (Anexo VII 18.3.25: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.3",
+       "text": "4.18.3. A sala de paramentação deve ser ventilada, com ar filtrado, com pressão inferior à da sala de manipulação e superior à área externa.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.25"
+      }
+     ],
+     "informativo": false,
+     "pos": "A antecâmara é ventilada com ar filtrado.",
+     "neg": "A antecâmara não é ventilada com ar filtrado.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_25_1",
+     "text": "A pressão da antecâmara é inferior à da sala de manipulação e superior à da área externa? (Anexo VII 18.3.25.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.3",
+       "text": "4.18.3. A sala de paramentação deve ser ventilada, com ar filtrado, com pressão inferior à da sala de manipulação e superior à área externa.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.25.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A pressão da antecâmara é intermediária entre a sala de manipulação e a área externa.",
+     "neg": "A pressão da antecâmara não é intermediária entre a sala de manipulação e a área externa.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_3_25_2",
+     "text": "O lavatório tem torneira ou comando sem contato das mãos? (Anexo VII 18.3.25.2: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.4",
+       "text": "4.18.4. O lavatório deve possuir torneira ou comando que dispense o contato das mãos para o fechamento. Junto ao lavatório deve existir provisão de sabonete líquido ou anti-séptico e recurso para secagem das mãos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.25.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "O lavatório tem comando sem contato das mãos.",
+     "neg": "Recomenda-se dotar o lavatório de comando sem contato das mãos.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_3_25_3",
+     "text": "Junto ao lavatório há sabonete líquido ou antisséptico e recurso para secagem das mãos? (Anexo VII 18.3.25.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.18.4",
+       "text": "4.18.4. O lavatório deve possuir torneira ou comando que dispense o contato das mãos para o fechamento. Junto ao lavatório deve existir provisão de sabonete líquido ou anti-séptico e recurso para secagem das mãos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.3.25.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há sabonete líquido ou antisséptico e recurso para secagem das mãos junto ao lavatório.",
+     "neg": "Não há sabonete líquido ou antisséptico e recurso para secagem das mãos junto ao lavatório.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.6",
+   "num": "13.6",
+   "title": "Equipamentos e mobiliário",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.6",
+   "itemNum": "13.6",
+   "itemTitle": "Equipamentos e mobiliário",
+   "requirements": [
+    {
+     "id": "e18_4_1",
+     "text": "Os equipamentos estão localizados, instalados e mantidos de forma adequada às operações? (Anexo VII 18.4.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.1",
+       "text": "5.1. Os equipamentos devem ser localizados, projetados, instalados, adaptados e mantidos de forma a estarem adequados às operações a serem realizadas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os equipamentos estão instalados e mantidos de forma adequada às operações.",
+     "neg": "Os equipamentos não estão instalados ou mantidos de forma adequada às operações.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_2",
+     "text": "A estrutura dos equipamentos permite limpá-los efetivamente e mantê-los limpos? (Anexo VII 18.4.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.2",
+       "text": "5.2. A estrutura dos equipamentos deve visar a minimização dos riscos de erro e permitir que os mesmos sejam efetivamente limpos e assim mantidos para que seja evitada a contaminação cruzada, o acúmulo de poeiras e sujeira e, de modo geral, qualquer efeito negativo sobre a qualidade da manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A estrutura dos equipamentos permite a limpeza efetiva.",
+     "neg": "A estrutura dos equipamentos não permite a limpeza efetiva.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_3",
+     "text": "Os equipamentos da manipulação de estéreis podem ser esterilizados por vapor, calor seco ou outro método? (Anexo VII 18.4.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.3",
+       "text": "5.3. Os equipamentos utilizados na manipulação de preparações estéreis devem ser escolhidos de forma que possam ser efetivamente esterilizados por vapor, por aquecimento a seco ou outro método.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os equipamentos da manipulação de estéreis podem ser esterilizados.",
+     "neg": "Há equipamentos da manipulação de estéreis que não podem ser esterilizados.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_4",
+     "text": "Os desinfetantes e detergentes são monitorados quanto à contaminação microbiana? (Anexo VII 18.4.4: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.6",
+       "text": "5.6. Os desinfetantes e detergentes devem ser monitorados quanto à contaminação microbiana.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os desinfetantes e detergentes são monitorados quanto à contaminação microbiana.",
+     "neg": "Os desinfetantes e detergentes não são monitorados quanto à contaminação microbiana.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_5",
+     "text": "Ao final da manipulação, os equipamentos são limpos, desinfetados e identificados quanto à condição? (Anexo VII 18.4.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.7",
+       "text": "5.7. Após o término do trabalho de manipulação, os equipamentos devem ser limpos, desinfetados e identificados quanto à sua condição, efetuando-se os registros desses procedimentos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "Ao final da manipulação, os equipamentos são limpos, desinfetados e identificados.",
+     "neg": "Ao final da manipulação, os equipamentos não são limpos, desinfetados e identificados.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_5_1",
+     "text": "Há registros da limpeza e desinfecção dos equipamentos ao final da manipulação? (Anexo VII 18.4.5.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.7",
+       "text": "5.7. Após o término do trabalho de manipulação, os equipamentos devem ser limpos, desinfetados e identificados quanto à sua condição, efetuando-se os registros desses procedimentos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.5.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da limpeza e desinfecção dos equipamentos.",
+     "neg": "Não há registros da limpeza e desinfecção dos equipamentos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_6",
+     "text": "O ar injetado nas áreas classificadas é filtrado por filtros HEPA? (Anexo VII 18.4.6: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.10",
+       "text": "5.10. O ar injetado nas áreas classificadas deve ser filtrado por filtros HEPA.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "O ar das áreas classificadas é filtrado por filtros HEPA.",
+     "neg": "O ar das áreas classificadas não é filtrado por filtros HEPA.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_4_7",
+     "text": "Os equipamentos têm manutenção preventiva em programa formal e corretiva quando necessário? (Anexo VII 18.4.7: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.12",
+       "text": "5.12. Todos os equipamentos devem ser submetidos à manutenção preventiva, de acordo com um programa formal, e corretiva, quando necessário, obedecendo a procedimentos operacionais escritos com base nas especificações dos manuais dos fabricantes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os equipamentos têm manutenção preventiva em programa formal e corretiva quando necessário.",
+     "neg": "Os equipamentos não têm programa formal de manutenção preventiva.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_8",
+     "text": "Há procedimentos escritos para a manutenção dos equipamentos? (Anexo VII 18.4.8: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.12",
+       "text": "5.12. Todos os equipamentos devem ser submetidos à manutenção preventiva, de acordo com um programa formal, e corretiva, quando necessário, obedecendo a procedimentos operacionais escritos com base nas especificações dos manuais dos fabricantes.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há procedimentos escritos para a manutenção dos equipamentos.",
+     "neg": "Não há procedimentos escritos para a manutenção dos equipamentos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_9",
+     "text": "Há registros das manutenções preventivas e corretivas? (Anexo VII 18.4.9: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.12.1",
+       "text": "5.12.1. Devem existir registros das manutenções preventivas e corretivas realizadas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros das manutenções preventivas e corretivas.",
+     "neg": "Não há registros das manutenções preventivas e corretivas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_10",
+     "text": "O equipamento de tratamento de água produz água com especificação de água para injetáveis? (Anexo VII 18.4.10: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.13",
+       "text": "5.13. O equipamento utilizado no tratamento de água deve ser projetado e mantido de forma a assegurar a produção da água com a especificação exigida.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.1",
+       "text": "7.2.1. A água utilizada na preparação de estéreis deve ser obtida no próprio estabelecimento, por destilação ou por osmose reversa, obedecendo às características farmacopéicas de água para injetáveis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.10"
+      }
+     ],
+     "informativo": false,
+     "pos": "O equipamento de tratamento produz água com especificação de água para injetáveis.",
+     "neg": "O equipamento de tratamento não produz água com especificação de água para injetáveis.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_4_11",
+     "text": "O sistema de produção de água é sanitizado conforme procedimento escrito? (Anexo VII 18.4.11: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.14",
+       "text": "5.14. Deve ser realizada a sanitização do sistema de produção de água, de acordo com procedimentos escritos, mantendo-se os devidos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.11"
+      }
+     ],
+     "informativo": false,
+     "pos": "O sistema de produção de água é sanitizado conforme procedimento escrito.",
+     "neg": "O sistema de produção de água não é sanitizado conforme procedimento escrito.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_11_1",
+     "text": "Há registros da sanitização do sistema de produção de água? (Anexo VII 18.4.11.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.14",
+       "text": "5.14. Deve ser realizada a sanitização do sistema de produção de água, de acordo com procedimentos escritos, mantendo-se os devidos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.11.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da sanitização do sistema de produção de água.",
+     "neg": "Não há registros da sanitização do sistema de produção de água.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_12",
+     "text": "O sistema de distribuição da água garante que não haja contaminação microbiana? (Anexo VII 18.4.12: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.15",
+       "text": "5.15. O sistema de distribuição da água deve garantir que não haja contaminação microbiana.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.12"
+      }
+     ],
+     "informativo": false,
+     "pos": "O sistema de distribuição da água impede a contaminação microbiana.",
+     "neg": "O sistema de distribuição da água não impede a contaminação microbiana.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_13",
+     "text": "Se a água é armazenada, usam-se recipientes de aço inoxidável, herméticos e com filtro de ar esterilizante? (Anexo VII 18.4.13: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.16",
+       "text": "5.16. Sendo necessário o armazenamento da água, devem ser usados recipientes de aço inoxidável, herméticos e munidos de filtro de ar esterilizante.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.13"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água é armazenada em recipientes de aço inoxidável, herméticos e com filtro de ar esterilizante.",
+     "neg": "A água é armazenada em recipientes fora do padrão exigido.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_14",
+     "text": "O mobiliário é liso, impermeável, facilmente lavável e não libera partículas? (Anexo VII 18.4.14: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.17",
+       "text": "5.17. O mobiliário deve ser construído de material liso, impermeável, facilmente lavável e que não libere partículas, e que seja passível de desinfecção pelos agentes normalmente utilizados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.14"
+      }
+     ],
+     "informativo": false,
+     "pos": "O mobiliário é liso, impermeável, lavável e não libera partículas.",
+     "neg": "O mobiliário não é liso, impermeável ou lavável, ou libera partículas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_4_14_1",
+     "text": "O mobiliário suporta a desinfecção pelos agentes normalmente usados? (Anexo VII 18.4.14.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 5.17",
+       "text": "5.17. O mobiliário deve ser construído de material liso, impermeável, facilmente lavável e que não libere partículas, e que seja passível de desinfecção pelos agentes normalmente utilizados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.4.14.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "O mobiliário suporta a desinfecção pelos agentes utilizados.",
+     "neg": "O mobiliário não suporta a desinfecção pelos agentes utilizados.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.7",
+   "num": "13.7",
+   "title": "Materiais",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.7",
+   "itemNum": "13.7",
+   "itemTitle": "Materiais",
+   "requirements": [
+    {
+     "id": "e18_5_1",
+     "text": "As matérias-primas adquiridas são analisadas quanto a todas as especificações dos compêndios oficiais, incluindo a biocarga? (Anexo VII 18.5.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 6.1.1",
+       "text": "6.1.1. As matérias primas adquiridas devem ser analisadas para a verificação do cumprimento de todas as especificações estabelecidas nos compêndios oficiais incluindo a determinação da biocarga.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.5.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "As matérias-primas são analisadas conforme os compêndios oficiais, incluindo a biocarga.",
+     "neg": "As matérias-primas não são analisadas conforme os compêndios oficiais, incluindo a biocarga.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_5_2",
+     "text": "As especialidades farmacêuticas e os produtos para saúde usados no preparo seguem especificação técnica do farmacêutico e estão regularizados na Anvisa? (Anexo VII 18.5.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 6.1.2",
+       "text": "6.1.2. Especialidades farmacêuticas e produtos para a saúde utilizados no preparo de estéreis devem seguir especificação técnica detalhada pelo farmacêutico e estar regularizados junto à ANVISA/ MS, conforme legislação vigente.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.5.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "As especialidades farmacêuticas e os produtos para saúde seguem especificação técnica e estão regularizados na Anvisa.",
+     "neg": "Há especialidades farmacêuticas ou produtos para saúde sem especificação técnica ou sem regularização na Anvisa.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_5_3",
+     "text": "Cada lote é acompanhado do certificado de análise do fabricante? (Anexo VII 18.5.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 6.1.3",
+       "text": "6.1.3. Cada lote deve estar acompanhado do Certificado de Análise emitido pelo fabricante, garantindo a sua pureza físico-química e microbiológica, bem como o atendimento às especificações estabelecidas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.5.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "Cada lote é acompanhado do certificado de análise do fabricante.",
+     "neg": "Há lotes sem certificado de análise do fabricante.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.8",
+   "num": "13.8",
+   "title": "Água para injetáveis",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.8",
+   "itemNum": "13.8",
+   "itemTitle": "Água para injetáveis",
+   "requirements": [
+    {
+     "id": "e18_6_1",
+     "text": "A água de abastecimento, o sistema de tratamento e a água tratada são monitorados regularmente? (Anexo VII 18.6.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.1",
+       "text": "7.1. A água de abastecimento, o sistema de tratamento de água e a água tratada devem ser monitorados regularmente e mantidos os registros desses resultados. 7.2 Água para Preparação de Estéreis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água de abastecimento, o sistema de tratamento e a água tratada são monitorados regularmente.",
+     "neg": "A água de abastecimento, o sistema de tratamento ou a água tratada não são monitorados regularmente.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_1_1",
+     "text": "Há registros dos resultados desse monitoramento? (Anexo VII 18.6.1.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.1",
+       "text": "7.1. A água de abastecimento, o sistema de tratamento de água e a água tratada devem ser monitorados regularmente e mantidos os registros desses resultados. 7.2 Água para Preparação de Estéreis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.1.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros do monitoramento da água.",
+     "neg": "Não há registros do monitoramento da água.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_2",
+     "text": "A água usada na preparação de estéreis é obtida por destilação ou osmose reversa, com características de água para injetáveis? (Anexo VII 18.6.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.1",
+       "text": "7.2.1. A água utilizada na preparação de estéreis deve ser obtida no próprio estabelecimento, por destilação ou por osmose reversa, obedecendo às características farmacopéicas de água para injetáveis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.2",
+       "text": "7.2.2. Em casos excepcionais, quando o consumo de água não justificar a instalação de sistema de produção de água para injetáveis, a farmácia pode utilizar-se de água para injetáveis produzida por indústria farmacêutica, sendo neste caso desnecessária a realização dos testes previstos nos itens 7.2.6. e 7.2.7 deste anexo.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água usada na preparação de estéreis tem características de água para injetáveis.",
+     "neg": "A água usada na preparação de estéreis não tem características comprovadas de água para injetáveis.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_2_1",
+     "text": "A água para injetáveis é obtida no próprio estabelecimento? (Anexo VII 18.6.2.1: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.1",
+       "text": "7.2.1. A água utilizada na preparação de estéreis deve ser obtida no próprio estabelecimento, por destilação ou por osmose reversa, obedecendo às características farmacopéicas de água para injetáveis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.2",
+       "text": "7.2.2. Em casos excepcionais, quando o consumo de água não justificar a instalação de sistema de produção de água para injetáveis, a farmácia pode utilizar-se de água para injetáveis produzida por indústria farmacêutica, sendo neste caso desnecessária a realização dos testes previstos nos itens 7.2.6. e 7.2.7 deste anexo.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.2.1"
+      }
+     ],
+     "informativo": true,
+     "pos": "A água para injetáveis é obtida no próprio estabelecimento.",
+     "neg": "A água para injetáveis é adquirida de indústria farmacêutica.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_6_3",
+     "text": "A água de enxágue de ampolas e recipientes de envase tem qualidade de água para injetáveis? (Anexo VII 18.6.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.3",
+       "text": "7.2.3. A água para enxágüe de ampolas e recipientes de envase, deve ter qualidade de água para injetáveis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água de enxágue de ampolas e recipientes tem qualidade de água para injetáveis.",
+     "neg": "A água de enxágue de ampolas e recipientes não tem qualidade de água para injetáveis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_4",
+     "text": "A farmácia armazena a água para injetáveis? (Anexo VII 18.6.4: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.4",
+       "text": "7.2.4. O armazenamento da água não é recomendado, a não ser que ela seja mantida em recirculação a uma temperatura igual ou superior a 80º C. Caso contrário, ela deve ser descartada a cada 24 (vinte e quatro) horas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.4"
+      }
+     ],
+     "informativo": true,
+     "pos": "A farmácia armazena a água para injetáveis.",
+     "neg": "A farmácia não armazena a água para injetáveis.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_6_4_1",
+     "text": "Se armazenada, a água é mantida em recirculação a 80 °C ou mais? (Anexo VII 18.6.4.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.4",
+       "text": "7.2.4. O armazenamento da água não é recomendado, a não ser que ela seja mantida em recirculação a uma temperatura igual ou superior a 80º C. Caso contrário, ela deve ser descartada a cada 24 (vinte e quatro) horas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.4.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água armazenada é mantida em recirculação a 80 °C ou mais.",
+     "neg": "A água armazenada não é mantida em recirculação a 80 °C ou mais.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_4_2",
+     "text": "Se não há recirculação a 80 °C, a água é descartada a cada 24 horas? (Anexo VII 18.6.4.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.4",
+       "text": "7.2.4. O armazenamento da água não é recomendado, a não ser que ela seja mantida em recirculação a uma temperatura igual ou superior a 80º C. Caso contrário, ela deve ser descartada a cada 24 (vinte e quatro) horas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.4.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A água sem recirculação é descartada a cada 24 horas.",
+     "neg": "A água sem recirculação não é descartada a cada 24 horas.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_5",
+     "text": "Há procedimentos escritos de limpeza e manutenção do sistema de obtenção de água para injetáveis? (Anexo VII 18.6.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.5",
+       "text": "7.2.5. Deve haver procedimentos escritos para a limpeza e manutenção do sistema de obtenção de água para injetáveis, com os devidos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há procedimentos escritos de limpeza e manutenção do sistema de água para injetáveis.",
+     "neg": "Não há procedimentos escritos de limpeza e manutenção do sistema de água para injetáveis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_5_1",
+     "text": "Há registros da limpeza e manutenção desse sistema? (Anexo VII 18.6.5.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.5",
+       "text": "7.2.5. Deve haver procedimentos escritos para a limpeza e manutenção do sistema de obtenção de água para injetáveis, com os devidos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.5.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da limpeza e manutenção do sistema de água para injetáveis.",
+     "neg": "Não há registros da limpeza e manutenção do sistema de água para injetáveis.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_6_6",
+     "text": "São feitos os testes físico-químicos e microbiológicos de água purificada e o teste de endotoxinas bacterianas? (Anexo VII 18.6.6: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.6",
+       "text": "7.2.6. Devem ser feitos os testes físico-químicos e microbiológicos previstos para água purificada, além de teste de endotoxinas bacterianas, com o objetivo de monitorar o processo de obtenção da água para injetáveis, com base em procedimentos escritos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "São feitos os testes físico-químicos, microbiológicos e de endotoxinas da água.",
+     "neg": "Não são feitos os testes físico-químicos, microbiológicos ou de endotoxinas da água.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_6_1",
+     "text": "Há registros desses testes da água? (Anexo VII 18.6.6.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.6",
+       "text": "7.2.6. Devem ser feitos os testes físico-químicos e microbiológicos previstos para água purificada, além de teste de endotoxinas bacterianas, com o objetivo de monitorar o processo de obtenção da água para injetáveis, com base em procedimentos escritos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.6.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros dos testes da água.",
+     "neg": "Não há registros dos testes da água.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_7",
+     "text": "A condutividade e as endotoxinas da água são verificadas imediatamente antes do uso (endotoxinas dispensadas para oftálmicos)? (Anexo VII 18.6.7: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.7",
+       "text": "7.2.7. A farmácia deve monitorar a água para preparação de estéreis, quanto à condutividade e presença de endotoxinas bacterianas imediatamente antes de ser usada na manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.7.1",
+       "text": "7.2.7.1. No caso da água se destinar a produtos oftálmicos, não será requerido o teste de endotoxinas bacterianas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "A condutividade e as endotoxinas da água são verificadas imediatamente antes do uso.",
+     "neg": "A condutividade e as endotoxinas da água não são verificadas imediatamente antes do uso.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_7_1",
+     "text": "Há registros dessa verificação antes do uso? (Anexo VII 18.6.7.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.7",
+       "text": "7.2.7. A farmácia deve monitorar a água para preparação de estéreis, quanto à condutividade e presença de endotoxinas bacterianas imediatamente antes de ser usada na manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.7.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da verificação da água antes do uso.",
+     "neg": "Não há registros da verificação da água antes do uso.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_8",
+     "text": "Há medidas corretivas e preventivas estabelecidas e registradas para laudo insatisfatório da água? (Anexo VII 18.6.8: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.8",
+       "text": "7.2.8. Devem ser estabelecidas e registradas as medidas corretivas e preventivas que serão adotadas em caso de laudo insatisfatório da água. Deve ser avaliada a efetividade das medidas adotadas, por meio de uma nova análise.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há medidas corretivas e preventivas registradas para laudo insatisfatório da água.",
+     "neg": "Não há medidas corretivas e preventivas registradas para laudo insatisfatório da água.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_8_1",
+     "text": "A efetividade dessas medidas é avaliada por nova análise? (Anexo VII 18.6.8.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.8",
+       "text": "7.2.8. Devem ser estabelecidas e registradas as medidas corretivas e preventivas que serão adotadas em caso de laudo insatisfatório da água. Deve ser avaliada a efetividade das medidas adotadas, por meio de uma nova análise.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.8.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A efetividade das medidas é avaliada por nova análise.",
+     "neg": "A efetividade das medidas não é avaliada por nova análise.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_6_8_9",
+     "text": "O processo de obtenção da água para estéreis está validado? (Anexo VII 18.6.8.9: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 7.2.9",
+       "text": "7.2.9. O processo de obtenção da água utilizada na preparação de estéreis deve ser validado.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.6.8.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "O processo de obtenção da água para estéreis está validado.",
+     "neg": "O processo de obtenção da água para estéreis não está validado.",
+     "classe": "I"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.9",
+   "num": "13.9",
+   "title": "Manipulação asséptica",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.9",
+   "itemNum": "13.9",
+   "itemTitle": "Manipulação asséptica",
+   "requirements": [
+    {
+     "id": "e18_7_1",
+     "text": "São tomadas precauções para minimizar a contaminação em todas as etapas da manipulação? (Anexo VII 18.7.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.1",
+       "text": "8.1. Devem ser tomadas precauções no sentido de minimizar a contaminação durante todos os estágios da manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "São tomadas precauções para minimizar a contaminação em todas as etapas.",
+     "neg": "Não são tomadas precauções suficientes para minimizar a contaminação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_2",
+     "text": "A manipulação é feita com técnica asséptica? (Anexo VII 18.7.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.2",
+       "text": "8.2. A manipulação deve ser realizada com técnica asséptica, seguindo procedimentos escritos e validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A manipulação é feita com técnica asséptica.",
+     "neg": "A manipulação não é feita com técnica asséptica.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_2_1",
+     "text": "A técnica asséptica segue procedimento escrito? (Anexo VII 18.7.2.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.2",
+       "text": "8.2. A manipulação deve ser realizada com técnica asséptica, seguindo procedimentos escritos e validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.2.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A técnica asséptica segue procedimento escrito.",
+     "neg": "A técnica asséptica não segue procedimento escrito.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_3",
+     "text": "O processo de manipulação está validado? (Anexo VII 18.7.3: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.2",
+       "text": "8.2. A manipulação deve ser realizada com técnica asséptica, seguindo procedimentos escritos e validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.2",
+       "text": "10.1.2. O procedimento de preparações estéreis deve ser validado para garantir a obtenção do medicamento estéril.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "O processo de manipulação está validado.",
+     "neg": "O processo de manipulação não está validado.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_3_1",
+     "text": "Há registros da validação do processo de manipulação? (Anexo VII 18.7.3.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.5",
+       "text": "10.1.5. As validações e revalidações devem ser documentadas e os documentos arquivados por dois anos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.3.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da validação do processo de manipulação.",
+     "neg": "Não há registros da validação do processo de manipulação.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_4",
+     "text": "Há programa de monitoramento ambiental da qualidade microbiológica da sala de manipulação? (Anexo VII 18.7.4: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.3",
+       "text": "8.3. Deve existir um programa de monitoramento ambiental, para garantir a qualidade microbiológica da sala de manipulação, com seus respectivos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há programa de monitoramento ambiental da sala de manipulação.",
+     "neg": "Não há programa de monitoramento ambiental da sala de manipulação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_4_1",
+     "text": "Há registros do monitoramento ambiental? (Anexo VII 18.7.4.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.3",
+       "text": "8.3. Deve existir um programa de monitoramento ambiental, para garantir a qualidade microbiológica da sala de manipulação, com seus respectivos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.4.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros do monitoramento ambiental.",
+     "neg": "Não há registros do monitoramento ambiental.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_5",
+     "text": "É verificado o cumprimento da lavagem de mãos e antebraços dos manipuladores? (Anexo VII 18.7.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.4",
+       "text": "8.4. Deve ser verificado, sistematicamente, o cumprimento do procedimento de lavagem das mãos e antebraços dos manipuladores.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "É verificado o cumprimento da lavagem de mãos e antebraços.",
+     "neg": "Não é verificado o cumprimento da lavagem de mãos e antebraços.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_6",
+     "text": "É verificado o cumprimento da limpeza e desinfecção das áreas, instalações, equipamentos e materiais? (Anexo VII 18.7.6: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.5",
+       "text": "8.5. Deve ser verificado o cumprimento dos procedimentos de limpeza e desinfecção das áreas, instalações, equipamentos e materiais empregados na manipulação das preparações estéreis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "É verificado o cumprimento da limpeza e desinfecção das áreas e equipamentos.",
+     "neg": "Não é verificado o cumprimento da limpeza e desinfecção das áreas e equipamentos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_7",
+     "text": "Especialidades farmacêuticas, produtos para saúde e recipientes são limpos e desinfetados antes de entrar na área de manipulação? (Anexo VII 18.7.7: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.6",
+       "text": "8.6. Especialidades farmacêuticas, produtos para a saúde e recipientes devem ser limpos e desinfetados antes da entrada na área de manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os materiais são limpos e desinfetados antes de entrar na área de manipulação.",
+     "neg": "Os materiais não são limpos e desinfetados antes de entrar na área de manipulação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_8",
+     "text": "As especialidades farmacêuticas usadas recebem tratamento para assepsia externa e inspeção visual quanto a partículas? (Anexo VII 18.7.8: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.7",
+       "text": "8.7. Especialidades farmacêuticas utilizadas para preparação de estéreis devem ser previamente tratadas para garantir a sua assepsia externa e inspecionadas visualmente quanto à presença de partículas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "As especialidades farmacêuticas recebem assepsia externa e inspeção visual quanto a partículas.",
+     "neg": "As especialidades farmacêuticas não recebem assepsia externa ou inspeção visual quanto a partículas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_9",
+     "text": "A ordem de manipulação registra o lote e o fabricante ou fornecedor de cada especialidade, produto para saúde ou matéria-prima usada? (Anexo VII 18.7.9: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.8",
+       "text": "8.8. Deve ser efetuado, na ordem de manipulação, o registro do número de lote de cada uma das especialidades farmacêuticas e produtos para a saúde, ou de cada matéria-prima, utilizados na manipulação de preparações estéreis, indicando inclusive os seus fabricantes / fornecedores.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "A ordem de manipulação registra lote e fabricante de cada componente usado.",
+     "neg": "A ordem de manipulação não registra lote e fabricante de cada componente usado.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_10",
+     "text": "As embalagens primárias estéreis são transportadas de forma a manter a esterilidade até o envase? (Anexo VII 18.7.10: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.9",
+       "text": "8.9. As embalagens primárias estéreis devem ser transportadas de modo a garantir a manutenção da sua esterilidade até o envase.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.10"
+      }
+     ],
+     "informativo": false,
+     "pos": "As embalagens primárias estéreis são transportadas de forma a manter a esterilidade.",
+     "neg": "O transporte das embalagens primárias estéreis não garante a esterilidade até o envase.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_11",
+     "text": "Todas as superfícies de trabalho, inclusive o interior da capela de fluxo laminar, são limpas e desinfetadas antes e depois de cada sessão? (Anexo VII 18.7.11: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.10",
+       "text": "8.10. Todas as superfícies de trabalho, inclusive as internas da capela de fluxo laminar, devem ser limpas e desinfetadas antes e depois de cada sessão de manipulação efetuando os respectivos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.11"
+      }
+     ],
+     "informativo": false,
+     "pos": "As superfícies de trabalho e o interior do fluxo laminar são limpos e desinfetados antes e depois de cada sessão.",
+     "neg": "As superfícies de trabalho ou o interior do fluxo laminar não são limpos e desinfetados antes e depois de cada sessão.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_11_1",
+     "text": "Há registros dessa limpeza e desinfecção das superfícies? (Anexo VII 18.7.11.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.10",
+       "text": "8.10. Todas as superfícies de trabalho, inclusive as internas da capela de fluxo laminar, devem ser limpas e desinfetadas antes e depois de cada sessão de manipulação efetuando os respectivos registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.11.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da limpeza e desinfecção das superfícies de trabalho.",
+     "neg": "Não há registros da limpeza e desinfecção das superfícies de trabalho.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_12",
+     "text": "Há registros da limpeza e desinfecção dos equipamentos usados na manipulação? (Anexo VII 18.7.12: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.11",
+       "text": "8.11. Devem existir registros das operações de limpeza e desinfecção dos equipamentos empregados na manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.12"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da limpeza e desinfecção dos equipamentos da manipulação.",
+     "neg": "Não há registros da limpeza e desinfecção dos equipamentos da manipulação.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.10",
+   "num": "13.10",
+   "title": "Esterilização, envase e revisão",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.10",
+   "itemNum": "13.10",
+   "itemTitle": "Esterilização, envase e revisão",
+   "requirements": [
+    {
+     "id": "e18_7_13",
+     "text": "Há esterilização final por calor dos produtos manipulados? (Anexo VII 18.7.13: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.5",
+       "text": "4.13.5. No caso do produto manipulado necessitar de esterilização final por calor, o processo de esterilização poderá ser realizado nesta sala, desde que obedecidos procedimentos previamente estabelecidos e em horário distinto das demais atividades realizadas nesta sala.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.13"
+      }
+     ],
+     "informativo": true,
+     "pos": "Há esterilização final por calor dos produtos manipulados.",
+     "neg": "Não há esterilização final por calor dos produtos manipulados.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_7_14",
+     "text": "A esterilização final é feita na sala de limpeza e higienização? (Anexo VII 18.7.14: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.5",
+       "text": "4.13.5. No caso do produto manipulado necessitar de esterilização final por calor, o processo de esterilização poderá ser realizado nesta sala, desde que obedecidos procedimentos previamente estabelecidos e em horário distinto das demais atividades realizadas nesta sala.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.14"
+      }
+     ],
+     "informativo": true,
+     "pos": "A esterilização final é feita na sala de limpeza e higienização.",
+     "neg": "A esterilização final não é feita na sala de limpeza e higienização.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_7_14_1",
+     "text": "Quando feita nessa sala, a esterilização segue procedimento e ocorre em horário distinto das demais atividades? (Anexo VII 18.7.14.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 4.13.5",
+       "text": "4.13.5. No caso do produto manipulado necessitar de esterilização final por calor, o processo de esterilização poderá ser realizado nesta sala, desde que obedecidos procedimentos previamente estabelecidos e em horário distinto das demais atividades realizadas nesta sala.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.14.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A esterilização na sala de limpeza segue procedimento e ocorre em horário distinto.",
+     "neg": "A esterilização na sala de limpeza não segue procedimento ou não ocorre em horário distinto.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_15",
+     "text": "O envase de preparações esterilizadas por filtração é feito sob fluxo laminar ISO 5, em sala ISO 7? (Anexo VII 18.7.15: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.12.3",
+       "text": "8.12.3. O envase de preparações esterilizadas por filtração deve ser procedido sob fluxo laminar classe ISO 5, em sala classe ISO 7.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.15"
+      }
+     ],
+     "informativo": false,
+     "pos": "O envase das preparações esterilizadas por filtração é feito sob fluxo laminar ISO 5, em sala ISO 7.",
+     "neg": "O envase das preparações esterilizadas por filtração não é feito sob fluxo laminar ISO 5 em sala ISO 7.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_15_1",
+     "text": "É feito teste de integridade do filtro esterilizante antes e depois da filtração? (Anexo VII 18.7.15.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.13",
+       "text": "8.13. Deve ser efetuado teste de integridade no filtro esterilizante antes e após o processo de filtração.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.15.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "É feito teste de integridade do filtro esterilizante antes e depois da filtração.",
+     "neg": "Não é feito teste de integridade do filtro esterilizante antes e depois da filtração.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_15_2",
+     "text": "Há registros do teste de integridade do filtro esterilizante? (Anexo VII 18.7.15.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.13",
+       "text": "8.13. Deve ser efetuado teste de integridade no filtro esterilizante antes e após o processo de filtração.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.15.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros do teste de integridade do filtro esterilizante.",
+     "neg": "Não há registros do teste de integridade do filtro esterilizante.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_16",
+     "text": "Todas as soluções passam por filtração em membrana compatível com o método de esterilização final? (Anexo VII 18.7.16: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.14",
+       "text": "8.14. Todas as soluções devem passar por filtração em membrana compatível com o método de esterilização final utilizado. Deverão ser efetuados testes para verificação da integridade da membrana filtrante antes e após a filtração.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.16"
+      }
+     ],
+     "informativo": false,
+     "pos": "As soluções passam por filtração em membrana compatível com a esterilização final.",
+     "neg": "Nem todas as soluções passam por filtração em membrana compatível com a esterilização final.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_16_1",
+     "text": "É verificada a integridade da membrana filtrante antes e depois da filtração? (Anexo VII 18.7.16.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.14",
+       "text": "8.14. Todas as soluções devem passar por filtração em membrana compatível com o método de esterilização final utilizado. Deverão ser efetuados testes para verificação da integridade da membrana filtrante antes e após a filtração.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.16.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "É verificada a integridade da membrana filtrante antes e depois da filtração.",
+     "neg": "Não é verificada a integridade da membrana filtrante antes e depois da filtração.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_16_2",
+     "text": "Há registros da verificação da membrana filtrante? (Anexo VII 18.7.16.2: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.14",
+       "text": "8.14. Todas as soluções devem passar por filtração em membrana compatível com o método de esterilização final utilizado. Deverão ser efetuados testes para verificação da integridade da membrana filtrante antes e após a filtração.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.16.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros da verificação da membrana filtrante.",
+     "neg": "Não há registros da verificação da membrana filtrante.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_17",
+     "text": "Todos os processos de esterilização são validados e monitorados conforme procedimento escrito? (Anexo VII 18.7.17: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.15",
+       "text": "8.15. Todos os processos de esterilização devem ser validados e sistematicamente monitorados com base em procedimentos escritos. Os resultados devem ser registrados e arquivados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.17"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os processos de esterilização são validados e monitorados conforme procedimento escrito.",
+     "neg": "Os processos de esterilização não são validados ou monitorados conforme procedimento escrito.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_17_1",
+     "text": "Os resultados do monitoramento da esterilização são registrados e arquivados? (Anexo VII 18.7.17.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.15",
+       "text": "8.15. Todos os processos de esterilização devem ser validados e sistematicamente monitorados com base em procedimentos escritos. Os resultados devem ser registrados e arquivados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.17.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os resultados do monitoramento da esterilização são registrados e arquivados.",
+     "neg": "Os resultados do monitoramento da esterilização não são registrados.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_7_18",
+     "text": "Há procedimento claro para diferenciar preparações esterilizadas das não esterilizadas? (Anexo VII 18.7.18: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.15.1",
+       "text": "8.15.1. Devem ser definidos procedimentos claros para diferenciação das preparações esterilizadas, das não esterilizadas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.18"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há procedimento para diferenciar preparações esterilizadas das não esterilizadas.",
+     "neg": "Não há procedimento para diferenciar preparações esterilizadas das não esterilizadas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_19",
+     "text": "Nos injetáveis, os produtos intermediários são monitorados quanto a endotoxinas? (Anexo VII 18.7.19: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.17",
+       "text": "8.17. No caso de injetáveis, deve ser realizado o monitoramento dos produtos intermediários quanto à presença de endotoxinas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.19"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os produtos intermediários injetáveis são monitorados quanto a endotoxinas.",
+     "neg": "Recomenda-se monitorar os produtos intermediários injetáveis quanto a endotoxinas.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_7_20",
+     "text": "Está estabelecido, por produto, o tempo máximo entre o início da manipulação e a esterilização ou filtração esterilizante? (Anexo VII 18.7.20: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.18",
+       "text": "8.18. O tempo entre o início da manipulação de determinada solução e sua esterilização ou filtração esterilizante deve ser o menor possível e estabelecido para cada produto, levando-se em conta a sua composição.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.20"
+      }
+     ],
+     "informativo": false,
+     "pos": "Está estabelecido o tempo máximo entre o início da manipulação e a esterilização.",
+     "neg": "Não está estabelecido o tempo máximo entre o início da manipulação e a esterilização.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_21",
+     "text": "Todas as unidades de produtos estéreis passam por revisão e inspeção? (Anexo VII 18.7.21: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.20",
+       "text": "8.20. É obrigatória a revisão e inspeção de todas as unidades de produtos estéreis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.21"
+      }
+     ],
+     "informativo": false,
+     "pos": "Todas as unidades de produtos estéreis passam por revisão e inspeção.",
+     "neg": "Nem todas as unidades de produtos estéreis passam por revisão e inspeção.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_22",
+     "text": "É feito teste de hermeticidade dos produtos estéreis? (Anexo VII 18.7.22: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.21",
+       "text": "8.21. Deve ser efetuado teste para verificação da hermeticidade dos produtos estéreis.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.22"
+      }
+     ],
+     "informativo": false,
+     "pos": "É feito teste de hermeticidade dos produtos estéreis.",
+     "neg": "Recomenda-se realizar teste de hermeticidade dos produtos estéreis.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_7_23",
+     "text": "Há sistema de identificação que separe com segurança as preparações antes e depois da revisão? (Anexo VII 18.7.23: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.22",
+       "text": "8.22. Deve existir um sistema de identificação que garanta a segurança da separação das preparações antes e depois da revisão.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.23"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há sistema de identificação que separa as preparações antes e depois da revisão.",
+     "neg": "Não há sistema de identificação que separe as preparações antes e depois da revisão.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_7_24",
+     "text": "O rótulo traz paciente, leito e registro, composição, volume, velocidade de infusão, via, data e hora, número de controle, conservação e transporte, farmacêutico com CRF e quem preparou? (Anexo VII 18.7.24: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 8.23",
+       "text": "8.23. Todo produto estéril, obtido por reconstituição, transferência, incorporação ou fracionamento de especialidades farmacêuticas estéreis destinado à utilização em serviços de saúde, deve conter rótulo com as seguintes informações: nome completo do paciente, quarto/leito e registro hospitalar (se for o caso), composição qualitativa e quantitativa dos produtos e ou nomes das especialidades farmacêuticas que compõem a manipulação, volume total, velocidade da infusão, via de acesso, data e hora da manipulação, número seqüencial de controle e condições de temperatura para conservação e transporte, nome e CRF do farmacêutico responsável e identificação de quem preparou a manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.7.24"
+      }
+     ],
+     "informativo": false,
+     "pos": "A rotulagem dos produtos estéreis traz as informações exigidas.",
+     "neg": "A rotulagem dos produtos estéreis não traz todas as informações exigidas.",
+     "classe": "N"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.11",
+   "num": "13.11",
+   "title": "Controle de qualidade",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.11",
+   "itemNum": "13.11",
+   "itemTitle": "Controle de qualidade",
+   "requirements": [
+    {
+     "id": "e18_8_1",
+     "text": "As matérias-primas passam por ensaios farmacopeicos completos: identificação, teor, impurezas e biocarga? (Anexo VII 18.8.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.1",
+       "text": "9.1. As matérias-primas utilizadas na preparação de estéreis devem ser submetidas aos ensaios farmacopéicos completos, incluindo identificação, quantificação (teor), impurezas e determinação da biocarga.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.8.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "As matérias-primas passam pelos ensaios farmacopeicos completos, incluindo a biocarga.",
+     "neg": "As matérias-primas não passam pelos ensaios farmacopeicos completos, incluindo a biocarga.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_8_1_1",
+     "text": "Os ensaios de teor, impurezas e biocarga são feitos por laboratório terceirizado? (Anexo VII 18.8.1.1: informativo)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.2",
+       "text": "9.2. Os testes de quantificação (teor), impurezas e determinação da biocarga podem ser executados por laboratórios de controle de qualidade terceirizados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.8.1.1"
+      }
+     ],
+     "informativo": true,
+     "pos": "Os ensaios de teor, impurezas e biocarga são terceirizados.",
+     "neg": "Os ensaios de teor, impurezas e biocarga são feitos pela própria farmácia.",
+     "classe": "INF"
+    },
+    {
+     "id": "e18_8_2",
+     "text": "O produto pronto passa por inspeção visual de 100% das unidades, conferência do rótulo, teste de esterilidade e de endotoxinas (exceto oftálmicos)? (Anexo VII 18.8.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.3",
+       "text": "9.3. O produto estéril pronto para o uso deve ser submetido, além dos previstos no Anexo I, aos seguintes controles:\na) inspeção visual de 100% das amostras, para verificar a integridade física da embalagem, ausência de partículas estranhas, precipitações e separações de fases;\nb) verificação da exatidão das informações do rótulo;\nc) teste de esterilidade;\nd) teste de endotoxinas bacterianas, exceto para os produtos oftálmicos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.5",
+       "text": "9.5. Ficam dispensadas dos testes de esterilidade e de endotoxinas bacterianas toda preparação estéril, obtida por reconstituição, transferência, incorporação ou fracionamento de especialidades farmacêuticas estéreis, com prazo de utilização de 48 horas e nos casos de administração prolongada (dispositivos de infusão portáteis), desde que a infusão inicie até 30 horas após o preparo, em serviços de saúde. 10.GARANTIA DA QUALIDADE.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.8.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "O produto pronto passa pela inspeção visual, conferência do rótulo e testes de esterilidade e de endotoxinas.",
+     "neg": "O produto pronto não passa por todos os controles exigidos (inspeção visual, rótulo, esterilidade e endotoxinas).",
+     "classe": "I"
+    },
+    {
+     "id": "e18_8_2_1",
+     "text": "As amostras do teste de esterilidade são retiradas de forma representativa a cada ciclo de esterilização? (Anexo VII 18.8.2.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.3.1",
+       "text": "9.3.1. As amostras para o teste de esterilidade devem ser retiradas, segundo técnicas de amostragem que assegurem a representatividade da amostra, a cada ciclo de esterilização.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.8.2.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "As amostras do teste de esterilidade são representativas de cada ciclo.",
+     "neg": "As amostras do teste de esterilidade não são representativas de cada ciclo.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_8_2_2",
+     "text": "Todas as análises são registradas? (Anexo VII 18.8.2.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 9.4",
+       "text": "9.4. Todas as análises realizadas devem ser registradas.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.8.2.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "Todas as análises são registradas.",
+     "neg": "Nem todas as análises são registradas.",
+     "classe": "I"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.12",
+   "num": "13.12",
+   "title": "Garantia da qualidade e validação",
+   "condition": "estereis",
+   "hint": null,
+   "item": "i13.12",
+   "itemNum": "13.12",
+   "itemTitle": "Garantia da qualidade e validação",
+   "requirements": [
+    {
+     "id": "e18_9_1",
+     "text": "Os equipamentos e as salas classificadas são qualificados ou certificados? (Anexo VII 18.9.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.1",
+       "text": "10.1.1. Os equipamentos e as salas classificadas devem ser qualificados/certificados e os ciclos de esterilização e despirogenização, assim como o sistema de obtenção de água para preparação de estéreis devem ser validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os equipamentos e as salas classificadas são qualificados ou certificados.",
+     "neg": "Os equipamentos ou as salas classificadas não são qualificados ou certificados.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_9_2",
+     "text": "Os ciclos de esterilização e despirogenização são validados? (Anexo VII 18.9.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.1",
+       "text": "10.1.1. Os equipamentos e as salas classificadas devem ser qualificados/certificados e os ciclos de esterilização e despirogenização, assim como o sistema de obtenção de água para preparação de estéreis devem ser validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os ciclos de esterilização e despirogenização são validados.",
+     "neg": "Os ciclos de esterilização e despirogenização não são validados.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_9_3",
+     "text": "O sistema de obtenção de água para estéreis está validado? (Anexo VII 18.9.3: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.1",
+       "text": "10.1.1. Os equipamentos e as salas classificadas devem ser qualificados/certificados e os ciclos de esterilização e despirogenização, assim como o sistema de obtenção de água para preparação de estéreis devem ser validados.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "O sistema de obtenção de água para estéreis está validado.",
+     "neg": "O sistema de obtenção de água para estéreis não está validado.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_9_4",
+     "text": "O procedimento de preparação de estéreis está validado para garantir a obtenção do medicamento estéril? (Anexo VII 18.9.4: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.2",
+       "text": "10.1.2. O procedimento de preparações estéreis deve ser validado para garantir a obtenção do medicamento estéril.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "O procedimento de preparação de estéreis está validado.",
+     "neg": "O procedimento de preparação de estéreis não está validado.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_9_4_1",
+     "text": "A validação segue protocolo escrito, com procedimento simulado da técnica? (Anexo VII 18.9.4.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.2.1",
+       "text": "10.1.2.1. A validação deve seguir protocolo escrito que inclua a avaliação da técnica adotada, por meio de um procedimento simulado.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.4.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A validação segue protocolo escrito, com procedimento simulado.",
+     "neg": "A validação não segue protocolo escrito com procedimento simulado.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_9_4_2",
+     "text": "A validação abrange a metodologia, cada manipulador e as condições da área e dos equipamentos? (Anexo VII 18.9.4.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.2.2",
+       "text": "10.1.2.2. A validação deve abranger a metodologia empregada, o manipulador, as condições da área e dos equipamentos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.4.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "A validação abrange a metodologia, os manipuladores e as condições da área e dos equipamentos.",
+     "neg": "A validação não abrange a metodologia, os manipuladores ou as condições da área e dos equipamentos.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_9_5",
+     "text": "Há revalidação periódica, no mínimo anual? (Anexo VII 18.9.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.3",
+       "text": "10.1.3. Devem ser realizadas revalidações periódicas, no mínimo uma vez ao ano.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há revalidação periódica, no mínimo anual.",
+     "neg": "Não há revalidação anual.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_9_6",
+     "text": "O procedimento é revalidado sempre que há alteração nas condições validadas? (Anexo VII 18.9.6: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.4",
+       "text": "10.1.4. Sempre que houver qualquer alteração nas condições validadas, o procedimento deve ser revalidado.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "O procedimento é revalidado quando há alteração nas condições validadas.",
+     "neg": "O procedimento não é revalidado quando há alteração nas condições validadas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_9_7",
+     "text": "As validações e revalidações são documentadas e arquivadas por dois anos? (Anexo VII 18.9.7: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.1.5",
+       "text": "10.1.5. As validações e revalidações devem ser documentadas e os documentos arquivados por dois anos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 10.2.1",
+       "text": "10.2.1. A documentação e o registro de preparações estéreis devem ser arquivados durante dois anos a partir da data da manipulação.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.9.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "As validações e revalidações são documentadas e arquivadas.",
+     "neg": "As validações e revalidações não são documentadas e arquivadas.",
+     "classe": "I"
+    }
+   ]
+  },
+  {
+   "code": "v2-13.13",
+   "num": "13.13",
+   "title": "Citostáticos",
+   "condition": "estereis",
+   "hint": "citostaticos",
+   "item": "i13.13",
+   "itemNum": "13.13",
+   "itemTitle": "Citostáticos",
+   "requirements": [
+    {
+     "id": "e18_10_1",
+     "text": "Os citostáticos são armazenados em local exclusivo, em condições que preservem identidade e integridade? (Anexo VII 18.10.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.1",
+       "text": "11.1. Todos os medicamentos Citostáticos devem ser armazenados em local exclusivo, sob condições apropriadas, de modo a preservar a identidade e integridade dos mesmos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os citostáticos são armazenados em local exclusivo e adequado.",
+     "neg": "Os citostáticos não são armazenados em local exclusivo e adequado.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_2",
+     "text": "Há sala exclusiva para manipulação e fracionamento de citostáticos? (Anexo VII 18.10.2: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.2",
+       "text": "11.2. A farmácia deve possuir sala exclusiva para manipulação e fracionamento de citostáticos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.2"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há sala exclusiva para manipulação e fracionamento de citostáticos.",
+     "neg": "Não há sala exclusiva para manipulação e fracionamento de citostáticos.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_10_3",
+     "text": "A sala de citostáticos tem pressão negativa em relação ao ambiente adjacente? (Anexo VII 18.10.3: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.3",
+       "text": "11.3. A pressurização da sala de manipulação deve ser negativa em relação ao ambiente adjacente.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.3"
+      }
+     ],
+     "informativo": false,
+     "pos": "A sala de citostáticos tem pressão negativa em relação ao adjacente.",
+     "neg": "A sala de citostáticos não tem pressão negativa em relação ao adjacente.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_4",
+     "text": "Todas as operações são feitas em Cabine de Segurança Biológica Classe II B2? (Anexo VII 18.10.4: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.4",
+       "text": "11.4. Todas as operações devem ser realizadas em Cabine de Segurança Biológica (CSB) Classe II B2, que deve ser instalada seguindo orientações contidas em legislação específica.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.4"
+      }
+     ],
+     "informativo": false,
+     "pos": "As operações com citostáticos são feitas em Cabine de Segurança Biológica Classe II B2.",
+     "neg": "As operações com citostáticos não são feitas em Cabine de Segurança Biológica Classe II B2.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_10_5",
+     "text": "A cabine é validada semestralmente e após deslocamento ou reparo? (Anexo VII 18.10.5: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.5",
+       "text": "11.5. A CSB deve ser validada com periodicidade semestral e sempre que houver deslocamento e/ou reparos, por pessoal treinado, mantendo-se os registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.5"
+      }
+     ],
+     "informativo": false,
+     "pos": "A cabine de segurança biológica é validada semestralmente e após deslocamento ou reparo.",
+     "neg": "A cabine de segurança biológica não é validada semestralmente ou após deslocamento ou reparo.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_5_1",
+     "text": "Há registros das validações da cabine? (Anexo VII 18.10.5.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.5",
+       "text": "11.5. A CSB deve ser validada com periodicidade semestral e sempre que houver deslocamento e/ou reparos, por pessoal treinado, mantendo-se os registros.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.5.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há registros das validações da cabine.",
+     "neg": "Não há registros das validações da cabine.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_6",
+     "text": "Qualquer interrupção da cabine paralisa imediatamente a manipulação de citostáticos? (Anexo VII 18.10.6: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.6",
+       "text": "11.6. Qualquer interrupção do funcionamento da CSB implica na paralisação imediata das atividades de manipulação dos medicamentos citostáticos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.6"
+      }
+     ],
+     "informativo": false,
+     "pos": "A interrupção da cabine paralisa imediatamente a manipulação de citostáticos.",
+     "neg": "A manipulação de citostáticos não é paralisada quando a cabine é interrompida.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_7",
+     "text": "Na manipulação são usados dois pares de luvas estéreis de látex, de punho longo e sem talco, e avental longo ou macacão de baixa permeabilidade? (Anexo VII 18.10.7: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.7.1",
+       "text": "11.7.1. Durante a manipulação devem ser usados:\na) dois pares de luvas (tipo cirúrgica) de látex estéreis com punho longo e sem talco, trocados a cada hora ou sempre que sua integridade estiver comprometida;\nb) avental longo ou macacão de uso restrito à sala de manipulação, com baixa permeabilidade, frente fechada, com mangas longas e punho elástico.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.7"
+      }
+     ],
+     "informativo": false,
+     "pos": "São usados dois pares de luvas estéreis e avental ou macacão de baixa permeabilidade.",
+     "neg": "Não são usados os dois pares de luvas estéreis e o avental ou macacão de baixa permeabilidade exigidos.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_10_8",
+     "text": "As luvas são trocadas a cada hora ou quando comprometidas? (Anexo VII 18.10.8: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.7.1",
+       "text": "11.7.1. Durante a manipulação devem ser usados:\na) dois pares de luvas (tipo cirúrgica) de látex estéreis com punho longo e sem talco, trocados a cada hora ou sempre que sua integridade estiver comprometida;\nb) avental longo ou macacão de uso restrito à sala de manipulação, com baixa permeabilidade, frente fechada, com mangas longas e punho elástico.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.8"
+      }
+     ],
+     "informativo": false,
+     "pos": "As luvas são trocadas a cada hora ou quando comprometidas.",
+     "neg": "As luvas não são trocadas a cada hora ou quando comprometidas.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_9",
+     "text": "A paramentação reutilizável é guardada separada, em ambiente fechado, até a lavagem? (Anexo VII 18.10.9: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.7.2",
+       "text": "11.7.2. A paramentação, quando reutilizável, deve ser guardada separadamente, em ambiente fechado, até que seja lavada. O processo de lavagem deve ser exclusivo a este vestuário.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.9"
+      }
+     ],
+     "informativo": false,
+     "pos": "A paramentação reutilizável é guardada separada até a lavagem.",
+     "neg": "A paramentação reutilizável não é guardada separada até a lavagem.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_9_1",
+     "text": "A lavagem desse vestuário é exclusiva? (Anexo VII 18.10.9.1: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.7.2",
+       "text": "11.7.2. A paramentação, quando reutilizável, deve ser guardada separadamente, em ambiente fechado, até que seja lavada. O processo de lavagem deve ser exclusivo a este vestuário.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.9.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "A lavagem do vestuário de citostáticos é exclusiva.",
+     "neg": "A lavagem do vestuário de citostáticos não é exclusiva.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_10",
+     "text": "O produto final passa por inspeção visual quanto a perfurações, vazamentos, corpos estranhos e precipitados? (Anexo VII 18.10.10: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.7.3",
+       "text": "11.7.3. Deve ser feita a inspeção visual do produto final, observando a existência de perfurações e/ou vazamentos, corpos estranhos ou precipitações na solução.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.10"
+      }
+     ],
+     "informativo": false,
+     "pos": "O produto final passa por inspeção visual.",
+     "neg": "O produto final não passa por inspeção visual.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_11",
+     "text": "O transporte é feito em recipientes isotérmicos exclusivos, protegidos de intempéries e da luz solar direta? (Anexo VII 18.10.11: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.8.1",
+       "text": "11.8.1. O transporte do medicamento citostático deve ser feito em recipientes isotérmicos exclusivos, protegido de intempéries e da incidência direta da luz solar.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.11"
+      }
+     ],
+     "informativo": false,
+     "pos": "O transporte de citostáticos é feito em recipientes isotérmicos exclusivos e protegidos.",
+     "neg": "O transporte de citostáticos não é feito em recipientes isotérmicos exclusivos e protegidos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_12",
+     "text": "O responsável pelo transporte recebeu treinamento de biossegurança para acidentes e emergências? (Anexo VII 18.10.12: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.8.2",
+       "text": "11.8.2. O responsável pelo transporte de medicamentos citostáticos deve receber treinamento específico de biossegurança em caso de acidentes e emergências.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.12"
+      }
+     ],
+     "informativo": false,
+     "pos": "O responsável pelo transporte recebeu treinamento de biossegurança.",
+     "neg": "O responsável pelo transporte não recebeu treinamento de biossegurança.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_13",
+     "text": "A contaminação acidental no transporte é notificada ao responsável pela manipulação? (Anexo VII 18.10.13: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.8.3",
+       "text": "11.8.3. Para casos de contaminação acidental no transporte de medicamentos citostáticos, é compulsória a notificação do ocorrido ao responsável pela manipulação, assim como as providências de descontaminação e limpeza, adotadas de acordo com os protocolos estabelecidos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.13"
+      }
+     ],
+     "informativo": false,
+     "pos": "A contaminação acidental no transporte é notificada ao responsável pela manipulação.",
+     "neg": "A contaminação acidental no transporte não é notificada ao responsável pela manipulação.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_13_1",
+     "text": "São adotadas descontaminação e limpeza conforme os protocolos estabelecidos? (Anexo VII 18.10.13.1: imprescindível)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.8.3",
+       "text": "11.8.3. Para casos de contaminação acidental no transporte de medicamentos citostáticos, é compulsória a notificação do ocorrido ao responsável pela manipulação, assim como as providências de descontaminação e limpeza, adotadas de acordo com os protocolos estabelecidos.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.13.1"
+      }
+     ],
+     "informativo": false,
+     "pos": "São adotadas descontaminação e limpeza conforme os protocolos.",
+     "neg": "Não são adotadas descontaminação e limpeza conforme os protocolos.",
+     "classe": "I"
+    },
+    {
+     "id": "e18_10_14",
+     "text": "A farmácia tem Programa de Biossegurança implantado? (Anexo VII 18.10.14: recomendável)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.1",
+       "text": "11.9.1. A farmácia deve dispor de Programa de Biossegurança, devidamente implantado, de acordo com legislação específica.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.14"
+      }
+     ],
+     "informativo": false,
+     "pos": "A farmácia tem Programa de Biossegurança implantado.",
+     "neg": "Recomenda-se implantar Programa de Biossegurança.",
+     "classe": "R"
+    },
+    {
+     "id": "e18_10_15",
+     "text": "Há kit de derramamento identificado e disponível em todas as áreas de manipulação, armazenamento e transporte? (Anexo VII 18.10.15: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.2",
+       "text": "11.9.2. A farmácia deve manter um \"Kit\" de Derramamento identificado e disponível em todas as áreas onde são realizadas atividades de manipulação, armazenamento e transporte.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.15"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há kit de derramamento identificado nas áreas de manipulação, armazenamento e transporte.",
+     "neg": "Não há kit de derramamento identificado em todas as áreas de manipulação, armazenamento e transporte.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_16",
+     "text": "O kit contém luvas, avental de baixa permeabilidade, compressas absorventes, proteção respiratória e ocular e sabão? (Anexo VII 18.10.16: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.2.1",
+       "text": "11.9.2.1. O Kit de Derramamento deve conter, no mínimo, luvas de procedimentos, avental de baixa permeabilidade, compressas absorventes, proteção respiratória, proteção ocular, sabão, descrição do procedimento, formulário para o registro do acidente e recipiente identificado para recolhimento dos resíduos de acordo com RDC/ANVISA nº 306, de 07/12/2004, suas atualizações ou outro instrumento legal que venha substituí-la.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.16"
+      }
+     ],
+     "informativo": false,
+     "pos": "O kit de derramamento contém os itens exigidos.",
+     "neg": "O kit de derramamento não contém todos os itens exigidos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_17",
+     "text": "O kit traz a descrição do procedimento, formulário de registro do acidente e recipiente identificado para os resíduos? (Anexo VII 18.10.17: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.2.1",
+       "text": "11.9.2.1. O Kit de Derramamento deve conter, no mínimo, luvas de procedimentos, avental de baixa permeabilidade, compressas absorventes, proteção respiratória, proteção ocular, sabão, descrição do procedimento, formulário para o registro do acidente e recipiente identificado para recolhimento dos resíduos de acordo com RDC/ANVISA nº 306, de 07/12/2004, suas atualizações ou outro instrumento legal que venha substituí-la.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.17"
+      }
+     ],
+     "informativo": false,
+     "pos": "O kit traz o procedimento, o formulário de registro e o recipiente para resíduos.",
+     "neg": "O kit não traz o procedimento, o formulário de registro ou o recipiente para resíduos.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_18",
+     "text": "Há normas e rotinas escritas, revisadas anualmente, para o uso da cabine e dos EPI? (Anexo VII 18.10.18: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.3",
+       "text": "11.9.3. Devem existir normas e rotinas escritas, revisadas anualmente, para a utilização da Cabine de Segurança Biológica e dos Equipamentos de Proteção Individual.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.18"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há normas escritas e revisadas anualmente para o uso da cabine e dos EPI.",
+     "neg": "Não há normas escritas e revisadas anualmente para o uso da cabine e dos EPI.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_19",
+     "text": "Todos os acidentes são registrados em formulário específico? (Anexo VII 18.10.19: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.4",
+       "text": "11.9.4. Em caso de acidente. Todos os acidentes devem ser registrados em formulário específico.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.19"
+      }
+     ],
+     "informativo": false,
+     "pos": "Os acidentes são registrados em formulário específico.",
+     "neg": "Os acidentes não são registrados em formulário específico.",
+     "classe": "N"
+    },
+    {
+     "id": "e18_10_20",
+     "text": "Há procedimentos específicos para acidentes com pessoal, na cabine e no ambiente? (Anexo VII 18.10.20: necessário)",
+     "condition": null,
+     "refs": [
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo IV · Item 11.9.4",
+       "text": "11.9.4. Em caso de acidente. Todos os acidentes devem ser registrados em formulário específico.",
+       "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000067&seqAto=002&valorAno=2007&orgao=RDC/DC/ANVISA/MS&cod_modulo=310&cod_menu=8542"
+      },
+      {
+       "law": "RDC nº 67/2007",
+       "device": "Anexo VII · Item 18.10.20"
+      }
+     ],
+     "informativo": false,
+     "pos": "Há procedimentos específicos para acidentes com pessoal, na cabine e no ambiente.",
+     "neg": "Não há procedimentos específicos para acidentes com pessoal, na cabine e no ambiente.",
+     "classe": "N"
+    }
+   ]
+  }
+ ],
+ "extraItems": [
+  {
+   "fn": "manV2",
+   "into": "i13.1",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.1",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.1",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.2",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.2",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.2",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.3",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.3",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.3",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.4",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.4",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.4",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.5",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.5",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.5",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.6",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.6",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.6",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.7",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.7",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.7",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.8",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.8",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.8",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.9",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.9",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.9",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.10",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.10",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.10",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.11",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.11",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.11",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.12",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.12",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.12",
+   "c": {
+    "t": "preview"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.13",
+   "antes": true,
+   "c": {
+    "t": "itemhead",
+    "na": true
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.13",
+   "antes": false,
+   "c": {
+    "t": "obs",
+    "label": "Observações gerais do item"
+   }
+  },
+  {
+   "fn": "manV2",
+   "into": "i13.13",
+   "c": {
+    "t": "preview"
+   }
+  }
+ ]
+}
