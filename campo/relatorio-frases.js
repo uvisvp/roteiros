@@ -24,8 +24,8 @@
  /* mantém a maiúscula de sigla e de nome próprio (“Responsável Técnico”, “Boas Práticas”, “Plano de Segurança”) */
  function minuscula(t){
   if(/^[A-ZÀ-Ú]{2,}\b/.test(t) || /^[A-Z]\w*\s?\d/.test(t)) return t;
-  var ws = t.split(/\s+/).slice(1, 4).filter(function(w){ return !/^(de|da|do|das|dos|e|ou|a|o)$/i.test(w); });
-  if(ws.length && /^[A-ZÀ-Ú][a-zà-ú]/.test(ws[0])) return t;
+  var w1 = t.split(/\s+/)[1] || '';
+  if(!/^(o|a|os|as|um|uma)$/i.test(t.split(/\s+/)[0]) && /^[A-ZÀ-Ú][a-zà-ú]/.test(w1)) return t;
   return t.charAt(0).toLowerCase() + t.slice(1);
  }
  function ponto(t){ return t.replace(/[\s.;:?!]+$/, '') + '.'; }
@@ -56,6 +56,8 @@
   if(m) return ponto((nc ? 'Não está atendida a exigência de ' : 'Está atendida a exigência de ') + m[1]);
   t = t.replace(/\?$/, '');
   var p = principal(t);
+  /* verbo de ligação depois da oração com “que” (“Alterações … que repercutem … foram comunicadas”) */
+  if(!temVerbo(p)){ var q = t.split(/\sque\s/i); if(q.length > 1 && /\s(é|são|está|estão|foi|foram)\s/i.test(' ' + q.slice(1).join(' que ') + ' ') && !/^(é|são|está|estão|foi|foram)\s/i.test(q[1])) p = t; }
   if(temVerbo(p)){
    if(!nc) return ponto(t.charAt(0).toUpperCase() + t.slice(1));
    /* requisito negativo (“Não há…”, “… não são reutilizadas”): a negativa tira o “não” */

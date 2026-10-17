@@ -22,7 +22,7 @@ function bloco(id, fn) {
 function troca(s, de, para, rot) {
   /* blocos com quebra CRLF: o trecho procurado e o novo seguem a mesma quebra */
   if (s.includes('\r\n') && de.includes('\n') && !de.includes('\r\n')) { de = de.replace(/\n/g, '\r\n'); para = para.replace(/\n/g, '\r\n'); }
-  if (s.includes(para)) return s;
+  if (para ? s.includes(para) : !s.includes(de)) return s;
   if (s.split(de).length !== 2) throw Error(rot + ': esperava 1 ocorrência, achei ' + (s.split(de).length - 1));
   return s.replace(de, () => para);
 }
@@ -57,8 +57,8 @@ function asDescritivo(rows){const F=${F},D=(window.UvsFrase&&UvsFrase.doc)||func
  const frase=r=>(r.kind==='doc'?D(r.item,r.res==='C'?'c':'nc','O estabelecimento'):F(r.item,r.res==='C'?'c':'nc'))+nota(r.nota);
  let h='',n=0;
  [['doc','DOCUMENTAÇÃO APRESENTADA'],['rot','VERIFICAÇÕES REALIZADAS']].forEach(([k,tit])=>{const rs=verif.filter(r=>r.kind===k);if(!rs.length)return;n++;h+='<h3>'+n+' '+tit+'</h3>';const gs=[];rs.forEach(r=>{if(!gs.includes(r.group))gs.push(r.group)});gs.forEach(g=>{h+='<h4>'+esc(g)+'</h4><p>'+esc(rs.filter(r=>r.group===g).map(frase).join(' '))+'</p>'})});
- n++;h+='<h3>'+n+' IRREGULARIDADES OBSERVADAS</h3>'+(irr.length?'<ol>'+irr.map(r=>'<li>'+esc(frase(r)+' Fundamento: '+String(r.citation||'').replace(/\\.?$/,'.'))+'</li>').join('')+'</ol>':'<p>Não foram registradas irregularidades nesta inspeção.</p>');
- if(inf.length){n++;h+='<h3>'+n+' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS</h3><ol>'+inf.map(r=>'<li>'+esc(String(r.item).replace(/\\.?$/,'.')+' Dispositivos infringidos: '+String(r.citation||'').replace(/\\.?$/,'.'))+'</li>').join('')+'</ol>'}
+ n++;h+='<h3>'+n+' IRREGULARIDADES OBSERVADAS</h3>'+(irr.length?irr.map((r,k)=>'<p>'+(k+1)+'. '+esc(frase(r)+' Fundamento: '+String(r.citation||'').replace(/\\.?$/,'.'))+'</p>').join(''):'<p>Não foram registradas irregularidades nesta inspeção.</p>');
+ if(inf.length){n++;h+='<h3>'+n+' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS</h3>'+inf.map((r,k)=>'<p>'+(k+1)+'. '+esc(String(r.item).replace(/\\.?$/,'.')+' Dispositivos infringidos: '+String(r.citation||'').replace(/\\.?$/,'.'))+'</p>').join('')}
  return h}
 async function buildReport(){`, 'assistenciais helper');
   s = troca(s, `if(st||nt)rows.push({kind,section:kind==="doc"?"Documentação":"Roteiro",group:item.g,item:item.i,citation:item.l,state:(st?status(kind,st):'Sem marcação')+(nt?' — '+nt:''),refs:item.refs,index:i})`,
@@ -80,7 +80,7 @@ bloco('rec--roteiro-guiado.js', s => {
     "    const irr = resp.filter((item) => state.answers[item._id] === 'no');\n" +
     "    const verif = etapas.map((e) => `<h4>${esc(e)}</h4><p>${esc(resp.filter((item) => item._sectionTitle === e).map(frase).join(' '))}</p>`).join('');", 'guiado meta e frases');
   s = troca(s, '<div class="report-meta">${meta}<div><strong>Progresso:</strong> ${c.answered}/${c.total} respondidos</div><div><strong>Não conformidades:</strong> ${c.nc}</div></div><table><thead><tr><th>Etapa</th><th>Verificação / base legal</th><th>Situação</th><th>Anotação / evidência</th></tr></thead><tbody>${rows || `<tr><td colspan="4">Nenhum item respondido.</td></tr>`}</tbody></table>${selected.length ? `<h3>Infrações selecionadas</h3><ul>${selected.map((item) => `<li>${esc(item.text)}${item.legal ? ` — ${esc(item.legal)}` : ""}</li>`).join("")}</ul>` : ""}',
-    '<div class="report-meta">${meta}</div><h3>1 VERIFICAÇÕES REALIZADAS</h3>${verif || "<p>Nenhuma verificação registrada.</p>"}<h3>2 IRREGULARIDADES OBSERVADAS</h3>${irr.length ? `<ol>${irr.map((item) => `<li>${esc(frase(item) + (item.legal ? " Fundamento: " + String(item.legal).replace(/\\.?$/, ".") : ""))}</li>`).join("")}</ol>` : "<p>Não foram registradas irregularidades nesta inspeção.</p>"}${selected.length ? `<h3>3 ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS</h3><ol>${selected.map((item) => `<li>${esc(String(item.text).replace(/\\.?$/, ".") + (item.legal ? " Dispositivos infringidos: " + String(item.legal).replace(/\\.?$/, ".") : ""))}</li>`).join("")}</ol>` : ""}', 'guiado corpo');
+    '<div class="report-meta">${meta}</div><h3>1 VERIFICAÇÕES REALIZADAS</h3>${verif || "<p>Nenhuma verificação registrada.</p>"}<h3>2 IRREGULARIDADES OBSERVADAS</h3>${irr.length ? irr.map((item, k) => `<p>${k + 1}. ${esc(frase(item) + (item.legal ? " Fundamento: " + String(item.legal).replace(/\\.?$/, ".") : ""))}</p>`).join("") : "<p>Não foram registradas irregularidades nesta inspeção.</p>"}${selected.length ? `<h3>3 ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS</h3>${selected.map((item, k) => `<p>${k + 1}. ${esc(String(item.text).replace(/\\.?$/, ".") + (item.legal ? " Dispositivos infringidos: " + String(item.legal).replace(/\\.?$/, ".") : ""))}</p>`).join("")}` : ""}', 'guiado corpo');
   return s;
 });
 
@@ -147,6 +147,19 @@ bloco('app--servicos-alimentacao-roteiro', s => {
 bloco('app--estetica', s => troca(s,
   `root.innerHTML='<h1>Infrações e legislação relacionada</h1><p>'+esc($("metaSaida").textContent)+'</p><table><thead><tr><th>Descrição da infração</th><th>Dispositivo legal infringido</th></tr></thead><tbody>'+$("corpoSaida").innerHTML+'</tbody></table>';`,
   `/* descritivo: infrações numeradas por bloco, com a constatação e o dispositivo infringido */const xs=TODAS.filter(t=>escolhidas.has(t.id)),pt=v=>String(v).trim().replace(/\\.?$/,'.');let last='',n=0,h='<h1>Relatório de inspeção sanitária — serviços de estética</h1><p>'+esc($("metaSaida").textContent)+'</p><h2>Infrações constatadas</h2>';xs.forEach(t=>{const k=t.bloco+' — '+t.tema;if(k!==last){h+='<h3>'+esc(k)+'</h3>';last=k}const c=String(notas[t.id]||'').trim();h+='<p>'+(++n)+'. '+esc(pt(t.i)+(c?' Constatação: '+pt(c.charAt(0).toUpperCase()+c.slice(1)):'')+' Dispositivo legal infringido: '+pt(t.l))+'</p>'});if(!n)h+='<p>Nenhuma infração selecionada.</p>';root.innerHTML=h;`, 'estética'));
+
+/* ---------- “O relatório é só o relatório” (17/10/2026): sem anexo com texto
+   de lei e sem avisos internos; a citação fica nas irregularidades e no
+   enquadramento, como no EAC ---------- */
+bloco('app--servicos-assistenciais', s => troca(s,
+  `+(refs.length?'<section class="legal-appendix"><h3>Dispositivos legais citados</h3>'+reportLegal(refs)+'</section>':'')+'<p><b>Conferência obrigatória:</b> antes da lavratura, confirmar aplicabilidade, vigência, competência e correspondência entre o fato e todos os dispositivos citados.</p>';`,
+  `;/* relatório sem anexo de texto legal nem aviso interno */`, 'assistenciais sem anexo'));
+bloco('app--odontologia', s => troca(s, "  if(o.transc&&nc.length){\n    B.push({t:'h1',x:'7 DISPOSITIVOS DESCUMPRIDOS'});",
+  "  if(false&&o.transc&&nc.length){/* sem transcrição de norma no relatório */\n    B.push({t:'h1',x:'7 DISPOSITIVOS DESCUMPRIDOS'});", 'odonto sem transcrição'));
+bloco('rec--roteiro-guiado.js', s => troca(s,
+  '<p class="report-note">Instrumento de apoio. A conclusão e a capitulação final dependem da constatação, da aplicabilidade ao caso, da competência do órgão e da redação vigente das normas.</p>', '', 'guiado sem nota'));
+bloco('app--servicos-alimentacao-roteiro', s => troca(s,
+  "  L.push('Instrumento de apoio. A conclusão, a aplicabilidade ao caso e a capitulação dependem da constatação da equipe.');\n", '', 'alimentos sem nota'));
 
 fs.writeFileSync(file, html);
 console.log('Relatórios descritivos aplicados.');
