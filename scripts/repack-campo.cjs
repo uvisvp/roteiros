@@ -31,8 +31,8 @@ function troca(de, para, rot) {
 }
 const casca = `(function(){
  var SO_DITADO=${JSON.stringify(SO_DITADO)};
- var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js'].map(le).join('\n'))};
- var DITADO_JS=${jsStr(le('ditado.js'))};
+ var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js'].map(le).join('\n'))};
+ var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js'].map(le).join('\n'))};
  window.__uvisCampoInjeta=function(app,s){var k=s.lastIndexOf('</body>');if(k<0)return s;
   return s.slice(0,k)+'<scr'+'ipt>'+(SO_DITADO.indexOf(app)>=0?DITADO_JS:CAMPO_JS)+'</scr'+'ipt>'+s.slice(k)};
  /* Salvas: os dados do botão Campo (med-campo-<roteiro>) e as fotos dos achados
