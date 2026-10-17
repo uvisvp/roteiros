@@ -1,6 +1,6 @@
 {
-  "versao": "20261017-4",
+  "versao": "20261017-5",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Roteiros revisados: nas instalações, marque os ambientes que o estabelecimento possui e, em cada um, só o que estiver irregular; o relatório diz quais ambientes existem e lista as irregularidades, sem frase de “ambiente sem irregularidade”. Na academia, as perguntas gerais que dependiam do local (limpeza, sinantrópicos, elétrica, ventilação, ralos, lixeiras, pisos, equipamentos, itens de sanitários e vestiários) passaram para os ambientes. No checklist, cada ponto não atendido tem a sua frase no relatório, sem “X ou Y”. Toda irregularidade cita a Lei Municipal nº 13.725/2004, até o art. 109, pelo assunto: art. 69 na academia e no SAICA; arts. 46 e 50 somados aos 61 a 68 em EAC e vacinação; 49 rotulagem, 50 instalações e controle especial no comércio, 50-A expositor refrigerado, 67 controlados no serviço de saúde, 55 e 56 eventos adversos, 71 notificação compulsória, 85 doses aplicadas, 92 e 93 responsável técnico, 37, I, saúde do trabalhador. Relatórios sem lista de normas e Word sem linhas sob os títulos. No celular, o campo em que se digita fica acima do teclado."
+  "notas": "Produtos e Serviços assistenciais: ao marcar uma infração, abre o campo “Constatação” (digite ou dite), como na Estética. Preenchido, o enquadramento do relatório, o Word e a prévia descrevem a infração pelo fato constatado, e não pelo texto genérico do catálogo; os dispositivos infringidos continuam os do catálogo, com a Lei Municipal nº 13.725/2004. Sem constatação, sai o texto do catálogo, sem o aviso “ATENÇÃO PRIORITÁRIA”."
 }

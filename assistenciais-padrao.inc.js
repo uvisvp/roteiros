@@ -63,7 +63,7 @@ function asInfracoes(el){
  const by=asGrupos('inf'),n=current.inf.filter((_,i)=>mark('inf',i)==='SEL').length;
  el.innerHTML=`<div class="pu-bloco"><h3>Infrações</h3><p>Redação de apoio: marque somente o que foi constatado e confirme o fato. Nenhuma resposta do roteiro marca infração sozinha. ${n} selecionada(s).</p></div>`
   +by.map(g=>{const sel=g.idx.filter(i=>mark('inf',i)==='SEL').length;return `<details class="pu-mais pu-inf-grupo" data-as-inf="${esc(g.g)}"${asInfAbertos.has(g.g)?' open':''}><summary>${esc(g.g)} · ${g.idx.length} ${g.idx.length===1?'item':'itens'}${sel?' · '+sel+' selecionada(s)':''}</summary><div>`
-   +g.idx.map(i=>{const it=current.inf[i],on=mark('inf',i)==='SEL';return `<div class="pu-q"><p class="pu-q-texto">${esc(it.i)}</p><div class="cite">${refButtons(it)}</div><div class="pu-acoes-item"><button type="button" class="pu-btn${on?' pu-btn-pri':''}" data-as-mark="SEL" data-kind="inf" data-index="${i}" aria-pressed="${on}">${on?'✓ Selecionada':'Selecionar'}</button></div></div>`}).join('')
+   +g.idx.map(i=>{const it=current.inf[i],on=mark('inf',i)==='SEL';return `<div class="pu-q"><p class="pu-q-texto">${esc(it.i)}</p><div class="cite">${refButtons(it)}</div><div class="pu-acoes-item"><button type="button" class="pu-btn${on?' pu-btn-pri':''}" data-as-mark="SEL" data-kind="inf" data-index="${i}" aria-pressed="${on}">${on?'✓ Selecionada':'Selecionar'}</button></div>${on?`<label class="pu-anot">Constatação <small>(digite ou dite)</small><textarea rows="2" data-as-nota="inf|${i}" placeholder="O que foi constatado, onde, documento ou pessoa envolvida">${esc(saved[scope()+'|nota|inf|'+i]||'')}</textarea></label>`:''}</div>`}).join('')
    +'</div></details>'}).join('');
 }
 function asRelatorio(el){
