@@ -424,3 +424,95 @@ module.exports = {
     {id: 'docs', grupo: 'Pessoal e documentação', texto: 'Deixar de manter no estabelecimento, organizados e disponíveis à autoridade sanitária, os documentos exigidos.', r: [P('14.1'), P('14.2'), LM(116)]}
   ]
 };
+
+/* ---------- 17/10/2026: checklist nas perguntas compostas, inventário por
+   ambiente e “Não se aplica” completo da piscina ----------
+   q.pontos: cada ponto Atende / Não atende / N/A; o resultado da pergunta
+   acompanha os pontos e os não atendidos entram na frase do relatório. */
+const PONTOS = {
+  federado: [['exame', 'exame médico prévio'], ['semestral', 'renovação a cada seis meses'], ['anotado', 'anotação do exame nos registros'], ['atestado', 'atestado anexado'], ['menores', 'autorização dos responsáveis, para menores']],
+  parq_docs: [['atestados', 'atestados médicos organizados'], ['parq', 'PAR-Q organizados'], ['termos', 'termos de responsabilidade organizados'], ['disp', 'documentos disponíveis à autoridade sanitária']],
+  limpeza: [['limpas', 'dependências limpas'], ['organizadas', 'dependências organizadas'], ['conservadas', 'boas condições de conservação'], ['desuso', 'ausência de materiais em desuso ou alheios à atividade'], ['animais', 'ausência de animais sinantrópicos ou de sinais deles']],
+  eletrica: [['embutidas', 'instalações elétricas embutidas'], ['conservacao', 'bom estado de conservação'], ['seguranca', 'condições de segurança (sem fios expostos, tomadas soltas ou extensões improvisadas)']],
+  ambiente: [['arejados', 'ambientes arejados'], ['iluminacao', 'iluminação com conforto visual']],
+  ralos: [['suficientes', 'ralos e grelhas em número suficiente para o escoamento'], ['dispositivo', 'dispositivo que impede a passagem de animais']],
+  separados: [['sexo', 'separação por sexo'], ['demanda', 'quantidade suficiente para a demanda'], ['chuveiro', 'ao menos um chuveiro protegido por porta e divisória'], ['vaso', 'ao menos um vaso protegido por porta e divisória']],
+  san_itens: [['vaso', 'vaso sifonado com assento e tampa'], ['descarga', 'descarga funcionando'], ['lixeira', 'lixeira com tampa sem contato manual'], ['pia', 'pia com sabonete líquido e secagem higiênica'], ['papel', 'lixeira para papel toalha']],
+  vest_itens: [['chuveiro', 'chuveiro com regulação de temperatura'], ['vaso', 'vaso sifonado com assento e tampa'], ['descarga', 'descarga funcionando'], ['lixeira', 'lixeira com tampa sem contato manual'], ['pia', 'pia com sabonete e secagem higiênica'], ['papel', 'lixeira para papel toalha']],
+  trocador: [['pia', 'pia próxima com sabonete e secagem higiênica'], ['lixeira', 'lixeira com tampa sem contato manual'], ['revestimento', 'revestimento impermeável'], ['produto', 'produto de higienização identificado'], ['alcance', 'produto fora do alcance das crianças']],
+  armarios: [['usuarios', 'armários para os usuários'], ['funcionarios', 'armários para os funcionários']],
+  lutas: [['piso', 'piso com revestimento higienizável que amortece quedas'], ['paredes', 'paredes e obstáculos de risco protegidos até 1,0 m de altura']],
+  equip: [['limpos', 'equipamentos limpos'], ['conservados', 'equipamentos conservados, sem ferrugem, rachaduras, amassamento ou umidade'], ['estaveis', 'equipamentos instalados de forma estável'], ['circulacao', 'circulação segura entre os equipamentos']],
+  anilhas: [['conservados', 'anilhas, barras e materiais de apoio conservados'], ['suportes', 'guardados em suportes apropriados'], ['circulacao', 'sem atrapalhar a circulação']],
+  colchonetes: [['conservados', 'colchonetes e assentos conservados'], ['apos_uso', 'higienização após cada uso'], ['produto', 'produto indicado, usado conforme o fabricante'], ['disposicao', 'recipiente do produto identificado e à disposição dos usuários'], ['separacao', 'separação entre higienizados e não higienizados']],
+  quadras: [['conservadas', 'quadras conservadas'], ['piso', 'piso sem rachaduras ou desníveis'], ['equipamentos', 'equipamentos e acessórios sem ferrugem ou saliências cortantes']],
+  aval_hig: [['colchonetes', 'colchonetes higienizados após cada uso'], ['equipamentos', 'equipamentos higienizados após cada uso'], ['alcool', 'produto alcoólico para as mãos na sala']],
+  dea_capac: [['cipa', 'membros da CIPA capacitados'], ['brigada', 'brigada de incêndio capacitada'], ['turno', 'dois funcionários capacitados por turno, por aparelho']],
+  limpidez: [['visao', 'visão perfeita da parte mais funda'], ['superficie', 'superfície livre de matéria flutuante'], ['fundo', 'fundo livre de detritos']],
+  recirc: [['entradas', 'entradas e grelhas de fundo'], ['retentor', 'retentor de pelos'], ['bombas', 'bombas e dosadores'], ['filtros', 'filtros'], ['cloracao', 'sistema de cloração'], ['agua_nova', 'entrada de água nova'], ['ciclo', 'tratamento e recirculação a cada 8 h (uso restrito) ou 6 h (uso público)']],
+  analises: [['micro', 'análises microbiológicas'], ['algas', 'pesquisa de algas, leveduras e amebas de vida livre'], ['lab', 'laboratório regularizado']],
+  guardiao: [['presente', 'salva-vidas ou guardião presente durante todo o funcionamento'], ['habilitado', 'profissional habilitado'], ['uniforme', 'profissional uniformizado']],
+  profundidade: [['pontos', 'indicação nos pontos de menor, mediana e maior profundidade'], ['bordas', 'indicação nas bordas externas'], ['material', 'material antiderrapante e impermeável'], ['visivel', 'indicação de fácil visualização']],
+  perimetro: [['antiderrapante', 'perímetro pavimentado com material antiderrapante'], ['borda', 'borda elevada com caimento para fora']],
+  revest: [['revestimento', 'revestimento interno resistente, liso, impermeável, sem falhas ou saliências'], ['corrimao', 'escadas com corrimão'], ['degraus', 'degraus antiderrapantes']],
+  hidraulico: [['ralos', 'ralos de fundo e grelhas conforme a NBR 10339'], ['aprisionamento', 'proteção contra aprisionamento por sucção'], ['parada', 'meio de desligar a bomba em emergência']],
+  lp_uso: [['passagem', 'acesso ao tanque somente pelo lava-pés'], ['dimensao', 'dimensão e profundidade que garantem a submersão dos pés']],
+  lp_cloro: [['limpida', 'água límpida'], ['cloro', 'cloro residual acima de 25 mg/L']],
+  lp_limpeza: [['diaria', 'esvaziamento, lavagem e enxágue diários'], ['frequencia', 'troca mais frequente nos dias de maior uso'], ['seco', 'mantido limpo e seco com a piscina fora de uso']],
+  cm_espaco: [['espaco', 'espaço para inspeção, operação e manutenção'], ['ventilada', 'ventilação'], ['iluminada', 'iluminação'], ['quimicos', 'sem produtos químicos guardados'], ['estranhos', 'sem materiais estranhos à atividade']],
+  reg_medicao: [['periodo', 'medição antes de cada período'], ['tanque', 'pH e cloro do tanque registrados'], ['lavapes', 'cloro do lava-pés registrado'], ['assinatura', 'data, hora e assinatura'], ['usuarios', 'registro disponível aos usuários'], ['arquivo', 'arquivo por 6 meses']],
+  reg_acidente: [['data', 'data e hora do acidente e da abertura'], ['banhistas', 'número de banhistas'], ['contaminante', 'tanque e tipo de contaminante'], ['parametros', 'cloro e pH no fechamento'], ['tratamento', 'tratamento aplicado'], ['tempo', 'tempo de desinfecção']],
+  pop_piscina: [['filtragem', 'POP: filtragem'], ['ph', 'POP: controle de pH'], ['aspiracao', 'POP: aspiração'], ['algicida', 'POP: adição de algicida'], ['bordas', 'POP: higienização das bordas'], ['retro', 'POP: retrolavagem do filtro'], ['alcal', 'POP: controle da alcalinidade'], ['cloracao', 'POP: cloração'], ['clarif', 'POP: clarificação e decantação'], ['acidente', 'POP de acidentes (vômito, fezes, animal morto)']],
+  banheiras: [['limpas', 'banheiras limpas'], ['revestimento', 'revestimento íntegro'], ['cada_uso', 'higienização a cada uso'], ['retro', 'retrolavagem acionada a cada limpeza, quando houver o sistema']],
+  sauna_estr: [['limpeza', 'sauna limpa e conservada'], ['piso', 'piso antiderrapante'], ['fechadura', 'porta sem fechadura'], ['macaneta', 'maçanetas que abrem dos dois lados e não conduzem calor'], ['termometro', 'termômetro visível'], ['lampada', 'lâmpadas protegidas'], ['calor', 'fonte de calor protegida e afastada']],
+  sauna_chuveiro: [['chuveiros', 'chuveiros próximos à sauna'], ['agua', 'água potável na sauna úmida'], ['aromatizantes', 'aromatizantes regularizados']],
+  prod_reg: [['regularizados', 'produtos regularizados'], ['validade', 'produtos dentro da validade'], ['uso', 'uso conforme o fabricante']],
+  alimentos: [['dependencia', 'dependência exclusiva para alimentos'], ['bp', 'Boas Práticas implantadas']],
+  reservatorio: [['acessivel', 'reservatório acessível'], ['protegido', 'protegido e vedado'], ['material', 'material adequado'], ['limpo', 'limpo e conservado']],
+  res_limpeza: [['comprovante', 'comprovante ou registro da limpeza e desinfecção'], ['periodicidade', 'periodicidade da legislação (semestral)']],
+  bebedouros: [['limpos', 'bebedouros e filtros limpos e conservados'], ['manutencao', 'manutenção registrada conforme o fabricante']],
+  pragas: [['controle', 'controle integrado de pragas'], ['empresa', 'aplicação por empresa regularizada, com comprovante']],
+  lixeiras: [['tampa', 'tampa sem contato manual'], ['limpeza', 'material de fácil limpeza'], ['capacidade', 'capacidade suficiente'], ['saco', 'saco plástico retirado com regularidade']],
+  reciclaveis: [['reciclaveis', 'recicláveis limpos e organizados em local protegido'], ['area', 'área externa de resíduos lavável, protegida e compatível com a geração']],
+  epi: [['disponiveis', 'EPIs disponíveis em número suficiente'], ['uso', 'uso conforme a função'], ['guarda', 'guarda separada dos produtos químicos']],
+  pops_gerais: [['higienizacao', 'POP de higienização das instalações, equipamentos, móveis e utensílios'], ['reservatorio', 'POP de limpeza e desinfecção do reservatório'], ['atualizados', 'POPs atualizados'], ['acesso', 'POPs de fácil acesso aos funcionários']],
+  docs_disp: [['presentes', 'documentos no estabelecimento'], ['organizados', 'organizados e atualizados'], ['disponiveis', 'disponíveis à autoridade sanitária']]
+};
+const NC_PONTOS = {
+  san_itens: 'Nos sanitários, faltam: {}.', vest_itens: 'Nos vestiários, faltam: {}.', trocador: 'No trocador de fraldas, não atende: {}.',
+  sauna_estr: 'Na sauna, não atende: {}.', recirc: 'No sistema de recirculação e tratamento da água, não atende: {}.', pop_piscina: 'O POP de tratamento da água da piscina não contempla: {}.',
+  reg_medicao: 'No registro das medições de pH e cloro, não atende: {}.', reg_acidente: 'O registro de acidentes no tanque não traz: {}.'
+};
+const QS = {};
+module.exports.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => { QS[q.id] = q; })));
+for (const [id, pts] of Object.entries(PONTOS)) {
+  const q = QS[id]; if (!q) throw Error('pontos: pergunta ' + id);
+  q.pontos = pts; delete q.checks;
+  if (NC_PONTOS[id]) q.ncPontos = NC_PONTOS[id];
+}
+/* piscina: o perfil “não possui piscina” marca todas as verificações do tanque */
+['outros_metodos', 'tanque_vazio', 'analises'].forEach(id => { QS[id].naSe = {campo: 'p_piscina', igual: 'nao'}; QS[id].na = SEM_PISC; });
+/* inventário de irregularidades de infraestrutura por ambiente (como no núcleo de medicamentos) */
+module.exports.secoes.find(s => s.id === 'instal').itens.unshift({
+  id: 'inventario', titulo: 'Inventário de irregularidades por ambiente', curto: 'Inventário por ambiente',
+  descricao: 'Percorra os ambientes e marque, em cada um, as irregularidades de infraestrutura encontradas. Ambiente sem marcação sai no relatório como sem irregularidade.',
+  campos: [{id: 'amb_inv', rotulo: 'Ambientes inspecionados', tipo: 'ambientes', largo: true, inf: ['instal'], r: [P('3.1')],
+    ambientes: ['Recepção', 'Sala de musculação', 'Sala de ginástica / dança', 'Sala de lutas', 'Área da piscina', 'Vestiário masculino', 'Vestiário feminino', 'Sanitários', 'Sauna', 'Sala de avaliação física', 'Depósito de material de limpeza', 'Área de resíduos', 'Lanchonete / copa'],
+    lista: [
+      ['a01', 'Piso, paredes ou teto danificados, com rachaduras, descascamento ou superfície de difícil limpeza', [P('3.1')]],
+      ['a02', 'Infiltração, mofo ou umidade aparente', [P('3.1')]],
+      ['a03', 'Sujidade, poeira ou acúmulo de materiais em desuso ou alheios à atividade', [P('3.1')]],
+      ['a04', 'Produtos, equipamentos ou utensílios desorganizados ou mal conservados', [P('3.2'), P('3.2.1')]],
+      ['a05', 'Instalação elétrica aparente ou em mau estado (fios expostos, tomadas soltas, extensões)', [P('3.3')]],
+      ['a06', 'Ambiente abafado, sem ventilação adequada', [P('3.4')]],
+      ['a07', 'Iluminação insuficiente', [P('3.5')]],
+      ['a08', 'Ralo ou grelha sem dispositivo contra a passagem de animais', [P('3.6')]],
+      ['a09', 'Animais sinantrópicos ou sinais de sua presença', [P('3.1'), P('10.1')]],
+      ['a10', 'Lixeira sem tampa de acionamento sem contato manual, sem saco plástico ou transbordando', [P('11.1'), P('11.2'), P('11.2.1')]],
+      ['a11', 'Piso inadequado ou inseguro para a atividade (escorregadio, solto, desnivelado)', [P('5.2')]],
+      ['a12', 'Local com risco de queda sem barreira física', [P('5.1')]],
+      ['a13', 'Equipamento sujo, enferrujado, danificado ou instalado sem estabilidade', [P('5.3'), P('5.3.1')]],
+      ['a14', 'Espelho quebrado, trincado ou mal fixado', [P('5.5')]],
+      ['a15', 'Colchonetes ou assentos danificados ou sem higiene', [P('5.6')]]
+    ]}]
+});

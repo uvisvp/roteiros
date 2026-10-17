@@ -79,3 +79,37 @@
 .rs-apagar-txt span{color:#6b5a58;font-size:.76rem;line-height:1.35}
 .pu-secoes-grade .rs-apagar .rs-apagar-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto!important;min-width:0!important;min-height:42px!important;height:auto!important;padding:9px 14px!important;border:1.5px solid #b9544d!important;border-radius:10px!important;background:#fff!important;color:#8b2f2a!important;box-shadow:none!important;font:inherit;font-size:.82rem!important;font-weight:800!important;text-align:center!important;cursor:pointer;white-space:nowrap}
 .pu-secoes-grade .rs-apagar .rs-apagar-btn:hover,.pu-secoes-grade .rs-apagar .rs-apagar-btn:focus-visible{background:#b9544d!important;color:#fff!important}
+
+/* checklist da pergunta composta (pontos Atende / Não atende / N/A) */
+.rs-pontos{margin:10px 0 0;padding:10px 12px;border:1px solid color-mix(in srgb,var(--pu-cor,#1E5A8A) 28%,#fff);border-radius:10px;background:color-mix(in srgb,var(--pu-cor,#1E5A8A) 4%,#fff)}
+.rs-pontos-tit{margin:0 0 6px;font-size:.86rem;color:#26343d}.rs-pontos-tit small{color:#5a6972}
+.rs-ponto{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:8px 0;border-top:1px solid #e3e9ed}
+.rs-ponto:first-of-type{border-top:0}
+.rs-ponto>span{font-size:.9rem;line-height:1.35;color:#1b262d}
+.rs-ponto-nc>span{color:#8a2433;font-weight:600}
+.rs-ponto-tog{display:inline-grid;grid-template-columns:repeat(3,auto);gap:4px}
+.rs-ponto-tog button{min-height:40px;min-width:40px;padding:6px 10px;border:1px solid #c7d5de;border-radius:8px;background:#fff;color:#466070;font:inherit;font-size:.8rem;font-weight:650;cursor:pointer}
+.rs-ponto-tog button[aria-pressed=true][data-v=ok]{background:#13764f;border-color:#13764f;color:#fff}
+.rs-ponto-tog button[aria-pressed=true][data-v=nao]{background:#b03749;border-color:#b03749;color:#fff}
+.rs-ponto-tog button[aria-pressed=true][data-v=na]{background:#5d6e7a;border-color:#5d6e7a;color:#fff}
+@media(max-width:560px){.rs-ponto{grid-template-columns:1fr}.rs-ponto-tog{justify-self:stretch;grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rs-nc-inf{margin:8px 0 0}
+/* item que o perfil exclui */
+.rs-na-item{border-left:4px solid #5d6e7a;background:#f3f5f7}
+.rs-na-item b{display:block;margin-bottom:4px;color:#33444f}.rs-na-item p{margin:0;font-size:.88rem;color:#4a5a64;line-height:1.45}
+/* inventário de irregularidades por ambiente */
+.rs-ambs{display:flex;flex-direction:column;gap:12px}
+.rs-amb{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid #dbe3e8;border-radius:10px;background:#fff}
+.rs-amb-irr{border-color:#e3b9c0;box-shadow:inset 4px 0 0 #b03749}
+.rs-amb .rs-eq-top b{flex:1}.rs-amb-n{font-size:.78rem;color:#5a6972}
+.rs-amb-irr .rs-amb-n{color:#8a2433;font-weight:700}
+.rs-amb-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 10px}
+.rs-amb-x{display:flex;align-items:flex-start;gap:9px;min-height:44px;padding:8px 10px;border:1px solid #dbe3e8;border-radius:9px;background:#fff;font-size:.88rem;line-height:1.35;cursor:pointer}
+.rs-amb-x input{flex:0 0 auto;width:20px;height:20px;margin-top:1px;accent-color:#b03749}
+.rs-amb-x:has(input:checked){border-color:#e3b9c0;background:#fff7f8;color:#6d1d2a}
+.rs-amb-add{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:640px){.rs-amb-lista{grid-template-columns:1fr}}
+.rs-campo .rs-amb-x{display:flex!important;flex-direction:row!important;align-items:flex-start!important;gap:10px!important;text-align:left}
+.rs-campo .rs-amb-x input{flex:0 0 22px!important;width:22px!important;height:22px!important;min-height:0!important;padding:0!important;margin:1px 0 0!important}
+.rs-campo .rs-amb-x span{font-weight:500;color:inherit}
+.rs-campo .rs-amb-lista{margin-top:2px}

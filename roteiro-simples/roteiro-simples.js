@@ -7,7 +7,13 @@
    perguntas, com Cumpre / Não cumpre / Não se aplica (ou Sim / Não / Não se
    aplica, com D.respostas = 'simnao'), situação encontrada,
    foto, prévia “Como sai no relatório” e a citação clicável (data-voltar-nucleo
-   fica no cabeçalho do componente).
+   fica no cabeçalho do componente). Em toda pergunta: anotação (digitada ou
+   ditada; entra no relatório depois da frase) e foto. q.pontos: checklist da
+   pergunta composta — cada ponto Atende / Não atende / N/A, e o resultado
+   acompanha os pontos (algum “Não atende” → Não cumpre, com os pontos na
+   frase). Campo tipo 'ambientes': inventário de irregularidades de
+   infraestrutura por ambiente. Item em que o perfil exclui todas as
+   verificações mostra o aviso “Não se aplica”.
    Relatório: Word (.docx) montado no aparelho; fotos em PDF à parte (botão
    Fotos do cabeçalho). Estado em localStorage (ROTEIRO.store), levado pelas
    Salvas da casca. */
@@ -15,7 +21,7 @@
  'use strict';
  var D = window.ROTEIRO, STORE = D.store;
  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
- function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, concl: ''}; }
+ function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, concl: '', pt: {}, auto: {}}; }
  function carrega(){ try { var x = JSON.parse(localStorage.getItem(STORE) || 'null'); if(x && x.v === 1) return Object.assign(novo(), x); } catch(e){} return novo(); }
  var st = carrega();
  /* campo de equipamentos que substituiu um texto livre (c.legado): o texto antigo vira o primeiro equipamento */
@@ -28,12 +34,20 @@
  var PERG = {}, ONDE = {}, ORDEM = [];
  D.secoes.forEach(function(s, si){ s.itens.forEach(function(it, ii){ (it.perguntas || []).forEach(function(q, qi){ PERG[q.id] = q; ONDE[q.id] = {s: s, it: it, n: (si + 1) + '.' + (ii + 1) + '.' + (qi + 1)}; ORDEM.push(q.id); }); }); });
  var INF = {}; D.infracoes.forEach(function(i){ INF[i.id] = i; });
- function visivel(q){ var c = q.se; if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ function visivel(q){ var c = q.se; if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
  function perguntasDe(it){ return (it.perguntas || []).filter(visivel); }
  function campoPreenchido(c){ var v = st.meta[c.id]; return Array.isArray(v) ? v.some(function(x){ return x && typeof x === 'object' ? eqTem(x) : true; }) : !!String(v || '').trim(); }
  function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
- function nNC(){ return ORDEM.filter(function(id){ return st.r[id] === 'nc' && visivel(PERG[id]); }).length; }
- function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); }); return s; }
+ function nNC(){ return ORDEM.filter(function(id){ return st.r[id] === 'nc' && visivel(PERG[id]); }).length + ambIrr().length; }
+ /* inventário de ambientes: [{c, a (ambiente), irr: [textos], refs}] dos ambientes com irregularidade */
+ function ambIrr(){ var out = []; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes') return;
+  (Array.isArray(st.meta[id]) ? st.meta[id] : []).forEach(function(a, i){ var m = a.m || {}, irr = [], refs = [].concat(c.r || []);
+   (c.lista || []).forEach(function(x){ if(m[x[0]]){ irr.push(x[1]); (x[2] || []).forEach(function(r){ if(refs.indexOf(r) < 0) refs.push(r); }); } });
+   if(String(a.outra || '').trim()) irr.push(String(a.outra).trim().replace(/\.$/, ''));
+   if(irr.length) out.push({c: c, a: a, i: i, irr: irr, refs: refs}); }); }); return out; }
+ function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); });
+  ambIrr().forEach(function(x){ (x.c.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ambNome(x.a, x.i)); }); }); return s; }
+ function ambNome(a, i){ return String(a.nome || '').trim() || 'ambiente ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
  function lista(xs){ return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1]; }
 
@@ -42,7 +56,10 @@
  function citacao(id){ var l = D.legal[id]; return l ? l.norma + ', ' + l.disp : id; }
  function fundamento(refs){ /* agrupa por norma: “RDC Anvisa nº 978/2025, art. 10, I, e art. 173” */
   var g = [], m = {}; (refs || []).forEach(function(id){ var l = D.legal[id]; if(!l) return; if(!m[l.norma]){ m[l.norma] = []; g.push(l.norma); } if(m[l.norma].indexOf(l.disp) < 0) m[l.norma].push(l.disp); });
-  return g.map(function(n){ return n + ', ' + m[n].join('; '); }).join('; '); }
+  /* vários itens do anexo da mesma norma: “Anexo, itens 3.1, 3.3 e 5.3” */
+  return g.map(function(n){ var d = m[n], it = d.filter(function(x){ return /^Anexo, item /.test(x); });
+   if(it.length > 1){ var resto = d.filter(function(x){ return it.indexOf(x) < 0; }); d = resto.concat(['Anexo, itens ' + lista(it.map(function(x){ return x.replace(/^Anexo, item /, ''); }))]); }
+   return n + ', ' + d.join('; '); }).join('; '); }
  /* A janela padrão de citações (injetada pela casca) intercepta [data-legal] e
     pergunta o texto a window.UvisLocalReferences; o modal próprio fica de reserva. */
  window.UvisLocalReferences = function(b){ return String(b.dataset.legal || '').split(',').map(function(id){ return D.legal[id]; }).filter(Boolean).map(function(x){ return {law: x.norma, device: x.disp, text: x.texto, url: x.url}; }); };
@@ -61,13 +78,20 @@
   C.opcoes.forEach(function(o){ if(o[0] !== 'outro' && a.indexOf(o[0]) >= 0) out.push(o[2] || o[1].charAt(0).toLowerCase() + o[1].slice(1)); });
   var ou = String(st.meta['chk_' + q.id + '_outro'] || '').trim(); if(ou && (a.indexOf('outro') >= 0 || !C.opcoes.some(function(o){ return o[0] === 'outro'; }))) out.push(ou.replace(/\.$/, ''));
   return lista(out); }
- function frase(q){ var r = st.r[q.id]; if(r === 'c'){ var ck = checksTxt(q); return ck ? (q.checks.frase ? q.checks.frase.replace('{}', ck) : q.c.replace(/\.$/, '') + ': ' + ck + '.') : q.c; }
-  if(r === 'na' && typeof q.na === 'string') return q.na;
-  if(r === 'nc'){ var s = String(st.sit[q.id] || '').trim(); return q.nc + (s ? ' Situação encontrada: ' + s.replace(/\.?$/, '.') : ''); } if(r === 'na') return 'Não se aplica: ' + q.t.replace(/\?$/, '.'); return ''; }
+ function cap(t){ t = String(t || '').trim(); return t ? t.charAt(0).toUpperCase() + t.slice(1).replace(/\.?$/, '.') : ''; }
+ /* pontos do checklist marcados “Não atende” */
+ function pontosNC(q){ var m = st.pt[q.id] || {}; return (q.pontos || []).filter(function(p){ return m[p[0]] === 'NC'; }).map(function(p){ return p[1]; }); }
+ function frase(q){ var r = st.r[q.id], s = String(st.sit[q.id] || '').trim();
+  if(r === 'c'){ var ck = checksTxt(q); return (ck ? (q.checks.frase ? q.checks.frase.replace('{}', ck) : q.c.replace(/\.$/, '') + ': ' + ck + '.') : q.c) + (s ? ' ' + cap(s) : ''); }
+  if(r === 'na') return (typeof q.na === 'string' ? q.na : 'Não se aplica: ' + q.t.replace(/\?$/, '.')) + (s ? ' ' + cap(s) : '');
+  if(r === 'nc'){ var f = pontosNC(q), b = f.length ? (q.ncPontos ? q.ncPontos.replace('{}', lista(f)) : q.nc.replace(/\.$/, '') + ': ' + lista(f) + '.') : q.nc;
+   return b + (s ? ' Situação encontrada: ' + s.replace(/\.?$/, '.') : ''); }
+  return ''; }
 
  /* ---------- tela do item ---------- */
  function campoHtml(c){ var v = st.meta[c.id], cls = 'pu-campo rs-campo' + (c.largo ? ' rs-largo' : '');
   if(c.tipo === 'equipamentos') return equipHtml(c);
+  if(c.tipo === 'ambientes') return ambHtml(c);
   if(c.tipo === 'checks'){ var a = Array.isArray(v) ? v : []; return '<fieldset class="' + cls + ' rs-largo"><legend>' + esc(c.rotulo) + '</legend><div class="rs-checks">' + c.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="' + esc(c.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div></fieldset>'; }
   if(c.tipo === 'select') return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><select data-rs-meta="' + esc(c.id) + '">' + [['', 'Selecione']].concat(c.opcoes).map(function(o){ return '<option value="' + esc(o[0]) + '"' + (v === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>';
   if(c.tipo === 'textarea') return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><textarea data-rs-meta="' + esc(c.id) + '" rows="3">' + esc(v || '') + '</textarea></label>';
@@ -155,7 +179,26 @@
   function(err){ eqMsg[k] = {t: err && err.message === 'curto' ? 'Número curto demais: digite ' + dica + '.' : 'Não foi possível consultar a base agora (sem internet?). Preencha os dados à mão.', tipo: 'aviso'}; redesenha(); }); }
  function sv(x){ return !!String(x || '').trim(); }
  /* campo de item fora da identificação → blocos do relatório, sob o título do item */
+ /* ---------- inventário de irregularidades de infraestrutura por ambiente ----------
+    c.lista [[id, irregularidade, [refs]]], c.ambientes (sugestões), c.r (refs gerais), c.inf (infrações).
+    Cada ambiente: {nome, m: {id: true}, outra, obs}; foto em st.fotos['amb:<campo>:<i>']. */
+ function ambLista(id){ return Array.isArray(st.meta[id]) ? st.meta[id] : []; }
+ function ambHtml(c){ var L = ambLista(c.id), usados = L.map(function(a){ return String(a.nome || '').trim(); });
+  var h = L.map(function(a, i){ var m = a.m || {}, k = c.id + '|' + i, f = st.fotos['amb:' + c.id + ':' + i], n = (c.lista || []).filter(function(x){ return m[x[0]]; }).length + (String(a.outra || '').trim() ? 1 : 0);
+   return '<div class="rs-amb' + (n ? ' rs-amb-irr' : '') + '"><div class="rs-eq-top"><b>' + esc(ambNome(a, i)) + '</b><span class="rs-amb-n">' + (n ? n + ' irregularidade' + (n > 1 ? 's' : '') : 'sem irregularidade marcada') + '</span><button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover</button></div>'
+    + '<label class="pu-campo rs-campo"><span>Ambiente</span><input type="text" data-rs-amb="' + esc(k) + '|nome" value="' + esc(a.nome || '') + '" placeholder="Ex.: sala de musculação"></label>'
+    + '<div class="rs-amb-lista">' + (c.lista || []).map(function(x){ return '<label class="rs-amb-x"><input type="checkbox" data-rs-amb-m="' + esc(k) + '|' + esc(x[0]) + '"' + (m[x[0]] ? ' checked' : '') + '><span>' + esc(x[1]) + '</span></label>'; }).join('') + '</div>'
+    + '<label class="pu-campo rs-campo rs-largo"><span>Outra irregularidade (descrever)</span><input type="text" data-rs-amb="' + esc(k) + '|outra" value="' + esc(a.outra || '') + '"></label>'
+    + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ambiente <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
+    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ambiente' : 'Foto do ambiente') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '</div>' + (f ? '<img class="rs-foto" alt="Foto do ambiente" src="' + esc(f) + '">' : '') + '</div>'; }).join('');
+  var sug = (c.ambientes || []).filter(function(x){ return usados.indexOf(x) < 0; });
+  return '<fieldset class="pu-campo rs-campo rs-largo rs-ambs"><legend>' + esc(c.rotulo) + '</legend>' + (c.ajuda ? '<p class="pu-q-ajuda">' + esc(c.ajuda) + '</p>' : '') + h
+   + '<div class="rs-amb-add">' + sug.map(function(x){ return '<button type="button" class="pu-btn" data-rs-amb-add="' + esc(c.id) + '|' + esc(x) + '">+ ' + esc(x) + '</button>'; }).join('') + '<button type="button" class="pu-btn" data-rs-amb-add="' + esc(c.id) + '|">+ Outro ambiente</button></div></fieldset>'; }
+ function ambSet(k, campo, v){ var p = k.split('|'), L = ambLista(p[0]).slice(), i = +p[1]; L[i] = Object.assign({}, L[i]); if(campo === 'm'){ L[i].m = Object.assign({}, L[i].m); if(v.on) L[i].m[v.id] = true; else delete L[i].m[v.id]; } else L[i][campo] = v; st.meta[p[0]] = L; salva(); }
  function campoRel(c){ var v = st.meta[c.id]; if(c.rel === false) return [];
+  if(c.tipo === 'ambientes'){ return ambLista(c.id).filter(function(a){ return String(a.nome || '').trim() || Object.keys(a.m || {}).length || String(a.outra || '').trim(); }).map(function(a, i){
+    var irr = (c.lista || []).filter(function(x){ return (a.m || {})[x[0]]; }).map(function(x){ return x[1].charAt(0).toLowerCase() + x[1].slice(1); }); if(String(a.outra || '').trim()) irr.push(String(a.outra).trim().replace(/\.$/, ''));
+    return {t: 'p', x: 'Ambiente “' + ambNome(a, i) + '”: ' + (irr.length ? 'constatou-se ' + lista(irr) + '.' : 'não foram constatadas irregularidades de infraestrutura.') + (String(a.obs || '').trim() ? ' ' + cap(a.obs) : '')}; }); }
   if(c.tipo === 'equipamentos'){ var P = perfil(c), L = (Array.isArray(v) ? v : []).filter(eqTem); if(!L.length) return [];
    var out = [{t: 'table', head: P.head, widths: [2500, 2200, 2500, 2100], rows: L.map(function(e){ return P.linha(e).map(function(cel){ return cel.filter(sv).join('\n') || '—'; }); })}];
    var cons = []; L.forEach(function(e){ if(e.consulta && cons.indexOf(fmtData(e.consulta)) < 0) cons.push(fmtData(e.consulta)); });
@@ -165,17 +208,30 @@
   if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; }
   if(c.tipo === 'date') v = fmtData(v);
   return sv(v) ? [{t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}] : []; }
- var fotoAberta = '', previaAberta = {};
+ var fotoAberta = '', previaAberta = {}, anotAberta = {};
+ /* checklist da pergunta composta: cada ponto Atende / Não atende / N/A */
+ var PT_OPTS = [['C', 'Atende', 'ok'], ['NC', 'Não atende', 'nao'], ['NA', 'N/A', 'na']];
+ function pontosHtml(q){ if(!q.pontos) return ''; var m = st.pt[q.id] || {}, n = q.pontos.filter(function(p){ return m[p[0]]; }).length, x = q.pontos.filter(function(p){ return m[p[0]] === 'NC'; }).length;
+  return '<div class="pu-bloco rs-pontos"><p class="rs-pontos-tit"><b>Checklist</b> <small>' + n + '/' + q.pontos.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + ' — o resultado acompanha os pontos</small></p>'
+   + q.pontos.map(function(p){ return '<div class="rs-ponto' + (m[p[0]] === 'NC' ? ' rs-ponto-nc' : '') + '"><span>' + esc(p[1].charAt(0).toUpperCase() + p[1].slice(1)) + '</span><div class="rs-ponto-tog" role="group">' + PT_OPTS.map(function(o){ return '<button type="button" data-rs-pt="' + esc(q.id) + '|' + esc(p[0]) + '|' + o[0] + '" data-v="' + o[2] + '" aria-pressed="' + (m[p[0]] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>'; }).join('') + '</div>'; }
+ /* resultado pelos pontos: algum “Não atende” → Não cumpre; todos marcados sem “Não atende” → Cumpre (ou N/A se todos N/A) */
+ function autoPontos(q){ var m = st.pt[q.id] || {}, v = q.pontos.map(function(p){ return m[p[0]]; });
+  if(v.indexOf('NC') >= 0) st.r[q.id] = 'nc'; else if(v.every(function(x){ return x === 'C' || x === 'NA'; })) st.r[q.id] = v.every(function(x){ return x === 'NA'; }) ? 'na' : 'c'; else if(st.r[q.id] === 'nc' && !v.some(Boolean)) delete st.r[q.id];
+  delete st.auto[q.id]; }
+ /* anotação em toda pergunta (digitada ou ditada): entra no relatório depois da frase */
+ function anotHtml(q, r){ var s = String(st.sit[q.id] || ''), ab = anotAberta[q.id] !== undefined ? anotAberta[q.id] : !!s.trim() || r === 'nc';
+  return '<details class="pu-mais rs-anot" data-rs-anot="' + esc(q.id) + '"' + (ab ? ' open' : '') + '><summary>📝 ' + (r === 'nc' ? 'Situação encontrada' : 'Anotação') + (s.trim() ? ' ✓' : '') + '</summary><div><label class="pu-campo rs-campo rs-largo"><span>' + (r === 'nc' ? 'Situação encontrada' : 'Anotação') + ' <small>(digite ou dite; entra no relatório depois da frase)</small></span><textarea data-rs-sit="' + esc(q.id) + '" rows="2" placeholder="' + (r === 'nc' ? 'Ex.: não havia registro de temperatura nos últimos 15 dias.' : 'Observação ou consideração sobre esta verificação.') + '">' + esc(s) + '</textarea></label></div></details>'; }
  function perguntaHtml(q){ var r = st.r[q.id] || '', f = st.fotos[q.id], o = ONDE[q.id];
   var simnao = D.respostas === 'simnao', vs = q.sim === 'nc' ? 'nc' : 'c', vn = vs === 'c' ? 'nc' : 'c', temNa = q.na || D.naSempre;
   var bt = (simnao ? [[vs, 'Sim', vs === 'c' ? 'ok' : 'nao'], [vn, 'Não', vn === 'c' ? 'ok' : 'nao']] : [['c', 'Cumpre', 'ok'], ['nc', 'Não cumpre', 'nao']]).concat(temNa ? [['na', 'Não se aplica', 'na']] : []);
   return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(o.n) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
    + '<div class="pu-resp" role="group" aria-label="Resultado"' + (bt.length === 2 ? ' style="grid-template-columns:repeat(2,minmax(0,1fr))"' : '') + '>' + bt.map(function(b){ return '<button type="button" data-rs-r="' + esc(q.id) + '|' + b[0] + '" data-v="' + b[2] + '" aria-pressed="' + (r === b[0]) + '">' + b[1] + '</button>'; }).join('') + '</div>'
+   + pontosHtml(q)
    + (r === 'c' && q.checks ? (function(){ var a = Array.isArray(st.meta['chk_' + q.id]) ? st.meta['chk_' + q.id] : [], temOutro = q.checks.opcoes.some(function(o){ return o[0] === 'outro'; });
       return '<fieldset class="pu-bloco rs-sub"><legend>' + esc(q.checks.rotulo || 'Detalhe (vai ao relatório; não gera infração)') + '</legend><div class="rs-checks">' + q.checks.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="chk_' + esc(q.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div>'
        + (!q.checks.semOutro && (!temOutro || a.indexOf('outro') >= 0) ? '<label class="pu-campo rs-campo"><span>' + esc(q.checks.outro || 'Outro (descrever)') + '</span><input type="text" data-rs-meta="chk_' + esc(q.id) + '_outro" value="' + esc(st.meta['chk_' + q.id + '_outro'] || '') + '"></label>' : '') + '</fieldset>'; })() : '')
-   + (r === 'nc' ? '<div class="pu-bloco pu-nc rs-nc"><label><span>Situação encontrada <small>(opcional — entra no relatório após a frase)</small></span><textarea data-rs-sit="' + esc(q.id) + '" rows="2" placeholder="Ex.: não havia registro de temperatura nos últimos 15 dias.">' + esc(st.sit[q.id] || '') + '</textarea></label>'
-     + ((q.inf || []).length ? '<p class="pu-q-ajuda">Enquadramento sugerido na aba Infrações: ' + esc(q.inf.map(function(i){ return INF[i] ? INF[i].texto : i; }).join(' · ')) + '</p>' : '') + '</div>' : '')
+   + (r === 'nc' && (q.inf || []).length ? '<p class="pu-q-ajuda rs-nc-inf">Enquadramento sugerido na aba Infrações: ' + esc(q.inf.map(function(i){ return INF[i] ? INF[i].texto : i; }).join(' · ')) + '</p>' : '')
+   + anotHtml(q, r)
    + '<details class="pu-mais"' + (fotoAberta === q.id ? ' open' : '') + '><summary>Foto' + (f ? ' ✓' : '') + '</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="' + esc(q.id) + '">📷 ' + (f ? 'Trocar foto' : 'Tirar ou anexar foto') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="' + esc(q.id) + '">Remover foto</button>' : '') + '</div>' + (f ? '<img class="rs-foto" alt="Foto vinculada à verificação" src="' + esc(f) + '">' : '') + '<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>'
    + (r ? '<details class="pu-mais rs-previa"' + (previaAberta[q.id] ? ' open' : '') + ' data-rs-previa="' + esc(q.id) + '"><summary>👁 Como sai no relatório</summary><div><p>' + esc(frase(q)) + '</p>' + (r === 'nc' ? '<p class="pu-q-ajuda">Fundamento: ' + esc(fundamento(q.r)) + '.</p>' : '') + '</div></details>' : '')
    + '</div>'; }
@@ -208,16 +264,27 @@
    var n = preenche([['razao', v.razao_social], ['cnpj', v.cnpj && mascaraCnpj(v.cnpj)], ['rt', rt], ['rt_subst', sub], ['crt', crt], ['horario', v.rotina]]);
    acaoMsg = {t: 'Certidão do CRF lida: ' + (n ? n + ' campo(s) preenchido(s); confira.' : 'os campos já estavam preenchidos; nada foi alterado.'), tipo: n ? 'ok' : ''}; redesenha(); }}); }
  /* q.naSe {campo, igual}: ao escolher o valor no campo, a pergunta sem resposta passa a “Não se aplica” */
- function naAuto(){ ORDEM.forEach(function(id){ var q = PERG[id], c = q.naSe; if(c && !st.r[id] && st.meta[c.campo] === c.igual) st.r[id] = 'na'; }); }
+ /* condição {campo, igual} ou {campo, em: [valores]} */
+ function bateCond(c){ var v = st.meta[c.campo]; return c.em ? c.em.indexOf(v) >= 0 : v === c.igual; }
+ function naAuto(){ ORDEM.forEach(function(id){ var q = PERG[id], c = q.naSe; if(!c) return; var bate = bateCond(c);
+   if(bate && !st.r[id]){ st.r[id] = 'na'; st.auto[id] = 1; }
+   /* perfil desfeito: sai o “Não se aplica” que o próprio perfil pôs */
+   else if(!bate && st.auto[id] && st.r[id] === 'na'){ delete st.r[id]; delete st.auto[id]; } }); }
+ /* item em que o perfil exclui todas as verificações: o motivo (frase do “Não se aplica” e o campo do perfil) */
+ function naItem(it){ var ps = perguntasDe(it); if(!ps.length || !ps.every(function(q){ return q.naSe && bateCond(q.naSe); })) return '';
+  var q = ps[0], c = campoPorId(q.naSe.campo), v = st.meta[q.naSe.campo], op = c && (c.opcoes || []).filter(function(o){ return o[0] === v; })[0];
+  return (typeof q.na === 'string' ? q.na + ' ' : '') + (c ? 'Perfil: ' + c.rotulo.replace(/\?$/, '') + ' — ' + (op ? op[1] : v) + '. ' : '') + 'As verificações deste item estão como “Não se aplica”; para reabrir, altere o perfil ou uma resposta.'; }
  function desenhaItem(s, it, el){
   var ps = perguntasDe(it), h = it.descricao ? '<p class="pu-desc">' + esc(it.descricao) + '</p>' : (s.descricao ? '<p class="pu-desc">' + esc(s.descricao) + '</p>' : '');
   if(it.orient && it.orient.length) h += '<details class="pu-mais rs-orient"><summary>📘 Orientação técnica</summary><div><ul>' + it.orient.map(function(o){ return '<li>' + esc(o.t) + (o.f ? ' <small class="rs-fonte">Fonte: ' + esc(o.f) + '</small>' : '') + '</li>'; }).join('') + '</ul></div></details>';
   if(it.consulta) h += consultaHtml(it.consulta);
   if(it.acoes && it.acoes.length) h += '<div class="pu-bloco rs-acoes"><div class="pu-acoes-item">' + it.acoes.map(function(a){ return '<button type="button" class="pu-btn' + (a.pri ? ' pu-btn-pri' : '') + '" data-rs-acao="' + esc(a.id) + '">' + esc(a.rotulo) + '</button>'; }).join('') + '</div>' + (acaoMsg ? '<p class="rs-eq-msg' + (acaoMsg.tipo ? ' rs-eq-' + acaoMsg.tipo : '') + '" role="status">' + esc(acaoMsg.t) + '</p>' : '') + (it.acoesNota ? '<p class="pu-q-ajuda">' + esc(it.acoesNota) + '</p>' : '') + '</div>';
   if(it.campos && it.campos.length) h += '<div class="pu-bloco"><div class="pu-campos rs-campos">' + it.campos.map(campoHtml).join('') + '</div></div>';
+  var naI = naItem(it); if(naI) h = '<div class="pu-bloco rs-na-item"><b>Não se aplica a este estabelecimento</b><p>' + esc(naI) + '</p></div>' + h;
   h += ps.map(perguntaHtml).join('');
   if(!ps.length && !(it.campos || []).length && !it.consulta) h += '<div class="pu-bloco pu-aviso"><p>' + esc(it.vazio || 'Nenhuma verificação se aplica a este item.') + '</p></div>';
-  if(ps.length) h += '<div class="pu-acoes-item">' + (ps.some(function(q){ return q.na || D.naSempre; }) ? '<button type="button" class="pu-btn" data-rs-lote="na">Marcar pendentes como Não se aplica</button>' : '') + '<button type="button" class="pu-btn" data-rs-lote="c">' + (D.respostas === 'simnao' ? 'Marcar pendentes como conformes' : 'Marcar pendentes como Cumpre') + '</button></div>';
+  var todasNA = ps.length && ps.every(function(q){ return st.r[q.id] === 'na'; });
+  if(ps.length) h += '<div class="pu-acoes-item">' + (ps.some(function(q){ return q.na || D.naSempre; }) ? '<button type="button" class="pu-btn" data-rs-item-na>' + (todasNA ? 'Reabrir o item (desfazer “Não se aplica”)' : 'O item todo não se aplica') + '</button>' : '') + (todasNA ? '' : '<button type="button" class="pu-btn" data-rs-lote="c">' + (D.respostas === 'simnao' ? 'Marcar pendentes como conformes' : 'Marcar pendentes como Cumpre') + '</button>') + '</div>';
   el.innerHTML = h; }
  function redesenha(){ var n = UvisPadrao.estado(), c = document.getElementById('pu-conteudo');
   if(n.aba === 'roteiro' && n.item && c){ var s = D.secoes.filter(function(x){ return x.id === n.secao; })[0], it = s && s.itens.filter(function(x){ return x.id === n.item; })[0]; if(it){ var y = window.scrollY; desenhaItem(s, it, c); window.scrollTo(0, y); } }
@@ -236,7 +303,7 @@
   D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.desc && c.rel !== false){ var t = descr(c); if(t) faz.push(t); return; } if(c.rel === false) return; var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
   if(faz.length) B.push({t: 'kv', k: D.perfilRotulo || 'Atividades e estrutura', v: lista(faz)});
   B.push({t: 'h1', x: (++sec) + ' OBJETIVO E LEGISLAÇÃO DE REFERÊNCIA'}, {t: 'p', x: R.objetivo});
-  D.normas.forEach(function(n){ B.push({t: 'num', n: '•', x: n[0] + ' — ' + n[1]}); });
+  D.normas.forEach(function(n){ if(n[2] && n[2].campo && !bateCond(n[2])) return; B.push({t: 'num', n: '•', x: n[0] + ' — ' + n[1]}); });
   B.push({t: 'h1', x: (++sec) + ' VERIFICAÇÕES REALIZADAS'});
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
@@ -246,11 +313,12 @@
     cps.forEach(function(b){ partes.push(b); });
     if(fr.length) partes.push({t: 'p', x: fr.join(' ')});
     if(na.length) partes.push({t: 'small', x: 'Não se aplicam ao estabelecimento: ' + lista(na.map(function(q){ return q.t.replace(/\?$/, '').replace(/^./, function(c){ return c.toLowerCase(); }); })) + '.'});
-    ps.forEach(function(q){ if(st.r[q.id] === 'nc') irr.push(q); }); });
+    ps.forEach(function(q){ if(st.r[q.id] === 'nc') irr.push({x: frase(q), r: q.r}); }); });
    if(partes.length){ ns++; B.push({t: 'h2', x: sec + '.' + ns + ' ' + s.titulo.toUpperCase()}); partes.forEach(function(p){ if(p.t === 'h2') p.x = p.x.replace(/^\d+\.\d+\.\d+/, function(m){ return m.split('.')[0] + '.' + ns + '.' + m.split('.')[2]; }); B.push(p); }); } });
   if(!ns) B.push({t: 'p', x: 'Nenhuma verificação foi registrada.'});
+  ambIrr().forEach(function(a){ irr.push({x: 'Ambiente “' + ambNome(a.a, a.i) + '”: ' + lista(a.irr.map(function(t){ return t.charAt(0).toLowerCase() + t.slice(1); })) + '.', r: a.refs}); });
   B.push({t: 'h1', x: (++sec) + ' IRREGULARIDADES OBSERVADAS'});
-  if(irr.length) irr.forEach(function(q, i){ B.push({t: 'num', n: i + 1, x: frase(q) + ' Fundamento: ' + fundamento(q.r) + '.'}); });
+  if(irr.length) irr.forEach(function(q, i){ var f = fundamento(q.r); B.push({t: 'num', n: i + 1, x: q.x + (f ? ' Fundamento: ' + f + '.' : '')}); });
   else B.push({t: 'p', x: 'Não foram registradas irregularidades nesta inspeção.'});
   var sel = D.infracoes.filter(function(i){ return st.inf[i.id]; });
   if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), i.texto, fundamento(i.r)]; })}); }
@@ -336,14 +404,22 @@
    r.readAsDataURL(f); };
   inp.click(); }
  window.__uvsFotosMeta = function(){ return {estab: st.meta.fantasia || st.meta.razao || '', data: st.meta.data || ''}; };
- window.__uvsFotosItens = function(){ return ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + o.n + ' ' + PERG[id].t}; }); };
+ window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + o.n + ' ' + PERG[id].t}; });
+  Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i)}); }); }); return out; };
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
  /* ---------- eventos ---------- */
  function mascaraCnpj(v){ var d = String(v).replace(/\D/g, '').slice(0, 14); return d.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); }
  document.addEventListener('click', function(e){ var b;
   if((b = e.target.closest('[data-legal]'))){ e.preventDefault(); abreLegal(b.dataset.legal); return; }
-  if((b = e.target.closest('[data-rs-r]'))){ var p = b.dataset.rsR.split('|'); st.r[p[0]] = st.r[p[0]] === p[1] ? '' : p[1]; if(!st.r[p[0]]) delete st.r[p[0]]; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-r]'))){ var p = b.dataset.rsR.split('|'); st.r[p[0]] = st.r[p[0]] === p[1] ? '' : p[1]; if(!st.r[p[0]]) delete st.r[p[0]]; delete st.auto[p[0]]; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-pt]'))){ var pp = b.dataset.rsPt.split('|'), qq = PERG[pp[0]], mm = st.pt[pp[0]] = Object.assign({}, st.pt[pp[0]]); if(mm[pp[1]] === pp[2]) delete mm[pp[1]]; else mm[pp[1]] = pp[2]; autoPontos(qq); salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-item-na]'))){ var ni = UvisPadrao.estado(), si = D.secoes.filter(function(x){ return x.id === ni.secao; })[0], ii = si && si.itens.filter(function(x){ return x.id === ni.item; })[0];
+   if(ii){ var pi = perguntasDe(ii), reabre = pi.every(function(q){ return st.r[q.id] === 'na'; }); pi.forEach(function(q){ if(reabre){ delete st.r[q.id]; delete st.auto[q.id]; } else st.r[q.id] = 'na'; }); } salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-add]'))){ var pa = b.dataset.rsAmbAdd.split('|'), La2 = ambLista(pa[0]).slice(); La2.push({nome: pa.slice(1).join('|'), m: {}}); st.meta[pa[0]] = La2; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]).slice(); if(!confirm('Remover o ambiente “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1]) + '” do inventário?')) return; Ld2.splice(+pd2[1], 1); st.meta[pd2[0]] = Ld2;
+   /* fotos dos ambientes seguintes sobem uma posição */
+   for(var fi = +pd2[1]; fi <= Ld2.length; fi++){ var ka = 'amb:' + pd2[0] + ':' + fi, kb = 'amb:' + pd2[0] + ':' + (fi + 1); if(st.fotos[kb]) st.fotos[ka] = st.fotos[kb]; else delete st.fotos[ka]; } salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-lote]'))){ var n = UvisPadrao.estado(), s = D.secoes.filter(function(x){ return x.id === n.secao; })[0], it = s && s.itens.filter(function(x){ return x.id === n.item; })[0];
    if(it) perguntasDe(it).forEach(function(q){ if(!st.r[q.id] && (b.dataset.rsLote === 'c' || q.na || D.naSempre)) st.r[q.id] = b.dataset.rsLote; }); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-acao]'))){ if(b.dataset.rsAcao === 'anvisa_cnpj') acaoAnvisa(); else if(b.dataset.rsAcao === 'ocr_crt') acaoCrt(); return; }
@@ -358,13 +434,15 @@
   if((b = e.target.closest('[data-rs-pendente]'))){ var id = ORDEM.filter(function(k){ return visivel(PERG[k]) && !st.r[k]; })[0]; if(id) UvisPadrao.vai({aba: 'roteiro', secao: ONDE[id].s.id, item: ONDE[id].it.id}); return; }
  });
  document.addEventListener('keydown', function(e){ var t = e.target; if(e.key === 'Enter' && t && t.matches && t.matches('[data-rs-eq$="|busca"]')){ e.preventDefault(); var q = t.dataset.rsEq.split('|'); eqBuscar(q[0] + '|' + q[1]); } });
- document.addEventListener('toggle', function(e){ var d = e.target; if(d && d.matches && d.matches('[data-rs-previa]')) previaAberta[d.dataset.rsPrevia] = d.open; }, true);
+ document.addEventListener('toggle', function(e){ var d = e.target; if(d && d.matches && d.matches('[data-rs-previa]')) previaAberta[d.dataset.rsPrevia] = d.open; if(d && d.matches && d.matches('[data-rs-anot]')) anotAberta[d.dataset.rsAnot] = d.open; }, true);
  document.addEventListener('input', function(e){ var t = e.target;
   if(t.matches('[data-rs-meta]')){ if(t.hasAttribute('data-rs-cnpj')){ var pos = t.value.length; t.value = mascaraCnpj(t.value); } st.meta[t.dataset.rsMeta] = t.value; salva(); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-eq]')){ var qe = t.dataset.rsEq.split('|'), de = {}; de[qe[2]] = t.value; eqSet(qe[0] + '|' + qe[1], de); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-sit]')){ st.sit[t.dataset.rsSit] = t.value; salva(); var pv = t.closest('.rs-q').querySelector('.rs-previa p'); if(pv) pv.textContent = frase(PERG[t.dataset.rsSit]); return; }
+  if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-concl]')){ st.concl = t.value; salva(); return; } });
  document.addEventListener('change', function(e){ var t = e.target;
+  if(t.matches('[data-rs-amb-m]')){ var qm = t.dataset.rsAmbM.split('|'); ambSet(qm[0] + '|' + qm[1], 'm', {id: qm[2], on: t.checked}); var box = t.closest('.rs-amb'); if(box){ var nn = box.querySelectorAll('[data-rs-amb-m]:checked').length; box.classList.toggle('rs-amb-irr', nn > 0); var lb = box.querySelector('.rs-amb-n'); if(lb) lb.textContent = nn ? nn + ' irregularidade' + (nn > 1 ? 's' : '') : 'sem irregularidade marcada'; } UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck)) redesenha(); else UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds); UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-meta]')){ st.meta[t.dataset.rsMeta] = t.value; naAuto(); salva(); redesenha(); return; }
@@ -380,19 +458,21 @@
   if(S && S.novaInspecao && D.app) Promise.resolve(S.novaInspecao(D.app)).catch(function(){}).then(fim); else fim(); });
 
  /* ---------- montagem ---------- */
+ /* cor do núcleo vinda da casca (paleta única); sem casca, a cor do roteiro */
+ function corNucleo(){ try { var t = parent !== window && parent.__uvisTemaApp ? parent.__uvisTemaApp(D.app) : null; if(t && t[0] && !/^#2f4655$/i.test(t[0])) return t[0]; } catch(e){} return D.cor; }
  function inicia(){
   var raiz = document.createElement('div'); raiz.id = 'pu-raiz'; document.body.insertBefore(raiz, document.body.firstChild);
   UvisPadrao.monta({
-   raiz: raiz, titulo: D.titulo, cor: D.cor,
+   raiz: raiz, titulo: D.titulo, cor: corNucleo(),
    abas: [{id: 'roteiro', rotulo: 'Roteiro'}, {id: 'infracoes', rotulo: 'Infrações'}, {id: 'relatorio', rotulo: 'Relatório'}],
-   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.map(function(it){ var p = progressoItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: it.descricao, feitos: p.feitos, total: p.total}; })}; }); },
+   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.map(function(it){ var p = progressoItem(it), na = naItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: na ? 'Não se aplica a este estabelecimento (perfil).' : it.descricao, feitos: p.feitos, total: p.total}; })}; }); },
    item: function(s, it, el){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0], I = S.itens.filter(function(x){ return x.id === it.id; })[0]; desenhaItem(S, I, el); },
    aba: function(id, el){ if(id === 'infracoes') abaInfracoes(el); else if(id === 'relatorio') abaRelatorio(el); },
    contagem: function(id){ return id === 'roteiro' ? nNC() : id === 'infracoes' ? D.infracoes.filter(function(i){ return st.inf[i.id]; }).length : 0; },
    depois: function(nav){ if(nav.aba !== 'roteiro' || nav.secao) return; var g = document.querySelector('.pu-secoes-grade'); if(!g || g.querySelector('[data-rs-apagar]')) return;
     var z = document.createElement('div'); z.className = 'rs-apagar'; z.innerHTML = '<div class="rs-apagar-txt"><strong>Apagar dados da inspeção</strong><span>Remove todas as respostas, anotações, fotos e dados desta inspeção salvos neste aparelho. Não há como desfazer; para guardar, use antes o botão Salvas.</span></div><button type="button" class="rs-apagar-btn" data-rs-apagar><span aria-hidden="true">🗑</span> Apagar dados</button>'; g.appendChild(z); },
    limpar: function(s, it){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0];
-    (it ? S.itens.filter(function(x){ return x.id === it.id; }) : S.itens).forEach(function(I){ (I.campos || []).forEach(function(c){ delete st.meta[c.id]; }); (I.perguntas || []).forEach(function(q){ delete st.r[q.id]; delete st.sit[q.id]; delete st.fotos[q.id]; }); });
+    (it ? S.itens.filter(function(x){ return x.id === it.id; }) : S.itens).forEach(function(I){ (I.campos || []).forEach(function(c){ delete st.meta[c.id]; }); (I.perguntas || []).forEach(function(q){ delete st.r[q.id]; delete st.sit[q.id]; delete st.fotos[q.id]; delete st.pt[q.id]; delete st.auto[q.id]; }); (I.campos || []).forEach(function(c){ Object.keys(st.fotos).forEach(function(k){ if(k.indexOf('amb:' + c.id + ':') === 0) delete st.fotos[k]; }); }); });
     salva(); }
   });
   try { parent.postMessage({__casca: 'pronto'}, '*'); } catch(e){}

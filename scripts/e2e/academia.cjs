@@ -16,7 +16,17 @@ const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
  let s=await st();
  ok(['ph','crl','guardiao','lp_cloro','operador','reg_medicao'].every(k=>s.r[k]==='na'),'sem piscina: perguntas da piscina viram Não se aplica');
  ok(s.r.reg_acidente==='na'&&s.r.sauna_estr==='na'&&s.r.lutas==='na','sem sauna e sem lutas: Não se aplica');
- ok(!s.r.outros_metodos&&!s.r.tanque_vazio,'perguntas sem naSe ficam em branco');
+ ok(s.r.outros_metodos==='na'&&s.r.tanque_vazio==='na','tratamento e esvaziamento do tanque também como Não se aplica');
+ ok(!s.r.vest_itens&&!s.r.san_itens,'perguntas fora do perfil ficam em branco');
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'piscina',item:ROTEIRO.secoes.find(x=>x.id==='piscina').itens[0].id}));await p.waitForTimeout(300);
+ ok(await f.evaluate(()=>/piscina/i.test(document.querySelector('.rs-na-item')?.textContent||'')),'item da piscina com aviso de Não se aplica');
+ // checklist e inventário das instalações
+ const qv=await f.evaluate(()=>{for(const s of ROTEIRO.secoes)for(const i of s.itens)for(const q of i.perguntas||[])if(q.id==='vest_itens')return [s.id,i.id,q.pontos.map(x=>x[0])]});
+ await f.evaluate(([a,i])=>UvisPadrao.vai({aba:'roteiro',secao:a,item:i}),qv);await p.waitForTimeout(300);
+ for(const [k,pt] of qv[2].entries())await f.click(`[data-rs-pt="vest_itens|${pt}|${k===0?'NC':'C'}"]`);await p.waitForTimeout(200);
+ s=await st();ok(s.r.vest_itens==='nc','vestiários: um ponto não atendido faz Não cumpre');
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'instal',item:'inventario'}));await p.waitForTimeout(300);
+ ok(await f.evaluate(()=>document.querySelectorAll('[data-rs-amb-add]').length)>5,'instalações: inventário por ambiente');
  // identificação e NC
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(300);
  await f.fill('input[data-rs-meta="fantasia"]','Academia Teste');await p.waitForTimeout(150);
