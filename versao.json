@@ -1,6 +1,6 @@
 {
-  "versao": "20261016-20",
+  "versao": "20261016-21",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Caixa de texto (digitada ou ditada) em cada pergunta: Odontologia e Serviços assistenciais ganham “Anotação” em toda verificação, que sai no relatório junto do resultado; Estética ganha “Constatação” em cada infração marcada, que sai no relatório; na Drogaria, “Anotação e evidência” fica disponível antes de responder e também no NSA."
+  "notas": "Serviços passa a ter 3 cards. Novo “Academias e piscinas” (Portaria SMS nº 1.101/2015; Leis Municipais 11.383/1993 com a redação da 15.681/2013, 17.105/2019, 13.993/2005, 16.059/2014, 13.945/2005; Código Sanitário, art. 116): perfil que marca “Não se aplica” no que não existir e relatório que descreve só o que o estabelecimento faz. Novo “Vacinação” (RDC Anvisa nº 197/2017), que abre três roteiros: drogaria (igual ao site Medicamentos), Unidade Básica de Saúde (sem os arts. 14 e 17, próprios dos serviços privados) e serviço privado. Todos com abas Roteiro, Infrações e Relatório, foto e anotação por pergunta, Salvas e Word."
 }

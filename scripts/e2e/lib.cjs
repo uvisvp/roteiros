@@ -21,7 +21,8 @@ async function passos(f,p,lista,ms=800){for(const s of lista){await f.evaluate(s
 const TEXTO={
   drogaria:()=>DrogariaAPI.report().blocks.map(b=>(b.x||'')+(b.k||'')+(b.v||'')+(b.rows?JSON.stringify(b.rows):'')).join('\n'),
   'farmacia-manipulacao':()=>{try{renderPreview()}catch(e){}const r=document.querySelector('#reportPreview');return r?r.innerText:''},
-  padrao:()=>JSON.stringify(window.UvsPrevia?UvsPrevia.linhas():[])
+  /* motor roteiro-simples (academias e piscinas, vacinação): texto da aba Relatório */
+  padrao:()=>{if(!window.ROTEIRO)return JSON.stringify(window.UvsPrevia?UvsPrevia.linhas():[]);const e=UvisPadrao.estado();UvisPadrao.vai({aba:'relatorio'});const r=document.querySelector('.rs-relatorio'),t=r?r.innerText:'';UvisPadrao.vai(e);return t}
 };
 function texto(f,app){return f.evaluate(TEXTO[app]||TEXTO.padrao)}
 function falha(msg){console.error('FALHA: '+msg);process.exitCode=1}
