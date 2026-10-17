@@ -99,7 +99,19 @@
 .rs-na-item b{display:block;margin-bottom:4px;color:#33444f}.rs-na-item p{margin:0;font-size:.88rem;color:#4a5a64;line-height:1.45}
 /* inventário de irregularidades por ambiente */
 .rs-ambs{display:flex;flex-direction:column;gap:12px}
-.rs-amb{display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid #dbe3e8;border-radius:10px;background:#fff}
+.rs-amb{display:block;border:1px solid #dbe3e8;border-radius:10px;background:#fff}
+.rs-amb>summary{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 12px;cursor:pointer;list-style:none}
+.rs-amb>summary::-webkit-details-marker{display:none}
+.rs-amb>summary b{flex:1;min-width:0}
+.rs-amb>summary::after{content:"";flex:0 0 auto;width:9px;height:9px;border-right:2px solid #5a6972;border-bottom:2px solid #5a6972;transform:rotate(45deg);margin:0 4px 4px 0}
+.rs-amb[open]>summary::after{transform:rotate(-135deg);margin:4px 4px 0 0}
+.rs-amb-corpo{display:flex;flex-direction:column;gap:10px;padding:2px 12px 12px}
+.rs-amb-sub{margin:0;font-size:.86rem;color:#5a6972}
+.rs-amb-grupo{margin:2px 0 0;font-size:.78rem;font-weight:750;letter-spacing:.03em;text-transform:uppercase;color:#5a6972}
+.rs-amb-chips{display:flex;flex-wrap:wrap;gap:8px}
+.rs-amb-chip{min-height:44px;padding:8px 14px;border:1px solid #c7d5de;border-radius:999px;background:#fff;color:#26343d;font:inherit;font-size:.9rem;font-weight:650;cursor:pointer}
+.rs-amb-chip[aria-pressed=true]{background:var(--pu-cor,#1E5A8A);border-color:var(--pu-cor,#1E5A8A);color:#fff}
+.rs-amb-outro{border-style:dashed;color:var(--pu-cor,#1E5A8A)}
 .rs-amb-irr{border-color:#e3b9c0;box-shadow:inset 4px 0 0 #b03749}
 .rs-amb .rs-eq-top b{flex:1}.rs-amb-n{font-size:.78rem;color:#5a6972}
 .rs-amb-irr .rs-amb-n{color:#8a2433;font-weight:700}
@@ -113,3 +125,4 @@
 .rs-campo .rs-amb-x input{flex:0 0 22px!important;width:22px!important;height:22px!important;min-height:0!important;padding:0!important;margin:1px 0 0!important}
 .rs-campo .rs-amb-x span{font-weight:500;color:inherit}
 .rs-campo .rs-amb-lista{margin-top:2px}
+.rs-pt-aviso{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:#fff7e6;color:#7a4a00}

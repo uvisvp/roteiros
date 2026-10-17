@@ -20,6 +20,8 @@ const PASSOS=[
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],
  ['checklist por ponto: odontologia, alimentos, produtos e assistenciais',['pontos.cjs']],
+ ['Lei 13.725 em toda irregularidade e sem lista de normas (odontologia, alimentos, produtos, assistenciais)',['lei13725.cjs']],
+ ['teclado não cobre o campo no celular',['teclado.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]
 ];

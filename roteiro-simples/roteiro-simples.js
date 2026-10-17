@@ -10,10 +10,14 @@
    fica no cabeçalho do componente). Em toda pergunta: anotação (digitada ou
    ditada; entra no relatório depois da frase) e foto. q.pontos: checklist da
    pergunta composta — cada ponto Atende / Não atende / N/A, e o resultado
-   acompanha os pontos (algum “Não atende” → Não cumpre, com os pontos na
-   frase). Campo tipo 'ambientes': inventário de irregularidades de
-   infraestrutura por ambiente. Item em que o perfil exclui todas as
-   verificações mostra o aviso “Não se aplica”.
+   acompanha os pontos (algum “Não atende” → Não cumpre). Ponto com frase
+   própria ([id, rótulo, frase]): o relatório traz só as frases dos pontos não
+   atendidos, cada uma com o problema exato. Campo tipo 'ambientes': os
+   ambientes que o estabelecimento possui e, em cada um, só as irregularidades
+   encontradas (lista geral e lista própria do tipo de ambiente). Item em que
+   o perfil exclui todas as verificações mostra o aviso “Não se aplica”.
+   Toda irregularidade leva a Lei Municipal nº 13.725/2004 (D.leiBase; com
+   D.leiSempre, em todas; sem ele, quando a irregularidade não cita a lei).
    Relatório: Word (.docx) montado no aparelho; fotos em PDF à parte (botão
    Fotos do cabeçalho). Estado em localStorage (ROTEIRO.store), levado pelas
    Salvas da casca. */
@@ -39,14 +43,26 @@
  function campoPreenchido(c){ var v = st.meta[c.id]; return Array.isArray(v) ? v.some(function(x){ return x && typeof x === 'object' ? eqTem(x) : true; }) : !!String(v || '').trim(); }
  function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
  function nNC(){ return ORDEM.filter(function(id){ return st.r[id] === 'nc' && visivel(PERG[id]); }).length + ambIrr().length; }
- /* inventário de ambientes: [{c, a (ambiente), irr: [textos], refs}] dos ambientes com irregularidade */
- function ambIrr(){ var out = []; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes') return;
-  (Array.isArray(st.meta[id]) ? st.meta[id] : []).forEach(function(a, i){ var m = a.m || {}, irr = [], refs = [].concat(c.r || []);
-   (c.lista || []).forEach(function(x){ if(m[x[0]]){ irr.push(x[1]); (x[2] || []).forEach(function(r){ if(refs.indexOf(r) < 0) refs.push(r); }); } });
-   if(String(a.outra || '').trim()) irr.push(String(a.outra).trim().replace(/\.$/, ''));
-   if(irr.length) out.push({c: c, a: a, i: i, irr: irr, refs: refs}); }); }); return out; }
+ /* ---------- ambientes ----------
+    c.ambientes: sugestões [nome, tipo] (ou só o nome); c.lista: irregularidades de qualquer
+    ambiente [[id, irregularidade, [refs], inf?]]; c.tipos {tipo: {rotulo, lista}}: as próprias
+    de cada tipo de ambiente; ['—', 'título'] na lista abre um grupo na tela. Cada ambiente:
+    {nome, tipo, m: {id: true}, outra, obs}. */
+ function ambSug(c){ return (c.ambientes || []).map(function(x){ return Array.isArray(x) ? {nome: x[0], tipo: x[1] || 'geral'} : {nome: x, tipo: 'geral'}; }); }
+ function ambTipo(c, a){ if(a.tipo && (a.tipo === 'geral' || (c.tipos || {})[a.tipo])) return a.tipo; var nm = String(a.nome || '').trim(), s = ambSug(c).filter(function(x){ return x.nome === nm; })[0]; return s ? s.tipo : 'geral'; }
+ function ambOpcoes(c, a){ var T = (c.tipos || {})[ambTipo(c, a)]; return (c.lista || []).concat(T && T.lista ? T.lista : []).filter(function(x){ return x[0] !== '—'; }); }
+ function ambValidos(c){ return ambLista(c.id).map(function(a, i){ return {a: a, i: i}; }).filter(function(x){ return String(x.a.nome || '').trim() || Object.keys(x.a.m || {}).length || String(x.a.outra || '').trim(); }); }
+ function ambIrrDe(c, a){ var m = a.m || {}, out = ambOpcoes(c, a).filter(function(x){ return m[x[0]]; }).map(function(x){ return {id: x[0], texto: x[1], refs: [].concat(x[2] || []), inf: x[3]}; });
+  if(String(a.outra || '').trim()) out.push({id: '', texto: String(a.outra).trim().replace(/\.$/, ''), refs: [].concat(c.r || [])}); return out; }
+ /* irregularidades dos ambientes, agrupadas pela irregularidade (cada uma com os ambientes onde foi vista): [{c, texto, refs, nomes, inf, outra}] */
+ function ambIrr(){ var out = [], idx = {}; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes') return;
+  ambValidos(c).forEach(function(x){ var nome = ambNome(x.a, x.i); ambIrrDe(c, x.a).forEach(function(r){ var k = r.id ? id + '|' + r.id : id + '|outra|' + x.i;
+   if(!idx[k]){ idx[k] = {c: c, texto: r.texto, refs: r.refs, nomes: [], inf: r.inf ? [].concat(r.inf) : (c.inf || []), outra: !r.id}; out.push(idx[k]); }
+   idx[k].nomes.push(nome); }); }); }); return out; }
+ function ambFrase(x){ return x.outra ? x.nomes[0] + ': ' + minus(x.texto) + '.' : x.texto + ': ' + lista(x.nomes.map(minus)) + '.'; }
+ function minus(t){ t = String(t || ''); return /^[A-ZÀ-Ý]{2}/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
  function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); });
-  ambIrr().forEach(function(x){ (x.c.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ambNome(x.a, x.i)); }); }); return s; }
+  ambIrr().forEach(function(x){ x.inf.forEach(function(i){ var l = s[i] = s[i] || []; x.nomes.forEach(function(n){ if(l.indexOf(n) < 0) l.push(n); }); }); }); return s; }
  function ambNome(a, i){ return String(a.nome || '').trim() || 'ambiente ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
  function lista(xs){ return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1]; }
@@ -54,6 +70,9 @@
  /* ---------- citações ---------- */
  function rotulo(id){ var l = D.legal[id]; return l ? l.norma.replace(/^(RDC|Lei) (Anvisa |Federal |Municipal )?nº /, '$1 ') + ' · ' + l.disp : id; }
  function citacao(id){ var l = D.legal[id]; return l ? l.norma + ', ' + l.disp : id; }
+ /* irregularidade: soma a Lei 13.725/2004 (D.leiBase) — sempre, com D.leiSempre; senão, quando ela não cita a lei */
+ function comLei(refs){ var r = [].concat(refs || []), tem = r.some(function(x){ return /^lei-municipal-13725-2004::/.test(x); });
+  (D.leiBase || []).forEach(function(x){ if((D.leiSempre || !tem) && r.indexOf(x) < 0) r.push(x); }); return r; }
  function fundamento(refs){ /* agrupa por norma: “RDC Anvisa nº 978/2025, art. 10, I, e art. 173” */
   var g = [], m = {}; (refs || []).forEach(function(id){ var l = D.legal[id]; if(!l) return; if(!m[l.norma]){ m[l.norma] = []; g.push(l.norma); } if(m[l.norma].indexOf(l.disp) < 0) m[l.norma].push(l.disp); });
   /* vários itens do anexo da mesma norma: “Anexo, itens 3.1, 3.3 e 5.3” */
@@ -80,11 +99,14 @@
   return lista(out); }
  function cap(t){ t = String(t || '').trim(); return t ? t.charAt(0).toUpperCase() + t.slice(1).replace(/\.?$/, '.') : ''; }
  /* pontos do checklist marcados “Não atende” */
- function pontosNC(q){ var m = st.pt[q.id] || {}; return (q.pontos || []).filter(function(p){ return m[p[0]] === 'NC'; }).map(function(p){ return p[1]; }); }
+ function pontosNC(q){ var m = st.pt[q.id] || {}; return (q.pontos || []).filter(function(p){ return m[p[0]] === 'NC'; }); }
+ /* frase dos pontos não atendidos: a frase própria de cada ponto ([id, rótulo, frase]); sem ela, a lista na frase da pergunta */
+ function frasePontos(q, f){ var com = f.filter(function(p){ return p[2]; }), sem = f.filter(function(p){ return !p[2]; }).map(function(p){ return p[1]; });
+  return com.map(function(p){ return cap(p[2]); }).concat(sem.length ? [q.ncPontos ? q.ncPontos.replace('{}', lista(sem)) : q.nc.replace(/\.$/, '') + ': ' + lista(sem) + '.'] : []).join(' '); }
  function frase(q){ var r = st.r[q.id], s = String(st.sit[q.id] || '').trim();
   if(r === 'c'){ var ck = checksTxt(q); return (ck ? (q.checks.frase ? q.checks.frase.replace('{}', ck) : q.c.replace(/\.$/, '') + ': ' + ck + '.') : q.c) + (s ? ' ' + cap(s) : ''); }
   if(r === 'na') return (typeof q.na === 'string' ? q.na : 'Não se aplica: ' + q.t.replace(/\?$/, '.')) + (s ? ' ' + cap(s) : '');
-  if(r === 'nc'){ var f = pontosNC(q), b = f.length ? (q.ncPontos ? q.ncPontos.replace('{}', lista(f)) : q.nc.replace(/\.$/, '') + ': ' + lista(f) + '.') : q.nc;
+  if(r === 'nc'){ var f = pontosNC(q), b = f.length ? frasePontos(q, f) : q.nc;
    return b + (s ? ' Situação encontrada: ' + s.replace(/\.?$/, '.') : ''); }
   return ''; }
 
@@ -179,26 +201,44 @@
   function(err){ eqMsg[k] = {t: err && err.message === 'curto' ? 'Número curto demais: digite ' + dica + '.' : 'Não foi possível consultar a base agora (sem internet?). Preencha os dados à mão.', tipo: 'aviso'}; redesenha(); }); }
  function sv(x){ return !!String(x || '').trim(); }
  /* campo de item fora da identificação → blocos do relatório, sob o título do item */
- /* ---------- inventário de irregularidades de infraestrutura por ambiente ----------
-    c.lista [[id, irregularidade, [refs]]], c.ambientes (sugestões), c.r (refs gerais), c.inf (infrações).
-    Cada ambiente: {nome, m: {id: true}, outra, obs}; foto em st.fotos['amb:<campo>:<i>']. */
+ /* ---------- ambientes do estabelecimento e irregularidades por ambiente ----------
+    No topo, os ambientes que o estabelecimento possui (toque liga/desliga; “Outro ambiente”
+    para os demais). Cada ambiente abre a lista do seu tipo e a geral; marca-se só o que
+    estiver irregular. Foto em st.fotos['amb:<campo>:<i>']. */
+ var ambAberto = {};
  function ambLista(id){ return Array.isArray(st.meta[id]) ? st.meta[id] : []; }
- function ambHtml(c){ var L = ambLista(c.id), usados = L.map(function(a){ return String(a.nome || '').trim(); });
-  var h = L.map(function(a, i){ var m = a.m || {}, k = c.id + '|' + i, f = st.fotos['amb:' + c.id + ':' + i], n = (c.lista || []).filter(function(x){ return m[x[0]]; }).length + (String(a.outra || '').trim() ? 1 : 0);
-   return '<div class="rs-amb' + (n ? ' rs-amb-irr' : '') + '"><div class="rs-eq-top"><b>' + esc(ambNome(a, i)) + '</b><span class="rs-amb-n">' + (n ? n + ' irregularidade' + (n > 1 ? 's' : '') : 'sem irregularidade marcada') + '</span><button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover</button></div>'
-    + '<label class="pu-campo rs-campo"><span>Ambiente</span><input type="text" data-rs-amb="' + esc(k) + '|nome" value="' + esc(a.nome || '') + '" placeholder="Ex.: sala de musculação"></label>'
-    + '<div class="rs-amb-lista">' + (c.lista || []).map(function(x){ return '<label class="rs-amb-x"><input type="checkbox" data-rs-amb-m="' + esc(k) + '|' + esc(x[0]) + '"' + (m[x[0]] ? ' checked' : '') + '><span>' + esc(x[1]) + '</span></label>'; }).join('') + '</div>'
+ function ambHtml(c){ var L = ambLista(c.id), sug = ambSug(c), nomes = L.map(function(a){ return String(a.nome || '').trim(); }), tipos = c.tipos || {};
+  var chips = sug.map(function(x){ var on = nomes.indexOf(x.nome) >= 0; return '<button type="button" class="rs-amb-chip" aria-pressed="' + on + '" data-rs-amb-chip="' + esc(c.id) + '|' + esc(x.nome) + '|' + esc(x.tipo) + '">' + (on ? '✓ ' : '+ ') + esc(x.nome) + '</button>'; }).join('')
+   + '<button type="button" class="rs-amb-chip rs-amb-outro" data-rs-amb-add="' + esc(c.id) + '">+ Outro ambiente</button>';
+  var ck = function(k, m){ return function(x){ if(x[0] === '—') return '</div><p class="rs-amb-grupo rs-amb-sub-grupo">' + esc(x[1]) + '</p><div class="rs-amb-lista">'; return '<label class="rs-amb-x"><input type="checkbox" data-rs-amb-m="' + esc(k) + '|' + esc(x[0]) + '"' + (m[x[0]] ? ' checked' : '') + '><span>' + esc(x[1]) + '</span></label>'; }; };
+  var h = L.map(function(a, i){ var k = c.id + '|' + i, m = a.m || {}, t = ambTipo(c, a), T = tipos[t], f = st.fotos['amb:' + c.id + ':' + i], nm = String(a.nome || '').trim();
+   var n = ambOpcoes(c, a).filter(function(x){ return m[x[0]]; }).length + (String(a.outra || '').trim() ? 1 : 0), ab = ambAberto[k] !== undefined ? ambAberto[k] : !nm;
+   var sugerido = sug.some(function(x){ return x.nome === nm; });
+   return '<details class="rs-amb' + (n ? ' rs-amb-irr' : '') + '" data-rs-amb-box="' + esc(k) + '"' + (ab ? ' open' : '') + '><summary><b>' + esc(ambNome(a, i)) + '</b><span class="rs-amb-n">' + (n ? n + ' irregularidade' + (n > 1 ? 's' : '') : 'nenhuma irregularidade marcada') + '</span></summary><div class="rs-amb-corpo">'
+    + (sugerido ? '' : '<div class="rs-campos"><label class="pu-campo rs-campo"><span>Nome do ambiente</span><input type="text" data-rs-amb="' + esc(k) + '|nome" value="' + esc(a.nome || '') + '" placeholder="Ex.: sala de pilates"></label>'
+      + (Object.keys(tipos).length ? '<label class="pu-campo rs-campo"><span>Tipo de ambiente</span><select data-rs-amb-tipo="' + esc(k) + '">' + [['geral', 'Outro']].concat(Object.keys(tipos).map(function(x){ return [x, tipos[x].rotulo]; })).map(function(o){ return '<option value="' + esc(o[0]) + '"' + (t === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' : '') + '</div>')
+    + '<p class="rs-amb-sub">Marque só o que estiver irregular neste ambiente.</p>'
+    + (T && T.lista && T.lista.length ? '<p class="rs-amb-grupo">' + esc(T.rotulo) + '</p><div class="rs-amb-lista">' + T.lista.map(ck(k, m)).join('') + '</div><p class="rs-amb-grupo">Em qualquer ambiente</p>' : '')
+    + '<div class="rs-amb-lista">' + (c.lista || []).map(ck(k, m)).join('') + '</div>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Outra irregularidade (descrever)</span><input type="text" data-rs-amb="' + esc(k) + '|outra" value="' + esc(a.outra || '') + '"></label>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ambiente <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
-    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ambiente' : 'Foto do ambiente') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '</div>' + (f ? '<img class="rs-foto" alt="Foto do ambiente" src="' + esc(f) + '">' : '') + '</div>'; }).join('');
-  var sug = (c.ambientes || []).filter(function(x){ return usados.indexOf(x) < 0; });
-  return '<fieldset class="pu-campo rs-campo rs-largo rs-ambs"><legend>' + esc(c.rotulo) + '</legend>' + (c.ajuda ? '<p class="pu-q-ajuda">' + esc(c.ajuda) + '</p>' : '') + h
-   + '<div class="rs-amb-add">' + sug.map(function(x){ return '<button type="button" class="pu-btn" data-rs-amb-add="' + esc(c.id) + '|' + esc(x) + '">+ ' + esc(x) + '</button>'; }).join('') + '<button type="button" class="pu-btn" data-rs-amb-add="' + esc(c.id) + '|">+ Outro ambiente</button></div></fieldset>'; }
+    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ambiente' : 'Foto do ambiente') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '<button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ambiente</button></div>' + (f ? '<img class="rs-foto" alt="Foto do ambiente" src="' + esc(f) + '">' : '') + '</div></details>'; }).join('');
+  return '<fieldset class="pu-campo rs-campo rs-largo rs-ambs"><legend>' + esc(c.rotulo) + '</legend><p class="pu-q-ajuda">' + esc(c.ajuda || 'Toque nos ambientes que o estabelecimento possui. Depois abra cada um e marque só o que estiver irregular. No relatório saem a lista dos ambientes e as irregularidades encontradas.') + '</p>'
+   + '<div class="rs-amb-chips">' + chips + '</div>' + h + '</fieldset>'; }
+ /* remove o ambiente i (as fotos dos seguintes sobem uma posição) */
+ function ambRemove(id, i){ var L = ambLista(id).slice(); L.splice(i, 1); st.meta[id] = L;
+  for(var fi = i; fi <= L.length; fi++){ var ka = 'amb:' + id + ':' + fi, kb = 'amb:' + id + ':' + (fi + 1); if(st.fotos[kb]) st.fotos[ka] = st.fotos[kb]; else delete st.fotos[ka]; }
+  var ab = {}; Object.keys(ambAberto).forEach(function(k){ var p = k.split('|'); if(p[0] !== id) ab[k] = ambAberto[k]; else if(+p[1] < i) ab[k] = ambAberto[k]; else if(+p[1] > i) ab[id + '|' + (+p[1] - 1)] = ambAberto[k]; }); ambAberto = ab; }
+ function ambTemDados(id, i){ var a = ambLista(id)[i] || {}; return Object.keys(a.m || {}).length || String(a.outra || '').trim() || String(a.obs || '').trim() || st.fotos['amb:' + id + ':' + i]; }
  function ambSet(k, campo, v){ var p = k.split('|'), L = ambLista(p[0]).slice(), i = +p[1]; L[i] = Object.assign({}, L[i]); if(campo === 'm'){ L[i].m = Object.assign({}, L[i].m); if(v.on) L[i].m[v.id] = true; else delete L[i].m[v.id]; } else L[i][campo] = v; st.meta[p[0]] = L; salva(); }
  function campoRel(c){ var v = st.meta[c.id]; if(c.rel === false) return [];
-  if(c.tipo === 'ambientes'){ return ambLista(c.id).filter(function(a){ return String(a.nome || '').trim() || Object.keys(a.m || {}).length || String(a.outra || '').trim(); }).map(function(a, i){
-    var irr = (c.lista || []).filter(function(x){ return (a.m || {})[x[0]]; }).map(function(x){ return x[1].charAt(0).toLowerCase() + x[1].slice(1); }); if(String(a.outra || '').trim()) irr.push(String(a.outra).trim().replace(/\.$/, ''));
-    return {t: 'p', x: 'Ambiente “' + ambNome(a, i) + '”: ' + (irr.length ? 'constatou-se ' + lista(irr) + '.' : 'não foram constatadas irregularidades de infraestrutura.') + (String(a.obs || '').trim() ? ' ' + cap(a.obs) : '')}; }); }
+  if(c.tipo === 'ambientes'){ var V = ambValidos(c); if(!V.length) return [];
+   var out = [{t: 'p', x: (c.possui || 'O estabelecimento possui') + ' ' + lista(V.map(function(x){ return minus(ambNome(x.a, x.i)); })) + '.'}], irr = [], ano = [];
+   V.forEach(function(x){ var ir = ambIrrDe(c, x.a).map(function(r){ return minus(r.texto); }), ob = String(x.a.obs || '').trim(), nm = ambNome(x.a, x.i);
+    if(ir.length) irr.push({t: 'num', n: '•', x: nm + ': ' + ir.join('; ') + '.' + (ob ? ' ' + cap(ob) : '')}); else if(ob) ano.push({t: 'num', n: '•', x: nm + ': ' + cap(ob)}); });
+   if(irr.length) out = out.concat([{t: 'p', x: 'Irregularidades constatadas nos ambientes:'}], irr);
+   if(ano.length) out = out.concat([{t: 'p', x: 'Anotações sobre os ambientes:'}], ano);
+   return out; }
   if(c.tipo === 'equipamentos'){ var P = perfil(c), L = (Array.isArray(v) ? v : []).filter(eqTem); if(!L.length) return [];
    var out = [{t: 'table', head: P.head, widths: [2500, 2200, 2500, 2100], rows: L.map(function(e){ return P.linha(e).map(function(cel){ return cel.filter(sv).join('\n') || '—'; }); })}];
    var cons = []; L.forEach(function(e){ if(e.consulta && cons.indexOf(fmtData(e.consulta)) < 0) cons.push(fmtData(e.consulta)); });
@@ -227,13 +267,14 @@
   return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(o.n) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
    + '<div class="pu-resp" role="group" aria-label="Resultado"' + (bt.length === 2 ? ' style="grid-template-columns:repeat(2,minmax(0,1fr))"' : '') + '>' + bt.map(function(b){ return '<button type="button" data-rs-r="' + esc(q.id) + '|' + b[0] + '" data-v="' + b[2] + '" aria-pressed="' + (r === b[0]) + '">' + b[1] + '</button>'; }).join('') + '</div>'
    + pontosHtml(q)
+   + (r === 'nc' && q.pontos && !pontosNC(q).length ? '<p class="pu-q-ajuda rs-pt-aviso">Marque no checklist o ponto que não atende: é a frase dele que vai ao relatório. Sem isso, sai a frase geral.</p>' : '')
    + (r === 'c' && q.checks ? (function(){ var a = Array.isArray(st.meta['chk_' + q.id]) ? st.meta['chk_' + q.id] : [], temOutro = q.checks.opcoes.some(function(o){ return o[0] === 'outro'; });
       return '<fieldset class="pu-bloco rs-sub"><legend>' + esc(q.checks.rotulo || 'Detalhe (vai ao relatório; não gera infração)') + '</legend><div class="rs-checks">' + q.checks.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="chk_' + esc(q.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div>'
        + (!q.checks.semOutro && (!temOutro || a.indexOf('outro') >= 0) ? '<label class="pu-campo rs-campo"><span>' + esc(q.checks.outro || 'Outro (descrever)') + '</span><input type="text" data-rs-meta="chk_' + esc(q.id) + '_outro" value="' + esc(st.meta['chk_' + q.id + '_outro'] || '') + '"></label>' : '') + '</fieldset>'; })() : '')
    + (r === 'nc' && (q.inf || []).length ? '<p class="pu-q-ajuda rs-nc-inf">Enquadramento sugerido na aba Infrações: ' + esc(q.inf.map(function(i){ return INF[i] ? INF[i].texto : i; }).join(' · ')) + '</p>' : '')
    + anotHtml(q, r)
    + '<details class="pu-mais"' + (fotoAberta === q.id ? ' open' : '') + '><summary>Foto' + (f ? ' ✓' : '') + '</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="' + esc(q.id) + '">📷 ' + (f ? 'Trocar foto' : 'Tirar ou anexar foto') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="' + esc(q.id) + '">Remover foto</button>' : '') + '</div>' + (f ? '<img class="rs-foto" alt="Foto vinculada à verificação" src="' + esc(f) + '">' : '') + '<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>'
-   + (r ? '<details class="pu-mais rs-previa"' + (previaAberta[q.id] ? ' open' : '') + ' data-rs-previa="' + esc(q.id) + '"><summary>👁 Como sai no relatório</summary><div><p>' + esc(frase(q)) + '</p>' + (r === 'nc' ? '<p class="pu-q-ajuda">Fundamento: ' + esc(fundamento(q.r)) + '.</p>' : '') + '</div></details>' : '')
+   + (r ? '<details class="pu-mais rs-previa"' + (previaAberta[q.id] ? ' open' : '') + ' data-rs-previa="' + esc(q.id) + '"><summary>👁 Como sai no relatório</summary><div><p>' + esc(frase(q)) + '</p>' + (r === 'nc' ? '<p class="pu-q-ajuda">Fundamento: ' + esc(fundamento(comLei(q.r))) + '.</p>' : '') + '</div></details>' : '')
    + '</div>'; }
  /* item só de consulta (ex.: calendário de vacinação): texto e tabelas, sem respostas nem relatório */
  function consultaHtml(c){ return '<div class="pu-bloco rs-consulta">' + (c.nota ? '<p class="pu-q-ajuda">' + esc(c.nota) + '</p>' : '') + (c.blocos || []).map(function(b){
@@ -302,8 +343,8 @@
   var faz = [];
   D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.desc && c.rel !== false){ var t = descr(c); if(t) faz.push(t); return; } if(c.rel === false) return; var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
   if(faz.length) B.push({t: 'kv', k: D.perfilRotulo || 'Atividades e estrutura', v: lista(faz)});
-  B.push({t: 'h1', x: (++sec) + ' OBJETIVO E LEGISLAÇÃO DE REFERÊNCIA'}, {t: 'p', x: R.objetivo});
-  D.normas.forEach(function(n){ if(n[2] && n[2].campo && !bateCond(n[2])) return; B.push({t: 'num', n: '•', x: n[0] + ' — ' + n[1]}); });
+  /* sem a lista de legislação no início (pedido de 17/10/2026): cada irregularidade traz o seu fundamento */
+  B.push({t: 'h1', x: (++sec) + ' OBJETIVO'}, {t: 'p', x: R.objetivo});
   B.push({t: 'h1', x: (++sec) + ' VERIFICAÇÕES REALIZADAS'});
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
@@ -316,12 +357,12 @@
     ps.forEach(function(q){ if(st.r[q.id] === 'nc') irr.push({x: frase(q), r: q.r}); }); });
    if(partes.length){ ns++; B.push({t: 'h2', x: sec + '.' + ns + ' ' + s.titulo.toUpperCase()}); partes.forEach(function(p){ if(p.t === 'h2') p.x = p.x.replace(/^\d+\.\d+\.\d+/, function(m){ return m.split('.')[0] + '.' + ns + '.' + m.split('.')[2]; }); B.push(p); }); } });
   if(!ns) B.push({t: 'p', x: 'Nenhuma verificação foi registrada.'});
-  ambIrr().forEach(function(a){ irr.push({x: 'Ambiente “' + ambNome(a.a, a.i) + '”: ' + lista(a.irr.map(function(t){ return t.charAt(0).toLowerCase() + t.slice(1); })) + '.', r: a.refs}); });
+  ambIrr().forEach(function(a){ irr.push({x: ambFrase(a), r: a.refs}); });
   B.push({t: 'h1', x: (++sec) + ' IRREGULARIDADES OBSERVADAS'});
-  if(irr.length) irr.forEach(function(q, i){ var f = fundamento(q.r); B.push({t: 'num', n: i + 1, x: q.x + (f ? ' Fundamento: ' + f + '.' : '')}); });
+  if(irr.length) irr.forEach(function(q, i){ var f = fundamento(comLei(q.r)); B.push({t: 'num', n: i + 1, x: q.x + (f ? ' Fundamento: ' + f + '.' : '')}); });
   else B.push({t: 'p', x: 'Não foram registradas irregularidades nesta inspeção.'});
   var sel = D.infracoes.filter(function(i){ return st.inf[i.id]; });
-  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), i.texto, fundamento(i.r)]; })}); }
+  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), i.texto, fundamento(comLei(i.r))]; })}); }
   B.push({t: 'h1', x: (++sec) + ' CONCLUSÃO'}, {t: 'p', x: String(st.concl || '').trim() || R.conclusao});
   if(st.meta.equipe) B.push({t: 'kv', k: 'Equipe de inspeção', v: st.meta.equipe});
   B.push({t: 'sign'});
@@ -346,7 +387,7 @@
  function wP(t, s, o){ return '<w:p><w:pPr><w:pStyle w:val="' + (s || 'Body') + '"/></w:pPr>' + wRun(t, o) + '</w:p>'; }
  function wMix(ps, s){ return '<w:p><w:pPr><w:pStyle w:val="' + (s || 'Body') + '"/></w:pPr>' + ps.map(function(p){ return wRun(p.text, p); }).join('') + '</w:p>'; }
  function wCell(c, w, sh){ return '<w:tc><w:tcPr><w:tcW w:w="' + w + '" w:type="dxa"/>' + (sh ? '<w:shd w:val="clear" w:fill="' + sh + '"/>' : '') + '</w:tcPr>' + c + '</w:tc>'; }
- function wTable(head, rows, widths){ var total = widths.reduce(function(a, b){ return a + b; }, 0), c1 = PB ? '000000' : 'BFCBD2', c2 = PB ? '000000' : 'D6DEE3', bd = '<w:top w:val="single" w:sz="4" w:color="' + c1 + '"/><w:left w:val="single" w:sz="4" w:color="' + c1 + '"/><w:bottom w:val="single" w:sz="4" w:color="' + c1 + '"/><w:right w:val="single" w:sz="4" w:color="' + c1 + '"/><w:insideH w:val="single" w:sz="4" w:color="' + c2 + '"/><w:insideV w:val="single" w:sz="4" w:color="' + c2 + '"/>';
+ function wTable(head, rows, widths, semBorda){ var total = widths.reduce(function(a, b){ return a + b; }, 0), c1 = PB ? '000000' : 'BFCBD2', c2 = PB ? '000000' : 'D6DEE3', bd = semBorda ? '<w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/>' : '<w:top w:val="single" w:sz="4" w:color="' + c1 + '"/><w:left w:val="single" w:sz="4" w:color="' + c1 + '"/><w:bottom w:val="single" w:sz="4" w:color="' + c1 + '"/><w:right w:val="single" w:sz="4" w:color="' + c1 + '"/><w:insideH w:val="single" w:sz="4" w:color="' + c2 + '"/><w:insideV w:val="single" w:sz="4" w:color="' + c2 + '"/>';
   return '<w:tbl><w:tblPr><w:tblW w:w="' + total + '" w:type="dxa"/><w:tblBorders>' + bd + '</w:tblBorders><w:tblCellMar><w:top w:w="70" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="70" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>' + widths.map(function(w){ return '<w:gridCol w:w="' + w + '"/>'; }).join('') + '</w:tblGrid>'
    + (head ? '<w:tr><w:trPr><w:tblHeader/></w:trPr>' + head.map(function(h, j){ return wCell(wP(h, 'CellHead', {bold: true}), widths[j], PB ? '' : 'E3ECF1'); }).join('') + '</w:tr>' : '')
    + rows.map(function(r){ return '<w:tr>' + r.map(function(c, j){ return wCell(wP(c, 'Cell'), widths[j]); }).join('') + '</w:tr>'; }).join('') + '</w:tbl>' + wP('', 'Gap'); }
@@ -354,7 +395,7 @@
   if(b.t === 'title') return wP(b.x, 'Title'); if(b.t === 'sub') return wP(b.x, 'Subtitle'); if(b.t === 'h1') return wP(b.x, 'Heading1'); if(b.t === 'h2') return wP(b.x, 'Heading2');
   if(b.t === 'kv') return wMix([{text: b.k + ': ', bold: true}, {text: b.v}]); if(b.t === 'num') return wMix([{text: b.n + (b.n === '•' ? ' ' : '. '), bold: true}, {text: b.x}], 'Item');
   if(b.t === 'small') return wP(b.x, 'Small'); if(b.t === 'table') return wTable(b.head, b.rows, b.widths);
-  if(b.t === 'sign') return wP('Local e data: ______________________________________________') + wP('', 'Gap') + wTable(null, [['\n________________________________________\nAutoridade sanitária', '\n________________________________________\nResponsável pelo estabelecimento']], [4650, 4650]);
+  if(b.t === 'sign') return wP('Local e data: ______________________________________________') + wP('', 'Gap') + wTable(null, [['\n________________________________________\nAutoridade sanitária', '\n________________________________________\nResponsável pelo estabelecimento']], [4650, 4650], true);
   return wP(b.x); }).join(''); }
  var PB = D.estilo === 'pb', COR = PB ? '000000' : String(D.cor || '#1E5A8A').replace('#', '').toUpperCase();
  var STYLES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:lang w:val="pt-BR"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="276" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>'
@@ -363,8 +404,8 @@
   + '<w:style w:type="paragraph" w:styleId="Item"><w:name w:val="Item"/><w:basedOn w:val="Body"/><w:pPr><w:spacing w:after="60"/><w:ind w:left="340" w:hanging="260"/></w:pPr></w:style>'
   + '<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="60"/><w:jc w:val="center"/></w:pPr><w:rPr><w:b/><w:color w:val="' + COR + '"/><w:sz w:val="28"/><w:szCs w:val="28"/></w:rPr></w:style>'
   + '<w:style w:type="paragraph" w:styleId="Subtitle"><w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="240"/><w:jc w:val="center"/></w:pPr><w:rPr><w:color w:val="' + (PB ? '000000' : '4A5A64') + '"/><w:sz w:val="20"/></w:rPr></w:style>'
-  + '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Body"/><w:qFormat/><w:pPr><w:keepNext/>' + (PB ? '' : '<w:shd w:val="clear" w:fill="E3ECF1"/>') + '<w:spacing w:before="300" w:after="120"/><w:ind w:left="80"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:color w:val="' + (PB ? '000000' : '1B262D') + '"/><w:sz w:val="23"/></w:rPr></w:style>'
-  + '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Body"/><w:qFormat/><w:pPr><w:keepNext/>' + (PB ? '' : '<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="3" w:color="' + COR + '"/></w:pBdr>') + '<w:spacing w:before="200" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:color w:val="' + COR + '"/><w:sz w:val="22"/></w:rPr></w:style>'
+  + '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Body"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="300" w:after="120"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:color w:val="' + (PB ? '000000' : '1B262D') + '"/><w:sz w:val="23"/></w:rPr></w:style>'
+  + '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Body"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="200" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:color w:val="' + COR + '"/><w:sz w:val="22"/></w:rPr></w:style>'
   + '<w:style w:type="paragraph" w:styleId="Small"><w:name w:val="Small"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="120"/></w:pPr><w:rPr>' + (PB ? '' : '<w:i/>') + '<w:color w:val="' + (PB ? '000000' : '5A6A72') + '"/><w:sz w:val="' + (PB ? '22' : '19') + '"/></w:rPr></w:style>'
   + '<w:style w:type="paragraph" w:styleId="Cell"><w:name w:val="Cell"/><w:basedOn w:val="Normal"/><w:pPr><w:spacing w:after="0"/></w:pPr><w:rPr><w:sz w:val="18"/></w:rPr></w:style>'
   + '<w:style w:type="paragraph" w:styleId="CellHead"><w:name w:val="Cell Head"/><w:basedOn w:val="Cell"/><w:rPr><w:b/><w:sz w:val="18"/></w:rPr></w:style>'
@@ -387,7 +428,7 @@
   el.innerHTML = '<div class="pu-bloco"><h3>Enquadramento das infrações</h3><p>Marque as infrações que serão enquadradas. As sugeridas vêm dos itens marcados como “Não cumpre”. O enquadramento sai no relatório, em tabela própria.</p>'
    + (nsug ? '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-sugeridas>Marcar as ' + nsug + ' sugeridas</button></div>' : '') + '</div>'
    + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + D.infracoes.filter(function(i){ return i.grupo === g; }).map(function(i){
-     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundamento(i.r)) + '</small>'
+     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundamento(comLei(i.r))) + '</small>'
       + (sug[i.id] ? '<em>Sugerida — itens ' + esc(sug[i.id].join(', ')) + ' não cumpridos</em>' : '') + '</span></label>'; }).join('') + '</div>'; }).join(''); }
  function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id]; }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Resumo</h3><div class="pu-campos"><div class="pu-campo">Respondidas<b>' + resp + ' de ' + tot.length + '</b></div><div class="pu-campo">' + (D.respostas === 'simnao' ? 'Irregulares' : 'Não cumpre') + '<b>' + nNC() + '</b></div><div class="pu-campo">Pendentes<b>' + (tot.length - resp) + '</b></div><div class="pu-campo">Infrações enquadradas<b>' + ninf + '</b></div></div>'
@@ -416,10 +457,12 @@
   if((b = e.target.closest('[data-rs-pt]'))){ var pp = b.dataset.rsPt.split('|'), qq = PERG[pp[0]], mm = st.pt[pp[0]] = Object.assign({}, st.pt[pp[0]]); if(mm[pp[1]] === pp[2]) delete mm[pp[1]]; else mm[pp[1]] = pp[2]; autoPontos(qq); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-item-na]'))){ var ni = UvisPadrao.estado(), si = D.secoes.filter(function(x){ return x.id === ni.secao; })[0], ii = si && si.itens.filter(function(x){ return x.id === ni.item; })[0];
    if(ii){ var pi = perguntasDe(ii), reabre = pi.every(function(q){ return st.r[q.id] === 'na'; }); pi.forEach(function(q){ if(reabre){ delete st.r[q.id]; delete st.auto[q.id]; } else st.r[q.id] = 'na'; }); } salva(); redesenha(); return; }
-  if((b = e.target.closest('[data-rs-amb-add]'))){ var pa = b.dataset.rsAmbAdd.split('|'), La2 = ambLista(pa[0]).slice(); La2.push({nome: pa.slice(1).join('|'), m: {}}); st.meta[pa[0]] = La2; salva(); redesenha(); return; }
-  if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]).slice(); if(!confirm('Remover o ambiente “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1]) + '” do inventário?')) return; Ld2.splice(+pd2[1], 1); st.meta[pd2[0]] = Ld2;
-   /* fotos dos ambientes seguintes sobem uma posição */
-   for(var fi = +pd2[1]; fi <= Ld2.length; fi++){ var ka = 'amb:' + pd2[0] + ':' + fi, kb = 'amb:' + pd2[0] + ':' + (fi + 1); if(st.fotos[kb]) st.fotos[ka] = st.fotos[kb]; else delete st.fotos[ka]; } salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-chip]'))){ var pc = b.dataset.rsAmbChip.split('|'), Lc = ambLista(pc[0]), ic = Lc.map(function(a){ return String(a.nome || '').trim(); }).indexOf(pc[1]);
+   if(ic >= 0){ if(ambTemDados(pc[0], ic) && !confirm('O ambiente “' + pc[1] + '” tem irregularidades, anotação ou foto. Remover do estabelecimento?')) return; ambRemove(pc[0], ic); }
+   else { st.meta[pc[0]] = Lc.concat([{nome: pc[1], tipo: pc[2] || 'geral', m: {}}]); }
+   salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-add]'))){ var La2 = ambLista(b.dataset.rsAmbAdd).concat([{nome: '', tipo: 'geral', m: {}}]); st.meta[b.dataset.rsAmbAdd] = La2; ambAberto[b.dataset.rsAmbAdd + '|' + (La2.length - 1)] = true; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]); if(!confirm('Remover o ambiente “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1]) + '”?')) return; ambRemove(pd2[0], +pd2[1]); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-lote]'))){ var n = UvisPadrao.estado(), s = D.secoes.filter(function(x){ return x.id === n.secao; })[0], it = s && s.itens.filter(function(x){ return x.id === n.item; })[0];
    if(it) perguntasDe(it).forEach(function(q){ if(!st.r[q.id] && (b.dataset.rsLote === 'c' || q.na || D.naSempre)) st.r[q.id] = b.dataset.rsLote; }); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-acao]'))){ if(b.dataset.rsAcao === 'anvisa_cnpj') acaoAnvisa(); else if(b.dataset.rsAcao === 'ocr_crt') acaoCrt(); return; }
@@ -434,15 +477,18 @@
   if((b = e.target.closest('[data-rs-pendente]'))){ var id = ORDEM.filter(function(k){ return visivel(PERG[k]) && !st.r[k]; })[0]; if(id) UvisPadrao.vai({aba: 'roteiro', secao: ONDE[id].s.id, item: ONDE[id].it.id}); return; }
  });
  document.addEventListener('keydown', function(e){ var t = e.target; if(e.key === 'Enter' && t && t.matches && t.matches('[data-rs-eq$="|busca"]')){ e.preventDefault(); var q = t.dataset.rsEq.split('|'); eqBuscar(q[0] + '|' + q[1]); } });
- document.addEventListener('toggle', function(e){ var d = e.target; if(d && d.matches && d.matches('[data-rs-previa]')) previaAberta[d.dataset.rsPrevia] = d.open; if(d && d.matches && d.matches('[data-rs-anot]')) anotAberta[d.dataset.rsAnot] = d.open; }, true);
+ document.addEventListener('toggle', function(e){ var d = e.target; if(d && d.matches && d.matches('[data-rs-previa]')) previaAberta[d.dataset.rsPrevia] = d.open; if(d && d.matches && d.matches('[data-rs-anot]')) anotAberta[d.dataset.rsAnot] = d.open; if(d && d.matches && d.matches('[data-rs-amb-box]')) ambAberto[d.dataset.rsAmbBox] = d.open; }, true);
  document.addEventListener('input', function(e){ var t = e.target;
   if(t.matches('[data-rs-meta]')){ if(t.hasAttribute('data-rs-cnpj')){ var pos = t.value.length; t.value = mascaraCnpj(t.value); } st.meta[t.dataset.rsMeta] = t.value; salva(); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-eq]')){ var qe = t.dataset.rsEq.split('|'), de = {}; de[qe[2]] = t.value; eqSet(qe[0] + '|' + qe[1], de); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-sit]')){ st.sit[t.dataset.rsSit] = t.value; salva(); var pv = t.closest('.rs-q').querySelector('.rs-previa p'); if(pv) pv.textContent = frase(PERG[t.dataset.rsSit]); return; }
-  if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value); UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value);
+   if(qa[2] === 'nome'){ var sb = t.closest('.rs-amb'), bb = sb && sb.querySelector('summary b'); if(bb) bb.textContent = t.value.trim() || 'ambiente ' + (+qa[1] + 1); }
+   UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-concl]')){ st.concl = t.value; salva(); return; } });
  document.addEventListener('change', function(e){ var t = e.target;
-  if(t.matches('[data-rs-amb-m]')){ var qm = t.dataset.rsAmbM.split('|'); ambSet(qm[0] + '|' + qm[1], 'm', {id: qm[2], on: t.checked}); var box = t.closest('.rs-amb'); if(box){ var nn = box.querySelectorAll('[data-rs-amb-m]:checked').length; box.classList.toggle('rs-amb-irr', nn > 0); var lb = box.querySelector('.rs-amb-n'); if(lb) lb.textContent = nn ? nn + ' irregularidade' + (nn > 1 ? 's' : '') : 'sem irregularidade marcada'; } UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-amb-m]')){ var qm = t.dataset.rsAmbM.split('|'); ambSet(qm[0] + '|' + qm[1], 'm', {id: qm[2], on: t.checked}); var box = t.closest('.rs-amb'); if(box){ var am = ambLista(qm[0])[+qm[1]] || {}, nn = box.querySelectorAll('[data-rs-amb-m]:checked').length + (String(am.outra || '').trim() ? 1 : 0); box.classList.toggle('rs-amb-irr', nn > 0); var lb = box.querySelector('.rs-amb-n'); if(lb) lb.textContent = nn ? nn + ' irregularidade' + (nn > 1 ? 's' : '') : 'nenhuma irregularidade marcada'; } UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-amb-tipo]')){ var qt = t.dataset.rsAmbTipo.split('|'); ambSet(qt[0] + '|' + qt[1], 'tipo', t.value); salva(); redesenha(); return; }
   if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck)) redesenha(); else UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds); UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-meta]')){ st.meta[t.dataset.rsMeta] = t.value; naAuto(); salva(); redesenha(); return; }
