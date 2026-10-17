@@ -38,7 +38,8 @@ const quadro=p=>p.frames().find(x=>x!==p.mainFrame());
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(300);
  await f.selectOption('select[data-rs-meta="tipo_est"]','farmacia');await p.waitForTimeout(300);
  s=await p.evaluate(()=>JSON.parse(localStorage.getItem('uvis-vacinacao-v1')||'{}'));ok(!s.r.prescricao&&!s.r.extra_aut,'drogaria: arts. 14 e 17 voltam a ser verificados');
- rel=await T.texto(f,'vacinacao');ok(/44\/2009/.test(rel),'farmácia: relatório com a RDC 44/2009');
+ /* sem lista de normas no relatório (17/10/2026): a RDC 44/2009 só aparece no fundamento de uma irregularidade que a cite */
+ rel=await T.texto(f,'vacinacao');ok(!/RDC Anvisa nº (44\/2009|197\/2017) — /.test(rel)&&/OBJETIVO/.test(rel),'farmácia: relatório sem lista de normas');
  await p.evaluate(()=>window.__cascaVoltarDireto());await p.waitForTimeout(500);
  ok(await p.evaluate(()=>document.getElementById('lista-tit').textContent)==='Serviços','voltar do roteiro leva a Serviços');
  // Medicamentos
