@@ -1,8 +1,8 @@
 'use strict';
 /* Vacinação no núcleo Serviços — card único (17/10/2026; antes, 16/10, eram três
    roteiros: drogaria, UBS e serviço privado). A RDC 197/2017 é a mesma para
-   todos; a identificação escolhe a natureza e o tipo de estabelecimento
-   (vacina/roteiro.cjs). Tira os três apps antigos e o grupo que os abria.
+   todos; a identificação escolhe o tipo de estabelecimento: drogaria ou
+   farmácia, clínica de vacinação ou serviço público (vacina/roteiro.cjs). Tira os três apps antigos e o grupo que os abria.
    O texto dos dispositivos vem de vacina/legislacao.json
    (node scripts/legislacao-v12.cjs vacina/legislacao.json vacina/roteiro.cjs).
    Idempotente. Uso: node scripts/repack-vacina.cjs */

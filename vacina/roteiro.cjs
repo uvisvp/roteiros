@@ -1,11 +1,11 @@
 /* Vacinação no núcleo Serviços — um card único (pedido de 17/10/2026): a RDC
-   Anvisa nº 197/2017 vale para todos os serviços que vacinam (públicos,
-   privados, filantrópicos, civis ou militares — art. 2º); na identificação
-   escolhem-se a natureza do serviço e o tipo de estabelecimento:
-   - serviço público ou militar: o art. 14 (prescrição de vacina fora do
-     Calendário, “estabelecimentos privados”) e o art. 17 (extramuros, “serviços
+   Anvisa nº 197/2017 vale para todos os serviços que vacinam (art. 2º); na
+   identificação escolhe-se o tipo de estabelecimento — drogaria ou farmácia,
+   clínica de vacinação ou serviço público (só esses três, pedido de 17/10):
+   - serviço público: o art. 14 (prescrição de vacina fora do Calendário,
+     “estabelecimentos privados”) e o art. 17 (extramuros, “serviços
      privados”) passam a “Não se aplica”;
-   - farmácia ou drogaria: entra a RDC 44/2009 na legislação de referência.
+   - drogaria ou farmácia: entra a RDC 44/2009 na legislação de referência.
    Base: vacina/base.cjs (cópia de medicamentos/modulos/roteiros/vacina.cjs),
    orientações e calendários do mesmo roteiro. Checklist nas perguntas
    compostas e inventário de irregularidades por ambiente (infraestrutura). */
@@ -19,7 +19,7 @@ const d = copia(BASE);
 d.secoes.forEach(s => s.itens.forEach(i => { if (ORIENT[i.id]) i.orient = copia(ORIENT[i.id]); }));
 const item = id => { for (const s of d.secoes) for (const i of s.itens) if (i.id === id) return i; throw Error('item ' + id); };
 const perg = id => { for (const s of d.secoes) for (const i of s.itens) for (const q of i.perguntas || []) if (q.id === id) return q; throw Error('pergunta ' + id); };
-const PUBLICO = {campo: 'natureza', em: ['publico', 'militar']};
+const PUBLICO = {campo: 'tipo_est', igual: 'publico'};
 
 Object.assign(d, {app: 'vacinacao', titulo: 'Vacinação', tituloCurto: 'Vacinacao', store: 'uvis-vacinacao-v1', naSempre: true});
 d.relatorio.subtitulo = 'Serviço de vacinação humana (RDC Anvisa nº 197/2017)';
@@ -32,8 +32,7 @@ d.normas = [
   ['Lei Municipal nº 13.725/2004', 'Código Sanitário do Município de São Paulo.']
 ];
 item('dados').campos = [
-  {id: 'natureza', rotulo: 'Natureza do serviço (RDC 197/2017, art. 2º)', tipo: 'select', opcoes: [['privado', 'Privado'], ['filantropico', 'Filantrópico'], ['publico', 'Público'], ['militar', 'Militar']]},
-  {id: 'tipo_est', rotulo: 'Tipo de estabelecimento', tipo: 'select', opcoes: [['farmacia', 'Farmácia ou drogaria'], ['clinica', 'Clínica ou serviço de vacinação'], ['ubs', 'Unidade Básica de Saúde ou outra unidade pública'], ['hospital', 'Hospital ou ambulatório'], ['ocupacional', 'Serviço de saúde ocupacional (empresa)'], ['outro', 'Outro']]},
+  {id: 'tipo_est', rotulo: 'Tipo de estabelecimento', tipo: 'select', opcoes: [['farmacia', 'Drogaria ou farmácia'], ['clinica', 'Clínica de vacinação'], ['publico', 'Serviço público (UBS e demais unidades)']]},
   {id: 'razao', rotulo: 'Razão social / mantenedora'}, {id: 'fantasia', rotulo: 'Nome do estabelecimento ou da unidade'},
   {id: 'cnpj', rotulo: 'CNPJ', tipo: 'cnpj'}, {id: 'endereco', rotulo: 'Endereço', largo: true},
   {id: 'licenca', rotulo: 'Licença sanitária / CMVS nº'}, {id: 'cnes', rotulo: 'CNES'},

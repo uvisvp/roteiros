@@ -2,8 +2,8 @@
 /* Cards que abrem listas (17/10/2026): Serviços com Vacinação (card único) e
    EAC (Tipos I, II e III); Medicamentos igual ao site Medicamentos (Drogaria
    com drogaria, EAC e vacinação; Manipulação; Atacadista com distribuidora e
-   gases). Vacinação: natureza pública marca os arts. 14 e 17 como “Não se
-   aplica”; farmácia traz a RDC 44/2009. A cor do roteiro segue o núcleo de onde
+   gases). Vacinação: o tipo “serviço público” marca os arts. 14 e 17 como
+   “Não se aplica”; drogaria traz a RDC 44/2009. A cor do roteiro segue o núcleo de onde
    foi aberto. Os módulos de medicamentos trazem os ajustes do site Medicamentos.
    Uso: node scripts/e2e/grupos.cjs */
 const T=require('./lib.cjs');
@@ -25,7 +25,7 @@ const quadro=p=>p.frames().find(x=>x!==p.mainFrame());
  let f=quadro(p);ok(await f.evaluate(()=>ROTEIRO.app)==='vacinacao','Vacinação abre o roteiro único');
  ok(await p.evaluate(()=>__uvisTemaApp('vacinacao')[0])===await p.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--t-ser').trim()),'vacinação aberta em Serviços tem a cor de Serviços');
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(300);
- await f.selectOption('select[data-rs-meta="natureza"]','publico');await f.selectOption('select[data-rs-meta="tipo_est"]','ubs');await p.waitForTimeout(300);
+ await f.selectOption('select[data-rs-meta="tipo_est"]','publico');await p.waitForTimeout(300);
  const itemMod=await f.evaluate(()=>{for(const s of ROTEIRO.secoes)for(const i of s.itens)if((i.campos||[]).some(c=>c.id==='extramuros'))return [s.id,i.id]});
  await f.evaluate(([a,i])=>UvisPadrao.vai({aba:'roteiro',secao:a,item:i}),itemMod);await p.waitForTimeout(300);
  await f.selectOption('select[data-rs-meta="extramuros"]','sim');await p.waitForTimeout(300);
@@ -34,10 +34,10 @@ const quadro=p=>p.frames().find(x=>x!==p.mainFrame());
  const itemExtra=await f.evaluate(()=>{const s=ROTEIRO.secoes.find(x=>x.itens.some(i=>(i.perguntas||[]).some(q=>q.id==='extra_aut')));return [s.id,s.itens.find(i=>(i.perguntas||[]).some(q=>q.id==='extra_aut')).id]});
  await f.evaluate(([a,i])=>UvisPadrao.vai({aba:'roteiro',secao:a,item:i}),itemExtra);await p.waitForTimeout(300);
  ok(await f.evaluate(()=>/serviços privados/.test(document.querySelector('.rs-na-item')?.textContent||'')),'item de extramuros com o aviso de Não se aplica');
- let rel=await T.texto(f,'vacinacao');ok(!/44\/2009/.test(rel),'UBS: relatório sem RDC 44/2009');
+ let rel=await T.texto(f,'vacinacao');ok(!/44\/2009/.test(rel),'serviço público: relatório sem RDC 44/2009');
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(300);
- await f.selectOption('select[data-rs-meta="natureza"]','privado');await f.selectOption('select[data-rs-meta="tipo_est"]','farmacia');await p.waitForTimeout(300);
- s=await p.evaluate(()=>JSON.parse(localStorage.getItem('uvis-vacinacao-v1')||'{}'));ok(!s.r.prescricao&&!s.r.extra_aut,'serviço privado: arts. 14 e 17 voltam a ser verificados');
+ await f.selectOption('select[data-rs-meta="tipo_est"]','farmacia');await p.waitForTimeout(300);
+ s=await p.evaluate(()=>JSON.parse(localStorage.getItem('uvis-vacinacao-v1')||'{}'));ok(!s.r.prescricao&&!s.r.extra_aut,'drogaria: arts. 14 e 17 voltam a ser verificados');
  rel=await T.texto(f,'vacinacao');ok(/44\/2009/.test(rel),'farmácia: relatório com a RDC 44/2009');
  await p.evaluate(()=>window.__cascaVoltarDireto());await p.waitForTimeout(500);
  ok(await p.evaluate(()=>document.getElementById('lista-tit').textContent)==='Serviços','voltar do roteiro leva a Serviços');
