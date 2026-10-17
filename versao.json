@@ -1,6 +1,6 @@
 {
-  "versao": "20261016-21",
+  "versao": "20261017-1",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Serviços passa a ter 3 cards. Novo “Academias e piscinas” (Portaria SMS nº 1.101/2015; Leis Municipais 11.383/1993 com a redação da 15.681/2013, 17.105/2019, 13.993/2005, 16.059/2014, 13.945/2005; Código Sanitário, art. 116): perfil que marca “Não se aplica” no que não existir e relatório que descreve só o que o estabelecimento faz. Novo “Vacinação” (RDC Anvisa nº 197/2017), que abre três roteiros: drogaria (igual ao site Medicamentos), Unidade Básica de Saúde (sem os arts. 14 e 17, próprios dos serviços privados) e serviço privado. Todos com abas Roteiro, Infrações e Relatório, foto e anotação por pergunta, Salvas e Word."
+  "notas": "Relatórios em formatação simples e tom descritivo em todos os roteiros: preto e branco, sem faixas, títulos em negrito (Word .docx e .doc, Imprimir/PDF). Odontologia, Serviços assistenciais, Produtos, Alimentos e Estética deixam a tabela de requisitos e passam a escrever, por seção, uma frase por verificação (constatação ou negativa), com irregularidades e enquadramento numerados e o fundamento — como nos roteiros do site Medicamentos. O relatório traz só o relatório: sem anexo com texto de lei e sem avisos internos; a citação legal fica nas irregularidades e no enquadramento."
 }
