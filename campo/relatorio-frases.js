@@ -78,3 +78,29 @@
  };
  window.UvsFrase = frase;
 })();
+/* Lei Municipal nº 13.725/2004 em toda irregularidade (pedido de 17/10/2026), só até o
+   art. 109: UvsLei(fundamento, id, grupo) devolve o fundamento com a lei quando ele não a
+   cita. O artigo vem do roteiro (window.__uvsApp, gravado pela casca) e do assunto: o
+   prefixo do id da verificação (odontologia, alimentos, produtos), a modalidade
+   (assistenciais) e palavras do grupo (serviços de saúde: arts. 61 a 68). */
+(function(){
+ if(window.UvsLei) return;
+ var SAUDE = [[/res[íi]duo/i, '62'], [/limpe|higien|infec|esteriliz|desinfec|processamento/i, '61'], [/manuten|calibra/i, '66'], [/prontu|registro|document/i, '68'],
+  [/medicament|psicotr/i, '67'], [/pessoal|equipe|profission|recursos humanos|capacita/i, '64'], [/instala|ambient|infraestr|estrutura|equipamento|mobili|acessib/i, '65']];
+ var MAPA = {
+  odontologia: {padrao: '63', prefixos: {lic: '90', ap: '65', fi: '65', cc: '65', eq: '66', em: '65', rx: '66', pe: '65', pr: '61', es: '61', de: '61', am: '61', te: '63', qu: '68', rs: '62', ex: '63'}},
+  'servicos-alimentacao-roteiro': {padrao: '46', prefixos: {a: '90'}},
+  'produtos-correlatos': {padrao: '46', prefixos: {l: '90', tv: '91'}},
+  /* assistenciais: SAICA e demais acolhimentos, art. 69; ILPI, Centro Dia, comunidade e residência terapêutica, arts. 61 a 68 pelo assunto */
+  'servicos-assistenciais': {padrao: '63', prefixos: {saica: '69', demais: '69'}, saude: true}
+ };
+ window.UvsLei = function(cit, id, grupo){
+  cit = String(cit || '').trim().replace(/[.;\s]+$/, '');
+  if(/13\.725/.test(cit)) return cit;
+  var M = MAPA[window.__uvsApp]; if(!M) return cit;
+  var pre = String(id || '').split('|')[0].replace(/\d.*$/, ''), art = M.prefixos[pre];
+  if(!art && M.saude) for(var i = 0; i < SAUDE.length; i++) if(SAUDE[i][0].test(String(grupo || ''))){ art = SAUDE[i][1]; break; }
+  art = art || M.padrao;
+  return (cit ? cit + '; ' : '') + 'Lei Municipal nº 13.725/2004, art. ' + art;
+ };
+})();

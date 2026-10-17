@@ -12,7 +12,9 @@ function valida(D, LEGAL) {
   D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
   D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
   /* citações dos campos (inventário por ambiente: c.r e as de cada irregularidade) */
-  D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); })));
+  D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r));
+    [c.lista || []].concat(Object.values(c.tipos || {}).map(t => t.lista || [])).forEach(l => l.forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r)))); })));
+  (D.leiBase || []).forEach(r => refs.add(r));
   const legal = {};
   for (const r of refs) { if (!LEGAL[r]) throw Error(`${D.app}: dispositivo sem texto (${r})`); legal[r] = LEGAL[r]; }
   const ids = D.secoes.flatMap(s => s.itens.flatMap(i => (i.perguntas || []).map(q => q.id)));
@@ -23,7 +25,15 @@ function valida(D, LEGAL) {
     for (const f of q.inf || []) if (!D.infracoes.some(x => x.id === f)) throw Error(`${D.app}: infração inexistente ${f} em ${q.id}`);
     for (const c of [q.naSe, q.se]) if (c && !campos.has(c.campo)) throw Error(`${D.app}: condição com campo inexistente em ${q.id}`);
   }
-  for (const x of D.infracoes) if (!D.secoes.some(s => s.itens.some(i => (i.perguntas || []).some(q => (q.inf || []).includes(x.id))))) throw Error(`${D.app}: infração sem pergunta: ${x.id}`);
+  /* infrações sugeridas pelas perguntas e pelo inventário de ambientes (c.inf e o 4º elemento de cada irregularidade) */
+  const usadas = new Set();
+  for (const s of D.secoes) for (const i of s.itens) {
+    for (const q of i.perguntas || []) (q.inf || []).forEach(f => usadas.add(f));
+    for (const c of i.campos || []) { (c.inf || []).forEach(f => usadas.add(f));
+      [c.lista || []].concat(Object.values(c.tipos || {}).map(t => t.lista || [])).forEach(l => l.forEach(x => [].concat(x[3] || []).forEach(f => usadas.add(f)))); }
+  }
+  for (const f of usadas) if (!D.infracoes.some(x => x.id === f)) throw Error(`${D.app}: infração inexistente ${f}`);
+  for (const x of D.infracoes) if (!usadas.has(x.id)) throw Error(`${D.app}: infração sem pergunta nem irregularidade de ambiente: ${x.id}`);
   return legal;
 }
 function pagina(D, LEGAL, cor, blocks) {

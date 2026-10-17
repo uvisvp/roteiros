@@ -2,7 +2,8 @@
 /* Gera academia/legislacao.json: o texto oficial de cada dispositivo citado
    pelo roteiro de academias e piscinas (academia/roteiro.cjs), tirado do banco
    legislativo v12 (repositório base-vigilancia) e, para a Lei Municipal nº
-   13.725/2004, do banco já embutido no app (bloco banco--v11).
+   13.725/2004, de legislacao/lei-municipal-13725-2004.json (texto oficial,
+   arts. 1º a 109; na falta, o banco embutido no app, bloco banco--v11).
    O app não depende do banco em tempo de uso: o texto vai embutido no bloco.
    Uso: node scripts/academia-legislacao.cjs [caminho/base-vigilancia] */
 'use strict';
@@ -45,7 +46,10 @@ const refs = new Set();
 D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
 D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
 /* citações dos campos (inventário por ambiente: c.r e as de cada irregularidade) */
-D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); })));
+D.secoes.forEach(s => s.itens.forEach(i => (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r));
+  [c.lista || []].concat(Object.values(c.tipos || {}).map(t => t.lista || [])).forEach(l => l.forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r)))); })));
+/* Lei 13.725/2004 que o motor soma a toda irregularidade (leiBase) */
+(D.leiBase || []).forEach(r => refs.add(r));
 
 const cache = {};
 function norma(chave) {
@@ -81,11 +85,15 @@ const municipal = {};
   }
 })();
 
+/* texto oficial dos arts. 1º a 109 (legislacao/lei-municipal-13725-2004.json): vale sobre o banco--v11 */
+{ const L = require(path.join(RAIZ, 'legislacao', 'lei-municipal-13725-2004.json')); Object.assign(municipal, L.textos); }
+
 const saida = {}, faltam = [];
 for (const id of [...refs].sort()) {
   const chave = id.split('::')[0], [nome, url] = NOMES[chave] || [chave];
   const base = {norma: nome, disp: dispositivo(id)};
   if (chave === 'lei-municipal-13725-2004') {
+    if (+id.split('::')[2] > 109) throw Error('Lei 13.725: artigo acima do 109 (' + id + ')');
     if (!municipal[id]) { faltam.push(id); continue; }
     saida[id] = {...base, texto: municipal[id], url};
     continue;

@@ -3,15 +3,19 @@
    sem mexer em cada módulo:
    - Word (.docx) montado com JSZip: antes de gerar, o XML do documento, dos
      cabeçalhos/rodapés e dos estilos perde sombreamentos (faixas e células
-     coloridas) e realces; toda cor de texto e de borda vira preta; bordas de
-     parágrafo grossas (barras) ficam finas; estilos de título ganham negrito;
+     coloridas) e realces; toda cor de texto e de borda vira preta; as linhas
+     de parágrafo (sublinhado dos títulos) saem — no núcleo Medicamentos, cujos
+     modelos oficiais as usam, só afinam (pedido de 17/10/2026); estilos de
+     título ganham negrito;
    - geradores próprios de .docx (distribuidora): o mesmo tratamento no XML
      que passa por TextEncoder;
    - Word em HTML (.doc) e páginas de impressão/PDF: estilo que força texto
      preto, fundo branco e títulos em negrito.
-   Cópia igual em roteiros/campo/relatorio-pb.js e medicamentos/modulos/relatorio-pb.js. */
+   Cópia em roteiros/campo/relatorio-pb.js e medicamentos/modulos/relatorio-pb.js; a do
+   Roteiros tira as linhas de parágrafo fora do núcleo Medicamentos (window.__uvsApp). */
 (function(){
  if(window.__uvsRelPB) return; window.__uvsRelPB = true;
+ var MANTEM_LINHAS = ['drogaria', 'farmacia-manipulacao', 'distribuidoras-transportadoras', 'gases-medicinais'].indexOf(window.__uvsApp) >= 0;
  function xml(x){
   return String(x)
    .replace(/<w:shd\b[^>]*\/>/g, '')
@@ -19,7 +23,7 @@
    .replace(/<w:color\b[^>]*\/>/g, '<w:color w:val="000000"/>')
    .replace(/\sw:(?:themeColor|themeShade|themeTint|themeFill|themeFillShade|themeFillTint)="[^"]*"/g, '')
    .replace(/(<w:(?:top|left|bottom|right|start|end|insideH|insideV|between|bar)\b[^>]*?\sw:color=")[^"]*"/g, '$1000000"')
-   .replace(/<w:pBdr>[\s\S]*?<\/w:pBdr>/g, function(b){ return b.replace(/\sw:sz="(\d+)"/g, function(m, n){ return ' w:sz="' + Math.min(+n, 6) + '"'; }); });
+   .replace(/<w:pBdr>[\s\S]*?<\/w:pBdr>/g, function(b){ return MANTEM_LINHAS ? b.replace(/\sw:sz="(\d+)"/g, function(m, n){ return ' w:sz="' + Math.min(+n, 6) + '"'; }) : ''; });
  }
  /* estilos de título (Heading, Title, Titulo…): negrito */
  function estilos(x){
@@ -52,7 +56,9 @@
   TE.encode.__pb = true;
  }
  var CSS = 'body,p,div,span,td,th,li,h1,h2,h3,h4,h5,h6,table,tr,caption,b,strong,em,small,a{color:#000 !important;background:#fff !important;background-color:#fff !important;text-shadow:none !important;box-shadow:none !important}'
-  + 'table,td,th,tr{border-color:#000 !important}h1,h2,h3,h4,h5,h6,th,caption{font-weight:bold !important}';
+  + 'table,td,th,tr{border-color:#000 !important}h1,h2,h3,h4,h5,h6,th,caption{font-weight:bold !important}'
+  /* fora do núcleo Medicamentos: títulos e parágrafos sem linha (sublinhado), sem régua */
+  + (MANTEM_LINHAS ? '' : 'h1,h2,h3,h4,h5,h6,p,div{border-top:0 !important;border-bottom:0 !important}hr{display:none !important}');
  /* Word em HTML: cores e fundos inline saem; o estilo acima entra no <head> */
  function html(t){
   t = t.replace(/\sbgcolor="[^"]*"/gi, '')

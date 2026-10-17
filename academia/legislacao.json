@@ -1,20 +1,38 @@
 {
- "lei-municipal-13725-2004::artigo::116": {
+ "lei-municipal-13725-2004::artigo::100": {
   "norma": "Lei Municipal nº 13.725/2004",
-  "disp": "art. 116",
-  "texto": "Considera-se infração sanitária, para fins deste Código e das pertinentes normas técnicas, a desobediência ou a inobservância ao disposto nas normas legais e regulamentos que, por qualquer forma, se destinem à promoção, preservação e recuperação da saúde.",
+  "disp": "art. 100",
+  "texto": "Art. 100 - As autoridades sanitárias, observados os preceitos constitucionais, terão livre acesso a todos os locais sujeitos à legislação sanitária, a qualquer dia e hora, sendo as empresas obrigadas, por seus dirigentes ou prepostos, a prestar os esclarecimentos necessários ao desempenho de suas atribuições legais e a exibir, quando exigido, quaisquer documentos que digam respeito ao fiel cumprimento das normas de prevenção à saúde.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::19::paragrafo::2": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 19, § 2º",
+  "texto": "§ 2º - Os proprietários de imóveis particulares ou legalmente estabelecidos são responsáveis pela manutenção de sua propriedade em condições sanitárias que dificultem a presença de animais sinantrópicos que possam comprometer a preservação da saúde pública.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::27::inciso::i": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 27, I",
+  "texto": "Art. 27 - Nos projetos, obras e operações de sistemas de abastecimento de água, públicos ou privados, individuais ou coletivos, devem ser obedecidos os seguintes princípios gerais, independentemente de outras exigências técnicas eventualmente estabelecidas:\nI - a água distribuída deve obedecer às normas e aos padrões de potabilidade estabelecidos pela legislação vigente;",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::69": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 69",
+  "texto": "Art. 69 - Para os fins deste Código, são considerados de interesse indireto da saúde todos os estabelecimentos e atividades nele não relacionados, cuja prestação de serviços ou fornecimento de produtos possa constituir risco à saúde pública.",
   "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
  },
  "lei-municipal-13725-2004::artigo::90": {
   "norma": "Lei Municipal nº 13.725/2004",
   "disp": "art. 90",
-  "texto": "Todos os estabelecimentos de interesse da saúde e os estabelecimentos comerciais, de produção, embalagem e manipulação de produtos e substâncias de interesse da saúde, antes de iniciarem suas atividades, devem encaminhar à autoridade sanitária declaração de que suas atividades, instalações, equipamentos e recursos humanos obedecem à legislação sanitária vigente, para fins de obtenção do Cadastro Municipal de Vigilância em Saúde.",
+  "texto": "Art. 90 - Todos os estabelecimentos de interesse da saúde e os estabelecimentos comerciais, de produção, embalagem e manipulação de produtos e substâncias de interesse da saúde, antes de iniciarem suas atividades, devem encaminhar à autoridade sanitária declaração de que suas atividades, instalações, equipamentos e recursos humanos obedecem à legislação sanitária vigente, para fins de obtenção do Cadastro Municipal de Vigilância em Saúde.\n§ 1º - Os estabelecimentos devem comunicar à autoridade sanitária competente as modificações nas instalações e equipamentos, bem como a inclusão de atividades e quaisquer outras alterações que repercutam na identidade, qualidade e segurança dos produtos ou serviços oferecidos à população.\n§ 2º - Os estabelecimentos comerciais que pretendam vender ou possibilitar o consumo de bebidas alcoólicas deverão informar tal pretensão à autoridade sanitária competente, em formulário próprio.\n§ 3º - Constatando que a declaração e a comunicação previstas no \"caput\" e no parágrafo 1º deste artigo são inverídicas, deverá a autoridade sanitária comunicar o fato ao Ministério Público, para fins de apuração de eventual ilícito penal, sem prejuízo da adoção dos demais procedimentos administrativos.",
   "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
  },
  "lei-municipal-13725-2004::artigo::90::paragrafo::1": {
   "norma": "Lei Municipal nº 13.725/2004",
   "disp": "art. 90, § 1º",
-  "texto": "Os estabelecimentos devem comunicar à autoridade sanitária competente as modificações nas instalações e equipamentos, bem como a inclusão de atividades e quaisquer outras alterações que repercutam na identidade, qualidade e segurança dos produtos ou serviços oferecidos à população.",
+  "texto": "§ 1º - Os estabelecimentos devem comunicar à autoridade sanitária competente as modificações nas instalações e equipamentos, bem como a inclusão de atividades e quaisquer outras alterações que repercutam na identidade, qualidade e segurança dos produtos ou serviços oferecidos à população.",
   "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
  },
  "lei-municipal-sp-11383-1993::artigo::1": {

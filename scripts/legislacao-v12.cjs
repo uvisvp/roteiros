@@ -6,7 +6,8 @@
    texto vai embutido no módulo, e o botão da citação abre o texto e o link
    da fonte oficial.
    A Lei Municipal nº 13.725/2004 não está no v12 como arquivo próprio; seus
-   artigos vêm do banco já embutido nos módulos do roteiros (drogaria e
+   artigos vêm de legislacao/lei-municipal-13725-2004.json (texto oficial,
+   arts. 1º a 109) e, na falta, do banco já embutido nos módulos (drogaria e
    odontologia).
    Uso: node scripts/legislacao-v12.cjs <saida.json> <roteiro.cjs>... */
 'use strict';
@@ -51,8 +52,10 @@ for (const f of FONTES) {
   const m = require(path.resolve(f));
   for (const d of [].concat(m)) {
     d.secoes.forEach(s => s.itens.forEach(i => { (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)));
-      (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); }); }));
+      (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r));
+        [c.lista || []].concat(Object.values(c.tipos || {}).map(t => t.lista || [])).forEach(l => l.forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r)))); }); }));
     d.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
+    (d.leiBase || []).forEach(r => refs.add(r));
   }
 }
 
@@ -116,11 +119,17 @@ const municipal = {};
   for (const n of lm.nos) if (!municipal[n.id]) municipal[n.id] = {texto: (n.rotulo ? n.rotulo + ' ' : '') + n.texto, url: 'https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004'};
 })();
 
+/* texto oficial dos arts. 1º a 109 (legislacao/lei-municipal-13725-2004.json, gerado por
+   scripts/lei13725.cjs): vale sobre o dos bancos embutidos. Os roteiros não citam artigo
+   acima do 109 (infrações e penalidades). */
+{ const L = require(path.join(ROT, 'legislacao', 'lei-municipal-13725-2004.json')); for (const [id, t] of Object.entries(L.textos)) municipal[id] = {texto: t, url: L.fonte}; }
+
 const saida = {}, faltam = [];
 for (const id of [...refs].sort()) {
   const chave = id.split('::')[0];
   const base = {norma: NOMES[chave] || chave, disp: dispositivo(id)};
   if (chave === 'lei-municipal-13725-2004') {
+    if (+id.split('::')[2] > 109) throw Error('Lei 13.725: artigo acima do 109 (' + id + ')');
     const m = municipal[id];
     if (!m) { faltam.push(id); continue; }
     saida[id] = {...base, texto: m.texto, url: m.url};

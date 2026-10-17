@@ -28,13 +28,16 @@ const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
  await f.fill('textarea[data-rs-sit="cnes"]','conferido no CNESNet durante a inspeção');await p.waitForTimeout(200);
  // inventário por ambiente
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'inventario'}));await p.waitForTimeout(300);
- await f.click('[data-rs-amb-add="amb_inv|Recepção"]');await p.waitForTimeout(300);
+ await f.click('[data-rs-amb-chip="amb_inv|Recepção|geral"]');await p.waitForTimeout(300);
+ await f.evaluate(()=>{document.querySelector('.rs-amb').open=true});await p.waitForTimeout(150);
  await f.check('[data-rs-amb-m="amb_inv|0|s02"]');await p.waitForTimeout(300);
  ok(await f.evaluate(()=>/1 irregularidade/.test(document.querySelector('.rs-amb')?.textContent||'')),'ambiente com 1 irregularidade');
  const rel=await T.texto(f,'eac-tipo2');
  ok(/A sala de coleta e execução não dispõe de: maca\./.test(rel),'relatório: frase com o ponto não atendido');
  ok(/Conferido no CNESNet durante a inspeção\./.test(rel),'relatório: anotação da pergunta');
  ok(/Recepção[\s\S]{0,80}(Infiltração|infiltração)/.test(rel),'relatório: irregularidade do ambiente');
+ ok(/Infiltração: recepção\. Fundamento: RDC Anvisa nº 63\/2011, art\. 36; Lei Municipal nº 13\.725\/2004, art\. 65\./.test(rel),'relatório: irregularidade do ambiente com a Lei 13.725 (art. 65)');
+ ok(/Fundamento: [^\n]*Lei Municipal nº 13\.725\/2004, art\. 65/.test(rel.slice(rel.indexOf('IRREGULARIDADES'))),'relatório: Lei 13.725 nas irregularidades (serviço de saúde, arts. 61 a 68)');
  if(erros.length)T.falha('erros de página (Tipo II): '+erros.join(' / '));
  await p.close();
  // Tipo III: perfil
