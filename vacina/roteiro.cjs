@@ -103,18 +103,27 @@ Object.entries({
   vac_extra: 'Realizar vacinação extramuros em desacordo com a autorização da autoridade sanitária e as regras do serviço.',
   vac_civp: 'Emitir o CIVP em desacordo com o credenciamento da Anvisa, a gratuidade e o registro no sistema da Anvisa.'
 }).forEach(([id, t]) => { const i = d.infracoes.find(x => x.id === id); if (!i) throw Error('infração ' + id); i.texto = t; });
-/* Lei Municipal nº 13.725/2004, só até o art. 109: serviço de saúde — arts. 61 a 68 conforme o
-   assunto, 92 (responsável técnico), 90 e 83 (licença e cadastro de quem aplica vacinas),
-   55 e 56 (notificação de eventos adversos); entra pela infração sugerida de cada pergunta */
+/* Lei Municipal nº 13.725/2004, só até o art. 109. Ficam os artigos que a infração já trazia
+   do roteiro de Medicamentos — 46 (boas práticas, vacinas e conservação), 50 (condições de
+   funcionamento pelas normas específicas), 55 (eventos adversos), 90 (licença) — e somam-se os
+   do serviço de saúde: arts. 61 a 68 conforme o assunto, 92 (responsável técnico), 83
+   (cadastro de quem aplica vacinas), 56 (notificação pelo serviço de saúde) e 85 (doses
+   aplicadas informadas à vigilância). A pergunta cita os da sua infração; LEIQ acerta as
+   perguntas cujo assunto pede outro artigo (descarte, 62; registro no sistema, 85; extramuros
+   autorizado, 90). */
 const LM = (a, ...r) => 'lei-municipal-13725-2004::artigo::' + a + (r.length ? '::' + r.join('::') : '');
 const LEI = {vac_lic: [LM(90), LM(90, 'paragrafo', '1'), LM(83)], vac_cnes: [LM(63)], vac_calend: [LM(63)], vac_rt: [LM(92)], vac_capacit: [LM(64)],
   vac_infra: [LM(65)], vac_refrig: [LM(65)], vac_transp: [LM(65)], vac_vacina: [LM(65)], vac_origem: [LM(65)], vac_prescr: [LM(63)], vac_interc: [LM(63)],
-  vac_registro: [LM(68)], vac_notif: [LM(55), LM(56)], vac_extra: [LM(63)], vac_civp: [LM(63)]};
-const fora = r => !/^lei-municipal-13725-2004::/.test(r);
-d.infracoes.forEach(i => { i.r = i.r.filter(fora).concat(LEI[i.id] || [LM(63)]); });
+  vac_registro: [LM(68), LM(85)], vac_notif: [LM(55), LM(56)], vac_extra: [LM(63), LM(90)], vac_civp: [LM(63)]};
+const eLei = r => /^lei-municipal-13725-2004::/.test(r), uniq = l => l.filter((x, k) => l.indexOf(x) === k);
+const ordem = r => r.replace(/^lei-municipal-13725-2004::artigo::(\d+).*/, '$1') * 1;
+const final = {};
+d.infracoes.forEach(i => { final[i.id] = uniq(i.r.filter(eLei).concat(LEI[i.id] || [LM(63)])).sort((a, b) => ordem(a) - ordem(b)); i.r = i.r.filter(r => !eLei(r)).concat(final[i.id]); });
+const LEIQ = {descarte: {mais: [LM(62)]}, cartao: {sem: [LM(85)]}, prontuario: {sem: [LM(85)]}, extra_regras: {sem: [LM(90)]}, extra_aut: {sem: [LM(63)]}};
 d.secoes.forEach(s => s.itens.forEach(it => (it.perguntas || []).forEach(q => {
-  const l = [].concat(...(q.inf || []).map(f => LEI[f] || [])).filter((x, k, a) => a.indexOf(x) === k);
-  q.r = q.r.filter(fora).concat(l.length ? l : [LM(63)]);
+  const o = LEIQ[q.id] || {};
+  let l = uniq([].concat(...(q.inf || []).map(f => final[f] || [])).concat(o.mais || [])).filter(x => !(o.sem || []).includes(x));
+  q.r = q.r.filter(r => !eLei(r)).concat(l.length ? l.sort((a, b) => ordem(a) - ordem(b)) : [LM(63)]);
 })));
 d.leiBase = [LM(63)];
 

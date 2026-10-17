@@ -455,7 +455,7 @@ const QUALIDADE = [
   {id: 'notivisa', t: 'Há sistemática para identificar, investigar e notificar no Notivisa eventos adversos e queixas técnicas?', r: [A(90), P(90, '1')],
     c: 'Eventos adversos e queixas técnicas são identificados, investigados e notificados no Notivisa, conforme sistemática definida.',
     nc: 'Não há sistemática para identificar, investigar e notificar eventos adversos e queixas técnicas.',
-    na: NAO_FUNC, inf: ['eac_pgq']},
+    na: NAO_FUNC, inf: ['eac_notif']},
   {id: 'riscos', tipos: [2, 3], t: 'O gerenciamento de riscos contempla identificação, análise, investigação documentada de falhas e ações preventivas e corretivas?', r: [A(107), A(109)],
     c: 'O gerenciamento de riscos contempla identificação, análise, investigação documentada de falhas e ações preventivas e corretivas.',
     nc: 'O gerenciamento de riscos está incompleto.', ncPontos: 'O gerenciamento de riscos não contempla: {}.',
@@ -641,7 +641,7 @@ const ANALITICA = [
   {id: 'dnc', t: 'Há procedimento para notificar resultados que indiquem suspeita de doença de notificação compulsória, seguindo as diretrizes de diagnóstico do Ministério da Saúde?', r: [A(66), A(67)],
     c: 'Há procedimento para notificar resultados que indiquem suspeita de doença de notificação compulsória.',
     nc: 'Não há procedimento para notificar resultados que indiquem suspeita de doença de notificação compulsória.',
-    na: 'Os exames oferecidos não detectam doenças de notificação compulsória.', inf: ['eac_processo']}
+    na: 'Os exames oferecidos não detectam doenças de notificação compulsória.', inf: ['eac_dnc']}
 ];
 const CQ = {
   gcq: [
@@ -700,6 +700,7 @@ const INFRACOES = [
   {id: 'eac_produto', grupo: 'Produtos e equipamentos', texto: 'Utilizar produto para diagnóstico in vitro, reagente e equipamento em desacordo com a regularização, a validade, as instruções do fabricante e a rotulagem exigida.', r: [LM(46), A(88), A(101), A(102)]},
   {id: 'eac_registros', grupo: 'Produtos e equipamentos', texto: 'Deixar de registrar o recebimento de produtos, a manutenção e a calibração dos equipamentos, e de manter os registros pelo prazo exigido.', r: [LM(46), A(92), A(94), A(100), A(115)]},
   {id: 'eac_pgq', grupo: 'Gestão da qualidade', texto: 'Deixar de implantar o Programa de Garantia da Qualidade e o gerenciamento de riscos do serviço de Exames de Análises Clínicas.', r: [LM(46), A(84), A(86), A(109)]},
+  {id: 'eac_notif', grupo: 'Gestão da qualidade', texto: 'Deixar de identificar, investigar e notificar no Notivisa os eventos adversos e as queixas técnicas.', r: [LM(55), A(90), P(90, '1')]},
   {id: 'eac_doc', grupo: 'Gestão da qualidade', texto: 'Deixar de manter as instruções escritas e os documentos exigidos para o serviço de Exames de Análises Clínicas.', r: [LM(50), A(110), A(117), A(119), I(154, 'i')]},
   {id: 'eac_limpeza', grupo: 'Gestão da qualidade', texto: 'Deixar de manter instruções de limpeza e o registro diário da limpeza, com saneantes regularizados.', r: [LM(50), A(112), A(113), A(114)]},
   {id: 'eac_residuos', grupo: 'Gestão da qualidade', texto: 'Deixar de gerenciar os resíduos de serviços de saúde conforme o PGRSS e a RDC 222/2018 (segregação, coletores, acondicionamento, abrigo, cadastro do gerador e coleta).', r: [LM(50), A(111), R222(5), R222(11), R222(17), R222(35), R222(86), LU(144)]},
@@ -708,6 +709,7 @@ const INFRACOES = [
   {id: 'eac_rastreab', grupo: 'Processos operacionais', texto: 'Deixar de garantir o cadastro do paciente e do exame, o comprovante de atendimento e a identificação do material biológico que assegurem a rastreabilidade.', r: [LM(50), A(128), A(134), A(136), A(137), A(138)]},
   {id: 'eac_transporte', grupo: 'Processos operacionais', texto: 'Transportar material biológico em desacordo com a RDC nº 504/2021, sem rastreabilidade.', r: [LM(50), A(140), A(141), A(143)]},
   {id: 'eac_processo', grupo: 'Processos operacionais', texto: 'Executar Exames de Análises Clínicas sem as orientações, critérios e fluxos exigidos para as fases pré-analítica, analítica e pós-analítica.', r: [LM(50), A(132), A(139), A(154), A(156)]},
+  {id: 'eac_dnc', grupo: 'Processos operacionais', texto: 'Deixar de notificar os resultados que indiquem suspeita de doença de notificação compulsória.', r: [LM(71), A(66), A(67)]},
   {id: 'eac_inhouse', grupo: 'Processos operacionais', texto: 'Utilizar metodologia própria em desacordo com os requisitos de documentação, validação, identificação no laudo e vedação de comércio.', r: [LM(50), A(158), A(159), A(160), A(163), A(164)]},
   {id: 'eac_laudo', grupo: 'Processos operacionais', texto: 'Emitir, transcrever e retificar laudo sem os requisitos mínimos e a assinatura de profissional legalmente habilitado.', r: [LM(50), A(166), A(167), A(168), A(169), A(170)]},
   {id: 'eac_cq', grupo: 'Controle da qualidade', texto: 'Deixar de realizar e registrar o controle interno e o controle externo da qualidade dos Exames de Análises Clínicas.', r: [LM(46), A(171), A(176), A(177), A(185)]}
@@ -811,23 +813,35 @@ function monta(t) {
   };
 }
 /* Lei Municipal nº 13.725/2004 (pedido de 17/10/2026): toda irregularidade cita o Código
-   Sanitário, só até o art. 109. Serviço de saúde: os arts. 61 a 68 conforme o assunto
-   (61 higiene, 62 resíduos, 63 condições para a atividade, 64 profissionais, 65 instalações,
-   equipamentos e materiais, 66 funcionamento dos equipamentos, 68 registros), o art. 92
-   (responsável técnico) e o art. 90 (licença). Entra pela infração sugerida de cada pergunta. */
+   Sanitário, só até o art. 109. Ficam os artigos que a infração já trazia do roteiro de
+   Medicamentos — 46 (boas práticas) e 50 (condições de funcionamento pelas normas
+   específicas), 55 (eventos adversos), 71 (notificação compulsória pelos laboratórios), 90
+   (licença) — e somam-se os do serviço de saúde: arts. 61 a 68 conforme o assunto (61
+   higiene, 62 resíduos, 63 condições para a atividade, 64 profissionais, 65 instalações,
+   equipamentos e materiais, 66 funcionamento dos equipamentos, 68 registros), 56
+   (notificação pelo serviço de saúde), 92 (responsável técnico) e 37, I (saúde do
+   trabalhador). A pergunta cita os da sua infração; LEIQ acerta as perguntas cujo assunto
+   pede outro artigo (rótulo de reagente fracionado, 49; PBA, 24; licença da central e do
+   itinerante, 90; recebimento, prazo dos registros). */
 const LEI = {
   farm_lic: [LM(90)], eac_lic: [LM(90), LM(90) + '::paragrafo::1'], eac_cnes: [LM(63)], eac_rt: [LM(92)], eac_prof: [LM(64)],
   eac_tipo1: [LM(63)], eac_tipo2: [LM(63)], eac_dsf: [LM(68)], eac_infra: [LM(65)], eac_temp: [LM(65)], eac_produto: [LM(65)],
-  eac_registros: [LM(66)], eac_pgq: [LM(63)], eac_doc: [LM(63)], eac_limpeza: [LM(61)], eac_residuos: [LM(62)], eac_saude_trab: [LM(63)],
-  eac_educacao: [LM(64)], eac_rastreab: [LM(68)], eac_processo: [LM(63)], eac_laudo: [LM(68)], eac_cq: [LM(63)], eac_vinculo: [LM(63)],
-  eac_transporte: [LM(63)], eac_apoio: [LM(63)], eac_itinerante: [LM(63)], eac_cd: [LM(63)], eac_inhouse: [LM(63)]
+  eac_registros: [LM(66)], eac_pgq: [LM(63)], eac_notif: [LM(56)], eac_doc: [LM(63)], eac_limpeza: [LM(61)], eac_residuos: [LM(62)],
+  eac_saude_trab: [LM(37) + '::inciso::i'], eac_educacao: [LM(64)], eac_rastreab: [LM(68)], eac_processo: [LM(63)], eac_dnc: [LM(71)],
+  eac_laudo: [LM(68)], eac_cq: [LM(63)], eac_vinculo: [LM(63)], eac_transporte: [LM(63)], eac_apoio: [LM(63)], eac_itinerante: [LM(63)],
+  eac_cd: [LM(63)], eac_inhouse: [LM(63)]
 };
+const LEIQ = {fracionados: {mais: [LM(49)]}, pba: {mais: [LM(24)]}, itin_reg: {mais: [LM(90)]}, cd_reg: {mais: [LM(90)]},
+  recebimento: {sem: [LM(66)], mais: [LM(65)]}, prazo_registros: {sem: [LM(66)], mais: [LM(68)]}};
 function lei13725(secoes, infracoes) {
-  const fora = r => !/^lei-municipal-13725-2004::/.test(r), uniq = l => l.filter((x, k) => l.indexOf(x) === k);
-  infracoes.forEach(i => { i.r = i.r.filter(fora).concat(LEI[i.id] || [LM(63)]); });
+  const eLei = r => /^lei-municipal-13725-2004::/.test(r), uniq = l => l.filter((x, k) => l.indexOf(x) === k);
+  const ordem = r => r.replace(/^lei-municipal-13725-2004::artigo::(\d+).*/, '$1') * 1, ord = l => l.sort((a, b) => ordem(a) - ordem(b));
+  const final = {};
+  infracoes.forEach(i => { final[i.id] = ord(uniq(i.r.filter(eLei).concat(LEI[i.id] || [LM(63)]))); i.r = i.r.filter(r => !eLei(r)).concat(final[i.id]); });
   secoes.forEach(s => s.itens.forEach(it => (it.perguntas || []).forEach(q => {
-    const l = uniq([].concat(...(q.inf || []).map(f => LEI[f] || [])));
-    q.r = q.r.filter(fora).concat(l.length ? l : [LM(63)]);
+    const o = LEIQ[q.id] || {};
+    const l = uniq([].concat(...(q.inf || []).map(f => final[f] || [])).concat(o.mais || [])).filter(x => !(o.sem || []).includes(x));
+    q.r = q.r.filter(r => !eLei(r)).concat(l.length ? ord(l) : [LM(63)]);
   })));
 }
 module.exports = [1, 2, 3].map(monta);

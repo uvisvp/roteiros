@@ -75,8 +75,8 @@
     var F=window.UvsFrase||function(t){return t},D=window.UvsFrase&&UvsFrase.doc;
     ['doc','rot'].forEach(function(k){(current[k]||[]).forEach(function(it,i){var st=mark(k,i);if(!st)return;
      var fr=st==='NA'?'Não se aplica: '+limpa(it.i):((st==='NC'&&window.UvsPontos&&UvsPontos.frase(current.id+'|'+it.i))||(k==='doc'&&D?D(it.i,st==='C'?'c':'nc','O estabelecimento'):F(it.i,st==='C'?'c':'nc')));
-     out.push({x:limpa(fr)+(st==='NC'?' Fundamento: '+limpa((window.UvsLei||function(c){return c})(it.l,current.id,it.g)):'')})})});
-    (current.inf||[]).forEach(function(it,i){if(mark('inf',i)==='SEL')out.push({x:'Infração selecionada: '+limpa(it.i)+' — '+limpa(it.l)})});return out},
+     out.push({x:limpa(fr)+(st==='NC'?' Fundamento: '+limpa((window.UvsLei||function(c){return c})(it.l,current.id,it.g,it.i)):'')})})});
+    (current.inf||[]).forEach(function(it,i){if(mark('inf',i)==='SEL')out.push({x:'Infração selecionada: '+limpa(it.i)+' — '+limpa((window.UvsLei||function(c){return c})(it.l,current.id,it.g,it.i))})});return out},
    /* vários grupos podem estar abertos ao mesmo tempo: uma prévia por grupo aberto */
    itens:function(){var pp=itemPadrao();if(pp)return [pp];var sc=typeof scope==='function'?scope():'';return [].filter.call(document.querySelectorAll('#content section.group'),function(g){return !g.classList.contains('closed')&&visivel(g)}).map(function(g){
      return {chave:sc+'|'+(typeof tab!=='undefined'?tab:'')+'|'+(g.dataset.groupSection||txt(g.querySelector('h3'))),titulo:g.dataset.groupSection||'',alvo:g.querySelector('.items')||g}})},
