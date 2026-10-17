@@ -2,5 +2,5 @@
   "versao": "20261017-1",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Relatórios em formatação simples em todos os roteiros: preto e branco, sem faixas nem células coloridas, títulos em negrito — no Word (.docx e .doc) e em Imprimir/PDF."
+  "notas": "Relatórios em formatação simples e tom descritivo em todos os roteiros: preto e branco, sem faixas, títulos em negrito (Word .docx e .doc, Imprimir/PDF). Odontologia, Serviços assistenciais, Produtos, Alimentos e Estética deixam a tabela de requisitos e passam a escrever, por seção, uma frase por verificação (constatação ou negativa), com irregularidades e enquadramento numerados e o fundamento — como nos roteiros do site Medicamentos."
 }
