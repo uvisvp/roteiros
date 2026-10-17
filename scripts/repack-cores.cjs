@@ -10,6 +10,9 @@
    - rec--padrao-uvis.js: a cor do cabeçalho vem da casca (núcleo do roteiro).
    - Casca: os módulos com o ardósia fixo no código (drogaria, manipulação,
      distribuidora) recebem o tom do núcleo ao abrir (como no app Medicamentos).
+   - Tela inicial (pedido seguinte, “as cores da tela inicial mais vivas”): os
+     cards dos núcleos usam a mesma paleta, e a marca (botão Consultas, símbolo
+     do topo) passa a azul vivo, o mesmo do ícone (scripts/icones-cor.py).
    Idempotente. Uso: node scripts/repack-cores.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
@@ -34,9 +37,23 @@ const PALETA = {
 {
   const ini = html.indexOf('<style id="home-option-b-overrides">'); if (ini < 0) throw Error('overrides');
   const a = html.indexOf(':root{', ini), b = html.indexOf('}', a);
-  const novo = ':root{\n  --brand:#174C68;--brand-strong:#103C54;--brand-mid:#25535B;--brand-soft:#E8F0F4;\n'
+  const novo = ':root{\n  --brand:#126AE0;--brand-strong:#0D54B5;--brand-mid:#25535B;--brand-soft:#E6F0FC;\n'
     + Object.entries(PALETA).map(([k, [c, d, w]]) => `  --t-${k}:${c};--t-${k}-d:${d};--t-${k}-w:${w};`).join('\n') + '\n';
   html = html.slice(0, a) + novo + html.slice(b);
+}
+/* tela inicial: cards dos núcleos e botão Consultas sem os tons fixos acinzentados */
+{
+  const ini = html.indexOf('<style id="home-option-b-overrides">'), fim = html.indexOf('</style>', ini);
+  let css = html.slice(ini, fim);
+  const sub = (re, para, rot) => { if (!re.test(css)) throw Error('tela inicial: ' + rot); css = css.replace(re, para); };
+  const K = {Medicamentos: 'med', Alimentos: 'ali', 'Serviços': 'ser', Produtos: 'pro', 'Serviços assistenciais': 'ass', Odontologia: 'odo'};
+  for (const [n, k] of Object.entries(K)) {
+    sub(new RegExp(`(\\.nucleus-card\\[data-nucleo="${n}"\\]\\{background:)[^!]+(!important\\})`), `$1var(--t-${k})$2`, n);
+    sub(new RegExp(`(\\.nucleus-card\\[data-nucleo="${n}"\\] \\.nucleus-symbol\\{color:)[^!]+(!important\\})`), `$1var(--t-${k})$2`, n + ' símbolo');
+  }
+  sub(/(\.quick-action\.primary\{background:)[^!]+(!important;color:#fff!important;border-color:)[^!]+(!important)/, '$1var(--brand)$2var(--brand)$3', 'Consultas');
+  sub(/(\.quick-action\.primary:hover,\.quick-action\.primary:focus-visible\{background:)[^!]+(!important;border-color:)[^!]+(!important)/, '$1var(--brand-strong)$2var(--brand-strong)$3', 'Consultas hover');
+  html = html.slice(0, ini) + css + html.slice(fim);
 }
 const CSS = `
 /* cores vivas (17/10/2026): cor do núcleo nos destaques */
