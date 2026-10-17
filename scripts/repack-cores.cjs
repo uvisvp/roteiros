@@ -56,8 +56,22 @@ const CSS = `
 .pu-ativo .pu-rodape [data-pu-nav=prox]:not([disabled]) svg{color:#fff;stroke:#fff}
 `;
 bloco('rec--padrao-uvis.css', s => s.includes('cores vivas (17/10/2026)') ? s : s + CSS);
-bloco('rec--padrao-uvis.js', s => troca(s, "if(cfg.cor)document.documentElement.style.setProperty('--pu-cor',cfg.cor);",
-  "/* cor do núcleo vinda da casca (paleta única); sem casca, a do roteiro */var cor=cfg.cor;try{var ap=document.documentElement.getAttribute('data-uvis-app'),tm=ap&&parent!==window&&parent.__uvisTemaApp?parent.__uvisTemaApp(ap):null;if(tm&&tm[0]&&!/^#2f4655$/i.test(tm[0]))cor=tm[0]}catch(e){}if(cor)document.documentElement.style.setProperty('--pu-cor',cor);", 'padrão cor'));
+/* paleta antiga do padrão (rec--padrao.css, módulos com body.p-on, como Produtos): os mesmos tons vivos */
+const P_TONE = {medicamentos: 'med', alimentos: 'ali', servicos: 'ser', produtos: 'pro', 'servicos-assistenciais': 'ass', odontologia: 'odo'};
+bloco('rec--padrao.css', s => {
+  for (const [n, k] of Object.entries(P_TONE)) {
+    const re = new RegExp(`html\\[data-nucleo="${n}"\\]\\{--p-tone:#[0-9a-fA-F]{6};--p-tone-ink:#[0-9a-fA-F]{6}\\}`);
+    if (!re.test(s)) throw Error('paleta p-tone: ' + n);
+    s = s.replace(re, `html[data-nucleo="${n}"]{--p-tone:${PALETA[k][0]};--p-tone-ink:${PALETA[k][1]}}`);
+  }
+  return s;
+});
+/* cor do núcleo vinda da casca; o cinza padrão é escrito em partes porque __uvisTom
+   troca os tons ardósia escritos por extenso no código do módulo (e trocava o do teste) */
+const VELHA_COR = "/* cor do núcleo vinda da casca (paleta única); sem casca, a do roteiro */var cor=cfg.cor;try{var ap=document.documentElement.getAttribute('data-uvis-app'),tm=ap&&parent!==window&&parent.__uvisTemaApp?parent.__uvisTemaApp(ap):null;if(tm&&tm[0]&&!/^#2f4655$/i.test(tm[0]))cor=tm[0]}catch(e){}if(cor)document.documentElement.style.setProperty('--pu-cor',cor);";
+const NOVA_COR = "/* cor do núcleo vinda da casca (paleta única); sem casca, a do roteiro */var cor=cfg.cor;try{var ap=document.documentElement.getAttribute('data-uvis-app'),tm=ap&&parent!==window&&parent.__uvisTemaApp?parent.__uvisTemaApp(ap):null;if(tm&&tm[0]&&String(tm[0]).toLowerCase()!=='#'+'2f'+'4655')cor=tm[0]}catch(e){}if(cor)document.documentElement.style.setProperty('--pu-cor',cor);";
+bloco('rec--padrao-uvis.js', s => s.includes(VELHA_COR) ? s.replace(VELHA_COR, () => NOVA_COR) : troca(s, "if(cfg.cor)document.documentElement.style.setProperty('--pu-cor',cfg.cor);",
+  NOVA_COR, 'padrão cor'));
 html = troca(html, "    try { fonte = montar(app); if(window.__uvisCampoInjeta)",
   "    try { fonte = montar(app); if(nucleoAtual && window.__uvisTom) fonte = window.__uvisTom(fonte, css(VAR_NUCLEO[nucleoAtual], ''), css(VAR_NUCLEO[nucleoAtual] + '-d', '')); if(window.__uvisCampoInjeta)", 'tom ao abrir');
 html = troca(html, '<style id="home-option-b-overrides">',

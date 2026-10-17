@@ -459,7 +459,7 @@
 
  /* ---------- montagem ---------- */
  /* cor do núcleo vinda da casca (paleta única); sem casca, a cor do roteiro */
- function corNucleo(){ try { var t = parent !== window && parent.__uvisTemaApp ? parent.__uvisTemaApp(D.app) : null; if(t && t[0] && !/^#2f4655$/i.test(t[0])) return t[0]; } catch(e){} return D.cor; }
+ function corNucleo(){ try { var t = parent !== window && parent.__uvisTemaApp ? parent.__uvisTemaApp(D.app) : null; if(t && t[0] && String(t[0]).toLowerCase() !== '#' + '2f' + '4655') return t[0]; } catch(e){} return D.cor; }
  function inicia(){
   var raiz = document.createElement('div'); raiz.id = 'pu-raiz'; document.body.insertBefore(raiz, document.body.firstChild);
   UvisPadrao.monta({

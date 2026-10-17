@@ -19,6 +19,7 @@ const PASSOS=[
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],
+ ['checklist por ponto: odontologia, alimentos, produtos e assistenciais',['pontos.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]
 ];
