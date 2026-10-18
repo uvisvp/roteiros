@@ -22,6 +22,7 @@ const PASSOS=[
  ['checklist por ponto: odontologia, alimentos, produtos e assistenciais',['pontos.cjs']],
  ['Lei 13.725 em toda irregularidade e sem lista de normas (odontologia, alimentos, produtos, assistenciais)',['lei13725.cjs']],
  ['infração descrita pela constatação (produtos e assistenciais)',['constatacao.cjs']],
+ ['prévia do relatório na aba Relatório e cores da Central de Consultas',['relatorio-aba.cjs']],
  ['teclado não cobre o campo no celular',['teclado.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]

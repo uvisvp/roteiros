@@ -13,6 +13,7 @@
    - Tela inicial (pedido seguinte, “as cores da tela inicial mais vivas”): os
      cards dos núcleos usam a mesma paleta, e a marca (botão Consultas, símbolo
      do topo) passa a azul vivo, o mesmo do ícone (scripts/icones-cor.py).
+   - Central de Consultas (18/10/2026): o mesmo azul vivo da marca.
    Idempotente. Uso: node scripts/repack-cores.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
@@ -96,5 +97,12 @@ html = troca(html, '<style id="home-option-b-overrides">',
 window.__uvisTom=function(fonte,tom,tomD){if(!tom||!tomD)return fonte;return fonte.replace(/#(365B73|2F4655|304F63|2B485C|205777|263F50)\\b/gi,function(m,h){h=h.toUpperCase();return (h==='365B73'||h==='2F4655')?tom:tomD;});};
 </script>
 <style id="home-option-b-overrides">`, 'tom script');
+/* Central de Consultas (pedido de 18/10/2026, “as cores vividas também na tela de
+   consultas”): o azul vivo da marca, o mesmo do botão Consultas da tela inicial, no lugar
+   do ardósia — cabeçalho, modos de busca e botão Pesquisar */
+bloco('app--central-consultas', s => {
+  s = troca(s, '--tone:var(--ui-blue,#365B73); --tone-dark:var(--ui-navy,#304F63);', '--tone:#126AE0; --tone-dark:#0D54B5;', 'consultas: tom');
+  return troca(s, '</head>', '<style id="consultas-cores-vivas">html,html.uvis-layout{--ui-navy:#126AE0!important;--ui-blue:#126AE0!important}</style></head>', 'consultas: cabeçalho');
+});
 fs.writeFileSync(file, html);
 console.log('Cores aplicadas.');

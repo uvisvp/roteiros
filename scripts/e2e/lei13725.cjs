@@ -35,7 +35,7 @@ const PERGUNTAS=[['Serviços','eac-tipo3','EAC — Serviço Tipo III',{aso:['37:
 const RELATORIO={
  odontologia:()=>reportBlocks({}).map(b=>b.x||(b.rows?b.rows.map(r=>r.join(' | ')).join('\n'):b.head?b.head.join(' | '):'')).join('\n'),
  'servicos-alimentacao-roteiro':async()=>{UvisPadrao.vai({aba:'relatorio'});await new Promise(r=>setTimeout(r,600));const t=[...document.querySelectorAll('textarea')].map(x=>x.value).find(v=>/IRREGULARIDADES/.test(v));return t||document.body.innerText},
- 'produtos-correlatos':async()=>{UvisPadrao.vai({aba:'relatorio'});await new Promise(r=>setTimeout(r,600));const bt=[...document.querySelectorAll('button')].find(e=>e.offsetParent&&/Visualizar relatório/.test(e.textContent));if(bt)bt.click();await new Promise(r=>setTimeout(r,500));const ps=document.querySelector('#print-sheet');return ps?ps.innerText:document.body.innerText},
+ 'produtos-correlatos':async()=>{UvisPadrao.vai({aba:'relatorio'});await new Promise(r=>setTimeout(r,600));const ps=document.querySelector('.uvs-rel-previa');return ps?ps.innerText:document.body.innerText},
  'servicos-assistenciais':async()=>{UvisPadrao.vai({aba:'relatorio'});await new Promise(r=>setTimeout(r,600));const h=await buildReport();const d=document.createElement('div');d.innerHTML=typeof h==='string'?h:'';return d.innerText||d.textContent||document.body.innerText}
 };
 (async()=>{const b=await T.navegador();

@@ -71,7 +71,11 @@ function asRelatorio(el){
  const inf=current.inf.filter((_,i)=>mark('inf',i)==='SEL').length;
  el.innerHTML=`<div class="pu-bloco"><h3>Resumo da inspeção</h3><p>${esc(current.titulo)}${meta().name?' · '+esc(meta().name):''}</p>
   <div class="pu-campos"><div class="pu-campo">Respondidos<b>${f} de ${t}</b></div><div class="pu-campo">Não conformes<b>${nc}</b></div><div class="pu-campo">Infrações selecionadas<b>${inf}</b></div><div class="pu-campo">Fotos<b>${photoIndex.size}</b></div></div>
-  <div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-as-rel>Gerar Word / PDF</button><button type="button" class="pu-btn" data-as-pendente>Ir à próxima verificação pendente</button></div></div>`;
+  <div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-as-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-as-pdf>Gerar PDF</button><button type="button" class="pu-btn" data-as-pendente>Ir à próxima verificação pendente</button></div>
+  <p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div>
+  <div class="pu-bloco uvs-rel-previa"><h3>Prévia do relatório</h3><div data-as-previa>Montando a prévia…</div></div>`;
+ /* prévia na própria aba (18/10/2026): o mesmo documento do Word, montado sem abrir a janela */
+ buildReport(true).then(()=>{const p=el.querySelector('[data-as-previa]'),r=document.getElementById('reportBody');if(p&&r)p.innerHTML=r.innerHTML}).catch(()=>{});
 }
 function asBotoes(){const a=document.querySelector('.pu-header .pu-acoes');if(!a)return;['uvs-fotos','uvs-botao'].forEach(id=>{const b=document.getElementById(id);if(b&&b.parentNode!==a){b.classList.add('uvs-fluxo');a.appendChild(b)}})}
 async function asInicia(id){
@@ -105,6 +109,8 @@ async function asInicia(id){
   const lg=t.closest('[data-law][data-node]');if(lg){e.preventDefault();openLegal(lg.dataset.law,lg.dataset.node);return}
   const rp=t.closest('[data-remove-photo]');if(rp){await deletePhoto(rp.dataset.removePhoto);asRedesenha();return}
   const na=t.closest('[data-as-na]');if(na){const n=UvisPadrao.estado(),p=n.item.indexOf(':'),kind=n.item.slice(0,p),g=asGrupos(kind).find(y=>y.g===n.item.slice(p+1));(g?g.idx:[]).forEach(i=>{if(!mark(kind,i))saved[k(kind,i)]='NA'});persist();asRedesenha();return}
+  if(t.closest('[data-as-word]')){buildReport(true).then(()=>document.getElementById('downloadWord').click());return}
+  if(t.closest('[data-as-pdf]')){buildReport(true).then(()=>{document.body.classList.add('as-imprime');window.print();setTimeout(()=>document.body.classList.remove('as-imprime'),800)});return}
   if(t.closest('[data-as-rel]')){buildReport();showModal('reportModal');return}
   if(t.closest('[data-as-pendente]')){for(const s of asSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}alert('Todas as verificações foram respondidas.');return}
  });

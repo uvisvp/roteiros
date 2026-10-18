@@ -22,8 +22,8 @@ const FATO='produto Alfa, lote 123, vencido em 08/2026, exposto na prateleira 3'
   ok(await f.evaluate(id=>!!document.querySelector('textarea[data-infraction-note="'+id+'"]'),idV),'produtos: a infração marcada abre o campo Constatação');
   await f.evaluate(([id,t])=>{const a=document.querySelector('textarea[data-infraction-note="'+id+'"]');a.value=t;a.dispatchEvent(new Event('input',{bubbles:true}))},[idV,FATO]);
   await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(500);
-  await f.evaluate(()=>{const bt=[...document.querySelectorAll('button')].find(e=>e.offsetParent&&/Visualizar relatório/.test(e.textContent));if(bt)bt.click()});await p.waitForTimeout(500);
-  const t=await f.evaluate(()=>{const ps=document.querySelector('#print-sheet');return ps?ps.innerText:''});
+  /* a prévia do relatório fica na própria aba (18/10/2026) */
+  const t=await f.evaluate(()=>{const ps=document.querySelector('.uvs-rel-previa');return ps?ps.innerText:''});
   const enq=t.slice(t.indexOf('ENQUADRAMENTO'));
   ok(enq.includes('Produto Alfa, lote 123, vencido em 08/2026, exposto na prateleira 3. Dispositivos infringidos:'),'produtos: enquadramento descreve a infração pela constatação');
   ok(!/expor ou distribuir produto com prazo de validade/.test(enq),'produtos: sem o texto do catálogo quando há constatação');
