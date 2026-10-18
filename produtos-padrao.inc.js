@@ -119,9 +119,12 @@
     const sel = infractionCatalog().filter((i) => matchesInfraction(i.when) && state.selectedInfractions[i.id]).length;
     el.innerHTML = `<section class="panel active" id="panel-relatorio"><div class="pu-bloco"><h3>Resumo da inspeção</h3><p>${esc(profileSummary())}${state.meta.establishment ? " · " + esc(state.meta.establishment) : ""}</p>
       <div class="pu-campos"><div class="pu-campo">Respondidos<b>${c.answered} de ${c.total}</b></div><div class="pu-campo">Não conformidades<b>${c.nc}</b></div><div class="pu-campo">Não se aplica<b>${c.na}</b></div><div class="pu-campo">Infrações selecionadas<b>${sel}</b></div></div></div>
-      <div class="actions"><button type="button" class="btn primary" data-report>Visualizar relatório</button><button type="button" class="btn" data-pu-pendente>Ir ao próximo item pendente</button></div>
-      <p class="pu-q-ajuda">No relatório: “Baixar Word” gera o documento; as fotos saem à parte, no botão Fotos do cabeçalho.</p></section>`;
+      <div class="actions"><button type="button" class="btn primary" data-word-export>Baixar relatório em Word</button><button type="button" class="btn" data-report>Abrir para imprimir</button><button type="button" class="btn" data-pu-pendente>Ir ao próximo item pendente</button></div>
+      <p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></section>
+      <section class="pu-bloco uvs-rel-previa"><h3>Prévia do relatório</h3><div>${puPrevia()}</div></section>`;
   }
+  /* prévia na própria aba (18/10/2026): o corpo da folha do relatório, sem abrir a folha */
+  function puPrevia() { renderReport(); $("#print-sheet").classList.remove("active"); return $("#print-body").innerHTML; }
 
   function puRedesenhaItem() {
     const n = UvisPadrao.estado(); const c = document.getElementById("pu-conteudo");

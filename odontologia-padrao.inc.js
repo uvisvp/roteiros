@@ -138,8 +138,16 @@ function odoRelatorio(el){
  const c=counts(),n=nSel();
  el.innerHTML=`<div class="pu-bloco"><h3>Resumo da inspeção</h3><p>${esc(state.p.tip?LBL[state.p.tip]:'Tipologia não escolhida')}${state.meta.company?' · '+esc(state.meta.company):''}</p>
   <div class="pu-campos"><div class="pu-campo">Respondidos<b>${c.ans} de ${c.it.length}</b></div><div class="pu-campo">Não cumpre<b>${c.nao}</b></div><div class="pu-campo">Não avaliados<b>${c.pend}</b></div><div class="pu-campo">Enquadramentos selecionados<b>${n}</b></div></div>
-  <div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-odo-gen>Gerar relatório</button><button type="button" class="pu-btn" data-odo-pendente>Ir à próxima verificação pendente</button></div>
-  <p class="pu-q-ajuda">O relatório usa apenas o roteiro. A tabela de infrações é emitida na aba Infrações.</p></div>`;
+  <div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-odo-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-odo-pdf>Gerar PDF</button><button type="button" class="pu-btn" data-odo-copia>Copiar texto</button><button type="button" class="pu-btn" data-odo-gen>Opções do relatório</button><button type="button" class="pu-btn" data-odo-pendente>Ir à próxima verificação pendente</button></div>
+  <p class="pu-q-ajuda">O relatório usa apenas o roteiro. A tabela de infrações é emitida na aba Infrações. As fotos saem à parte, no botão Fotos do cabeçalho.</p></div>
+  <div class="pu-bloco uvs-rel-previa"><h3>Prévia do relatório</h3><div>${odoPreviaHtml(blocks())}</div></div>`;
+}
+/* prévia na própria aba (18/10/2026): os blocos do Word desenhados em HTML */
+function odoPreviaHtml(B){
+ const tab=b=>'<table><thead><tr>'+b.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+b.rows.map(r=>'<tr>'+r.map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+ return B.map(b=>b.t==='title'?'<p class="uvs-r-tit">'+esc(b.x)+'</p>':b.t==='sub'?'<p class="uvs-r-sub">'+esc(b.x)+'</p>':b.t==='h1'?'<h3>'+esc(b.x)+'</h3>':b.t==='h2'?'<h4>'+esc(b.x)+'</h4>'
+  :b.t==='kv'?'<p><b>'+esc(b.k)+':</b> '+esc(b.v)+'</p>':b.t==='num'?'<p>'+esc(b.n)+'. '+esc(b.x)+'</p>':b.t==='small'?'<p class="pu-q-ajuda">'+esc(b.x)+'</p>':b.t==='p'?'<p>'+esc(b.x)+'</p>'
+  :b.t==='table'?tab(b):b.t==='sign'?'<p class="pu-q-ajuda">Local e data; assinaturas da autoridade sanitária e do responsável pelo estabelecimento.</p>':'').join('');
 }
 function iniciaPadrao(){
  ['body > header.top','body > main','body > .dock'].forEach(q=>{const n=document.querySelector(q);if(n){n.hidden=true;n.setAttribute('data-pu-oculto','')}});
@@ -162,6 +170,8 @@ function iniciaPadrao(){
   },
   depois:n=>{if(n.aba==='roteiro')ui.tab='roteiro'}
  });
+ /* as opções do relatório mudam a prévia: ao fechar a janela, a aba é refeita */
+ byId('mGen')?.addEventListener('close',()=>{if(UvisPadrao.estado().aba==='relatorio')UvisPadrao.vai({aba:'relatorio'})});
  /* os ouvintes originais chamam renderRot() depois de cada mudança */
  const rotOriginal=renderRot;
  renderRot=function(){rotOriginal();odoRedesenha()};
@@ -176,6 +186,9 @@ function iniciaPadrao(){
    save();odoRedesenha();return}
   const fb=e.target.closest('[data-odo-foto]');if(fb){odoFoto(fb.dataset.odoFoto);return}
   const sf=e.target.closest('[data-odo-sem-foto]');if(sf){if(confirm('Remover a foto desta verificação?')){delete state.fotos[sf.dataset.odoSemFoto];save();odoFotoAberta=sf.dataset.odoSemFoto;odoRedesenha()}return}
+  if(e.target.closest('[data-odo-word]')){download();return}
+  if(e.target.closest('[data-odo-pdf]')){printPdf();return}
+  if(e.target.closest('[data-odo-copia]')){copyTxt();return}
   if(e.target.closest('[data-odo-gen]')){openGen();return}
   if(e.target.closest('[data-odo-pendente]')){for(const s of odoSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}toast('Todas as verificações foram respondidas.');return}
  });

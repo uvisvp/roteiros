@@ -1,6 +1,6 @@
 {
-  "versao": "20261017-5",
+  "versao": "20261018-1",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "Produtos e Serviços assistenciais: ao marcar uma infração, abre o campo “Constatação” (digite ou dite), como na Estética. Preenchido, o enquadramento do relatório, o Word e a prévia descrevem a infração pelo fato constatado, e não pelo texto genérico do catálogo; os dispositivos infringidos continuam os do catálogo, com a Lei Municipal nº 13.725/2004. Sem constatação, sai o texto do catálogo, sem o aviso “ATENÇÃO PRIORITÁRIA”."
+  "notas": "A aba Relatório de Odontologia, Produtos, Serviços assistenciais e Estética mostra a prévia do relatório na própria aba, como em Academia, Vacinação, EAC e Alimentos, com “Baixar relatório em Word” ali mesmo, sem abrir outra tela. Central de Consultas no azul vivo da marca."
 }
