@@ -6,7 +6,7 @@
    - Caixas “Para saber mais” nas perguntas certas, cada linha com “Fonte:”; nos
      Assistenciais, a norma muda com a modalidade.
    - Motor roteiro-simples: Academia sem “Prática de inspeção” e com outros métodos de
-     desinfecção; Vacinação com o alarme como recomendação (a RDC não exige); EAC com
+     desinfecção; Estética com as orientações dos itens (nota técnica suspensa, RDC 56/2009…); Vacinação com o alarme como recomendação (a RDC não exige); EAC com
      transporte, água reagente, valores críticos e notificação compulsória.
    Uso: node scripts/e2e/saber-mais-roteiros.cjs */
 const T=require('./lib.cjs');
@@ -22,14 +22,18 @@ const CASOS=[
  ['Serviços','academia-piscina','Academias e piscinas','',[],[]],
  ['Serviços','vacinacao','Vacinação','',[],[]],
  ['Serviços','eac-tipo2','EAC — Serviço Tipo II','',[],[]],
- ['Serviços','eac-tipo3','EAC — Serviço Tipo III','',[],[]]
+ ['Serviços','eac-tipo3','EAC — Serviço Tipo III','',[],[]],
+ ['Serviços','estetica','Estética e beleza','p_tipo=saude',[],[]],
+ ['Serviços','estetica','Estética e beleza','p_tipo=interesse',[],[]]
 ];
 /* texto que precisa estar (e não estar) nas orientações do roteiro-simples */
 const ORIENT={
  'academia-piscina':{tem:['Outros métodos de desinfecção','Cloro livre, total e combinado','Standard Methods','Lei Municipal nº 13.945/2005, art. 2º, IV e V'],nao:['Prática de inspeção']},
  vacinacao:{tem:['A RDC não exige alarme','Recomendação técnica do Manual de Rede de Frio','Excursão de temperatura','Manual de Normas e Procedimentos para Vacinação'],nao:['deve ter registrador eletrônico']},
  'eac-tipo2':{tem:['UN 3373','Valores críticos','Notificação compulsória'],nao:['CLSI GP40']},
- 'eac-tipo3':{tem:['UN 3373','CLSI GP40','Valores críticos','Notificação compulsória'],nao:[]}
+ 'eac-tipo3':{tem:['UN 3373','CLSI GP40','Valores críticos','Notificação compulsória'],nao:[]},
+ /* Estética (roteiro-simples): as orientações dos itens, com fonte */
+ estetica:{tem:['Nota Técnica nº 2/2024','RDC Anvisa nº 56/2009, art. 1º','Lei Federal nº 6.360/1976, art. 12','RDC Anvisa nº 222/2018, arts. 2º e 5º, § 1º'],nao:[]}
 };
 (async()=>{const b=await T.navegador();
  for(const [n,app,t,q,esperadas,proibidas] of CASOS){const {p,f,erros}=await T.abre(n,app,t,q,{browser:b});
@@ -57,16 +61,7 @@ const ORIENT={
   /* aba Infrações: a capitulação continua com a Lei 13.725; nenhuma caixa fora do Roteiro */
   await f.evaluate(()=>UvisPadrao.vai({aba:'infracoes'}));await p.waitForTimeout(500);
   const inf=await f.evaluate(()=>({lei:((document.querySelector('#pu-conteudo')||document.body).textContent.match(/13\.725/g)||[]).length,sm:document.querySelectorAll('#pu-conteudo [data-uvs-sm]').length,oculta:document.querySelectorAll('#pu-conteudo [data-uvs-lei-oculta],#pu-conteudo [data-uvs-lei-retirada]').length}));
-  if(['academia-piscina','vacinacao','eac-tipo2','eac-tipo3','odontologia'].includes(app))ok(inf.lei>0,rot+': aba Infrações com a Lei 13.725');
+  if(['academia-piscina','vacinacao','eac-tipo2','eac-tipo3','odontologia','estetica'].includes(app))ok(inf.lei>0,rot+': aba Infrações com a Lei 13.725');
   ok(!inf.sm&&!inf.oculta,rot+': aba Infrações sem “Para saber mais” e sem citação filtrada');
   if(erros.length)T.falha(rot+': erros de página: '+erros.join(' / '));await p.close()}
- /* Estética: caixas nos grupos do inventário */
- {const {p,f,erros}=await T.abre('Serviços','estetica','Estética','',{browser:b});
-  const grupos=await f.evaluate(()=>[...document.querySelectorAll('button')].filter(x=>x.offsetParent).map(x=>x.textContent.trim()).filter(x=>/^(Profissionais|Produtos, equipamentos|Procedimentos, biossegurança|Atividade proibida)/.test(x)));
-  const achou=new Set(),semFonte=[];
-  for(const g of grupos){await f.evaluate(g=>{const x=[...document.querySelectorAll('button')].find(y=>y.offsetParent&&y.textContent.trim()===g);x&&x.click()},g);await p.waitForTimeout(400);
-   (await f.evaluate(()=>[...document.querySelectorAll('[data-uvs-sm]')].map(d=>[d.dataset.uvsSm,[...d.querySelectorAll('p')].filter(x=>!x.classList.contains('uvs-sm-nota')).every(x=>/Fonte: \S/.test(x.textContent))]))).forEach(([id,fonte])=>{achou.add(id);if(!fonte)semFonte.push(id)})}
-  for(const x of ['es-prof','es-equip','es-proc','es-proib'])ok(achou.has(x),'estética: “Para saber mais” '+x);
-  ok(!semFonte.length,'estética: toda linha do “Para saber mais” tem fonte');
-  if(erros.length)T.falha('estética: erros de página: '+erros.join(' / '));await p.close()}
  await b.close()})();

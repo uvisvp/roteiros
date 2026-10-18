@@ -144,7 +144,8 @@ bloco('app--servicos-alimentacao-roteiro', s => {
 });
 
 /* ---------- Estética: inventário de infrações ---------- */
-bloco('app--estetica', s => troca(s,
+/* desde 18/10/2026 a Estética é roteiro-simples (scripts/repack-estetica.cjs): o ajuste do módulo antigo não se aplica */
+bloco('app--estetica', s => /window\.ROTEIRO=/.test(s) ? s : troca(s,
   `root.innerHTML='<h1>Infrações e legislação relacionada</h1><p>'+esc($("metaSaida").textContent)+'</p><table><thead><tr><th>Descrição da infração</th><th>Dispositivo legal infringido</th></tr></thead><tbody>'+$("corpoSaida").innerHTML+'</tbody></table>';`,
   `/* descritivo: infrações numeradas por bloco, com a constatação e o dispositivo infringido */const xs=TODAS.filter(t=>escolhidas.has(t.id)),pt=v=>String(v).trim().replace(/\\.?$/,'.');let last='',n=0,h='<h1>Relatório de inspeção sanitária — serviços de estética</h1><p>'+esc($("metaSaida").textContent)+'</p><h2>Infrações constatadas</h2>';xs.forEach(t=>{const k=t.bloco+' — '+t.tema;if(k!==last){h+='<h3>'+esc(k)+'</h3>';last=k}const c=String(notas[t.id]||'').trim();h+='<p>'+(++n)+'. '+esc(pt(t.i)+(c?' Constatação: '+pt(c.charAt(0).toUpperCase()+c.slice(1)):'')+' Dispositivo legal infringido: '+pt(t.l))+'</p>'});if(!n)h+='<p>Nenhuma infração selecionada.</p>';root.innerHTML=h;`, 'estética'));
 

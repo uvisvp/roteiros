@@ -72,7 +72,9 @@ bloco('app--servicos-assistenciais', s => {
 });
 
 /* ---------- Estética ---------- */
+/* desde 18/10/2026 a Estética é roteiro-simples (scripts/repack-estetica.cjs): o ajuste do módulo antigo não se aplica */
 bloco('app--estetica', s => {
+  if (/window\.ROTEIRO=/.test(s)) return s;
   s = comCss(s);
   s = troca(s, "function htmlInfra(t){",
     "let notas={};try{notas=JSON.parse(localStorage.getItem('estetica-constatacoes-v1')||'{}')||{}}catch(e){}\n"

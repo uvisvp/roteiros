@@ -25,7 +25,7 @@
  'use strict';
  var D = window.ROTEIRO, STORE = D.store;
  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
- function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, concl: '', pt: {}, auto: {}}; }
+ function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, infNota: {}, concl: '', pt: {}, auto: {}}; }
  function carrega(){ try { var x = JSON.parse(localStorage.getItem(STORE) || 'null'); if(x && x.v === 1) return Object.assign(novo(), x); } catch(e){} return novo(); }
  var st = carrega();
  /* campo de equipamentos que substituiu um texto livre (c.legado): o texto antigo vira o primeiro equipamento */
@@ -38,7 +38,18 @@
  var PERG = {}, ONDE = {}, ORDEM = [];
  D.secoes.forEach(function(s, si){ s.itens.forEach(function(it, ii){ (it.perguntas || []).forEach(function(q, qi){ PERG[q.id] = q; ONDE[q.id] = {s: s, it: it, n: (si + 1) + '.' + (ii + 1) + '.' + (qi + 1)}; ORDEM.push(q.id); }); }); });
  var INF = {}; D.infracoes.forEach(function(i){ INF[i.id] = i; });
- function visivel(q){ var c = q.se; if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ function cond(c){ if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ /* it.se: o item inteiro depende do perfil (sai da navegação e do relatório); i.se: a infração idem */
+ function itemVisivel(it){ return cond(it.se); }
+ function infVisivel(i){ return cond(i.se); }
+ function visivel(q){ var o = ONDE[q.id]; return (!o || itemVisivel(o.it)) && cond(q.se); }
+ /* D.filtroPerfil: o perfil filtra o roteiro — itens sem verificação visível saem da navegação e a numeração
+    corre só entre seções, itens e perguntas visíveis (sem saltos) */
+ function itemMostra(it){ return itemVisivel(it) && (!D.filtroPerfil || perguntasDe(it).length || (it.campos || []).length || !!it.consulta); }
+ function numero(id){ var o = ONDE[id]; if(!D.filtroPerfil) return o.n; var si = 0, ii = 0, qi = 0;
+  D.secoes.some(function(s){ var its = s.itens.filter(itemMostra); if(!its.length) return false; si++;
+   if(s !== o.s) return false; ii = its.indexOf(o.it) + 1; qi = perguntasDe(o.it).indexOf(PERG[id]) + 1; return true; });
+  return si + '.' + ii + '.' + qi; }
  function perguntasDe(it){ return (it.perguntas || []).filter(visivel); }
  function campoPreenchido(c){ var v = st.meta[c.id]; return Array.isArray(v) ? v.some(function(x){ return x && typeof x === 'object' ? eqTem(x) : true; }) : !!String(v || '').trim(); }
  function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
@@ -61,7 +72,7 @@
    idx[k].nomes.push(nome); }); }); }); return out; }
  function ambFrase(x){ return x.outra ? x.nomes[0] + ': ' + minus(x.texto) + '.' : x.texto + ': ' + lista(x.nomes.map(minus)) + '.'; }
  function minus(t){ t = String(t || ''); return /^[A-ZÀ-Ý]{2}/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
- function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); });
+ function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(numero(id)); }); });
   ambIrr().forEach(function(x){ x.inf.forEach(function(i){ var l = s[i] = s[i] || []; x.nomes.forEach(function(n){ if(l.indexOf(n) < 0) l.push(n); }); }); }); return s; }
  function ambNome(a, i){ return String(a.nome || '').trim() || 'ambiente ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
@@ -126,6 +137,8 @@
     processo pelo índice indices/processos), preenchimento dos dados do registro e
     edição/digitação livre. Sai no relatório em tabela, sob o título do item. */
  var CAMPO = {}; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ CAMPO[c.id] = c; }); }); });
+ /* ?campo=valor na abertura (window.__QS, da casca): preenche campo vazio do perfil — links diretos e testes */
+ try { String(window.__QS || '').replace(/^\?/, '').split('&').forEach(function(kv){ var p = kv.split('='), k = decodeURIComponent(p[0] || ''), v = decodeURIComponent(p[1] || ''); if(k && v && CAMPO[k] && CAMPO[k].tipo === 'select' && !st.meta[k]) st.meta[k] = v; }); } catch(e){}
  function vencMA(v){ var m = /^(\d{2})(\d{4})$/.exec(String(v || '')); return m ? m[1] + '/' + m[2] : String(v || ''); }
  var PERFIS = {
   refrigeracao: {item: 'Equipamento', mais: '+ Adicionar equipamento', base: 'dispositivos',
@@ -141,6 +154,13 @@
    confere: function(x){ return /TESTE|R[ÁA]PID|IMUNO|REAGENTE|TIRA|GLIC|COLESTER|HEMOGLOB|LIP[ÍI]D|TRIGLI|ANALISADOR|MONITOR|CASSETE|KIT|SARS|COVID|HIV|HEPATITE|DENGUE|S[ÍI]FILIS|INFLUENZA|ANT[ÍI]GENO|ANTICORPO|IG[GM]|PCR|LACTATO|CETONA|[ÁA]CIDO [ÚU]RICO|BETA ?HCG|GRAVIDEZ|CONTROLE|CALIBRADOR/i.test(x.produto || ''); }, estranho: 'o produto deste registro não parece ser teste ou reagente para diagnóstico in vitro',
    head: ['Produto', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Lote, validade e observações'],
    linha: function(e){ return [[e.tipo, e.nome, rot('Exame: ', e.exame)], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Lote: ', e.lote), rot('Validade: ', e.validade), e.obs]]; }},
+  /* estética: equipamentos (laser, luz pulsada, radiofrequência…) — dispositivos médicos */
+  estetica: {item: 'Equipamento', mais: '+ Adicionar equipamento', base: 'dispositivos',
+   campos: [['tipo', 'Tipo', 'select'], ['nome', 'Nome comercial / produto'], ['modelo', 'Marca e modelo'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'],
+    ['fabricante', 'Fabricante (país)'], ['detentor', 'Detentor do registro'], ['classe', 'Classe de risco'], ['serie', 'Nº de série / patrimônio'], ['manut', 'Última manutenção'], ['obs', 'Observações', 'textarea']],
+   confere: function(){ return true; }, estranho: '',
+   head: ['Equipamento', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Série, manutenção e observações'],
+   linha: function(e){ return [[e.tipo, e.nome, e.modelo], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Série / patrimônio: ', e.serie), rot('Última manutenção: ', e.manut), e.obs]]; }},
   vacina: {item: 'Vacina', mais: '+ Adicionar vacina', base: 'medicamentos',
    campos: [['nome', 'Vacina (nome comercial)'], ['principio', 'Princípio ativo'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'], ['detentor', 'Detentor do registro'],
     ['situacao', 'Situação do registro'], ['vencimento', 'Vencimento do registro'], ['lote', 'Lote'], ['validade', 'Validade do lote'], ['obs', 'Observações', 'textarea']],
@@ -264,7 +284,7 @@
  function perguntaHtml(q){ var r = st.r[q.id] || '', f = st.fotos[q.id], o = ONDE[q.id];
   var simnao = D.respostas === 'simnao', vs = q.sim === 'nc' ? 'nc' : 'c', vn = vs === 'c' ? 'nc' : 'c', temNa = q.na || D.naSempre;
   var bt = (simnao ? [[vs, 'Sim', vs === 'c' ? 'ok' : 'nao'], [vn, 'Não', vn === 'c' ? 'ok' : 'nao']] : [['c', 'Cumpre', 'ok'], ['nc', 'Não cumpre', 'nao']]).concat(temNa ? [['na', 'Não se aplica', 'na']] : []);
-  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(o.n) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
+  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(numero(q.id)) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
    + '<div class="pu-resp" role="group" aria-label="Resultado"' + (bt.length === 2 ? ' style="grid-template-columns:repeat(2,minmax(0,1fr))"' : '') + '>' + bt.map(function(b){ return '<button type="button" data-rs-r="' + esc(q.id) + '|' + b[0] + '" data-v="' + b[2] + '" aria-pressed="' + (r === b[0]) + '">' + b[1] + '</button>'; }).join('') + '</div>'
    + pontosHtml(q)
    + (r === 'nc' && q.pontos && !pontosNC(q).length ? '<p class="pu-q-ajuda rs-pt-aviso">Marque no checklist o ponto que não atende: é a frase dele que vai ao relatório. Sem isso, sai a frase geral.</p>' : '')
@@ -361,8 +381,8 @@
   B.push({t: 'h1', x: (++sec) + ' IRREGULARIDADES OBSERVADAS'});
   if(irr.length) irr.forEach(function(q, i){ var f = fundamento(comLei(q.r)); B.push({t: 'num', n: i + 1, x: q.x + (f ? ' Fundamento: ' + f + '.' : '')}); });
   else B.push({t: 'p', x: 'Não foram registradas irregularidades nesta inspeção.'});
-  var sel = D.infracoes.filter(function(i){ return st.inf[i.id]; });
-  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), i.texto, fundamento(comLei(i.r))]; })}); }
+  var sel = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); });
+  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), descInf(i), fundInf(i)]; })}); }
   B.push({t: 'h1', x: (++sec) + ' CONCLUSÃO'}, {t: 'p', x: String(st.concl || '').trim() || R.conclusao});
   if(st.meta.equipe) B.push({t: 'kv', k: 'Equipe de inspeção', v: st.meta.equipe});
   B.push({t: 'sign'});
@@ -422,15 +442,21 @@
  function baixa(blob, nome){ var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 2000); }
 
  /* ---------- abas Infrações e Relatório ---------- */
- function abaInfracoes(el){ var sug = sugeridas(), grupos = [];
-  D.infracoes.forEach(function(i){ if(grupos.indexOf(i.grupo) < 0) grupos.push(i.grupo); });
+ /* D.constatacao: a infração marcada abre o campo “Constatação”; preenchido, ele descreve a infração no enquadramento */
+ function notaInf(i){ return D.constatacao ? String((st.infNota || {})[i.id] || '').trim() : ''; }
+ /* i.fund: capitulação já redigida no catálogo (“art. 63 da Lei 13.725/2004 c/c art. 39 da RDC 63/2011”) */
+ function fundInf(i){ return i.fund || fundamento(comLei(i.r)); }
+ function descInf(i){ var n = notaInf(i); return n ? n.charAt(0).toUpperCase() + n.slice(1) + (/[.!?]$/.test(n) ? '' : '.') : i.texto; }
+ function abaInfracoes(el){ var sug = sugeridas(), grupos = [], INFS = D.infracoes.filter(infVisivel);
+  INFS.forEach(function(i){ if(grupos.indexOf(i.grupo) < 0) grupos.push(i.grupo); });
   var nsug = Object.keys(sug).filter(function(k){ return !st.inf[k]; }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Enquadramento das infrações</h3><p>Marque as infrações que serão enquadradas. As sugeridas vêm dos itens marcados como “Não cumpre”. O enquadramento sai no relatório, em tabela própria.</p>'
    + (nsug ? '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-sugeridas>Marcar as ' + nsug + ' sugeridas</button></div>' : '') + '</div>'
-   + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + D.infracoes.filter(function(i){ return i.grupo === g; }).map(function(i){
-     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundamento(comLei(i.r))) + '</small>'
-      + (sug[i.id] ? '<em>Sugerida — itens ' + esc(sug[i.id].join(', ')) + ' não cumpridos</em>' : '') + '</span></label>'; }).join('') + '</div>'; }).join(''); }
- function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id]; }).length;
+   + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + INFS.filter(function(i){ return i.grupo === g; }).map(function(i){
+     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundInf(i)) + '</small>'
+      + (sug[i.id] ? '<em>Sugerida — itens ' + esc(sug[i.id].join(', ')) + ' não cumpridos</em>' : '') + '</span></label>'
+      + (D.constatacao && st.inf[i.id] ? '<label class="pu-campo rs-campo rs-largo rs-inf-nota"><span>Constatação <small>(o fato encontrado; descreve a infração no relatório)</small></span><textarea data-rs-inf-nota="' + esc(i.id) + '" rows="2" placeholder="Ex.: produto X, lote Y, vencido em 08/2026, na sala 2.">' + esc((st.infNota || {})[i.id] || '') + '</textarea></label>' : ''); }).join('') + '</div>'; }).join(''); }
+ function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Resumo</h3><div class="pu-campos"><div class="pu-campo">Respondidas<b>' + resp + ' de ' + tot.length + '</b></div><div class="pu-campo">' + (D.respostas === 'simnao' ? 'Irregulares' : 'Não cumpre') + '<b>' + nNC() + '</b></div><div class="pu-campo">Pendentes<b>' + (tot.length - resp) + '</b></div><div class="pu-campo">Infrações enquadradas<b>' + ninf + '</b></div></div>'
    + '<label class="pu-campo rs-largo"><span>Conclusão (se vazio, sai o texto padrão)</span><textarea data-rs-concl rows="4" placeholder="' + esc(D.relatorio.conclusao) + '">' + esc(st.concl || '') + '</textarea></label>'
    + '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-rs-copia>Copiar texto</button>' + (resp < tot.length ? '<button type="button" class="pu-btn" data-rs-pendente>Ir à próxima pendente</button>' : '') + '</div>'
@@ -445,7 +471,7 @@
    r.readAsDataURL(f); };
   inp.click(); }
  window.__uvsFotosMeta = function(){ return {estab: st.meta.fantasia || st.meta.razao || '', data: st.meta.data || ''}; };
- window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + o.n + ' ' + PERG[id].t}; });
+ window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + numero(id) + ' ' + PERG[id].t}; });
   Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i)}); }); }); return out; };
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
@@ -481,6 +507,7 @@
  document.addEventListener('input', function(e){ var t = e.target;
   if(t.matches('[data-rs-meta]')){ if(t.hasAttribute('data-rs-cnpj')){ var pos = t.value.length; t.value = mascaraCnpj(t.value); } st.meta[t.dataset.rsMeta] = t.value; salva(); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-eq]')){ var qe = t.dataset.rsEq.split('|'), de = {}; de[qe[2]] = t.value; eqSet(qe[0] + '|' + qe[1], de); UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-inf-nota]')){ st.infNota = st.infNota || {}; st.infNota[t.dataset.rsInfNota] = t.value; salva(); return; }
   if(t.matches('[data-rs-sit]')){ st.sit[t.dataset.rsSit] = t.value; salva(); var pv = t.closest('.rs-q').querySelector('.rs-previa p'); if(pv) pv.textContent = frase(PERG[t.dataset.rsSit]); return; }
   if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value);
    if(qa[2] === 'nome'){ var sb = t.closest('.rs-amb'), bb = sb && sb.querySelector('summary b'); if(bb) bb.textContent = t.value.trim() || 'ambiente ' + (+qa[1] + 1); }
@@ -492,7 +519,7 @@
   if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck)) redesenha(); else UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds); UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-meta]')){ st.meta[t.dataset.rsMeta] = t.value; naAuto(); salva(); redesenha(); return; }
-  if(t.matches('[data-rs-inf]')){ st.inf[t.dataset.rsInf] = t.checked; if(!t.checked) delete st.inf[t.dataset.rsInf]; salva(); UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-inf]')){ st.inf[t.dataset.rsInf] = t.checked; if(!t.checked) delete st.inf[t.dataset.rsInf]; salva(); if(D.constatacao) abaInfracoes(document.getElementById('pu-aba')); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-concl]')){ var r = document.querySelector('.rs-relatorio'); if(r) abaRelatorio(document.getElementById('pu-aba')); } });
 
  /* ---------- apagar dados da inspeção (tela inicial do roteiro) ----------
@@ -511,10 +538,10 @@
   UvisPadrao.monta({
    raiz: raiz, titulo: D.titulo, cor: corNucleo(),
    abas: [{id: 'roteiro', rotulo: 'Roteiro'}, {id: 'infracoes', rotulo: 'Infrações'}, {id: 'relatorio', rotulo: 'Relatório'}],
-   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.map(function(it){ var p = progressoItem(it), na = naItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: na ? 'Não se aplica a este estabelecimento (perfil).' : it.descricao, feitos: p.feitos, total: p.total}; })}; }); },
+   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.filter(itemMostra).map(function(it){ var p = progressoItem(it), na = naItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: na ? 'Não se aplica a este estabelecimento (perfil).' : it.descricao, feitos: p.feitos, total: p.total}; })}; }).filter(function(s){ return s.itens.length; }); },
    item: function(s, it, el){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0], I = S.itens.filter(function(x){ return x.id === it.id; })[0]; desenhaItem(S, I, el); },
    aba: function(id, el){ if(id === 'infracoes') abaInfracoes(el); else if(id === 'relatorio') abaRelatorio(el); },
-   contagem: function(id){ return id === 'roteiro' ? nNC() : id === 'infracoes' ? D.infracoes.filter(function(i){ return st.inf[i.id]; }).length : 0; },
+   contagem: function(id){ return id === 'roteiro' ? nNC() : id === 'infracoes' ? D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); }).length : 0; },
    depois: function(nav){ if(nav.aba !== 'roteiro' || nav.secao) return; var g = document.querySelector('.pu-secoes-grade'); if(!g || g.querySelector('[data-rs-apagar]')) return;
     var z = document.createElement('div'); z.className = 'rs-apagar'; z.innerHTML = '<div class="rs-apagar-txt"><strong>Apagar dados da inspeção</strong><span>Remove todas as respostas, anotações, fotos e dados desta inspeção salvos neste aparelho. Não há como desfazer; para guardar, use antes o botão Salvas.</span></div><button type="button" class="rs-apagar-btn" data-rs-apagar><span aria-hidden="true">🗑</span> Apagar dados</button>'; g.appendChild(z); },
    limpar: function(s, it){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0];

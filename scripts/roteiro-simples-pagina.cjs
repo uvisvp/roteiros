@@ -21,6 +21,9 @@ function valida(D, LEGAL) {
   const rep = ids.filter((x, i) => ids.indexOf(x) !== i);
   if (rep.length) throw Error(`${D.app}: perguntas com id repetido: ${rep.join(', ')}`);
   const campos = new Set(D.secoes.flatMap(s => s.itens.flatMap(i => (i.campos || []).map(c => c.id))));
+  /* condições de perfil do item (it.se) e da infração (i.se) */
+  for (const s of D.secoes) for (const i of s.itens) if (i.se && !campos.has(i.se.campo)) throw Error(`${D.app}: condição com campo inexistente no item ${i.id}`);
+  for (const x of D.infracoes) if (x.se && !campos.has(x.se.campo)) throw Error(`${D.app}: condição com campo inexistente na infração ${x.id}`);
   for (const s of D.secoes) for (const i of s.itens) for (const q of i.perguntas || []) {
     for (const f of q.inf || []) if (!D.infracoes.some(x => x.id === f)) throw Error(`${D.app}: infração inexistente ${f} em ${q.id}`);
     for (const c of [q.naSe, q.se]) if (c && !campos.has(c.campo)) throw Error(`${D.app}: condição com campo inexistente em ${q.id}`);
@@ -33,7 +36,8 @@ function valida(D, LEGAL) {
       [c.lista || []].concat(Object.values(c.tipos || {}).map(t => t.lista || [])).forEach(l => l.forEach(x => [].concat(x[3] || []).forEach(f => usadas.add(f)))); }
   }
   for (const f of usadas) if (!D.infracoes.some(x => x.id === f)) throw Error(`${D.app}: infração inexistente ${f}`);
-  for (const x of D.infracoes) if (!usadas.has(x.id)) throw Error(`${D.app}: infração sem pergunta nem irregularidade de ambiente: ${x.id}`);
+  /* x.avulsa: infração do catálogo sem pergunta correspondente (marcada direto na aba Infrações) */
+  for (const x of D.infracoes) if (!usadas.has(x.id) && !x.avulsa) throw Error(`${D.app}: infração sem pergunta nem irregularidade de ambiente: ${x.id}`);
   return legal;
 }
 function pagina(D, LEGAL, cor, blocks) {

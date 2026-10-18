@@ -1,11 +1,11 @@
 /* “Para saber mais” nos roteiros de motor próprio (pedido de 18/10/2026): Odontologia,
-   Produtos, Alimentos, Serviços assistenciais e Estética. Mesma ideia da “Orientação
+   Produtos, Alimentos e Serviços assistenciais (a Estética passou ao motor roteiro-simples e
+   leva as orientações nos próprios itens, em estetica/roteiro.cjs). Mesma ideia da “Orientação
    técnica” do motor roteiro-simples: conceito e modo de verificar, cada linha com a sua
    fonte (norma ou documento técnico publicado). Não é exigência por si, não capitula
    infração e não entra no relatório.
    Cada caixa vai na primeira pergunta do item aberto cujo texto casa com `re` (componente
-   padrão, .pu-q na aba Roteiro); na Estética, no grupo do inventário cujo título casa com
-   `grupo`. Na Odontologia, substitui o antigo odontologia-orientacoes.js (retirado do módulo
+   padrão, .pu-q na aba Roteiro). Na Odontologia, substitui o antigo odontologia-orientacoes.js (retirado do módulo
    por scripts/repack-odontologia.cjs). */
 (function(){
  if(window.__uvsSaberMais) return; window.__uvsSaberMais = true;
@@ -91,19 +91,6 @@
     ['São proibidos castigos físicos, psíquicos ou morais.', 'RDC Anvisa nº 29/2011, art. 20, IV'],
     ['O serviço define critérios para alta terapêutica, desistência (alta a pedido), desligamento (administrativo ou por mandado judicial) e evasão.', 'RDC Anvisa nº 29/2011, art. 21'],
     ['A Anvisa publicou esclarecimentos atuais sobre voluntariedade, escopo e aplicação da RDC 29/2011.', 'Nota Técnica Anvisa nº 3/2024']]}
-  ],
-  estetica: [
-   {id: 'es-prof', grupo: /Profissionais e limites de atuação/, tit: 'quem pode fazer o quê', l: [
-    ['A Lei 13.643/2018 define a formação e as atribuições do técnico em estética e do esteticista e cosmetólogo, com produtos cosméticos e equipamentos regularizados. Procedimento invasivo e aplicação de injetáveis ficam fora dessas atribuições e dependem de profissional de saúde habilitado pelo respectivo conselho.', 'Lei Federal nº 13.643/2018, arts. 3º a 6º'],
-    ['Peça o comprovante de formação de quem executa cada procedimento e, se for profissional de saúde, o registro no conselho.', 'Lei Federal nº 13.643/2018, arts. 3º a 6º']]},
-   {id: 'es-equip', grupo: /Produtos, equipamentos e materiais/, tit: 'equipamentos estéticos', l: [
-    ['Equipamentos que emitem energia (laser, luz intensa pulsada, radiofrequência, ultrassom, criolipólise) são dispositivos médicos e precisam estar regularizados na Anvisa: confira o número na etiqueta ou no manual e consulte na Central de Consultas.', 'Lei Federal nº 6.360/1976, art. 12; RDC Anvisa nº 751/2022'],
-    ['Confira também o manual em português, os registros de manutenção e se o uso observado corresponde à finalidade indicada pelo fabricante.', 'RDC Anvisa nº 751/2022']]},
-   {id: 'es-proc', grupo: /Procedimentos, biossegurança e processamento/, tit: 'biossegurança e esterilização', l: [
-    ['Agulhas, lancetas e lâminas são de uso único e vão para recipiente rígido, identificado, com tampa e resistente a punctura, ruptura e vazamento.', 'RDC Anvisa nº 222/2018, art. 86; ABNT NBR 13853'],
-    ['A RDC 15/2012 (processamento de produtos para saúde) vale para as unidades do seu art. 3º; o parágrafo único exclui consultórios individualizados não vinculados a serviços de saúde. Fora desse âmbito, valem a RDC 63/2011 e as instruções do fabricante do instrumento.', 'RDC Anvisa nº 15/2012, art. 3º e parágrafo único; RDC Anvisa nº 63/2011, art. 57']]},
-   {id: 'es-proib', grupo: /Atividade proibida/, tit: 'bronzeamento artificial', l: [
-    ['São proibidos o uso, a importação, o recebimento em doação, o aluguel e a comercialização de equipamentos de bronzeamento artificial por radiação ultravioleta com finalidade estética.', 'RDC Anvisa nº 56/2009, art. 1º']]}
   ]
  };
  var SERV = ((window.__QS || location.search || '').match(/servico=([a-z]+)/) || [])[1] || '';
@@ -117,11 +104,6 @@
  var CSS = '.uvs-sm{margin:8px 0 0}.uvs-sm p{margin:0 0 8px;font-size:.86rem;line-height:1.5}.uvs-sm-f{color:#55636b}.uvs-sm-nota{font-size:.78rem!important;color:#6b7780;font-style:italic}';
  function poe(){
   if(!document.getElementById('uvs-sm-css')){ var st = document.createElement('style'); st.id = 'uvs-sm-css'; st.textContent = CSS; document.head.appendChild(st); }
-  if(window.__uvsApp === 'estetica'){
-   document.querySelectorAll('details.uvis-inventory').forEach(function(d){ var s = d.querySelector('summary'); if(!s) return;
-    R.forEach(function(r){ if(r.grupo.test(s.textContent) && !d.querySelector('[data-uvs-sm="' + r.id + '"]')) s.insertAdjacentHTML('afterend', caixa(r)); }); });
-   return;
-  }
   try { if(!(window.UvisPadrao && UvisPadrao.estado && UvisPadrao.estado().aba === 'roteiro')) return; } catch(e){ return; }
   var qs = document.querySelectorAll('#pu-conteudo .pu-q');
   R.forEach(function(r){

@@ -103,7 +103,8 @@ bloco('app--alimentos-integrado', s => {
 });
 
 /* ---------- Estética: a constatação descreve a infração ---------- */
-bloco('app--estetica', s => troca(s,
+/* desde 18/10/2026 a Estética é roteiro-simples (scripts/repack-estetica.cjs): o ajuste do módulo antigo não se aplica */
+bloco('app--estetica', s => /window\.ROTEIRO=/.test(s) ? s : troca(s,
   "h+='<p>'+(++n)+'. '+esc(pt(t.i)+(c?' Constatação: '+pt(c.charAt(0).toUpperCase()+c.slice(1)):'')+' Dispositivo legal infringido: '+pt(t.l))+'</p>'",
   "/* com a constatação, ela descreve a infração (o fato encontrado, sem o “ou” do catálogo) */h+='<p>'+(++n)+'. '+esc((c?pt(c.charAt(0).toUpperCase()+c.slice(1)):pt(t.i))+' Dispositivo legal infringido: '+pt(t.l))+'</p>'", 'estética constatação'));
 

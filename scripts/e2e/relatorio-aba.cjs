@@ -13,7 +13,9 @@ const CASOS=[
  ['Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento','','#sa-rel',null],
  ['Serviços','academia-piscina','Academias e piscinas','','.rs-relatorio',null],
  ['Serviços','vacinacao','Vacinação','','.rs-relatorio',null],
- ['Serviços','eac-tipo2','EAC — Serviço Tipo II','','.rs-relatorio',null]
+ ['Serviços','eac-tipo2','EAC — Serviço Tipo II','','.rs-relatorio',null],
+ /* Estética: roteiro-simples desde 18/10/2026 (perfil de serviço de saúde pela query) */
+ ['Serviços','estetica','Estética e beleza','p_tipo=saude','.rs-relatorio','[data-rs-word]']
 ];
 const aberto=()=>!!document.querySelector('#print-sheet.active,dialog[open],#reportModal.open,#reportModal[aria-hidden="false"],#saida.ativo');
 (async()=>{const b=await T.navegador();
@@ -29,23 +31,11 @@ const aberto=()=>!!document.querySelector('#print-sheet.active,dialog[open],#rep
   ok(!await f.evaluate(aberto),app+': nenhuma janela ou folha aberta por cima');
   if(word){ok(await f.evaluate(w=>!!document.querySelector(w),word),app+': botão de Word na aba');
    const dl=p.waitForEvent('download',{timeout:20000}).catch(()=>null);
-   await f.evaluate(w=>document.querySelector(w).click(),word);
+   await f.evaluate(w=>document.querySelector(w).click(),word);await p.waitForTimeout(800);
+   await f.evaluate(()=>{const x=[...document.querySelectorAll('button')].find(b=>/Emitir mesmo assim/.test(b.textContent));if(x)x.click()});
    const d=await dl;ok(!!d&&/\.docx$/i.test(d.suggestedFilename()),app+': Word baixado da aba'+(d?' ('+d.suggestedFilename()+')':''));
    await p.waitForTimeout(300);ok(!await f.evaluate(aberto),app+': baixar o Word não abre outra tela')}
   if(erros.length)T.falha(app+': erros de página: '+erros.join(' / '));await p.close()}
- /* Estética: inventário próprio; a aba Relatório mostra o documento do Word */
- {const {p,f,erros}=await T.abre('Serviços','estetica','Estética','',{browser:b});
-  await f.evaluate(()=>{const g=[...document.querySelectorAll('button')].find(x=>/Licenciamento e regularidade/.test(x.textContent));g&&g.click()});await p.waitForTimeout(400);
-  await f.evaluate(()=>{const i=document.querySelector('button.infra');i&&i.click()});await p.waitForTimeout(300);
-  await f.evaluate(()=>{const r=[...document.querySelectorAll('button')].find(x=>x.offsetParent&&/^Relatório/.test(x.textContent.trim()));r&&r.click()});await p.waitForTimeout(700);
-  const tx=await f.evaluate(()=>{const e=document.querySelector('.folha-previa');return e?e.innerText:''});
-  ok(/Infrações constatadas/.test(tx)&&/Dispositivo legal infringido/.test(tx),'estética: prévia do relatório na aba Relatório');
-  ok(!await f.evaluate(aberto),'estética: nenhuma folha aberta por cima');
-  const dl=p.waitForEvent('download',{timeout:20000}).catch(()=>null);
-  await f.evaluate(()=>document.querySelector('.acoes-rel [data-acao="word"]').click());
-  const d=await dl;ok(!!d&&/\.docx$/i.test(d.suggestedFilename()),'estética: Word baixado da aba'+(d?' ('+d.suggestedFilename()+')':''));
-  await p.waitForTimeout(300);ok(!await f.evaluate(aberto),'estética: baixar o Word não abre a folha');
-  if(erros.length)T.falha('estética: erros de página: '+erros.join(' / '));await p.close()}
  /* Central de Consultas: azul vivo da marca */
  {const p=await b.newPage({viewport:{width:420,height:900}});await p.goto(T.INDEX);await p.waitForTimeout(900);
   await p.evaluate(()=>document.getElementById('abrir-consultas').click());await p.waitForTimeout(2500);
