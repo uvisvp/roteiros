@@ -63,7 +63,7 @@ module.exports = {
             c: 'A licença sanitária contempla as atividades exercidas com gases medicinais.', nc: 'A licença sanitária não contempla as atividades exercidas com gases medicinais.', inf: ['gas_lic']},
           {id: 'afe', t: 'Há AFE (e AE, quando aplicável) para as atividades exercidas, com a classe gases medicinais distinta da de medicamentos?', r: [A(9), P(9, '1')],
             c: 'Há AFE para as atividades exercidas, com a classe gases medicinais.', nc: 'Não há AFE para as atividades exercidas ou a AFE não contempla a classe gases medicinais.', inf: ['gas_afe']},
-          {id: 'rt', t: 'A responsabilidade técnica é de profissional legalmente habilitado (farmacêutico, quando há dispensação)?', r: [A(13), P(13, 'unico')],
+          {id: 'rt', t: 'A responsabilidade técnica é de profissional legalmente habilitado (farmacêutico, quando há dispensação)?', r: [A(13), P(13, 'unico'), LM(93)],
             c: 'A responsabilidade técnica é de profissional legalmente habilitado.', nc: 'A responsabilidade técnica não é de profissional legalmente habilitado para as atividades exercidas.', inf: ['gas_rt']},
           {id: 'organograma', t: 'Há organograma e descrição das responsabilidades de cada cargo?', r: [A(12), P(12, 'unico')],
             c: 'Há organograma e descrição das responsabilidades de cada cargo.', nc: 'Não há organograma ou descrição das responsabilidades dos cargos.', inf: ['gas_sgq']},

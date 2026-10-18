@@ -35,4 +35,7 @@ const PONTOS = {
   veiculos: ['Não há procedimento de: {}.', [['operacao', 'operação'], ['manutencao', 'manutenção'], ['limpeza', 'limpeza'], ['seguranca', 'segurança']]]
 };
 for (const [id, [nc, pts]] of Object.entries(PONTOS)) Object.assign(perg(id), {pontos: pts, ncPontos: nc});
+/* toda irregularidade cita a Lei 13.725/2004 (auditoria de 18/10/2026): o motor soma os arts. 46 e 50
+   (estabelecimentos de produtos de interesse da saúde) quando a irregularidade não cita a Lei */
+d.leiBase = ['lei-municipal-13725-2004::artigo::46', 'lei-municipal-13725-2004::artigo::50'];
 module.exports = d;

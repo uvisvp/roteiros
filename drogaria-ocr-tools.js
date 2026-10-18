@@ -1301,7 +1301,7 @@
     const maxPages = Math.min(pdf.numPages, 40);
     const maxOcrPages = /pop_manual_pgrss|sumario_documentos/.test(type) ? 6 : 4;
     const pages = [];
-    let ocrPages = 0;
+    let ocrPages = 0; const semOcr = [];
     for (let p = 1; p <= maxPages; p++) {
       progress('Lendo página ' + p + ' de ' + pdf.numPages + '…');
       const page = await pdf.getPage(p);
@@ -1326,9 +1326,10 @@
           ocrPages++;
         }
       }
+      if (!region && ocrPages >= maxOcrPages && chars < 25) semOcr.push(p);
       pages.push({ number: p, page, textLayer, region });
     }
-    return { pdf, pages, total: pdf.numPages };
+    return { pdf, pages, total: pdf.numPages, semOcr, maxOcrPages };
   }
 
   /* ------------------------------------------------- leituras múltiplas */
@@ -1403,7 +1404,7 @@
   }
 
   async function readPdfFile(type, file, progress) {
-    const { pdf, pages, total } = await pdfPages(file, type, progress);
+    const { pdf, pages, total, semOcr, maxOcrPages } = await pdfPages(file, type, progress);
     try {
       const ocrPages = pages.filter(p => p.region);
       const units = ocrPages.map(p => ({ label: 'página ' + p.number, pageNumber: p.number, getCanvas: () => renderRegion(p.page, p.region) }));
@@ -1412,7 +1413,7 @@
         const ocr = unit && unit.texts ? unit.texts[pass] || '' : '';
         return (total > 1 ? 'Página ' + p.number + '\n' : '') + [p.textLayer, ocr].filter(Boolean).join('\n');
       }).join('\n\n');
-      const cut = total > pages.length ? ' · lidas ' + pages.length + ' de ' + total + ' páginas' : '';
+      const cut = (total > pages.length ? ' · lidas ' + pages.length + ' de ' + total + ' páginas' : '') + (semOcr && semOcr.length ? ' · sem OCR (limite de ' + maxOcrPages + ' páginas de imagem por documento): página' + (semOcr.length > 1 ? 's ' : ' ') + semOcr.join(', ') + ' — confira essas páginas no documento' : '');
       if (!units.length) {
         return extract(type, assemble(0), { filename: file.name, readAt: new Date().toISOString(), method: 'PDF: texto digital' + cut });
       }
@@ -1725,7 +1726,7 @@
     const blob = await photoBookBlob(scope, options);
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'Fotografias_da_inspecao_Drogaria.doc';
+    link.download = 'Fotografias_da_inspecao_' + (String(document.title || 'inspecao').split(/ [—–-] /)[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40) || 'inspecao') + '.doc';
     document.body.appendChild(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     return blob;
@@ -1744,3 +1745,4 @@
     fotos: Object.freeze({ save: savePhoto, list: listPhotos, remove: removePhoto, revokePreview: revokePhotoPreview, photoBookBlob, downloadPhotoBook })
   });
 })();
+/*med:dda3c902fa*/
