@@ -13,7 +13,7 @@
 const NR32 = 'NR-32 (Segurança e saúde no trabalho em serviços de saúde)';
 const REDE_FRIO = 'Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)';
 const RBC = 'ABNT NBR ISO/IEC 17025; laboratórios acreditados pela Cgcre/Inmetro (Rede Brasileira de Calibração — RBC)';
-const FB = 'Farmacopeia Brasileira, 6ª edição';
+const FB = 'Farmacopeia Brasileira, 8ª edição (RDC nº 1.026/2026)';
 const NORMAS_VAC = 'Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed. revisada, 2024)';
 
 module.exports = {
@@ -156,7 +156,7 @@ module.exports = {
  },
 
  estereis: {
-  'i13.1': 'Referências: RDC 67/2007, Anexo IV; RDC 220/2004 (terapia antineoplásica); Farmacopeia Brasileira, 6ª ed. (esterilidade, endotoxinas bacterianas, partículas). O capítulo USP <797> é referência internacional útil, não obrigatória no Brasil.',
+  'i13.1': 'Referências: RDC 67/2007, Anexo IV; RDC 220/2004 (terapia antineoplásica); Farmacopeia Brasileira, 8ª ed. (esterilidade, endotoxinas bacterianas, partículas). O capítulo USP <797> é referência internacional útil, não obrigatória no Brasil.',
   'i13.2': 'Higienização de mãos e antebraços com antisséptico antes da paramentação; unhas curtas, sem esmalte e sem adornos (NR-32). Pessoa com lesão de pele ou infecção respiratória não manipula.',
   'i13.3': 'Paramentação estéril de baixa liberação de partículas (avental, gorro, máscara, propés, luvas estéreis sem talco), vestida na antecâmara em sequência definida em POP; a técnica do operador é qualificada por inspeção e simulação asséptica.',
   'i13.4': 'Paredes, pisos e tetos lisos, impermeáveis e sem reentrâncias; sanitizantes regularizados, com rodízio e uso periódico de agente esporicida; registros de limpeza.',
@@ -166,7 +166,7 @@ module.exports = {
   'i13.8': 'Água para injetáveis conforme monografia da Farmacopeia Brasileira (inclui limite de endotoxinas bacterianas de 0,25 UI/mL, condutividade e carbono orgânico total), obtida por destilação ou processo equivalente validado.',
   'i13.9': 'Simulação asséptica (media fill) com meio de cultura para qualificar operadores e processo, na admissão e periodicamente; monitoramento microbiológico do ambiente e das superfícies (placas de sedimentação, contato e ar ativo) — ABNT NBR ISO 14698.',
   'i13.10': 'Esterilização validada: calor úmido (ABNT NBR ISO 17665), óxido de etileno (ABNT NBR ISO 11135) ou radiação (ABNT NBR ISO 11137); filtração esterilizante em 0,22 µm com teste de integridade (ponto de bolha) após o uso.',
-  'i13.11': 'Ensaios farmacopeicos de produto estéril: esterilidade, endotoxinas bacterianas (LAL), partículas visíveis e subvisíveis, além de teor e aspecto — Farmacopeia Brasileira, 6ª ed.',
+  'i13.11': 'Ensaios farmacopeicos de produto estéril: esterilidade, endotoxinas bacterianas (LAL), partículas visíveis e subvisíveis, além de teor e aspecto — Farmacopeia Brasileira, 8ª ed.',
   'i13.12': 'Validação de processos, limpeza e sistemas críticos; prazo de uso da preparação com base técnica (estudo ou literatura). Como referência de prazos de uso (BUD), a USP <797> é útil, sem valor normativo no Brasil.',
   'i13.13': 'Citostáticos: RDC 220/2004; NR-32 — riscos químicos dos antineoplásicos: kit de derramamento, EPI específico, é vedado a gestantes e nutrizes manipular antineoplásicos; resíduos do grupo B (RDC 222/2018).'
  },

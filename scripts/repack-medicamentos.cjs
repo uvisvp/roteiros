@@ -188,6 +188,10 @@ const jsStr = t => JSON.stringify(t).replace(/<\//g, '<\\/');
    Central de Consultas no modo Automático (central-auto.js) e orientações das
    seções de transporte (transporte-orient.js). As ferramentas de campo já
    entram pela casca do Roteiros (scripts/repack-campo.cjs). */
+/* Já montado: regrava o trecho, para que mudanças nos arquivos de ajuste entrem de novo. */
+{ const INI = '  var ATACADISTA_JS = ', FIM = "  function montarBase(app){\n    var s = rec('app--' + app);";
+  const i = h.indexOf(INI), j = h.indexOf(FIM);
+  if (i >= 0 && j > i && h.indexOf(INI, i + 1) < 0) h = h.slice(0, i) + "  function montar(app){\n    var s = rec('app--' + app);" + h.slice(j + FIM.length); }
 troca('  function montar(app){\n    var s = rec(\'app--\' + app);',
   `  var ATACADISTA_JS = ${jsStr(le('atacadista-ajustes.js'))};
   var CENTRAL_AUTO_JS = ${jsStr(le('central-auto.js'))};

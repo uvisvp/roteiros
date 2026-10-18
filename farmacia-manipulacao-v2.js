@@ -377,6 +377,7 @@ const CLS_NOME={I:'Imprescindível',N:'Necessário',R:'Recomendável'};
 function infraRefs(x){
  const a7=x.a7.map(n=>{const t=APP_DATA.infraTexts['A7 '+n];return {law:'RDC nº 67/2007',device:'Anexo VII · Item '+n,text:t?t.x:''}});
  const dev=x.dev.map(k=>{const t=APP_DATA.infraTexts[k];const m=String(t.t).replace(' · item ',' · Item ').split(' · ');return {law:m[0],device:m.slice(1).join(' · '),text:t.x}});
+ if(!dev.some(r=>/13\.725/.test(r.law)))dev.push({law:'Lei Municipal nº 13.725/2004',device:'Arts. 46 e 50',text:"Art. 46 - Os estabelecimentos industriais, comerciais e de prestação de serviços relacionados aos produtos e substâncias de interesse da saúde são responsáveis pela manutenção dos padrões de identidade, qualidade e segurança, definidos a partir de normas técnicas, aprovadas pelo órgão competente, bem como pelo cumprimento de normas de boas práticas de fabricação e de normas de boas práticas de prestação de serviços.\nArt. 50 - As disposições referentes às condições de funcionamento dos estabelecimentos industriais, comerciais e de prestação de serviços relacionados aos produtos e substâncias de interesse da saúde, no que for pertinente, devem seguir as regulamentações específicas vigentes."});
  return {a7,dev};
 }
 function infraCitacao(x){const {a7,dev}=infraRefs(x);return 'RDC nº 67/2007, Anexo VII, item '+x.a7.join(', ')+(x.cls?' ('+x.cls+')':'')+(dev.length?'; '+dev.map(r=>r.law.replace('RDC nº 67/2007','').trim()?r.law+', '+r.device:r.device).join('; '):'')}
@@ -486,6 +487,10 @@ function v2Reduz(url){return new Promise(res=>{const im=new Image();im.onload=()
 function v2CarregarFotos(){if(v2FotosCarga)return v2FotosCarga;v2FotosCarga=(async()=>{const out=[];if(window.RoteiroEvidence)for(const n of Object.keys(APP_DATA.cards)){try{const all=await RoteiroEvidence.read('manipulacao-card-'+n);for(const[k,url]of Object.entries(all))out.push({card:Number(n),key:k,url:await v2Reduz(url)})}catch(e){}}v2Fotos=out;renderPreview();return out})();return v2FotosCarga}
 function v2InvalidarFotos(){v2Fotos=null;v2FotosCarga=null}
 function v2Lc(t){t=String(t||'');return /^.[a-zà-ú]/.test(t)?t.charAt(0).toLowerCase()+t.slice(1):t}
+/* toda irregularidade cita a Lei 13.725/2004. Artigo pelo assunto da frase (sem o título do item):
+   licença sanitária → art. 90 (§ 1º quando não contempla a atividade); CRT do responsável técnico → art. 93;
+   guarda de controlados → art. 50, § 1º; estoque, escrituração, SNGPC, mapas e balanços → art. 50, § 2º; demais → arts. 46 e 50 */
+function v2ComLei(texto,cit){cit=String(cit||'').trim().replace(/\.$/,'');if(/13\.725/.test(cit))return cit;const f=String(texto||'').replace(/^[^:]{0,140}:\s*/,''),ctl=/controle especial|controlad|SNGPC|Portaria 344/i.test(f);const art=/licen[çc]a sanit[áa]ria/i.test(f)?(/n[ãa]o (contempla|corresponde|est[áa] contemplad)/i.test(f)?'art. 90, § 1º':'art. 90'):/Certid[ãa]o de Regularidade T[ée]cnica/i.test(f)?'art. 93':ctl&&/chave|dispositivo de seguran[çc]a|arm[áa]rio|segregad/i.test(f)?'art. 50, § 1º':ctl&&/estoque|escritura|SNGPC|mapas e balan/i.test(f)?'art. 50, § 2º':'arts. 46 e 50';return (cit?cit+'; ':'')+'Lei Municipal nº 13.725/2004, '+art}
 function v2Cite(t){return String(t||'').replace(/RDC (\d)/,'RDC nº $1').replace(/ · /g,', ').replace(/(Anexo [IVX]+|RT), (\d[\d.]*)( e \d)/,'$1, itens $2$3').replace(/(Anexo [IVX]+|RT), (\d)/,'$1, item $2').replace(/^(.*), RT,/,'$1, Regulamento Técnico,')}
 let V2_SUP=false;
 function v2Mk(k){return V2_SUP&&k?'<sup class="v2-irn">'+k+'</sup>':''}
@@ -598,7 +603,7 @@ function v2AnexoFotos(){
 }
 function renderPreview(){
  const root=$('#reportPreview');if(!root)return;const r=state.report,v=v2State(),c=state.char||{};
- const irr=[];const addIrr=(texto,cit)=>{irr.push({texto,cit});return irr.length};
+ const irr=[];const addIrr=(texto,cit)=>{irr.push({texto,cit:v2ComLei(texto,cit)});return irr.length};
  const refTxt=refs=>(refs||[]).map(x=>x.law+', '+String(x.device).replace(' · Item ',', item ').replace(' · ',', ')).join('; ');
  const ROT0={razao:'Razão social',fantasia:'Nome fantasia',cnpj:'CNPJ',cmvs:'Licença sanitária / CMVS',validade:'Validade da licença',endereco:'Endereço',fone:'Telefone',email:'E-mail',horario:'Horário de funcionamento',rl:'Responsável legal',cpf:'CPF do responsável legal',rt:'Responsável técnico',crf:'CRF-SP',afe:'AFE nº',afeData:'AFE publicada em',ae:'AE nº',aeData:'AE publicada em',atividades:'Atividades licenciadas'};
  const fmt=x=>/^\d{4}-\d{2}-\d{2}$/.test(String(x))?manData(x):String(x);

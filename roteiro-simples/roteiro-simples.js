@@ -464,7 +464,7 @@
   var agora = new Date().toISOString();
   z.folder('docProps').file('core.xml', X + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>' + xe(titulo) + '</dc:title><dc:creator>Vigilância Sanitária</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">' + agora + '</dcterms:created></cp:coreProperties>');
   return z.generateAsync({type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', compression: 'DEFLATE'}); }
- function nomeArq(ext){ var b = String(st.meta.fantasia || st.meta.razao || 'inspecao').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40) || 'inspecao'; return 'Relatorio_' + D.tituloCurto.replace(/[^A-Za-z0-9]+/g, '_') + '_' + b + '_' + new Date().toISOString().slice(0, 10) + '.' + ext; }
+ function nomeArq(ext){ var b = String(st.meta.fantasia || st.meta.razao || 'inspecao').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40) || 'inspecao'; return 'Relatorio_' + D.tituloCurto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '_') + '_' + b + '_' + new Date().toISOString().slice(0, 10) + '.' + ext; }
  function baixa(blob, nome){ var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 2000); }
 
  /* ---------- abas Infrações e Relatório ---------- */
