@@ -1,15 +1,23 @@
 'use strict';
 /* Estética no padrão dos demais roteiros (18/10/2026): perguntas do ROI de Estética da Anvisa
    (v1.3), perfil saúde/interesse à saúde no início filtrando roteiro e infrações, catálogo do
-   módulo anterior com constatação, citações e relatório.
+   módulo anterior com constatação, citações e relatório; inventário dos ambientes por perfil e
+   produtos em uso com busca nas bases da Anvisa (respostas simuladas, sem rede).
    Uso: node scripts/e2e/estetica.cjs */
 const T=require('./lib.cjs');
 const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
 const CONST='agulhas de uso único reaproveitadas na sala 2, em 18/10/2026';
 const perfil=(f,v)=>f.evaluate(v=>{UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'perfil'});const s=document.querySelector('select[data-rs-meta="p_tipo"]');s.value=v;s.dispatchEvent(new Event('change',{bubbles:true}))},v);
+/* bases de dados abertos (base-vigilancia): respostas fixas */
+const BASE={'manifest.json':{bases:{saneantes:{prefixo:4},cosmeticos:{prefixo:3}}},
+ 'cosmeticos/005.json':[{processo:'25351005971201409',produto:'DOUTOR HEDERA ARNICA+COPAÍBA',detentor:'AM INDUSTRIA DE COSMETICOS LTDA',tipo:'Notificado',situacao:'ATIVO'}],
+ 'saneantes/3052.json':[{registro:'305290003',produto:'DESINFETANTE PINHO VERT',processo:'250000042059231',detentor:'AMAURY CRIVELA COSTA & CIA LTDA',situacao:'N'}]};
 const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelector('[data-rs-q="'+id+'"]');const bt=[...q.querySelectorAll('.pu-resp button')].find(b=>b.textContent.trim()===val);bt.click()},[id,val]);
 (async()=>{const b=await T.navegador();
  const {p,f,erros}=await T.abre('Serviços','estetica','Estética e beleza','',{browser:b});
+ await p.route(/base-vigilancia\/(main\/)?dados\//,r=>{const k=r.request().url().replace(/^.*\/dados\//,''),x=BASE[k],h={'Access-Control-Allow-Origin':'*'};
+  return x?r.fulfill({status:200,contentType:'application/json',headers:h,body:JSON.stringify(x)}):r.fulfill({status:404,headers:h,body:''})});
+ const valor=(sel)=>f.evaluate(s=>(document.querySelector(s)||{}).value,sel);
  const lista=()=>f.evaluate(()=>UvisPadrao.lista().map(s=>s.id));
  ok(JSON.stringify(await lista())==='["ident"]','sem classificação, só a Identificação');
  ok(await f.evaluate(()=>!!window.ROTEIRO&&ROTEIRO.app==='estetica'),'Estética no motor roteiro-simples (componente padrão)');
@@ -25,10 +33,31 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  await responde(f,'lic','Não');await p.waitForTimeout(300);
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'proc',item:'interno'}));await p.waitForTimeout(400);
  await responde(f,'proc_s','Não');await p.waitForTimeout(300);
+ /* inventário dos ambientes: lista do serviço de saúde, só o que estiver irregular */
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'ambientes'}));await p.waitForTimeout(400);
+ ok(await f.evaluate(()=>!!document.querySelector('[data-rs-amb-chip^="amb_s|Sala de procedimentos|"]')&&!document.querySelector('[data-rs-amb-chip^="amb_i|"]')),'inventário dos ambientes do serviço de saúde');
+ await f.click('[data-rs-amb-chip^="amb_s|Sala de procedimentos|"]');await p.waitForTimeout(300);
+ await f.evaluate(()=>document.querySelectorAll('.rs-amb').forEach(d=>{d.open=true}));await p.waitForTimeout(200);
+ await f.check('[data-rs-amb-m="amb_s|0|pragas"]');await f.check('[data-rs-amb-m="amb_s|0|coletor"]');await p.waitForTimeout(300);
+ ok(await f.evaluate(()=>!!document.querySelector('[data-rs-amb-m="amb_s|0|alcool"]')),'preparação alcoólica na lista do serviço de saúde');
+ /* produtos em uso: a categoria escolhe a base da Anvisa */
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'med',item:'produtos'}));await p.waitForTimeout(400);
+ await f.click('[data-rs-eq-buscar="prod_lista|0"]');await p.waitForTimeout(300);
+ ok(/categoria/.test(await f.evaluate(()=>(document.querySelector('.rs-eq-msg')||{}).textContent||'')),'produto: busca pede a categoria antes');
+ await f.selectOption('select[data-rs-eq="prod_lista|0|tipo"]','Cosmético');await p.waitForTimeout(400);
+ ok(/pelo processo/.test(await f.evaluate(()=>document.querySelector('.rs-eq-busca span').textContent)),'cosmético: busca pelo processo');
+ await f.fill('[data-rs-eq="prod_lista|0|busca"]','25351.005971/2014-09');await f.click('[data-rs-eq-buscar="prod_lista|0"]');await p.waitForTimeout(1200);
+ ok(await valor('[data-rs-eq="prod_lista|0|nome"]')==='DOUTOR HEDERA ARNICA+COPAÍBA'&&await valor('[data-rs-eq="prod_lista|0|situacao"]')==='Notificado, ativo','cosmético encontrado pelo processo (base de cosméticos)');
+ await f.click('[data-rs-eq-add="prod_lista"]');await p.waitForTimeout(300);
+ await f.selectOption('select[data-rs-eq="prod_lista|1|tipo"]','Saneante');await p.waitForTimeout(400);
+ await f.fill('[data-rs-eq="prod_lista|1|busca"]','305290003');await f.click('[data-rs-eq-buscar="prod_lista|1"]');await p.waitForTimeout(1200);
+ ok(await valor('[data-rs-eq="prod_lista|1|nome"]')==='DESINFETANTE PINHO VERT'&&await valor('[data-rs-eq="prod_lista|1|situacao"]')==='Registrado, inativo','saneante encontrado pelo registro (base de saneantes)');
+ ok(/inativo na base da Anvisa/.test(await f.evaluate(()=>[...document.querySelectorAll('.rs-eq-msg')].map(x=>x.textContent).join(' '))),'saneante inativo: aviso na busca');
  /* infrações: só o catálogo de saúde, sugeridas pelas respostas, constatação */
  await f.evaluate(()=>UvisPadrao.vai({aba:'infracoes'}));await p.waitForTimeout(500);
  ok(await f.evaluate(()=>document.querySelectorAll('input[data-rs-inf]').length)===71,'aba Infrações: 71 enquadramentos de serviço de saúde');
  ok(await f.evaluate(()=>[...document.querySelectorAll('.rs-inf.rs-sug input')].map(x=>x.dataset.rsInf).includes('s01')),'licença “Não” sugere a infração de licença');
+ ok(await f.evaluate(()=>['s28','s68'].every(i=>[...document.querySelectorAll('.rs-inf.rs-sug input')].some(x=>x.dataset.rsInf===i))),'pragas e coletor no inventário sugerem as infrações de pragas e de resíduos');
  await f.evaluate(()=>document.querySelector('[data-rs-sugeridas]').click());await p.waitForTimeout(400);
  ok(await f.evaluate(()=>!!document.querySelector('textarea[data-rs-inf-nota="s65"]')),'infração marcada abre o campo Constatação');
  await f.evaluate(t=>{const a=document.querySelector('textarea[data-rs-inf-nota="s65"]');a.value=t;a.dispatchEvent(new Event('input',{bubbles:true}))},CONST);
@@ -44,6 +73,9 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  ok(/bronzeamento artificial/i.test(enq),'infração avulsa no enquadramento');
  const irr=rel.slice(rel.indexOf('IRREGULARIDADES OBSERVADAS'),rel.indexOf('ENQUADRAMENTO'));
  ok(/Fundamento: RDC Anvisa nº 63\/2011, art\. 10[^.]*Lei Municipal nº 13\.725\/2004, art\. 90/.test(irr),'fundamento da irregularidade com a RDC e a Lei 13.725');
+ ok(/Sinais de pragas \(insetos, roedores, fezes\): sala de procedimentos\. Fundamento: RDC Anvisa nº 63\/2011, art\. 63; Lei Municipal nº 13\.725\/2004, art\. 61\./.test(irr),'irregularidade do inventário com o fundamento');
+ ok(/O estabelecimento possui sala de procedimentos\./.test(rel)&&/Irregularidades constatadas nos ambientes/.test(rel),'inventário dos ambientes no relatório');
+ ok(/Regularização na Anvisa/.test(rel)&&/DOUTOR HEDERA/.test(rel)&&/Processo 25351005971201409/.test(rel)&&/conferidos nas bases de cosméticos e saneantes da Anvisa/.test(rel),'tabela de produtos no relatório, com as bases conferidas');
  const dl=p.waitForEvent('download',{timeout:20000}).catch(()=>null);
  await f.evaluate(()=>document.querySelector('[data-rs-word]').click());await p.waitForTimeout(800);
  /* inspeção incompleta: a checagem de consistência pede confirmação */
@@ -58,7 +90,18 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  await f.evaluate(()=>UvisPadrao.vai({aba:'infracoes'}));await p.waitForTimeout(500);
  ok(await f.evaluate(()=>document.querySelectorAll('input[data-rs-inf]').length)===36,'aba Infrações: 36 enquadramentos de interesse à saúde');
  await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(600);
- ok(!/ENQUADRAMENTO/.test(await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'')),'infrações do perfil de saúde fora do relatório de interesse à saúde');
+ const rel2=await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'');
+ ok(!/ENQUADRAMENTO/.test(rel2),'infrações do perfil de saúde fora do relatório de interesse à saúde');
+ ok(!/pragas|sala de procedimentos/i.test(rel2),'inventário do perfil de saúde fora do relatório de interesse à saúde');
+ ok(/DOUTOR HEDERA/.test(rel2),'produtos em uso nos dois perfis');
+ await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'ambientes_i'}));await p.waitForTimeout(400);
+ ok(await f.evaluate(()=>!!document.querySelector('[data-rs-amb-chip^="amb_i|Sala de procedimentos|"]')&&!document.querySelector('[data-rs-amb-chip^="amb_s|"]')),'inventário dos ambientes do interesse à saúde');
+ await f.click('[data-rs-amb-chip^="amb_i|Sanitário|"]');await p.waitForTimeout(300);
+ await f.evaluate(()=>document.querySelectorAll('.rs-amb').forEach(d=>{d.open=true}));await p.waitForTimeout(200);
+ ok(!await f.evaluate(()=>!!document.querySelector('[data-rs-amb-m="amb_i|0|alcool"]')),'interesse à saúde: sem a linha de preparação alcoólica (RDC 42/2010 é de serviço de saúde)');
+ await f.check('[data-rs-amb-m="amb_i|0|sabonete"]');await p.waitForTimeout(300);
+ await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(600);
+ ok(/Pia sem sabonete líquido: sanitário\. Fundamento: Lei Federal nº 13\.643\/2018, art\. 8º; Lei Municipal nº 13\.725\/2004, art\. 69\./.test(await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'')),'interesse à saúde: irregularidade do inventário com a Lei 13.643 e o art. 69');
  /* orientações com fonte (perfil e equipamentos) */
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'perfil'}));await p.waitForTimeout(400);
  const o1=await f.evaluate(()=>(document.querySelector('.rs-orient')||{}).textContent||'');

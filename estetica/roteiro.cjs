@@ -24,6 +24,45 @@ const ROI = 'Roteiro Objetivo de Inspeção — Serviços de Estética classific
 /* esteticista: biossegurança e legislação sanitária (Lei 13.643, art. 8º) + Código Sanitário, art. 69 */
 const INT_BIO = [...L13643('a8'), LM(69)];
 
+/* Inventário dos ambientes (como na academia): os ambientes que o estabelecimento possui e,
+   em cada um, só as irregularidades encontradas — uma irregularidade por linha. A mesma lista
+   serve aos dois perfis; muda o fundamento: no serviço de saúde, a RDC 63/2011 (e a RDC 42/2010
+   na preparação alcoólica) com os arts. 61 a 65 da Lei 13.725; no interesse à saúde, a Lei
+   13.643/2018, art. 8º, com o art. 69. Resíduos: RDC 222/2018 nos dois. [id, texto, saúde, interesse]
+   — fundamento: [refs, infração]; null: a linha não vale para o perfil. */
+const AMBIENTES = ['Recepção e espera', 'Sala de procedimentos', 'Sanitário', 'DML (material de limpeza)', 'Processamento de instrumentais', 'Guarda de produtos e materiais', 'Copa'];
+const EST = [[...R63('a36'), LM(65)], 's26'], EST_I = [INT_BIO, 'i21'];
+const LISTA_AMB = [
+  ['—', 'Estrutura e conservação'],
+  ['piso', 'Piso danificado', EST, EST_I],
+  ['parede', 'Paredes danificadas', EST, EST_I],
+  ['teto', 'Teto ou forro danificado', EST, EST_I],
+  ['infiltra', 'Infiltração ou umidade', EST, EST_I],
+  ['mofo', 'Mofo ou bolor', EST, EST_I],
+  ['movel', 'Mobiliário ou maca danificados', EST, EST_I],
+  ['—', 'Limpeza e organização'],
+  ['sujo', 'Ambiente sujo', [[...R63('a52'), LM(61)], 's52'], EST_I],
+  ['desorg', 'Ambiente desorganizado', [[...R63('a36'), LM(63)], 's26'], [INT_BIO, 'i22']],
+  ['alheio', 'Objetos alheios à atividade', [[...R63('a36'), LM(63)], 's26'], [INT_BIO, 'i22']],
+  ['—', 'Instalações'],
+  ['fios', 'Fiação elétrica exposta', EST, EST_I],
+  ['luz', 'Iluminação insuficiente', [[...R63('a38'), LM(63)], 's27'], [INT_BIO, 'i24']],
+  ['vent', 'Ventilação insuficiente', [[...R63('a38'), LM(63)], 's27'], [INT_BIO, 'i24']],
+  ['—', 'Higiene das mãos'],
+  ['pia', 'Sem pia para higiene das mãos', [[...R63('a59'), LM(61)], 's47'], [INT_BIO, 'i27']],
+  ['sabonete', 'Pia sem sabonete líquido', [[...R63('a59'), LM(61)], 's47'], [INT_BIO, 'i27']],
+  ['papel', 'Pia sem papel toalha', [[...R63('a59'), LM(61)], 's47'], [INT_BIO, 'i27']],
+  ['alcool', 'Sem preparação alcoólica no ponto de assistência', [[...R42('a5'), LM(61)], 's48'], null],
+  ['—', 'Pragas e resíduos'],
+  ['pragas', 'Sinais de pragas (insetos, roedores, fezes)', [[...R63('a63'), LM(61)], 's28'], [INT_BIO, 'i25']],
+  ['lixeira', 'Lixeira sem tampa de abertura sem contato manual', [[...R222('a17'), LM(62)], 's68'], [[...R222('a17'), LM(69)], 'i33']],
+  ['perfuro', 'Perfurocortante descartado fora de coletor rígido', [[...R222('a86'), LM(62)], 's68'], [[...R222('a86'), LM(69)], 'i33']],
+  ['coletor', 'Coletor de perfurocortante acima de 3/4 da capacidade', [[...R222('a87'), LM(62)], 's68'], [[...R222('a87'), LM(69)], 'i33']]
+];
+const inventario = (id, saude) => ({id, rotulo: 'Ambientes do estabelecimento', tipo: 'ambientes', largo: true, ambientes: AMBIENTES,
+  r: saude ? EST[0] : INT_BIO, inf: [saude ? 's26' : 'i21'],
+  lista: LISTA_AMB.filter(x => x[0] === '—' || x[saude ? 2 : 3]).map(x => x[0] === '—' ? x : [x[0], x[1], x[saude ? 2 : 3][0], [x[saude ? 2 : 3][1]]])});
+
 const secoes = [
   {
     id: 'ident', titulo: 'Identificação e perfil', curto: 'Identificação', icone: 'building',
@@ -175,27 +214,23 @@ const secoes = [
   },
   {
     id: 'infra', titulo: 'Estrutura física e condições ambientais', curto: 'Estrutura', icone: 'plan',
-    descricao: 'Indicadores 11, 13, 14 e 15 do ROI.',
+    descricao: 'Ambientes do estabelecimento e indicadores 11, 13, 14 e 15 do ROI.',
     itens: [
-      {id: 'estrutura', titulo: 'Estrutura física', curto: 'Estrutura física',
+      /* conservação, limpeza, iluminação, ventilação, higiene das mãos, pragas e resíduos de cada
+         ambiente ficam no inventário; as perguntas tratam do que não é de um ambiente só */
+      {id: 'ambientes', se: SAUDE, titulo: 'Ambientes e irregularidades', curto: 'Ambientes',
+        campos: [inventario('amb_s', true)]},
+      {id: 'ambientes_i', se: INT, titulo: 'Ambientes e irregularidades', curto: 'Ambientes',
+        campos: [inventario('amb_i', false)]},
+      {id: 'estrutura', se: SAUDE, titulo: 'Projeto e estrutura física', curto: 'Estrutura física',
         perguntas: [
-          {id: 'pba', se: SAUDE, t: 'A estrutura física tem projeto básico de arquitetura (PBA) aprovado pela vigilância sanitária, executado e atualizado conforme as atividades, com os ambientes mínimos bem dimensionados e em boas condições?', r: [...R63('a17', 'a34', 'a36'), LM(63)],
-            c: 'A estrutura física corresponde ao PBA aprovado e atualizado, com os ambientes mínimos em boas condições.', nc: 'A estrutura física do serviço não atende às exigências.',
-            pontos: [['pba', 'PBA aprovado pela vigilância sanitária', 'O serviço não possui projeto básico de arquitetura aprovado.'], ['executado', 'estrutura corresponde ao PBA atualizado', 'A estrutura do serviço não corresponde ao PBA aprovado ou o PBA está desatualizado.'], ['ambientes', 'ambientes mínimos bem dimensionados', 'O serviço não possui os ambientes mínimos para as atividades ou eles estão subdimensionados.'], ['conservacao', 'instalações em boas condições de conservação', 'As instalações físicas não estão em boas condições de conservação, segurança ou organização.']],
-            inf: ['s25', 's26']},
-          {id: 'amb_i', se: INT, t: 'Os ambientes estão em boas condições de conservação e organização, compatíveis com as atividades realizadas?', r: [...INT_BIO],
-            c: 'Os ambientes estão conservados e organizados de forma compatível com as atividades.', nc: 'Os ambientes não estão em condições de conservação e organização compatíveis com as atividades.',
-            inf: ['i21', 'i22']}
+          {id: 'pba', t: 'A estrutura física tem projeto básico de arquitetura (PBA) aprovado pela vigilância sanitária, executado e atualizado conforme as atividades, com os ambientes mínimos bem dimensionados?', r: [...R63('a17', 'a34'), LM(63)],
+            c: 'A estrutura física corresponde ao PBA aprovado e atualizado, com os ambientes mínimos bem dimensionados.', nc: 'A estrutura física do serviço não atende às exigências.',
+            pontos: [['pba', 'PBA aprovado pela vigilância sanitária', 'O serviço não possui projeto básico de arquitetura aprovado.'], ['executado', 'estrutura corresponde ao PBA atualizado', 'A estrutura do serviço não corresponde ao PBA aprovado ou o PBA está desatualizado.'], ['ambientes', 'ambientes mínimos bem dimensionados', 'O serviço não possui os ambientes mínimos para as atividades ou eles estão subdimensionados.']],
+            inf: ['s25', 's26']}
         ],
         orient: [
           {t: 'O PBA de serviço de saúde segue a RDC 50/2002 (regulamento técnico para projetos físicos de estabelecimentos assistenciais de saúde), que traz os ambientes, dimensões e instalações exigidos.', f: 'RDC Anvisa nº 50/2002; RDC Anvisa nº 63/2011, art. 34'}
-        ]},
-      {id: 'ambiente', titulo: 'Iluminação e ventilação', curto: 'Iluminação e ventilação',
-        perguntas: [
-          {id: 'ilum_s', se: SAUDE, t: 'A iluminação e a ventilação são compatíveis com as atividades, inclusive nas áreas de procedimento?', r: [...R63('a38'), LM(63)],
-            c: 'A iluminação e a ventilação são compatíveis com as atividades.', nc: 'A iluminação ou a ventilação não é compatível com as atividades.', inf: ['s27']},
-          {id: 'ilum_i', se: INT, t: 'A iluminação e a ventilação são compatíveis com as atividades?', r: [...INT_BIO],
-            c: 'A iluminação e a ventilação são compatíveis com as atividades.', nc: 'A iluminação ou a ventilação não é compatível com as atividades.', inf: ['i24']}
         ]},
       {id: 'agua', titulo: 'Controle de qualidade da água', curto: 'Água',
         perguntas: [
@@ -222,14 +257,12 @@ const secoes = [
     id: 'bio', titulo: 'Biossegurança, limpeza e resíduos', curto: 'Biossegurança', icone: 'shield',
     descricao: 'Indicadores 10, 12, 16, 22 e 23 do ROI.',
     itens: [
-      {id: 'maos', titulo: 'Higiene das mãos', curto: 'Higiene das mãos',
+      {id: 'maos', se: SAUDE, titulo: 'Higiene das mãos', curto: 'Higiene das mãos',
+        descricao: 'Pias, sabonete, papel toalha e preparação alcoólica de cada ambiente: no inventário dos ambientes (Estrutura).',
         perguntas: [
-          {id: 'maos_s', se: SAUDE, t: 'Há pias com sabonete e papel toalha, dispensadores de preparação alcoólica nos pontos de assistência, protocolo de higiene das mãos e cartaz de orientação?', r: [...R42('a5', 'a6'), ...R63('a8-ii', 'a59'), LM(61)],
-            c: 'Há pias com insumos, preparação alcoólica nos pontos de assistência e protocolo de higiene das mãos.', nc: 'As condições para a higiene das mãos não atendem às exigências.',
-            pontos: [['pias', 'pias com sabonete e papel toalha em todos os pontos', 'Faltam pias ou insumos para a higiene das mãos em pontos de assistência.'], ['alcool', 'preparação alcoólica nos pontos de assistência', 'Não há dispensadores de preparação alcoólica nos pontos de assistência.'], ['protocolo', 'protocolo de higiene das mãos e cartaz', 'Não há protocolo de higiene das mãos.']],
-            inf: ['s47', 's48', 's49']},
-          {id: 'maos_i', se: INT, t: 'Há condições e insumos para a higiene das mãos (pia, sabonete líquido, papel toalha)?', r: [...INT_BIO],
-            c: 'Há condições e insumos para a higiene das mãos.', nc: 'Não há condições e insumos para a higiene das mãos.', inf: ['i27']}
+          {id: 'maos_s', t: 'O serviço estabelece orientações escritas (protocolo) para a higiene das mãos?', r: [...R63('a8-ii'), LM(61)],
+            c: 'O serviço estabelece orientações escritas para a higiene das mãos.', nc: 'O serviço não estabelece orientações escritas para a higiene das mãos.',
+            inf: ['s49']}
         ]},
       {id: 'epi', titulo: 'Equipamentos de proteção individual (EPI)', curto: 'EPI',
         perguntas: [
@@ -242,12 +275,12 @@ const secoes = [
         ]},
       {id: 'limpeza', titulo: 'Limpeza e desinfecção de áreas e superfícies', curto: 'Limpeza',
         perguntas: [
-          {id: 'limp_s', se: SAUDE, t: 'Os ambientes estão limpos e organizados, com POP de limpeza e desinfecção conforme a criticidade das áreas e registro de treinamento da equipe?', r: [...R63('a36', 'a52'), LM(61)],
-            c: 'Os ambientes estão limpos, com POP de limpeza conforme a criticidade e equipe treinada.', nc: 'A limpeza e a desinfecção das áreas não atendem às exigências.',
-            pontos: [['condicoes', 'ambientes limpos e organizados', 'As condições de limpeza das áreas e superfícies são insatisfatórias.'], ['pop', 'POP de limpeza conforme a criticidade das áreas', 'Não há POP de limpeza e desinfecção ou ele não considera a criticidade das áreas.'], ['treino', 'registro de treinamento da equipe', 'Não há registro de treinamento da equipe no POP de limpeza.']],
+          {id: 'limp_s', se: SAUDE, t: 'Há POP de limpeza e desinfecção conforme a criticidade das áreas, com registro de treinamento da equipe?', r: [...R63('a51', 'a52'), LM(61)],
+            c: 'Há POP de limpeza e desinfecção conforme a criticidade das áreas, com equipe treinada.', nc: 'O POP de limpeza e desinfecção não atende às exigências.',
+            pontos: [['pop', 'POP de limpeza conforme a criticidade das áreas', 'Não há POP de limpeza e desinfecção ou ele não considera a criticidade das áreas.'], ['treino', 'registro de treinamento da equipe', 'Não há registro de treinamento da equipe no POP de limpeza.']],
             inf: ['s52']},
-          {id: 'limp_i', se: INT, t: 'Ambientes, mobiliário, equipamentos e utensílios estão limpos e em boas condições de higiene?', r: [...INT_BIO],
-            c: 'Ambientes, mobiliário, equipamentos e utensílios estão limpos.', nc: 'Ambientes, mobiliário, equipamentos ou utensílios não estão em condições adequadas de higiene.', inf: ['i21', 'i14']}
+          {id: 'limp_i', se: INT, t: 'Mobiliário, equipamentos e utensílios estão limpos e em boas condições de higiene?', r: [...INT_BIO],
+            c: 'Mobiliário, equipamentos e utensílios estão limpos.', nc: 'Mobiliário, equipamentos ou utensílios não estão em condições adequadas de higiene.', inf: ['i21', 'i14']}
         ]},
       {id: 'saneantes', titulo: 'Saneantes e cosméticos', curto: 'Saneantes',
         perguntas: [
@@ -313,8 +346,15 @@ const secoes = [
   },
   {
     id: 'med', titulo: 'Medicamentos e produtos', curto: 'Medicamentos', icone: 'lab',
-    descricao: 'Indicadores 19, 20, 21 e 24 do ROI.',
+    descricao: 'Produtos em uso e indicadores 19, 20, 21 e 24 do ROI.',
     itens: [
+      /* lista de produtos: campo; a condição evita o item antes de escolher o perfil */
+      {id: 'produtos', se: {campo: 'p_tipo', em: ['saude', 'interesse']}, titulo: 'Produtos em uso', curto: 'Produtos',
+        descricao: 'Liste cosméticos, saneantes, medicamentos e dispositivos médicos em uso: escolha a categoria, busque pelo registro ou pelo processo na Anvisa ou digite os dados. A lista sai em tabela no relatório.',
+        campos: [{id: 'prod_lista', rotulo: 'Produtos em uso', tipo: 'equipamentos', perfil: 'produto', largo: true}],
+        orient: [
+          {t: 'Cosméticos, saneantes, medicamentos e produtos para saúde só podem ser expostos ao uso depois de regularizados na Anvisa. A busca consulta as bases de dados abertos da Anvisa (cosméticos, saneantes, medicamentos e produtos para saúde); produto não localizado deve ser conferido na consulta oficial antes de concluir pela irregularidade.', f: 'Lei Federal nº 6.360/1976, art. 12; Portal de Dados Abertos da Anvisa (dados.anvisa.gov.br)'}
+        ]},
       {id: 'medicamentos', se: SAUDE, titulo: 'Uso de medicamentos', curto: 'Medicamentos',
         perguntas: [
           {id: 'med_uso', t: 'Os medicamentos usados são registrados, preparados e administrados por profissional legalmente habilitado, com protocolo e POPs de uso seguro conforme o fabricante e a legislação?', r: [...R63('a8-v', 'a17', 'a53'), LM(67)],
@@ -371,10 +411,13 @@ const secoes = [
   }
 ];
 
-/* catálogo: o perfil de cada infração vira condição; as que não têm pergunta no ROI
-   (pragas, bronzeamento UV) ficam avulsas, marcadas direto na aba Infrações */
+/* catálogo: o perfil de cada infração vira condição; as que não têm pergunta nem linha do
+   inventário (bronzeamento UV) ficam avulsas, marcadas direto na aba Infrações */
 const usadas = new Set();
-secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => (q.inf || []).forEach(f => usadas.add(f)))));
+secoes.forEach(s => s.itens.forEach(i => {
+  (i.perguntas || []).forEach(q => (q.inf || []).forEach(f => usadas.add(f)));
+  (i.campos || []).forEach(c => { (c.inf || []).forEach(f => usadas.add(f)); (c.lista || []).forEach(x => [].concat(x[3] || []).forEach(f => usadas.add(f))); });
+}));
 const infracoes = CAT.infracoes.map(x => Object.assign({id: x.id, grupo: x.grupo, texto: x.texto, fund: x.fund, r: x.r, se: x.perfil === 'saude' ? SAUDE : INT}, usadas.has(x.id) ? {} : {avulsa: true}));
 
 module.exports = {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Gera estetica/legislacao.json: o texto de cada dispositivo citado pelo roteiro de estética
-   (estetica/roteiro.cjs: perguntas do ROI e catálogo de infrações), no formato do motor
+   (estetica/roteiro.cjs: perguntas do ROI, inventário dos ambientes e catálogo de infrações), no formato do motor
    roteiro-simples ({norma, disp, texto, url}). Fontes:
    - estetica/normas.json: banco de normas do antigo módulo de Estética (texto oficial,
      verificado em 31/08/2026), mais a Lei 6.360/1976 e a RDC 751/2022 do banco embutido;
@@ -21,7 +21,11 @@ const LEI = 'lei-municipal-13725-2004';
 const URL_LEI = 'https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004';
 
 const refs = new Set();
-D.secoes.forEach(s => s.itens.forEach(i => (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)))));
+D.secoes.forEach(s => s.itens.forEach(i => {
+  (i.perguntas || []).forEach(q => q.r.forEach(r => refs.add(r)));
+  /* inventário dos ambientes: fundamento de cada irregularidade e o da “outra irregularidade” */
+  (i.campos || []).forEach(c => { (c.r || []).forEach(r => refs.add(r)); (c.lista || []).forEach(x => (Array.isArray(x[2]) ? x[2] : []).forEach(r => refs.add(r))); });
+}));
 D.infracoes.forEach(i => i.r.forEach(r => refs.add(r)));
 (D.leiBase || []).forEach(r => refs.add(r));
 
