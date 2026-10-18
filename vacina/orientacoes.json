@@ -45,7 +45,11 @@
    "f": "RDC Anvisa nº 197/2017, art. 10, § 2º; Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
   },
   {
-   "t": "A câmara refrigerada opera entre 2 °C e 8 °C, com set point de 5 °C; deve ter registrador eletrônico de temperatura contínuo, controlador de alta e baixa temperatura com alarme visual e sonoro e bateria, e ventilação por ar forçado.",
+   "t": "O que a RDC exige do equipamento: uso exclusivo para vacinas, regularização na Anvisa, termômetro de momento com máxima e mínima, registro diário das temperaturas máxima e mínima com instrumento calibrado que permita monitoramento contínuo, e meios para conservar as vacinas mesmo com falta de energia. A RDC não exige alarme.",
+   "f": "RDC Anvisa nº 197/2017, arts. 10, III, “f”, e § 2º, e 11, I e II"
+  },
+  {
+   "t": "Recomendação técnica do Manual de Rede de Frio (não é exigência da RDC): câmara refrigerada entre 2 °C e 8 °C, com set point de 5 °C, registrador eletrônico contínuo de temperatura, controlador de alta e baixa temperatura com alarme visual e sonoro e bateria, e ventilação por ar forçado. A falta de alarme não é, por si, infração; pode entrar como orientação no relatório.",
    "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
   },
   {
@@ -55,6 +59,10 @@
   {
    "t": "Equipamento longe da luz solar direta, em ambiente ventilado, com no mínimo 15 cm livres ao redor; identificado, com “mapa ilustrativo” (vacina, lote, laboratório, validade, quantidade) e organização “primeiro a vencer, primeiro a sair”; plano de contingência para falha de energia ou do equipamento, conhecido pela equipe.",
    "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025)"
+  },
+  {
+   "t": "Excursão de temperatura (registro fora de 2 °C a 8 °C): as vacinas continuam refrigeradas entre 2 °C e 8 °C, separadas e identificadas como “sob suspeita”, sem uso e sem descarte por conta própria; o serviço registra o ocorrido (temperaturas, tempo de exposição, lotes) e comunica a coordenação de imunização, que avalia e decide o destino. Peça o registro das ocorrências e a comunicação feita.",
+   "f": "Manual de Rede de Frio do Programa Nacional de Imunizações (Ministério da Saúde, 6ª ed., 2025); Manual de Normas e Procedimentos para Vacinação (Ministério da Saúde, 2ª ed., 2024)"
   }
  ],
  "produtos": [

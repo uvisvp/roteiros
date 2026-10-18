@@ -90,7 +90,8 @@ const VELHA_COR = "/* cor do núcleo vinda da casca (paleta única); sem casca, 
 const NOVA_COR = "/* cor do núcleo vinda da casca (paleta única); sem casca, a do roteiro */var cor=cfg.cor;try{var ap=document.documentElement.getAttribute('data-uvis-app'),tm=ap&&parent!==window&&parent.__uvisTemaApp?parent.__uvisTemaApp(ap):null;if(tm&&tm[0]&&String(tm[0]).toLowerCase()!=='#'+'2f'+'4655')cor=tm[0]}catch(e){}if(cor)document.documentElement.style.setProperty('--pu-cor',cor);";
 bloco('rec--padrao-uvis.js', s => s.includes(VELHA_COR) ? s.replace(VELHA_COR, () => NOVA_COR) : troca(s, "if(cfg.cor)document.documentElement.style.setProperty('--pu-cor',cfg.cor);",
   NOVA_COR, 'padrão cor'));
-html = troca(html, "    try { fonte = montar(app); if(window.__uvisCampoInjeta)",
+/* o repack-campo normaliza a cadeia (injeção e tom, uma vez cada): com o tom já presente, nada a fazer */
+if (!html.includes('fonte = window.__uvisTom(fonte')) html = troca(html, "    try { fonte = montar(app); if(window.__uvisCampoInjeta)",
   "    try { fonte = montar(app); if(nucleoAtual && window.__uvisTom) fonte = window.__uvisTom(fonte, css(VAR_NUCLEO[nucleoAtual], ''), css(VAR_NUCLEO[nucleoAtual] + '-d', '')); if(window.__uvisCampoInjeta)", 'tom ao abrir');
 html = troca(html, '<style id="home-option-b-overrides">',
   `<script id="uvis-tom">/* tom do núcleo nos módulos com o ardósia fixo no código (drogaria, manipulação, distribuidora) */

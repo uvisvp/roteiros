@@ -716,6 +716,21 @@ const INFRACOES = [
 ];
 const INFRA_REF = {1: [A(13), A(14)], 2: [A(27), A(28)], 3: [A(40)]};
 const ITEM_ORIENT = {lic: 'lic', resp: 'resp', req: 'tipo1', ambientes: 'ambientes', salacoleta: 'salacoleta', pgq: 'pgq', produtos: 'produtos', biosseg: 'biosseg', documentos: 'documentos', equipe: 'equipe', pre: 'pre', analitica: 'analitica', gcq: 'gcq', ciq: 'ciq', ceq: 'ceq'};
+/* “Para saber mais” dos três tipos (18/10/2026): cada linha com a sua fonte; `tipos` limita
+   ao tipo de serviço em que a pergunta existe */
+const R978 = 'RDC Anvisa nº 978/2025';
+const ORIENT_MAIS = {
+  transporte: [
+    {t: 'Transporte de material biológico: embalagem tripla (recipiente primário estanque, embalagem secundária estanque com material absorvente e embalagem terciária rígida). Amostra de paciente para diagnóstico costuma ser “Substância biológica, categoria B” (UN 3373), identificação que vai na embalagem terciária com remetente, destinatário e responsável. A temperatura exigida pelo exame é mantida e registrada durante o trajeto.', f: R978 + ', arts. 140 e 143; RDC Anvisa nº 504/2021'},
+    {t: 'O que pedir: o procedimento de transporte, os registros de envio e recebimento (data, hora, temperatura, quantidade e integridade) e a embalagem em uso.', f: R978 + ', arts. 140 e 141; RDC Anvisa nº 504/2021'}
+  ],
+  analitica: [
+    {tipos: [3], t: 'Água reagente: a RDC manda o laboratório definir o grau de pureza e testar a conformidade, sem fixar valores. A referência usual é a água reagente de laboratório clínico (CLRW) do CLSI GP40: resistividade de pelo menos 10 MΩ·cm a 25 °C, carbono orgânico total abaixo de 500 ppb, menos de 10 UFC/mL e filtração de 0,22 µm; vale o grau pedido pelo fabricante do equipamento, quando for outro.', f: R978 + ', art. 154, IV e V; CLSI GP40 (Preparation and Testing of Reagent Water in the Clinical Laboratory)'},
+    {tipos: [3], t: 'O que pedir: o grau de pureza definido, os registros de resistividade ou condutividade (em geral, leitura diária no próprio sistema), as análises microbiológicas periódicas e a manutenção do sistema (troca de cartuchos e filtros, sanitização).', f: R978 + ', art. 154, IV e V; CLSI GP40'},
+    {t: 'Valores críticos: a RDC exige lista de valores críticos ou de alerta e fluxo de comunicação ao profissional responsável ou ao paciente, mas não fixa prazo; o laboratório define o prazo no procedimento. O registro de cada comunicação traz data, hora, quem comunicou, quem recebeu e o resultado informado, com confirmação por leitura de volta.', f: R978 + ', arts. 154, III, e 165, parágrafo único; ABNT NBR ISO 15189 (laboratórios clínicos — requisitos de qualidade e competência), comunicação de resultados críticos'},
+    {t: 'Notificação compulsória pelo laboratório: resultado que indique suspeita de doença da Lista Nacional de Notificação Compulsória é notificado à vigilância epidemiológica; a lista separa as doenças de notificação imediata (em até 24 horas) das de notificação semanal. Peça o procedimento e exemplos de notificação feita.', f: R978 + ', arts. 66 e 67; Portaria de Consolidação GM/MS nº 4/2017, Anexo 1 do Anexo V, com as atualizações da Portaria GM/MS nº 420/2022'}
+  ]
+};
 
 const copia = x => JSON.parse(JSON.stringify(x));
 function monta(t) {
@@ -725,6 +740,8 @@ function monta(t) {
     const it = Object.assign({id, titulo, curto}, extra || {}, {perguntas: de(perguntas)});
     if (!it.perguntas.length) delete it.perguntas;
     if (t === 1 && ORIENT[ITEM_ORIENT[id]]) it.orient = copia(ORIENT[ITEM_ORIENT[id]]);
+    const mais = (ORIENT_MAIS[id] || []).filter(o => !o.tipos || o.tipos.includes(t)).map(o => ({t: o.t, f: o.f}));
+    if (mais.length) it.orient = (it.orient || []).concat(mais);
     return it;
   };
   const REQ = {1: REQ1, 2: REQ2, 3: []}[t];

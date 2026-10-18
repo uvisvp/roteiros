@@ -1,6 +1,6 @@
 {
-  "versao": "20261018-1",
+  "versao": "20261018-2",
   "banco": "13.1",
   "correcoes": 1,
-  "notas": "A aba Relatório de Odontologia, Produtos, Serviços assistenciais e Estética mostra a prévia do relatório na própria aba, como em Academia, Vacinação, EAC e Alimentos, com “Baixar relatório em Word” ali mesmo, sem abrir outra tela. Central de Consultas no azul vivo da marca."
+  "notas": "Roteiros: os botões de citação mostram a norma específica (RDC, Portaria, lei federal); a Lei 13.725 aparece só quando a pergunta não tem outra norma, e continua na aba Infrações e no relatório. “Para saber mais” com fonte em cada linha em Odontologia, Produtos, Alimentos, Serviços assistenciais (por modalidade) e Estética; Academia com outros métodos de desinfecção e fontes reais no lugar de “Prática de inspeção”; Vacinação: alarme sonoro é recomendação do Manual de Rede de Frio, não exigência da RDC 197; EAC com transporte, água reagente, valores críticos e notificação compulsória."
 }
