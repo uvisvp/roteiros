@@ -1,5 +1,5 @@
 {
- "_fonte": "Catálogo de infrações do antigo módulo de Estética (enquadramentos e capitulação conferidos em 31/08/2026), convertido em 18/10/2026.",
+ "_fonte": "Catálogo de infrações do antigo módulo de Estética (enquadramentos e capitulação conferidos em 31/08/2026), convertido em 18/10/2026. Em 18/10/2026, nas infrações de resíduos do interesse à saúde (i32 a i34), o art. 62 da Lei 13.725 (estabelecimentos de assistência à saúde) foi trocado pelo art. 69 (estabelecimentos de interesse indireto da saúde).",
  "notas": {
   "saude|Tecnologias, equipamentos e produtos": "Para medicamentos manipulados, a RDC 67/2007 é usada apenas de forma acessória no item 5.10 e nos subitens pertinentes ao fornecimento para estabelecimento de saúde. O item 5.18.4 não é usado contra o serviço, porque a avaliação ali prevista é responsabilidade do farmacêutico.",
   "saude|Processamento de dispositivos médicos": "A RDC 15/2012 só deve ser usada quando a unidade estiver no âmbito do art. 3º. O parágrafo único desse artigo exclui consultórios individualizados e não vinculados a serviços de saúde. Fora desse âmbito, permanecem aplicáveis os deveres pertinentes da RDC 63/2011 e de outras normas específicas.",
@@ -1288,9 +1288,9 @@
    "perfil": "interesse",
    "grupo": "Resíduos e serviços terceirizados",
    "texto": "Não dispor de PGRSS quando exigido, sem se enquadrar na hipótese de substituição por notificação de geração exclusiva de resíduos do Grupo D",
-   "fund": "Art. 62 da Lei Municipal nº 13.725/2004 c/c art. 2º, § 1º, art. 5º, caput e § 1º, e art. 10 da RDC Anvisa nº 222/2018",
+   "fund": "Art. 69 da Lei Municipal nº 13.725/2004 c/c art. 2º, § 1º, art. 5º, caput e § 1º, e art. 10 da RDC Anvisa nº 222/2018",
    "r": [
-    "lei-municipal-13725-2004::artigo::62",
+    "lei-municipal-13725-2004::artigo::69",
     "rdc-anvisa-222-2018::a2",
     "rdc-anvisa-222-2018::a2p1",
     "rdc-anvisa-222-2018::a5",
@@ -1303,9 +1303,9 @@
    "perfil": "interesse",
    "grupo": "Resíduos e serviços terceirizados",
    "texto": "Realizar segregação, acondicionamento, identificação, coleta ou armazenamento de resíduos em desacordo com as regras aplicáveis à etapa",
-   "fund": "Art. 62 da Lei Municipal nº 13.725/2004 c/c arts. 11 a 22 e 25 a 37 da RDC Anvisa nº 222/2018, conforme a etapa constatada",
+   "fund": "Art. 69 da Lei Municipal nº 13.725/2004 c/c arts. 11 a 22 e 25 a 37 da RDC Anvisa nº 222/2018, conforme a etapa constatada",
    "r": [
-    "lei-municipal-13725-2004::artigo::62"
+    "lei-municipal-13725-2004::artigo::69"
    ]
   },
   {
@@ -1313,9 +1313,9 @@
    "perfil": "interesse",
    "grupo": "Resíduos e serviços terceirizados",
    "texto": "Não manter no PGRSS cópia do contrato e da licença ambiental da empresa responsável pela destinação dos resíduos",
-   "fund": "Arts. 62 e 94 da Lei Municipal nº 13.725/2004 c/c art. 6º, inciso XI, e art. 10 da RDC Anvisa nº 222/2018",
+   "fund": "Arts. 69 e 94 da Lei Municipal nº 13.725/2004 c/c art. 6º, inciso XI, e art. 10 da RDC Anvisa nº 222/2018",
    "r": [
-    "lei-municipal-13725-2004::artigo::62",
+    "lei-municipal-13725-2004::artigo::69",
     "lei-municipal-13725-2004::artigo::94",
     "rdc-anvisa-222-2018::a6",
     "rdc-anvisa-222-2018::a6-xi",

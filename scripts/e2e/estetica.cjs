@@ -89,6 +89,7 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  ok(q2&&q2.n==='2.1.1'&&q2.cits.length&&q2.cits.every(c=>/13\.725/.test(c)),'licença (interesse): só a Lei 13.725, que não tem norma específica, numerada 2.1.1');
  await f.evaluate(()=>UvisPadrao.vai({aba:'infracoes'}));await p.waitForTimeout(500);
  ok(await f.evaluate(()=>document.querySelectorAll('input[data-rs-inf]').length)===36,'aba Infrações: 36 enquadramentos de interesse à saúde');
+ ok(await f.evaluate(()=>['i32','i33','i34'].every(id=>{const t=document.querySelector('input[data-rs-inf="'+id+'"]').closest('.rs-inf').textContent;return /Arts?\. 69( e 94)? da Lei Municipal/.test(t)&&!/\b62\b/.test(t.split('c/c')[0])})),'resíduos (interesse): capitulação com o art. 69, sem o art. 62');
  await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(600);
  const rel2=await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'');
  ok(!/ENQUADRAMENTO/.test(rel2),'infrações do perfil de saúde fora do relatório de interesse à saúde');
