@@ -120,7 +120,7 @@ module.exports = {
     {t: 'A AFE de gases medicinais é uma classe própria, distinta da de medicamentos; confira as atividades autorizadas (distribuir, armazenar, transportar, fracionar, dispensar) com as exercidas.', f: 'RDC Anvisa nº 887/2024, art. 9º'}
    ],
    cadeia: [
-    {t: 'Oxigênio, ar medicinal, óxido nitroso, nitrogênio e dióxido de carbono têm monografia na Farmacopeia Brasileira; o laudo do fabricante deve comprovar o atendimento à monografia (teor e impurezas).', f: FB},
+    {t: 'Oxigênio, oxigênio 93%, ar comprimido medicinal, ar sintético medicinal e dióxido de carbono têm monografia na Farmacopeia Brasileira (Volume II, Gases medicinais); óxido nitroso e nitrogênio medicinais são descritos no capítulo 8.8, sem monografia brasileira. O laudo do fabricante deve comprovar o atendimento à monografia aplicável (teor e impurezas).', f: FB},
     {t: 'A notificação ou registro dos gases medicinais é exigida pela RDC 870/2024; o prazo de adequação vai até 31/03/2027.', f: 'RDC Anvisa nº 870/2024, arts. 4º e 63'}
    ],
    equipe: [
@@ -163,7 +163,7 @@ module.exports = {
   'i13.5': 'Classificação por partículas: ABNT NBR ISO 14644-1 (classificação) e 14644-2 (monitoramento). Manipulação sob fluxo unidirecional ISO 5 em sala ISO 7, com antecâmara; diferencial de pressão entre salas registrado (valor usual de 10 a 15 Pa). Para citostáticos, o arranjo de pressão segue a RDC 220/2004.',
   'i13.6': 'Fluxo laminar e cabines com certificação periódica por empresa qualificada: integridade dos filtros HEPA, velocidade do ar e contagem de partículas. Para citostáticos, cabine de segurança biológica classe II tipo B2 (RDC 220/2004). Instrumentos calibrados em laboratório acreditado (ABNT NBR ISO/IEC 17025).',
   'i13.7': 'Materiais e insumos estéreis de uso único, regularizados; embalagem externa desinfetada (ex.: álcool 70% estéril) antes de entrar na área limpa.',
-  'i13.8': 'Água para injetáveis conforme monografia da Farmacopeia Brasileira (inclui limite de endotoxinas bacterianas de 0,25 UI/mL, condutividade e carbono orgânico total), obtida por destilação ou processo equivalente validado.',
+  'i13.8': 'Água para injetáveis conforme a Farmacopeia Brasileira, 8ª ed., capítulo 8.5 (endotoxinas bacterianas abaixo de 0,25 UE/mL, além dos requisitos químicos da água purificada, como condutividade e carbono orgânico total), obtida no próprio estabelecimento por destilação ou osmose reversa (RDC nº 67/2007, Anexo IV, item 7.2.1).',
   'i13.9': 'Simulação asséptica (media fill) com meio de cultura para qualificar operadores e processo, na admissão e periodicamente; monitoramento microbiológico do ambiente e das superfícies (placas de sedimentação, contato e ar ativo) — ABNT NBR ISO 14698.',
   'i13.10': 'Esterilização validada: calor úmido (ABNT NBR ISO 17665), óxido de etileno (ABNT NBR ISO 11135) ou radiação (ABNT NBR ISO 11137); filtração esterilizante em 0,22 µm com teste de integridade (ponto de bolha) após o uso.',
   'i13.11': 'Ensaios farmacopeicos de produto estéril: esterilidade, endotoxinas bacterianas (LAL), partículas visíveis e subvisíveis, além de teor e aspecto — Farmacopeia Brasileira, 8ª ed.',

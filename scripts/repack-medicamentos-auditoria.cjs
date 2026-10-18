@@ -104,7 +104,9 @@ for (const id of ['rec--saber-mais.js', 'app--farmacia-manipulacao', 'app--distr
 bloco('app--farmacia-manipulacao', s => s.split('(Farmacopeia Brasileira, 6ª ed., 5.2.1)').join('(Farmacopeia Brasileira, 8ª ed., 5.2.1)')
   /* orientações de estéreis (i13.1 e i13.11), injetadas uma vez pelo repack-medicamentos */
   .split('Farmacopeia Brasileira, 6ª ed. (esterilidade').join('Farmacopeia Brasileira, 8ª ed. (esterilidade')
-  .split('além de teor e aspecto — Farmacopeia Brasileira, 6ª ed.').join('além de teor e aspecto — Farmacopeia Brasileira, 8ª ed.'));
+  .split('além de teor e aspecto — Farmacopeia Brasileira, 6ª ed.').join('além de teor e aspecto — Farmacopeia Brasileira, 8ª ed.')
+  /* i13.8: capítulo 8.5 da FB 8ª ed. (UE/mL) e RDC 67, Anexo IV, item 7.2.1 */
+  .split('Água para injetáveis conforme monografia da Farmacopeia Brasileira (inclui limite de endotoxinas bacterianas de 0,25 UI/mL, condutividade e carbono orgânico total), obtida por destilação ou processo equivalente validado.').join('Água para injetáveis conforme a Farmacopeia Brasileira, 8ª ed., capítulo 8.5 (endotoxinas bacterianas abaixo de 0,25 UE/mL, além dos requisitos químicos da água purificada, como condutividade e carbono orgânico total), obtida no próprio estabelecimento por destilação ou osmose reversa (RDC nº 67/2007, Anexo IV, item 7.2.1).'));
 
 /* nenhuma citação do art. 22 ou do art. 129, nem de artigo acima de 109, em qualquer forma */
 const {blocks} = require('./integrated-html.cjs').unpackText(html);
