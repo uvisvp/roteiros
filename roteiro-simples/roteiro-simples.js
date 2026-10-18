@@ -25,7 +25,7 @@
  'use strict';
  var D = window.ROTEIRO, STORE = D.store;
  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
- function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, concl: '', pt: {}, auto: {}}; }
+ function novo(){ return {v: 1, meta: {}, r: {}, sit: {}, fotos: {}, inf: {}, infNota: {}, concl: '', pt: {}, auto: {}}; }
  function carrega(){ try { var x = JSON.parse(localStorage.getItem(STORE) || 'null'); if(x && x.v === 1) return Object.assign(novo(), x); } catch(e){} return novo(); }
  var st = carrega();
  /* campo de equipamentos que substituiu um texto livre (c.legado): o texto antigo vira o primeiro equipamento */
@@ -38,7 +38,18 @@
  var PERG = {}, ONDE = {}, ORDEM = [];
  D.secoes.forEach(function(s, si){ s.itens.forEach(function(it, ii){ (it.perguntas || []).forEach(function(q, qi){ PERG[q.id] = q; ONDE[q.id] = {s: s, it: it, n: (si + 1) + '.' + (ii + 1) + '.' + (qi + 1)}; ORDEM.push(q.id); }); }); });
  var INF = {}; D.infracoes.forEach(function(i){ INF[i.id] = i; });
- function visivel(q){ var c = q.se; if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ function cond(c){ if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ /* it.se: o item inteiro depende do perfil (sai da navegação e do relatório); i.se: a infração idem */
+ function itemVisivel(it){ return cond(it.se); }
+ function infVisivel(i){ return cond(i.se); }
+ function visivel(q){ var o = ONDE[q.id]; return (!o || itemVisivel(o.it)) && cond(q.se); }
+ /* D.filtroPerfil: o perfil filtra o roteiro — itens sem verificação visível saem da navegação e a numeração
+    corre só entre seções, itens e perguntas visíveis (sem saltos) */
+ function itemMostra(it){ return itemVisivel(it) && (!D.filtroPerfil || perguntasDe(it).length || (it.campos || []).length || !!it.consulta); }
+ function numero(id){ var o = ONDE[id]; if(!D.filtroPerfil) return o.n; var si = 0, ii = 0, qi = 0;
+  D.secoes.some(function(s){ var its = s.itens.filter(itemMostra); if(!its.length) return false; si++;
+   if(s !== o.s) return false; ii = its.indexOf(o.it) + 1; qi = perguntasDe(o.it).indexOf(PERG[id]) + 1; return true; });
+  return si + '.' + ii + '.' + qi; }
  function perguntasDe(it){ return (it.perguntas || []).filter(visivel); }
  function campoPreenchido(c){ var v = st.meta[c.id]; return Array.isArray(v) ? v.some(function(x){ return x && typeof x === 'object' ? eqTem(x) : true; }) : !!String(v || '').trim(); }
  function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
@@ -55,13 +66,13 @@
  function ambIrrDe(c, a){ var m = a.m || {}, out = ambOpcoes(c, a).filter(function(x){ return m[x[0]]; }).map(function(x){ return {id: x[0], texto: x[1], refs: [].concat(x[2] || []), inf: x[3]}; });
   if(String(a.outra || '').trim()) out.push({id: '', texto: String(a.outra).trim().replace(/\.$/, ''), refs: [].concat(c.r || [])}); return out; }
  /* irregularidades dos ambientes, agrupadas pela irregularidade (cada uma com os ambientes onde foi vista): [{c, texto, refs, nomes, inf, outra}] */
- function ambIrr(){ var out = [], idx = {}; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes') return;
+ function ambIrr(){ var out = [], idx = {}; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes' || !itemVisivel(CAMPO_IT[id])) return;
   ambValidos(c).forEach(function(x){ var nome = ambNome(x.a, x.i); ambIrrDe(c, x.a).forEach(function(r){ var k = r.id ? id + '|' + r.id : id + '|outra|' + x.i;
    if(!idx[k]){ idx[k] = {c: c, texto: r.texto, refs: r.refs, nomes: [], inf: r.inf ? [].concat(r.inf) : (c.inf || []), outra: !r.id}; out.push(idx[k]); }
    idx[k].nomes.push(nome); }); }); }); return out; }
  function ambFrase(x){ return x.outra ? x.nomes[0] + ': ' + minus(x.texto) + '.' : x.texto + ': ' + lista(x.nomes.map(minus)) + '.'; }
  function minus(t){ t = String(t || ''); return /^[A-ZÀ-Ý]{2}/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
- function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(ONDE[id].n); }); });
+ function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(numero(id)); }); });
   ambIrr().forEach(function(x){ x.inf.forEach(function(i){ var l = s[i] = s[i] || []; x.nomes.forEach(function(n){ if(l.indexOf(n) < 0) l.push(n); }); }); }); return s; }
  function ambNome(a, i){ return String(a.nome || '').trim() || 'ambiente ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
@@ -121,11 +132,16 @@
  /* ---------- listas de produtos com busca nas bases públicas da Anvisa ----------
     Campo tipo 'equipamentos' com c.perfil: 'refrigeracao' (equipamentos de
     refrigeração das vacinas), 'teste' (testes rápidos e reagentes do EAC) e
-    'vacina' (vacinas do serviço). Cada item: busca pelo registro ou pelo processo
-    (dispositivos/<prefixo do registro>.json; medicamentos/<prefixo>.json;
-    processo pelo índice indices/processos), preenchimento dos dados do registro e
-    edição/digitação livre. Sai no relatório em tabela, sob o título do item. */
- var CAMPO = {}; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ CAMPO[c.id] = c; }); }); });
+    'vacina' (vacinas do serviço), 'estetica' (equipamentos estéticos) e 'produto'
+    (produtos em uso: a categoria escolhe a base — cosméticos, saneantes, medicamentos
+    ou dispositivos médicos). Cada item: busca pelo registro ou pelo processo
+    (dispositivos/, medicamentos/ e saneantes/<prefixo do registro>.json; processo pelo
+    índice indices/processos, por medicamentos_processos/ e saneantes_processos/, e
+    cosméticos só pelo processo, em cosmeticos/<dígitos 6 a 8>.json), preenchimento dos
+    dados do registro e edição/digitação livre. Sai no relatório em tabela, sob o título do item. */
+ var CAMPO = {}, CAMPO_IT = {}; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ CAMPO[c.id] = c; CAMPO_IT[c.id] = it; }); }); });
+ /* ?campo=valor na abertura (window.__QS, da casca): preenche campo vazio do perfil — links diretos e testes */
+ try { String(window.__QS || '').replace(/^\?/, '').split('&').forEach(function(kv){ var p = kv.split('='), k = decodeURIComponent(p[0] || ''), v = decodeURIComponent(p[1] || ''); if(k && v && CAMPO[k] && CAMPO[k].tipo === 'select' && !st.meta[k]) st.meta[k] = v; }); } catch(e){}
  function vencMA(v){ var m = /^(\d{2})(\d{4})$/.exec(String(v || '')); return m ? m[1] + '/' + m[2] : String(v || ''); }
  var PERFIS = {
   refrigeracao: {item: 'Equipamento', mais: '+ Adicionar equipamento', base: 'dispositivos',
@@ -141,6 +157,19 @@
    confere: function(x){ return /TESTE|R[ÁA]PID|IMUNO|REAGENTE|TIRA|GLIC|COLESTER|HEMOGLOB|LIP[ÍI]D|TRIGLI|ANALISADOR|MONITOR|CASSETE|KIT|SARS|COVID|HIV|HEPATITE|DENGUE|S[ÍI]FILIS|INFLUENZA|ANT[ÍI]GENO|ANTICORPO|IG[GM]|PCR|LACTATO|CETONA|[ÁA]CIDO [ÚU]RICO|BETA ?HCG|GRAVIDEZ|CONTROLE|CALIBRADOR/i.test(x.produto || ''); }, estranho: 'o produto deste registro não parece ser teste ou reagente para diagnóstico in vitro',
    head: ['Produto', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Lote, validade e observações'],
    linha: function(e){ return [[e.tipo, e.nome, rot('Exame: ', e.exame)], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Lote: ', e.lote), rot('Validade: ', e.validade), e.obs]]; }},
+  /* estética: equipamentos (laser, luz pulsada, radiofrequência…) — dispositivos médicos */
+  estetica: {item: 'Equipamento', mais: '+ Adicionar equipamento', base: 'dispositivos',
+   campos: [['tipo', 'Tipo', 'select'], ['nome', 'Nome comercial / produto'], ['modelo', 'Marca e modelo'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'],
+    ['fabricante', 'Fabricante (país)'], ['detentor', 'Detentor do registro'], ['classe', 'Classe de risco'], ['serie', 'Nº de série / patrimônio'], ['manut', 'Última manutenção'], ['obs', 'Observações', 'textarea']],
+   confere: function(){ return true; }, estranho: '',
+   head: ['Equipamento', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Série, manutenção e observações'],
+   linha: function(e){ return [[e.tipo, e.nome, e.modelo], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Série / patrimônio: ', e.serie), rot('Última manutenção: ', e.manut), e.obs]]; }},
+  /* estética: produtos em uso — a categoria escolhe a base da Anvisa */
+  produto: {item: 'Produto', mais: '+ Adicionar produto', porTipo: {'Cosmético': 'cosmeticos', 'Saneante': 'saneantes', 'Medicamento': 'medicamentos', 'Dispositivo médico': 'dispositivos'},
+   campos: [['tipo', 'Categoria', 'select'], ['nome', 'Produto (nome comercial)'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'], ['detentor', 'Empresa detentora'], ['situacao', 'Situação na Anvisa'], ['lote', 'Lote'], ['validade', 'Validade'], ['obs', 'Observações', 'textarea']],
+   confere: function(){ return true; }, estranho: '',
+   head: ['Produto', 'Regularização na Anvisa', 'Detentor e situação', 'Lote, validade e observações'],
+   linha: function(e){ return [[e.tipo, e.nome], sv(e.registro) || sv(e.processo) ? [rot('Registro ', e.registro), rot('Processo ', e.processo)] : ['Regularização não informada'], [e.detentor, rot('Situação: ', e.situacao)], [rot('Lote: ', e.lote), rot('Validade: ', e.validade), e.obs]]; }},
   vacina: {item: 'Vacina', mais: '+ Adicionar vacina', base: 'medicamentos',
    campos: [['nome', 'Vacina (nome comercial)'], ['principio', 'Princípio ativo'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'], ['detentor', 'Detentor do registro'],
     ['situacao', 'Situação do registro'], ['vencimento', 'Vencimento do registro'], ['lote', 'Lote'], ['validade', 'Validade do lote'], ['obs', 'Observações', 'textarea']],
@@ -150,51 +179,68 @@
  };
  function perfil(c){ return PERFIS[(c && c.perfil) || 'refrigeracao'] || PERFIS.refrigeracao; }
  function rot(pre, v){ return sv(v) ? pre + String(v).trim() : ''; }
+ /* base da Anvisa do item: a do perfil ou, com P.porTipo, a da categoria escolhida */
+ function baseDe(P, e){ return P.porTipo ? P.porTipo[(e || {}).tipo] || '' : P.base; }
+ var NOME_BASE = {medicamentos: 'medicamentos', dispositivos: 'produtos para saúde', cosmeticos: 'cosméticos', saneantes: 'saneantes'};
+ var DICA = {medicamentos: 'o registro (9 ou 13 dígitos) ou o processo', dispositivos: 'o registro (11 dígitos) ou o processo', saneantes: 'o registro (9 dígitos) ou o processo', cosmeticos: 'o número do processo (13 a 17 dígitos)'};
  var eqMsg = {};
  function eqLista(id){ return Array.isArray(st.meta[id]) ? st.meta[id] : []; }
- function eqTem(e){ return Object.keys(e || {}).some(function(k){ return !/^(busca|consulta|consultaReg)$/.test(k) && sv(e[k]); }); }
+ function eqTem(e){ return Object.keys(e || {}).some(function(k){ return !/^(busca|consulta|consultaReg|consultaBase)$/.test(k) && sv(e[k]); }); }
  function equipHtml(c){ var P = perfil(c), L = eqLista(c.id), n = Math.max(L.length, 1), h = '';
-  for(var i = 0; i < n; i++){ var e = L[i] || {}, k = c.id + '|' + i, m = eqMsg[k];
+  /* com P.porTipo a categoria vem antes da busca: é ela que escolhe a base */
+  var tipos = c.tipos || (P.porTipo ? Object.keys(P.porTipo) : []);
+  function cmp(e, k, f){ var v = e[f[0]] || '', a = ' data-rs-eq="' + esc(k) + '|' + f[0] + '"';
+   if(f[2] === 'select') return '<label class="pu-campo rs-campo"><span>' + f[1] + '</span><select' + a + '>' + [''].concat(tipos).map(function(o){ return '<option value="' + esc(o) + '"' + (v === o ? ' selected' : '') + '>' + esc(o || 'Selecione') + '</option>'; }).join('') + '</select></label>';
+   if(f[2] === 'textarea') return '<label class="pu-campo rs-campo rs-largo"><span>' + f[1] + '</span><textarea rows="2"' + a + '>' + esc(v) + '</textarea></label>';
+   return '<label class="pu-campo rs-campo"><span>' + f[1] + '</span><input type="text"' + a + ' value="' + esc(v) + '"></label>'; }
+  for(var i = 0; i < n; i++){ var e = L[i] || {}, k = c.id + '|' + i, m = eqMsg[k], b = baseDe(P, e), antes = P.porTipo ? P.campos.filter(function(f){ return f[0] === 'tipo'; }) : [];
    h += '<div class="rs-eq"><div class="rs-eq-top"><b>' + esc(P.item) + ' ' + (i + 1) + '</b>' + (i < L.length ? '<button type="button" class="pu-btn" data-rs-eq-del="' + esc(k) + '">Remover</button>' : '') + '</div>'
-    + '<div class="rs-eq-busca"><label class="pu-campo rs-campo"><span>Buscar na Anvisa pelo registro ou processo</span><input type="text" inputmode="numeric" data-rs-eq="' + esc(k) + '|busca" placeholder="Registro ou processo para pesquisar" value="' + esc(e.busca || '') + '"></label><button type="button" class="pu-btn pu-btn-pri" data-rs-eq-buscar="' + esc(k) + '">Buscar</button></div>'
+    + (antes.length ? '<div class="rs-campos">' + antes.map(function(f){ return cmp(e, k, f); }).join('') + '</div>' : '')
+    + '<div class="rs-eq-busca"><label class="pu-campo rs-campo"><span>Buscar na Anvisa pelo ' + (b === 'cosmeticos' ? 'processo' : 'registro ou processo') + '</span><input type="text" inputmode="numeric" data-rs-eq="' + esc(k) + '|busca" placeholder="' + (b === 'cosmeticos' ? 'Processo' : 'Registro ou processo') + ' para pesquisar" value="' + esc(e.busca || '') + '"></label><button type="button" class="pu-btn pu-btn-pri" data-rs-eq-buscar="' + esc(k) + '">Buscar</button></div>'
     + (m ? '<p class="rs-eq-msg' + (m.tipo ? ' rs-eq-' + m.tipo : '') + '" role="status">' + esc(m.t) + '</p>' : '')
-    + '<div class="rs-campos">' + P.campos.map(function(f){ var v = e[f[0]] || '', a = ' data-rs-eq="' + esc(k) + '|' + f[0] + '"';
-      if(f[2] === 'select') return '<label class="pu-campo rs-campo"><span>' + f[1] + '</span><select' + a + '>' + [''].concat(c.tipos || []).map(function(o){ return '<option value="' + esc(o) + '"' + (v === o ? ' selected' : '') + '>' + esc(o || 'Selecione') + '</option>'; }).join('') + '</select></label>';
-      if(f[2] === 'textarea') return '<label class="pu-campo rs-campo rs-largo"><span>' + f[1] + '</span><textarea rows="2"' + a + '>' + esc(v) + '</textarea></label>';
-      return '<label class="pu-campo rs-campo"><span>' + f[1] + '</span><input type="text"' + a + ' value="' + esc(v) + '"></label>'; }).join('') + '</div>'
-    + (e.consulta ? '<p class="pu-q-ajuda">Dados do registro conferidos na base de ' + (P.base === 'medicamentos' ? 'medicamentos' : 'produtos para saúde') + ' da Anvisa em ' + esc(fmtData(e.consulta)) + '.</p>' : '') + '</div>'; }
+    + '<div class="rs-campos">' + P.campos.filter(function(f){ return antes.indexOf(f) < 0; }).map(function(f){ return cmp(e, k, f); }).join('') + '</div>'
+    + (e.consulta ? '<p class="pu-q-ajuda">Dados do registro conferidos na base de ' + NOME_BASE[e.consultaBase || b] + ' da Anvisa em ' + esc(fmtData(e.consulta)) + '.</p>' : '') + '</div>'; }
   return '<fieldset class="pu-campo rs-campo rs-largo rs-eqs"><legend>' + esc(c.rotulo) + '</legend>' + h + '<div><button type="button" class="pu-btn" data-rs-eq-add="' + esc(c.id) + '">' + esc(P.mais) + '</button></div></fieldset>'; }
  function eqSet(k, dados){ var p = k.split('|'), id = p[0], i = +p[1], L = eqLista(id).slice(); while(L.length <= i) L.push({}); var e = Object.assign({}, L[i], dados);
   /* registro trocado à mão depois da busca: a nota de conferência deixa de valer */
-  if(e.consulta && dig(e.registro) !== e.consultaReg){ delete e.consulta; delete e.consultaReg; }
+  if(e.consulta && (dig(e.registro) !== e.consultaReg || (e.consultaBase && e.consultaBase !== baseDe(perfil(CAMPO[id]), e)))){ delete e.consulta; delete e.consultaReg; delete e.consultaBase; }
   L[i] = e; st.meta[id] = L; salva(); }
  var BASES = ['https://uvisvp.github.io/base-vigilancia/dados/', 'https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/'];
  function jget(path){ var i = 0; function tenta(){ var u = BASES[i++] + path; return fetch(u, {cache: 'no-store'}).then(function(r){ if(r.status === 404) return null; if(!r.ok) throw Error('HTTP ' + r.status); return r.json(); }).catch(function(e){ if(i < BASES.length) return tenta(); throw e; }); } return tenta(); }
  var manif = null; function prefixo(base){ if(!manif) manif = jget('manifest.json').catch(function(){ return null; }); return manif.then(function(m){ var n = Number(m && m.bases && m.bases[base] && m.bases[base].prefixo); return n > 0 && n < 10 ? n : (base === 'medicamentos' ? 4 : 5); }); }
  function dig(v){ return String(v || '').replace(/\D/g, ''); }
  function porRegistro(base, reg){ return prefixo(base).then(function(n){ return jget(base + '/' + reg.slice(0, n) + '.json'); }).then(function(d){ return (d || []).filter(function(x){ return dig(x.registro) === reg; }); }); }
- function buscaEquip(P, txt){ var d = dig(txt), base = P.base;
-  if(d.length >= 15 || (/^25/.test(d) && d.length >= 13)) return jget('indices/processos/' + d.slice(5, 8) + '.json').then(function(idx){ var refs = (idx && idx[d]) || [];
+ function buscaEquip(base, txt){ var d = dig(txt), proc = d.length >= 15 || (/^25/.test(d) && d.length >= 13);
+  /* cosméticos (só processo na base aberta) e saneantes por processo: fragmento pelos dígitos 6 a 8 do processo */
+  if(base === 'cosmeticos' || (base === 'saneantes' && proc)){ if(d.length < 13) return Promise.reject(Error('curto'));
+   return jget((base === 'cosmeticos' ? 'cosmeticos/' : 'saneantes_processos/') + d.slice(5, 8) + '.json').then(function(a){ return {por: 'processo', achados: (a || []).filter(function(x){ return dig(x.processo) === d; })}; }); }
+  if(proc) return jget('indices/processos/' + d.slice(5, 8) + '.json').then(function(idx){ var refs = (idx && idx[d]) || [];
    if(base === 'medicamentos') return (refs.length ? jget('medicamentos_processos/' + d.slice(5, 8) + '.json') : Promise.resolve([])).then(function(a){ return {por: 'processo', achados: (a || []).filter(function(x){ return dig(x.processo) === d; })}; });
    var regs = refs.filter(function(r){ return r && r.b === base; }).map(function(r){ return dig(r.r); });
    return Promise.all(regs.map(function(r){ return porRegistro(base, r); })).then(function(a){ return {por: 'processo', achados: [].concat.apply([], a).filter(function(x){ return dig(x.processo) === d; })}; }); });
   if(d.length < 7) return Promise.reject(Error('curto'));
-  var curto = base === 'medicamentos' ? 9 : 11;
+  var curto = base === 'dispositivos' ? 11 : 9;
   return porRegistro(base, d).then(function(a){ return !a.length && d.length > curto ? porRegistro(base, d.slice(0, curto)) : a; }).then(function(a){ return {por: 'registro', achados: a}; }); }
- function eqBuscar(k){ var p = k.split('|'), c = CAMPO[p[0]], P = perfil(c), e = eqLista(p[0])[+p[1]] || {}, q = e.busca || e.registro || e.processo || '';
-  var dica = P.base === 'medicamentos' ? 'o registro (9 ou 13 dígitos) ou o processo' : 'o registro (11 dígitos) ou o processo';
+ function eqBuscar(k){ var p = k.split('|'), c = CAMPO[p[0]], P = perfil(c), e = eqLista(p[0])[+p[1]] || {}, q = e.busca || e.registro || e.processo || '', base = baseDe(P, e);
+  if(!base){ eqMsg[k] = {t: 'Escolha a categoria do produto antes de buscar.', tipo: 'aviso'}; redesenha(); return; }
+  var dica = DICA[base];
   if(!dig(q)){ eqMsg[k] = {t: 'Digite ' + dica + '.', tipo: 'aviso'}; redesenha(); return; }
   eqMsg[k] = {t: 'Consultando a base da Anvisa…'}; redesenha();
-  buscaEquip(P, q).then(function(r){ /* a base repete o mesmo registro (com e sem fabricante): fica a linha mais completa */
+  buscaEquip(base, q).then(function(r){ /* a base repete o mesmo registro (com e sem fabricante): fica a linha mais completa */
    var u = {}; r.achados.forEach(function(y){ var kr = dig(y.registro) || JSON.stringify(y); if(!u[kr] || Object.keys(y).length > Object.keys(u[kr]).length) u[kr] = y; }); r.achados = Object.keys(u).map(function(kr){ return u[kr]; }); var x = r.achados[0];
-   if(!x){ eqMsg[k] = {t: (r.por === 'processo' ? 'Processo' : 'Registro') + ' não localizado na base de ' + (P.base === 'medicamentos' ? 'medicamentos' : 'produtos para saúde') + ' da Anvisa. Confira o número na consulta oficial; os dados podem ser digitados.', tipo: 'aviso'}; redesenha(); return; }
+   if(!x){ eqMsg[k] = {t: (r.por === 'processo' ? 'Processo' : 'Registro') + ' não localizado na base de ' + NOME_BASE[base] + ' da Anvisa. Confira o número na consulta oficial; os dados podem ser digitados.', tipo: 'aviso'}; redesenha(); return; }
    var atual = eqLista(p[0])[+p[1]] || {}, dados, obs = [];
-   if(P.base === 'medicamentos'){ dados = {registro: x.registro || '', processo: x.processo || '', nome: x.produto || '', principio: x.principio_ativo || '', detentor: String(x.detentor || '').replace(/^\d{14}\s*-\s*/, ''), situacao: x.situacao || '', vencimento: vencMA(x.vencimento)};
+   if(base === 'medicamentos'){ dados = {registro: x.registro || '', processo: x.processo || '', nome: x.produto || '', principio: x.principio_ativo || '', detentor: String(x.detentor || '').replace(/^\d{14}\s*-\s*/, ''), situacao: x.situacao || '', vencimento: vencMA(x.vencimento)};
     if(x.situacao && !/^ativ/i.test(x.situacao)) obs.push('registro ' + String(x.situacao).toLowerCase());
     var mv = /^(\d{2})(\d{4})$/.exec(String(x.vencimento || '')), hoje = new Date(); if(mv && (+mv[2] < hoje.getFullYear() || (+mv[2] === hoje.getFullYear() && +mv[1] < hoje.getMonth() + 1))) obs.push('registro vencido em ' + vencMA(x.vencimento)); }
+   /* cosméticos: tipo (Notificado, Registrado…) e situação; saneantes: IS_REGISTRADO e ST_PRODUTO_ATIVO (S/N) */
+   else if(base === 'cosmeticos' || base === 'saneantes'){ var ativo = base === 'cosmeticos' ? (/^ativ/i.test(x.situacao || '') ? true : /^inativ/i.test(x.situacao || '') ? false : null) : (x.situacao === 'S' ? true : x.situacao === 'N' ? false : null);
+    var forma = base === 'cosmeticos' ? String(x.tipo || '') : (x.registrado === '0' ? 'Notificado' : x.registrado === '1' || dig(x.registro) ? 'Registrado' : '');
+    dados = {registro: x.registro || '', processo: x.processo || '', nome: x.produto || '', detentor: x.detentor || '', situacao: [forma, ativo === true ? 'ativo' : ativo === false ? 'inativo' : ''].filter(Boolean).join(', ')};
+    if(ativo === false) obs.push('produto inativo na base da Anvisa'); }
    else { dados = {registro: x.registro || '', processo: x.processo || '', nome: x.produto || '', fabricante: [x.fabricante, x.pais].filter(Boolean).join(' — '), detentor: x.detentor || '', classe: x.classe ? 'Classe ' + x.classe : ''}; }
    if(P.tipoAuto && !atual.tipo && P.tipoAuto(x)) dados.tipo = P.tipoAuto(x);
-   eqSet(k, dados); eqSet(k, {consulta: new Date().toISOString().slice(0, 10), consultaReg: dig(x.registro)});
+   eqSet(k, dados); eqSet(k, {consulta: new Date().toISOString().slice(0, 10), consultaReg: dig(x.registro), consultaBase: base});
    if(!P.confere(x)) obs.push(P.estranho);
    eqMsg[k] = {t: 'Encontrado: ' + String(x.produto || '').replace(/\.+$/, '') + (r.achados.length > 1 ? ' (' + r.achados.length + ' registros; usado o primeiro).' : '.') + (obs.length ? ' Atenção: ' + obs.join('; ') + '; confira.' : ''), tipo: obs.length ? 'aviso' : 'ok'};
    redesenha(); },
@@ -241,8 +287,8 @@
    return out; }
   if(c.tipo === 'equipamentos'){ var P = perfil(c), L = (Array.isArray(v) ? v : []).filter(eqTem); if(!L.length) return [];
    var out = [{t: 'table', head: P.head, widths: [2500, 2200, 2500, 2100], rows: L.map(function(e){ return P.linha(e).map(function(cel){ return cel.filter(sv).join('\n') || '—'; }); })}];
-   var cons = []; L.forEach(function(e){ if(e.consulta && cons.indexOf(fmtData(e.consulta)) < 0) cons.push(fmtData(e.consulta)); });
-   if(cons.length) out.push({t: 'small', x: 'Dados de registro conferidos na base de ' + (P.base === 'medicamentos' ? 'medicamentos' : 'produtos para saúde') + ' da Anvisa em ' + lista(cons) + '.'});
+   var cons = [], bs = []; L.forEach(function(e){ if(!e.consulta) return; var nb = NOME_BASE[e.consultaBase || baseDe(P, e)]; if(cons.indexOf(fmtData(e.consulta)) < 0) cons.push(fmtData(e.consulta)); if(nb && bs.indexOf(nb) < 0) bs.push(nb); });
+   if(cons.length) out.push({t: 'small', x: 'Dados de registro conferidos na' + (bs.length > 1 ? 's bases' : ' base') + ' de ' + lista(bs) + ' da Anvisa em ' + lista(cons) + '.'});
    return out; }
   if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', ');
   if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; }
@@ -264,7 +310,7 @@
  function perguntaHtml(q){ var r = st.r[q.id] || '', f = st.fotos[q.id], o = ONDE[q.id];
   var simnao = D.respostas === 'simnao', vs = q.sim === 'nc' ? 'nc' : 'c', vn = vs === 'c' ? 'nc' : 'c', temNa = q.na || D.naSempre;
   var bt = (simnao ? [[vs, 'Sim', vs === 'c' ? 'ok' : 'nao'], [vn, 'Não', vn === 'c' ? 'ok' : 'nao']] : [['c', 'Cumpre', 'ok'], ['nc', 'Não cumpre', 'nao']]).concat(temNa ? [['na', 'Não se aplica', 'na']] : []);
-  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(o.n) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
+  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(numero(q.id)) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
    + '<div class="pu-resp" role="group" aria-label="Resultado"' + (bt.length === 2 ? ' style="grid-template-columns:repeat(2,minmax(0,1fr))"' : '') + '>' + bt.map(function(b){ return '<button type="button" data-rs-r="' + esc(q.id) + '|' + b[0] + '" data-v="' + b[2] + '" aria-pressed="' + (r === b[0]) + '">' + b[1] + '</button>'; }).join('') + '</div>'
    + pontosHtml(q)
    + (r === 'nc' && q.pontos && !pontosNC(q).length ? '<p class="pu-q-ajuda rs-pt-aviso">Marque no checklist o ponto que não atende: é a frase dele que vai ao relatório. Sem isso, sai a frase geral.</p>' : '')
@@ -348,7 +394,7 @@
   B.push({t: 'h1', x: (++sec) + ' VERIFICAÇÕES REALIZADAS'});
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
-   s.itens.forEach(function(it){ var ps = perguntasDe(it).filter(function(q){ return st.r[q.id] && !(D.relSemNa && st.r[q.id] === 'na'); }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
+   s.itens.forEach(function(it){ if(!itemVisivel(it)) return; var ps = perguntasDe(it).filter(function(q){ return st.r[q.id] && !(D.relSemNa && st.r[q.id] === 'na'); }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
     var fr = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }).map(frase), na = ps.filter(function(q){ return st.r[q.id] === 'na' && typeof q.na !== 'string'; });
     partes.push({t: 'h2', x: sec + '.' + (ns + 1) + '.' + (partes.filter(function(p){ return p.t === 'h2'; }).length + 1) + ' ' + it.titulo});
     cps.forEach(function(b){ partes.push(b); });
@@ -361,8 +407,8 @@
   B.push({t: 'h1', x: (++sec) + ' IRREGULARIDADES OBSERVADAS'});
   if(irr.length) irr.forEach(function(q, i){ var f = fundamento(comLei(q.r)); B.push({t: 'num', n: i + 1, x: q.x + (f ? ' Fundamento: ' + f + '.' : '')}); });
   else B.push({t: 'p', x: 'Não foram registradas irregularidades nesta inspeção.'});
-  var sel = D.infracoes.filter(function(i){ return st.inf[i.id]; });
-  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), i.texto, fundamento(comLei(i.r))]; })}); }
+  var sel = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); });
+  if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), descInf(i), fundInf(i)]; })}); }
   B.push({t: 'h1', x: (++sec) + ' CONCLUSÃO'}, {t: 'p', x: String(st.concl || '').trim() || R.conclusao});
   if(st.meta.equipe) B.push({t: 'kv', k: 'Equipe de inspeção', v: st.meta.equipe});
   B.push({t: 'sign'});
@@ -422,15 +468,21 @@
  function baixa(blob, nome){ var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 2000); }
 
  /* ---------- abas Infrações e Relatório ---------- */
- function abaInfracoes(el){ var sug = sugeridas(), grupos = [];
-  D.infracoes.forEach(function(i){ if(grupos.indexOf(i.grupo) < 0) grupos.push(i.grupo); });
+ /* D.constatacao: a infração marcada abre o campo “Constatação”; preenchido, ele descreve a infração no enquadramento */
+ function notaInf(i){ return D.constatacao ? String((st.infNota || {})[i.id] || '').trim() : ''; }
+ /* i.fund: capitulação já redigida no catálogo (“art. 63 da Lei 13.725/2004 c/c art. 39 da RDC 63/2011”) */
+ function fundInf(i){ return i.fund || fundamento(comLei(i.r)); }
+ function descInf(i){ var n = notaInf(i); return n ? n.charAt(0).toUpperCase() + n.slice(1) + (/[.!?]$/.test(n) ? '' : '.') : i.texto; }
+ function abaInfracoes(el){ var sug = sugeridas(), grupos = [], INFS = D.infracoes.filter(infVisivel);
+  INFS.forEach(function(i){ if(grupos.indexOf(i.grupo) < 0) grupos.push(i.grupo); });
   var nsug = Object.keys(sug).filter(function(k){ return !st.inf[k]; }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Enquadramento das infrações</h3><p>Marque as infrações que serão enquadradas. As sugeridas vêm dos itens marcados como “Não cumpre”. O enquadramento sai no relatório, em tabela própria.</p>'
    + (nsug ? '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-sugeridas>Marcar as ' + nsug + ' sugeridas</button></div>' : '') + '</div>'
-   + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + D.infracoes.filter(function(i){ return i.grupo === g; }).map(function(i){
-     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundamento(comLei(i.r))) + '</small>'
-      + (sug[i.id] ? '<em>Sugerida — itens ' + esc(sug[i.id].join(', ')) + ' não cumpridos</em>' : '') + '</span></label>'; }).join('') + '</div>'; }).join(''); }
- function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id]; }).length;
+   + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + INFS.filter(function(i){ return i.grupo === g; }).map(function(i){
+     return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundInf(i)) + '</small>'
+      + (sug[i.id] ? '<em>Sugerida — itens ' + esc(sug[i.id].join(', ')) + ' não cumpridos</em>' : '') + '</span></label>'
+      + (D.constatacao && st.inf[i.id] ? '<label class="pu-campo rs-campo rs-largo rs-inf-nota"><span>Constatação <small>(o fato encontrado; descreve a infração no relatório)</small></span><textarea data-rs-inf-nota="' + esc(i.id) + '" rows="2" placeholder="Ex.: produto X, lote Y, vencido em 08/2026, na sala 2.">' + esc((st.infNota || {})[i.id] || '') + '</textarea></label>' : ''); }).join('') + '</div>'; }).join(''); }
+ function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Resumo</h3><div class="pu-campos"><div class="pu-campo">Respondidas<b>' + resp + ' de ' + tot.length + '</b></div><div class="pu-campo">' + (D.respostas === 'simnao' ? 'Irregulares' : 'Não cumpre') + '<b>' + nNC() + '</b></div><div class="pu-campo">Pendentes<b>' + (tot.length - resp) + '</b></div><div class="pu-campo">Infrações enquadradas<b>' + ninf + '</b></div></div>'
    + '<label class="pu-campo rs-largo"><span>Conclusão (se vazio, sai o texto padrão)</span><textarea data-rs-concl rows="4" placeholder="' + esc(D.relatorio.conclusao) + '">' + esc(st.concl || '') + '</textarea></label>'
    + '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-rs-copia>Copiar texto</button>' + (resp < tot.length ? '<button type="button" class="pu-btn" data-rs-pendente>Ir à próxima pendente</button>' : '') + '</div>'
@@ -445,7 +497,7 @@
    r.readAsDataURL(f); };
   inp.click(); }
  window.__uvsFotosMeta = function(){ return {estab: st.meta.fantasia || st.meta.razao || '', data: st.meta.data || ''}; };
- window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + o.n + ' ' + PERG[id].t}; });
+ window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + numero(id) + ' ' + PERG[id].t}; });
   Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i)}); }); }); return out; };
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
@@ -481,6 +533,7 @@
  document.addEventListener('input', function(e){ var t = e.target;
   if(t.matches('[data-rs-meta]')){ if(t.hasAttribute('data-rs-cnpj')){ var pos = t.value.length; t.value = mascaraCnpj(t.value); } st.meta[t.dataset.rsMeta] = t.value; salva(); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-eq]')){ var qe = t.dataset.rsEq.split('|'), de = {}; de[qe[2]] = t.value; eqSet(qe[0] + '|' + qe[1], de); UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-inf-nota]')){ st.infNota = st.infNota || {}; st.infNota[t.dataset.rsInfNota] = t.value; salva(); return; }
   if(t.matches('[data-rs-sit]')){ st.sit[t.dataset.rsSit] = t.value; salva(); var pv = t.closest('.rs-q').querySelector('.rs-previa p'); if(pv) pv.textContent = frase(PERG[t.dataset.rsSit]); return; }
   if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value);
    if(qa[2] === 'nome'){ var sb = t.closest('.rs-amb'), bb = sb && sb.querySelector('summary b'); if(bb) bb.textContent = t.value.trim() || 'ambiente ' + (+qa[1] + 1); }
@@ -490,9 +543,12 @@
   if(t.matches('[data-rs-amb-m]')){ var qm = t.dataset.rsAmbM.split('|'); ambSet(qm[0] + '|' + qm[1], 'm', {id: qm[2], on: t.checked}); var box = t.closest('.rs-amb'); if(box){ var am = ambLista(qm[0])[+qm[1]] || {}, nn = box.querySelectorAll('[data-rs-amb-m]:checked').length + (String(am.outra || '').trim() ? 1 : 0); box.classList.toggle('rs-amb-irr', nn > 0); var lb = box.querySelector('.rs-amb-n'); if(lb) lb.textContent = nn ? nn + ' irregularidade' + (nn > 1 ? 's' : '') : 'nenhuma irregularidade marcada'; } UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-amb-tipo]')){ var qt = t.dataset.rsAmbTipo.split('|'); ambSet(qt[0] + '|' + qt[1], 'tipo', t.value); salva(); redesenha(); return; }
   if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck)) redesenha(); else UvisPadrao.atualiza(); return; }
-  if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds); UvisPadrao.atualiza(); return; }
+  if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds);
+   /* categoria do produto: muda a base e o rótulo da busca */
+   if(qs[2] === 'tipo' && perfil(CAMPO[qs[0]]).porTipo){ delete eqMsg[qs[0] + '|' + qs[1]]; redesenha(); return; }
+   UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-meta]')){ st.meta[t.dataset.rsMeta] = t.value; naAuto(); salva(); redesenha(); return; }
-  if(t.matches('[data-rs-inf]')){ st.inf[t.dataset.rsInf] = t.checked; if(!t.checked) delete st.inf[t.dataset.rsInf]; salva(); UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-inf]')){ st.inf[t.dataset.rsInf] = t.checked; if(!t.checked) delete st.inf[t.dataset.rsInf]; salva(); if(D.constatacao) abaInfracoes(document.getElementById('pu-aba')); UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-concl]')){ var r = document.querySelector('.rs-relatorio'); if(r) abaRelatorio(document.getElementById('pu-aba')); } });
 
  /* ---------- apagar dados da inspeção (tela inicial do roteiro) ----------
@@ -511,10 +567,10 @@
   UvisPadrao.monta({
    raiz: raiz, titulo: D.titulo, cor: corNucleo(),
    abas: [{id: 'roteiro', rotulo: 'Roteiro'}, {id: 'infracoes', rotulo: 'Infrações'}, {id: 'relatorio', rotulo: 'Relatório'}],
-   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.map(function(it){ var p = progressoItem(it), na = naItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: na ? 'Não se aplica a este estabelecimento (perfil).' : it.descricao, feitos: p.feitos, total: p.total}; })}; }); },
+   secoes: function(){ return D.secoes.map(function(s){ return {id: s.id, titulo: s.titulo, curto: s.curto, icone: s.icone, descricao: s.descricao, itens: s.itens.filter(itemMostra).map(function(it){ var p = progressoItem(it), na = naItem(it); return {id: it.id, titulo: it.titulo, curto: it.curto, resumo: na ? 'Não se aplica a este estabelecimento (perfil).' : it.descricao, feitos: p.feitos, total: p.total}; })}; }).filter(function(s){ return s.itens.length; }); },
    item: function(s, it, el){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0], I = S.itens.filter(function(x){ return x.id === it.id; })[0]; desenhaItem(S, I, el); },
    aba: function(id, el){ if(id === 'infracoes') abaInfracoes(el); else if(id === 'relatorio') abaRelatorio(el); },
-   contagem: function(id){ return id === 'roteiro' ? nNC() : id === 'infracoes' ? D.infracoes.filter(function(i){ return st.inf[i.id]; }).length : 0; },
+   contagem: function(id){ return id === 'roteiro' ? nNC() : id === 'infracoes' ? D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); }).length : 0; },
    depois: function(nav){ if(nav.aba !== 'roteiro' || nav.secao) return; var g = document.querySelector('.pu-secoes-grade'); if(!g || g.querySelector('[data-rs-apagar]')) return;
     var z = document.createElement('div'); z.className = 'rs-apagar'; z.innerHTML = '<div class="rs-apagar-txt"><strong>Apagar dados da inspeção</strong><span>Remove todas as respostas, anotações, fotos e dados desta inspeção salvos neste aparelho. Não há como desfazer; para guardar, use antes o botão Salvas.</span></div><button type="button" class="rs-apagar-btn" data-rs-apagar><span aria-hidden="true">🗑</span> Apagar dados</button>'; g.appendChild(z); },
    limpar: function(s, it){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0];

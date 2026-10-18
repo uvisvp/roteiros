@@ -12,6 +12,9 @@ const PASSOS=[
  ['serviços assistenciais (ILPI): navegação padrão e relatório',['padrao.cjs','Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi']],
  ['academias e piscinas: navegação padrão e relatório',['padrao.cjs','Serviços','academia-piscina','Academias e piscinas']],
  ['academias e piscinas: perfil, infrações, foto, citação e Word',['academia.cjs']],
+ ['estética (serviço de saúde): navegação padrão e relatório',['padrao.cjs','Serviços','estetica','Estética e beleza','p_tipo=saude']],
+ ['estética (interesse à saúde): navegação padrão e relatório',['padrao.cjs','Serviços','estetica','Estética e beleza','p_tipo=interesse']],
+ ['estética: roteiro do ROI, perfil, infrações com constatação e Word',['estetica.cjs']],
  ['vacinação (card único): navegação padrão e relatório',['padrao.cjs','Serviços','vacinacao','Vacinação']],
  ['EAC Serviço Tipo I: navegação padrão e relatório',['padrao.cjs','Serviços','eac-tipo1','EAC — Serviço Tipo I']],
  ['EAC Serviço Tipo II: navegação padrão e relatório',['padrao.cjs','Serviços','eac-tipo2','EAC — Serviço Tipo II']],
@@ -23,6 +26,8 @@ const PASSOS=[
  ['Lei 13.725 em toda irregularidade e sem lista de normas (odontologia, alimentos, produtos, assistenciais)',['lei13725.cjs']],
  ['infração descrita pela constatação (produtos e assistenciais)',['constatacao.cjs']],
  ['prévia do relatório na aba Relatório e cores da Central de Consultas',['relatorio-aba.cjs']],
+ ['“Para saber mais” com fonte e Lei 13.725 só onde não há norma específica, no roteiro',['saber-mais-roteiros.cjs']],
+ ['saber mais e orientações não escondem perguntas (odontologia)',['saber-mais.cjs','Odontologia','odontologia','Odontologia']],
  ['teclado não cobre o campo no celular',['teclado.cjs']],
  ['saber mais e orientações não escondem perguntas (distribuidora)',['saber-mais.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos']],
  ['distribuidora: respostas no relatório',['varredura.cjs','Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos'],{PERMITIDOS:'^Conformidade do conteúdo||^Descrição das não conformidades||^Categorização das não conformidades||^Classificação final adotada'}]

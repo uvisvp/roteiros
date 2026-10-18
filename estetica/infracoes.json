@@ -1,0 +1,1350 @@
+{
+ "_fonte": "Catálogo de infrações do antigo módulo de Estética (enquadramentos e capitulação conferidos em 31/08/2026), convertido em 18/10/2026. Em 18/10/2026, nas infrações de resíduos do interesse à saúde (i32 a i34), o art. 62 da Lei 13.725 (estabelecimentos de assistência à saúde) foi trocado pelo art. 69 (estabelecimentos de interesse indireto da saúde).",
+ "notas": {
+  "saude|Tecnologias, equipamentos e produtos": "Para medicamentos manipulados, a RDC 67/2007 é usada apenas de forma acessória no item 5.10 e nos subitens pertinentes ao fornecimento para estabelecimento de saúde. O item 5.18.4 não é usado contra o serviço, porque a avaliação ali prevista é responsabilidade do farmacêutico.",
+  "saude|Processamento de dispositivos médicos": "A RDC 15/2012 só deve ser usada quando a unidade estiver no âmbito do art. 3º. O parágrafo único desse artigo exclui consultórios individualizados e não vinculados a serviços de saúde. Fora desse âmbito, permanecem aplicáveis os deveres pertinentes da RDC 63/2011 e de outras normas específicas.",
+  "saude|Resíduos e serviços terceirizados": "O PGRSS pode ser substituído por notificação ao órgão sanitário quando o serviço gerar exclusivamente resíduos do Grupo D, nos termos do art. 5º, § 1º, da RDC 222/2018 e das orientações locais.",
+  "interesse|Resíduos e serviços terceirizados": "A RDC 222/2018 inclui expressamente salões de beleza e estética. Se o serviço gerar exclusivamente resíduos do Grupo D, o PGRSS pode ser substituído pela notificação prevista no art. 5º, § 1º, conforme a orientação local."
+ },
+ "infracoes": [
+  {
+   "id": "s01",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Iniciar ou manter o funcionamento do serviço sem licença sanitária vigente",
+   "fund": "Art. 90, caput, da Lei Municipal nº 13.725/2004 c/c art. 10 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::90",
+    "rdc-anvisa-63-2011::a10"
+   ]
+  },
+  {
+   "id": "s02",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Não manter a licença sanitária vigente afixada em local visível ao público",
+   "fund": "Art. 90 da Lei Municipal nº 13.725/2004 c/c art. 10 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::90",
+    "rdc-anvisa-63-2011::a10"
+   ]
+  },
+  {
+   "id": "s03",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Deixar de comunicar alteração de atividade, instalação ou equipamento que possa repercutir na qualidade ou na segurança do serviço",
+   "fund": "Art. 90, § 1º, da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::90",
+    "lei-municipal-13725-2004::artigo::90::paragrafo::1"
+   ]
+  },
+  {
+   "id": "s04",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Não contar com responsável técnico legalmente habilitado",
+   "fund": "Art. 92 da Lei Municipal nº 13.725/2004 c/c art. 14 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::92",
+    "rdc-anvisa-63-2011::a14"
+   ]
+  },
+  {
+   "id": "s05",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Não contar com responsável técnico substituto",
+   "fund": "Art. 92 da Lei Municipal nº 13.725/2004 c/c art. 14 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::92",
+    "rdc-anvisa-63-2011::a14"
+   ]
+  },
+  {
+   "id": "s06",
+   "perfil": "saude",
+   "grupo": "Licenciamento e responsabilidade técnica",
+   "texto": "Não assegurar profissional legalmente habilitado para responder pelas questões operacionais durante todo o período de funcionamento",
+   "fund": "Art. 92 da Lei Municipal nº 13.725/2004 c/c art. 16 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::92",
+    "rdc-anvisa-63-2011::a16"
+   ]
+  },
+  {
+   "id": "s07",
+   "perfil": "saude",
+   "grupo": "Gestão de pessoal",
+   "texto": "Manter profissional sem formação ou qualificação compatível com a função desempenhada",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c art. 31, caput, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a31"
+   ]
+  },
+  {
+   "id": "s08",
+   "perfil": "saude",
+   "grupo": "Gestão de pessoal",
+   "texto": "Não manter documentação do registro do profissional no respectivo conselho de classe, quando exigível",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c art. 31, parágrafo único, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a31",
+    "rdc-anvisa-63-2011::a31pu"
+   ]
+  },
+  {
+   "id": "s09",
+   "perfil": "saude",
+   "grupo": "Gestão de pessoal",
+   "texto": "Manter equipe em número incompatível com o perfil da demanda e com as atividades executadas",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c arts. 17 e 30 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a17",
+    "rdc-anvisa-63-2011::a30"
+   ]
+  },
+  {
+   "id": "s10",
+   "perfil": "saude",
+   "grupo": "Gestão de pessoal",
+   "texto": "Não promover capacitação antes do início das atividades e de forma permanente",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c arts. 32, caput, e 33 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a32",
+    "rdc-anvisa-63-2011::a33"
+   ]
+  },
+  {
+   "id": "s11",
+   "perfil": "saude",
+   "grupo": "Gestão de pessoal",
+   "texto": "Não manter registros das capacitações com os elementos obrigatórios",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c art. 32, parágrafo único, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a32",
+    "rdc-anvisa-63-2011::a32pu"
+   ]
+  },
+  {
+   "id": "s12",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não dispor de normas, rotinas e procedimentos de trabalho escritos e atualizados",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 23, inciso XVIII, e art. 51 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-xviii",
+    "rdc-anvisa-63-2011::a51"
+   ]
+  },
+  {
+   "id": "s13",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Manter normas, rotinas ou procedimentos de trabalho inacessíveis à equipe",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 51 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a51"
+   ]
+  },
+  {
+   "id": "s14",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não manter prontuário individual do paciente",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c arts. 24 a 26 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a24",
+    "rdc-anvisa-63-2011::a25",
+    "rdc-anvisa-63-2011::a26"
+   ]
+  },
+  {
+   "id": "s15",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Manter prontuário incompleto ou ilegível",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c arts. 26 e 27 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a26",
+    "rdc-anvisa-63-2011::a27"
+   ]
+  },
+  {
+   "id": "s16",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não identificar no prontuário os profissionais responsáveis pelo atendimento",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c arts. 24 e 27 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a24",
+    "rdc-anvisa-63-2011::a27"
+   ]
+  },
+  {
+   "id": "s17",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não registrar no prontuário os procedimentos realizados e as informações necessárias à continuidade e à rastreabilidade da assistência",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c art. 26 da RDC Anvisa nº 63/2011 e art. 15 da RDC Anvisa nº 509/2021, quando envolver tecnologia em saúde",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a26",
+    "rdc-anvisa-509-2021::a15"
+   ]
+  },
+  {
+   "id": "s18",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não assegurar guarda, integridade, organização ou disponibilidade do prontuário",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c arts. 25 e 28 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a25",
+    "rdc-anvisa-63-2011::a28"
+   ]
+  },
+  {
+   "id": "s19",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não estabelecer mecanismo de identificação do paciente",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 8º, inciso I, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a8",
+    "rdc-anvisa-63-2011::a8-i"
+   ]
+  },
+  {
+   "id": "s20",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não estabelecer ações de prevenção e controle de eventos adversos relacionados à assistência",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 8º, inciso III, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a8",
+    "rdc-anvisa-63-2011::a8-iii"
+   ]
+  },
+  {
+   "id": "s21",
+   "perfil": "saude",
+   "grupo": "Qualidade, segurança do paciente e documentação",
+   "texto": "Não estabelecer orientações para a administração segura de medicamentos",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 8º, inciso V, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a8",
+    "rdc-anvisa-63-2011::a8-v"
+   ]
+  },
+  {
+   "id": "s22",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não garantir a qualidade da água necessária ao funcionamento do serviço",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 39, caput, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a39"
+   ]
+  },
+  {
+   "id": "s23",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não realizar a limpeza dos reservatórios de água a cada seis meses",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 39, § 1º, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a39",
+    "rdc-anvisa-63-2011::a39p1"
+   ]
+  },
+  {
+   "id": "s24",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não manter registro da capacidade e da limpeza periódica dos reservatórios de água",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 39, § 2º, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a39",
+    "rdc-anvisa-63-2011::a39p2"
+   ]
+  },
+  {
+   "id": "s25",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter projeto básico de arquitetura desatualizado, incompatível com as atividades ou sem aprovação dos órgãos competentes",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 34 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a34"
+   ]
+  },
+  {
+   "id": "s26",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter instalações físicas em condições inadequadas de conservação, segurança, organização, conforto ou limpeza",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 36 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a36"
+   ]
+  },
+  {
+   "id": "s27",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter ambientes com iluminação ou ventilação incompatíveis com as atividades",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 38 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a38"
+   ]
+  },
+  {
+   "id": "s28",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não garantir ações eficazes e contínuas de controle de vetores e pragas urbanas",
+   "fund": "Art. 63 da Lei Municipal nº 13.725/2004 c/c art. 23, inciso VIII, e art. 63 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-viii",
+    "rdc-anvisa-63-2011::a63"
+   ]
+  },
+  {
+   "id": "s29",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não dispor de equipamentos, medicamentos, insumos ou materiais necessários ao suporte imediato à vida, conforme a complexidade do serviço",
+   "fund": "Arts. 63 e 65 da Lei Municipal nº 13.725/2004 c/c arts. 53 e 58 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a53",
+    "rdc-anvisa-63-2011::a58"
+   ]
+  },
+  {
+   "id": "s30",
+   "perfil": "saude",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não dispor de mecanismos, rotinas e fluxos para suporte imediato à vida e remoção segura do paciente",
+   "fund": "Arts. 63 e 65 da Lei Municipal nº 13.725/2004 c/c arts. 19, 51 e 58 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a19",
+    "rdc-anvisa-63-2011::a51",
+    "rdc-anvisa-63-2011::a58"
+   ]
+  },
+  {
+   "id": "s31",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Manter para uso ou utilizar equipamento ou dispositivo médico sem comprovação de regularização sanitária, quando exigida",
+   "fund": "Arts. 46, 50 e 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s32",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Manter ou utilizar equipamento danificado ou sem condições seguras de funcionamento",
+   "fund": "Arts. 65 e 66 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::65",
+    "lei-municipal-13725-2004::artigo::66",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s33",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Não realizar manutenção preventiva ou corretiva dos equipamentos, ou não manter os respectivos registros",
+   "fund": "Arts. 65 e 66 da Lei Municipal nº 13.725/2004 c/c art. 23, inciso IX, e art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::65",
+    "lei-municipal-13725-2004::artigo::66",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-ix",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s34",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Utilizar material ou equipamento fora da finalidade a que se destina",
+   "fund": "Arts. 65 e 66 da Lei Municipal nº 13.725/2004 c/c art. 55 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::65",
+    "lei-municipal-13725-2004::artigo::66",
+    "rdc-anvisa-63-2011::a55"
+   ]
+  },
+  {
+   "id": "s35",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Não elaborar, implementar ou manter disponível à autoridade sanitária o Plano de Gerenciamento de Tecnologias em Saúde",
+   "fund": "Art. 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011 e art. 5º, caput e § 3º, da RDC Anvisa nº 509/2021",
+   "r": [
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54",
+    "rdc-anvisa-509-2021::a5",
+    "rdc-anvisa-509-2021::a5p3"
+   ]
+  },
+  {
+   "id": "s36",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Manter para uso ou utilizar medicamento sem comprovação de regularização sanitária",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s37",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Disponibilizar para uso ou utilizar medicamento vencido, deteriorado ou com integridade comprometida",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s38",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Administrar medicamento sem registrar no prontuário a indicação, a prescrição quando exigida e a administração realizada",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c art. 8º, inciso V, e art. 26 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a8",
+    "rdc-anvisa-63-2011::a8-v",
+    "rdc-anvisa-63-2011::a26"
+   ]
+  },
+  {
+   "id": "s39",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Permitir a administração de medicamento por profissional sem habilitação legal para o ato",
+   "fund": "Art. 64 da Lei Municipal nº 13.725/2004 c/c arts. 16 e 31 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a16",
+    "rdc-anvisa-63-2011::a31"
+   ]
+  },
+  {
+   "id": "s40",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Utilizar medicamento, inclusive manipulado, sem condições de vincular o produto empregado ao paciente e ao procedimento realizado",
+   "fund": "Art. 68 da Lei Municipal nº 13.725/2004 c/c arts. 26 e 54 da RDC Anvisa nº 63/2011 e art. 15 da RDC Anvisa nº 509/2021",
+   "r": [
+    "lei-municipal-13725-2004::artigo::68",
+    "rdc-anvisa-63-2011::a26",
+    "rdc-anvisa-63-2011::a54",
+    "rdc-anvisa-509-2021::a15"
+   ]
+  },
+  {
+   "id": "s41",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Manter para uso ou utilizar preparação magistral ou oficinal fornecida para atendimento institucional em desacordo com o caráter excepcional, a justificativa técnica, a requisição escrita ou a destinação exclusiva previstos no item 5.10 da RDC Anvisa nº 67/2007",
+   "fund": "Arts. 46, 50 e 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011 e item 5.10, caput, e subitens 5.10.1 e 5.10.2 do Regulamento Técnico da RDC Anvisa nº 67/2007, conforme a condição constatada",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54",
+    "rdc-anvisa-67-2007::n5.10",
+    "rdc-anvisa-67-2007::n5.10.1",
+    "rdc-anvisa-67-2007::n5.10.2"
+   ]
+  },
+  {
+   "id": "s42",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Armazenar medicamentos, dispositivos médicos, cosméticos ou saneantes sem identificação, organização ou segregação compatíveis com o risco",
+   "fund": "Arts. 46, 50 e 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s43",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Não controlar a integridade, a validade ou a temperatura dos produtos armazenados, conforme aplicável",
+   "fund": "Arts. 46, 50 e 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s44",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Não assegurar a rastreabilidade das tecnologias em saúde desde o recebimento até o uso e o descarte",
+   "fund": "Arts. 46 e 65 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011 e art. 15 da RDC Anvisa nº 509/2021",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a54",
+    "rdc-anvisa-509-2021::a15"
+   ]
+  },
+  {
+   "id": "s45",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Deixar de escriturar a movimentação de substância ou medicamento sujeito a controle especial",
+   "fund": "Art. 67 da Lei Municipal nº 13.725/2004 c/c art. 62 da Portaria SVS/MS nº 344/1998",
+   "r": [
+    "lei-municipal-13725-2004::artigo::67",
+    "portaria-svs-ms-344-1998::a62"
+   ]
+  },
+  {
+   "id": "s46",
+   "perfil": "saude",
+   "grupo": "Tecnologias, equipamentos e produtos",
+   "texto": "Manter substância ou medicamento sujeito a controle especial fora de local exclusivo, sob chave ou outro dispositivo de segurança",
+   "fund": "Art. 67 da Lei Municipal nº 13.725/2004 c/c art. 67 da Portaria SVS/MS nº 344/1998",
+   "r": [
+    "lei-municipal-13725-2004::artigo::67",
+    "portaria-svs-ms-344-1998::a67"
+   ]
+  },
+  {
+   "id": "s47",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não disponibilizar os insumos, produtos e equipamentos necessários às práticas de higiene das mãos",
+   "fund": "Arts. 61 e 63 da Lei Municipal nº 13.725/2004 c/c art. 59 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a59"
+   ]
+  },
+  {
+   "id": "s48",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não disponibilizar preparação alcoólica nos pontos de assistência e nos demais locais exigidos",
+   "fund": "Arts. 61 e 63 da Lei Municipal nº 13.725/2004 c/c arts. 5º e 6º da RDC Anvisa nº 42/2010",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-42-2010::a5",
+    "rdc-anvisa-42-2010::a6"
+   ]
+  },
+  {
+   "id": "s49",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não estabelecer orientações para a higiene das mãos",
+   "fund": "Arts. 61 e 63 da Lei Municipal nº 13.725/2004 c/c art. 8º, inciso II, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a8",
+    "rdc-anvisa-63-2011::a8-ii"
+   ]
+  },
+  {
+   "id": "s50",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não fornecer equipamentos de proteção individual em número suficiente e compatíveis com as atividades",
+   "fund": "Arts. 63 e 64 da Lei Municipal nº 13.725/2004 c/c art. 47 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a47"
+   ]
+  },
+  {
+   "id": "s51",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não manter disponíveis instruções para o uso dos equipamentos de proteção individual ou medidas de prevenção dos riscos ocupacionais",
+   "fund": "Arts. 63 e 64 da Lei Municipal nº 13.725/2004 c/c arts. 47 e 50, inciso II, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::63",
+    "lei-municipal-13725-2004::artigo::64",
+    "rdc-anvisa-63-2011::a47",
+    "rdc-anvisa-63-2011::a50",
+    "rdc-anvisa-63-2011::a50-ii"
+   ]
+  },
+  {
+   "id": "s52",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Não manter ambientes, mobiliários e superfícies fixas limpos e livres de resíduos ou odores incompatíveis com a atividade",
+   "fund": "Arts. 61 e 63 da Lei Municipal nº 13.725/2004 c/c art. 52 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::63",
+    "rdc-anvisa-63-2011::a52"
+   ]
+  },
+  {
+   "id": "s53",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Manter para uso ou utilizar saneante sem regularização sanitária, sem identificação, vencido ou deteriorado",
+   "fund": "Arts. 46, 49 e 50 da Lei Municipal nº 13.725/2004 c/c art. 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::49",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s54",
+   "perfil": "saude",
+   "grupo": "Proteção à saúde do trabalhador e higiene",
+   "texto": "Utilizar saneante em desacordo com as instruções do fabricante",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c arts. 51 e 54 da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-63-2011::a51",
+    "rdc-anvisa-63-2011::a54"
+   ]
+  },
+  {
+   "id": "s55",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Realizar processamento em unidade abrangida pela RDC 15/2012 sem estrutura ou fluxo compatíveis com sua classificação e capacidade operacional",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c art. 57 da RDC Anvisa nº 63/2011 e arts. 3º, 5º, § 3º, 15 e 44 a 61 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a57",
+    "rdc-anvisa-15-2012::a3",
+    "rdc-anvisa-15-2012::a5",
+    "rdc-anvisa-15-2012::a5p3",
+    "rdc-anvisa-15-2012::a44",
+    "rdc-anvisa-15-2012::a45",
+    "rdc-anvisa-15-2012::a46",
+    "rdc-anvisa-15-2012::a47",
+    "rdc-anvisa-15-2012::a48",
+    "rdc-anvisa-15-2012::a49",
+    "rdc-anvisa-15-2012::a50",
+    "rdc-anvisa-15-2012::a51",
+    "rdc-anvisa-15-2012::a52",
+    "rdc-anvisa-15-2012::a53",
+    "rdc-anvisa-15-2012::a54",
+    "rdc-anvisa-15-2012::a55",
+    "rdc-anvisa-15-2012::a56",
+    "rdc-anvisa-15-2012::a57",
+    "rdc-anvisa-15-2012::a58",
+    "rdc-anvisa-15-2012::a59",
+    "rdc-anvisa-15-2012::a60",
+    "rdc-anvisa-15-2012::a61"
+   ]
+  },
+  {
+   "id": "s56",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Não dispor de procedimento operacional padrão para cada etapa do processamento, quando a RDC 15/2012 for aplicável",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c arts. 51 e 57 da RDC Anvisa nº 63/2011 e art. 24 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a51",
+    "rdc-anvisa-63-2011::a57",
+    "rdc-anvisa-15-2012::a24"
+   ]
+  },
+  {
+   "id": "s57",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Realizar limpeza, desinfecção ou esterilização incompatível com a classificação de risco do dispositivo, quando a RDC 15/2012 for aplicável",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c art. 57 da RDC Anvisa nº 63/2011 e arts. 11, 12, 14 e 65 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a57",
+    "rdc-anvisa-15-2012::a11",
+    "rdc-anvisa-15-2012::a12",
+    "rdc-anvisa-15-2012::a14",
+    "rdc-anvisa-15-2012::a65"
+   ]
+  },
+  {
+   "id": "s58",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Não monitorar o processo de esterilização, quando a RDC 15/2012 for aplicável",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c arts. 96, 97 e 99 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-15-2012::a96",
+    "rdc-anvisa-15-2012::a97",
+    "rdc-anvisa-15-2012::a99"
+   ]
+  },
+  {
+   "id": "s59",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Armazenar dispositivos esterilizados em condições inadequadas ou sem controle de eventos que comprometam a integridade da embalagem, quando a RDC 15/2012 for aplicável",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c art. 57 da RDC Anvisa nº 63/2011 e arts. 101 e 102 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-63-2011::a57",
+    "rdc-anvisa-15-2012::a101",
+    "rdc-anvisa-15-2012::a102"
+   ]
+  },
+  {
+   "id": "s60",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Não manter registros do monitoramento e do controle das etapas do processamento, quando a RDC 15/2012 for aplicável",
+   "fund": "Arts. 61 e 65 da Lei Municipal nº 13.725/2004 c/c arts. 26 e 100 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::61",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-15-2012::a26",
+    "rdc-anvisa-15-2012::a100"
+   ]
+  },
+  {
+   "id": "s61",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Terceirizar o processamento de dispositivos médicos sem contrato específico que estabeleça as responsabilidades das partes",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c art. 11 da RDC Anvisa nº 63/2011 e art. 16, parágrafo único, da RDC Anvisa nº 15/2012; quando houver reprocessamento, aplica-se também o art. 10, § 1º, da RDC Anvisa nº 156/2006",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-63-2011::a11",
+    "rdc-anvisa-15-2012::a16",
+    "rdc-anvisa-15-2012::a16pu",
+    "rdc-anvisa-156-2006::a10",
+    "rdc-anvisa-156-2006::a10p1"
+   ]
+  },
+  {
+   "id": "s62",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Encaminhar dispositivo médico à empresa processadora sem a pré-limpeza exigida e sem POP definido em conjunto",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c arts. 18 e 72 da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-15-2012::a18",
+    "rdc-anvisa-15-2012::a72"
+   ]
+  },
+  {
+   "id": "s63",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Terceirizar o processamento para empresa não regularizada ou sem verificar sua regularidade sanitária",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c art. 11, §§ 1º e 2º, da RDC Anvisa nº 63/2011 e arts. 16, caput, e 33, parágrafo único, da RDC Anvisa nº 15/2012",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-63-2011::a11",
+    "rdc-anvisa-63-2011::a11p1",
+    "rdc-anvisa-63-2011::a11p2",
+    "rdc-anvisa-15-2012::a16",
+    "rdc-anvisa-15-2012::a33",
+    "rdc-anvisa-15-2012::a33pu"
+   ]
+  },
+  {
+   "id": "s64",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Não auditar a empresa contratada para o reprocessamento de produtos médicos",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c art. 10, § 2º, da RDC Anvisa nº 156/2006",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-156-2006::a10",
+    "rdc-anvisa-156-2006::a10p2"
+   ]
+  },
+  {
+   "id": "s65",
+   "perfil": "saude",
+   "grupo": "Processamento de dispositivos médicos",
+   "texto": "Reprocessar ou reutilizar produto médico cujo reprocessamento seja proibido",
+   "fund": "Arts. 46, 50 e 65 da Lei Municipal nº 13.725/2004 c/c art. 8º da RDC Anvisa nº 156/2006 e Resolução-RE Anvisa nº 2.605/2006",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-municipal-13725-2004::artigo::65",
+    "rdc-anvisa-156-2006::a8"
+   ]
+  },
+  {
+   "id": "s66",
+   "perfil": "saude",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Não elaborar, implementar ou monitorar o PGRSS quando exigido, sem se enquadrar na hipótese de substituição por notificação de geração exclusiva de resíduos do Grupo D",
+   "fund": "Art. 62 da Lei Municipal nº 13.725/2004 c/c art. 23, inciso X, da RDC Anvisa nº 63/2011 e art. 5º, caput e § 1º, e art. 10 da RDC Anvisa nº 222/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::62",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-x",
+    "rdc-anvisa-222-2018::a5",
+    "rdc-anvisa-222-2018::a5p1",
+    "rdc-anvisa-222-2018::a10"
+   ]
+  },
+  {
+   "id": "s67",
+   "perfil": "saude",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Não manter cópia do PGRSS disponível para consulta",
+   "fund": "Art. 62 da Lei Municipal nº 13.725/2004 c/c art. 23, inciso X, da RDC Anvisa nº 63/2011 e art. 9º da RDC Anvisa nº 222/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::62",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-x",
+    "rdc-anvisa-222-2018::a9"
+   ]
+  },
+  {
+   "id": "s68",
+   "perfil": "saude",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Manejar resíduos em desacordo com as regras aplicáveis à etapa de segregação, acondicionamento, identificação, coleta, transporte ou armazenamento",
+   "fund": "Art. 62 da Lei Municipal nº 13.725/2004 c/c arts. 11 a 22 e 25 a 37 da RDC Anvisa nº 222/2018, conforme a etapa constatada",
+   "r": [
+    "lei-municipal-13725-2004::artigo::62"
+   ]
+  },
+  {
+   "id": "s69",
+   "perfil": "saude",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Contratar serviço ou atividade terceirizada relacionada à assistência sem contrato de prestação de serviços",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c art. 11, caput, e art. 23, inciso V, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-63-2011::a11",
+    "rdc-anvisa-63-2011::a23",
+    "rdc-anvisa-63-2011::a23-v"
+   ]
+  },
+  {
+   "id": "s70",
+   "perfil": "saude",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Contratar serviço ou atividade terceirizada sem verificar sua regularização e habilitação sanitária, quando exigíveis",
+   "fund": "Art. 94 da Lei Municipal nº 13.725/2004 c/c art. 11, §§ 1º e 2º, da RDC Anvisa nº 63/2011",
+   "r": [
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-63-2011::a11",
+    "rdc-anvisa-63-2011::a11p1",
+    "rdc-anvisa-63-2011::a11p2"
+   ]
+  },
+  {
+   "id": "s71",
+   "perfil": "saude",
+   "grupo": "Atividade proibida",
+   "texto": "Utilizar, importar, receber em doação, alugar ou comercializar equipamento para bronzeamento artificial por radiação ultravioleta com finalidade estética",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 1º da RDC Anvisa nº 56/2009",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-56-2009::a1"
+   ]
+  },
+  {
+   "id": "i01",
+   "perfil": "interesse",
+   "grupo": "Licenciamento e regularidade",
+   "texto": "Iniciar ou manter a atividade sem inscrição no CMVS ou sem licença sanitária, quando exigível",
+   "fund": "Art. 90, caput, da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::90"
+   ]
+  },
+  {
+   "id": "i02",
+   "perfil": "interesse",
+   "grupo": "Licenciamento e regularidade",
+   "texto": "Deixar de comunicar alteração de atividade, instalação ou equipamento que possa repercutir na qualidade ou na segurança do serviço",
+   "fund": "Art. 90, § 1º, da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::90",
+    "lei-municipal-13725-2004::artigo::90::paragrafo::1"
+   ]
+  },
+  {
+   "id": "i03",
+   "perfil": "interesse",
+   "grupo": "Profissionais e limites de atuação",
+   "texto": "Atribuir procedimento estético a pessoa sem formação, qualificação ou habilitação legal compatível com a atividade",
+   "fund": "Art. 46 da Lei Municipal nº 13.725/2004 c/c arts. 3º a 6º da Lei Federal nº 13.643/2018, para esteticistas",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-federal-13643-2018::a3",
+    "lei-federal-13643-2018::a4",
+    "lei-federal-13643-2018::a5",
+    "lei-federal-13643-2018::a6"
+   ]
+  },
+  {
+   "id": "i04",
+   "perfil": "interesse",
+   "grupo": "Profissionais e limites de atuação",
+   "texto": "Deixar de apresentar, quando solicitado, os comprovantes de formação ou qualificação dos profissionais",
+   "fund": "Art. 46, § 1º, da Lei Municipal nº 13.725/2004 c/c arts. 3º a 6º da Lei Federal nº 13.643/2018, quando aplicáveis",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::46::paragrafo::1",
+    "lei-federal-13643-2018::a3",
+    "lei-federal-13643-2018::a4",
+    "lei-federal-13643-2018::a5",
+    "lei-federal-13643-2018::a6"
+   ]
+  },
+  {
+   "id": "i05",
+   "perfil": "interesse",
+   "grupo": "Profissionais e limites de atuação",
+   "texto": "Permitir que esteticista ou técnico em estética administre medicamento ou substância injetável",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c arts. 5º, inciso I, e 8º da Lei Federal nº 13.643/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a5",
+    "lei-federal-13643-2018::a5-i",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i06",
+   "perfil": "interesse",
+   "grupo": "Profissionais e limites de atuação",
+   "texto": "Permitir que esteticista ou técnico em estética utilize produto que não se enquadre como cosmético na execução de procedimento",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c arts. 5º, inciso I, 6º e 8º da Lei Federal nº 13.643/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a5",
+    "lei-federal-13643-2018::a5-i",
+    "lei-federal-13643-2018::a6",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i07",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Manter para uso ou utilizar cosmético, saneante ou produto para a saúde sem comprovação de regularização sanitária, quando exigida",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i08",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Utilizar produto sem rótulo ou sem identificação que permita verificar origem, regularização, lote e validade, conforme aplicável",
+   "fund": "Arts. 46, 49 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::49",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i09",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Fornecer ou utilizar produto com prazo de validade expirado",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i10",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Disponibilizar para uso ou utilizar produto manifestamente alterado, adulterado ou deteriorado",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i11",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Conservar produto em desacordo com as condições indicadas pelo fabricante",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i12",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Utilizar equipamento ou dispositivo estético fora da finalidade e das condições de uso previstas pelo fabricante",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i13",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Permitir o uso de equipamento estético por profissional sem habilitação compatível com o recurso empregado",
+   "fund": "Art. 46 da Lei Municipal nº 13.725/2004 c/c art. 5º, inciso I, da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-federal-13643-2018::a5",
+    "lei-federal-13643-2018::a5-i"
+   ]
+  },
+  {
+   "id": "i14",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Manter equipamento, utensílio ou mobiliário em condições inadequadas de higiene ou conservação",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i15",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Manter equipamento sem condições de funcionamento seguro",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i16",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Não realizar manutenção preventiva ou corretiva dos equipamentos segundo as orientações aplicáveis",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i17",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Deixar de apresentar, quando solicitado, os comprovantes das manutenções realizadas",
+   "fund": "Art. 46, § 1º, da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::46::paragrafo::1"
+   ]
+  },
+  {
+   "id": "i18",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Armazenar produtos, materiais ou utensílios sem identificação, organização ou segregação compatíveis com o risco",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i19",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Não controlar a temperatura de armazenamento quando exigida pelo fabricante",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i20",
+   "perfil": "interesse",
+   "grupo": "Produtos, equipamentos e materiais",
+   "texto": "Manter alimento ou objeto pessoal em equipamento destinado à conservação de produtos utilizados no serviço",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50"
+   ]
+  },
+  {
+   "id": "i21",
+   "perfil": "interesse",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter ambientes em condições inadequadas de higiene ou conservação",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i22",
+   "perfil": "interesse",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter ambientes sem organização compatível com as atividades realizadas",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i23",
+   "perfil": "interesse",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não dispor de abastecimento de água adequado às atividades realizadas",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i24",
+   "perfil": "interesse",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Manter ambientes com ventilação ou iluminação incompatíveis com as atividades",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i25",
+   "perfil": "interesse",
+   "grupo": "Infraestrutura e condições de funcionamento",
+   "texto": "Não adotar medidas eficazes de controle de vetores e pragas urbanas",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i26",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Não dispor de procedimentos operacionais escritos e atualizados para as atividades realizadas",
+   "fund": "Art. 46, caput e § 1º, da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::46::paragrafo::1",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i27",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Não assegurar condições e insumos para a higiene das mãos",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i28",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Não assegurar higiene pessoal e vestimenta compatível com os riscos das atividades",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i29",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Não fornecer ou não assegurar medidas para o uso de equipamento de proteção individual compatível com o risco",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i30",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Reutilizar material destinado a uso único ou descartável",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i31",
+   "perfil": "interesse",
+   "grupo": "Procedimentos, biossegurança e processamento",
+   "texto": "Não limpar, desinfetar ou esterilizar utensílios e instrumentos reutilizáveis após o uso, de acordo com o risco",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "lei-federal-13643-2018::a8"
+   ]
+  },
+  {
+   "id": "i32",
+   "perfil": "interesse",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Não dispor de PGRSS quando exigido, sem se enquadrar na hipótese de substituição por notificação de geração exclusiva de resíduos do Grupo D",
+   "fund": "Art. 69 da Lei Municipal nº 13.725/2004 c/c art. 2º, § 1º, art. 5º, caput e § 1º, e art. 10 da RDC Anvisa nº 222/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::69",
+    "rdc-anvisa-222-2018::a2",
+    "rdc-anvisa-222-2018::a2p1",
+    "rdc-anvisa-222-2018::a5",
+    "rdc-anvisa-222-2018::a5p1",
+    "rdc-anvisa-222-2018::a10"
+   ]
+  },
+  {
+   "id": "i33",
+   "perfil": "interesse",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Realizar segregação, acondicionamento, identificação, coleta ou armazenamento de resíduos em desacordo com as regras aplicáveis à etapa",
+   "fund": "Art. 69 da Lei Municipal nº 13.725/2004 c/c arts. 11 a 22 e 25 a 37 da RDC Anvisa nº 222/2018, conforme a etapa constatada",
+   "r": [
+    "lei-municipal-13725-2004::artigo::69"
+   ]
+  },
+  {
+   "id": "i34",
+   "perfil": "interesse",
+   "grupo": "Resíduos e serviços terceirizados",
+   "texto": "Não manter no PGRSS cópia do contrato e da licença ambiental da empresa responsável pela destinação dos resíduos",
+   "fund": "Arts. 69 e 94 da Lei Municipal nº 13.725/2004 c/c art. 6º, inciso XI, e art. 10 da RDC Anvisa nº 222/2018",
+   "r": [
+    "lei-municipal-13725-2004::artigo::69",
+    "lei-municipal-13725-2004::artigo::94",
+    "rdc-anvisa-222-2018::a6",
+    "rdc-anvisa-222-2018::a6-xi",
+    "rdc-anvisa-222-2018::a10"
+   ]
+  },
+  {
+   "id": "i35",
+   "perfil": "interesse",
+   "grupo": "Atividade proibida",
+   "texto": "Utilizar equipamento para bronzeamento artificial por radiação ultravioleta com finalidade estética",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 1º da RDC Anvisa nº 56/2009",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-56-2009::a1"
+   ]
+  },
+  {
+   "id": "i36",
+   "perfil": "interesse",
+   "grupo": "Atividade proibida",
+   "texto": "Importar, receber em doação, alugar ou comercializar equipamento para bronzeamento artificial por radiação ultravioleta com finalidade estética",
+   "fund": "Arts. 46 e 50 da Lei Municipal nº 13.725/2004 c/c art. 1º da RDC Anvisa nº 56/2009",
+   "r": [
+    "lei-municipal-13725-2004::artigo::46",
+    "lei-municipal-13725-2004::artigo::50",
+    "rdc-anvisa-56-2009::a1"
+   ]
+  }
+ ]
+}

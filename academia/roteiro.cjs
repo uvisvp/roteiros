@@ -133,7 +133,7 @@ module.exports = {
           ],
           orient: [
             {t: 'Desde a Lei 15.681/2013, a regra geral do praticante amador é o PAR-Q anual (15 a 69 anos). O atestado médico passou a ser exigido para quem está fora dessa faixa e para atividades no âmbito de entidades federativas (exame semestral). Atestado de médico de confiança do aluno deve ser aceito.', f: 'Lei Municipal nº 11.383/1993, art. 2º e 2º-A, redação da Lei nº 15.681/2013'},
-            {t: 'Amostragem: peça as fichas de alguns alunos de turmas diferentes (inclusive matrículas recentes) e confira data do PAR-Q, respostas, termo quando houver “sim” e a idade.', f: 'Prática de inspeção'}
+            {t: 'O que conferir em cada ficha: data do PAR-Q (renovação anual), respostas, Termo de Responsabilidade quando houver “sim” e idade (fora de 15 a 69 anos, atestado médico). Peça fichas de turmas diferentes, inclusive de matrículas recentes.', f: 'Lei Municipal nº 11.383/1993, art. 2º, §§ 4º e 5º, e art. 2º-A, redação da Lei nº 15.681/2013'}
           ]}
       ]
     },
@@ -190,7 +190,7 @@ module.exports = {
           ],
           orient: [
             {t: 'A bibliografia da Portaria fala em “1.500 pessoas”, mas a redação vigente da Lei 13.945/2005 (alterada pelas Leis 14.621/2007 e 15.283/2010) exige o DEA de clubes e academias com mais de 1.000 sócios. A multa é a própria da Lei 13.945 (art. 3º).', f: 'Lei Municipal nº 13.945/2005, arts. 1º e 3º'},
-            {t: 'Confira se o aparelho está carregado (luz/indicador de prontidão), com eletrodos dentro da validade e em local sinalizado e acessível.', f: 'Prática de inspeção'}
+            {t: 'A lei pede DEA em prontas condições de uso, com dispositivo que monitora bateria e componentes e alerta sobre reparos: confira o indicador de prontidão (autoteste) e a validade dos eletrodos e da bateria, que constam das instruções do fabricante.', f: 'Lei Municipal nº 13.945/2005, art. 2º, IV e V; instruções de uso do fabricante do DEA'}
           ]}
       ]
     },
@@ -227,7 +227,10 @@ module.exports = {
             {t: 'O pH governa a eficácia do cloro: quanto mais alto o pH, menor a fração de ácido hipocloroso (a forma que desinfeta). Cloro dentro da faixa com pH alto desinfeta mal.', f: ABNT1},
             {t: 'Cheiro forte de “cloro” e ardor nos olhos costumam indicar cloro combinado (cloraminas, formado com suor e urina), não excesso de cloro livre. A correção é oxidação (supercloração) e renovação de água, não reduzir o cloro.', f: ABNT1},
             {t: 'Alcalinidade total funciona como tampão do pH; alcalinidade baixa faz o pH oscilar. Ácido cianúrico (estabilizador) protege o cloro do sol, mas em excesso reduz sua eficácia.', f: ABNT1},
-            {t: 'Como medir: kit DPD para cloro livre e vermelho de fenol para pH; coletar a cerca de 30 cm da superfície, longe dos retornos de água tratada, em mais de um ponto; ler logo após o reagente. Compare com o registro do dia.', f: 'Prática de inspeção — conferir o manual do kit'}
+            {t: 'Como medir: kit DPD para cloro livre e vermelho de fenol para pH, conforme as instruções do kit. O cloro é exigido em toda a extensão e profundidade do tanque: colete em mais de um ponto, longe dos retornos de água tratada. Leia o cloro livre logo após o reagente DPD 1, porque com o tempo o cloro combinado também dá cor. Compare com o registro do dia.', f: 'Portaria SMS nº 1.101/2015, item 6.2.4; Standard Methods for the Examination of Water and Wastewater, método 4500-Cl G (DPD colorimétrico); instruções de uso do fabricante do kit'},
+            {t: 'Cloro livre, total e combinado: o DPD 1 mede o cloro livre; com o DPD 3, mede-se o cloro total; a diferença (total menos livre) é o cloro combinado (cloraminas). A Portaria exige o cloro residual livre.', f: 'Standard Methods for the Examination of Water and Wastewater, método 4500-Cl G; Portaria SMS nº 1.101/2015, item 6.2.4'},
+            {t: 'Outros métodos de desinfecção: a Portaria aceita ozônio, UV, salinização e ionização associados à cloração, operados conforme o fabricante; nenhum deles dispensa o cloro residual livre de 0,5 a 0,8 mg/L. Ozônio e UV desinfetam a água que passa pelo equipamento e não deixam residual no tanque; o gerador de cloro por eletrólise de sal produz cloro no próprio sistema (é cloração); ionização cobre-prata não substitui o cloro.', f: 'Portaria SMS nº 1.101/2015, itens 6.2.4 e 6.2.5; OMS, Guidelines for safe recreational water environments, vol. 2: Swimming pools and similar environments (2006), cap. 5'},
+            {t: 'Bromo e biguanida (PHMB) não dão leitura de cloro residual livre e não atendem ao parâmetro da Portaria; a biguanida é incompatível com o cloro. O que pedir no método associado: manual do fabricante, registros de manutenção e, no UV, as horas de uso da lâmpada frente à vida útil indicada.', f: 'Portaria SMS nº 1.101/2015, itens 6.2.4 e 6.2.5; OMS, Guidelines for safe recreational water environments, vol. 2: Swimming pools and similar environments (2006), cap. 5; instruções de uso do fabricante'}
           ]},
         {id: 'seguranca', titulo: 'Segurança dos banhistas', curto: 'Segurança',
           perguntas: [
@@ -263,7 +266,7 @@ module.exports = {
               c: 'O lava-pés é esvaziado e lavado diariamente e mantido seco quando a piscina está fora de uso.', nc: 'A higienização do lava-pés não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['lavapes']}
           ],
           orient: [
-            {t: 'Cloro acima de 25 mg/L está fora da faixa do kit DPD comum de piscina: use fita ou kit de faixa alta, ou dilua a amostra e multiplique o resultado.', f: 'Prática de inspeção — conferir o manual do kit'}
+            {t: 'Cloro acima de 25 mg/L está fora da faixa do kit DPD comum de piscina e, muito alto, descora o reagente e dá leitura falsamente baixa: use fita ou kit de faixa alta, ou dilua a amostra em água sem cloro e multiplique o resultado pelo fator de diluição.', f: 'Portaria SMS nº 1.101/2015, item 6.15; Standard Methods for the Examination of Water and Wastewater, método 4500-Cl G; instruções de uso do fabricante do kit'}
           ]},
         {id: 'maquinas', titulo: 'Casa de máquinas e operador', curto: 'Casa de máquinas',
           perguntas: [

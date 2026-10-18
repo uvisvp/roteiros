@@ -111,7 +111,9 @@ bloco('app--servicos-assistenciais', s => {
 /* a aba Relatório tinha só “Gerar relatório”, que abria a folha por cima: agora mostra o
    documento do Word (estHtml, o mesmo de word()), com Baixar Word na aba; a folha fica
    para imprimir */
+/* desde 18/10/2026 a Estética é roteiro-simples (scripts/repack-estetica.cjs): o ajuste do módulo antigo não se aplica */
 bloco('app--estetica', s => {
+  if (/window\.ROTEIRO=/.test(s)) return s;
   s = troca(s, 'function gerar(){', 'function gerar(semAbrir){', 'estética: gerar sem abrir');
   s = troca(s, '$("saida").classList.add("ativo");$("saida").scrollTop=0}', 'if(semAbrir!==true){$("saida").classList.add("ativo");$("saida").scrollTop=0}}', 'estética: folha opcional');
   s = troca(s, "function word(){if(!$(\"saida\").classList.contains(\"ativo\"))gerar();const root=document.createElement('div');", 'function estHtml(){gerar(true);', 'estética: html do Word');
