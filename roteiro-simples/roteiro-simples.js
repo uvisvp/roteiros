@@ -57,7 +57,9 @@
  /* ---------- ambientes ----------
     c.ambientes: sugestões [nome, tipo] (ou só o nome); c.lista: irregularidades de qualquer
     ambiente [[id, irregularidade, [refs], inf?]]; c.tipos {tipo: {rotulo, lista}}: as próprias
-    de cada tipo de ambiente; ['—', 'título'] na lista abre um grupo na tela. Cada ambiente:
+    de cada tipo de ambiente; ['—', 'título'] na lista abre um grupo na tela. c.termo troca a
+    palavra “ambiente” na tela e no relatório (ex.: 'veículo'); c.exemplo, o exemplo do nome;
+    c.possui, o início da frase do relatório. Cada ambiente:
     {nome, tipo, m: {id: true}, outra, obs}. */
  function ambSug(c){ return (c.ambientes || []).map(function(x){ return Array.isArray(x) ? {nome: x[0], tipo: x[1] || 'geral'} : {nome: x, tipo: 'geral'}; }); }
  function ambTipo(c, a){ if(a.tipo && (a.tipo === 'geral' || (c.tipos || {})[a.tipo])) return a.tipo; var nm = String(a.nome || '').trim(), s = ambSug(c).filter(function(x){ return x.nome === nm; })[0]; return s ? s.tipo : 'geral'; }
@@ -67,14 +69,14 @@
   if(String(a.outra || '').trim()) out.push({id: '', texto: String(a.outra).trim().replace(/\.$/, ''), refs: [].concat(c.r || [])}); return out; }
  /* irregularidades dos ambientes, agrupadas pela irregularidade (cada uma com os ambientes onde foi vista): [{c, texto, refs, nomes, inf, outra}] */
  function ambIrr(){ var out = [], idx = {}; Object.keys(CAMPO).forEach(function(id){ var c = CAMPO[id]; if(c.tipo !== 'ambientes' || !itemVisivel(CAMPO_IT[id])) return;
-  ambValidos(c).forEach(function(x){ var nome = ambNome(x.a, x.i); ambIrrDe(c, x.a).forEach(function(r){ var k = r.id ? id + '|' + r.id : id + '|outra|' + x.i;
+  ambValidos(c).forEach(function(x){ var nome = ambNome(x.a, x.i, c); ambIrrDe(c, x.a).forEach(function(r){ var k = r.id ? id + '|' + r.id : id + '|outra|' + x.i;
    if(!idx[k]){ idx[k] = {c: c, texto: r.texto, refs: r.refs, nomes: [], inf: r.inf ? [].concat(r.inf) : (c.inf || []), outra: !r.id}; out.push(idx[k]); }
    idx[k].nomes.push(nome); }); }); }); return out; }
  function ambFrase(x){ return x.outra ? x.nomes[0] + ': ' + minus(x.texto) + '.' : x.texto + ': ' + lista(x.nomes.map(minus)) + '.'; }
  function minus(t){ t = String(t || ''); return /^[A-ZÀ-Ý]{2}/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
  function sugeridas(){ var s = {}; ORDEM.forEach(function(id){ var q = PERG[id]; if(st.r[id] === 'nc' && visivel(q)) (q.inf || []).forEach(function(i){ (s[i] = s[i] || []).push(numero(id)); }); });
   ambIrr().forEach(function(x){ x.inf.forEach(function(i){ var l = s[i] = s[i] || []; x.nomes.forEach(function(n){ if(l.indexOf(n) < 0) l.push(n); }); }); }); return s; }
- function ambNome(a, i){ return String(a.nome || '').trim() || 'ambiente ' + (i + 1); }
+ function ambNome(a, i, c){ return String(a.nome || '').trim() || ((c && c.termo) || 'ambiente') + ' ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
  function lista(xs){ return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1]; }
 
@@ -164,6 +166,16 @@
    confere: function(){ return true; }, estranho: '',
    head: ['Equipamento', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Série, manutenção e observações'],
    linha: function(e){ return [[e.tipo, e.nome, e.modelo], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Série / patrimônio: ', e.serie), rot('Última manutenção: ', e.manut), e.obs]]; }},
+  /* diagnóstico por imagem: equipamentos (raios X, mamógrafo, tomógrafo, ressonância, ultrassom,
+     angiógrafo) — dispositivos médicos, com as datas do último teste de constância e do levantamento radiométrico */
+  /* c.omite: campos do perfil que o roteiro não usa (ex.: levantamento radiométrico fora dos raios X) */
+  imagem: {item: 'Equipamento', mais: '+ Adicionar equipamento', base: 'dispositivos',
+   campos: [['tipo', 'Tipo', 'select'], ['nome', 'Nome comercial / produto'], ['modelo', 'Marca e modelo'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'],
+    ['fabricante', 'Fabricante (país)'], ['detentor', 'Detentor do registro'], ['classe', 'Classe de risco'], ['serie', 'Nº de série / patrimônio'], ['local', 'Sala'],
+    ['constancia', 'Último teste de constância'], ['levantamento', 'Último levantamento radiométrico'], ['obs', 'Observações', 'textarea']],
+   confere: function(){ return true; }, estranho: '',
+   head: ['Equipamento', 'Registro e processo na Anvisa', 'Fabricante e detentor', 'Série, sala, testes e observações'],
+   linha: function(e){ return [[e.tipo, e.nome, e.modelo], [rot('Registro ', e.registro) || 'Registro não informado', rot('Processo ', e.processo), e.classe], [rot('Fabricante: ', e.fabricante), rot('Detentor: ', e.detentor)], [rot('Série / patrimônio: ', e.serie), rot('Sala: ', e.local), rot('Teste de constância: ', e.constancia), rot('Levantamento radiométrico: ', e.levantamento), e.obs]]; }},
   /* estética: produtos em uso — a categoria escolhe a base da Anvisa */
   produto: {item: 'Produto', mais: '+ Adicionar produto', porTipo: {'Cosmético': 'cosmeticos', 'Saneante': 'saneantes', 'Medicamento': 'medicamentos', 'Dispositivo médico': 'dispositivos'},
    campos: [['tipo', 'Categoria', 'select'], ['nome', 'Produto (nome comercial)'], ['registro', 'Registro na Anvisa'], ['processo', 'Processo na Anvisa'], ['detentor', 'Empresa detentora'], ['situacao', 'Situação na Anvisa'], ['lote', 'Lote'], ['validade', 'Validade'], ['obs', 'Observações', 'textarea']],
@@ -198,7 +210,7 @@
     + (antes.length ? '<div class="rs-campos">' + antes.map(function(f){ return cmp(e, k, f); }).join('') + '</div>' : '')
     + '<div class="rs-eq-busca"><label class="pu-campo rs-campo"><span>Buscar na Anvisa pelo ' + (b === 'cosmeticos' ? 'processo' : 'registro ou processo') + '</span><input type="text" inputmode="numeric" data-rs-eq="' + esc(k) + '|busca" placeholder="' + (b === 'cosmeticos' ? 'Processo' : 'Registro ou processo') + ' para pesquisar" value="' + esc(e.busca || '') + '"></label><button type="button" class="pu-btn pu-btn-pri" data-rs-eq-buscar="' + esc(k) + '">Buscar</button></div>'
     + (m ? '<p class="rs-eq-msg' + (m.tipo ? ' rs-eq-' + m.tipo : '') + '" role="status">' + esc(m.t) + '</p>' : '')
-    + '<div class="rs-campos">' + P.campos.filter(function(f){ return antes.indexOf(f) < 0; }).map(function(f){ return cmp(e, k, f); }).join('') + '</div>'
+    + '<div class="rs-campos">' + P.campos.filter(function(f){ return antes.indexOf(f) < 0 && (c.omite || []).indexOf(f[0]) < 0; }).map(function(f){ return cmp(e, k, f); }).join('') + '</div>'
     + (e.consulta ? '<p class="pu-q-ajuda">Dados do registro conferidos na base de ' + NOME_BASE[e.consultaBase || b] + ' da Anvisa em ' + esc(fmtData(e.consulta)) + '.</p>' : '') + '</div>'; }
   return '<fieldset class="pu-campo rs-campo rs-largo rs-eqs"><legend>' + esc(c.rotulo) + '</legend>' + h + '<div><button type="button" class="pu-btn" data-rs-eq-add="' + esc(c.id) + '">' + esc(P.mais) + '</button></div></fieldset>'; }
  function eqSet(k, dados){ var p = k.split('|'), id = p[0], i = +p[1], L = eqLista(id).slice(); while(L.length <= i) L.push({}); var e = Object.assign({}, L[i], dados);
@@ -253,22 +265,22 @@
     estiver irregular. Foto em st.fotos['amb:<campo>:<i>']. */
  var ambAberto = {};
  function ambLista(id){ return Array.isArray(st.meta[id]) ? st.meta[id] : []; }
- function ambHtml(c){ var L = ambLista(c.id), sug = ambSug(c), nomes = L.map(function(a){ return String(a.nome || '').trim(); }), tipos = c.tipos || {};
+ function ambHtml(c){ var TM = c.termo || 'ambiente', L = ambLista(c.id), sug = ambSug(c), nomes = L.map(function(a){ return String(a.nome || '').trim(); }), tipos = c.tipos || {};
   var chips = sug.map(function(x){ var on = nomes.indexOf(x.nome) >= 0; return '<button type="button" class="rs-amb-chip" aria-pressed="' + on + '" data-rs-amb-chip="' + esc(c.id) + '|' + esc(x.nome) + '|' + esc(x.tipo) + '">' + (on ? '✓ ' : '+ ') + esc(x.nome) + '</button>'; }).join('')
-   + '<button type="button" class="rs-amb-chip rs-amb-outro" data-rs-amb-add="' + esc(c.id) + '">+ Outro ambiente</button>';
+   + '<button type="button" class="rs-amb-chip rs-amb-outro" data-rs-amb-add="' + esc(c.id) + '">+ Outro ' + TM + '</button>';
   var ck = function(k, m){ return function(x){ if(x[0] === '—') return '</div><p class="rs-amb-grupo rs-amb-sub-grupo">' + esc(x[1]) + '</p><div class="rs-amb-lista">'; return '<label class="rs-amb-x"><input type="checkbox" data-rs-amb-m="' + esc(k) + '|' + esc(x[0]) + '"' + (m[x[0]] ? ' checked' : '') + '><span>' + esc(x[1]) + '</span></label>'; }; };
   var h = L.map(function(a, i){ var k = c.id + '|' + i, m = a.m || {}, t = ambTipo(c, a), T = tipos[t], f = st.fotos['amb:' + c.id + ':' + i], nm = String(a.nome || '').trim();
    var n = ambOpcoes(c, a).filter(function(x){ return m[x[0]]; }).length + (String(a.outra || '').trim() ? 1 : 0), ab = ambAberto[k] !== undefined ? ambAberto[k] : !nm;
    var sugerido = sug.some(function(x){ return x.nome === nm; });
-   return '<details class="rs-amb' + (n ? ' rs-amb-irr' : '') + '" data-rs-amb-box="' + esc(k) + '"' + (ab ? ' open' : '') + '><summary><b>' + esc(ambNome(a, i)) + '</b><span class="rs-amb-n">' + (n ? n + ' irregularidade' + (n > 1 ? 's' : '') : 'nenhuma irregularidade marcada') + '</span></summary><div class="rs-amb-corpo">'
-    + (sugerido ? '' : '<div class="rs-campos"><label class="pu-campo rs-campo"><span>Nome do ambiente</span><input type="text" data-rs-amb="' + esc(k) + '|nome" value="' + esc(a.nome || '') + '" placeholder="Ex.: sala de pilates"></label>'
+   return '<details class="rs-amb' + (n ? ' rs-amb-irr' : '') + '" data-rs-amb-box="' + esc(k) + '"' + (ab ? ' open' : '') + '><summary><b>' + esc(ambNome(a, i, c)) + '</b><span class="rs-amb-n">' + (n ? n + ' irregularidade' + (n > 1 ? 's' : '') : 'nenhuma irregularidade marcada') + '</span></summary><div class="rs-amb-corpo">'
+    + (sugerido ? '' : '<div class="rs-campos"><label class="pu-campo rs-campo"><span>Nome do ' + TM + '</span><input type="text" data-rs-amb="' + esc(k) + '|nome" value="' + esc(a.nome || '') + '" placeholder="' + esc(c.exemplo || 'Ex.: sala de pilates') + '"></label>'
       + (Object.keys(tipos).length ? '<label class="pu-campo rs-campo"><span>Tipo de ambiente</span><select data-rs-amb-tipo="' + esc(k) + '">' + [['geral', 'Outro']].concat(Object.keys(tipos).map(function(x){ return [x, tipos[x].rotulo]; })).map(function(o){ return '<option value="' + esc(o[0]) + '"' + (t === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' : '') + '</div>')
-    + '<p class="rs-amb-sub">Marque só o que estiver irregular neste ambiente.</p>'
+    + '<p class="rs-amb-sub">Marque só o que estiver irregular neste ' + TM + '.</p>'
     + (T && T.lista && T.lista.length ? '<p class="rs-amb-grupo">' + esc(T.rotulo) + '</p><div class="rs-amb-lista">' + T.lista.map(ck(k, m)).join('') + '</div><p class="rs-amb-grupo">Em qualquer ambiente</p>' : '')
     + '<div class="rs-amb-lista">' + (c.lista || []).map(ck(k, m)).join('') + '</div>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Outra irregularidade (descrever)</span><input type="text" data-rs-amb="' + esc(k) + '|outra" value="' + esc(a.outra || '') + '"></label>'
-    + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ambiente <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
-    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ambiente' : 'Foto do ambiente') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '<button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ambiente</button></div>' + (f ? '<img class="rs-foto" alt="Foto do ambiente" src="' + esc(f) + '">' : '') + '</div></details>'; }).join('');
+    + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ' + TM + ' <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
+    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ' + TM : 'Foto do ' + TM) + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '<button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ' + TM + '</button></div>' + (f ? '<img class="rs-foto" alt="Foto do ' + TM + '" src="' + esc(f) + '">' : '') + '</div></details>'; }).join('');
   return '<fieldset class="pu-campo rs-campo rs-largo rs-ambs"><legend>' + esc(c.rotulo) + '</legend><p class="pu-q-ajuda">' + esc(c.ajuda || 'Toque nos ambientes que o estabelecimento possui. Depois abra cada um e marque só o que estiver irregular. No relatório saem a lista dos ambientes e as irregularidades encontradas.') + '</p>'
    + '<div class="rs-amb-chips">' + chips + '</div>' + h + '</fieldset>'; }
  /* remove o ambiente i (as fotos dos seguintes sobem uma posição) */
@@ -279,11 +291,11 @@
  function ambSet(k, campo, v){ var p = k.split('|'), L = ambLista(p[0]).slice(), i = +p[1]; L[i] = Object.assign({}, L[i]); if(campo === 'm'){ L[i].m = Object.assign({}, L[i].m); if(v.on) L[i].m[v.id] = true; else delete L[i].m[v.id]; } else L[i][campo] = v; st.meta[p[0]] = L; salva(); }
  function campoRel(c){ var v = st.meta[c.id]; if(c.rel === false) return [];
   if(c.tipo === 'ambientes'){ var V = ambValidos(c); if(!V.length) return [];
-   var out = [{t: 'p', x: (c.possui || 'O estabelecimento possui') + ' ' + lista(V.map(function(x){ return minus(ambNome(x.a, x.i)); })) + '.'}], irr = [], ano = [];
-   V.forEach(function(x){ var ir = ambIrrDe(c, x.a).map(function(r){ return minus(r.texto); }), ob = String(x.a.obs || '').trim(), nm = ambNome(x.a, x.i);
+   var out = [{t: 'p', x: (c.possui || 'O estabelecimento possui') + ' ' + lista(V.map(function(x){ return minus(ambNome(x.a, x.i, c)); })) + '.'}], irr = [], ano = [];
+   V.forEach(function(x){ var ir = ambIrrDe(c, x.a).map(function(r){ return minus(r.texto); }), ob = String(x.a.obs || '').trim(), nm = ambNome(x.a, x.i, c);
     if(ir.length) irr.push({t: 'num', n: '•', x: nm + ': ' + ir.join('; ') + '.' + (ob ? ' ' + cap(ob) : '')}); else if(ob) ano.push({t: 'num', n: '•', x: nm + ': ' + cap(ob)}); });
-   if(irr.length) out = out.concat([{t: 'p', x: 'Irregularidades constatadas nos ambientes:'}], irr);
-   if(ano.length) out = out.concat([{t: 'p', x: 'Anotações sobre os ambientes:'}], ano);
+   if(irr.length) out = out.concat([{t: 'p', x: 'Irregularidades constatadas nos ' + (c.termo || 'ambiente') + 's:'}], irr);
+   if(ano.length) out = out.concat([{t: 'p', x: 'Anotações sobre os ' + (c.termo || 'ambiente') + 's:'}], ano);
    return out; }
   if(c.tipo === 'equipamentos'){ var P = perfil(c), L = (Array.isArray(v) ? v : []).filter(eqTem); if(!L.length) return [];
    var out = [{t: 'table', head: P.head, widths: [2500, 2200, 2500, 2100], rows: L.map(function(e){ return P.linha(e).map(function(cel){ return cel.filter(sv).join('\n') || '—'; }); })}];
@@ -498,7 +510,7 @@
   inp.click(); }
  window.__uvsFotosMeta = function(){ return {estab: st.meta.fantasia || st.meta.razao || '', data: st.meta.data || ''}; };
  window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + numero(id) + ' ' + PERG[id].t}; });
-  Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i)}); }); }); return out; };
+  Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i, CAMPO[id])}); }); }); return out; };
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
  /* ---------- eventos ---------- */
@@ -514,7 +526,7 @@
    else { st.meta[pc[0]] = Lc.concat([{nome: pc[1], tipo: pc[2] || 'geral', m: {}}]); }
    salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-amb-add]'))){ var La2 = ambLista(b.dataset.rsAmbAdd).concat([{nome: '', tipo: 'geral', m: {}}]); st.meta[b.dataset.rsAmbAdd] = La2; ambAberto[b.dataset.rsAmbAdd + '|' + (La2.length - 1)] = true; salva(); redesenha(); return; }
-  if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]); if(!confirm('Remover o ambiente “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1]) + '”?')) return; ambRemove(pd2[0], +pd2[1]); salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]); var Cd2 = CAMPO[pd2[0]] || {}; if(!confirm('Remover o ' + (Cd2.termo || 'ambiente') + ' “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1], Cd2) + '”?')) return; ambRemove(pd2[0], +pd2[1]); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-lote]'))){ var n = UvisPadrao.estado(), s = D.secoes.filter(function(x){ return x.id === n.secao; })[0], it = s && s.itens.filter(function(x){ return x.id === n.item; })[0];
    if(it) perguntasDe(it).forEach(function(q){ if(!st.r[q.id] && (b.dataset.rsLote === 'c' || q.na || D.naSempre)) st.r[q.id] = b.dataset.rsLote; }); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-acao]'))){ if(b.dataset.rsAcao === 'anvisa_cnpj') acaoAnvisa(); else if(b.dataset.rsAcao === 'ocr_crt') acaoCrt(); return; }
@@ -536,7 +548,7 @@
   if(t.matches('[data-rs-inf-nota]')){ st.infNota = st.infNota || {}; st.infNota[t.dataset.rsInfNota] = t.value; salva(); return; }
   if(t.matches('[data-rs-sit]')){ st.sit[t.dataset.rsSit] = t.value; salva(); var pv = t.closest('.rs-q').querySelector('.rs-previa p'); if(pv) pv.textContent = frase(PERG[t.dataset.rsSit]); return; }
   if(t.matches('[data-rs-amb]')){ var qa = t.dataset.rsAmb.split('|'); ambSet(qa[0] + '|' + qa[1], qa[2], t.value);
-   if(qa[2] === 'nome'){ var sb = t.closest('.rs-amb'), bb = sb && sb.querySelector('summary b'); if(bb) bb.textContent = t.value.trim() || 'ambiente ' + (+qa[1] + 1); }
+   if(qa[2] === 'nome'){ var sb = t.closest('.rs-amb'), bb = sb && sb.querySelector('summary b'); if(bb) bb.textContent = t.value.trim() || ((CAMPO[qa[0]] || {}).termo || 'ambiente') + ' ' + (+qa[1] + 1); }
    UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-concl]')){ st.concl = t.value; salva(); return; } });
  document.addEventListener('change', function(e){ var t = e.target;

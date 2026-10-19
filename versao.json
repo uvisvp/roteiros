@@ -1,6 +1,6 @@
 {
-  "versao": "20261018-4",
+  "versao": "20261019-1",
   "banco": "13.1",
-  "correcoes": 1,
-  "notas": "Fontes do núcleo Medicamentos conferidas nos documentos originais (Farmacopeia Brasileira 8ª ed., OMS, NIST, FDA, USP, RDC 220/2004). Correções: vidraria volumétrica não vai à estufa (NIST GLP 13; a versão anterior dizia o contrário); valores de pHmetro da USP <791> apresentados como típicos, salvo especificação do fabricante; gases com monografia na FB: oxigênio, oxigênio 93%, ar comprimido, ar sintético e dióxido de carbono (óxido nitroso e nitrogênio só no capítulo 8.8); água para injetáveis com endotoxinas abaixo de 0,25 UE/mL (FB 8ª ed., capítulo 8.5), por destilação ou osmose reversa (RDC 67, Anexo IV, 7.2.1); diferencial de pressão de 10 a 15 Pa atribuído ao guia da FDA (2004); FEFO no item 12.30 do Anexo 7 do TRS 1025 da OMS; coleta no ponto de uso no item 12.5 do Anexo 3 do TRS 1033; picnômetro calibrado com água recentemente destilada e fervida (FB 5.2.5); CSB classe II B2 também pela RDC 220/2004, Anexo I, 7.2.2.1."
+  "correcoes": 0,
+  "notas": "Novos roteiros no núcleo Serviços: Transporte de material biológico (transportadora; RDC 504/2021, RDC 34/2014 para sangue e hemocomponentes, Portaria SMS 266/2025 e Lei 13.725, art. 91, com inventário de veículos) e Diagnóstico por imagem, com seis sub-roteiros sobre a RDC 611/2022: radiologia convencional (IN 90/2021), mamografia (IN 92/2021 e Programa Nacional de Qualidade em Mamografia), tomografia (IN 93/2021), ressonância magnética (IN 97/2021), ultrassonografia diagnóstica e terapêutica (IN 96/2021) e hemodinâmica (IN 91/2021 e RDC 36/2013). Equipamentos de imagem com busca na Anvisa e datas do teste de constância e do levantamento radiométrico."
 }
