@@ -27,6 +27,7 @@ const PASSOS=[
  ['ultrassonografia: navegação padrão e relatório',['padrao.cjs','Serviços','imagem-ultrassom','Ultrassonografia']],
  ['hemodinâmica: navegação padrão e relatório',['padrao.cjs','Serviços','imagem-hemodinamica','Hemodinâmica e radiologia intervencionista']],
  ['transporte e imagem: inventário de veículos, perfil, equipamentos e Lei 13.725',['transporte-imagem.cjs']],
+ ['busca do estabelecimento na Anvisa pelo CNPJ (motor e módulos próprios)',['cnpj-anvisa.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],

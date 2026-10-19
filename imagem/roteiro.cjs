@@ -454,6 +454,36 @@ const MAIS = {
   ]
 };
 
+/* orientação técnica dos demais itens: o que pedir e conferir, com o dispositivo */
+const R611 = 'RDC Anvisa nº 611/2022';
+const ORIENT = {
+  org: [
+    {t: 'O que pedir: a licença sanitária, o ato do responsável legal que designa o responsável técnico do setor e o substituto (com as atividades delegadas) e, nos raios X, o supervisor de proteção radiológica. Os três programas (Garantia da Qualidade, Educação Permanente e Proteção Radiológica) são documentos com execução registrada, não só um manual.', f: R611 + ', arts. 5º, 13, 14 e 17'},
+    {t: 'Projeto de blindagem: confira se a sala, o equipamento e a carga de trabalho atuais são os do projeto aprovado. Troca ou inclusão de equipamento e mudança na sala precisam de aprovação antes; mudança de parâmetro do projeto é comunicada antes.', f: R611 + ', arts. 7º, 8º, 10 e 11'}
+  ],
+  pessoal: [
+    {t: 'O que pedir: a relação nominal da equipe com qualificação e carga horária, os registros de habilitação no conselho de quem opera os equipamentos e os registros das capacitações do último ano (data, carga horária, conteúdo, instrutor e participantes), com a avaliação da eficácia.', f: R611 + ', arts. 12, 15, 17, IV, 34 e 78'}
+  ],
+  processos: [
+    {t: 'O que pedir: os procedimentos operacionais da modalidade (preparo do paciente, protocolos de exame, limpeza, conduta em evento adverso), com data de revisão; o registro de incidentes com a investigação e as ações; e, em serviço de atenção secundária ou terciária, as atas do Comitê de Gerenciamento de Riscos em Radiologia.', f: R611 + ', arts. 38, 39 e 41'}
+  ],
+  epi: [
+    {t: 'O que verificar: aventais, protetores de tireoide e óculos plumbíferos em número suficiente para todas as salas em uso ao mesmo tempo, íntegros e guardados pendurados (dobra trinca o chumbo). Peça o registro da última inspeção de integridade dos aventais.', f: R611 + ', arts. 57 a 59 e 61; IN Anvisa nº 91/2021, art. 9º (teste semestral na radiologia intervencionista)'}
+  ],
+  monitoracao: [
+    {t: 'O que pedir: o laudo de levantamento radiométrico (croqui, equipamento, instrumentos calibrados, leituras, conclusões, assinaturas) e os relatórios mensais de dosimetria dos últimos meses. Confira se todo trabalhador exposto aparece no relatório e se o dosímetro padrão fica guardado com os demais, em área livre.', f: R611 + ', arts. 63 a 66 e 69'}
+  ],
+  imagens: [
+    {t: 'O que verificar: se os laudos são feitos em monitor específico para laudo (não em tela comum de computador), se há armazenamento das imagens digitais e, na telerradiologia, o contrato, o consentimento do paciente e a transmissão em padrão DICOM.', f: R611 + ', arts. 70 a 74'}
+  ],
+  proibicoes: [
+    {t: 'Durante a visita, observe um exame: ninguém deve segurar o receptor de imagem com a mão, só um equipamento opera por vez na sala e equipamento móvel não fica fixo na sala sem justificativa de urgência.', f: R611 + ', arts. 80 a 83'}
+  ],
+  conv: [
+    {t: 'Na sala de raios X convencional, confira no próprio equipamento: luz de campo funcionando, indicação de kV, mA e tempo (ou mAs) no painel, grade no bucky, sinal sonoro e luminoso no disparo e a tabela de exposição colada no comando.', f: 'IN Anvisa nº 90/2021, arts. 2º, 7º, 8º e 11'}
+  ]
+};
+MAIS.conv = ORIENT.conv;
 const copia = x => JSON.parse(JSON.stringify(x));
 function monta(m) {
   const x = MOD[m], ion = ION.includes(m);
@@ -471,26 +501,26 @@ function monta(m) {
         {id: 'perfil', titulo: 'Perfil do serviço', curto: 'Perfil', campos: perfil(m)}
       ]},
     {id: 'org', titulo: 'Organização e documentação', curto: 'Organização', icone: 'folder', itens: [
-      item('org', 'Licença, responsáveis, programas e projeto', 'Organização', ORG),
-      item('pessoal', 'Equipe e educação permanente', 'Equipe', PESSOAL)
+      Object.assign(item('org', 'Licença, responsáveis, programas e projeto', 'Organização', ORG), {orient: copia(ORIENT.org)}),
+      Object.assign(item('pessoal', 'Equipe e educação permanente', 'Equipe', PESSOAL), {orient: copia(ORIENT.pessoal)})
     ]},
     {id: 'qualidade', titulo: 'Garantia da qualidade', curto: 'Qualidade', icone: 'shield', itens: [
       Object.assign(item('equipamentos', 'Equipamentos e testes', 'Equipamentos', QUALIDADE.slice(0, 6)), {
         descricao: 'Liste os equipamentos: busque pelo registro na Anvisa ou pelo processo, ou digite os dados, com as datas do último teste de constância' + (ion ? ' e do levantamento radiométrico' : '') + '. A lista sai em tabela no relatório.',
         campos: [{id: 'equip_lista', rotulo: 'Equipamentos em uso', tipo: 'equipamentos', perfil: 'imagem', largo: true, tipos: x.tipos, omite: ion ? [] : ['levantamento']}],
         orient: copia(MAIS.testes)}),
-      item('processos', 'Procedimentos e gerenciamento de riscos', 'Riscos', QUALIDADE.slice(6))
+      Object.assign(item('processos', 'Procedimentos e gerenciamento de riscos', 'Riscos', QUALIDADE.slice(6)), {orient: copia(ORIENT.processos)})
     ]}
   ];
   if (ion) secoes.push({id: 'protecao', titulo: 'Proteção radiológica', curto: 'Proteção radiológica', icone: 'shield', itens: [
     Object.assign(item('ppr', 'Programa, sala e sinalização', 'Sala e sinalização', PROTECAO.slice(0, 6)), {orient: copia(MAIS.protecao)}),
-    item('epi', 'Acompanhantes, EPI e blindagem', 'EPI', PROTECAO.slice(6, 9)),
-    item('monitoracao', 'Levantamento radiométrico e dosimetria', 'Dosimetria', PROTECAO.slice(9))
+    Object.assign(item('epi', 'Acompanhantes, EPI e blindagem', 'EPI', PROTECAO.slice(6, 9)), {orient: copia(ORIENT.epi)}),
+    Object.assign(item('monitoracao', 'Levantamento radiométrico e dosimetria', 'Dosimetria', PROTECAO.slice(9)), {orient: copia(ORIENT.monitoracao)})
   ]});
   secoes.push({id: 'laudos', titulo: 'Imagens e laudos', curto: 'Imagens', icone: 'check', itens: [
-    item('imagens', 'Registro, laudo, telerradiologia e itinerante', 'Imagens e laudos', IMAGENS)
+    Object.assign(item('imagens', 'Registro, laudo, telerradiologia e itinerante', 'Imagens e laudos', IMAGENS), {orient: copia(ORIENT.imagens)})
   ]});
-  if (ion) secoes[secoes.length - 1].itens.push(item('proibicoes', 'Proibições', 'Proibições', PROIBE));
+  if (ion) secoes[secoes.length - 1].itens.push(Object.assign(item('proibicoes', 'Proibições', 'Proibições', PROIBE), {orient: copia(ORIENT.proibicoes)}));
   secoes.push({id: 'modalidade', titulo: x.titulo + ' (' + x.inN + ')', curto: 'Modalidade', icone: 'lab',
     descricao: 'Requisitos próprios da modalidade. Na pergunta de condições que inabilitam o uso, marque “Não atende” no ponto encontrado.', itens: [
       Object.assign(item('especifica', 'Requisitos da ' + x.inN, x.inN, ESPEC[m]), MAIS[m].length ? {orient: copia(MAIS[m])} : {})

@@ -343,7 +343,7 @@
     ocr_crt: leitura da Certidão de Regularidade Técnica do CRF (OcrPadrao, embutido com D.ocr).
     Só preenchem campos vazios; o que já foi digitado fica. */
  var acaoMsg = null;
- function preenche(pares){ var n = 0; pares.forEach(function(p){ var v = String(p[1] || '').trim(); if(v && !String(st.meta[p[0]] || '').trim()){ st.meta[p[0]] = v; n++; } }); salva(); return n; }
+ function preenche(pares){ var n = 0; pares.forEach(function(p){ var v = String(p[1] || '').trim(); if(v && CAMPO[p[0]] && !String(st.meta[p[0]] || '').trim()){ st.meta[p[0]] = v; n++; } }); salva(); return n; }
  function acaoAnvisa(){ var c = dig(st.meta.cnpj); if(c.length !== 14){ acaoMsg = {t: 'Digite o CNPJ completo (14 dígitos) antes de buscar.', tipo: 'aviso'}; redesenha(); return; }
   acaoMsg = {t: 'Consultando a base da Anvisa (AFE/AE)…'}; redesenha();
   jget('afe_ae/' + c.slice(0, 3) + '.json').then(function(d){ var a = (Array.isArray(d) ? d : (d && (d.registros || d.dados)) || []).filter(function(x){ return dig(x.cnpj) === c; });
@@ -351,8 +351,10 @@
    var ativ = function(x){ return /^(sim|s|ativ)/i.test(String(x.ativo || x.situacao || '')); };
    a.sort(function(x, y){ return (ativ(y) - ativ(x)) || (String(x.tipo).toUpperCase() === 'AFE' ? -1 : 1); });
    var x = a[0], end = [x.endereco, x.bairro, x.municipio && (x.municipio + (x.uf ? '/' + x.uf : '')), x.cep && 'CEP ' + String(x.cep).replace(/^(\d{5})(\d{3})$/, '$1-$2')].filter(Boolean).join(', ');
+   var aut = function(l){ return l.filter(function(y){ return y.autorizacao; }).map(function(y){ return (y.tipo || (/^s/i.test(String(y.autorizacao_especial || '')) ? 'AE' : 'AFE')) + ' ' + y.autorizacao + (y.situacao ? ' (' + String(y.situacao).toLowerCase() + ')' : ''); }).filter(function(v, i, l2){ return l2.indexOf(v) === i; }).join('; '); };
+   var soAe = !!CAMPO.ae, afeL = soAe ? aut(a.filter(function(y){ return !/^s/i.test(String(y.autorizacao_especial || '')) && String(y.tipo || 'AFE').toUpperCase() !== 'AE'; })) : '', aeL = soAe ? aut(a.filter(function(y){ return /^s/i.test(String(y.autorizacao_especial || '')) || String(y.tipo || '').toUpperCase() === 'AE'; })) : '';
    var afe = a.filter(function(y){ return y.autorizacao; }).map(function(y){ return (y.tipo || 'AFE') + ' ' + y.autorizacao + (y.situacao ? ' (' + String(y.situacao).toLowerCase() + ')' : ''); }).filter(function(v, i, l){ return l.indexOf(v) === i; }).join('; ');
-   var n = preenche([['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', end], ['rl', x.responsavel_legal], ['rt', x.responsavel_tecnico], ['afe', afe]]);
+   var n = preenche([['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', end], ['rl', x.responsavel_legal], ['rt', x.responsavel_tecnico], ['afe', soAe ? afeL : afe], ['ae', aeL]]);
    acaoMsg = {t: 'Base da Anvisa: ' + (x.razao_social || 'estabelecimento') + (afe ? ' — ' + afe : '') + '. ' + (n ? n + ' campo(s) preenchido(s); confira.' : 'Os campos já estavam preenchidos; nada foi alterado.'), tipo: n ? 'ok' : ''};
    redesenha(); }, function(){ acaoMsg = {t: 'Não foi possível consultar a base agora (sem internet?). Preencha os dados à mão.', tipo: 'aviso'}; redesenha(); }); }
  function acaoCrt(){ if(!window.OcrPadrao){ acaoMsg = {t: 'Leitor de documentos indisponível neste roteiro.', tipo: 'aviso'}; redesenha(); return; }
@@ -377,7 +379,10 @@
   var ps = perguntasDe(it), h = it.descricao ? '<p class="pu-desc">' + esc(it.descricao) + '</p>' : (s.descricao ? '<p class="pu-desc">' + esc(s.descricao) + '</p>' : '');
   if(it.orient && it.orient.length) h += '<details class="pu-mais rs-orient"><summary>📘 Orientação técnica</summary><div><ul>' + it.orient.map(function(o){ return '<li>' + esc(o.t) + (o.f ? ' <small class="rs-fonte">Fonte: ' + esc(o.f) + '</small>' : '') + '</li>'; }).join('') + '</ul></div></details>';
   if(it.consulta) h += consultaHtml(it.consulta);
-  if(it.acoes && it.acoes.length) h += '<div class="pu-bloco rs-acoes"><div class="pu-acoes-item">' + it.acoes.map(function(a){ return '<button type="button" class="pu-btn' + (a.pri ? ' pu-btn-pri' : '') + '" data-rs-acao="' + esc(a.id) + '">' + esc(a.rotulo) + '</button>'; }).join('') + '</div>' + (acaoMsg ? '<p class="rs-eq-msg' + (acaoMsg.tipo ? ' rs-eq-' + acaoMsg.tipo : '') + '" role="status">' + esc(acaoMsg.t) + '</p>' : '') + (it.acoesNota ? '<p class="pu-q-ajuda">' + esc(it.acoesNota) + '</p>' : '') + '</div>';
+  /* item com campo de CNPJ e sem ações próprias: busca do estabelecimento na base da Anvisa (D.buscaCnpj === false desliga) */
+  var acoes = it.acoes || ((it.campos || []).some(function(c){ return c.tipo === 'cnpj'; }) && D.buscaCnpj !== false ? [{id: 'anvisa_cnpj', rotulo: 'Buscar dados na Anvisa pelo CNPJ', pri: true}] : null);
+  var acoesNota = it.acoesNota || (acoes && !it.acoes ? 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas): traz o estabelecimento que tem Autorização de Funcionamento. Só os campos vazios são preenchidos — confira antes de seguir.' : '');
+  if(acoes && acoes.length) h += '<div class="pu-bloco rs-acoes"><div class="pu-acoes-item">' + acoes.map(function(a){ return '<button type="button" class="pu-btn' + (a.pri ? ' pu-btn-pri' : '') + '" data-rs-acao="' + esc(a.id) + '">' + esc(a.rotulo) + '</button>'; }).join('') + '</div>' + (acaoMsg ? '<p class="rs-eq-msg' + (acaoMsg.tipo ? ' rs-eq-' + acaoMsg.tipo : '') + '" role="status">' + esc(acaoMsg.t) + '</p>' : '') + (acoesNota ? '<p class="pu-q-ajuda">' + esc(acoesNota) + '</p>' : '') + '</div>';
   if(it.campos && it.campos.length) h += '<div class="pu-bloco"><div class="pu-campos rs-campos">' + it.campos.map(campoHtml).join('') + '</div></div>';
   var naI = naItem(it); if(naI) h = '<div class="pu-bloco rs-na-item"><b>Não se aplica a este estabelecimento</b><p>' + esc(naI) + '</p></div>' + h;
   h += ps.map(perguntaHtml).join('');

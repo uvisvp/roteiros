@@ -239,6 +239,26 @@ const MAIS = {
   ]
 };
 
+/* orientação técnica dos demais itens: o que pedir e conferir, com o dispositivo */
+const R504 = 'RDC Anvisa nº 504/2021';
+const ORIENT = {
+  lic: [
+    {t: 'O que pedir: a licença sanitária com a atividade de transporte de material biológico humano e o nome do supervisor técnico, com a comprovação da capacitação. Confira se a frota e a base informadas correspondem ao que está licenciado.', f: R504 + ', arts. 3º, XVIII, 7º, §§ 1º e 2º, e 31; Portaria SMS nº 266/2025, art. 22'}
+  ],
+  contrato: [
+    {t: 'O que pedir: o contrato com cada remetente (laboratório, hospital, banco de sangue). Ele deve dizer quem cuida da documentação de expedição, da biossegurança, da conservação do material, das instruções escritas, da logística, dos treinamentos e da guarda de cada documento.', f: R504 + ', arts. 7º, 8º, parágrafo único, 9º, § 1º, e 26'},
+    {t: 'O remetente classifica e embala o material; a transportadora recebe dele as informações técnicas e a conduta em caso de acidente. Sem essas informações a equipe não sabe o que fazer num derramamento.', f: R504 + ', arts. 28 e 29'}
+  ],
+  proc: [
+    {t: 'O que pedir: as instruções escritas (coleta, acondicionamento no veículo, trânsito, entrega, limpeza do veículo e das caixas, acidente), com data de revisão no último ano; o registro de não conformidades com a ação tomada; e os registros de transporte de 5 anos (amostra de alguns meses).', f: R504 + ', arts. 5º, 6º, 8º e 42'}
+  ],
+  pessoal: [
+    {t: 'O que pedir: a lista de motoristas e entregadores, os registros de treinamento de cada um (conteúdo, data, avaliação) e o treinamento para emergência e uso do kit. Para quem pode ter contato com o conteúdo da carga, a comprovação de vacinação (hepatite B, tétano e difteria são as vacinas que a NR-32 prevê para os serviços de saúde, além das do PCMSO).', f: R504 + ', arts. 9º, 38, 39 e 40; NR-32 (segurança e saúde no trabalho em serviços de saúde), item 32.2.4.17'}
+  ],
+  operacao: [
+    {t: 'O que verificar no veículo em operação: o documento de rastreabilidade da carga (remetente, destinatário, quantidade, horários), a conferência na coleta e o kit para derramamento (luvas, material absorvente, saco para resíduo infectante, desinfetante).', f: R504 + ', arts. 32, 33, 39 e 41; Fiocruz, Manual de Transporte de Material Biológico (2023)'}
+  ]
+};
 const secoes = [
   {id: 'ident', titulo: 'Identificação e perfil', curto: 'Identificação', icone: 'building',
     descricao: 'Dados da transportadora e o que ela transporta. O perfil marca “Não se aplica” no que não existir.',
@@ -247,12 +267,12 @@ const secoes = [
       {id: 'perfil', titulo: 'Perfil do transporte', curto: 'Perfil', campos: PERFIL}
     ]},
   {id: 'licenc', titulo: 'Licenciamento e responsabilidades', curto: 'Licenciamento', icone: 'folder', itens: [
-    {id: 'lic', titulo: 'Licença, supervisão e infraestrutura', curto: 'Licença', perguntas: LIC},
-    {id: 'contrato', titulo: 'Contrato com os remetentes', curto: 'Contrato', perguntas: CONTRATO}
+    {id: 'lic', titulo: 'Licença, supervisão e infraestrutura', curto: 'Licença', perguntas: LIC, orient: ORIENT.lic},
+    {id: 'contrato', titulo: 'Contrato com os remetentes', curto: 'Contrato', perguntas: CONTRATO, orient: ORIENT.contrato}
   ]},
   {id: 'docs', titulo: 'Procedimentos e pessoal', curto: 'Procedimentos', icone: 'shield', itens: [
-    {id: 'proc', titulo: 'Instruções escritas e registros', curto: 'Procedimentos', perguntas: PROC},
-    {id: 'pessoal', titulo: 'Treinamento e saúde do trabalhador', curto: 'Pessoal', perguntas: PESSOAL}
+    {id: 'proc', titulo: 'Instruções escritas e registros', curto: 'Procedimentos', perguntas: PROC, orient: ORIENT.proc},
+    {id: 'pessoal', titulo: 'Treinamento e saúde do trabalhador', curto: 'Pessoal', perguntas: PESSOAL, orient: ORIENT.pessoal}
   ]},
   {id: 'carga', titulo: 'Embalagem, rotulagem e temperatura', curto: 'Embalagem', icone: 'check',
     descricao: 'Verifique as cargas em trânsito ou prontas para coleta.', itens: [
@@ -261,7 +281,7 @@ const secoes = [
     ]},
   {id: 'veiculos', titulo: 'Veículos e operação', curto: 'Veículos', icone: 'plan', itens: [
     {id: 'frota', titulo: 'Declaração e vistoria dos veículos', curto: 'Veículos', perguntas: VEIC_DECL, campos: [VEICULOS], orient: MAIS.veiculos},
-    {id: 'operacao', titulo: 'Coleta, trânsito e acidentes', curto: 'Operação', perguntas: OPER}
+    {id: 'operacao', titulo: 'Coleta, trânsito e acidentes', curto: 'Operação', perguntas: OPER, orient: ORIENT.operacao}
   ]}
 ];
 lei13725(secoes, INFRACOES);
