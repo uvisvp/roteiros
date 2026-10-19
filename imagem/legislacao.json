@@ -1,0 +1,854 @@
+{
+ "in-90-2021::artigo::1": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança em sistemas de radiografia médica convencional, bem como a relação mínima de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, determinando respectivas periodicidades, tolerâncias e níveis de restrição, conforme Anexo I desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo I desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado e pelas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::10": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 10",
+  "texto": "Art. 10. Os equipamentos de raios X devem ser providos de dispositivo que interrompa automaticamente a irradiação ao final do tempo, da dose, ou do produto corrente-tempo selecionados, ou a qualquer momento dentro do intervalo selecionado de exposição.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::11": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 11",
+  "texto": "Art. 11. São condições dos procedimentos e equipamentos de radiografia médica convencional que inabilitam o seu uso:\nI - equipamento sem sistema de colimação ou sistema sem funcionar;\nII - equipamento sem luz de campo ou luz de campo sem funcionar;\nIII - equipamento sem filtração adicional;\nIV - equipamento sem indicação no painel de controle dos parâmetros básicos (tensão (kV), corrente (mA) e tempo (s) ou o produto corrente x tempo (mAs);\nV - mesa bucky ou bucky mural sem grade antidifusora;\nVI - mais de 1 (um) equipamento instalado na mesma sala;\nVII - equipamento móvel sem cabo disparador; e\nVIII - equipamento com sistema de disparo que permita feixe contínuo, independentemente do tempo selecionado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::12": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 12",
+  "texto": "Art. 12. As avaliações da qualidade da imagem devem:\nI - utilizar ferramenta de teste específica para radiografia médica convencional que verifique, no mínimo, resolução espacial e resolução de baixo contraste;\nII - após a realização do teste de aceitação ou dos testes completos de desempenho, incluindo avaliação do equipamento de raios X, receptores de imagem, sistema de processamento e visualização, deve-se produzir 1 (uma) imagem da ferramenta de teste, para ser utilizada como referência; e\nIII - as avaliações quantitativas e qualitativas devem ser realizadas com base nos parâmetros estabelecidos no Anexo I desta Instrução Normativa, na imagem de referência e nas especificações da ferramenta de teste.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::2": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º Todo equipamento de radiografia médica convencional deve possuir:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nII - o disposto no inciso I deste artigo aplica-se à radiação de fuga através do sistema de colimação;\nIII - filtração total permanente do feixe útil de radiação de, no mínimo o equivalente a 2,5 mm (dois inteiros e cinco décimos de milímetro) de alumínio;\nIV - diafragma regulável com localização luminosa, para limitar o campo de radiação à região de interesse clínico;\nV - sistema para identificar quando o eixo do feixe de radiação está perpendicular ao plano do receptor de imagem e para ajustar o centro do feixe de radiação em relação ao centro do receptor de imagem;\nVI - sistema para indicar a distância foco-receptor ou foco-pele;\nVII - indicação visual do tubo selecionado no painel de controle, para equipamentos com mais de 1 (um) tubo;\nVIII - cabo disparador com comprimento mínimo de 2 (dois) metros, nos equipamentos móveis;\nIX - suporte do cabeçote ajustável, de modo a manter o tubo estável durante a exposição, a menos que o movimento do cabeçote seja função projetada do equipamento;\nX - componentes, tais como gerador, tubo, cabeçote, mesa e sistema de colimação, devem possuir identificação própria (marca, modelo, número de série), mediante etiqueta fixada em lugar visível; e\nXI - grade antidifusora removível, para equipamentos especificados para aplicações pediátricas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::3": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 3º",
+  "texto": "Art. 3º Quando houver sistema de Controle Automático de Exposição, o painel de controle deve possuir indicação clara de quando esse modo de operação está sendo utilizado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::5": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 5º",
+  "texto": "Art. 5º No painel de controle do equipamento, a terminologia e os valores dos parâmetros de operação devem estar exibidos em linguagem ou simbologia internacionalmente aceita, compreensível para o usuário.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::7": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 7º",
+  "texto": "Art. 7º A emissão de raios X, enquanto durar a exposição radiográfica, deve ser indicada por sinal sonoro e luminoso localizado no painel de controle do equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::8": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 8º",
+  "texto": "Art. 8º Deve estar disponível no comando, protocolo de técnicas radiográficas (tabela de exposição), especificando, para cada exame realizado no equipamento, as seguintes informações:\nI - tipo de exame (espessuras e partes anatômicas do paciente) e respectivos fatores de técnica radiográfica;\nII - parâmetros para o controle automático de exposição, quando aplicáveis;\nIII - tamanho e tipo de receptor de imagem;\nIV - distância foco-receptor de imagem;\nV - tipo e posicionamento da blindagem a ser usada no paciente, quando aplicável; e\nVI - quando determinado pela autoridade sanitária competente, restrições de operação do equipamento e procedimentos de segurança.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-90-2021::artigo::9": {
+  "norma": "IN Anvisa nº 90/2021",
+  "disp": "art. 9º",
+  "texto": "Art. 9º Todo equipamento com anodo rotatório deve ter 2 (dois) estágios de acionamento do feixe de raios X e possuir mecanismos para que:\nI - a emissão do feixe de raios X ocorra somente enquanto durar a pressão intencional sobre o botão disparador;\nII - seja necessário aliviar a pressão sobre o botão e pressioná-lo novamente para ocorrer repetição da exposição; e\nIII - o botão disparador esteja instalado de tal forma que seja difícil efetuar exposição acidental.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000090&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::1": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança de sistemas de fluoroscopia e de radiologia intervencionista, bem como a relação de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, as respectivas periodicidades, tolerâncias e níveis de restrição, conforme Anexo I desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo I desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado e pelas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::2": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º Todo equipamento de fluoroscopia ou de radiologia intervencionista deve possuir, além do estabelecido nas demais normativas aplicáveis:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nII - dispositivo para controlar o tempo acumulado de fluoroscopia, de modo que:\na) o tempo não exceda 5 (cinco) minutos sem que o dispositivo seja reajustado ou reiniciado; e\nb) produza alarme sonoro audível na sala de exames, o qual indique o término do tempo pré-selecionado e continue soando enquanto os raios X são emitidos, até que o dispositivo seja reajustado ou reiniciado;\nIII - filtração total permanente do feixe útil de radiação em qualquer tensão de, no mínimo, o equivalente a 2,5 mm (dois inteiros e cinco décimos de milímetro) de alumínio;\nIV - diafragma regulável, para limitar o campo de radiação à região de interesse e garantir que o feixe de radiação seja completamente restrito à área do receptor de imagem, em qualquer distância foco-receptor e qualquer tamanho de campo selecionado;\nV - sistema para identificar quando o eixo do feixe de radiação está perpendicular ao plano do receptor de imagem, para equipamentos comercializados a partir da publicação desta Instrução Normativa;\nVI - indicação visual do tubo selecionado no painel de controle, para equipamentos com mais de 1 (um) tubo;\nVII - para salas com equipamentos fixos ou utilizados como fixos, cortina ou saiote plumbífero inferior/lateral íntegros para a proteção do operador contra a radiação espalhada pelo paciente, com espessura não inferior a 0,5 mm (cinco décimos de milímetro) equivalente de chumbo, a 100 kVp (cem quilovolts de pico). Este critério não é aplicável a equipamentos com tubo de raios X instalado sobre a mesa;\nVIII - sistema para impedir que a distância foco-pele seja inferior a 30 cm (trinta centímetros) para equipamentos fixos e 20 cm (vinte centímetros) para equipamentos móveis;\nIX - sinais sonoro e luminoso perceptíveis no interior da sala de exames, quando o modo cine (registro ou gravação) estiver acionado;\nX - componentes, tais como gerador, tubo, cabeçote, mesa e sistema de colimação devem possuir identificação própria (marca, modelo, número de série), mediante etiqueta fixada em lugar visível;\nXI - controle automático de intensidade;\nXII - indicação do produto kerma x área (pka) acumulado no exame ou do kerma no ar de referência, sendo recomendadas as duas indicações, para equipamentos comercializados a partir da data de publicação desta Instrução Normativa;\nXIII - visor plumbífero íntegro, com atenuação mínima equivalente a 0,25 mm (vinte e cinco centésimos de milímetro) de chumbo, a 100 kVp (cem quilovolts de pico), para salas com equipamento fixo ou utilizado como fixo; e\nXIV - gerador e tubo de raios X com potência mínima de 60 kW (sessenta quilowatts), para equipamentos utilizados em cardiologia intervencionista.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::3": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 3º",
+  "texto": "Art. 3º Ficam proibidas:\nI - a instalação de equipamentos com gerador que não seja de alta frequência;\nII - a instalação de equipamentos de fluoroscopia sem feixe pulsado; e\nIII - a utilização de equipamentos sem controle automático de intensidade.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::6": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 6º",
+  "texto": "Art. 6º A emissão de raios X, enquanto durar a exposição, deve ser indicada por sinal luminoso localizado no painel de controle do equipamento e no interior da sala de exames.\nParágrafo único. No caso de equipamentos fixos, a emissão de raios X também deve ser indicada por sinal luminoso no lado externo da(s) porta(s) de acesso à sala de exames.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::6::paragrafo::unico": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 6º, parágrafo único",
+  "texto": "Art. 6º A emissão de raios X, enquanto durar a exposição, deve ser indicada por sinal luminoso localizado no painel de controle do equipamento e no interior da sala de exames.\nParágrafo único. No caso de equipamentos fixos, a emissão de raios X também deve ser indicada por sinal luminoso no lado externo da(s) porta(s) de acesso à sala de exames.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::7": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 7º",
+  "texto": "Art. 7º São condições dos procedimentos e equipamentos de fluoroscopia e de radiologia intervencionista que inabilitam o seu uso:\nI - equipamento sem sistema de colimação ou sistema sem funcionar;\nII - equipamento incapaz de restringir o campo de radiação ao receptor de imagem;\nIII - equipamento sem filtração adicional;\nIV - equipamento sem indicação no painel de controle dos parâmetros básicos (tensão (kVp), corrente (mA) e tempo (min), produto kerma x área (quando aplicável) e kerma no ar de referência (quando aplicável) para todos os equipamentos comercializados a partir da publicação desta Instrução Normativa;\nV - mais de 1 (um) equipamento instalado na mesma sala;\nVI - equipamentos sem intensificador de imagem, detector de placa plana ou detector digital integrado; e\nVII - equipamentos utilizados em radiologia intervencionista sem anteparos de teto ou visores plumbíferos, e cortinas plumbíferas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::8": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 8º",
+  "texto": "Art. 8º As avaliações da qualidade da imagem devem:\nI - utilizar ferramenta de teste específica para fluoroscopia e radiologia intervencionista;\nII - após a realização do teste de aceitação ou dos testes completos de desempenho, incluindo avaliação do equipamento de raios X, receptores de imagem, sistema de visualização, deve-se produzir 1 (uma) imagem da ferramenta de teste, para ser utilizada como referência;\nIII - semestralmente, deverá ser produzida 1 (uma) imagem da ferramenta de teste, com a mesma técnica utilizada para produzir a imagem de referência; e\nIV - as avaliações quantitativas e qualitativas devem ser realizadas com base nos parâmetros estabelecidos no Anexo I desta Instrução Normativa, na imagem de referência e nas especificações da ferramenta de teste.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::9": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 9º",
+  "texto": "Art. 9º Os equipamentos de proteção individual utilizados no serviço de radiologia intervencionista devem ser testados semestralmente, sendo obrigatória a elaboração de laudo técnico de integridade, com os resultados e as respectivas imagens, quando aplicável.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::1": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança de sistemas de mamografia, bem como a relação mínima de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, determinando respectivas periodicidades, tolerâncias e níveis de restrição, conforme Anexo I desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo I desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado e pelas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::2": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º Todo equipamento de mamografia deve possuir:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nII - o requisito de que trata o inciso I deste artigo aplica-se à radiação de fuga através do sistema de colimação;\nIII - filtração total permanente mínima do feixe útil de radiação equivalente a 0,03 mm (três centésimos de milímetro) de molibdênio, para combinação alvo/filtro Mo/Mo; 0,025 mm (vinte e cinco milésimos de milímetro) de ródio, para a combinação alvo/filtro Mo/Rh ou Rh/Rh; 0,06 mm (seis centésimos de milímetro) de molibdênio, para combinação alvo/filtro W/Mo; 0,05 mm (cinco centésimos de milímetro) de ródio, para combinação alvo/filtro W/Rh;\nIV - dispositivo para manter compressão firme na mama para assegurar espessura uniforme na porção radiografada, de modo que:\na) a placa de compressão produza atenuação de, no máximo, o equivalente a 2 mm (dois milímetros) de Polimetil-Meta-Acrilato (PMMA), comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X; e\nb) o sistema automático garanta força de compressão do dispositivo entre 150 (cento e cinquenta) e 200 (duzentos) Newtons (N), indicando o valor da compressão.\nV - suporte de receptor de imagem com transmissão menor que 1 µGy (um microgray) por exposição a 5 cm (cinco centímetros), sem a presença da mama, para valores máximos de kVp e mAs empregados, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nVI - tubo de raios X projetado especificamente para mamografia;\nVII - gerador de alta frequência;\nVIII - controle automático de exposição;\nIX - distância do ponto focal até o receptor de imagem não inferior a 50 cm (cinquenta centímetros);\nX - tamanho nominal do ponto focal não superior a 0,4 mm (quatro décimos de milímetro); e\nXI - sistema para indicar a espessura da mama comprimida, para equipamentos comercializados após a publicação desta Instrução Normativa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::3": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 3º",
+  "texto": "Art. 3º O painel de controle deve possuir indicação clara de quando se utiliza o controle automático de exposição.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::4": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 4º",
+  "texto": "Art. 4º No painel de controle do equipamento, a terminologia e os valores dos parâmetros de operação devem estar exibidos em linguagem ou simbologia internacionalmente aceita, compreensível para o usuário.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::5": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 5º",
+  "texto": "Art. 5º A emissão de raios X, enquanto durar a exposição, deve ser indicada por sinal sonoro e luminoso no painel de controle do equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::6": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 6º",
+  "texto": "Art. 6º São condições dos procedimentos e equipamentos de mamografia que inabilitam seu uso:\nI - equipamento sem sistema de colimação ou sistema sem funcionar;\nII - equipamento sem filtração adicional;\nIII - equipamento sem indicação no painel de controle dos parâmetros básicos (Tensão (kVp), Corrente (mA) e Tempo (s) ou o produto corrente x tempo (mAs));\nIV - equipamento sem sistema automático de compressão;\nV - equipamento sem bandeja de compressão, com bandeja danificada ou sem fixação;\nVI - equipamento sem controle automático de exposição (CAE) ou com CAE sem funcionar;\nVII - equipamento com distância do ponto focal até o receptor de imagem menor que 50 cm (cinquenta centímetros);\nVIII - suporte de receptor de imagem (bucky) sem grade antidifusora, exceto sistemas de magnificação;\nIX - revelação manual;\nX - mais de 1 (um) equipamento instalado na mesma sala;\nXI - utilizar negatoscópios que não sejam específicos para mamografia, quando o serviço realizar diagnóstico e laudos por meio de filme;\nXII - utilizar monitor para diagnóstico e laudos que não seja específico para mamografia; e\nXIII - utilizar processadora não específica e exclusiva para mamografia convencional, quando o serviço utilizar essa modalidade.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::7": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 7º",
+  "texto": "Art. 7º Os testes de controle de qualidade devem ser realizados com as respectivas periodicidades, tolerâncias e níveis de restrição estabelecidos no Anexo I desta Instrução Normativa, e em conformidade com as demais normativas aplicáveis.\n§ 1º Para serviços de mamografia em unidades itinerantes, os testes do Anexo I desta Instrução Normativa devem ser realizados, no mínimo, semestralmente, com exceção dos testes de menor período, que devem ser realizados conforme estabelecido no Anexo I desta Instrução Normativa.\n§ 2º A avaliação diária da qualidade da imagem pode ser realizada por profissionais do próprio serviço, desde que treinados e legalmente habilitados para tais funções.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::7::paragrafo::1": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 7º, § 1º",
+  "texto": "Art. 7º Os testes de controle de qualidade devem ser realizados com as respectivas periodicidades, tolerâncias e níveis de restrição estabelecidos no Anexo I desta Instrução Normativa, e em conformidade com as demais normativas aplicáveis.\n§ 1º Para serviços de mamografia em unidades itinerantes, os testes do Anexo I desta Instrução Normativa devem ser realizados, no mínimo, semestralmente, com exceção dos testes de menor período, que devem ser realizados conforme estabelecido no Anexo I desta Instrução Normativa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-92-2021::artigo::7::paragrafo::2": {
+  "norma": "IN Anvisa nº 92/2021",
+  "disp": "art. 7º, § 2º",
+  "texto": "Art. 7º Os testes de controle de qualidade devem ser realizados com as respectivas periodicidades, tolerâncias e níveis de restrição estabelecidos no Anexo I desta Instrução Normativa, e em conformidade com as demais normativas aplicáveis.\n§ 2º A avaliação diária da qualidade da imagem pode ser realizada por profissionais do próprio serviço, desde que treinados e legalmente habilitados para tais funções.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000092&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::1": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança em sistemas de tomografia computadorizada médica, bem como a relação mínima de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, determinando as respectivas periodicidades, tolerâncias e níveis de restrição, conforme Anexo I desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo I desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado e pelas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::2": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º Todo equipamento de tomografia computadorizada médica deve possuir:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nII - filtração total permanente do feixe útil de radiação de, no mínimo, o equivalente a 2,5 mm (dois inteiros e cinco décimos de milímetro) de alumínio;\nIII - meios que permitam a determinação visual do plano de referência;\nIV - dispositivo que permita ao operador interromper, a qualquer instante, qualquer aquisição de duração maior que 0,5 s (cinco décimos de segundo);\nV - indicação visual, no painel de controle, dos parâmetros de técnica, incluindo espessura de corte, colimação e incremento de varredura, antes do início de uma série;\nVI - meios para ajustar os números de CT, de modo que os dados de calibração no fantoma com água ou material equivalente produzam números iguais a 0 (zero);\nVII - modulação automática de corrente, para equipamentos comercializados após a publicação desta Instrução Normativa;\nVIII - protocolos pediátricos, para equipamentos utilizados em pediatria;\nIX - tecnologia helicoidal, para equipamentos comercializados após a publicação desta Instrução Normativa;\nX - indicação do Índice de Dose em Tomografia Computadorizada Ponderado (CTDIw) ou Índice de Dose em Tomografia Computadorizada Volumétrico (CTDIvol ) e do Produto Dose x Comprimento (DLP), para equipamentos comercializados após a publicação desta Instrução Normativa; e\nXI - relatório de dose em padrão DICOM, para equipamentos comercializados após a publicação desta Instrução Normativa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::2::inciso::viii": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 2º, VIII",
+  "texto": "Art. 2º Todo equipamento de tomografia computadorizada médica deve possuir:\nVIII - protocolos pediátricos, para equipamentos utilizados em pediatria;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::3": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 3º",
+  "texto": "Art. 3º A emissão de raios X, enquanto durar a exposição radiográfica, deve ser indicada por sinal sonoro e luminoso localizado no painel de controle do equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::4": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 4º",
+  "texto": "Art. 4º São condições dos procedimentos e equipamentos de tomografia computadorizada médica que inabilitam o seu uso:\nI - equipamento sem modulação automática de corrente, para equipamentos comercializados após a publicação desta Instrução Normativa;\nII - equipamento sem protocolos pediátricos, caso sejam utilizados em pediatria;\nIII - equipamento sem indicação de CTDIw ou CTDIvol e DLP, para equipamentos comercializados após a publicação desta Instrução Normativa; e\nIV - equipamento sem relatório de dose em formato DICOM, para equipamentos comercializados após a publicação desta Instrução Normativa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-93-2021::artigo::4::inciso::ii": {
+  "norma": "IN Anvisa nº 93/2021",
+  "disp": "art. 4º, II",
+  "texto": "Art. 4º São condições dos procedimentos e equipamentos de tomografia computadorizada médica que inabilitam o seu uso:\nII - equipamento sem protocolos pediátricos, caso sejam utilizados em pediatria;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000093&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-96-2021::artigo::1": {
+  "norma": "IN Anvisa nº 96/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança nos sistemas de ultrassom diagnóstico ou terapêutico, bem como a relação de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, determinando as respectivas periodicidades e tolerâncias, conforme o Anexo desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000096&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-96-2021::artigo::2": {
+  "norma": "IN Anvisa nº 96/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º Os testes de controle de qualidade do equipamento de ultrassom terapêutico devem ser realizados conforme estabelecido pelo fabricante do equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000096&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::1": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Esta Instrução Normativa estabelece requisitos sanitários para a garantia da qualidade e da segurança em sistemas de imagens por ressonância magnética nuclear, bem como a relação mínima de testes de aceitação e de controle de qualidade que devem ser realizados pelos serviços de saúde, determinando as respectivas periodicidades e tolerâncias, conforme Anexo desta Instrução Normativa.\nParágrafo único. O rol de testes do Anexo desta Instrução Normativa deve ser complementado pelos testes de aceitação e de controle de qualidade estabelecidos pelo fabricante do sistema avaliado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::10": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 10",
+  "texto": "Art. 10. O serviço de saúde deve implementar processos de trabalho de forma a:\nI - garantir que nenhuma pessoa entre nas zonas III ou IV com o magneto gerando campo magnético, portando implantes ou objetos incompatíveis que comprometam a segurança ou qualidade do procedimento;\nII - garantir que nenhum paciente seja submetido a procedimento radiológico sem que atenda aos critérios clínicos e de segurança estabelecidos nas normativas aplicáveis; e\nIII - mitigar os riscos de eventos adversos relacionados ao procedimento radiológico.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::10::inciso::i": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 10, I",
+  "texto": "Art. 10. O serviço de saúde deve implementar processos de trabalho de forma a:\nI - garantir que nenhuma pessoa entre nas zonas III ou IV com o magneto gerando campo magnético, portando implantes ou objetos incompatíveis que comprometam a segurança ou qualidade do procedimento;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::11": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 11",
+  "texto": "Art. 11. O programa de educação permanente do serviço de saúde deve conter as orientações para toda a equipe sobre segurança e restrições de acesso às zonas III ou IV quando o magneto estiver gerando campo magnético, além do exigido nas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::12": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 12",
+  "texto": "Art. 12. O serviço de saúde deve prover proteção auditiva para o paciente e para o acompanhante ou profissional que precisar permanecer dentro da sala de exames, de modo a não exceder os limites de ruído acústico estabelecidos nas normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::2": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 2º",
+  "texto": "Art. 2º As salas do sistema de ressonância magnética devem dispor de isolamento acústico, de forma a atender os limites de exposição a níveis de ruído acústico estabelecidos nas normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::3": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 3º",
+  "texto": "Art. 3º O Projeto Básico de Arquitetura de salas de exames de equipamentos que utilizam líquidos criogênicos com tubo Quench deve prever a abertura da porta de acesso para fora do ambiente.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::4": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 4º",
+  "texto": "Art. 4º O projeto de blindagem deve conter, além do exigido nas demais normativas aplicáveis:\nI - descrição técnica da blindagem para os campos eletromagnéticos, conforme estabelecido pelo fabricante;\nII - descrição das medidas para isolamento acústico da sala de exames e para atenuação de vibrações mecânicas no interior da sala, de forma a atender às normativas aplicáveis;\nIII - descrições técnicas de blindagens adicionais e do sistema de evacuação massiva de gases criogênicos, quando aplicável; e\nIV - laudo de compatibilidade eletromagnética, contendo estudo de compatibilidade eletromagnética da instalação com os demais produtos para a saúde e sistemas passíveis de perturbação eletromagnética, e descrição das medidas para mitigar os riscos de interações indesejadas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::5": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 5º",
+  "texto": "Art. 5º A sala de exames deve possuir sinalização nas portas de acesso, informando os riscos e a proibição da entrada de pessoas com implantes ou outros objetos incompatíveis com a tecnologia, em linguagem ou simbologia internacionalmente aceita, compreensível para os indivíduos do público.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::6": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 6º",
+  "texto": "Art. 6º O sistema de ressonância magnética que utiliza líquido criogênico deve possuir sistema de evacuação massiva de gases criogênicos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::7": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 7º",
+  "texto": "Art. 7º O serviço de saúde deve dispor de sistema de comunicação entre a sala de comando e a sala de exames, que permita manter contato audiovisual com o paciente durante toda a realização do procedimento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::8": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 8º",
+  "texto": "Art. 8º O serviço de saúde deve classificar seus ambientes conforme os critérios abaixo:\nI - zona I - ambientes de livre acesso para os indivíduos do público;\nII - zona II - ambientes externamente adjacentes à zona III, onde são realizados os procedimentos de acolhimento, anamnese e preparo do paciente e avaliação de compatibilidade de objetos, por exemplo;\nIII - zona III - ambientes adjacentes à zona IV onde há restrição à circulação de pessoas e equipamentos devido ao risco de ocorrência de eventos adversos causados pela interação de indivíduos ou objetos com os campos eletromagnéticos produzidos pelo equipamento de ressonância magnética nuclear; e\nIV - zona IV - sala em que está localizado o equipamento de ressonância magnética nuclear.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-97-2021::artigo::9": {
+  "norma": "IN Anvisa nº 97/2021",
+  "disp": "art. 9º",
+  "texto": "Art. 9º O serviço de saúde deve possuir sistema de detecção de metais para monitoramento do acesso de pessoas e objetos às zonas III e IV em quantidade compatível com o número de salas de exame.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000097&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "lei-municipal-13725-2004::artigo::42": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 42",
+  "texto": "Art. 42 - As empresas devem manter sob controle os fatores ambientais de risco à saúde do trabalhador, como ruído, iluminação, calor, frio, umidade, radiações, agentes químicos, pressões hiperbáricas e outros de interesse da saúde, dentro dos critérios estabelecidos em normas técnicas ou reconhecidos como cientificamente válidos.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::63": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 63",
+  "texto": "Art. 63 - Os estabelecimentos de assistência à saúde devem possuir condições adequadas para o exercício da atividade profissional na prática de ações que visem à proteção, promoção, preservação, recuperação e reabilitação da saúde.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::64": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 64",
+  "texto": "Art. 64 - Os estabelecimentos de assistência à saúde devem possuir quadro de profissionais legalmente habilitados, em número adequado à demanda, às atividades desenvolvidas e à legislação profissional vigente.\nParágrafo único - Os estabelecimentos de assistência à saúde que, por suas características e finalidades, destinam-se a prestar serviços em regime de internação hospitalar e em urgência e emergência ambulatorial ou pronto atendimento, devem contar com quadro de profissionais legalmente habilitados nas 24 (vinte e quatro) horas do dia, em número adequado à demanda e às atividades desenvolvidas, especialmente médicos e enfermeiros.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::65": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 65",
+  "texto": "Art. 65 - Os estabelecimentos de assistência à saúde devem possuir instalações, equipamentos, instrumentais, utensílios e materiais de consumo indispensáveis e condizentes com suas finalidades e em perfeito estado de conservação e funcionamento, de acordo com normas técnicas específicas.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::66": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 66",
+  "texto": "Art. 66 - Cabe ao responsável técnico pelo estabelecimento e/ou serviço, o funcionamento adequado dos equipamentos utilizados nos procedimentos diagnósticos e terapêuticos, durante sua vida útil, instalados ou utilizados pelos estabelecimentos de assistência à saúde.\n§ 1º - Respondem solidariamente pelo funcionamento adequado dos equipamentos:\nI - o proprietário, a quem caberá a compra do equipamento adequado, sua instalação, manutenção permanente e reparos;\nII - o fabricante, cabendo-lhe prover os equipamentos do certificado de garantia, manual de instalação, operacionalização, especificações técnicas e assistência técnica permanente;\nIII - a rede de assistência técnica, cabendo-lhe garantir o acesso aos equipamentos nas condições estabelecidas no inciso II deste parágrafo.\n§ 2º - Os equipamentos, quando não estiverem em perfeitas condições de uso, devem ficar fora da área de atendimento ou, quando a remoção for impossível, exibir aviso inequívoco de proibição de uso.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::68": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 68",
+  "texto": "Art. 68 - Todos os estabelecimentos de assistência à saúde devem manter, de forma organizada e sistematizada, os registros de dados de identificação dos pacientes, de exames clínicos e complementares, dos procedimentos realizados ou da terapêutica adotada, da evolução e das condições de alta, apresentando-os à autoridade sanitária sempre que esta o solicitar, justificadamente, por escrito.\nParágrafo único - Os documentos previstos no \"caput\" devem ser guardados pelo tempo previsto em legislação específica.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::90": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 90",
+  "texto": "Art. 90 - Todos os estabelecimentos de interesse da saúde e os estabelecimentos comerciais, de produção, embalagem e manipulação de produtos e substâncias de interesse da saúde, antes de iniciarem suas atividades, devem encaminhar à autoridade sanitária declaração de que suas atividades, instalações, equipamentos e recursos humanos obedecem à legislação sanitária vigente, para fins de obtenção do Cadastro Municipal de Vigilância em Saúde.\n§ 1º - Os estabelecimentos devem comunicar à autoridade sanitária competente as modificações nas instalações e equipamentos, bem como a inclusão de atividades e quaisquer outras alterações que repercutam na identidade, qualidade e segurança dos produtos ou serviços oferecidos à população.\n§ 2º - Os estabelecimentos comerciais que pretendam vender ou possibilitar o consumo de bebidas alcoólicas deverão informar tal pretensão à autoridade sanitária competente, em formulário próprio.\n§ 3º - Constatando que a declaração e a comunicação previstas no \"caput\" e no parágrafo 1º deste artigo são inverídicas, deverá a autoridade sanitária comunicar o fato ao Ministério Público, para fins de apuração de eventual ilícito penal, sem prejuízo da adoção dos demais procedimentos administrativos.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "lei-municipal-13725-2004::artigo::92": {
+  "norma": "Lei Municipal nº 13.725/2004",
+  "disp": "art. 92",
+  "texto": "Art. 92 - Os estabelecimentos de assistência à saúde devem contar com responsável técnico legalmente habilitado, que deverá estar presente durante o período de seu funcionamento.\nParágrafo único - O órgão coordenador do Sistema Municipal de Vigilância em Saúde disciplinará, no que for pertinente, a assunção de responsabilidade técnica de estabelecimentos de interesse da saúde, excetuando-se os estabelecimentos de que trata o \"caput\" deste artigo.",
+  "url": "https://legislacao.prefeitura.sp.gov.br/leis/lei-13725-de-09-de-janeiro-de-2004"
+ },
+ "portaria-de-consolidacao-ms-5-2017::artigo::208": {
+  "norma": "Portaria de Consolidação GM/MS nº 5/2017",
+  "disp": "art. 208",
+  "texto": "Art. 208. O PNQM tem abrangência nacional e se aplica a todos os estabelecimentos de saúde públicos e privados que realizam mamografia e que sejam vinculados ou não ao Sistema Único de Saúde (SUS);. (Origem: PRT MS/GM 2898/2013, Art. 3º)",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=POR&numeroAto=00000005&seqAto=001&valorAno=2017&orgao=MS&cod_modulo=310&cod_menu=9431"
+ },
+ "portaria-de-consolidacao-ms-5-2017::artigo::216": {
+  "norma": "Portaria de Consolidação GM/MS nº 5/2017",
+  "disp": "art. 216",
+  "texto": "Art. 216. Compete aos serviços de diagnóstico por imagem que realizam mamografia, públicos e privados, participantes ou não do SUS: (Origem: PRT MS/GM 2898/2013, Art. 11)\nI - participar do PNQM; (Origem: PRT MS/GM 2898/2013, Art. 11, I)\nII - inserir no SISCAN ou no sistema de informação vigente definido pelo Ministério da Saúde as informações sobre os exames mamográficos realizados; (Origem: PRT MS/GM 2898/2013, Art. 11, II)\nIII - enviar anualmente ao órgão de vigilância sanitária competente o relatório do PGQ definido na legislação sanitária vigente, contemplando todos os testes de aceitação, constância e desempenho realizados no período; e (Origem: PRT MS/GM 2898/2013, Art. 11, III)\nIV - enviar trienalmente para o INCA/SAS/MS uma amostra de exames para a análise de que trata o art. 211, I. (Origem: PRT MS/GM 2898/2013, Art. 11, IV)\nParágrafo Único. Os serviços de diagnóstico por imagem que realizam mamografia que não sejam participantes do SUS disporão de procedimento simplificado no SISCAN ou no sistema de informação vigente para a inserção das informações sobre os exames mamográficos realizados mensalmente. (Origem: PRT MS/GM 2898/2013, Art. 11, Parágrafo Único)",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=POR&numeroAto=00000005&seqAto=001&valorAno=2017&orgao=MS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-36-2013::artigo::4": {
+  "norma": "RDC Anvisa nº 36/2013",
+  "disp": "art. 4º",
+  "texto": "Art. 4º A direção do serviço de saúde deve constituir o Núcleo de Segurança do Paciente (NSP) e nomear a sua composição, conferindo aos membros autoridade, responsabilidade e poder para executar as ações do Plano de Segurança do Paciente em Serviços de Saúde.\n§ 1º A direção do serviço de saúde pode utilizar a estrutura de comitês, comissões, gerências, coordenações ou núcleos já existentes para o desempenho das atribuições do NSP.\n§ 2º No caso de serviços públicos ambulatoriais pode ser constituído um NSP para cada serviço de saúde ou um NSP para o conjunto desses, conforme decisão do gestor local do SUS.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000036&seqAto=000&valorAno=2013&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-36-2013::artigo::5": {
+  "norma": "RDC Anvisa nº 36/2013",
+  "disp": "art. 5º",
+  "texto": "Art. 5º Para o funcionamento sistemático e contínuo do NSP a direção do serviço de saúde deve disponibilizar:\nI - recursos humanos, financeiros, equipamentos, insumos e materiais;\nII - um profissional responsável pelo NSP com participação nas instâncias deliberativas do serviço de saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000036&seqAto=000&valorAno=2013&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-36-2013::artigo::7": {
+  "norma": "RDC Anvisa nº 36/2013",
+  "disp": "art. 7º",
+  "texto": "Art.7º Compete ao NSP:\nI - promover ações para a gestão de risco no serviço de saúde;\nII - desenvolver ações para a integração e a articulação multiprofissional no serviço de saúde;\nIII - promover mecanismos para identificar e avaliar a existência de não conformidades nos processos e procedimentos realizados e na utilização de equipamentos, medicamentos e insumos propondo ações preventivas e corretivas;\nIV - elaborar, implantar, divulgar e manter atualizado o Plano de Segurança do Paciente em Serviços de Saúde;\nV - acompanhar as ações vinculadas ao Plano de Segurança do Paciente em Serviços de Saúde;\nVI - implantar os Protocolos de Segurança do Paciente e realizar o monitoramento dos seus indicadores;\nVII - estabelecer barreiras para a prevenção de incidentes nos serviços de saúde;\nVIII - desenvolver, implantar e acompanhar programas de capacitação em segurança do paciente e qualidade em serviços de saúde;\nIX - analisar e avaliar os dados sobre incidentes e eventos adversos decorrentes da prestação do serviço de saúde;\nX - compartilhar e divulgar à direção e aos profissionais do serviço de saúde os resultados da análise e avaliação dos dados sobre incidentes e eventos adversos decorrentes da prestação do serviço de saúde;\nXI - notificar ao Sistema Nacional de Vigilância Sanitária os eventos adversos decorrentes da prestação do serviço de saúde;\nXII- manter sob sua guarda e disponibilizar à autoridade sanitária, quando requisitado, as notificações de eventos adversos;\nXIII - acompanhar os alertas sanitários e outras comunicações de risco divulgadas pelas autoridades sanitárias.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000036&seqAto=000&valorAno=2013&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-36-2013::artigo::7::inciso::iv": {
+  "norma": "RDC Anvisa nº 36/2013",
+  "disp": "art. 7º, IV",
+  "texto": "Art.7º Compete ao NSP:\nIV - elaborar, implantar, divulgar e manter atualizado o Plano de Segurança do Paciente em Serviços de Saúde;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000036&seqAto=000&valorAno=2013&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-36-2013::artigo::8": {
+  "norma": "RDC Anvisa nº 36/2013",
+  "disp": "art. 8º",
+  "texto": "Art. 8º O Plano de Segurança do Paciente em Serviços de Saúde (PSP), elaborado pelo NSP, deve estabelecer estratégias e ações de gestão de risco, conforme as atividades desenvolvidas pelo serviço de saúde para:\nI - identificação, análise, avaliação, monitoramento e comunicação dos riscos no serviço de saúde, de forma sistemática;\nII - integrar os diferentes processos de gestão de risco desenvolvidos nos serviços de saúde;\nIII - implementação de protocolos estabelecidos pelo Ministério da Saude;\nIV - identificação do paciente;\nV - higiene das mãos;\nVI - segurança cirúrgica;\nVII - segurança na prescrição, uso e administração de medicamentos;\nVIII - segurança na prescrição, uso e administração de sangue e hemocomponentes;\nIX - segurança no uso de equipamentos e materiais;\nX - manter registro adequado do uso de órteses e próteses quando este procedimento for realizado;\nXI - prevenção de quedas dos pacientes;\nXII - prevenção de úlceras por pressão;\nXIII - prevenção e controle de eventos adversos em serviços de saúde, incluindo as infecções relacionadas à assistência à saúde;\nXIV- segurança nas terapias nutricionais enteral e parenteral;\nXV - comunicação efetiva entre profissionais do serviço de saúde e entre serviços de saúde;\nXVI - estimular a participação do paciente e dos familiares na assistência prestada.\nXVII - promoção do ambiente seguro",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000036&seqAto=000&valorAno=2013&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::10": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 10",
+  "texto": "Art. 10. Qualquer modificação nas instalações, no tipo de equipamento ou a inclusão de novo equipamento de radiologia diagnóstica ou intervencionista deve ser aprovada pela autoridade sanitária competente antes da efetivação da(s) modificação(ões).",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::11": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 11",
+  "texto": "Art. 11. A modificação de qualquer parâmetro utilizado para os projetos de blindagem do serviço deve ser informada à autoridade sanitária competente antes da sua efetivação.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::12": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 12",
+  "texto": "Art. 12. O serviço de saúde de que trata esta Resolução deve possuir equipe multiprofissional dimensionada de acordo com seu perfil de demanda, e em conformidade com o estabelecido nas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::13": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 13",
+  "texto": "Art. 13. O responsável legal deve designar formalmente 1 (um) profissional legalmente habilitado para assumir a responsabilidade pelos procedimentos radiológicos de cada setor de radiologia diagnóstica ou intervencionista do serviço de saúde, doravante denominado responsável técnico.\n§ 1º O responsável técnico de que trata o caput desteartigo tem autoridade para interromper atividades inseguras no setor de radiologia diagnóstica ou intervencionista por que é responsável.\n§ 2º Cada responsável técnico deve ter substituto(s) legalmente habilitado(s) e formalmente designado(s) pelo responsável legal, para os casos de seu impedimento ou ausência.\n§ 3º No ato de designação do responsável técnico e de seu(s) substituto(s), o responsável legal do serviço de saúde deve definir todas as atividades delegadas a esses profissionais.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::13::paragrafo::2": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 13, § 2º",
+  "texto": "Art. 13. O responsável legal deve designar formalmente 1 (um) profissional legalmente habilitado para assumir a responsabilidade pelos procedimentos radiológicos de cada setor de radiologia diagnóstica ou intervencionista do serviço de saúde, doravante denominado responsável técnico.\n§ 2º Cada responsável técnico deve ter substituto(s) legalmente habilitado(s) e formalmente designado(s) pelo responsável legal, para os casos de seu impedimento ou ausência.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::13::paragrafo::3": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 13, § 3º",
+  "texto": "Art. 13. O responsável legal deve designar formalmente 1 (um) profissional legalmente habilitado para assumir a responsabilidade pelos procedimentos radiológicos de cada setor de radiologia diagnóstica ou intervencionista do serviço de saúde, doravante denominado responsável técnico.\n§ 3º No ato de designação do responsável técnico e de seu(s) substituto(s), o responsável legal do serviço de saúde deve definir todas as atividades delegadas a esses profissionais.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::14": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 14",
+  "texto": "Art. 14. O responsável legal deve designar formalmente 1 (um) membro da equipe legalmente habilitado para assumir a responsabilidade pelas ações relativas à proteção radiológica de cada serviço de saúde que utilize radiações ionizantes para fins diagnósticos ou intervencionistas, denominado supervisor de proteção radiológica.\n§ 1º O supervisor de proteção radiológica de que trata o caput deste artigo tem autoridade para interromper atividades inseguras no serviço de saúde por que é responsável.\n§ 2º O supervisor de proteçãoradiológica pode assessorar-se de consultores externos, conforme a necessidade e o porte do serviço, os quais devem estar alistados na equipe do serviço.\n§ 3º Cada supervisor de proteção radiológica deve ter substituto(s) legalmente habilitado(s) e formalmente designado(s) pelo responsável legal, para os casos de seu impedimento ou ausência.\n§ 4º No ato de designação do supervisor de proteção radiológica e de seu(s) substituto(s), o responsável legal deve definir todas as atividades delegadas a esses profissionais.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::14::paragrafo::3": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 14, § 3º",
+  "texto": "Art. 14. O responsável legal deve designar formalmente 1 (um) membro da equipe legalmente habilitado para assumir a responsabilidade pelas ações relativas à proteção radiológica de cada serviço de saúde que utilize radiações ionizantes para fins diagnósticos ou intervencionistas, denominado supervisor de proteção radiológica.\n§ 3º Cada supervisor de proteção radiológica deve ter substituto(s) legalmente habilitado(s) e formalmente designado(s) pelo responsável legal, para os casos de seu impedimento ou ausência.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::14::paragrafo::4": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 14, § 4º",
+  "texto": "Art. 14. O responsável legal deve designar formalmente 1 (um) membro da equipe legalmente habilitado para assumir a responsabilidade pelas ações relativas à proteção radiológica de cada serviço de saúde que utilize radiações ionizantes para fins diagnósticos ou intervencionistas, denominado supervisor de proteção radiológica.\n§ 4º No ato de designação do supervisor de proteção radiológica e de seu(s) substituto(s), o responsável legal deve definir todas as atividades delegadas a esses profissionais.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::15": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 15",
+  "texto": "Art. 15. O serviço de radiologia diagnóstica ou intervencionista deve implementar Programa de Educação Permanente para toda a equipe, em conformidade com o disposto nesta Resolução e nas demais normativas aplicáveis.\n§ 1º O Programa de que trata o caput deste artigo deve contemplar:\nI - capacitações e treinamentos inicial e periódicos, com frequência mínima anual;\nII - capacitações e treinamentos teóricos e práticos, baseados em abordagem de riscos, sempre que novos processos, técnicas ou tecnologias forem implementados, ou antes de novas pessoas integrarem os processos; e\nIII - metodologia de avaliação de forma a demonstrar a eficácia das ações de capacitação e treinamento.\n§ 2º As capacitações e treinamentos periódicos de que trata este artigo devem contemplar, além do estabelecido nas demais normativas aplicáveis, no mínimo, os seguintes tópicos:\nI - normas, rotinas, protocolos e procedimentos operacionais;\nII - segurança do paciente;\nIII - gerenciamento dos riscos inerentes às tecnologias utilizadas;\nIV - Programa de Garantia da Qualidade;\nV - Programa de Proteção Radiológica, quando couber; e\nVI - normativas aplicáveis.\n§ 3º As capacitações e os treinamentos de que trata este artigo devem ser registrados, contendo data, horário, carga horária, conteúdo ministrado, nome e a formação ou capacitação profissional do instrutor e dos trabalhadores envolvidos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::15::paragrafo::1": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 15, § 1º",
+  "texto": "Art. 15. O serviço de radiologia diagnóstica ou intervencionista deve implementar Programa de Educação Permanente para toda a equipe, em conformidade com o disposto nesta Resolução e nas demais normativas aplicáveis.\n§ 1º O Programa de que trata o caput deste artigo deve contemplar:\nI - capacitações e treinamentos inicial e periódicos, com frequência mínima anual;\nII - capacitações e treinamentos teóricos e práticos, baseados em abordagem de riscos, sempre que novos processos, técnicas ou tecnologias forem implementados, ou antes de novas pessoas integrarem os processos; e\nIII - metodologia de avaliação de forma a demonstrar a eficácia das ações de capacitação e treinamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::15::paragrafo::2": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 15, § 2º",
+  "texto": "Art. 15. O serviço de radiologia diagnóstica ou intervencionista deve implementar Programa de Educação Permanente para toda a equipe, em conformidade com o disposto nesta Resolução e nas demais normativas aplicáveis.\n§ 2º As capacitações e treinamentos periódicos de que trata este artigo devem contemplar, além do estabelecido nas demais normativas aplicáveis, no mínimo, os seguintes tópicos:\nI - normas, rotinas, protocolos e procedimentos operacionais;\nII - segurança do paciente;\nIII - gerenciamento dos riscos inerentes às tecnologias utilizadas;\nIV - Programa de Garantia da Qualidade;\nV - Programa de Proteção Radiológica, quando couber; e\nVI - normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::15::paragrafo::3": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 15, § 3º",
+  "texto": "Art. 15. O serviço de radiologia diagnóstica ou intervencionista deve implementar Programa de Educação Permanente para toda a equipe, em conformidade com o disposto nesta Resolução e nas demais normativas aplicáveis.\n§ 3º As capacitações e os treinamentos de que trata este artigo devem ser registrados, contendo data, horário, carga horária, conteúdo ministrado, nome e a formação ou capacitação profissional do instrutor e dos trabalhadores envolvidos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::16": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 16",
+  "texto": "Art. 16. Toda documentação de que trata esta Resolução deve ser arquivada, de forma a garantir-se sua rastreabilidade, em conformidade com o estabelecido nas demais normativas aplicáveis ou, na ausência dessas, pelo prazo mínimo de 5 (cinco) anos, para efeitos de vigilância sanitária.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::17": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 17",
+  "texto": "Art. 17. Serviços de radiologia diagnóstica ou intervencionista devem manter os seguintes documentos atualizados e disponíveis, além dos exigidos nas demais normativas aplicáveis:\nI - Projeto Básico de Arquitetura e memorial descritivo aprovados pela vigilância sanitária;\nII - relação e registros de todos os procedimentos radiológicos realizados, normas, rotinas, protocolos, procedimentos operacionais;\nIII - inventário dos produtos sujeitos a regime de vigilância sanitária e de proteção radiológica, com comprovação de regularização junto à Agência Nacional de Vigilância Sanitária (Anvisa), quando couber;\nIV - relação nominal de toda a equipe, suas atribuições, qualificações e cargas horárias; e\nV - assentamentos que evidenciem a execução dos Programas de Educação Permanente, de Garantia da Qualidade e de Proteção Radiológica.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::25": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 25",
+  "texto": "Art. 25. Todos os produtos sujeitos a regime de vigilância sanitária devem estar regularizados junto à Anvisa.\nParágrafo único. A utilização dos produtos sujeitos a regime de vigilância sanitária deve obedecer às normativas aplicáveis e às instruções de uso dos fabricantes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::25::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 25, parágrafo único",
+  "texto": "Art. 25. Todos os produtos sujeitos a regime de vigilância sanitária devem estar regularizados junto à Anvisa.\nParágrafo único. A utilização dos produtos sujeitos a regime de vigilância sanitária deve obedecer às normativas aplicáveis e às instruções de uso dos fabricantes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::26": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 26",
+  "texto": "Art. 26. O serviço de radiologia diagnóstica ou intervencionista deve garantir que os produtos sujeitos a regime de vigilância sanitária sejam utilizados exclusivamente para os fins a que se destinam.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::27": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 27",
+  "texto": "Art. 27. O serviço de radiologia diagnóstica ou intervencionista deve realizar o gerenciamento de suas tecnologias de forma a atender às necessidades do serviço, mantendo as condições de seleção, aquisição, transporte, recebimento, armazenamento, distribuição, instalação, funcionamento ou uso, descarte e rastreabilidade, conforme estabelecido nesta Resolução e nas demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::28": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 28",
+  "texto": "Art. 28. O serviço de radiologia diagnóstica ou intervencionista deve estabelecer e implementar padrões de qualidade de imagem, garantir a sua manutenção, e assegurar que os equipamentos sejam operados apenas dentro das condições de uso estabelecidas nesta Resolução, nas demais normativas aplicáveis, e nas especificações dos fabricantes.\nParágrafo único. Para fins de garantia da qualidade e da segurança nos sistemas, o serviço de radiologia diagnóstica ou intervencionista deve realizar testes de aceitação e constância, além de manutenções preventivas e corretivas, conforme estabelecido nas demais normativas aplicáveis, e manter os relatórios e laudos arquivados no serviço.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::28::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 28, parágrafo único",
+  "texto": "Art. 28. O serviço de radiologia diagnóstica ou intervencionista deve estabelecer e implementar padrões de qualidade de imagem, garantir a sua manutenção, e assegurar que os equipamentos sejam operados apenas dentro das condições de uso estabelecidas nesta Resolução, nas demais normativas aplicáveis, e nas especificações dos fabricantes.\nParágrafo único. Para fins de garantia da qualidade e da segurança nos sistemas, o serviço de radiologia diagnóstica ou intervencionista deve realizar testes de aceitação e constância, além de manutenções preventivas e corretivas, conforme estabelecido nas demais normativas aplicáveis, e manter os relatórios e laudos arquivados no serviço.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::29": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 29",
+  "texto": "Art. 29. Os testes de aceitação e constância previstos nas demais normativas aplicáveis e nas instruções de uso dos fabricantes devem ser executados conforme protocolos nacionais oficiais ou internacionais dos quais o Brasil seja signatário.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::30": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 30",
+  "texto": "Art. 30. Os instrumentos utilizados na avaliação dos equipamentos e das instalações devem estar calibrados em laboratórios credenciados pelos órgãos competentes, rastreáveis até a rede nacional oficial ou internacional de metrologia, conforme a periodicidade recomendada pelos fabricantes.\nParágrafo único. Na ausência de recomendação do fabricante do instrumento quanto à periodicidade de calibração do equipamento, essa deve ser realizada conforme o estabelecido pelo Instituto Nacional de Metrologia, Qualidade e Tecnologia (Inmetro).",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::31": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 31",
+  "texto": "Art. 31. Sempre que for realizado qualquer ajuste ou alteração das condições físicas originais do equipamento de radiologia diagnóstica ou intervencionista, o serviço de radiologia diagnóstica ou intervencionista deve realizar os testes correspondentes aos parâmetros modificados e os demais parâmetros que podem ser afetados por essas modificações, e manter os relatórios e laudos arquivados no serviço.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::33": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 33",
+  "texto": "Art. 33. Caso os parâmetros de funcionamento dos equipamentos estejam nos níveis de restrição estabelecidos nesta Resolução e nas demais normativas aplicáveis, o responsável legal deverá:\nI - suspender imediatamente a utilização do equipamento ou permitir o funcionamento temporário apenas para atendimentos de urgência ou emergência, mediante parecer do responsável técnico e do supervisor de proteção radiológica, quando couber; e\nII - adotar imediatamente ações necessárias à adequação dos equipamentos, procedimentos ou ambientes, registrando as metas e prazos estabelecidos, bem como as ações realizadas para solucionar os problemas e evitar que os mesmos se repitam.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::34": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 34",
+  "texto": "Art. 34. Os procedimentos de radiologia diagnóstica ou intervencionista devem ser realizados por profissionais legalmente habilitados para tais atividades.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::35": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 35",
+  "texto": "Art. 35. Nenhum procedimento radiológico pode ser realizado, a menos que solicitado por profissional legalmente habilitado.\nParágrafo único. Os procedimentos radiológicos a que os pacientes serão submetidos devem ser os mínimos necessários para atingir o objetivo pretendido e devem ser consideradas informações prévias capazes de evitar procedimentos adicionais desnecessários.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::37": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 37",
+  "texto": "Art. 37. O serviço de radiologia diagnóstica ou intervencionista deve assegurar que a presença de acompanhantes durante os procedimentos somente se dará quando tal participação for imprescindível para conter, confortar ou ajudar pacientes, devendo adotar as medidas cabíveis para minimizar a exposição aos riscos inerentes à tecnologia utilizada.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::38": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 38",
+  "texto": "Art. 38. O serviço de radiologia diagnóstica ou intervencionista deve elaborar e implementar normas, rotinas, protocolos e procedimentos operacionais para todas as atividades executadas.\n§ 1º A elaboração e a implementação das normas, rotinas, protocolos e procedimentos operacionais são atribuições do responsável legal ou do profissional legalmente habilitado formalmente designado por ele.\n§ 2º As normas, rotinas, protocolos e procedimentos operacionais devem estar em conformidade com a legislação vigente, as instruções de uso dos fabricantes dos produtos utilizados e evidências científicas atualizadas.\n§ 3º O serviço de radiologia diagnóstica ou intervencionista deve garantir que toda a equipe conheça e execute suas atividades conforme as normas, rotinas, protocolos e procedimentos operacionais estabelecidos.\n§ 4º As normas, rotinas, protocolos e procedimentos operacionais devem estar escritos em linguagem acessível, atualizados e em local de fácil acesso a toda a equipe.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::38::paragrafo::3": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 38, § 3º",
+  "texto": "Art. 38. O serviço de radiologia diagnóstica ou intervencionista deve elaborar e implementar normas, rotinas, protocolos e procedimentos operacionais para todas as atividades executadas.\n§ 3º O serviço de radiologia diagnóstica ou intervencionista deve garantir que toda a equipe conheça e execute suas atividades conforme as normas, rotinas, protocolos e procedimentos operacionais estabelecidos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::38::paragrafo::4": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 38, § 4º",
+  "texto": "Art. 38. O serviço de radiologia diagnóstica ou intervencionista deve elaborar e implementar normas, rotinas, protocolos e procedimentos operacionais para todas as atividades executadas.\n§ 4º As normas, rotinas, protocolos e procedimentos operacionais devem estar escritos em linguagem acessível, atualizados e em local de fácil acesso a toda a equipe.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::39": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 39",
+  "texto": "Art. 39. O serviço deradiologia diagnóstica ou intervencionista deve definir e implementar medidas para o aprimoramento constante dos procedimentos radiológicos e do gerenciamento dos riscos inerentes às tecnologias utilizadas.\nParágrafo único. O serviço de saúde de Atenção Secundária ou Terciária deve instituir Comitê de Gerenciamento de Riscos em Radiologia Diagnósti ca ou Intervencionista, integrado por, no mínimo, todos os responsáveis técnicos dos setores de radiologia diagnóstica ou intervencionista, todos os supervisores de proteção radiológica, quando couber, representantes dos membros da equipe e 1 (um) representante da direção, a fim de:\nI - revisar sistematicamente os Programas de Educação Permanente, de Garantia da Qualidade e de Proteção Radiológica, quando couber, para garantir a qualidade, a eficácia e a segurança das práticas no serviço de radiologia diagnóstica ou intervencionista; e\nII - recomendar as medidas cabíveis para a melhoria contínua do gerenciamento de riscos, do uso das tecnologias e dos processos de trabalho existentes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::39::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 39, parágrafo único",
+  "texto": "Art. 39. O serviço deradiologia diagnóstica ou intervencionista deve definir e implementar medidas para o aprimoramento constante dos procedimentos radiológicos e do gerenciamento dos riscos inerentes às tecnologias utilizadas.\nParágrafo único. O serviço de saúde de Atenção Secundária ou Terciária deve instituir Comitê de Gerenciamento de Riscos em Radiologia Diagnósti ca ou Intervencionista, integrado por, no mínimo, todos os responsáveis técnicos dos setores de radiologia diagnóstica ou intervencionista, todos os supervisores de proteção radiológica, quando couber, representantes dos membros da equipe e 1 (um) representante da direção, a fim de:\nI - revisar sistematicamente os Programas de Educação Permanente, de Garantia da Qualidade e de Proteção Radiológica, quando couber, para garantir a qualidade, a eficácia e a segurança das práticas no serviço de radiologia diagnóstica ou intervencionista; e\nII - recomendar as medidas cabíveis para a melhoria contínua do gerenciamento de riscos, do uso das tecnologias e dos processos de trabalho existentes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::41": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 41",
+  "texto": "Art. 41. O gerenciamento de riscos deve contemplar, no mínimo:\nI - identificação, análise, avaliação, tratamento, monitoramento e comunicação dos riscos, conforme as demais normativas aplicáveis;\nII - identificação de possíveis falhas de equipamentos e erros humanos que possam resultar em incidentes relacionados a assistência à saúde, e promoção das medidas preventivas necessárias;\nIII - investigação documentada que determine as causas das possíveis falhas de equipamentos, erros humanos identificados ou descumprimento das normas em vigor, suas consequências e as ações preventivas e corretivas necessárias;\nIV - execução das ações preventivas e corretivas identificadas durante as investigações; e\nV - notificações à autoridade sanitária competente das situações previstas nas normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::42": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 42",
+  "texto": "Art. 42. O serviço de saúde que utiliza radiações ionizantes para fins diagnósticos ou intervencionistas deve implementar Programa de Proteção Radiológica que contemple, no mínimo, medidas de prevenção, de controle e de vigilância e monitoramento, para garantir a segurança e a qualidade dos procedimentos radiológicos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::43": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 43",
+  "texto": "Art. 43. Todos os procedimentos realizados em serviços de radiologia diagnóstica ou intervencionista devem observar os princípios da justificação, da otimização, da limitação da dose e da prevenção de acidentes, de modo a garantir que a exposição do paciente aos riscos inerentes de cada tecnologia seja a mínima necessária para garantir a segurança do paciente e a qualidade esperada das imagens e procedimentos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::44": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 44",
+  "texto": "Art. 44. As exposições médicas de pacientes devem ser otimizadas ao valor mínimo necessário à obtenção do objetivo radiológico, bem como ser compatíveis com os padrões aceitáveis de qualidade de imagem, devendo-se considerar, no processo de otimização de exposições médicas:\nI - a seleção adequada de técnicas, equipamentos e acessórios;\nII - os processos de trabalho;\nIII - a garantia da qualidade;\nIV - os níveis de referência de diagnóstico para pacientes adultos e pediátricos; e\nV - as restrições de dose para indivíduo que colabore conscientemente, de livre vontade e fora do contexto de sua atividade profissional, no apoio e conforto de um paciente, durante a realização do procedimento radiológico.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::46": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 46",
+  "texto": "Art. 46. Para mulheres grávidas, devem ser observados os seguintes requisitos adicionais, com vistas a proteger o embrião ou feto:\nI - a gravidez deve ser notificada ao responsável legal pelo serviço, ou ao profissional formalmente designado por ele, tão logo seja constatada; e\nII - as condições de trabalho devem ser revistas para atender a esta Resolução e às demais normativas aplicáveis.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::47": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 47",
+  "texto": "Art. 47. Menores de 18 (dezoito) anos não podem trabalhar com raios X diagnósticos ou intervencionistas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::49": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 49",
+  "texto": "Art. 49. Os níveis anuais deequivalente de dose ambiente adotados como restrição de dose para o planejamento de barreiras físicas de uma instalação e para a verificação de adequação dos níveis de radiação em levantamentos radiométricos são:\nI - 0,5 mSv (cinco décimos de milisievert) para áreas livres; e\nII - 5 mSv (cinco milisieverts) para áreas controladas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::5": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 5º",
+  "texto": "Art. 5º Serviços de radiologia diagnóstica ou intervencionista devem implementar, no mínimo, os seguintes programas, além dos exigidos nas demais normativas aplicáveis:\nI - Programa de Garantia da Qualidade;\nII - Programa de Educação Permanente, para todos os profissionais; e\nIII - Programa de Proteção Radiológica, quando o serviço utilizar radiações ionizantes para fins diagnósticos ou intervencionistas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::50": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 50",
+  "texto": "Art. 50. As medidas de prevenção em proteção radiológica devem contemplar:\nI - avaliação contínua das condições de trabalho, quanto aos aspectos de proteção radiológica;\nII - classificação dos ambientes, em áreas livres, supervisionadas ou controladas, segundo as características das atividades desenvolvidas em cada ambiente; e\nIII - sinalização das áreas supervisionadas ou controladas e definição das barreiras físicas de proteção radiológica e de controle de acesso a esses ambientes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::51": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 51",
+  "texto": "Art. 51. As salas onde se realizam procedimentos radiológicos diagnósticos ou intervencionistas devem:\nI - ser classificadas como áreas controladas;\nII - possuir barreiras físicas com blindagem suficiente para garantir a manutenção de níveis de dose tão baixos quanto razoavelmente exequíveis, não ultrapassando os níveis de restrição de dose estabelecidos nesta Resolução;\nIII - dispor de restrição de acesso e de sinalização adequada, conforme especificado nesta Resolução;\nIV - ter acesso exclusivo aos profissionais necessários à realização do procedimento radiológico, ao paciente submetido ao procedimento e ao acompanhante, quando estritamente necessário; e\nV - dispor apenas dos equipamentos e acessórios indispensáveis à realização dos procedimentos radiológicos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::52": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 52",
+  "texto": "Art. 52. Sinalização luminosa vermelha deve ser acionada durante os procedimentos radiológicos, indicando que pode haver exposição à radiação, devendo ainda:\nI - ser visível e estar acima da face externa da(s) porta(s) de acesso; e\nII - a sinalização luminosa estar acompanhada do símbolo internacional da radiação ionizante e das seguintes inscrições na(s) porta(s):\na) \"Raios X, entrada restrita\" ou \"Raios X, entrada proibida a pessoas não autorizadas\"; e\nb) \"Quando a luz vermelha estiver acesa, a entrada é proibida\".\nParágrafo único. O consultório odontológico isolado que possua apenas equipamento de raios X intraoral e as unidades onde se utilizam equipamentos móveis ocasionalmente, como salas de cirurgia geral ou unidades de terapia intensiva, estão dispensados desta sinalização, sendo necessária apenas nas salas exclusivas para procedimentos radiológicos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::53": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 53",
+  "texto": "Art. 53. Na sala de exames e na(s) porta(s) de acesso deve constar, em lugar visível, quadro com as seguintes orientações de proteção radiológica:\nI - \"Paciente, exija e use corretamente vestimenta plumbífera, para sua proteção durante o procedimento radiológico\";\nII - \"Não é permitida a permanência de acompanhantes na sala durante o procedimento radiológico, salvo quando estritamente necessário e autorizado\";\nIII - \"Acompanhante, quando houver necessidade de contenção de paciente, exija e use corretamente vestimenta plumbífera, para sua proteção\";\nIV - \"Nesta sala pode permanecer somente 1 (um) paciente de cada vez\"; e\nV - \"Mulheres grávidas ou com suspeita de gravidez: informem ao médico ou ao técnico antes do exame\".",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::54": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 54",
+  "texto": "Art. 54. A cabine ou sala de comando do equipamento deve:\nI - permitir ao operador, na posição de disparo, eficaz comunicação e observação visual do paciente mediante sistema de observação eletrônico ou visor de tamanho apropriado com, pelo menos, a mesma atenuação da cabine;\nII - possuir sistema de reserva ou sistema alternativo para falha eletrônica, no caso de sistema de observação eletrônico; e\nIII - estar posicionada de modo que, durante as exposições, nenhum indivíduo possa adentrar a sala sem ser notado pelo operador.\nParágrafo único. A exigência de cabine de comando para o equipamento de radiologia odontológica intraoral pode ser dispensada, desde que a equipe possa manterse a, no mínimo, 2 (dois) metros do cabeçote e do paciente, ou que o levantamento radiométrico comprove a adequação dos níveis de exposição aos limites toleráveis estabelecidos nesta Resolução.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::56": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 56",
+  "texto": "Art. 56. A presença de acompanhante durante os procedimentos radiológicos somente é permitida quando sua participação for imprescindível para conter, confortar ou ajudar pacientes.\n§ 1º Esta atividade deve ser exercida apenas em caráter voluntário e fora do contexto da atividade profissional do acompanhante.\n§ 2º É proibido a um mesmo indivíduo desempenhar de forma regular a atividade a que se refere o caput deste artigo.\n§ 3º É proibido a gestantes e menores de 18 (dezoito) anos desempenhar a atividade a que se refere o caput deste artigo.\n§ 4º O serviço de radiologia diagnóstica ou intervencionista deve dispor de meios adequados de imobilização mecânica para pacientes que demandem esse recurso.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::56::paragrafo::4": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 56, § 4º",
+  "texto": "Art. 56. A presença de acompanhante durante os procedimentos radiológicos somente é permitida quando sua participação for imprescindível para conter, confortar ou ajudar pacientes.\n§ 4º O serviço de radiologia diagnóstica ou intervencionista deve dispor de meios adequados de imobilização mecânica para pacientes que demandem esse recurso.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::57": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 57",
+  "texto": "Art. 57. Durante as exposições, é obrigatória ao acompanhante a utilização de equipamento de proteção individual compatível com o tipo de procedimento radiológico, com a energia da radiação, e com atenuação maior ou igual a 0,25 mm (vinte e cinco centésimos de milímetro) equivalente de chumbo.\nParágrafo único. O conceito de limite de dose não se aplica a acompanhantes, embora as exposições a que forem submetidos durante o procedimento devam ser otimizadas, de modo que não excedam o estabelecido pela Comissão Nacional de Energia Nuclear.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::58": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 58",
+  "texto": "Art. 58. A quantidade de equipamentos de proteção individual disponível deve ser suficiente para prover proteção adequada a todos os profissionais e eventuais acompanhantes, quando do uso simultâneo de todas as salas de procedimentos radiológicos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::59": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 59",
+  "texto": "Art. 59. Todos os profissionais necessários ao funcionamento da sala devem:\nI - posicionar-se de tal forma que nenhuma parte do corpo, incluindo extremidades, quando possível, seja atingida pelo feixe primário de radiação ionizante sem estar protegida por, no mínimo, 0,5 mm (cinco décimos de milímetro) equivalente de chumbo; e\nII - proteger-se da radiação ionizante espalhada, por meio de equipamentos de proteção individual e coletiva com atenuação compatível com a energia da radiação, não inferior a 0,25 mm (vinte e cinco centésimos de milímetro) equivalente de chumbo.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::61": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 61",
+  "texto": "Art. 61. O serviço de radiologia diagnóstica ou intervencionista deve colocar blindagem adequada, com pelo menos 0,5 mm (cinco décimos de milímetro) equivalente de chumbo, nos órgãos mais radiossensíveis do paciente submetido ao procedimento, tais como gônadas, cristalino e tireoide, quando, por necessidade, estiverem diretamente no feixe primário de radiação ou a até 5 cm (cinco centímetros) dele, a não ser que tais blindagens excluam ou degradem informações diagnósticas importantes, ou aumentem a dose a que o paciente for exposto.\nParágrafo único. Para os serviços odontológicos que disponham apenas de equipamentos intraorais, as blindagens de que trata o caput deste artigo devem ter, pelo menos, o equivalente a 0,25 mm (vinte e cinco centésimos de milímetro) de chumbo.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::63": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 63",
+  "texto": "Art. 63. Os assentamentos do levantamento radiométrico devem incluir :\nI - croquis da instalação e vizinhanças, com o leiaute apresentando o equipamento de raios X e o painel de controle, com indicação da natureza e da ocupação das salas adjacentes;\nII - identificação do equipamento de raios X e seu(s) tubo(s), indicando fabricante, modelo e número de série;\nIII - descrição da instrumentação utilizada e da calibração;\nIV - descrição dos fatores de operação utilizados no levantamento, incluindo corrente, tempo, tensão de pico, direção do feixe, tamanho de campo, fantoma, entre outros, conforme o caso concreto;\nV - carga de trabalho máxima estimada e os fatores de uso relativos às direções do feixe primário;\nVI - leituras realizadas em pontos dentro e fora da área controlada, considerando as localizações dos receptores de imagem, observando-se a exigência de que as barreiras primárias sejam avaliadas sem fantoma, e os pontos de leitura estejam assinalados nos croquis;\nVII - estimativa dos equivalentes de dose ambiental anuais nos pontos de medida, considerando os fatores de uso, de ocupação e carga de trabalho aplicáveis;\nVIII - conclusões e recomendações aplicáveis; e\nIX - data, identificação, qualificação profissional e assinatura do responsável pelo laudo de levantamento radiométrico, e assinatura do responsável legal do serviço de radiologia diagnóstica ou intervencionista.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::64": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 64",
+  "texto": "Art. 64. Um novo laudo de levantamento radiométrico deve ser elaborado sempre que houver modificações na infraestrutura, nos equipamentos ou nos processos de trabalho que influenciem as medidas de proteção radiológica do serviço de radiologia diagnóstica ou intervencionista, ou quando decorrerem 4 (quatro) anos contados da realização do último levantamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::65": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 65",
+  "texto": "Art. 65. Todo indivíduo ocupacionalmente exposto deve usar dosímetro individual durante sua jornada de trabalho e enquanto permanecer em área controlada.\nParágrafo único. A obrigatoriedade do uso de dosímetro individual é dispensada para o consultório odontológico isolado que possua apenas 1 (um) equipamento de raios X intraoral, com carga de trabalho máxima estimada em até 4 mA.min/semana.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::66": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 66",
+  "texto": "Art. 66. O uso do dosímetro individual de quetrata o art. 65 deve observar o disposto abaixo:\nI - o dosímetro deve ser utilizado estritamente como estabelecido nas instruções de uso do laboratório de monitoração individual e no Programa de Proteção Radiológica;\nII - o dosímetro deve ser trocado mensalmente;\nIII - cada dosímetro será utilizado por um único usuário, exclusivamente no serviço de saúde ou setor para o qual foi adquirido; e\nIV - quando não estiver em uso, o dosímetro individual deve ser mantido junto ao dosímetro padrão em local seguro da área livre, em conformidade com as instruções de uso do fabricante, soba responsabilidade do responsável legal, ou do pr ofissional formalmente designado por ele.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::68": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 68",
+  "texto": "Art. 68. Se houver suspeita de exposição acidental, o dosímetro individual deve ser enviado ao serviço de monitoração individual para leitura em caráter de urgência.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::69": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 69",
+  "texto": "Art. 69. O responsável legal do serviço de radiologia diagnóstica ou intervencionista deve providenciar investigação dos casos de doses que atingirem ou excederem os níveis de investigação estabelecidos pela Comissão Nacional de Energia Nuclear, ou quando notificado para tanto pela autoridade sanitária competente.\n§ 1º Os resultados da investigação devem ser assentados e comunicados à autoridade sanitária competente, nos casos de doses efetivas mensais superiores a 20 mSv (vinte milisieverts).\n§ 2º Quando os valores mensais relatados de dose efetiva forem superiores a 100 mSv (cem milisieverts), o responsável legal deve providenciar avaliação clínica e a realização de exames complementares, incluindo dosimetria citogenética, a critério médico, dos usuários afetados.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::69::paragrafo::1": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 69, § 1º",
+  "texto": "Art. 69. O responsável legal do serviço de radiologia diagnóstica ou intervencionista deve providenciar investigação dos casos de doses que atingirem ou excederem os níveis de investigação estabelecidos pela Comissão Nacional de Energia Nuclear, ou quando notificado para tanto pela autoridade sanitária competente.\n§ 1º Os resultados da investigação devem ser assentados e comunicados à autoridade sanitária competente, nos casos de doses efetivas mensais superiores a 20 mSv (vinte milisieverts).",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::69::paragrafo::2": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 69, § 2º",
+  "texto": "Art. 69. O responsável legal do serviço de radiologia diagnóstica ou intervencionista deve providenciar investigação dos casos de doses que atingirem ou excederem os níveis de investigação estabelecidos pela Comissão Nacional de Energia Nuclear, ou quando notificado para tanto pela autoridade sanitária competente.\n§ 2º Quando os valores mensais relatados de dose efetiva forem superiores a 100 mSv (cem milisieverts), o responsável legal deve providenciar avaliação clínica e a realização de exames complementares, incluindo dosimetria citogenética, a critério médico, dos usuários afetados.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::7": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 7º",
+  "texto": "Art. 7º Para o caso de instalações que utilizam equipamentos de radiologia emissores de radiações eletromagnéticas ionizantes ou não ionizantes para fins diagnósticos ou intervencionistas, deve ser apresentado o projeto de blindagem elaborado e assinado por profissional legalmente habilitado, aprovado e assinado pelo responsável legal, conforme disposto nesta Resolução, nas demais normativas aplicáveis e nas recomendações dos fabricantes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::70": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 70",
+  "texto": "Art. 70. Os critérios primários para opção por procedimento telerradiológico devem ser o benefício e a segurança do paciente.\nParágrafo único. Estes critérios não devem ser subordinados somente a razões econômicas ou conveniência para o serviço.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::71": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 71",
+  "texto": "Art. 71. O serviço de telerradiologia eo serviço de radiologia diagnóstica ou intervencionista que realiza procedimentos radiológicos por meio de comando remoto de equipamentos devem:\nI - dispor de infraestrutura tecnológica apropriada ao armazenamento, manuseio, transmissão, confidencialidade e privacidade dos dados;\nII - garantir a ética, qualidade, segurança e eficácia do processo radiológico;\nIII - prover acesso a estudos e relatórios anteriores, além de informações clínicas adicionais necessárias para o procedimento radiológico;\nIV - assegurar os direitos do paciente à informação e termo de consentimento assinado para a transmissão dos dados; e\nV - garantir as características técnicas e compatibilidade das estações remotas de trabalho, além de manter documentos comprobatórios do cumprimento dos requisitos dispostos nesta Resolução e nas demais normativas aplicáveis a essas estações.\nParágrafo único. Os protocolos de comunicação, formato dos arquivos e algoritmos de compressão, relativos a procedimentos telerradiológicos, deverão estar de acordo com o padrão atual DICOM e HL7.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::71::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 71, parágrafo único",
+  "texto": "Art. 71. O serviço de telerradiologia eo serviço de radiologia diagnóstica ou intervencionista que realiza procedimentos radiológicos por meio de comando remoto de equipamentos devem:\nParágrafo único. Os protocolos de comunicação, formato dos arquivos e algoritmos de compressão, relativos a procedimentos telerradiológicos, deverão estar de acordo com o padrão atual DICOM e HL7.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::72": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 72",
+  "texto": "Art. 72. Fica proibida a prática de fotografar, filmar ou utilizar escâner não específico para exames radiológicos, com a finalidade de digitalizar imagens e utilizar esses arquivos como assentamentos, registros ou imagens para laudos ou diagnósticos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::73": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 73",
+  "texto": "Art. 73. Caso o serviço não possua sistema de armazenamento das imagens digitais, fica proibido:\nI - imprimir as imagens apenas em papel, exceto em exames de ultrassonografia; e\nII - imprimir as imagens em filmes apenas em formato reduzido.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::74": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 74",
+  "texto": "Art. 74. Monitores utilizados para laudo devem ser específicos para esse fim, compatíveis com as características das imagens de cada modalidade assistencial, sendo proibida a utilização de monitores convencionais não específicos para essa finalidade.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::75": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 75",
+  "texto": "Art. 75. O serviço de radiologia diagnóstica ou intervencionista itinerante deve estar formalmente vinculado a serviço de radiologia com instalações fixas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::76": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 76",
+  "texto": "Art. 76. Os sistemas de radiologia diagnóstica ou intervencionista itinerantes devem ser submetidos a todos os testes de constância em cada local de parada para atendimento, antes do início das atividades, conforme estabelecido nesta Resolução, nas demais normativas aplicáveis e nas instruções de uso dos fabricantes.\nParágrafo único. O serviço itinerante e o serviço de radiologia a ela vinculado devem manter, pelo prazo de 5 (cinco) anos, conforme art. 16 desta Resolução, os documentos comprobatórios da realização dos testes de que trata o caput deste artigo, bem como aqueles que demonstram o cumprimento dos requisitos das normativas aplicáveis e das instruções de uso do fabricante do sistema.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::77": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 77",
+  "texto": "Art. 77. O serviço de saúde deve adotar mecanismos para garantir que os fabricantes, importadores, distribuidores, as empresas prestadoras de serviço de manutenção, assistência técnica de equipamentos, controle de qualidade ou de proteção radiológica:\nI - atendam aos requisitos estabelecidos nesta Resolução e nas demais normativas aplicáveis;\nII - assegurem que suas equipes técnicas estejam legalmente habilitadas, qualificadas e cientes dos requisitos de desempenho e de segurança dos equipamentos utilizados;\nIII - assegurem que os equipamentos e dispositivos utilizados nos testes e avaliações satisfaçam os requisitos estabelecidos nesta Resolução, nas instruções de uso dos fabricantes e nas demais normativas aplicáveis;\nIV - registrem todos os serviços ou intervenções executados nos sistemas de radiologia diagnóstica ou intervencionista, contendo, no mínimo, a identificação do serviço de saúde e do equipamento implicados, o detalhamento do serviço, a identificação do responsável pela execução do serviço ou intervenção e assinatura do representante do serviço de saúde;\nV - quando couber, entreguem ao responsável legal do serviço de radiologia diagnóstica ou intervencionista o equipamento acompanhado do relatório de testes de aceitação, com os resultados de todos os testes descritos nas normativas aplicáveis, além dos testes recomendados pelo fabricante, para comprovação do desempenho relativo a requisitos específicos que não estejam contemplados nesta Resolução;\nVI - realizem verificação após qualquer intervenção ou reparo em um equipamento de radiologia diagnóstica ou intervencionista, e certifiquem formalmente a restituição para as condições de operação antes da queixa; e\nVII - arquivem, pelo período mínimo de 5 (cinco) anos, cópias dos certificados emitidos, dos testes de aceitação dos equipamentos, registros dos serviços de assistência técnica, bem como os respectivos certificados de destruição de equipamentos, quando houver.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::78": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 78",
+  "texto": "Art. 78. Nenhum indivíduo pode administrar, intencionalmente, radiações ionizantes em seres humanos ou operar equipamentos de radiologia, a menos que seja legalmente habilitado para o exercício dessas atividades, ou esteja em treinamento sob supervisão direta de profissional legalmente habilitado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::8": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 8º",
+  "texto": "Art. 8º A aprovação do projeto de blindagem deve preceder a análise dos demais itens previstos em outras normativas aplicáveis.\nParágrafo único. Ficam dispensados da aprovação de que trata o caput deste artigo os serviços de radiologia que disponham apenas de equipamentos móveis, serviços de densitometria óssea, serviços de ultrassonografia e consultórios isolados de odontologia que disponham apenas de equipamento de radiografia intraoral.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::80": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 80",
+  "texto": "Art. 80. É proibida a utilização dos seguintes equipamentos e materiais nos serviços de radiologia diagnóstica ou intervencionista:\nI - cassetes sem tela intensificadora; e\nII - equipamentos de abreugrafia.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::81": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 81",
+  "texto": "Art. 81. Ficam proibidas:\nI - a realização simultânea de procedimentos radiológicos em equipamentos distintos, em uma mesma sala;\nII - o uso de sistema de acionamento de disparo com retardo que impossibilite a interrupção da exposição a qualquer momento;\nIII - segurar os dispositivos de registro de imagem com as mãos durante a exposição, exceto nas técnicas necessárias em radiologia odontológica intraoral;\nIV - a utilização de equipamento de radiologia diagnóstica ou intervencionista móvel como fixo, exceto em condições temporárias para atendimentos de urgência ou emergência, mediante parecer do responsável técnico; e\nV - a utilização de equipamentos de radiologia diagnóstica ou intervenci onista com tubo alimentado por gerador de alta tensão autorretificado ou com retificação de meia onda, exceto equipamentos de radiologia odontológica intraoral.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::81::inciso::i": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 81, I",
+  "texto": "Art. 81. Ficam proibidas:\nI - a realização simultânea de procedimentos radiológicos em equipamentos distintos, em uma mesma sala;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::82": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 82",
+  "texto": "Art. 82. Fica proibido o processamento manual de filmes radiográficos, exceto em radiologia odontológica intraoral ou em condições temporárias para atendimentos de urgência ou emergência, mediante parecer do responsável técnico.\n§ 1º Em radiologia odontológica intraoral, podem ser utilizadas câmara s portáteis de revelação manual confeccionadas em material opaco, e o serviço deve dispor de cronômetro, termômetro, tabela de revelação e demais recursos para garantir o processamento conforme as instruções de uso dos fabricantes.\n§ 2º Nos demais casos, a câmara escura para revelação manual deve ser provida de cronômetro, termômetro, tabela de revelação e demais recursos para garantir o processamento conforme as instruções de uso dos fabricantes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::83": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 83",
+  "texto": "Art. 83. O sistema de controle da duração da exposição aos raios X deve ser do tipo eletrônico e não deve permitir exposição com duração superior a 5 (cinco) segundos, exceto em fluoroscopia, radiologia intervencionista, tomografia computadorizada e radiologia odontológica extraoral.\nParágrafo único. O sistema de controle da duração da exposição deve possibilitar a interrupção da exposição a qualquer momento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::83::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 83, parágrafo único",
+  "texto": "Art. 83. O sistema de controle da duração da exposição aos raios X deve ser do tipo eletrônico e não deve permitir exposição com duração superior a 5 (cinco) segundos, exceto em fluoroscopia, radiologia intervencionista, tomografia computadorizada e radiologia odontológica extraoral.\nParágrafo único. O sistema de controle da duração da exposição deve possibilitar a interrupção da exposição a qualquer momento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::9": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 9º",
+  "texto": "Art. 9º A iluminação da sala de interpretação e laudos deve ser planejada de modo a não prejudicar a avaliação da imagem.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ }
+}

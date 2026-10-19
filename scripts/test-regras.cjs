@@ -32,7 +32,7 @@ const manip = blocks.get('app--farmacia-manipulacao');
 ok(/function v2ComLei\(/.test(manip) && manip.includes('cit:v2ComLei(texto,cit)'), 'Manipulação: irregularidades sem a Lei 13.725');
 ok(manip.includes("dev.push({law:'Lei Municipal nº 13.725/2004'"), 'Manipulação: aba Infrações sem a Lei 13.725');
 /* roteiros do motor roteiro-simples (dados que geram os blocos app--) */
-for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cjs', 'gases/roteiro.cjs', 'estetica/roteiro.cjs']) {
+for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cjs', 'gases/roteiro.cjs', 'estetica/roteiro.cjs', 'transporte/roteiro.cjs', 'imagem/roteiro.cjs']) {
   const m = require(path.join(root, arq));
   for (const R of Array.isArray(m) ? m : [m]) {
     if (R.leiBase && R.leiBase.length) continue;

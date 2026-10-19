@@ -16,7 +16,7 @@ const quadro=p=>p.frames().find(x=>x!==p.mainFrame());
  await p.goto(T.INDEX);await p.waitForTimeout(1200);
  // Serviços
  await p.evaluate(()=>document.querySelector('[data-nucleo="Serviços"]').click());await p.waitForTimeout(400);
- ok(await cards(p)==='Estética e beleza|Academias e piscinas|Vacinação|Exames de análises clínicas (EAC)','Serviços: Estética, Academias, Vacinação e EAC');
+ ok(await cards(p)==='Estética e beleza|Academias e piscinas|Vacinação|Exames de análises clínicas (EAC)|Transporte de material biológico|Diagnóstico por imagem','Serviços: Estética, Academias, Vacinação, EAC, Transporte e Diagnóstico por imagem');
  await clica(p,'EAC');await p.waitForTimeout(400);
  ok(await cards(p)==='Serviço Tipo I|Serviço Tipo II|Serviço Tipo III','EAC abre os Serviços Tipo I, II e III');
  await p.evaluate(()=>document.querySelector('#tela-lista [data-home]').click());await p.waitForTimeout(300);

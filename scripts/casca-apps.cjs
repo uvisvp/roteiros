@@ -79,6 +79,8 @@ const ICONES = {
   frasco: '<path d="M9 3h6M10 3v5l-4.5 9a2.5 2.5 0 0 0 2.2 3.6h8.6a2.5 2.5 0 0 0 2.2-3.6L14 8V3M7.5 14h9"/>',
   cilindro: '<path d="M9 7h6v13a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zM10 7V4.5A1.5 1.5 0 0 1 11.5 3h1A1.5 1.5 0 0 1 14 4.5V7M9 11h6"/>',
   drogaria: '<path d="M4 9h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM4 9l1.6-5h12.8L20 9M12 12v5M9.5 14.5h5"/>',
-  atacadista: '<path d="M3 21V9l9-5 9 5v12M7 21v-7h10v7M7 17h10"/>'
+  atacadista: '<path d="M3 21V9l9-5 9 5v12M7 21v-7h10v7M7 17h10"/>',
+  caminhao: '<path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M7 19a2 2 0 1 0 0-.01M17 19a2 2 0 1 0 0-.01"/>',
+  imagem: '<path d="M3 5h18v12H3zM8 21h8M12 17v4M9 11a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/>'
 };
 module.exports = {registra, remove, icone, grupo, catalogo, cartao, ICONES};

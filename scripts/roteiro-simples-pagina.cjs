@@ -1,7 +1,7 @@
 'use strict';
 /* Página de um roteiro no motor roteiro-simples (roteiro-simples/, cópia do
    site Medicamentos): valida os dados e devolve o HTML do bloco app--<app>.
-   Usado por repack-academia, repack-vacina, repack-eac e repack-medicamentos. */
+   Usado por repack-academia, repack-vacina, repack-eac, repack-medicamentos, repack-transporte e repack-imagem. */
 const fs = require('node:fs'), path = require('node:path');
 const root = path.join(__dirname, '..');
 const le = f => fs.readFileSync(path.join(root, f), 'utf8');
