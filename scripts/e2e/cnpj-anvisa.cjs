@@ -32,6 +32,23 @@ async function rota(p){await p.route(/afe_ae\/\d{3}\.json/,r=>r.fulfill({status:
    ok(v==='EMPRESA TESTE LTDA',a+': razão social preenchida ('+v+')');
    ok(/Base da Anvisa: EMPRESA TESTE LTDA/.test(await f.evaluate(()=>document.querySelector('.uvs-cnpj-msg')?.textContent||'')),a+': mensagem com AFE/AE')}
   if(erros.length)T.falha('erros de página ('+a+'): '+erros.join(' / '));await p.close()}
+ /* sem AFE/AE: Receita Federal (BrasilAPI simulada) — motor (ressonância) e módulo próprio (Serviços de alimentação) */
+ const RF={cnpj:CNPJ,razao_social:'CLINICA RECEITA LTDA',nome_fantasia:'CLINICA R',descricao_tipo_de_logradouro:'RUA',logradouro:'B',numero:'20',bairro:'SE',municipio:'SAO PAULO',uf:'SP',cep:'01002000',cnae_fiscal:8640205,cnae_fiscal_descricao:'Serviços de diagnóstico por imagem com uso de radiação ionizante',descricao_situacao_cadastral:'ATIVA',qsa:[{nome_socio:'SOCIA ADM',qualificacao_socio:'Sócio-Administrador'}]};
+ async function rotaRF(p){await p.route(/afe_ae\/\d{3}\.json/,r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await p.route(/brasilapi\.com\.br\/api\/cnpj\/v1\//,r=>r.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify(RF)}))}
+ {const {p,f,erros}=await T.abre('Serviços','imagem-ressonancia','Ressonância magnética','',{browser:b});await rotaRF(p);
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(300);
+  await f.fill('[data-rs-meta="cnpj"]',FMT);await f.click('[data-rs-acao="anvisa_cnpj"]');await p.waitForTimeout(1000);
+  const s=await p.evaluate(()=>JSON.parse(localStorage.getItem('uvis-imagem-ressonancia-v1')||'{}'));
+  ok(s.meta.razao==='CLINICA RECEITA LTDA'&&/RUA B, 20/.test(s.meta.endereco||'')&&s.meta.rl==='SOCIA ADM','ressonância: sem AFE, dados da Receita (razão social, endereço, sócio administrador)');
+  ok(/Receita Federal/.test(await f.evaluate(()=>document.querySelector('.rs-acoes')?.textContent||'')),'ressonância: mensagem cita a Receita Federal');
+  if(erros.length)T.falha('erros de página (ressonância Receita): '+erros.join(' / '));await p.close()}
+ {const {p,f,erros}=await T.abre('Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento','',{browser:b});await rotaRF(p);
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'perfil',item:'ident'}));await p.waitForTimeout(700);
+  ok(await f.evaluate(()=>!!document.querySelector('[data-sa-meta="cnpj"]')),'alimentação: campo CNPJ na identificação');
+  ok(await f.evaluate(()=>!!document.querySelector('.uvs-cnpj-btn')),'alimentação: botão de busca');
+  await f.fill('[data-sa-meta="cnpj"]',FMT);await f.click('.uvs-cnpj-btn');await p.waitForTimeout(1000);
+  ok((await f.evaluate(()=>document.querySelector('[data-sa-meta="establishment"]').value))==='CLINICA RECEITA LTDA','alimentação: estabelecimento preenchido pela Receita');
+  if(erros.length)T.falha('erros de página (alimentação): '+erros.join(' / '));await p.close()}
  /* quem já tinha busca própria não ganha outro botão */
  {const {p,f}=await T.abre('Medicamentos','drogaria','Drogaria','',{browser:b});ok(!(await f.evaluate(()=>!!document.querySelector('.uvs-cnpj-btn'))),'drogaria: sem botão duplicado');await p.close()}
  await b.close()})();
