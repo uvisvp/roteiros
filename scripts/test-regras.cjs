@@ -60,6 +60,11 @@ for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cj
   for (const [id, src] of blocks) if (src && /^(app|rec)--/.test(id)) trocas.forEach(([de]) => { if (src.includes(de)) volta.push(id + ': ' + de.slice(0, 60)); });
   ok(!volta.length, 'frase em negativa de volta ao app (rode scripts/repack-redacao.cjs): ' + volta.slice(0, 3).join(' | ')); }
 
+/* alertas sanitários fora do app (a fonte exige verificação humana; scripts/repack-sem-alertas.cjs) */
+{ const volta = ['app--central-consultas', 'app--alimentos-integrado', 'rec--insumo-check.js'].filter(id => /alertas_sanitarios/.test(blocks.get(id) || ''));
+  ok(!volta.length, 'consulta a alertas sanitários de volta (rode scripts/repack-sem-alertas.cjs): ' + volta.join(', '));
+  ok(!/alertas sanitários/i.test(html.slice(html.indexOf('<div class="guide-body">'), html.indexOf('<div class="toast"'))), 'Guia de uso ainda cita alertas sanitários'); }
+
 /* 3. cache do PWA */
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const ess = [...sw.slice(sw.indexOf('const ESSENCIAIS'), sw.indexOf('];', sw.indexOf('const ESSENCIAIS'))).matchAll(/'\.\/([^']+)'/g)].map(m => m[1]);
