@@ -49,8 +49,8 @@ module.exports = {
       id: 'ident', titulo: 'Identificação e exames', curto: 'Identificação', icone: 'building',
       itens: [
         {id: 'dados', titulo: 'Dados do estabelecimento e da inspeção', curto: 'Dados',
-          acoes: [{id: 'anvisa_cnpj', rotulo: 'Buscar dados na Anvisa pelo CNPJ', pri: true}, {id: 'ocr_crt', rotulo: 'Ler certidão do CRF'}],
-          acoesNota: 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas); a certidão do CRF é lida no próprio aparelho. Só os campos vazios são preenchidos — confira antes de seguir.',
+          acoes: [{id: 'anvisa_cnpj', rotulo: 'Buscar dados pelo CNPJ (Anvisa, CNES e Receita)', pri: true}, {id: 'ocr_crt', rotulo: 'Ler certidão do CRF'}],
+          acoesNota: 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas), o CNES (Ministério da Saúde, município de São Paulo) e, sem AFE/AE, os dados públicos do CNPJ na Receita Federal; a certidão do CRF é lida no próprio aparelho. Só os campos vazios são preenchidos — confira antes de seguir.',
           campos: [
           {id: 'razao', rotulo: 'Razão social'}, {id: 'fantasia', rotulo: 'Nome fantasia'},
           {id: 'cnpj', rotulo: 'CNPJ', tipo: 'cnpj'}, {id: 'endereco', rotulo: 'Endereço', largo: true},

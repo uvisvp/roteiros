@@ -118,7 +118,9 @@
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(x){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x];});}
   function dataBR(v){var m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1]:String(v||'');}
   function modo(){var b=document.querySelector('.mode.on');return b&&b.getAttribute('data-mode');}
-  function ehAfe(){var m=modo();return m==='cnpj'||m==='afe'||m==='autorizacao';}
+  /* Só no modo AFE/AE. No modo CNPJ a Central faz a busca completa (AFE/AE com atividades, produtos,
+     Cannabis, CNES, alertas e medidas fiscais); interceptar o Enter ali mostrava só as AFE/AE (20/10/2026). */
+  function ehAfe(){var m=modo();return m==='afe'||m==='autorizacao';}
   function status(t,ok){var x=E('status');if(x){x.className='status '+(ok?'ok':'');x.textContent=t||'';}}
   async function json(url){var r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
   async function porCnpj(v){

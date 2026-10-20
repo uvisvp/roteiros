@@ -750,8 +750,8 @@ function monta(t) {
       descricao: t === 3 ? 'Dados do laboratório e o que ele faz. O perfil marca “Não se aplica” no que não existir.' : 'Dados do estabelecimento e os exames realizados.',
       itens: [
         Object.assign({id: 'dados', titulo: 'Dados do estabelecimento e da inspeção', curto: 'Dados', campos: dados(t)},
-          t === 1 ? {acoes: [{id: 'anvisa_cnpj', rotulo: 'Buscar dados na Anvisa pelo CNPJ', pri: true}, {id: 'ocr_crt', rotulo: 'Ler certidão do CRF'}],
-            acoesNota: 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas); a certidão do CRF é lida no próprio aparelho. Só os campos vazios são preenchidos — confira antes de seguir.'} : {}),
+          t === 1 ? {acoes: [{id: 'anvisa_cnpj', rotulo: 'Buscar dados pelo CNPJ (Anvisa, CNES e Receita)', pri: true}, {id: 'ocr_crt', rotulo: 'Ler certidão do CRF'}],
+            acoesNota: 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas), o CNES (Ministério da Saúde, município de São Paulo) e, sem AFE/AE, os dados públicos do CNPJ na Receita Federal; a certidão do CRF é lida no próprio aparelho. Só os campos vazios são preenchidos — confira antes de seguir.'} : {}),
         {id: 'exames', titulo: t === 3 ? 'Setores e equipamentos' : 'Exames realizados e equipamentos', curto: t === 3 ? 'Setores' : 'Exames', campos: exames(t)}
       ].concat(t === 3 ? [{id: 'perfil', titulo: 'Perfil do laboratório', curto: 'Perfil', campos: copia(PERFIL3)}] : [])},
     {id: 'classif', titulo: 'Classificação e responsabilidade', curto: 'Classificação', icone: 'folder', itens: [
