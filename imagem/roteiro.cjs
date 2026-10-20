@@ -112,8 +112,8 @@ const PESSOAL = [
     c: 'O Programa de Educação Permanente atende ao mínimo exigido, com registro das capacitações.', nc: 'O Programa de Educação Permanente não atende ao mínimo exigido.',
     pontos: [['anual', 'capacitação inicial e periódica, no mínimo anual', 'Não há capacitação inicial e periódica, no mínimo anual.'], ['novos', 'capacitação antes de novos processos, tecnologias ou pessoas', 'Não há capacitação antes de novos processos, tecnologias ou pessoas.'], ['eficacia', 'avaliação da eficácia das capacitações', 'A eficácia das capacitações não é avaliada.'], ['temas', 'temas mínimos (POPs, segurança do paciente, riscos, PGQ, proteção radiológica)', 'As capacitações não cobrem os temas mínimos exigidos.'], ['registro', 'registro com data, carga horária, conteúdo, instrutor e participantes', 'As capacitações não são registradas com os dados exigidos.']],
     na: NAO_FUNC, inf: ['im_pep']},
-  {id: 'menor', m: ION, t: 'Nenhum menor de 18 anos trabalha com raios X no serviço?', r: [R(47)],
-    c: 'Nenhum menor de 18 anos trabalha com raios X no serviço.', nc: 'Foi constatado menor de 18 anos trabalhando com raios X.',
+  {id: 'menor', m: ION, t: 'Todos os que trabalham com raios X no serviço têm 18 anos ou mais?', r: [R(47)],
+    c: 'Todos os que trabalham com raios X no serviço têm 18 anos ou mais.', nc: 'Foi constatado menor de 18 anos trabalhando com raios X.',
     na: NAO_FUNC, inf: ['im_ocupacional']},
   {id: 'gestante', m: ION, t: 'Há procedimento para a trabalhadora gestante notificar a gravidez e ter as condições de trabalho revistas?', r: [R(46)],
     c: 'Há procedimento para notificação da gravidez e revisão das condições de trabalho da gestante.', nc: 'Não há procedimento para notificação da gravidez e revisão das condições de trabalho da gestante.',
@@ -195,11 +195,11 @@ const PROTECAO = [
     na: 'Não houve dose no nível de investigação nos relatórios de dosimetria.', inf: ['im_dosimetria']}
 ];
 const IMAGENS = [
-  {id: 'foto', t: 'O serviço não fotografa, filma ou digitaliza imagens com escâner não específico para usá-las em laudo ou registro?', r: [R(72)],
-    c: 'O serviço não fotografa, filma nem digitaliza imagens com escâner não específico para laudo ou registro.', nc: 'O serviço fotografa, filma ou digitaliza imagens com escâner não específico para laudo ou registro.',
+  {id: 'foto', t: 'As imagens usadas em laudo ou registro são obtidas e digitalizadas só por equipamento próprio para esse fim (sem fotografar, filmar ou usar escâner comum)?', r: [R(72)],
+    c: 'As imagens destinadas a laudo ou registro são obtidas e digitalizadas por equipamento próprio para esse fim.', nc: 'Imagens destinadas a laudo ou registro são fotografadas, filmadas ou digitalizadas com escâner não específico para esse fim.',
     na: NAO_FUNC, inf: ['im_imagens']},
-  {id: 'impressao', m: ['conv', 'mamo', 'tc', 'rm', 'hemo'], t: 'Sem armazenamento digital, as imagens não são impressas só em papel nem só em filme reduzido?', r: [R(73)], naSe: SIM('p_digital'),
-    c: 'As imagens não são impressas apenas em papel nem em filme reduzido.', nc: 'Sem armazenamento digital, as imagens são impressas apenas em papel ou em filme reduzido.',
+  {id: 'impressao', m: ['conv', 'mamo', 'tc', 'rm', 'hemo'], t: 'Sem armazenamento digital, as imagens são entregues em filme de tamanho original (não só em papel nem só em filme reduzido)?', r: [R(73)], naSe: SIM('p_digital'),
+    c: 'Sem armazenamento digital, as imagens são impressas em filme de tamanho original.', nc: 'Sem armazenamento digital, as imagens são impressas apenas em papel ou em filme reduzido.',
     na: 'O serviço tem sistema de armazenamento das imagens digitais.', inf: ['im_imagens']},
   {id: 'monitor', t: 'Os monitores de laudo são específicos para esse fim e compatíveis com a modalidade, e a iluminação da sala de laudos não prejudica a imagem?', r: [R(74), R(9)], naSe: NAO('p_laudo'),
     c: 'Os monitores de laudo são específicos e compatíveis com a modalidade, com iluminação adequada da sala de laudos.', nc: 'São usados monitores convencionais, não específicos, para laudo.',
@@ -212,15 +212,16 @@ const IMAGENS = [
     na: 'O serviço não mantém unidade itinerante.', inf: ['im_itinerante']}
 ];
 const PROIBE = [
-  {id: 'proibidos', t: 'O serviço não usa equipamentos e práticas proibidos?', r: [R(80), R(81)],
-    c: 'O serviço não usa equipamentos nem práticas proibidos.', nc: 'O serviço usa equipamentos ou práticas proibidos.',
-    pontos: [['cassete', 'sem cassete sem tela intensificadora nem abreugrafia', 'Há cassete sem tela intensificadora ou equipamento de abreugrafia.'], ['retardo', 'sem disparo com retardo que impeça interromper a exposição', 'Há disparo com retardo que impede interromper a exposição.'], ['segurar', 'ninguém segura o receptor de imagem com a mão na exposição', 'O receptor de imagem é segurado com a mão durante a exposição.'], ['movel', 'equipamento móvel não usado como fixo', 'Equipamento móvel é usado como fixo.'], ['meia', 'sem gerador autorretificado ou de meia onda', 'Há equipamento com gerador autorretificado ou de retificação de meia onda.']],
+  {id: 'proibidos', t: 'Os equipamentos e as práticas observados respeitam as vedações dos arts. 80 e 81 da RDC 611/2022?', r: [R(80), R(81)],
+    c: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora, o disparo permite interromper a exposição, o receptor de imagem não é segurado com a mão, o equipamento móvel é usado como móvel e os geradores não são autorretificados nem de meia onda.',
+    nc: 'Foram constatados equipamentos ou práticas vedados pela RDC 611/2022.',
+    pontos: [['cassete', 'cassetes com tela intensificadora; sem abreugrafia', 'Há cassete sem tela intensificadora ou equipamento de abreugrafia.'], ['retardo', 'disparo que permite interromper a exposição (sem retardo)', 'Há disparo com retardo que impede interromper a exposição.'], ['segurar', 'receptor de imagem em suporte, sem ser segurado com a mão', 'O receptor de imagem é segurado com a mão durante a exposição.'], ['movel', 'equipamento móvel usado como móvel (não como fixo)', 'Equipamento móvel é usado como fixo.'], ['meia', 'gerador de onda completa ou alta frequência (sem autorretificado ou meia onda)', 'Há equipamento com gerador autorretificado ou de retificação de meia onda.']],
     na: NAO_FUNC, inf: ['im_proibido']},
-  {id: 'revelacao', m: ['conv', 'mamo'], t: 'O serviço não faz processamento manual de filmes (fora de urgência com parecer)?', r: [R(82)],
-    c: 'O serviço não faz processamento manual de filmes.', nc: 'O serviço faz processamento manual de filmes radiográficos.',
+  {id: 'revelacao', m: ['conv', 'mamo'], t: 'O processamento dos filmes é automático (o manual só em urgência, com parecer)?', r: [R(82)],
+    c: 'O processamento dos filmes é automático.', nc: 'O serviço faz processamento manual de filmes radiográficos.',
     na: 'O serviço não usa filme radiográfico.', inf: ['im_proibido']},
   {id: 'tempo', m: ['conv', 'mamo'], t: 'O controle da duração da exposição é eletrônico, limitado a 5 segundos e permite interromper a exposição a qualquer momento?', r: [R(83), RP(83, 'unico')],
-    c: 'O controle da duração da exposição é eletrônico, limitado a 5 segundos e interrompível.', nc: 'O controle da duração da exposição não atende às exigências.',
+    c: 'O controle da duração da exposição é eletrônico, limitado a 5 segundos e permite interromper a exposição.', nc: 'O controle da duração da exposição não atende às exigências.',
     na: NAO_FUNC, inf: ['im_proibido']}
 ];
 
@@ -241,8 +242,8 @@ const ESPEC = {
     {id: 'conv_disparo', t: 'O disparo tem dois estágios, só emite enquanto pressionado e interrompe a exposição ao fim do tempo, dose ou mAs selecionado?', r: [N90(9), N90(10)],
       c: 'O disparo tem dois estágios, só emite enquanto pressionado e interrompe a exposição ao fim do valor selecionado.', nc: 'O sistema de disparo não atende às exigências da IN 90/2021.',
       na: NAO_FUNC, inf: ['im_equip_in']},
-    {id: 'conv_inabilita', t: 'Nenhum equipamento está em condição que inabilita o uso?', r: [N90(11)],
-      c: 'Nenhum equipamento está em condição que inabilita o uso.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
+    {id: 'conv_inabilita', t: 'Os equipamentos em uso atendem às condições mínimas de funcionamento (nenhuma das condições do checklist, que inabilitam o uso)?', r: [N90(11)],
+      c: 'Os equipamentos em uso atendem às condições mínimas de funcionamento exigidas pela instrução normativa da modalidade.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
       pontos: [['colim', 'colimação ausente ou sem funcionar'], ['luz', 'luz de campo ausente ou sem funcionar'], ['filtro', 'falta de filtração adicional'], ['param', 'painel sem kV, mA e tempo (ou mAs)'], ['grade', 'bucky sem grade antidifusora'], ['dois', 'mais de um equipamento na mesma sala'], ['cabo', 'equipamento móvel sem cabo disparador'], ['continuo', 'disparo que permite feixe contínuo']],
       na: NAO_FUNC, inf: ['im_inabilita']},
     {id: 'conv_qualidade', t: 'A qualidade da imagem é avaliada com ferramenta de teste específica, com imagem de referência e os testes do Anexo I da IN 90/2021?', r: [N90(1), N90(12)],
@@ -257,8 +258,8 @@ const ESPEC = {
     {id: 'mamo_sinal', t: 'A emissão de raios X é indicada por sinal sonoro e luminoso no painel?', r: [N92(5)],
       c: 'A emissão de raios X é indicada por sinal sonoro e luminoso no painel.', nc: 'A emissão de raios X não é indicada por sinal sonoro e luminoso no painel.',
       na: NAO_FUNC, inf: ['im_equip_in']},
-    {id: 'mamo_inabilita', t: 'Nenhum equipamento está em condição que inabilita o uso?', r: [N92(6)],
-      c: 'Nenhum equipamento está em condição que inabilita o uso.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
+    {id: 'mamo_inabilita', t: 'Os equipamentos em uso atendem às condições mínimas de funcionamento (nenhuma das condições do checklist, que inabilitam o uso)?', r: [N92(6)],
+      c: 'Os equipamentos em uso atendem às condições mínimas de funcionamento exigidas pela instrução normativa da modalidade.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
       pontos: [['colim', 'colimação ausente ou sem funcionar'], ['filtro', 'falta de filtração adicional'], ['param', 'painel sem kVp, mA e tempo (ou mAs)'], ['compr', 'sem compressão automática ou bandeja danificada'], ['cae', 'sem controle automático de exposição funcionando'], ['dist', 'distância foco-receptor menor que 50 cm'], ['grade', 'bucky sem grade (fora de magnificação)'], ['manual', 'revelação manual'], ['dois', 'mais de um equipamento na sala'], ['monitor', 'monitor ou negatoscópio não específico para mamografia'], ['processadora', 'processadora não exclusiva de mamografia']],
       na: NAO_FUNC, inf: ['im_inabilita']},
     {id: 'mamo_testes', t: 'Os testes do Anexo I da IN 92/2021 são feitos nas periodicidades, tolerâncias e níveis de restrição fixados, inclusive a avaliação diária da imagem?', r: [N92(1), N92(7), N92(7, 'paragrafo', '1'), N92(7, 'paragrafo', '2')],
@@ -280,8 +281,8 @@ const ESPEC = {
     {id: 'tc_pediatria', t: 'O tomógrafo usado em pediatria tem protocolos pediátricos?', r: [N93(2, 'inciso', 'viii'), N93(4, 'inciso', 'ii')], naSe: NAO('p_pediatria'),
       c: 'O tomógrafo usado em pediatria tem protocolos pediátricos.', nc: 'O tomógrafo é usado em pediatria sem protocolos pediátricos.',
       na: 'O serviço não atende pacientes pediátricos.', inf: ['im_inabilita']},
-    {id: 'tc_inabilita', t: 'Nenhum tomógrafo comercializado após a IN está sem modulação automática de corrente, indicação de CTDI e DLP ou relatório de dose em DICOM?', r: [N93(4)],
-      c: 'Nenhum tomógrafo está em condição que inabilita o uso.', nc: 'Há tomógrafo em uso em condição que inabilita o uso.',
+    {id: 'tc_inabilita', t: 'Os tomógrafos comercializados após a IN têm modulação automática de corrente, indicação de CTDI e DLP e relatório de dose em DICOM?', r: [N93(4)],
+      c: 'Os tomógrafos comercializados após a IN 93/2021 têm modulação automática de corrente, indicação de CTDI e DLP e relatório de dose em DICOM.', nc: 'Há tomógrafo em uso em condição que inabilita o uso.',
       na: 'Todos os tomógrafos foram comercializados antes da IN 93/2021.', inf: ['im_inabilita']},
     {id: 'tc_testes', t: 'Os testes do Anexo I da IN 93/2021 e os do fabricante são feitos e registrados?', r: [N93(1), RP(28, 'unico')],
       c: 'Os testes do Anexo I da IN 93/2021 e os do fabricante são feitos e registrados.', nc: 'Os testes do Anexo I da IN 93/2021 não são feitos e registrados.',
@@ -335,14 +336,14 @@ const ESPEC = {
       c: 'O equipamento possui os itens obrigatórios da IN 91/2021.', nc: 'O equipamento não possui os itens obrigatórios da IN 91/2021.', ncPontos: 'O equipamento não possui: {}.',
       pontos: [['tempo', 'controle do tempo acumulado de fluoroscopia'], ['diafragma', 'diafragma que restringe o campo ao receptor'], ['saiote', 'cortina ou saiote plumbífero íntegro (salas fixas)'], ['visor', 'visor plumbífero íntegro (salas fixas)'], ['cine', 'sinal sonoro e luminoso no modo cine'], ['dose', 'indicação de produto kerma-área ou kerma de referência (equipamentos novos)'], ['dfp', 'limitador da distância foco-pele'], ['etiqueta', 'identificação dos componentes']],
       na: NAO_FUNC, inf: ['im_equip_in']},
-    {id: 'hemo_proib', t: 'O serviço não instala equipamento sem gerador de alta frequência ou sem feixe pulsado, nem usa equipamento sem controle automático de intensidade?', r: [N91(3)],
-      c: 'O serviço não usa equipamento proibido pela IN 91/2021.', nc: 'O serviço usa equipamento proibido pela IN 91/2021.',
+    {id: 'hemo_proib', t: 'Os equipamentos têm gerador de alta frequência, feixe pulsado e controle automático de intensidade?', r: [N91(3)],
+      c: 'Os equipamentos têm gerador de alta frequência, feixe pulsado e controle automático de intensidade, como exige a IN 91/2021.', nc: 'Há equipamento sem gerador de alta frequência, sem feixe pulsado ou sem controle automático de intensidade, vedado pela IN 91/2021.',
       na: NAO_FUNC, inf: ['im_inabilita']},
     {id: 'hemo_sinal', t: 'A emissão de raios X é indicada por sinal luminoso no painel, dentro da sala e, nos fixos, do lado de fora da porta?', r: [N91(6), N91(6, 'paragrafo', 'unico')],
       c: 'A emissão de raios X é indicada por sinal luminoso no painel, na sala e do lado de fora da porta.', nc: 'A emissão de raios X não é indicada pelos sinais luminosos exigidos.',
       na: NAO_FUNC, inf: ['im_equip_in']},
-    {id: 'hemo_inabilita', t: 'Nenhum equipamento está em condição que inabilita o uso?', r: [N91(7)],
-      c: 'Nenhum equipamento está em condição que inabilita o uso.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
+    {id: 'hemo_inabilita', t: 'Os equipamentos em uso atendem às condições mínimas de funcionamento (nenhuma das condições do checklist, que inabilitam o uso)?', r: [N91(7)],
+      c: 'Os equipamentos em uso atendem às condições mínimas de funcionamento exigidas pela instrução normativa da modalidade.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
       pontos: [['colim', 'colimação ausente ou sem funcionar'], ['campo', 'campo não restrito ao receptor de imagem'], ['filtro', 'falta de filtração adicional'], ['param', 'painel sem os parâmetros básicos'], ['dois', 'mais de um equipamento na sala'], ['detector', 'sem intensificador ou detector digital'], ['anteparo', 'intervencionista sem anteparo de teto ou visor e cortina plumbífera']],
       na: NAO_FUNC, inf: ['im_inabilita']},
     {id: 'hemo_qualidade', t: 'A qualidade da imagem é avaliada com ferramenta específica, imagem de referência e imagem semestral, e os testes do Anexo I são feitos?', r: [N91(1), N91(8)],
@@ -520,7 +521,10 @@ function monta(m) {
   secoes.push({id: 'laudos', titulo: 'Imagens e laudos', curto: 'Imagens', icone: 'check', itens: [
     Object.assign(item('imagens', 'Registro, laudo, telerradiologia e itinerante', 'Imagens e laudos', IMAGENS), {orient: copia(ORIENT.imagens)})
   ]});
-  if (ion) secoes[secoes.length - 1].itens.push(Object.assign(item('proibicoes', 'Proibições', 'Proibições', PROIBE), {orient: copia(ORIENT.proibicoes)}));
+  /* cTodos: com todas as perguntas do item em “Atende”, uma frase só no relatório (diretriz de 20/10/2026) */
+  const filme = ['conv', 'mamo'].includes(m);
+  if (ion) secoes[secoes.length - 1].itens.push(Object.assign(item('proibicoes', 'Vedações e controle da exposição', 'Vedações', PROIBE), {orient: copia(ORIENT.proibicoes)},
+    filme ? {cTodos: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora, o receptor de imagem não é segurado com a mão, o equipamento móvel é usado como móvel e os geradores não são autorretificados nem de meia onda. O processamento dos filmes é automático, e o controle da duração da exposição é eletrônico, limitado a 5 segundos e permite interromper a exposição.'} : {}));
   secoes.push({id: 'modalidade', titulo: x.titulo + ' (' + x.inN + ')', curto: 'Modalidade', icone: 'lab',
     descricao: 'Requisitos próprios da modalidade. Na pergunta de condições que inabilitam o uso, marque “Não atende” no ponto encontrado.', itens: [
       Object.assign(item('especifica', 'Requisitos da ' + x.inN, x.inN, ESPEC[m]), MAIS[m].length ? {orient: copia(MAIS[m])} : {})

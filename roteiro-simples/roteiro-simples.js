@@ -448,11 +448,15 @@
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
    s.itens.forEach(function(it){ if(!itemVisivel(it)) return; var ps = perguntasDe(it).filter(function(q){ return st.r[q.id] && !(D.relSemNa && st.r[q.id] === 'na'); }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
-    var fr = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }).map(frase), na = ps.filter(function(q){ return st.r[q.id] === 'na' && typeof q.na !== 'string'; });
+    var fr = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }).map(frase);
+    /* it.cTodos: todas as perguntas visíveis do item em “Atende” viram uma frase só, consolidada; as anotações seguem depois */
+    var vis = perguntasDe(it);
+    if(it.cTodos && vis.length > 1 && vis.every(function(q){ return st.r[q.id] === 'c' && !checksTxt(q); })) fr = [it.cTodos].concat(vis.map(function(q){ return String(st.sit[q.id] || '').trim(); }).filter(Boolean).map(cap));
     partes.push({t: 'h2', x: sec + '.' + (ns + 1) + '.' + (partes.filter(function(p){ return p.t === 'h2'; }).length + 1) + ' ' + it.titulo});
     cps.forEach(function(b){ partes.push(b); });
     if(fr.length) partes.push({t: 'p', x: fr.join(' ')});
-    if(na.length) partes.push({t: 'small', x: 'Não se aplicam ao estabelecimento: ' + lista(na.map(function(q){ return q.t.replace(/\?$/, '').replace(/^./, function(c){ return c.toLowerCase(); }); })) + '.'});
+    /* “Não se aplica” sem frase própria fica fora do texto corrido (diretriz de 20/10/2026): repetir a pergunta
+       como frase poluía o relatório; o que explica o escopo é a frase do q.na. */
     ps.forEach(function(q){ if(st.r[q.id] === 'nc') irr.push({x: frase(q), r: q.r}); }); });
    if(partes.length){ ns++; B.push({t: 'h2', x: sec + '.' + ns + ' ' + s.titulo.toUpperCase()}); partes.forEach(function(p){ if(p.t === 'h2') p.x = p.x.replace(/^\d+\.\d+\.\d+/, function(m){ return m.split('.')[0] + '.' + ns + '.' + m.split('.')[2]; }); B.push(p); }); } });
   if(!ns) B.push({t: 'p', x: 'Nenhuma verificação foi registrada.'});

@@ -33,8 +33,8 @@ function __medLacunasDrogaria(catalog){
   frase_positiva: 'Os medicamentos sujeitos à prescrição são dispensados somente mediante apresentação da receita.',
   frase_negativa: 'Foi constatada a dispensação de medicamento sujeito à prescrição sem apresentação da receita.'});
  add({id: 'disp_receita_legivel', card: 4, grupo: 'Dispensação e escrituração', refs: [A(45), PG(44, 'unico')],
-  pergunta: 'Não são dispensados medicamentos com receitas ilegíveis ou que possam induzir a erro, e o prescritor é contatado em caso de dúvida?',
-  frase_positiva: 'Não são dispensados medicamentos com receitas ilegíveis ou que possam induzir a erro, e o prescritor é contatado em caso de dúvida.',
+  pergunta: 'A dispensação exige receita legível e sem ambiguidade, com contato com o prescritor em caso de dúvida?',
+  frase_positiva: 'A dispensação é feita mediante receita legível e sem ambiguidade, com contato com o prescritor em caso de dúvida.',
   frase_negativa: 'Foram dispensados medicamentos com receita ilegível ou que pode induzir a erro, ou o prescritor não é contatado em caso de dúvida.'});
 
  /* card 4 — exposição (o card 2 tem tela própria, que não mostra perguntas do catálogo) */
@@ -50,8 +50,8 @@ function __medLacunasDrogaria(catalog){
 
  /* card 7 — produtos impróprios */
  add({id: 'emb_violada', card: 7, grupo: 'Produtos impróprios', refs: [PG(76, 2)],
-  pergunta: 'Não há medicamentos com embalagem primária violada armazenados no estabelecimento?',
-  frase_positiva: 'Não foram encontrados medicamentos com embalagem primária violada armazenados no estabelecimento.',
+  pergunta: 'Os medicamentos armazenados estão com a embalagem primária íntegra?',
+  frase_positiva: 'Os medicamentos armazenados estão com a embalagem primária íntegra.',
   frase_negativa: 'Foram encontrados medicamentos com embalagem primária violada armazenados no estabelecimento.'});
 
 }

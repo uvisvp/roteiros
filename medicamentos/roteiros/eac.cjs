@@ -158,7 +158,7 @@ module.exports = {
             c: 'A sala de coleta e execução dispõe de ventilação natural ou de climatização.',
             nc: 'A sala de coleta e execução não dispõe de ventilação natural nem de sistema de climatização.',
             na: 'Não há sala de coleta e execução instalada.', inf: ['eac_infra']},
-          {id: 'iluminacao', t: 'A iluminação da sala não prejudica a avaliação do exame e da coloração da pele do paciente?', r: [A(17)],
+          {id: 'iluminacao', t: 'A iluminação da sala permite avaliar o exame e a coloração da pele do paciente?', r: [A(17)],
             c: 'A iluminação da sala é adequada à avaliação do exame e da coloração da pele do paciente.',
             nc: 'A iluminação da sala de coleta e execução prejudica a avaliação do exame ou da coloração da pele do paciente.',
             na: 'Não há sala de coleta e execução instalada.', inf: ['eac_infra']}

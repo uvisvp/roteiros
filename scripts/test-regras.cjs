@@ -41,6 +41,18 @@ for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cj
     ok(!sem.length, R.app + ': perguntas sem a Lei 13.725 e roteiro sem leiBase (' + sem.slice(0, 5).join(', ') + (sem.length > 5 ? '…' : '') + ')');
   }
 }
+/* redação (diretriz de 20/10/2026): a pergunta cuja resposta conforme é “Atende”/“Sim” não pode ser a negação
+   de uma irregularidade (“O serviço não usa…?”, “Nenhum equipamento…?”): pergunta-se pela condição correta.
+   Perguntas de escopo com Sim = não conforme (sim: 'nc') ficam de fora. */
+const NEGA = /^(Nenhum|Nenhuma|Não |O serviço não|A empresa não|O estabelecimento não|O laboratório não)/;
+for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cjs', 'gases/roteiro.cjs', 'estetica/roteiro.cjs', 'transporte/roteiro.cjs', 'imagem/roteiro.cjs']) {
+  const m = require(path.join(root, arq));
+  for (const R of Array.isArray(m) ? m : [m]) {
+    const neg = [];
+    R.secoes.forEach(s => s.itens.forEach(it => (it.perguntas || []).forEach(p => { if (p.sim !== 'nc' && NEGA.test(p.t || '')) neg.push(p.id); })));
+    ok(!neg.length, R.app + ': pergunta formulada como negação de irregularidade (' + neg.join(', ') + ')');
+  }
+}
 
 /* 3. cache do PWA */
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');

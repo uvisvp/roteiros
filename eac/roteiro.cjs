@@ -312,7 +312,7 @@ const AMB = {
       c: 'A sala de coleta e execução dispõe de ventilação natural ou de climatização.',
       nc: 'A sala de coleta e execução não dispõe de ventilação natural nem de sistema de climatização.',
       na: 'Não há sala de coleta e execução instalada.', inf: ['eac_infra']},
-    {id: 'iluminacao', t: 'A iluminação da sala não prejudica a avaliação do exame e da coloração da pele do paciente?', r: [A(17)],
+    {id: 'iluminacao', t: 'A iluminação da sala permite avaliar o exame e a coloração da pele do paciente?', r: [A(17)],
       c: 'A iluminação da sala é adequada à avaliação do exame e da coloração da pele do paciente.',
       nc: 'A iluminação da sala de coleta e execução não atende às exigências.',
       na: 'Não há sala de coleta e execução instalada.', pontos: [['exame', 'iluminação adequada à avaliação do exame', 'A iluminação da sala prejudica a avaliação do exame.'], ['pele', 'iluminação adequada à avaliação da coloração da pele', 'A iluminação da sala prejudica a avaliação da coloração da pele do paciente.']], inf: ['eac_infra']}
@@ -327,7 +327,7 @@ const AMB = {
     {id: 'climatizacao', t: 'A sala de coleta e execução dispõe de sistema de climatização?', r: [A(29)],
       c: 'A sala de coleta e execução dispõe de sistema de climatização.', nc: 'A sala de coleta e execução não dispõe de sistema de climatização.',
       na: 'Não há sala de coleta e execução instalada.', inf: ['eac_infra']},
-    {id: 'iluminacao', t: 'A iluminação da sala não prejudica a avaliação do exame e da coloração da pele do paciente?', r: [A(31)],
+    {id: 'iluminacao', t: 'A iluminação da sala permite avaliar o exame e a coloração da pele do paciente?', r: [A(31)],
       c: 'A iluminação da sala é adequada à avaliação do exame e da coloração da pele do paciente.',
       nc: 'A iluminação da sala de coleta e execução não atende às exigências.',
       na: 'Não há sala de coleta e execução instalada.', pontos: [['exame', 'iluminação adequada à avaliação do exame', 'A iluminação da sala prejudica a avaliação do exame.'], ['pele', 'iluminação adequada à avaliação da coloração da pele', 'A iluminação da sala prejudica a avaliação da coloração da pele do paciente.']], inf: ['eac_infra']}
@@ -339,7 +339,7 @@ const AMB = {
     {id: 'climatizacao', t: 'A sala de coleta e execução dispõe de sistema de climatização?', r: [A(41)],
       c: 'A sala de coleta e execução dispõe de sistema de climatização.', nc: 'A sala de coleta e execução não dispõe de sistema de climatização.',
       na: 'Não há sala de coleta no laboratório.', inf: ['eac_infra']},
-    {id: 'iluminacao', t: 'A iluminação da sala de coleta não prejudica a avaliação do exame e da coloração da pele do paciente?', r: [A(42)],
+    {id: 'iluminacao', t: 'A iluminação da sala de coleta permite avaliar o exame e a coloração da pele do paciente?', r: [A(42)],
       c: 'A iluminação da sala de coleta é adequada à avaliação do exame e da coloração da pele do paciente.',
       nc: 'A iluminação da sala de coleta não atende às exigências.',
       na: 'Não há sala de coleta no laboratório.', pontos: [['exame', 'iluminação adequada à avaliação do exame', 'A iluminação da sala prejudica a avaliação do exame.'], ['pele', 'iluminação adequada à avaliação da coloração da pele', 'A iluminação da sala prejudica a avaliação da coloração da pele do paciente.']], inf: ['eac_infra']}

@@ -449,7 +449,11 @@ blocoAltera('app--distribuidoras-transportadoras', s => {
 /* 7t. Drogaria — perguntas que faltavam para autuar (medicamentos/drogaria-lacunas.js),
    entram no catálogo ao carregar, logo depois do ajuste padrão do catálogo. */
 blocoAltera('app--drogaria', s => {
-  s = trocaEm(s, 'async function loadBank(){', le('drogaria-lacunas.js').replace(/<\/script/gi, '<\\/script') + '\nasync function loadBank(){', 'drogaria: lacunas — definição');
+  const LAC = le('drogaria-lacunas.js').replace(/<\/script/gi, '<\\/script'), INI = '/* Drogaria — perguntas que faltavam para autuar';
+  /* já montado (versão anterior do arquivo): troca o trecho inteiro pelo arquivo atual (redação de 20/10/2026) */
+  const i = s.indexOf(INI), j = s.indexOf('\nasync function loadBank(){');
+  if (i >= 0 && j > i) return s.slice(0, i) + LAC + s.slice(j);
+  s = trocaEm(s, 'async function loadBank(){', LAC + '\nasync function loadBank(){', 'drogaria: lacunas — definição');
   return trocaEm(s, "normalizeDrogariaCatalog();if(catalog.schema", "normalizeDrogariaCatalog();try{__medLacunasDrogaria(catalog)}catch(e){console.error(e)}if(catalog.schema", 'drogaria: lacunas — chamada');
 });
 
