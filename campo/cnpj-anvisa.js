@@ -8,7 +8,8 @@
    administrador e CNAE). Com AFE/AE, o CNES aparece na mensagem.
    - Ao lado do campo de CNPJ (rótulo “CNPJ” ou “CNPJ ou CPF”), um botão “Buscar na Anvisa”.
    - Preenche só os campos vazios da mesma tela, achados pelo rótulo: razão social /
-     estabelecimento, nome fantasia, endereço, responsável legal e responsável técnico.
+     estabelecimento, nome fantasia, endereço, responsável legal, responsável técnico e
+     licença sanitária (CEVS/CMVS declarada no CNES, de estabelecimento ativo).
    - Dispara input/change, para o módulo gravar como se fosse digitado. */
 (function(){
  'use strict';
@@ -22,7 +23,7 @@
  function ehCnpj(el){return el&&el.tagName==='INPUT'&&!el.readOnly&&!el.disabled&&/^(text|search|tel|)$/i.test(el.getAttribute('type')||'')&&!el.closest('#cmp-painel,#cmp-modal,.rs-eq')&&/^CNPJ( ou CPF)?\b/i.test(rot(el))}
  function jget(path){var i=0;function tenta(){var u=BASES[i++]+path;return fetch(u,{cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).catch(function(e){if(i<BASES.length)return tenta();throw e})}return tenta()}
  /* campos da tela pelo rótulo */
- var ALVOS=[['razao',/^(raz[aã]o social|estabelecimento|empresa)\b/i],['fantasia',/fantasia/i],['endereco',/^endere[cç]o/i],['rl',/respons[aá]vel legal/i],['rt',/respons[aá]vel t[eé]cnico/i]];
+ var ALVOS=[['razao',/^(raz[aã]o social|estabelecimento|empresa)\b/i],['fantasia',/fantasia/i],['endereco',/^endere[cç]o/i],['rl',/respons[aá]vel legal/i],['rt',/respons[aá]vel t[eé]cnico/i],['licenca',/^(CEVS|CMVS|licen[cç]a sanit[aá]ria)(?!.*\bdata\b)/i]];
  function escopo(el){var e=el.closest('fieldset,form,section,.pu-bloco,.meta-grid,.card');return e&&e.querySelectorAll('input,textarea').length>1?e:document}
  function poe(inp,v){if(!inp||!v||String(inp.value||'').trim())return 0;inp.value=v;inp.dispatchEvent(new Event('input',{bubbles:true}));inp.dispatchEvent(new Event('change',{bubbles:true}));return 1}
  function msg(btn,t,tipo){var m=btn.nextElementSibling;if(!(m&&m.classList.contains('uvs-cnpj-msg'))){m=document.createElement('small');m.className='uvs-cnpj-msg';m.setAttribute('role','status');btn.insertAdjacentElement('afterend',m)}m.textContent=t;m.dataset.tipo=tipo||''}
@@ -34,7 +35,7 @@
    var x=a[0],end=[x.endereco,x.bairro,x.municipio&&(x.municipio+(x.uf?'/'+x.uf:'')),x.cep&&'CEP '+String(x.cep).replace(/^(\d{5})(\d{3})$/,'$1-$2')].filter(Boolean).join(', ');
    var n=enche(el,{razao:x.razao_social,fantasia:x.nome_fantasia,endereco:end,rl:x.responsavel_legal,rt:x.responsavel_tecnico});
    var aut=a.filter(function(y){return y.autorizacao}).map(function(y){return (/^s/i.test(String(y.autorizacao_especial||''))?'AE ':'AFE ')+y.autorizacao}).filter(function(v,i,l){return l.indexOf(v)===i}).join('; ');
-   cnes(c).then(function(p){msg(btn,'Base da Anvisa: '+(x.razao_social||'estabelecimento')+(aut?' — '+aut:'')+'.'+cnesFrase(p)+' '+(n?n+' campo(s) preenchido(s); confira.':'Os campos já estavam preenchidos; nada foi alterado.'),n?'ok':'')})},
+   cnes(c).then(function(p){var l=p.length===1&&p[0].licenca_sanitaria||{};if(l.numero&&(!p[0].situacao||p[0].situacao==='ativo'))n+=enche(el,{licenca:l.numero});msg(btn,'Base da Anvisa: '+(x.razao_social||'estabelecimento')+(aut?' — '+aut:'')+'.'+cnesFrase(p)+' '+(n?n+' campo(s) preenchido(s); confira.':'Os campos já estavam preenchidos; nada foi alterado.'),n?'ok':'')})},
   function(){msg(btn,'Não foi possível consultar a base agora (sem internet?). Preencha os dados à mão.','aviso')})}
  /* CNES pelo CNPJ próprio do estabelecimento (o índice também traz as unidades da mantenedora) */
  function cnes(c){return jget('cnes/cnpj/'+c.slice(0,3)+'.json').then(function(idx){var cods=(idx&&idx[c])||[],sh={};cods.forEach(function(k){(sh[k.slice(0,3)]=sh[k.slice(0,3)]||[]).push(k)});
@@ -45,7 +46,8 @@
  function viaCnes(btn,el,c){msg(btn,'Sem AFE/AE na Anvisa. Consultando o CNES…');
   cnes(c).then(function(p){if(!p.length){viaReceita(btn,el,c);return}var x=p[0];
    var end=[[x.logradouro,x.numero].filter(Boolean).join(', '),x.complemento,x.bairro,'São Paulo/SP',x.cep&&'CEP '+String(x.cep).replace(/^(\d{5})(\d{3})$/,'$1-$2')].filter(Boolean).join(', ');
-   var n=p.length===1?enche(el,{razao:x.razao_social,fantasia:x.nome_fantasia,endereco:end}):enche(el,{razao:x.razao_social});
+   var l=x.licenca_sanitaria||{},lic=l.numero&&(!x.situacao||x.situacao==='ativo')?l.numero:'';
+   var n=p.length===1?enche(el,{razao:x.razao_social,fantasia:x.nome_fantasia,endereco:end,licenca:lic}):enche(el,{razao:x.razao_social});
    viaReceita(btn,el,c,'Sem AFE/AE na Anvisa.'+cnesFrase(p),n)})}
  /* sem AFE/AE: dados públicos do CNPJ na Receita Federal (BrasilAPI) */
  function receita(c){return fetch('https://brasilapi.com.br/api/cnpj/v1/'+c,{cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(function(x){if(!x||!x.razao_social)return null;

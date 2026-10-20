@@ -359,7 +359,7 @@
    var soAe = !!CAMPO.ae, afeL = soAe ? aut(a.filter(function(y){ return !/^s/i.test(String(y.autorizacao_especial || '')) && String(y.tipo || 'AFE').toUpperCase() !== 'AE'; })) : '', aeL = soAe ? aut(a.filter(function(y){ return /^s/i.test(String(y.autorizacao_especial || '')) || String(y.tipo || '').toUpperCase() === 'AE'; })) : '';
    var afe = a.filter(function(y){ return y.autorizacao; }).map(function(y){ return (y.tipo || 'AFE') + ' ' + y.autorizacao + (y.situacao ? ' (' + String(y.situacao).toLowerCase() + ')' : ''); }).filter(function(v, i, l){ return l.indexOf(v) === i; }).join('; ');
    var n = preenche([['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', end], ['rl', x.responsavel_legal], ['rt', x.responsavel_tecnico], ['afe', soAe ? afeL : afe], ['ae', aeL]]);
-   cnesBusca(c).then(function(l){ var p = l.filter(function(y){ return y.cnpj === c; }), k = p.length === 1 ? preenche([['cnes', p[0].cnes]]) : 0; n += k;
+   cnesBusca(c).then(function(l){ var p = l.filter(function(y){ return y.cnpj === c; }), k = p.length === 1 ? preenche([['cnes', p[0].cnes]].concat(cnesLic(p[0]))) : 0; n += k;
     acaoMsg = {t: 'Base da Anvisa: ' + (x.razao_social || 'estabelecimento') + (afe ? ' — ' + afe : '') + '.' + cnesFrase(p) + ' ' + (n ? n + ' campo(s) preenchido(s); confira.' : 'Os campos já estavam preenchidos; nada foi alterado.'), tipo: n ? 'ok' : ''};
     redesenha(); }); }, function(){ acaoMsg = {t: 'Não foi possível consultar a base agora (sem internet?). Preencha os dados à mão.', tipo: 'aviso'}; redesenha(); }); }
  /* CNES: índice por CNPJ (próprio ou da mantenedora) e estabelecimentos por número do CNES */
@@ -368,17 +368,22 @@
    return Promise.all(Object.keys(sh).map(function(s){ return jget('cnes/estabelecimentos/' + s + '.json').then(function(d){ return sh[s].map(function(k){ return d && d[k]; }).filter(Boolean); }); })).then(function(l){ return [].concat.apply([], l); }); }).catch(function(){ return []; }); }
  function cnesCodigo(k){ k = String(k).padStart(7, '0'); return jget('cnes/estabelecimentos/' + k.slice(0, 3) + '.json').then(function(d){ return d && d[k] ? [d[k]] : []; }).catch(function(){ return []; }); }
  function brData(v){ var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || '')); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; }
+ /* Licença sanitária declarada no CNES (CMVS/CEVS): só de estabelecimento ativo, no campo de licença do roteiro.
+    No EAC, laboratório ou posto de coleta (unidade de apoio diagnóstico) vai para a licença do EAC. */
+ function cnesLic(x){ var l = x.licenca_sanitaria || {}; if(!l.numero || (x.situacao && x.situacao !== 'ativo')) return [];
+  var k = CAMPO.licenca_eac && /diagnose|laborat|coleta/i.test(x.tipo_unidade || '') ? 'licenca_eac' : CAMPO.licenca ? 'licenca' : 'cmvs';
+  return [[k, l.numero]]; }
  function cnesEnd(x){ return [[x.logradouro, x.numero].filter(Boolean).join(', '), x.complemento, x.bairro, 'São Paulo/SP', x.cep && 'CEP ' + String(x.cep).replace(/^(\d{5})(\d{3})$/, '$1-$2')].filter(Boolean).join(', '); }
  function cnesFrase(p){ if(!p.length) return ''; if(p.length > 1) return ' CNES: ' + p.length + ' estabelecimentos com este CNPJ (' + p.map(function(y){ return y.cnes; }).join(', ') + ').';
   var x = p[0], l = x.licenca_sanitaria || {}, eq = (x.equipamentos || []).length;
   return ' CNES ' + x.cnes + (x.tipo_unidade ? ' — ' + String(x.tipo_unidade).toLowerCase() : '') + (x.situacao && x.situacao !== 'ativo' ? ' (' + x.situacao + ')' : '') + (l.numero ? '; licença sanitária declarada no CNES nº ' + l.numero + (l.validade ? ', validade ' + brData(l.validade) : '') : '') + (eq ? '; ' + eq + ' tipo(s) de equipamento declarados' : '') + (x.data_atualizacao ? '; cadastro atualizado em ' + brData(x.data_atualizacao) : '') + '.'; }
  function acaoCnes(c){ acaoMsg = {t: 'Sem AFE/AE na Anvisa. Consultando o CNES…'}; redesenha();
   cnesBusca(c).then(function(l){ var p = l.filter(function(y){ return y.cnpj === c; }); if(!p.length){ acaoReceita(c); return; }
-   var x = p[0], n = p.length === 1 ? preenche([['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', cnesEnd(x)], ['cnes', x.cnes]]) : preenche([['razao', x.razao_social]]);
+   var x = p[0], n = p.length === 1 ? preenche([['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', cnesEnd(x)], ['cnes', x.cnes]].concat(cnesLic(x))) : preenche([['razao', x.razao_social]]);
    acaoReceita(c, 'Sem AFE/AE na Anvisa.' + cnesFrase(p), n); }); }
  function acaoCnesCodigo(k){ acaoMsg = {t: 'Consultando o CNES ' + k + '…'}; redesenha();
   cnesCodigo(k).then(function(p){ if(!p.length){ acaoMsg = {t: 'CNES ' + k + ' não encontrado na base (só estabelecimentos do município de São Paulo). Confira o número ou digite o CNPJ.', tipo: 'aviso'}; redesenha(); return; }
-   var x = p[0], n = preenche([['cnpj', x.cnpj ? x.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5') : ''], ['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', cnesEnd(x)]]);
+   var x = p[0], n = preenche([['cnpj', x.cnpj ? x.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5') : ''], ['razao', x.razao_social], ['fantasia', x.nome_fantasia], ['endereco', cnesEnd(x)]].concat(cnesLic(x)));
    acaoMsg = {t: 'CNES (Ministério da Saúde): ' + (x.nome_fantasia || x.razao_social) + '.' + cnesFrase(p) + ' ' + (n ? n + ' campo(s) preenchido(s); confira.' : 'Os campos já estavam preenchidos; nada foi alterado.'), tipo: n ? 'ok' : ''}; redesenha(); }); }
  /* sem AFE/AE na Anvisa: dados públicos do CNPJ na Receita Federal (BrasilAPI) — razão social,
     fantasia, endereço, sócio administrador e atividade principal (CNAE) */
