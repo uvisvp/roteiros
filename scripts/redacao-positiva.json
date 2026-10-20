@@ -1,0 +1,269 @@
+{
+  "_sobre": "Redação positiva (pedido de 20/10/2026): a pergunta e a frase de conformidade descrevem o que o estabelecimento faz certo, não a ausência do erro. Fica a negativa só no escopo (atividade que o estabelecimento não exerce). Aplicada aos blocos por scripts/repack-redacao.cjs e às fontes uma vez; test-regras barra a volta das frases antigas.",
+  "trocas": [
+    [
+      "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e não guarda produtos químicos nem materiais estranhos?",
+      "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e é usada só para os equipamentos do sistema?"
+    ],
+    [
+      "A casa de máquinas tem espaço, ventilação e iluminação adequados e não guarda produtos químicos nem materiais estranhos.",
+      "A casa de máquinas tem espaço, ventilação e iluminação adequados e é usada só para os equipamentos do sistema."
+    ],
+    [
+      "Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e não ficam guardados junto com produtos químicos?",
+      "Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e ficam guardados separados dos produtos químicos?"
+    ],
+    [
+      "Há abrigo de resíduos, com ambiente para os resíduos infectantes e perfurocortantes separado do resíduo comum, e não há coletores armazenados fora do abrigo.",
+      "Há abrigo de resíduos, com ambiente para os resíduos infectantes e perfurocortantes separado do resíduo comum, e todos os coletores ficam no abrigo."
+    ],
+    [
+      "Não foram constatados produtos para diagnóstico, reagentes ou insumos vencidos.",
+      "Os produtos para diagnóstico, reagentes e insumos em uso e em estoque estão dentro do prazo de validade."
+    ],
+    [
+      "O laboratório não comercializa nem repassa reagentes ou produtos de metodologia própria.",
+      "Os reagentes e produtos de metodologia própria são usados só pelo próprio laboratório."
+    ],
+    [
+      "o receptor de imagem não é segurado com a mão",
+      "o receptor de imagem fica em suporte durante a exposição"
+    ],
+    [
+      "os geradores não são autorretificados nem de meia onda",
+      "os geradores são de onda completa ou de alta frequência"
+    ],
+    [
+      "Os monitores de laudo são específicos para esse fim e compatíveis com a modalidade, e a iluminação da sala de laudos não prejudica a imagem?",
+      "Os monitores de laudo são específicos para esse fim e compatíveis com a modalidade, e a iluminação da sala de laudos é adequada à leitura da imagem?"
+    ],
+    [
+      "A área de descanso é separada dos demais ambientes e não é usada para guarda de materiais?",
+      "A área de descanso é separada dos demais ambientes e usada só para esse fim?"
+    ],
+    [
+      "A área de descanso é separada e não é usada para guarda de materiais.",
+      "A área de descanso é separada e usada só para esse fim."
+    ],
+    [
+      "Os manipulados não são armazenados/transportados junto a alimentos, animais, solventes orgânicos, gases, corrosivos/tóxicos, pesticidas ou radioativos?",
+      "Os manipulados são armazenados e transportados separados de alimentos, animais, solventes orgânicos, gases, corrosivos/tóxicos, pesticidas e radioativos?"
+    ],
+    [
+      "Os manipulados não são armazenados ou transportados com materiais incompatíveis.",
+      "Os manipulados são armazenados e transportados separados de materiais incompatíveis."
+    ],
+    [
+      "Não existem infiltrações e /ou mofo e/ ou acúmulo de lixo?",
+      "As instalações estão livres de infiltrações, mofo e acúmulo de lixo?"
+    ],
+    [
+      "As salas de pesagem, manipulação e envase não têm superfícies de difícil limpeza.",
+      "As superfícies das salas de pesagem, manipulação e envase são lisas e de fácil limpeza."
+    ],
+    [
+      "Não há portas corrediças nas salas de pesagem, manipulação e envase.",
+      "As portas das salas de pesagem, manipulação e envase são do tipo de abrir."
+    ],
+    [
+      "Não há pia nem ralo nas salas de pesagem e de manipulação e envase.",
+      "As salas de pesagem e de manipulação e envase são livres de pias e ralos."
+    ],
+    [
+      "Não há exposição de manipulados com fim de propaganda.",
+      "Os manipulados ficam fora da exposição ao público, em atendimento à vedação de propaganda."
+    ],
+    [
+      "Não foi constatada manipulação em substituição a medicamento industrializado prescrito.",
+      "As preparações manipuladas correspondem ao que foi prescrito, inclusive quando a prescrição é de medicamento industrializado."
+    ],
+    [
+      "O tecido dos uniformes das áreas classificadas não libera partículas ou fibras.",
+      "Os uniformes das áreas classificadas são de tecido próprio para áreas limpas, de baixa liberação de partículas e fibras."
+    ],
+    [
+      "Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo), trabalha só com cosméticos, técnicas e equipamentos registrados e não aplica medicamento ou injetável, com comprovantes disponíveis?",
+      "Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo) e trabalha só com cosméticos, técnicas e equipamentos registrados, nos limites da profissão, com comprovantes disponíveis?"
+    ],
+    [
+      "Utensílios e instrumentos reutilizáveis são limpos, desinfetados ou esterilizados após o uso, conforme o risco, e o material de uso único não é reutilizado?",
+      "Utensílios e instrumentos reutilizáveis são limpos, desinfetados ou esterilizados após o uso, conforme o risco, e o material de uso único é descartado após o uso?"
+    ],
+    [
+      "Está atendida a exigência de ausência de comunicação direta com dependências residenciais e não uso do imóvel como moradia ou dormitório?",
+      "Está atendida a exigência de uso exclusivo do imóvel pela atividade, separado de dependências residenciais?"
+    ],
+    [
+      "Está atendida a exigência de ausência de residentes cuja situação exija serviços de saúde não disponibilizados pela instituição?",
+      "Está atendida a exigência de compatibilidade entre a situação dos residentes e os serviços de saúde que a instituição oferece?"
+    ],
+    [
+      "Está atendida a exigência de liberdade de ir e vir dos moradores e ausência de restrições não previstas em projeto terapêutico?",
+      "Está atendida a exigência de liberdade de ir e vir dos moradores, com restrições limitadas às previstas no projeto terapêutico?"
+    ],
+    [
+      "Está atendida a exigência de não desmembramento de grupos de irmãos e atendimento conjunto de crianças com vínculo de parentesco?",
+      "Está atendida a exigência de manter juntos os grupos de irmãos e as crianças com vínculo de parentesco?"
+    ],
+    [
+      "Está atendida a exigência de liberdade de ir e vir e ausência de restrições não previstas em plano de cuidado?",
+      "Está atendida a exigência de liberdade de ir e vir, com restrições limitadas às previstas no plano de cuidado?"
+    ],
+    [
+      "Não há alimentos sob o sifão ou a pia?",
+      "Os alimentos são guardados fora da área sob o sifão e a pia?"
+    ],
+    [
+      "Não há alimentos sob o sifão ou a pia.",
+      "Os alimentos são guardados fora da área sob o sifão e a pia."
+    ],
+    [
+      "O acesso ao sanitário não ocorre através da sala de serviços?",
+      "O sanitário tem acesso independente da sala de serviços?"
+    ],
+    [
+      "O acesso ao sanitário não ocorre através da sala de serviços.",
+      "O sanitário tem acesso independente da sala de serviços."
+    ],
+    [
+      "O abrigo externo tem capacidade para a ausência de uma coleta regular?",
+      "O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer?"
+    ],
+    [
+      "O abrigo externo tem capacidade para a ausência de uma coleta regular.",
+      "O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer."
+    ],
+    [
+      "O procedimento de fracionamento (separação de unidades) não viola a embalagem secundária original do medicamento?",
+      "O procedimento de fracionamento (separação de unidades) preserva a embalagem secundária original do medicamento?"
+    ],
+    [
+      "Medicamentos não estão no chão, encostados ou sob luz solar?",
+      "Os medicamentos ficam fora do chão, afastados das paredes e protegidos da luz solar?"
+    ],
+    [
+      "Os veículos e contêineres não expõem os medicamentos a riscos de contaminação ou avaria?",
+      "Os veículos e contêineres protegem os medicamentos contra contaminação e avaria?"
+    ],
+    [
+      "O transporte de outras categorias de produtos (não medicamentos) interfere na qualidade dos medicamentos?",
+      "O transporte de outras categorias de produtos (não medicamentos) preserva a qualidade dos medicamentos?"
+    ],
+    [
+      "Nenhum equipamento emissor de radiação ionizante em ambiente com mais de um conjunto de equipo odontológico.",
+      "Cada equipamento emissor de radiação ionizante fica em ambiente com um único conjunto de equipo odontológico."
+    ],
+    [
+      "Lavatório de mãos não utilizado em nenhuma etapa do processamento.",
+      "Lavatório de mãos usado exclusivamente para a higiene das mãos, separado do processamento de DM."
+    ],
+    [
+      "Estrutura compatível com a tipologia: consultório coletivo e CCO não utilizam bancada setorizada.",
+      "Estrutura compatível com a tipologia: consultório coletivo e CCO processam DM em sala ou área própria, distinta da bancada setorizada."
+    ],
+    [
+      "Processamento não realizado durante as atividades clínicas.",
+      "Processamento realizado fora do horário das atividades clínicas."
+    ],
+    [
+      "Não há processamento de DM proibidos: de uso único, não regularizados, avariados, oriundos de explante ou de uso veterinário.",
+      "Só são processados DM reprocessáveis, regularizados, íntegros e de uso humano."
+    ],
+    [
+      "Não é utilizada imersão em desinfetante líquido como método de esterilização.",
+      "Desinfetantes líquidos usados apenas para desinfecção, e a esterilização feita em equipamento próprio."
+    ],
+    [
+      "Não são utilizados saneantes à base de aldeídos para desinfecção de DM.",
+      "Desinfecção dos DM feita com saneantes regularizados, de princípio ativo diferente dos aldeídos."
+    ],
+    [
+      "Não há desinfecção por imersão de tubete de medicamento anestésico.",
+      "Tubetes de anestésico mantidos íntegros na embalagem do fabricante até o uso."
+    ],
+    [
+      "Embalagens específicas para esterilização; não são usados papel kraft, papel toalha, manilha, jornal, alumínio, caixa metálica sem perfuração ou embalagem plástica nos dois lados.",
+      "Embalagens específicas para esterilização, regularizadas para esse fim."
+    ],
+    [
+      "Papel grau cirúrgico não é fechado com fita zebrada nem com equipamento não específico.",
+      "Papel grau cirúrgico fechado com seladora específica."
+    ],
+    [
+      "Embalagens descartáveis não são reutilizadas.",
+      "Embalagens descartáveis usadas uma única vez."
+    ],
+    [
+      "Não há uso de estufa nem de caixa de luz ultravioleta para esterilização.",
+      "Esterilização feita em autoclave ou outro equipamento regularizado para esterilização."
+    ],
+    [
+      "Não há uso de DM com embalagem violada, suja, amassada ou molhada.",
+      "DM esterilizados usados só com a embalagem íntegra, limpa e seca."
+    ],
+    [
+      "Não há produto sem procedência comprovada, sem rotulagem ou de fornecedor não autorizado.",
+      "Todos os produtos têm procedência comprovada, rotulagem e fornecedor autorizado."
+    ],
+    [
+      "Produtos não são vendidos nem entregues ao consumo antes de concluídas todas as etapas de controle e liberação.",
+      "Os produtos só são vendidos ou entregues ao consumo depois de concluídas todas as etapas de controle e liberação."
+    ],
+    [
+      "produto não é liberado ao estoque antes da verificação.",
+      "o produto só é liberado ao estoque depois da verificação."
+    ],
+    [
+      "produto com validade expirada não é distribuído.",
+      "só são distribuídos produtos dentro da validade."
+    ],
+    [
+      "Iluminação, ventilação, exaustão e proteção de aberturas são compatíveis com as atividades e não geram contaminação.",
+      "Iluminação, ventilação, exaustão e proteção de aberturas são compatíveis com as atividades e protegem os alimentos de contaminação."
+    ],
+    [
+      "Resíduos são segregados, retirados com frequência e mantidos em recipientes e área que não contaminam alimentos.",
+      "Resíduos são segregados, retirados com frequência e mantidos em recipientes e área separados dos alimentos."
+    ],
+    [
+      "Não são observadas práticas que contaminem alimentos, como manipular dinheiro, resíduos ou objetos e retornar sem higienizar as mãos.",
+      "Os manipuladores higienizam as mãos sempre que tocam dinheiro, resíduos ou outros objetos, antes de voltar aos alimentos."
+    ],
+    [
+      "Utensílios, superfícies e mãos não transferem contaminação de alimentos crus para alimentos prontos.",
+      "Utensílios, superfícies e mãos são separados ou higienizados entre alimentos crus e prontos, evitando a contaminação cruzada."
+    ],
+    [
+      "Pessoas, animais, produtos tóxicos e outras cargas de risco não são transportados junto com alimentos.",
+      "Os alimentos são transportados separados de pessoas, animais, produtos tóxicos e outras cargas de risco."
+    ],
+    [
+      "Embalagens e recipientes protegem o alimento, permitem identificação e não causam contaminação.",
+      "Embalagens e recipientes protegem o alimento, permitem identificação e são próprios para contato com alimentos."
+    ],
+    [
+      "O serviço não guarda, não armazena e não transporta material biológico, exceto o material de controle da qualidade.",
+      "O serviço mantém apenas o material biológico da coleta e da execução imediata, além do material de controle da qualidade."
+    ],
+    [
+      "O serviço não recebe material biológico encaminhado por outros serviços.",
+      "O serviço processa apenas o material biológico que ele mesmo coleta."
+    ],
+    [
+      "O serviço não utiliza metodologia própria.",
+      "O serviço utiliza apenas produtos para diagnóstico in vitro regularizados na Anvisa."
+    ],
+    [
+      "Os equipamentos utilizados não requerem água reagente produzida no serviço.",
+      "Os equipamentos utilizados dispensam água reagente produzida no serviço."
+    ],
+    [
+      "A empresa não realiza envase de gases medicinais.",
+      "A atividade da empresa se limita à distribuição de gases medicinais."
+    ],
+    [
+      "Não há coleta de sangue venoso ou arterial no consultório.",
+      "A coleta de sangue venoso ou arterial ocorre apenas em posto de coleta."
+    ]
+  ]
+}

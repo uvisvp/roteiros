@@ -270,8 +270,8 @@ module.exports = {
           ]},
         {id: 'maquinas', titulo: 'Casa de máquinas e operador', curto: 'Casa de máquinas',
           perguntas: [
-            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e não guarda produtos químicos nem materiais estranhos?', r: [P('6.19'), P('6.19.1')],
-              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e não guarda produtos químicos nem materiais estranhos.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
+            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e é usada só para os equipamentos do sistema?', r: [P('6.19'), P('6.19.1')],
+              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e é usada só para os equipamentos do sistema.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
             {id: 'operador', t: 'A qualidade da água é mantida e supervisionada por profissional com certificado de curso de operador de piscinas?', r: [P('12.2'), PI('14.2.1', 'iii')],
               c: 'A qualidade da água é mantida por operador de piscinas com certificado de capacitação.', nc: 'A qualidade da água não é mantida por profissional com certificado de curso de operador de piscinas.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['operador']},
             {id: 'epi_operador', t: 'O operador usa os EPIs indicados pelo fabricante ao manipular os produtos de desinfecção?', r: [P('12.6')],
@@ -358,7 +358,7 @@ module.exports = {
       itens: [
         {id: 'equipe', titulo: 'Pessoal e EPIs', curto: 'Pessoal',
           perguntas: [
-            {id: 'epi', t: 'Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e não ficam guardados junto com produtos químicos?', r: [P('12.4'), P('12.5')],
+            {id: 'epi', t: 'Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e ficam guardados separados dos produtos químicos?', r: [P('12.4'), P('12.5')],
               c: 'Os EPIs estão disponíveis em número suficiente, são usados corretamente e guardados separados dos produtos químicos.', nc: 'O fornecimento, o uso e a guarda dos EPIs não atendem às exigências.', inf: ['epi']},
             {id: 'atualizacao', t: 'Os funcionários passam, no mínimo anualmente, por atualização profissional, com comprovante?', r: [P('12.7'), PI('14.2', 'vi')],
               c: 'Os funcionários passam por atualização profissional anual, com comprovante.', nc: 'Não há comprovante de atualização profissional anual dos funcionários.', inf: ['docs']}

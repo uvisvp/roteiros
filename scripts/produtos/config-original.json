@@ -262,7 +262,7 @@
     },
     {
      "id": "r5",
-     "text": "Não há produto sem procedência comprovada, sem rotulagem ou de fornecedor não autorizado.",
+     "text": "Todos os produtos têm procedência comprovada, rotulagem e fornecedor autorizado.",
      "legal": "Lei Municipal nº 13.725/2004, arts. 46, 49 e 50.",
      "critical": true
     }
@@ -332,7 +332,7 @@
     },
     {
      "id": "fgq3",
-     "text": "Produtos não são vendidos nem entregues ao consumo antes de concluídas todas as etapas de controle e liberação.",
+     "text": "Os produtos só são vendidos ou entregues ao consumo depois de concluídas todas as etapas de controle e liberação.",
      "legal": "RDC Anvisa nº 48/2013, Anexo II, item 3.3.4.",
      "critical": true
     },
@@ -1522,7 +1522,7 @@
     },
     {
      "id": "da3",
-     "text": "Produto mais próximo do vencimento distribuído primeiro; produto com validade expirada não é distribuído.",
+     "text": "Produto mais próximo do vencimento distribuído primeiro; só são distribuídos produtos dentro da validade.",
      "legal": "RDC Anvisa nº 665/2022, art. 109.",
      "critical": true
     },

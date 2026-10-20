@@ -80,7 +80,7 @@ module.exports = {
           {id: 'entre_distrib', t: 'Na venda a outra distribuidora, ambas têm AFE para distribuição (e, no granel, cumprem as boas práticas de fabricação)?', r: [A(78), P(78, 'unico')], na: true, se: TEM('distribuir'),
             c: 'A comercialização entre distribuidoras ocorre entre empresas com AFE para distribuição.', nc: 'Foi constatada comercialização com distribuidora sem AFE para distribuição.', inf: ['gas_cadeia']},
           {id: 'envase', t: 'A atividade se limita à distribuição, sem envase de gases (o envase exige boas práticas de fabricação)?', r: [P(2, '3'), A(11), A(63)],
-            c: 'A empresa não realiza envase de gases medicinais.', nc: 'A empresa realiza envase de gases medicinais sem atender às boas práticas de fabricação.', inf: ['gas_envase']}
+            c: 'A atividade da empresa se limita à distribuição de gases medicinais.', nc: 'A empresa realiza envase de gases medicinais sem atender às boas práticas de fabricação.', inf: ['gas_envase']}
         ]}
       ]
     },

@@ -312,7 +312,7 @@
       }
      ],
      "informativo": false,
-     "pos": "O tecido dos uniformes das áreas classificadas não libera partículas ou fibras.",
+     "pos": "Os uniformes das áreas classificadas são de tecido próprio para áreas limpas, de baixa liberação de partículas e fibras.",
      "neg": "O tecido dos uniformes das áreas classificadas libera partículas ou fibras.",
      "classe": "N"
     },
@@ -624,7 +624,7 @@
       }
      ],
      "informativo": false,
-     "pos": "As salas de pesagem, manipulação e envase não têm superfícies de difícil limpeza.",
+     "pos": "As superfícies das salas de pesagem, manipulação e envase são lisas e de fácil limpeza.",
      "neg": "As salas de pesagem, manipulação e envase têm superfícies de difícil limpeza.",
      "classe": "N"
     },
@@ -645,7 +645,7 @@
       }
      ],
      "informativo": false,
-     "pos": "Não há portas corrediças nas salas de pesagem, manipulação e envase.",
+     "pos": "As portas das salas de pesagem, manipulação e envase são do tipo de abrir.",
      "neg": "Há portas corrediças nas salas de pesagem, manipulação e envase.",
      "classe": "N"
     },
@@ -792,7 +792,7 @@
       }
      ],
      "informativo": false,
-     "pos": "Não há pia nem ralo nas salas de pesagem e de manipulação e envase.",
+     "pos": "As salas de pesagem e de manipulação e envase são livres de pias e ralos.",
      "neg": "Há pia ou ralo nas salas de pesagem ou de manipulação e envase.",
      "classe": "I"
     },

@@ -54,6 +54,12 @@ for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cj
   }
 }
 
+/* redação positiva nos blocos: as frases antigas (ausência do erro) não voltam (scripts/redacao-positiva.json) */
+{ const {trocas} = JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'redacao-positiva.json'), 'utf8'));
+  const volta = [];
+  for (const [id, src] of blocks) if (src && /^(app|rec)--/.test(id)) trocas.forEach(([de]) => { if (src.includes(de)) volta.push(id + ': ' + de.slice(0, 60)); });
+  ok(!volta.length, 'frase em negativa de volta ao app (rode scripts/repack-redacao.cjs): ' + volta.slice(0, 3).join(' | ')); }
+
 /* 3. cache do PWA */
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const ess = [...sw.slice(sw.indexOf('const ESSENCIAIS'), sw.indexOf('];', sw.indexOf('const ESSENCIAIS'))).matchAll(/'\.\/([^']+)'/g)].map(m => m[1]);
