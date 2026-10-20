@@ -29,6 +29,7 @@ const PASSOS=[
  ['transporte e imagem: inventário de veículos, perfil, equipamentos e Lei 13.725',['transporte-imagem.cjs']],
  ['busca do estabelecimento na Anvisa pelo CNPJ (motor e módulos próprios)',['cnpj-anvisa.cjs']],
  ['Central de Consultas: CNES (modo, Automático, CNPJ e mantenedora)',['central-cnes.cjs']],
+ ['Conferência de IFA: produtos irregulares pelo CNPJ do fornecedor e pelo lote',['ifa-irregulares.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],
