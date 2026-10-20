@@ -386,7 +386,7 @@ block('Áreas físicas', 'Dispensação, apoio, almoxarifado e lavagem', [
         nq('A geladeira da copa é de uso exclusivo para alimentos (sem medicamentos, insumos ou amostras)?', ['RDC 67/2007 · Anexo I · 3.3.4'], tag='novo'),
         irreg(), obs()], origin='Item novo', cond='Copa / refeitório'),
     item('5.7', 'Área de descanso', [
-        nq('A área de descanso é separada dos demais ambientes e usada só para esse fim?', ['RDC 67/2007 · Anexo I · 4.17'], tag='novo'),
+        nq('A área de descanso é separada dos demais ambientes?', ['RDC 67/2007 · Anexo I · 4.17'], tag='novo'),
         irreg(), obs()], origin='Item novo', cond='Área de descanso'),
     item('5.8', 'Almoxarifado / armazenamento', [
         note('Saiu de Laboratórios. As duas perguntas de pesagem (r088/r089) foram para Laboratórios — ver consideração no plano.', 'mov'),

@@ -32,7 +32,7 @@ NEW_IDS = {
     'O vestiário tem armários para guarda de pertences e é separado das áreas de manipulação?': 'n020',
     'A copa/refeitório é separada dos demais ambientes?': 'n021',
     'A geladeira da copa é de uso exclusivo para alimentos (sem medicamentos, insumos ou amostras)?': 'n022',
-    'A área de descanso é separada dos demais ambientes e usada só para esse fim?': 'n023',
+    'A área de descanso é separada dos demais ambientes?': 'n023',
     'A ordem de manipulação corresponde à prescrição (fármacos, concentrações, quantidades e forma farmacêutica), sem alteração não autorizada?': 'n030',
     'A dispensação é feita com orientação farmacêutica ao paciente?': 'n031',
     'Possui licença sanitária para a atividade?': 'n041',

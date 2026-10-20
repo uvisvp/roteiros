@@ -3,11 +3,11 @@
   "trocas": [
     [
       "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e não guarda produtos químicos nem materiais estranhos?",
-      "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e é usada só para os equipamentos do sistema?"
+      "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e está livre de produtos químicos e de materiais estranhos à atividade?"
     ],
     [
       "A casa de máquinas tem espaço, ventilação e iluminação adequados e não guarda produtos químicos nem materiais estranhos.",
-      "A casa de máquinas tem espaço, ventilação e iluminação adequados e é usada só para os equipamentos do sistema."
+      "A casa de máquinas tem espaço, ventilação e iluminação adequados e está livre de produtos químicos e de materiais estranhos à atividade."
     ],
     [
       "Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e não ficam guardados junto com produtos químicos?",
@@ -27,11 +27,11 @@
     ],
     [
       "o receptor de imagem não é segurado com a mão",
-      "o receptor de imagem fica em suporte durante a exposição"
+      "o receptor de imagem fica em suporte, sem ser segurado com a mão"
     ],
     [
       "os geradores não são autorretificados nem de meia onda",
-      "os geradores são de onda completa ou de alta frequência"
+      "os geradores são de onda completa ou de alta frequência, sem autorretificação nem retificação de meia onda"
     ],
     [
       "Os monitores de laudo são específicos para esse fim e compatíveis com a modalidade, e a iluminação da sala de laudos não prejudica a imagem?",
@@ -39,11 +39,11 @@
     ],
     [
       "A área de descanso é separada dos demais ambientes e não é usada para guarda de materiais?",
-      "A área de descanso é separada dos demais ambientes e usada só para esse fim?"
+      "A área de descanso é separada dos demais ambientes?"
     ],
     [
       "A área de descanso é separada e não é usada para guarda de materiais.",
-      "A área de descanso é separada e usada só para esse fim."
+      "A área de descanso é separada dos demais ambientes."
     ],
     [
       "Os manipulados não são armazenados/transportados junto a alimentos, animais, solventes orgânicos, gases, corrosivos/tóxicos, pesticidas ou radioativos?",
@@ -143,11 +143,11 @@
     ],
     [
       "Não há processamento de DM proibidos: de uso único, não regularizados, avariados, oriundos de explante ou de uso veterinário.",
-      "Só são processados DM reprocessáveis, regularizados, íntegros e de uso humano."
+      "Só são processados DM permitidos, sem DM de uso único, não regularizados, avariados, oriundos de explante ou de uso veterinário."
     ],
     [
       "Não é utilizada imersão em desinfetante líquido como método de esterilização.",
-      "Desinfetantes líquidos usados apenas para desinfecção, e a esterilização feita em equipamento próprio."
+      "Esterilização feita em equipamento próprio, sem imersão em desinfetante líquido."
     ],
     [
       "Não são utilizados saneantes à base de aldeídos para desinfecção de DM.",
@@ -155,15 +155,15 @@
     ],
     [
       "Não há desinfecção por imersão de tubete de medicamento anestésico.",
-      "Tubetes de anestésico mantidos íntegros na embalagem do fabricante até o uso."
+      "Tubetes de medicamento anestésico usados sem desinfecção por imersão."
     ],
     [
       "Embalagens específicas para esterilização; não são usados papel kraft, papel toalha, manilha, jornal, alumínio, caixa metálica sem perfuração ou embalagem plástica nos dois lados.",
-      "Embalagens específicas para esterilização, regularizadas para esse fim."
+      "Embalagens específicas para esterilização, sem uso de papel kraft, papel toalha, papel manilha, papel jornal, lâminas de alumínio, caixas metálicas sem perfuração ou embalagens plásticas nos dois lados."
     ],
     [
       "Papel grau cirúrgico não é fechado com fita zebrada nem com equipamento não específico.",
-      "Papel grau cirúrgico fechado com seladora específica."
+      "Papel grau cirúrgico fechado com seladora específica, sem fita zebrada."
     ],
     [
       "Embalagens descartáveis não são reutilizadas.",
@@ -171,7 +171,7 @@
     ],
     [
       "Não há uso de estufa nem de caixa de luz ultravioleta para esterilização.",
-      "Esterilização feita em autoclave ou outro equipamento regularizado para esterilização."
+      "Esterilização feita em autoclave ou outro equipamento regularizado, sem uso de estufa ou de caixa de luz ultravioleta."
     ],
     [
       "Não há uso de DM com embalagem violada, suja, amassada ou molhada.",
@@ -240,6 +240,10 @@
     [
       "Não há coleta de sangue venoso ou arterial no consultório.",
       "A coleta de sangue venoso ou arterial ocorre apenas em posto de coleta."
+    ],
+    [
+      "Área de descanso separada e sem guarda de materiais. Se não existir, marque Não se aplica.",
+      "A RDC 67/2007 (Anexo I, 4.17) exige que a área de descanso seja separada dos demais ambientes. Oriente que ela seja usada só para o descanso, sem guarda de materiais, insumos, produtos ou documentos. Se não existir, marque Não se aplica."
     ]
   ]
 }

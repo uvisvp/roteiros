@@ -80,7 +80,7 @@ F = {
  'n020': ('O vestiário tem armários e é separado das áreas de manipulação.', 'O vestiário não tem armários ou não é separado das áreas de manipulação.'),
  'n021': ('A copa é separada dos demais ambientes.', 'A copa não é separada dos demais ambientes.'),
  'n022': ('A geladeira da copa é de uso exclusivo para alimentos.', 'A geladeira da copa guardava medicamentos, insumos ou amostras junto com alimentos.'),
- 'n023': ('A área de descanso é separada e usada só para esse fim.', 'A área de descanso não é separada ou é usada para guarda de materiais.'),
+ 'n023': ('A área de descanso é separada dos demais ambientes.', 'A área de descanso não é separada dos demais ambientes.'),
  # Almoxarifado
  'r078': ('O almoxarifado tem acesso restrito e capacidade suficiente para estocagem ordenada.', 'O almoxarifado não tem acesso restrito ou capacidade suficiente para estocagem ordenada.'),
  'r079': ('O almoxarifado é limpo e seco, com temperatura e umidade monitoradas e registradas.', 'O almoxarifado não tem temperatura e umidade monitoradas e registradas, ou não é mantido limpo e seco.'),

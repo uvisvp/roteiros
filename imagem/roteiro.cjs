@@ -213,7 +213,7 @@ const IMAGENS = [
 ];
 const PROIBE = [
   {id: 'proibidos', t: 'Os equipamentos e as práticas observados respeitam as vedações dos arts. 80 e 81 da RDC 611/2022?', r: [R(80), R(81)],
-    c: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora, o disparo permite interromper a exposição, o receptor de imagem fica em suporte durante a exposição, o equipamento móvel é usado como móvel e os geradores são de onda completa ou de alta frequência.',
+    c: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora e não há equipamento de abreugrafia; o disparo permite interromper a exposição; o receptor de imagem fica em suporte, sem ser segurado com a mão; o equipamento móvel é usado como móvel; e os geradores são de onda completa ou de alta frequência, sem autorretificação nem retificação de meia onda.',
     nc: 'Foram constatados equipamentos ou práticas vedados pela RDC 611/2022.',
     pontos: [['cassete', 'cassetes com tela intensificadora; sem abreugrafia', 'Há cassete sem tela intensificadora ou equipamento de abreugrafia.'], ['retardo', 'disparo que permite interromper a exposição (sem retardo)', 'Há disparo com retardo que impede interromper a exposição.'], ['segurar', 'receptor de imagem em suporte, sem ser segurado com a mão', 'O receptor de imagem é segurado com a mão durante a exposição.'], ['movel', 'equipamento móvel usado como móvel (não como fixo)', 'Equipamento móvel é usado como fixo.'], ['meia', 'gerador de onda completa ou alta frequência (sem autorretificado ou meia onda)', 'Há equipamento com gerador autorretificado ou de retificação de meia onda.']],
     na: NAO_FUNC, inf: ['im_proibido']},
@@ -524,7 +524,7 @@ function monta(m) {
   /* cTodos: com todas as perguntas do item em “Atende”, uma frase só no relatório (diretriz de 20/10/2026) */
   const filme = ['conv', 'mamo'].includes(m);
   if (ion) secoes[secoes.length - 1].itens.push(Object.assign(item('proibicoes', 'Vedações e controle da exposição', 'Vedações', PROIBE), {orient: copia(ORIENT.proibicoes)},
-    filme ? {cTodos: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora, o receptor de imagem fica em suporte durante a exposição, o equipamento móvel é usado como móvel e os geradores são de onda completa ou de alta frequência. O processamento dos filmes é automático, e o controle da duração da exposição é eletrônico, limitado a 5 segundos e permite interromper a exposição.'} : {}));
+    filme ? {cTodos: 'Os equipamentos e as práticas observados respeitam as vedações da RDC 611/2022: os cassetes têm tela intensificadora e não há equipamento de abreugrafia; o receptor de imagem fica em suporte, sem ser segurado com a mão; o equipamento móvel é usado como móvel; e os geradores são de onda completa ou de alta frequência, sem autorretificação nem retificação de meia onda. O processamento dos filmes é automático, e o controle da duração da exposição é eletrônico, limitado a 5 segundos e permite interromper a exposição.'} : {}));
   secoes.push({id: 'modalidade', titulo: x.titulo + ' (' + x.inN + ')', curto: 'Modalidade', icone: 'lab',
     descricao: 'Requisitos próprios da modalidade. Na pergunta de condições que inabilitam o uso, marque “Não atende” no ponto encontrado.', itens: [
       Object.assign(item('especifica', 'Requisitos da ' + x.inN, x.inN, ESPEC[m]), MAIS[m].length ? {orient: copia(MAIS[m])} : {})

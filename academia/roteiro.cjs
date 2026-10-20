@@ -270,8 +270,8 @@ module.exports = {
           ]},
         {id: 'maquinas', titulo: 'Casa de máquinas e operador', curto: 'Casa de máquinas',
           perguntas: [
-            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e é usada só para os equipamentos do sistema?', r: [P('6.19'), P('6.19.1')],
-              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e é usada só para os equipamentos do sistema.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
+            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e está livre de produtos químicos e de materiais estranhos à atividade?', r: [P('6.19'), P('6.19.1')],
+              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e está livre de produtos químicos e de materiais estranhos à atividade.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
             {id: 'operador', t: 'A qualidade da água é mantida e supervisionada por profissional com certificado de curso de operador de piscinas?', r: [P('12.2'), PI('14.2.1', 'iii')],
               c: 'A qualidade da água é mantida por operador de piscinas com certificado de capacitação.', nc: 'A qualidade da água não é mantida por profissional com certificado de curso de operador de piscinas.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['operador']},
             {id: 'epi_operador', t: 'O operador usa os EPIs indicados pelo fabricante ao manipular os produtos de desinfecção?', r: [P('12.6')],

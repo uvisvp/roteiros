@@ -21,7 +21,7 @@ ORIENT = {
  'i5.4': 'Inclua um cartão por sanitário e informe o uso (clientes, funcionários), o tipo (unissex, masculino, feminino) e se é adaptado para PCD. O checklist de cada um mostra onde está a não conformidade. Em galerias e shoppings o sanitário pode ser de uso comum do edifício.',
  'i5.5': 'O vestiário é para guarda de pertences e troca de uniforme; não confunda com a sala de paramentação (item 6.1).',
  'i5.6': 'A copa deve ser separada dos demais ambientes. Abra a geladeira: medicamentos, insumos ou amostras junto a alimentos são irregularidade.',
- 'i5.7': 'Área de descanso separada e sem guarda de materiais. Se não existir, marque Não se aplica.',
+ 'i5.7': 'A RDC 67/2007 (Anexo I, 4.17) exige que a área de descanso seja separada dos demais ambientes. Oriente que ela seja usada só para o descanso, sem guarda de materiais, insumos, produtos ou documentos. Se não existir, marque Não se aplica.',
  'i5.8': 'Verifique acesso restrito, organização, afastamento de piso e parede, validade e situação das matérias-primas (quarentena, aprovado, reprovado). As substâncias controladas podem estar em armário no almoxarifado ou em sala própria; indique onde.',
  'i5.9': 'A lavagem pode ocorrer em área própria ou dentro do laboratório, desde que em horário distinto da manipulação e com procedimento escrito (Anexo I, 4.9).',
  'i6.1': 'A sala de paramentação dá acesso às áreas de pesagem e manipulação. Dois ambientes (barreira sujo/limpo) são preferenciais, não obrigatórios.',
