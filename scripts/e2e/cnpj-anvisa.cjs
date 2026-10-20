@@ -22,7 +22,7 @@ async function rota(p){await p.route(/afe_ae\/\d{3}\.json/,r=>r.fulfill({status:
   await f.fill('[data-rs-meta="cnpj"]',FMT);await f.click('[data-rs-acao="anvisa_cnpj"]');await p.waitForTimeout(800);
   const s=await p.evaluate(k=>JSON.parse(localStorage.getItem(k)||'{}'),'uvis-'+a+'-v1');
   ok(s.meta&&s.meta.razao==='EMPRESA TESTE LTDA'&&/RUA A, 10/.test(s.meta.endereco||''),a+': razão social e endereço preenchidos');
-  if(a==='imagem-tomografia'){ok(s.meta.cnes==='2077485','tomografia: CNES preenchido pelo CNPJ');ok(/CNES 2077485.*CEVS123/.test(await f.evaluate(()=>document.querySelector('.rs-acoes')?.textContent||'')),'tomografia: mensagem com CNES e licença declarada')}
+  if(a==='imagem-tomografia'){ok(s.meta.cnes==='2077485','tomografia: CNES preenchido pelo CNPJ');ok(s.meta.licenca==='CEVS123','tomografia: licença sanitária declarada no CNES preenchida ('+s.meta.licenca+')');ok(/CNES 2077485.*CEVS123/.test(await f.evaluate(()=>document.querySelector('.rs-acoes')?.textContent||'')),'tomografia: mensagem com CNES e licença declarada')}
   if(a==='gases-medicinais')ok(/AFE 1234567/.test(s.meta.afe||'')&&/AE 7654321/.test(s.meta.ae||'')&&!/7654321/.test(s.meta.afe||''),'gases: AFE e AE em campos separados');
   if(erros.length)T.falha('erros de página ('+a+'): '+erros.join(' / '));await p.close()}
  /* módulos próprios */
@@ -35,6 +35,8 @@ async function rota(p){await p.route(/afe_ae\/\d{3}\.json/,r=>r.fulfill({status:
    await f.click('.uvs-cnpj-btn');await p.waitForTimeout(800);
    const v=await f.evaluate(re=>{const r=new RegExp(re);const i=[...document.querySelectorAll('input')].find(x=>x.offsetParent&&r.test(((x.closest('label')||{}).textContent||x.placeholder||'').trim()));return i&&i.value},rs.source);
    ok(v==='EMPRESA TESTE LTDA',a+': razão social preenchida ('+v+')');
+   const lic=await f.evaluate(()=>{const i=[...document.querySelectorAll('input')].find(x=>x.offsetParent&&/^(CEVS|CMVS|Licen[cç]a sanit[aá]ria)/i.test(((x.closest('label')||{}).textContent||'').trim()));return i?i.value:null});
+   if(lic!==null)ok(lic==='CEVS123',a+': licença sanitária do CNES preenchida ('+lic+')');
    ok(/Base da Anvisa: EMPRESA TESTE LTDA/.test(await f.evaluate(()=>document.querySelector('.uvs-cnpj-msg')?.textContent||'')),a+': mensagem com AFE/AE')}
   if(erros.length)T.falha('erros de página ('+a+'): '+erros.join(' / '));await p.close()}
  /* sem AFE/AE: Receita Federal (BrasilAPI simulada) — motor (ressonância) e módulo próprio (Serviços de alimentação) */
@@ -60,6 +62,7 @@ async function rota(p){await p.route(/afe_ae\/\d{3}\.json/,r=>r.fulfill({status:
   await f.fill('[data-rs-meta="cnpj"]',FMT);await f.click('[data-rs-acao="anvisa_cnpj"]');await p.waitForTimeout(1200);
   const s=await p.evaluate(()=>JSON.parse(localStorage.getItem('uvis-imagem-ultrassom-v1')||'{}'));
   ok(s.meta.razao==='EMPRESA TESTE LTDA'&&s.meta.cnes==='2077485'&&/RUA A, 10/.test(s.meta.endereco||'')&&s.meta.rl==='SOCIA ADM','ultrassom: sem AFE, CNES preenche a identificação e a Receita o sócio administrador');
+  ok(s.meta.licenca==='CEVS123','ultrassom: sem AFE, licença sanitária do CNES preenchida');
   ok(/CNES 2077485/.test(await f.evaluate(()=>document.querySelector('.rs-acoes')?.textContent||'')),'ultrassom: mensagem cita o CNES');
   if(erros.length)T.falha('erros de página (ultrassom CNES): '+erros.join(' / '));await p.close()}
  /* sem CNPJ: busca pelo número do CNES */
