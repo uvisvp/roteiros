@@ -91,7 +91,7 @@ Q(E + 'local identificado, seguro e exclusivo', 'O local dos produtos de higiene
 Q(E + 'cozinha em espaço exclusivo', 'A cozinha não atende: {}.', 'espaço exclusivo', 'trânsito de pessoas restrito');
 Q(E + 'refeitório com área segura', 'O refeitório não atende: {}.', 'área segura para circulação', 'mesas e cadeiras em número suficiente');
 Q(E + 'recebimento, armazenamento, preparo e distribuição', 'Não seguem as boas práticas: {}.', 'recebimento', 'armazenamento', 'preparo', 'distribuição');
-Q(E + 'ausência de comunicação direta com dependências residenciais', 'O imóvel não atende: {}.', 'sem comunicação direta com dependências residenciais', 'não usado como moradia ou dormitório');
+Q(E + 'uso exclusivo do imóvel pela atividade', 'O imóvel não atende: {}.', 'separado das dependências residenciais, sem comunicação direta', 'uso exclusivo pela atividade (não como moradia ou dormitório)');
 Q('Os sanitários dispõem de barra de apoio', 'Os sanitários não dispõem de: {}.', 'barra de apoio', 'vaso com assento e tampa', 'descarga em funcionamento', 'lixeira com acionamento sem contato manual', 'pia para higienização das mãos');
 Q('As pias dispõem de sabonete líquido', 'As pias não dispõem de: {}.', 'sabonete líquido', 'toalha de papel descartável ou dispositivo automático de secagem');
 Q(E + 'área de higienização pessoal', 'A área de higienização pessoal não dispõe de: {}.', 'chuveiro', 'ducha higiênica com água quente', 'pia com sabonete líquido', 'papel toalha', 'lixeira', 'privacidade');

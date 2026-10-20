@@ -4,7 +4,7 @@
    escolher à mão (tocar num deles desliga o automático até tocar em Automático).
    - Números: reconhecidos ao pesquisar (o módulo apaga a caixa quando o modo
      muda; o texto é devolvido e a pesquisa segue). CNPJ e EAN/GTIN pelo dígito
-     verificador; 7 dígitos = AFE/AE; 9 a 13 = registro; 15 a 17 = processo;
+     verificador; 7 dígitos = AFE/AE (com CNES como opção); 9 a 13 = registro; 15 a 17 = processo;
      25351.xxxxxx/aaaa-dd = processo. Ambíguo: pesquisa o mais provável e mostra
      os outros como opção.
    - O aviso próprio da Central (“Esse dado tem formato de…”, #detect) fica
@@ -15,7 +15,7 @@
 (function(){
  'use strict';
  if(window.__centralAuto)return;window.__centralAuto=true;
- var NOMES={registro:'Registro',processo:'Processo',cnpj:'CNPJ',ean:'EAN / GTIN',afe:'AFE / AE','uvis-nome-medicamento':'Medicamento','uvis-nome-ifa':'IFA por nome',lote:'Lote / modelo'};
+ var NOMES={registro:'Registro',processo:'Processo',cnpj:'CNPJ',ean:'EAN / GTIN',afe:'AFE / AE',cnes:'CNES','uvis-nome-medicamento':'Medicamento','uvis-nome-ifa':'IFA por nome',lote:'Lote / modelo'};
  function $(s){return document.querySelector(s)}
  function dig(t){return String(t||'').replace(/\D/g,'')}
  function cnpjOk(d){if(d.length!==14||/^(\d)\1+$/.test(d))return false;var calc=function(n){var s=0,p=n-7;for(var i=0;i<n;i++){s+=+d[i]*p--;if(p<2)p=9}var r=s%11;return r<2?0:11-r};return calc(12)===+d[12]&&calc(13)===+d[13]}
@@ -31,7 +31,7 @@
   if(d.length===13)return gtinOk(d)&&/^7[89]/.test(d)?['ean',['registro','processo']]:['registro',['processo','ean']];
   if(d.length===8||d.length===12)return gtinOk(d)?['ean',['registro']]:(d.length===12?['registro',[]]:null);
   if(d.length>=9&&d.length<=11)return ['registro',[]];
-  if(d.length===7)return ['afe',[]];
+  if(d.length===7)return ['afe',['cnes']];
   return null}
  var auto=true,btn,dica,trocando=false;
  function modoAtual(){var b=$('[data-mode].on');return b?b.dataset.mode:''}
@@ -48,7 +48,7 @@
   var q=$('#q');if(auto&&q)q.setAttribute('inputmode','text');
   if(!dica)return;if(!auto){dica.innerHTML='';return}
   var r=reconhece(q&&q.value);
-  if(!r){dica.innerHTML=q&&q.value.trim()?'Formato não reconhecido: escolha o tipo de consulta acima.':'Automático: digite CNPJ, registro, processo, EAN, AFE ou o nome do medicamento/IFA.';return}
+  if(!r){dica.innerHTML=q&&q.value.trim()?'Formato não reconhecido: escolha o tipo de consulta acima.':'Automático: digite CNPJ, registro, processo, EAN, AFE, CNES ou o nome do medicamento/IFA.';return}
   dica.innerHTML='Reconhecido: <b>'+NOMES[modo||r[0]]+'</b>'+(r[1].length?' · pesquisar como: '+r[1].map(function(m){return '<button type="button" class="central-auto-alt" data-auto-alt="'+m+'">'+NOMES[m]+'</button>'}).join(' '):'')}
  function antesDePesquisar(e){if(!auto||trocando)return;var q=$('#q'),r=reconhece(q.value);if(!r||r[0].indexOf('uvis-nome')===0)return;
   if(modoAtual()===r[0])return pinta(r[0]);e.preventDefault();e.stopImmediatePropagation();vaiPara(r[0],q.value,true)}

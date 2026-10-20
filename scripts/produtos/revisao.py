@@ -90,7 +90,7 @@ sections.append(S('reg', 'Regularidade dos produtos',
     f'{L6360}, art. 12; RDC Anvisa nº 989/2025, arts. 8º e 12.', True, {'flagsAll': ['cls_san']}),
   I('r4', 'Produtos dentro do prazo de validade, com embalagem íntegra e identificação legível.',
     f'{L}, art. 46; {L6360}, art. 67, inciso III.', True),
-  I('r5', 'Não há produto sem procedência comprovada, sem rotulagem ou de fornecedor não autorizado.',
+  I('r5', 'Todos os produtos têm procedência comprovada, rotulagem e fornecedor autorizado.',
     f'{L6360}, art. 2º; {L}, art. 46.', True),
 ]))
 
@@ -135,7 +135,7 @@ sections += [
      f'{A28}, inciso II, alínea k.'),
    I('df2', 'No recebimento são conferidos identificação do produto, lote, validade, integridade da embalagem e condições de transporte, conforme procedimento escrito.',
      f'{A28}, inciso II, alínea d.'),
-   I('df4', 'Dispositivos/IVD: conformidade verificada no recebimento; produto não é liberado ao estoque antes da verificação.',
+   I('df4', 'Dispositivos/IVD: conformidade verificada no recebimento; o produto só é liberado ao estoque depois da verificação.',
      f'{R665}, arts. 88 a 91.', False, {'flagsAll': ['cls_disp']}),
  ], DIST),
  S('d_arm', 'Armazenamento e controle de estoque', 'Condições de conservação, segregação e inventário.', [

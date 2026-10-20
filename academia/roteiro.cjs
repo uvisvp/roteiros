@@ -142,8 +142,8 @@ module.exports = {
       itens: [
         {id: 'gerais', titulo: 'Animais domésticos', curto: 'Animais domésticos',
           perguntas: [
-            {id: 'animais', t: 'A presença de animais domésticos, quando permitida, não oferece risco aos usuários nem compromete a higiene?', r: [P('3.7')],
-              c: 'A presença de animais domésticos não oferece risco nem compromete a higiene.', nc: 'A presença de animais domésticos não atende às condições de segurança e higiene.',
+            {id: 'animais', t: 'Quando permitida, a presença de animais domésticos é compatível com a segurança dos usuários e com a higiene do local?', r: [P('3.7')],
+              c: 'A presença de animais domésticos é compatível com a segurança dos usuários e com a higiene do local.', nc: 'A presença de animais domésticos não atende às condições de segurança e higiene.',
               na: 'Não há animais domésticos no estabelecimento.', inf: ['instal']}
           ]},
         {id: 'sanit', titulo: 'Sanitários e vestiários', curto: 'Sanitários e vestiários',
@@ -270,8 +270,8 @@ module.exports = {
           ]},
         {id: 'maquinas', titulo: 'Casa de máquinas e operador', curto: 'Casa de máquinas',
           perguntas: [
-            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e não guarda produtos químicos nem materiais estranhos?', r: [P('6.19'), P('6.19.1')],
-              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e não guarda produtos químicos nem materiais estranhos.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
+            {id: 'cm_espaco', t: 'A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e está livre de produtos químicos e de materiais estranhos à atividade?', r: [P('6.19'), P('6.19.1')],
+              c: 'A casa de máquinas tem espaço, ventilação e iluminação adequados e está livre de produtos químicos e de materiais estranhos à atividade.', nc: 'A casa de máquinas não atende às exigências.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['maquinas']},
             {id: 'operador', t: 'A qualidade da água é mantida e supervisionada por profissional com certificado de curso de operador de piscinas?', r: [P('12.2'), PI('14.2.1', 'iii')],
               c: 'A qualidade da água é mantida por operador de piscinas com certificado de capacitação.', nc: 'A qualidade da água não é mantida por profissional com certificado de curso de operador de piscinas.', na: SEM_PISC, naSe: {campo: 'p_piscina', igual: 'nao'}, inf: ['operador']},
             {id: 'epi_operador', t: 'O operador usa os EPIs indicados pelo fabricante ao manipular os produtos de desinfecção?', r: [P('12.6')],
@@ -358,7 +358,7 @@ module.exports = {
       itens: [
         {id: 'equipe', titulo: 'Pessoal e EPIs', curto: 'Pessoal',
           perguntas: [
-            {id: 'epi', t: 'Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e não ficam guardados junto com produtos químicos?', r: [P('12.4'), P('12.5')],
+            {id: 'epi', t: 'Os EPIs necessários estão disponíveis em número suficiente, são usados conforme a função e ficam guardados separados dos produtos químicos?', r: [P('12.4'), P('12.5')],
               c: 'Os EPIs estão disponíveis em número suficiente, são usados corretamente e guardados separados dos produtos químicos.', nc: 'O fornecimento, o uso e a guarda dos EPIs não atendem às exigências.', inf: ['epi']},
             {id: 'atualizacao', t: 'Os funcionários passam, no mínimo anualmente, por atualização profissional, com comprovante?', r: [P('12.7'), PI('14.2', 'vi')],
               c: 'Os funcionários passam por atualização profissional anual, com comprovante.', nc: 'Não há comprovante de atualização profissional anual dos funcionários.', inf: ['docs']}
@@ -417,7 +417,7 @@ const PONTOS = {
   atestado_idade: [['atestado', 'atestado médico dos alunos fora da faixa de 15 a 69 anos', 'Há alunos fora da faixa de 15 a 69 anos sem atestado médico.'], ['nome', 'nome completo do médico no atestado', 'Há atestados médicos sem o nome completo do médico.'], ['crm', 'número do CRM no atestado', 'Há atestados médicos sem o número do CRM do médico.']],
   federado: [['exame', 'exame médico prévio', 'Há atletas federados sem exame médico prévio.'], ['semestral', 'renovação a cada seis meses', 'O exame médico dos atletas federados não é renovado a cada seis meses.'], ['anotado', 'anotação do exame nos registros', 'O exame médico dos atletas federados não está anotado nos registros.'], ['atestado', 'atestado anexado', 'Os registros dos atletas federados não têm o atestado médico anexado.'], ['menores', 'autorização dos responsáveis, para menores', 'Há atletas federados menores de idade sem autorização dos responsáveis.']],
   parq_docs: [['atestados', 'atestados médicos organizados', 'Os atestados médicos não estavam organizados.'], ['parq', 'PAR-Q organizados', 'Os PAR-Q não estavam organizados.'], ['termos', 'termos de responsabilidade organizados', 'Os termos de responsabilidade não estavam organizados.'], ['disp', 'documentos apresentados à autoridade sanitária', 'Os atestados, PAR-Q e termos de responsabilidade não foram apresentados à autoridade sanitária.']],
-  animais: [['risco', 'sem risco aos usuários', 'A presença de animais domésticos oferece risco aos usuários.'], ['higiene', 'sem prejuízo da higiene', 'A presença de animais domésticos compromete as condições higiênico-sanitárias.']],
+  animais: [['risco', 'segurança dos usuários preservada', 'A presença de animais domésticos oferece risco aos usuários.'], ['higiene', 'condições de higiene preservadas', 'A presença de animais domésticos compromete as condições higiênico-sanitárias.']],
   separados: [['sexo', 'separação por sexo', 'Os sanitários e vestiários não são separados por sexo.'], ['demanda', 'quantidade suficiente para a demanda', 'Os sanitários e vestiários são insuficientes para a demanda.'], ['chuveiro', 'ao menos um chuveiro protegido por porta e divisória', 'Não há chuveiro protegido por porta e divisória.'], ['vaso', 'ao menos um vaso protegido por porta e divisória', 'Não há vaso sanitário protegido por porta e divisória.']],
   trocador: [['pia', 'pia próxima ao trocador', 'Não há pia próxima ao trocador de fraldas.'], ['sabonete', 'sabonete líquido na pia', 'A pia junto ao trocador de fraldas não tem sabonete líquido.'], ['secagem', 'secagem higiênica das mãos', 'A pia junto ao trocador de fraldas não tem meio de secagem higiênica das mãos.'], ['lixeira', 'lixeira com tampa sem contato manual', 'O trocador de fraldas não tem lixeira com tampa de acionamento sem contato manual.'], ['revestimento', 'revestimento impermeável', 'O trocador de fraldas não tem revestimento impermeável.'], ['produto', 'produto de higienização identificado', 'Não há produto identificado para a higienização do trocador de fraldas.'], ['alcance', 'produto fora do alcance das crianças', 'O produto de higienização do trocador de fraldas fica ao alcance das crianças.']],
   armarios: [['usuarios', 'armários para os usuários', 'Não há armários para a guarda de roupas e objetos pessoais dos usuários.'], ['funcionarios', 'armários para os funcionários', 'Não há armários para a guarda de roupas e objetos pessoais dos funcionários.']],

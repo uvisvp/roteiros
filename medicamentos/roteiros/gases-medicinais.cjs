@@ -79,8 +79,8 @@ module.exports = {
             c: 'Os gases medicinais comercializados estão notificados ou registrados na Anvisa.', nc: 'Foram constatados gases medicinais comercializados sem notificação ou registro na Anvisa.', inf: ['gas_produto']},
           {id: 'entre_distrib', t: 'Na venda a outra distribuidora, ambas têm AFE para distribuição (e, no granel, cumprem as boas práticas de fabricação)?', r: [A(78), P(78, 'unico')], na: true, se: TEM('distribuir'),
             c: 'A comercialização entre distribuidoras ocorre entre empresas com AFE para distribuição.', nc: 'Foi constatada comercialização com distribuidora sem AFE para distribuição.', inf: ['gas_cadeia']},
-          {id: 'envase', t: 'A empresa não envasa gases (o envase exige boas práticas de fabricação)?', r: [P(2, '3'), A(11), A(63)],
-            c: 'A empresa não realiza envase de gases medicinais.', nc: 'A empresa realiza envase de gases medicinais sem atender às boas práticas de fabricação.', inf: ['gas_envase']}
+          {id: 'envase', t: 'A atividade se limita à distribuição, sem envase de gases (o envase exige boas práticas de fabricação)?', r: [P(2, '3'), A(11), A(63)],
+            c: 'A atividade da empresa se limita à distribuição de gases medicinais.', nc: 'A empresa realiza envase de gases medicinais sem atender às boas práticas de fabricação.', inf: ['gas_envase']}
         ]}
       ]
     },
@@ -98,7 +98,7 @@ module.exports = {
             c: 'Os registros de treinamento contêm as informações exigidas.', nc: 'Os registros de treinamento não contêm as informações exigidas.', inf: ['gas_pessoal']},
           {id: 'domiciliar', t: 'O treinamento inclui os cuidados de assistência domiciliar?', r: [P(16, '2')], se: TEM('dispensar'),
             c: 'O treinamento inclui os cuidados de assistência domiciliar.', nc: 'O treinamento não inclui os cuidados de assistência domiciliar.', inf: ['gas_pessoal']},
-          {id: 'conduta', t: 'Nas áreas de recepção, armazenagem, expedição e devolução não há fumo, alimentos, bebidas (exceto água em local próprio), plantas ou objetos estranhos?', r: [A(17)],
+          {id: 'conduta', t: 'As áreas de recepção, armazenagem, expedição e devolução estão livres de fumo, alimentos, bebidas (exceto água em local próprio), plantas e objetos estranhos?', r: [A(17)],
             c: 'As áreas operacionais estão livres de fumo, alimentos, plantas e objetos estranhos.', nc: 'Foram constatados fumo, alimentos, plantas ou objetos estranhos nas áreas operacionais.', inf: ['gas_pessoal']}
         ]}
       ]
