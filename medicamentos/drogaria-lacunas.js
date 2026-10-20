@@ -15,6 +15,12 @@ function __medLacunasDrogaria(catalog){
   return out.join(', '); }
  function ref(id){ if(!R[id]) R[id] = {id: id, norma: 'RDC 44/2009', dispositivo: rot(id), arquivo: base.arquivo || 'legislacao_v12/normas/rdc-44-2009.json', status: 'validado', fonte_oficial: base.fonte_oficial || ''}; return id; }
  var A = function(n){ return 'rdc-44-2009::artigo::' + n; }, PG = function(n, p){ return A(n) + '::paragrafo::' + p; };
+ /* redação positiva (20/10/2026): perguntas do catálogo embutido escritas como ausência do erro. O catálogo
+    (VISA_LOCAL) é protegido e não se reescreve; a troca é feita aqui, na carga. */
+ [['refeitorio_sifao', 'Os alimentos são guardados fora da área sob o sifão e a pia?', 'Os alimentos são guardados fora da área sob o sifão e a pia.'],
+  ['service_wc', 'O sanitário tem acesso independente da sala de serviços?', 'O sanitário tem acesso independente da sala de serviços.'],
+  ['wext_3', 'O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer?', 'O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer.']
+ ].forEach(function(t){ P.forEach(function(p){ if(p.id === t[0]){ p.pergunta = t[1]; if(p.frase_positiva) p.frase_positiva = t[2]; } }); });
  function add(q, aposGrupo){
   if(P.some(function(p){ return p.id === q.id; })) return;
   var refs = q.refs.map(ref), irmao = P.filter(function(p){ return p.card === q.card; })[0] || {};

@@ -30,12 +30,14 @@ function troca(de, para, rotulo) {
 
 /* 1b. Complementos dentro dos módulos herdados. Cada bloco é descompactado,
    alterado com a mesma checagem de ocorrência única e compactado de novo. */
-function blocoAltera(id, fn) {
+/* extra: texto que entra no hash da marca (ex.: o conteúdo de um arquivo inserido), para que a
+   mudança do arquivo, e não só a do código do passo, regrave o bloco */
+function blocoAltera(id, fn, extra) {
   const rx = new RegExp(`(<script type="text/plain" id="${id.replace(/[.]/g, '\\.')}">)([\\s\\S]*?)(</script>)`);
   const m = h.match(rx);
   if (!m) throw Error(`bloco ${id} não encontrado`);
   const atual = lz.decompressFromBase64(m[2].trim());
-  const hash = crypto.createHash('sha1').update(fn.toString()).digest('hex').slice(0, 10);
+  const hash = crypto.createHash('sha1').update(fn.toString() + (extra || '')).digest('hex').slice(0, 10);
   const marca = /\.(js|css)$/.test(id) ? `\n/*med:${hash}*/` : `\n<!--med:${hash}-->`;
   if (atual.includes(marca)) return;
   const novo = fn(atual) + marca;
@@ -455,7 +457,7 @@ blocoAltera('app--drogaria', s => {
   if (i >= 0 && j > i) return s.slice(0, i) + LAC + s.slice(j);
   s = trocaEm(s, 'async function loadBank(){', LAC + '\nasync function loadBank(){', 'drogaria: lacunas — definição');
   return trocaEm(s, "normalizeDrogariaCatalog();if(catalog.schema", "normalizeDrogariaCatalog();try{__medLacunasDrogaria(catalog)}catch(e){console.error(e)}if(catalog.schema", 'drogaria: lacunas — chamada');
-});
+}, le('drogaria-lacunas.js'));
 
 /* 7u. Drogaria — lacunas nas telas próprias (serviços, documentos de qualidade
    e venda remota não mostram perguntas do catálogo). A do art. 61, § 5º fica

@@ -1,5 +1,5 @@
 {
-  "_sobre": "Redação positiva (pedido de 20/10/2026): a pergunta e a frase de conformidade descrevem o que o estabelecimento faz certo, não a ausência do erro. Fica a negativa só no escopo (atividade que o estabelecimento não exerce). Aplicada aos blocos por scripts/repack-redacao.cjs e às fontes uma vez; test-regras barra a volta das frases antigas.",
+  "_sobre": "Redação positiva (pedido de 20/10/2026): a pergunta e a frase de conformidade descrevem o que o estabelecimento faz certo, não a ausência do erro. Fica a negativa só no escopo (atividade que o estabelecimento não exerce). Aplicada aos blocos por scripts/repack-redacao.cjs e às fontes uma vez; test-regras barra a volta das frases antigas. As perguntas do catálogo embutido da Drogaria (VISA_LOCAL, protegido) são reescritas na carga, em medicamentos/drogaria-lacunas.js.",
   "trocas": [
     [
       "A casa de máquinas tem espaço para inspeção, operação e manutenção, é ventilada e iluminada, e não guarda produtos químicos nem materiais estranhos?",
@@ -108,30 +108,6 @@
     [
       "Está atendida a exigência de liberdade de ir e vir e ausência de restrições não previstas em plano de cuidado?",
       "Está atendida a exigência de liberdade de ir e vir, com restrições limitadas às previstas no plano de cuidado?"
-    ],
-    [
-      "Não há alimentos sob o sifão ou a pia?",
-      "Os alimentos são guardados fora da área sob o sifão e a pia?"
-    ],
-    [
-      "Não há alimentos sob o sifão ou a pia.",
-      "Os alimentos são guardados fora da área sob o sifão e a pia."
-    ],
-    [
-      "O acesso ao sanitário não ocorre através da sala de serviços?",
-      "O sanitário tem acesso independente da sala de serviços?"
-    ],
-    [
-      "O acesso ao sanitário não ocorre através da sala de serviços.",
-      "O sanitário tem acesso independente da sala de serviços."
-    ],
-    [
-      "O abrigo externo tem capacidade para a ausência de uma coleta regular?",
-      "O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer?"
-    ],
-    [
-      "O abrigo externo tem capacidade para a ausência de uma coleta regular.",
-      "O abrigo externo comporta os resíduos acumulados se uma coleta regular deixar de ocorrer."
     ],
     [
       "O procedimento de fracionamento (separação de unidades) não viola a embalagem secundária original do medicamento?",
