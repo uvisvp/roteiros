@@ -6,14 +6,18 @@
    botões do componente padrão (.uvis-cite) e do motor roteiro-simples (.rs-cit), por
    pergunta (.pu-q). Botão que junta várias normas (“Lei 13.725 · art. 46 ; Lei 6.360 · …”,
    em Produtos) perde só o trecho da Lei 13.725. A prévia “Como sai no relatório” fica como
-   está, porque mostra o fundamento. */
+   está, porque mostra o fundamento.
+   Exceção (pedido de 21/10/2026): o art. 91 (declaração individualizada de cada veículo)
+   é a própria exigência, não só a capitulação — fica visível mesmo com outra norma
+   (ex.: Transporte de material biológico, com a Portaria SMS nº 266/2025, art. 22, § 1º). */
 (function(){
  if(window.__uvsCitRoteiro) return; window.__uvsCitRoteiro = true;
- var LEI = /13\.725/;
+ var LEI = /13\.725/, FICA = /13\.725[^;]*\bart\.\s*91(?!\d)/i;
  /* início de outra norma dentro de data-uvis-citation (“…, art. 2º; RDC Anvisa nº 16/2014, …”) */
  var NORMA = /;\s*(?=(?:Lei|RDC|Portaria|Decreto|Instrução|IN|Resolução|ABNT|NBR|Nota|Código|Constituição)\b)/;
  function partes(t){ return String(t || '').split(/\s;\s/); }
- function semLei(t){ return partes(t).filter(function(p){ return !LEI.test(p); }); }
+ function retira(p){ return LEI.test(p) && !FICA.test(p); }
+ function semLei(t){ return partes(t).filter(function(p){ return !retira(p); }); }
  function noRoteiro(){ try { return !!(window.UvisPadrao && UvisPadrao.estado && UvisPadrao.estado().aba === 'roteiro'); } catch(e){ return false; } }
  function filtra(){
   if(!noRoteiro()) return;
@@ -32,7 +36,7 @@
     if(!fica.length){ b.setAttribute('data-uvs-lei-oculta', ''); b.style.setProperty('display', 'none', 'important'); return; }
     b.textContent = fica.join(' ; ');
     if(b.title) b.title = semLei(b.title).join(' ; ');
-    if(b.dataset.uvisCitation) b.dataset.uvisCitation = b.dataset.uvisCitation.split(NORMA).filter(function(p){ return !LEI.test(p); }).join('; ');
+    if(b.dataset.uvisCitation) b.dataset.uvisCitation = b.dataset.uvisCitation.split(NORMA).filter(function(p){ return !retira(p); }).join('; ');
     b.setAttribute('data-uvs-lei-retirada', '');
    });
   });

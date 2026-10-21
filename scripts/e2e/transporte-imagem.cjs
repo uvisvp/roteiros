@@ -33,6 +33,15 @@ const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
   await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'qualidade',item:'equipamentos'}));await p.waitForTimeout(300);
   ok(await f.evaluate(()=>/Último teste de constância/.test(document.querySelector('.rs-eqs')?.textContent||'')),app+': equipamento com a data do teste de constância');
   if(erros.length)T.falha('erros de página ('+app+'): '+erros.join(' / '));await p.close();}
+ /* veículos: o art. 91 da Lei 13.725 (declaração de cada veículo) fica visível ao lado da Portaria SMS 266 */
+ ({p,f,erros}=await T.abre('Serviços','transporte-biologico','Transporte de material biológico','',{browser:b}));
+ {const loc=await f.evaluate(()=>{let s=null,i=null;ROTEIRO.secoes.forEach(x=>x.itens.forEach(it=>(it.perguntas||[]).forEach(q=>{if(q.id==='veic_info'){s=x.id;i=it.id}})));return [s,i]});
+  await f.evaluate(([s,i])=>UvisPadrao.vai({aba:'roteiro',secao:s,item:i}),loc);await p.waitForTimeout(600);
+  const cits=await f.evaluate(()=>[...document.querySelectorAll('[data-rs-q="veic_info"] .rs-cit')].filter(x=>x.offsetParent).map(x=>x.textContent));
+  ok(cits.some(c=>/266\/2025/.test(c))&&cits.some(c=>/13\.725\/2004 · Art\. 91/.test(c)),'transporte: pergunta do veículo com Portaria SMS 266 e Lei 13.725, art. 91 ('+cits.join(' | ')+')');
+  const outra=await f.evaluate(()=>[...document.querySelectorAll('.rs-cit')].filter(x=>x.offsetParent&&/13\.725/.test(x.textContent)&&!/Art\. 91/.test(x.textContent)).length);
+  ok(outra===0,'transporte: demais artigos da Lei 13.725 continuam fora dos botões quando há norma específica');
+  if(erros.length)T.falha('erros de página (transporte veículos): '+erros.join(' / '));await p.close()}
  ({p,f,erros}=await T.abre('Serviços','imagem-mamografia','Mamografia','',{browser:b}));
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'modalidade',item:'especifica'}));await p.waitForTimeout(300);
  await f.click('[data-rs-r="pnqm|nc"]');await p.waitForTimeout(300);
