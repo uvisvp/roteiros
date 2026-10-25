@@ -30,7 +30,8 @@ const NOMES = {
   'rdc-504-2021': 'RDC Anvisa nº 504/2021', 'rdc-34-2014': 'RDC Anvisa nº 34/2014', 'portaria-sms-sp-266-2025': 'Portaria SMS nº 266/2025',
   'resolucao-antt-5998-2022': 'Resolução ANTT nº 5.998/2022', 'rdc-611-2022': 'RDC Anvisa nº 611/2022', 'rdc-36-2013': 'RDC Anvisa nº 36/2013',
   'in-90-2021': 'IN Anvisa nº 90/2021', 'in-91-2021': 'IN Anvisa nº 91/2021', 'in-92-2021': 'IN Anvisa nº 92/2021', 'in-93-2021': 'IN Anvisa nº 93/2021',
-  'in-96-2021': 'IN Anvisa nº 96/2021', 'in-97-2021': 'IN Anvisa nº 97/2021', 'portaria-de-consolidacao-ms-5-2017': 'Portaria de Consolidação GM/MS nº 5/2017'
+  'in-96-2021': 'IN Anvisa nº 96/2021', 'in-97-2021': 'IN Anvisa nº 97/2021', 'portaria-de-consolidacao-ms-5-2017': 'Portaria de Consolidação GM/MS nº 5/2017',
+  'portaria-svs-ms-64-2018': 'Portaria SVS/MS nº 64/2018'
 };
 const ROMANO = s => /^[ivxlcdm]+$/i.test(s) ? s.toUpperCase() : s;
 const ORD = n => /^\d$/.test(n) ? n + 'º' : n;

@@ -31,6 +31,7 @@ const PASSOS=[
  ['Central de Consultas: CNES (modo, Automático, CNPJ e mantenedora)',['central-cnes.cjs']],
  ['Conferência de IFA: produtos irregulares pelo CNPJ do fornecedor e pelo lote',['ifa-irregulares.cjs']],
  ['Central de Consultas: produtos não regularizados como dispositivos médicos',['central-naoreg.cjs']],
+ ['Padronização: Campo, Apagar dados, rótulos, progresso das seções, Atacadista e cor da resposta',['padronizacao.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],

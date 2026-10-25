@@ -17,6 +17,8 @@
      Alimentos, Serviços assistenciais e Estética (18/10/2026).
    - cnpj-anvisa.js: busca do estabelecimento na base de AFE/AE da Anvisa pelo CNPJ nos
      módulos próprios que não a tinham (19/10/2026).
+   - apagar-padrao.js: cartão “Apagar dados da inspeção” na tela inicial de Odontologia,
+     Produtos, Serviços de alimentação e Serviços assistenciais (25/10/2026).
    Entra na casca, num bloco entre CAMPO_INICIO e CAMPO_FIM; ao abrir um
    roteiro, a casca acrescenta os scripts ao fim do módulo
    (window.__uvisCampoInjeta). O iframe recebe permissão de microfone,
@@ -38,7 +40,7 @@ function troca(de, para, rot) {
 }
 const casca = `(function(){
  var SO_DITADO=${JSON.stringify(SO_DITADO)};
- var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js'].map(le).join('\n'))};
+ var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js', 'apagar-padrao.js'].map(le).join('\n'))};
  var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js', 'teclado.js'].map(le).join('\n'))};
  window.__uvisCampoInjeta=function(app,s){var k=s.lastIndexOf('</body>');if(k<0||s.indexOf('<!--UVS-CAMPO-->')>=0)return s;
   /* __uvsApp: o roteiro aberto (Lei 13.725 por roteiro, bordas do Word); a marca evita injetar duas vezes */

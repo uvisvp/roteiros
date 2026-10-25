@@ -28,6 +28,8 @@ const LM = art => 'lei-municipal-13725-2004::artigo::' + art;
 const R63 = art => 'rdc-63-2011::artigo::' + art;
 const R222 = (art, ...resto) => 'rdc-222-2018::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
 const LU = art => 'lei-municipal-sp-13478-2002::artigo::' + art;
+const R50 = art => 'rdc-50-2002::artigo::' + art;
+const P64 = art => 'portaria-svs-ms-64-2018::artigo::' + art;
 const SN = [['sim', 'Sim'], ['nao', 'Não']];
 const NAO = campo => ({campo, igual: 'nao'});
 const FARM = {campo: 'tipo_est', igual: 'farmacia'}, CONS = {campo: 'tipo_est', igual: 'consultorio'}, POSTO = {campo: 'tipo_est', igual: 'posto'};
@@ -286,9 +288,9 @@ const AGUA_ATM = [
   {id: 'agua_pureza', t: 'O grau de pureza da água reagente está definido, com avaliações e testes que assegurem a conformidade?', r: [I(154, 'iv'), I(154, 'v')], naSe: NAO('p_agua'),
     c: 'O grau de pureza da água reagente está definido, com avaliações e testes que asseguram a conformidade.', nc: 'A água reagente não atende às exigências.',
     na: 'O laboratório não produz água reagente.', pontos: [['grau', 'grau de pureza definido', 'O grau de pureza da água reagente não está definido.'], ['testes', 'avaliações e testes de conformidade', 'Não há testes que assegurem a conformidade da água reagente.']], inf: ['eac_processo']},
-  {id: 'atm', t: 'O teste de sensibilidade aos antimicrobianos segue a Portaria MS nº 64/2018 e usa culturas de referência do BrCAST?', r: [A(156)], naSe: NAO('p_atm'),
-    c: 'O teste de sensibilidade aos antimicrobianos segue a Portaria MS nº 64/2018, com culturas de referência do BrCAST.', nc: 'O teste de sensibilidade aos antimicrobianos não atende às exigências.',
-    na: 'O laboratório não realiza teste de sensibilidade aos antimicrobianos.', pontos: [['portaria', 'conforme a Portaria MS nº 64/2018', 'O teste de sensibilidade aos antimicrobianos não segue a Portaria MS nº 64/2018.'], ['brcast', 'culturas de referência do BrCAST', 'O teste de sensibilidade aos antimicrobianos não usa culturas de referência do BrCAST.']], inf: ['eac_processo']}
+  {id: 'atm', t: 'O teste de sensibilidade aos antimicrobianos segue a Portaria SVS/MS nº 64/2018 e usa culturas de referência do BrCAST?', r: [A(156), P64(1)], naSe: NAO('p_atm'),
+    c: 'O teste de sensibilidade aos antimicrobianos segue a Portaria SVS/MS nº 64/2018, com culturas de referência do BrCAST.', nc: 'O teste de sensibilidade aos antimicrobianos não atende às exigências.',
+    na: 'O laboratório não realiza teste de sensibilidade aos antimicrobianos.', pontos: [['portaria', 'conforme a Portaria SVS/MS nº 64/2018', 'O teste de sensibilidade aos antimicrobianos não segue a Portaria SVS/MS nº 64/2018.'], ['brcast', 'culturas de referência do BrCAST', 'O teste de sensibilidade aos antimicrobianos não usa culturas de referência do BrCAST.']], inf: ['eac_processo']}
 ];
 
 const AMB = {
@@ -333,7 +335,7 @@ const AMB = {
       na: 'Não há sala de coleta e execução instalada.', pontos: [['exame', 'iluminação adequada à avaliação do exame', 'A iluminação da sala prejudica a avaliação do exame.'], ['pele', 'iluminação adequada à avaliação da coloração da pele', 'A iluminação da sala prejudica a avaliação da coloração da pele do paciente.']], inf: ['eac_infra']}
   ],
   3: [
-    {id: 'pba', t: 'A infraestrutura atende à RDC nº 50/2002, com Projeto Básico de Arquitetura aprovado pela autoridade sanitária?', r: [A(40), I(117, 'i')],
+    {id: 'pba', t: 'A infraestrutura atende à RDC nº 50/2002, com Projeto Básico de Arquitetura aprovado pela autoridade sanitária?', r: [A(40), R50(1), I(117, 'i')],
       c: 'A infraestrutura atende à RDC nº 50/2002, com Projeto Básico de Arquitetura aprovado.', nc: 'A infraestrutura não atende às exigências de projeto.',
       na: 'A exigência não incide, por não haver reforma, ampliação, construção nova ou mudança de uso dos ambientes.', pontos: [['pba', 'Projeto Básico de Arquitetura aprovado', 'Não foi apresentado Projeto Básico de Arquitetura aprovado pela autoridade sanitária.'], ['rdc50', 'infraestrutura conforme a RDC nº 50/2002', 'A infraestrutura não atende à RDC nº 50/2002.']], inf: ['eac_infra']},
     {id: 'climatizacao', t: 'A sala de coleta e execução dispõe de sistema de climatização?', r: [A(41)],
