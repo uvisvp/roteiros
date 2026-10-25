@@ -5,6 +5,8 @@
      Na aba Infrações ela continua.
    - Caixas “Para saber mais” nas perguntas certas, cada linha com “Fonte:”; nos
      Assistenciais, a norma muda com a modalidade.
+   - Projeto físico (25/10/2026): orientação sobre a DCFF (Portarias SMS/COVISA 404/2024 e SMS 266/2025)
+     nas perguntas de projeto aprovado — EAC, Estética, Odontologia e ILPI.
    - Motor roteiro-simples: Academia sem “Prática de inspeção” e com outros métodos de
      desinfecção; Estética com as orientações dos itens (nota técnica suspensa, RDC 56/2009…); Vacinação com o alarme como recomendação (a RDC não exige); EAC com
      transporte, água reagente, valores críticos e notificação compulsória.
@@ -13,11 +15,11 @@ const T=require('./lib.cjs');
 const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
 /* [núcleo, app, título, query, caixas esperadas, caixas que não podem aparecer] */
 const CASOS=[
- ['Odontologia','odontologia','Odontologia','',['od-clima','od-pcd','od-ester','od-rx','od-agua','od-res'],[]],
+ ['Odontologia','odontologia','Odontologia','',['od-dcff','od-clima','od-pcd','od-ester','od-rx','od-agua','od-res'],[]],
  ['Produtos','produtos-correlatos','Atacadista / distribuidor','atividade=atacadista',['pr-reg','pr-afe','pr-temp','pr-recolhe'],[]],
  ['Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento','',['al-temp','al-horti','al-oleo','al-pragas','al-caixa'],[]],
- ['Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi',['as-grau','as-med','as-sentinela'],['as-ct','as-grau-cd']],
- ['Serviços assistenciais','servicos-assistenciais','CT','servico=ct',['as-med','as-ct'],['as-grau','as-sentinela']],
+ ['Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi',['as-dcff','as-grau','as-med','as-sentinela'],['as-ct','as-grau-cd']],
+ ['Serviços assistenciais','servicos-assistenciais','CT','servico=ct',['as-med','as-ct'],['as-grau','as-sentinela','as-dcff']],
  ['Serviços assistenciais','servicos-assistenciais','Centro-Dia','servico=centrodia',['as-med','as-grau-cd'],['as-grau','as-ct']],
  ['Serviços','academia-piscina','Academias e piscinas','',[],[]],
  ['Serviços','vacinacao','Vacinação','',[],[]],
@@ -30,10 +32,11 @@ const CASOS=[
 const ORIENT={
  'academia-piscina':{tem:['Outros métodos de desinfecção','Cloro livre, total e combinado','Standard Methods','Lei Municipal nº 13.945/2005, art. 2º, IV e V'],nao:['Prática de inspeção']},
  vacinacao:{tem:['A RDC não exige alarme','Recomendação técnica do Manual de Rede de Frio','Excursão de temperatura','Manual de Normas e Procedimentos para Vacinação'],nao:['deve ter registrador eletrônico']},
- 'eac-tipo2':{tem:['UN 3373','Valores críticos','Notificação compulsória'],nao:['CLSI GP40']},
- 'eac-tipo3':{tem:['UN 3373','CLSI GP40','Valores críticos','Notificação compulsória'],nao:[]},
+ 'eac-tipo2':{tem:['UN 3373','Valores críticos','Notificação compulsória','Declaração de Conformidade Físico-Funcional','não exigem a DCFF'],nao:['CLSI GP40','CNAE 8640-2/02) está entre']},
+ 'eac-tipo3':{tem:['UN 3373','CLSI GP40','Valores críticos','Notificação compulsória','CNAE 8640-2/02) está entre'],nao:['não exigem a DCFF']},
  /* Estética (roteiro-simples): as orientações dos itens, com fonte */
- estetica:{tem:['Nota Técnica nº 2/2024','RDC Anvisa nº 56/2009, art. 1º','Lei Federal nº 6.360/1976, art. 12','RDC Anvisa nº 222/2018, arts. 2º e 5º, § 1º'],nao:[]}
+ estetica:{tem:['Nota Técnica nº 2/2024','RDC Anvisa nº 56/2009, art. 1º','Lei Federal nº 6.360/1976, art. 12','RDC Anvisa nº 222/2018, arts. 2º e 5º, § 1º'],nao:[]},
+ 'estetica:p_tipo=saude':{tem:['CNAE 9602-5/02','Nota Técnica nº 2/2024','RDC Anvisa nº 56/2009, art. 1º','Lei Federal nº 6.360/1976, art. 12','RDC Anvisa nº 222/2018, arts. 2º e 5º, § 1º'],nao:[]}
 };
 (async()=>{const b=await T.navegador();
  for(const [n,app,t,q,esperadas,proibidas] of CASOS){const {p,f,erros}=await T.abre(n,app,t,q,{browser:b});
@@ -55,7 +58,7 @@ const ORIENT={
   for(const x of proibidas)ok(!achou.has(x),rot+': sem a caixa '+x+' (outra modalidade)');
   if(esperadas.length)ok(!semFonte.length,rot+': toda linha do “Para saber mais” tem fonte'+(semFonte.length?' — '+[...new Set(semFonte)].join(', '):''));
   if(app==='odontologia')ok(!antigo,rot+': sem a caixa antiga da tela anterior');
-  const o=ORIENT[app];if(o){const tx=orient.join('\n');
+  const o=ORIENT[app+(q?':'+q:'')]||ORIENT[app];if(o){const tx=orient.join('\n');
    for(const x of o.tem)ok(tx.includes(x),rot+': orientação traz “'+x+'”');
    for(const x of o.nao)ok(!tx.includes(x),rot+': orientação sem “'+x+'”')}
   /* aba Infrações: a capitulação continua com a Lei 13.725; nenhuma caixa fora do Roteiro */

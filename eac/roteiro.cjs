@@ -721,7 +721,16 @@ const ITEM_ORIENT = {lic: 'lic', resp: 'resp', req: 'tipo1', ambientes: 'ambient
 /* “Para saber mais” dos três tipos (18/10/2026): cada linha com a sua fonte; `tipos` limita
    ao tipo de serviço em que a pergunta existe */
 const R978 = 'RDC Anvisa nº 978/2025';
+/* Projeto físico no Município de São Paulo (revisão de 25/10/2026): a análise do projeto pela vigilância
+   (LTA) foi substituída pela DCFF, autodeclaratória e exigida só nas atividades com o documento 17 no
+   Anexo I da Portaria SMS nº 266/2025. */
+const DCFF = 'Portaria SMS/COVISA nº 404/2024, arts. 3º a 5º; Portaria SMS nº 266/2025, art. 2º, XII, e Anexo IV (documento 17)';
 const ORIENT_MAIS = {
+  ambientes: [
+    {t: 'No Município de São Paulo, a avaliação do projeto físico pela vigilância (o antigo Laudo Técnico de Avaliação, LTA) foi substituída pela Declaração de Conformidade Físico-Funcional (DCFF): documento autodeclaratório, sem aprovação nem laudo da vigilância, assinado pelo responsável legal e pelo engenheiro ou arquiteto, com a ART ou RRT e o memorial descritivo de atividades. É exigida no pedido de licença inicial, de alteração de endereço e de ampliação de atividade que altere a estrutura física e o fluxo.', f: DCFF},
+    {tipos: [3], t: 'Laboratório clínico (EAC Tipo III, CNAE 8640-2/02) está entre as atividades que exigem a DCFF (documento 17 na coluna “Documentos” do Anexo I da Portaria SMS nº 266/2025, publicado no site da Covisa, em Licenciamento Sanitário – CMVS). Como não há mais aprovação municipal do projeto, confira no processo de licenciamento a DCFF com o formulário assinado, a ART ou RRT e o memorial descritivo, e se os ambientes vistos correspondem ao declarado. A DCFF não atesta a conformidade: a responsabilidade é de quem declara, e a estrutura continua sujeita à RDC 50/2002 na inspeção.', f: 'Portaria SMS nº 266/2025, Anexo I (CNAE 8640-2/02); Portaria SMS/COVISA nº 404/2024, art. 5º e parágrafo único'},
+    {tipos: [1, 2], t: 'Posto de coleta (EAC Tipo II) e EAC Tipo I em farmácia, drogaria ou consultório isolado não exigem a DCFF: são licenciados por Declaração de Conformidade da Atividade (DCA) ou pelo Certificado de Licenciamento Integrado (CLI), sem documento 17 no Anexo I. A estrutura física é conferida na inspeção, contra os requisitos de ambientes da RDC 978/2025.', f: 'Portaria SMS nº 266/2025, art. 13 e Anexo I (CNAE 8640-2/02, tipos de serviço 139, 223 e 224)'}
+  ],
   transporte: [
     {t: 'Transporte de material biológico: embalagem tripla (recipiente primário estanque, embalagem secundária estanque com material absorvente e embalagem terciária rígida). Amostra de paciente para diagnóstico costuma ser “Substância biológica, categoria B” (UN 3373), identificação que vai na embalagem terciária com remetente, destinatário e responsável. A temperatura exigida pelo exame é mantida e registrada durante o trajeto.', f: R978 + ', arts. 140 e 143; RDC Anvisa nº 504/2021'},
     {t: 'O que pedir: o procedimento de transporte, os registros de envio e recebimento (data, hora, temperatura, quantidade e integridade) e a embalagem em uso.', f: R978 + ', arts. 140 e 141; RDC Anvisa nº 504/2021'}
