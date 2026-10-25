@@ -43,7 +43,7 @@ const DOCS = {
   licenca: {g: 'reg', n: 'Licença de Funcionamento Sanitária (CMVS)', o: 'Licença vigente, com o endereço, a razão social e todas as atividades (CNAE) exercidas no local; alterações de atividade, endereço ou responsável comunicadas à vigilância.', r: [L90]},
   afe: {g: 'reg', n: 'Autorização de Funcionamento (AFE) da Anvisa', o: 'AFE publicada, com as atividades e as classes de produtos efetivamente exercidas e o endereço inspecionado.', r: ['rdc-16-2014::artigo::3']},
   ae: {g: 'reg', n: 'Autorização Especial (AE) da Anvisa', q: 'Quando houver atividade com substâncias ou medicamentos sujeitos a controle especial (Portaria SVS/MS 344/1998).', o: 'AE publicada no DOU, compatível com as atividades com substâncias e medicamentos controlados.', r: ['rdc-16-2014::artigo::4']},
-  cnes: {g: 'reg', n: 'Inscrição no CNES', o: 'Cadastro Nacional de Estabelecimentos de Saúde ativo, com dados atualizados (endereço, serviços e profissionais).', r: [R978(74)]},
+  cnes: {g: 'reg', n: 'Inscrição no CNES', o: 'Cadastro Nacional de Estabelecimentos de Saúde ativo, com dados atualizados (endereço, serviços e profissionais).', r: ['rdc-63-2011::artigo::13']},
   crt: {g: 'rt', n: 'Certidão de Regularidade Técnica do Conselho Regional', o: 'Certidão vigente, em nome do responsável técnico e do estabelecimento, afixada em local visível quando a norma exigir.', r: [D44('2::inciso::iv')]},
   rt: {g: 'rt', n: 'Designação do responsável técnico e do substituto', o: 'Documento de designação do responsável técnico legalmente habilitado (registro no conselho de classe) e do substituto, com o horário de presença compatível com o funcionamento.', r: ['lei-municipal-13725-2004::artigo::92']},
   equipe: {g: 'rt', n: 'Relação da equipe e comprovantes de habilitação', o: 'Relação nominal da equipe com atribuições, qualificação, registro no conselho (quando houver) e carga horária.', r: [R978('117::inciso::iv')]},
@@ -168,6 +168,7 @@ const APPS = {
   'eac-tipo1': eac(1), 'eac-tipo2': eac(2), 'eac-tipo3': eac(3),
   'estetica': [
     ['licenca', {o: 'Licença (serviço de saúde) ou CMVS (serviço de interesse da saúde) vigente, afixada em local visível, com todas as atividades (CNAE) executadas.', r: ['rdc-63-2011::artigo::10', L90]}],
+    ['cnes', {q: 'Serviço de saúde (procedimentos realizados por profissional de saúde).'}],
     ['rt', {q: 'Serviço de saúde (procedimentos realizados por profissional de saúde).', o: 'Responsável técnico e substituto de nível superior, designados conforme os conselhos de classe.', r: ['rdc-63-2011::artigo::16', 'lei-municipal-13725-2004::artigo::92']}],
     ['habilitacao', {g: 'rt', n: 'Comprovantes de formação dos profissionais', o: 'Registro no conselho (profissionais de saúde) ou certificado de formação de técnico em estética, esteticista ou cosmetólogo (serviço de interesse da saúde).', r: ['rdc-63-2011::artigo::17', 'lei-federal-13643-2018:a3']}],
     'avcb',
@@ -212,7 +213,7 @@ const APPS = {
   'imagem-ressonancia': imagem('ressonancia'), 'imagem-ultrassom': imagem('ultrassom'), 'imagem-hemodinamica': imagem('hemodinamica'),
   'odontologia': [
     ['licenca', {r: [O1002('a8'), L90]}],
-    ['cnes', {r: [R63('xix')], o: 'Cadastro Nacional de Estabelecimentos de Saúde ativo e atualizado.', q: 'Serviço de saúde inscrito ou obrigado à inscrição no CNES.'}],
+    'cnes',
     ['rt', {o: 'Cirurgião-dentista responsável técnico designado pelo responsável legal; alteração de RT ou substituto comunicada à vigilância.', r: [O1002('a5'), O1002('a7')]}],
     'avcb',
     ['sdbpf', {g: 'proc', n: 'Série de Documentos de Boas Práticas de Funcionamento (SDBPF)', o: 'Rotinas, protocolos técnicos padronizados, POPs e planos do serviço, elaborados pelo RT e adequados à assistência prestada (recepção, limpeza, desinfecção, processamento, esterilização).', r: [O1002('a110'), O1002('a112'), O1002('a113')]}],
@@ -301,7 +302,7 @@ const APPS = {
 function eac(tipo) {
   const l = [
     ['licenca', {o: 'Alvará de licenciamento indicando as atividades de EAC' + (tipo === 1 ? ' (na farmácia ou consultório isolado, além das atividades principais).' : '.'), r: [R978(73), L90]}],
-    'cnes',
+    ['cnes', {r: [R978(74)]}],
     ['rt', {o: 'Responsável técnico legalmente habilitado e substituto para os impedimentos; supervisor do pessoal técnico presente durante o funcionamento.', r: [R978(75), R978(122)]}],
     ['organograma', {g: 'rt', n: 'Estrutura organizacional documentada', o: 'Organograma e descrição das responsabilidades.', r: [R978(76)]}],
     'equipe',
@@ -328,7 +329,7 @@ function eac(tipo) {
 function imagem(m) {
   const ion = m !== 'ressonancia' && m !== 'ultrassom';
   const l = [
-    'licenca',
+    'licenca', 'cnes',
     ['rt', {o: 'Designação formal, pelo responsável legal, do responsável técnico de cada setor e do substituto, com as atividades delegadas.', r: [R611(13)]}],
     ['programas', {g: 'prog', n: 'Programas de Garantia da Qualidade' + (ion ? ' e de Proteção Radiológica' : ''), o: 'Programa de Garantia da Qualidade' + (ion ? ', Programa de Proteção Radiológica (prevenção, controle, vigilância e monitoramento)' : '') + ' e Programa de Educação Permanente implementados.', r: [R611(5)].concat(ion ? [R611(42)] : [])}],
     ['pep', {g: 'rt', n: 'Registros do Programa de Educação Permanente', o: 'Registros dos treinamentos do programa, no conteúdo e na periodicidade mínimos.', r: [R611(15)]}],

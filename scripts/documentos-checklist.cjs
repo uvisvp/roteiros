@@ -35,16 +35,18 @@ const ord = n => (+n < 10 ? n + 'º' : String(n));
    Sufixo 'b' marca redação alterada (Lei 10.741: a48b). */
 function partesV11(no) {
   /* itens de regulamento (Portaria SMS 2.619/2011: 'n14.10', 'n14.10-iii') */
-  const it = /^n(\d+(?:\.\d+)*)((?:-[a-z0-9]+)*)$/.exec(no);
+  const it = /^n(\d+(?:\.\d+)*)b?((?:-[a-z0-9]+)*)$/.exec(no);
   if (it) return {item: it[1], par: '', segs: it[2] ? it[2].slice(1).split('-') : []};
   const m = /^a(\d+(?:-[A-Z])?)(b?)((?:pu|p\d+)?)(b?)((?:-[a-z0-9]+)*)$/.exec(no);
   if (!m) return null;
   const segs = m[5] ? m[5].slice(1).split('-') : [];
   return {art: m[1], par: m[3] ? (m[3] === 'pu' ? 'pu' : m[3].slice(1)) : '', segs};
 }
-function dispV11(no) {
+/* itens que estão num anexo da norma (RDC 48/2013: o regulamento técnico é o Anexo II) */
+const ANEXO_V11 = {'rdc-anvisa-48-2013': 'Anexo II, '};
+function dispV11(no, lei) {
   const p = partesV11(no); if (!p) return no;
-  const out = [p.item ? 'item ' + p.item : 'art. ' + ord(p.art)];
+  const out = [p.item ? (ANEXO_V11[lei] || '') + 'item ' + p.item : 'art. ' + ord(p.art)];
   if (p.par) out.push(p.par === 'pu' ? 'parágrafo único' : '§ ' + ord(p.par));
   p.segs.forEach((s, i) => out.push(i === 0 ? ROM(s) : i === 1 ? 'alínea “' + s + '”' : 'item ' + s));
   return out.join(', ');
@@ -64,7 +66,7 @@ function textoV11(lei, no) {
   for (const x of nos) if (x[0] !== no && x[0].startsWith(no) && filho.test(x[0].slice(no.length)) && !/b/.test(x[0].slice(no.length).replace(/pub?/, ''))) l.push(linha(x));
   /* parágrafo, inciso ou alínea citados sozinhos levam antes o caput do artigo (ou do item) */
   if (p && (p.par || p.segs.length)) { const cap = nos.find(x => x[0] === (p.item ? 'n' + p.item : 'a' + p.art)); if (cap) l.unshift(linha(cap)); }
-  return {norma: L.l, disp: dispV11(no), texto: l.join('\n'), url: L.u || ''};
+  return {norma: L.l, disp: dispV11(no, lei), texto: l.join('\n'), url: L.u || ''};
 }
 
 /* normas que só o módulo de Serviços assistenciais traz (DATA.laws: nós {id, p, t, r, x}) */
@@ -191,4 +193,16 @@ const textos = resolve([...todos].sort());
 for (const x of Object.values(textos)) if (x.texto.length > 4000) x.texto = x.texto.slice(0, x.texto.lastIndexOf('\n', 4000)) + '\n[…] O texto continua na fonte oficial.';
 /* a citação legível de cada documento vem dos textos: “RDC Anvisa nº 63/2011, art. 39; …” */
 fs.writeFileSync(SAIDA, JSON.stringify({versao: C.VERSAO, grupos: C.GRUPOS, textos, apps}) + '\n');
+/* documentos/LISTAS.md: as listas em texto, para conferência roteiro a roteiro */
+{
+  const cit = d => { const por = {}, ordem = []; d.r.forEach(r => { const t = textos[r]; if (!por[t.norma]) { por[t.norma] = []; ordem.push(t.norma); } if (!por[t.norma].includes(t.disp)) por[t.norma].push(t.disp); }); return ordem.map(n => n + ', ' + por[n].join('; ')).join('; '); };
+  const bloco = (titulo, l, gs) => '## ' + titulo + '\n\n' + gs.map(([g, nome]) => { const ds = l.filter(d => d.g === g); return ds.length ? '### ' + nome + '\n\n' + ds.map(d => '- **' + d.n + '**' + (d.q ? ' — _' + d.q + '_' : '') + '  \n  ' + (d.o ? d.o + '  \n  ' : '') + 'Fundamento: ' + cit(d)).join('\n') + '\n' : ''; }).join('\n');
+  const md = ['# Checklist de documentos — listas por roteiro', '', 'Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão ' + C.VERSAO + '.', ''];
+  const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8'), nome = a => a === 'servicos-alimentacao-roteiro' ? 'Serviços de alimentação' : ((new RegExp("'" + a + "':\\{nome:'([^']+)'").exec(html) || [])[1] || a);
+  for (const [app, v] of Object.entries(apps)) {
+    if (Array.isArray(v)) md.push(bloco(nome(app), v, C.GRUPOS));
+    else for (const [k, m] of Object.entries(v.modalidades)) md.push(bloco(nome(app) + ' — ' + m.nome, m.lista, m.grupos || C.GRUPOS));
+  }
+  fs.writeFileSync(path.join(RAIZ, 'documentos', 'LISTAS.md'), md.join('\n') + '\n');
+}
 console.log('campo/documentos-dados.json:', Object.keys(apps).length, 'roteiros,', Object.keys(textos).length, 'dispositivos,', (fs.statSync(SAIDA).size / 1024).toFixed(0), 'KB');
