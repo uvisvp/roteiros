@@ -33,6 +33,7 @@ const PASSOS=[
  ['Central de Consultas: produtos não regularizados como dispositivos médicos',['central-naoreg.cjs']],
  ['Padronização: Campo, Apagar dados, rótulos, progresso das seções, Atacadista e cor da resposta',['padronizacao.cjs']],
  ['Produtos: relatórios e Anexo III no modelo do POP-O-SNVS-013 rev. 9',['produtos-pop13.cjs']],
+ ['Checklist de documentos: cartão, marcação, foto, Word à parte, exportar/importar e modalidades',['checklist-documentos.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],

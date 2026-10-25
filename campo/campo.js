@@ -92,6 +92,7 @@
   (function vis(o,d){if(ach||!o||typeof o!=='object'||d>5)return;for(var k=0;k<pri.length&&!ach;k++){var v=o[pri[k]];if(typeof v==='string'&&v.trim())ach=v.trim()}Object.keys(o).forEach(function(x){vis(o[x],d+1)})})(alvo,0);
   return ach;
  }
+ window.__uvsNomeEstab=nomeEstab; /* checklist de documentos (documentos.js) */
  /* item aberto na tela: {titulo} ou null */
  function itemAtual(){
   try{if(window.UvsPrevia){var l=UvsPrevia.itens();if(l&&l[0]&&l[0].titulo)return {titulo:limpa(l[0].titulo)}}}catch(e){}

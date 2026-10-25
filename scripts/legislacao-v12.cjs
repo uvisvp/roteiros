@@ -9,6 +9,7 @@
    artigos vêm de legislacao/lei-municipal-13725-2004.json (texto oficial,
    arts. 1º a 109) e, na falta, do banco já embutido nos módulos (drogaria e
    odontologia).
+   LEGIS_TOLERANTE=1: só avisa dos ausentes (conferência no scripts/documentos-checklist.cjs --ver).
    Uso: node scripts/legislacao-v12.cjs <saida.json> <roteiro.cjs>... */
 'use strict';
 const fs = require('node:fs');
@@ -159,6 +160,6 @@ for (const id of Object.keys(saida)) {
   if (inc) { const nm = norma(chave), n = nm && nm.porId.get(inc[1]); if (n) ctx.push(String(n.texto).split('\n')[0].trim()); }
   if (ctx.length) saida[id].texto = ctx.join('\n') + '\n' + t;
 }
-if (faltam.length) { console.error('Dispositivos ausentes no banco:\n  ' + faltam.join('\n  ')); process.exit(1); }
+if (faltam.length) { console.error('Dispositivos ausentes no banco:\n  ' + faltam.join('\n  ')); if (!process.env.LEGIS_TOLERANTE) process.exit(1); }
 fs.writeFileSync(path.resolve(SAIDA), JSON.stringify(saida, null, 1) + '\n');
 console.log(SAIDA + ':', Object.keys(saida).length, 'dispositivos');

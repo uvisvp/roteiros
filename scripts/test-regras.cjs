@@ -107,6 +107,17 @@ for (const [id, b] of [['casca', html], ...blocks]) {
   ok(!/Farmacopeia Brasileira,? \(?[1-7]ª/.test(b), id + ': Farmacopeia Brasileira em edição anterior à 8ª');
   ok(!/Farmacopeia Homeopática Brasileira,? \(?[1-3]ª/.test(b), id + ': Farmacopeia Homeopática Brasileira em edição anterior à 4ª');
 }
+/* checklist de documentos: bloco da casca igual ao JSON gerado, todo documento com fundamento e
+   texto embutido, e todos os roteiros com lista */
+{ const J = fs.readFileSync(path.join(root, 'campo', 'documentos-dados.json'), 'utf8').trim(), d = JSON.parse(J);
+  ok(blocks.get('campo--documentos') === J, 'campo--documentos diferente de campo/documentos-dados.json (rode scripts/repack-campo.cjs)');
+  const CFG = (html.match(/CFG=\{\n  '([\s\S]*?)\n \};/) || ['', ''])[1].match(/^\s*'([a-z0-9-]+)':/gm) || [];
+  const apps = CFG.map(x => x.replace(/[\s':]/g, '')).concat((html.match(/CFG=\{\n  '([a-z0-9-]+)'/) || [])[1] || []);
+  const faltam = [...new Set(apps)].filter(a => !d.apps[a]);
+  ok(apps.length >= 20 && !faltam.length, 'checklist de documentos: roteiros sem lista (' + faltam.join(', ') + ')');
+  const docs = Object.values(d.apps).flatMap(a => Array.isArray(a) ? a : Object.values(a.modalidades).flatMap(m => m.lista));
+  const ruins = docs.filter(x => !x.r.length || x.r.some(r => !d.textos[r] || !d.textos[r].texto)).map(x => x.id);
+  ok(!ruins.length, 'checklist de documentos: documento sem fundamento ou sem texto (' + ruins.slice(0, 5).join(', ') + ')'); }
 
 if (falhas.length) { console.error('FALHA:\n  ' + falhas.join('\n  ')); process.exit(1); }
 console.log('Regras OK: Lei 13.725 (artigos e irregularidades), Para saber mais com fonte, Farmacopeia vigente, cache do PWA e versão ' + v + '.');

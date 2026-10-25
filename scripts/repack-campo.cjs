@@ -19,6 +19,10 @@
      módulos próprios que não a tinham (19/10/2026).
    - apagar-padrao.js: cartão “Apagar dados da inspeção” na tela inicial de Odontologia,
      Produtos, Serviços de alimentação e Serviços assistenciais (25/10/2026).
+   - documentos.js: checklist de documentos, cartão após o de identificação, com relatório à
+     parte (25/10/2026). A lista e os textos legais (campo/documentos-dados.json, gerado por
+     scripts/documentos-checklist.cjs) ficam comprimidos no bloco campo--documentos; ao abrir, a
+     casca põe no módulo só a lista do roteiro aberto (window.__uvsDocs).
    Entra na casca, num bloco entre CAMPO_INICIO e CAMPO_FIM; ao abrir um
    roteiro, a casca acrescenta os scripts ao fim do módulo
    (window.__uvisCampoInjeta). O iframe recebe permissão de microfone,
@@ -27,6 +31,7 @@
 const fs = require('node:fs'), path = require('node:path');
 const root = path.join(__dirname, '..'), file = path.join(root, 'index.html');
 let html = fs.readFileSync(file, 'utf8');
+const {lz} = require('./integrated-html.cjs').unpackText(html);
 const le = f => fs.readFileSync(path.join(root, 'campo', f), 'utf8');
 const jsStr = t => JSON.stringify(t).replace(/<\//g, '<\\/');
 const fecha = t => t.replace(/<\/(script)/gi, '<\\/$1');
@@ -40,19 +45,30 @@ function troca(de, para, rot) {
 }
 const casca = `(function(){
  var SO_DITADO=${JSON.stringify(SO_DITADO)};
- var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js', 'apagar-padrao.js'].map(le).join('\n'))};
+ var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js', 'apagar-padrao.js', 'documentos.js'].map(le).join('\n'))};
  var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js', 'teclado.js'].map(le).join('\n'))};
+ /* checklist de documentos: só a lista (e os textos legais) do roteiro aberto */
+ var DOCS=null;function docsDe(app){try{if(!DOCS){var e=document.getElementById('campo--documentos');if(!e)return '';DOCS=JSON.parse(LZString.decompressFromBase64(e.textContent.trim()))}
+  var a=DOCS.apps[app];if(!a)return '';var o=Array.isArray(a)?{lista:a}:{modalidades:a.modalidades},t={};
+  (o.lista?[o.lista]:Object.keys(o.modalidades).map(function(m){return o.modalidades[m].lista})).forEach(function(l){l.forEach(function(d){d.r.forEach(function(r){if(DOCS.textos[r])t[r]=DOCS.textos[r]})})});
+  o.grupos=DOCS.grupos;o.textos=t;o.versao=DOCS.versao;
+  return 'window.__uvsDocs='+JSON.stringify(o).replace(/<\\//g,'<\\\\/').replace(/\\u2028/g,'\\\\u2028').replace(/\\u2029/g,'\\\\u2029')+';'}catch(e){return ''}}
  window.__uvisCampoInjeta=function(app,s){var k=s.lastIndexOf('</body>');if(k<0||s.indexOf('<!--UVS-CAMPO-->')>=0)return s;
   /* __uvsApp: o roteiro aberto (Lei 13.725 por roteiro, bordas do Word); a marca evita injetar duas vezes */
-  return s.slice(0,k)+'<!--UVS-CAMPO--><scr'+'ipt>window.__uvsApp='+JSON.stringify(app)+';'+(SO_DITADO.indexOf(app)>=0?DITADO_JS:CAMPO_JS)+'</scr'+'ipt>'+s.slice(k)};
+  var so=SO_DITADO.indexOf(app)>=0;
+  return s.slice(0,k)+'<!--UVS-CAMPO--><scr'+'ipt>window.__uvsApp='+JSON.stringify(app)+';'+(so?DITADO_JS:docsDe(app)+CAMPO_JS)+'</scr'+'ipt>'+s.slice(k)};
  /* Salvas: os dados do botão Campo (med-campo-<roteiro>) e as fotos dos achados
     entram na inspeção salva; Nova inspeção apaga também esses dados. */
  var n=0;function salvas(){var S=window.UvisSalvas;if(!S){if(++n<80)setTimeout(salvas,150);return}
-  Object.keys(S.CFG).forEach(function(a){var c=S.CFG[a],k='med-campo-'+a;if(c.ls.indexOf(k)<0)c.ls.push(k);if(!c.fotos.length)c.fotos.push(a+'-campo-')});
-  var nova=S.novaInspecao;if(nova&&!nova.__campo){S.novaInspecao=function(app){try{localStorage.removeItem('med-campo-'+app)}catch(e){}return nova.apply(this,arguments)};S.novaInspecao.__campo=true}}
+  Object.keys(S.CFG).forEach(function(a){var c=S.CFG[a];['med-campo-'+a,'uvs-docs-'+a].forEach(function(k){if(c.ls.indexOf(k)<0)c.ls.push(k)});if(!c.fotos.length)c.fotos.push(a+'-campo-')});
+  var nova=S.novaInspecao;if(nova&&!nova.__campo){S.novaInspecao=function(app){try{localStorage.removeItem('med-campo-'+app);localStorage.removeItem('uvs-docs-'+app)}catch(e){}return nova.apply(this,arguments)};S.novaInspecao.__campo=true}}
  salvas();
 })();`;
-const bloco = START + '<script>' + fecha(casca) + '</script>\n<script>' + fecha(le('copia-auto.js')) + '</script>\n<script>' + fecha(le('ditado.js')) + '</script>' + END;
+/* lista do checklist de documentos, comprimida (a casca descomprime ao abrir o roteiro) */
+const dados = fs.readFileSync(path.join(root, 'campo', 'documentos-dados.json'), 'utf8').trim();
+const dadosLz = lz.compressToBase64(dados);
+if (lz.decompressFromBase64(dadosLz) !== dados) throw Error('round-trip campo--documentos');
+const bloco = START + '<script type="text/plain" id="campo--documentos">' + dadosLz + '</script>\n<script>' + fecha(casca) + '</script>\n<script>' + fecha(le('copia-auto.js')) + '</script>\n<script>' + fecha(le('ditado.js')) + '</script>' + END;
 const i0 = html.indexOf(START);
 if (i0 >= 0) html = html.slice(0, i0) + html.slice(html.indexOf(END) + END.length).replace(/^\n/, '');
 const k = html.lastIndexOf('</body>'); if (k < 0) throw Error('</body> da casca');
