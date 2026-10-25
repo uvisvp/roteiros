@@ -59,4 +59,10 @@ html = html.replace(/(<script type="text\/plain" id="([^"]+)">)([\s\S]*?)(<\/scr
 });
 if (!feito) throw Error('Bloco não localizado: ' + ID);
 fs.writeFileSync(file, html);
+/* as citações do inventário também estão na fonte distribuidora-textos.js (injetada por
+   repack-distribuidora-docs): mesmas trocas, para não voltarem numa nova injeção */
+const fonte = path.join(__dirname, '..', 'distribuidora-textos.js');
+let t = fs.readFileSync(fonte, 'utf8'), t0 = t;
+for (const [de, para] of TROCAS) if (t.includes(de)) t = t.split(de).join(para);
+if (t !== t0) fs.writeFileSync(fonte, t);
 console.log('Atacadista: cada parte da citação com a norma e um só artigo.');
