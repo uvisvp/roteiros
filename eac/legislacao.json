@@ -131,6 +131,12 @@
   "texto": "Art. 145 - Os resíduos sólidos de serviços de saúde deverão ser obrigatoriamente segregados na origem e tratados em sistemas cadastrados, controlados e fiscalizados pela Autoridade Municipal de Limpeza Urbana - AMLURB antes de sua disposição final.\nParágrafo único - O controle e fiscalização mencionados no \"caput\" deste artigo não eximirá o gerador da responsabilidade pelo cumprimento das leis e normas específicas que regulam a atividade.",
   "url": "https://legislacao.prefeitura.sp.gov.br/lei-13478-de-30-de-dezembro-de-2002"
  },
+ "portaria-svs-ms-64-2018::artigo::1": {
+  "norma": "Portaria SVS/MS nº 64/2018",
+  "disp": "art. 1º",
+  "texto": "Art. 1º Fica determinado aos laboratórios da rede pública e rede privada, de todas as Unidades Federadas, a utilização das normas de interpretação para os testes de sensibilidade aos antimicrobianos (TSA), tendo como base os documentos da versão brasileira do European Committee on Antimicrobial Susceptibility Testing (EUCAST / versão BrCAST).\nParágrafo único. A Secretaria de Vigilância à Saúde (SVS/MS) disponibilizará os documentos de forma gratuita, em português, de livre acesso, na forma digital e com opção de impressão, no endereço eletrônico: http://portalms.saude.gov.br/svs .",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=POR&numeroAto=00000064&seqAto=000&valorAno=2018&orgao=SVS%2FMS&cod_modulo=310&cod_menu=9431"
+ },
  "rdc-222-2018::artigo::11": {
   "norma": "RDC Anvisa nº 222/2018",
   "disp": "art. 11",
@@ -220,6 +226,12 @@
   "disp": "art. 87",
   "texto": "Art. 87 Os recipientes de acondicionamento dos RSS do Grupo E devem ser substituídos de acordo com a demanda ou quando o nível de preenchimento atingir 3/4 (três quartos) da capacidade ou de acordo com as instruções do fabricante, sendo proibidos seu esvaziamento manual e seu reaproveitamento.\nParágrafo único. Admite-se o emprego de tecnologia que promova o esvaziamento automatizado de recipientes plásticos específicos com posterior descontaminação, possibilitando sua reutilização.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000222&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2018"
+ },
+ "rdc-50-2002::artigo::1": {
+  "norma": "RDC Anvisa nº 50/2002",
+  "disp": "art. 1º",
+  "texto": "Art. 1º - Aprovar o Regulamento Técnico destinado ao planejamento, programação, elaboração, avaliação e aprovação de projetos físicos de estabelecimentos assistenciais de saúde, em anexo a esta Resolução a ser observado em todo território nacional, na área pública e privada compreendendo:\na) as construções novas de estabelecimentos assistenciais de saúde de todo o país;\nb) as áreas a serem ampliadas de estabelecimentos assistenciais de saúde já existentes;\nc) as reformas de estabelecimentos assistenciais de saúde já existentes e os anteriormente não destinados a estabelecimentos de saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000050&seqAto=002&valorAno=2002&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
  },
  "rdc-63-2011::artigo::35": {
   "norma": "RDC Anvisa nº 63/2011",

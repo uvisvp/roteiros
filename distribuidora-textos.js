@@ -8,7 +8,7 @@ const DIST_REV={
  q159:{nc:'Não há fornecimento ou registro do fornecimento de equipamentos de proteção individual aos funcionários, conforme os requisitos de saúde, higiene e vestuário do pessoal.'},
  q282:{nc:'Não há procedimento para comunicação imediata à Comissão Nacional de Energia Nuclear (CNEN) em caso de sinistro, roubo ou furto de radiofármacos.',legal:'RDC Anvisa nº 430/2020, art. 71'},
  q293:{nc:'A qualificação do transporte não considera as especificações de conservação dos produtos transportados.',legal:'RDC Anvisa nº 430/2020, art. 64, III'},
- q338:{nc:'Os medicamentos devolvidos não são avaliados, com registro dos fatores ponderados pelo sistema de gestão da qualidade, antes da reintegração ao estoque comercializável.',legal:'RDC Anvisa nº 430/2020, arts. 34 e 35'},
+ q338:{nc:'Os medicamentos devolvidos não são avaliados, com registro dos fatores ponderados pelo sistema de gestão da qualidade, antes da reintegração ao estoque comercializável.',legal:'RDC Anvisa nº 430/2020, art. 34; RDC Anvisa nº 430/2020, art. 35'},
  q368:{nc:'Não há sistema de escrituração da movimentação dos medicamentos sujeitos a controle especial.'},
  q388:{nc:'As áreas dos laboratórios de ensaios físico-químicos e microbiológicos não são separadas e independentes.'},
  q389:{nc:'O laboratório de controle microbiológico não dispõe de sistema de tratamento de ar adequado aos ensaios realizados.'},

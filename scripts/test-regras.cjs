@@ -65,6 +65,14 @@ for (const arq of ['academia/roteiro.cjs', 'vacina/roteiro.cjs', 'eac/roteiro.cj
   ok(!volta.length, 'consulta a alertas sanitários de volta (rode scripts/repack-sem-alertas.cjs): ' + volta.join(', '));
   ok(!/alertas sanitários/i.test(html.slice(html.indexOf('<div class="guide-body">'), html.indexOf('<div class="toast"'))), 'Guia de uso ainda cita alertas sanitários'); }
 
+/* Atacadista: o botão abre cada parte da citação (separada por “;”) pelo nome da norma; parte sem a
+   norma (“…; Art. 25”) ou com vários artigos (“arts. 34 e 35”) não abria o texto (revisão de 25/10/2026) */
+{ const ata = blocks.get('app--distribuidoras-transportadoras'), ruins = new Set();
+  for (const m of ata.matchAll(/"(?:legal|n)":"((?:[^"\\]|\\.)*)"/g)) m[1].split(';').map(x => x.trim()).filter(Boolean).forEach(x => {
+    if (/13\.725/.test(x)) return;
+    if (!/\d+\/\d{4}/.test(x) || !/\bart\.\s*\d/i.test(x) || /\barts\.|[Aa]rt\.\s*\d+.*\b[Aa]rt\.|c\/c/.test(x)) ruins.add(x); });
+  ok(!ruins.size, 'Atacadista: citação sem a norma ou com vários artigos na mesma parte (rode scripts/repack-atacadista-citacoes.cjs): ' + [...ruins].slice(0, 4).join(' | ')); }
+
 /* 3. cache do PWA */
 const sw = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 const ess = [...sw.slice(sw.indexOf('const ESSENCIAIS'), sw.indexOf('];', sw.indexOf('const ESSENCIAIS'))).matchAll(/'\.\/([^']+)'/g)].map(m => m[1]);
@@ -99,6 +107,17 @@ for (const [id, b] of [['casca', html], ...blocks]) {
   ok(!/Farmacopeia Brasileira,? \(?[1-7]ª/.test(b), id + ': Farmacopeia Brasileira em edição anterior à 8ª');
   ok(!/Farmacopeia Homeopática Brasileira,? \(?[1-3]ª/.test(b), id + ': Farmacopeia Homeopática Brasileira em edição anterior à 4ª');
 }
+/* checklist de documentos: bloco da casca igual ao JSON gerado, todo documento com fundamento e
+   texto embutido, e todos os roteiros com lista */
+{ const J = fs.readFileSync(path.join(root, 'campo', 'documentos-dados.json'), 'utf8').trim(), d = JSON.parse(J);
+  ok(blocks.get('campo--documentos') === J, 'campo--documentos diferente de campo/documentos-dados.json (rode scripts/repack-campo.cjs)');
+  const CFG = (html.match(/CFG=\{\n  '([\s\S]*?)\n \};/) || ['', ''])[1].match(/^\s*'([a-z0-9-]+)':/gm) || [];
+  const apps = CFG.map(x => x.replace(/[\s':]/g, '')).concat((html.match(/CFG=\{\n  '([a-z0-9-]+)'/) || [])[1] || []);
+  const faltam = [...new Set(apps)].filter(a => !d.apps[a]);
+  ok(apps.length >= 20 && !faltam.length, 'checklist de documentos: roteiros sem lista (' + faltam.join(', ') + ')');
+  const docs = Object.values(d.apps).flatMap(a => Array.isArray(a) ? a : Object.values(a.modalidades).flatMap(m => m.lista));
+  const ruins = docs.filter(x => !x.r.length || x.r.some(r => !d.textos[r] || !d.textos[r].texto)).map(x => x.id);
+  ok(!ruins.length, 'checklist de documentos: documento sem fundamento ou sem texto (' + ruins.slice(0, 5).join(', ') + ')'); }
 
 if (falhas.length) { console.error('FALHA:\n  ' + falhas.join('\n  ')); process.exit(1); }
 console.log('Regras OK: Lei 13.725 (artigos e irregularidades), Para saber mais com fonte, Farmacopeia vigente, cache do PWA e versão ' + v + '.');

@@ -210,7 +210,7 @@
   {
    "id": "reg",
    "title": "Regularidade dos produtos",
-   "description": "Confira por amostragem no estoque. A consulta de regularização fica no fim do roteiro.",
+   "description": "Confira por amostragem no estoque. A consulta de regularização fica no fim do roteiro. Produto que consta da lista da Anvisa de produtos não regularizados como dispositivos médicos não exige notificação nem registro: consulte na Central de Consultas, modo “DM não regularizado”, e leia a exceção do item.",
    "items": [
     {
      "id": "r1",
@@ -226,7 +226,7 @@
     {
      "id": "r1ivd",
      "text": "Dispositivos para diagnóstico in vitro (IVD) regularizados conforme a classe de risco (notificação ou registro).",
-     "legal": "Lei Federal nº 6.360/1976, art. 12; RDC Anvisa nº 830/2023.",
+     "legal": "Lei Federal nº 6.360/1976, art. 12; RDC Anvisa nº 830/2023, arts. 6º e 7º.",
      "critical": true,
      "when": {
       "flagsAll": [
@@ -1524,7 +1524,7 @@
     {
      "id": "tv5",
      "text": "Cargas incompatíveis segregadas; produto perigoso transportado segundo o regulamento próprio, sem contato com produto sujeito à vigilância sanitária.",
-     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “c”; Resolução ANTT nº 5.998/2022, quando houver produto perigoso.",
+     "legal": "RDC Anvisa nº 16/2014, art. 28, II, “c”; Resolução ANTT nº 5.998/2022, art. 2º, quando houver produto perigoso.",
      "critical": true
     },
     {
@@ -1657,7 +1657,7 @@
    "id": "p05",
    "group": "1. Licença, AFE e responsável técnico",
    "text": "ATENÇÃO PRIORITÁRIA — Por movimentar substâncias sujeitas a controle especial sem Autorização Especial.",
-   "legal": "RDC Anvisa nº 16/2014, art. 4º, c/c Portaria SVS/MS nº 344/1998.",
+   "legal": "RDC Anvisa nº 16/2014, art. 4º, c/c Portaria SVS/MS nº 344/1998, art. 2º.",
    "when": {
     "flagsAll": [
      "ae344"
@@ -1691,7 +1691,7 @@
    "id": "p09",
    "group": "2. Regularidade e rotulagem dos produtos",
    "text": "ATENÇÃO PRIORITÁRIA — Por manter, expor ou distribuir dispositivo médico ou produto para diagnóstico in vitro sem notificação ou registro na Anvisa.",
-   "legal": "Lei Federal nº 6.360/1976, art. 12, c/c RDC Anvisa nº 751/2022, arts. 6º e 7º, ou RDC Anvisa nº 830/2023.",
+   "legal": "Lei Federal nº 6.360/1976, art. 12, c/c RDC Anvisa nº 751/2022, arts. 6º e 7º, ou RDC Anvisa nº 830/2023, arts. 6º e 7º.",
    "when": {
     "flagsAll": [
      "cls_disp"
@@ -2052,7 +2052,7 @@
    "id": "p34",
    "group": "4. Armazenamento, distribuição e transporte",
    "text": "Por transportar produto sujeito à vigilância sanitária junto com carga incompatível ou perigosa, sem segregação.",
-   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, II, “c”, e Resolução ANTT nº 5.998/2022.",
+   "legal": "Lei Municipal nº 13.725/2004, art. 46, c/c RDC Anvisa nº 16/2014, art. 28, II, “c”, e Resolução ANTT nº 5.998/2022, art. 2º.",
    "when": {
     "types": [
      "transportadora"

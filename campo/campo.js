@@ -46,8 +46,13 @@
   if(window.DrogariaAPI)return 'drogaria';
   try{if(typeof renderPreview==='function'&&typeof APP_DATA!=='undefined')return 'manip'}catch(e){}
   try{if(typeof reportText==='function'&&typeof state!=='undefined'&&state.answers)return 'dist'}catch(e){}
+  /* Odontologia, Produtos, Alimentação e Serviços assistenciais: navegação padrão (UvisPadrao) com
+     estado próprio de cada módulo; o progresso vem da lista de itens do componente */
+  if(window.UvisPadrao&&UvisPadrao.lista&&PADRAO.indexOf(APP)>=0)return 'pu';
   return '';
  }
+ var PADRAO=['odontologia','produtos-correlatos','servicos-alimentacao-roteiro','servicos-assistenciais'];
+ function listaPu(){try{return UvisPadrao.lista()||[]}catch(e){return []}}
  function stRs(){try{return JSON.parse(localStorage.getItem(ROTEIRO.store)||'{}')||{}}catch(e){return {}}}
  function perguntasRs(){var out=[];ROTEIRO.secoes.forEach(function(s){s.itens.forEach(function(i){(i.perguntas||[]).forEach(function(q){out.push({q:q,item:i})})})});return out}
  /* {c, nc, na, resp} — resp = total respondido */
@@ -57,6 +62,7 @@
    if(m==='rs'){var r=stRs().r||{};Object.keys(r).forEach(function(k){soma(r[k])})}
    else if(m==='manip'){var rr=state.responses||{};Object.keys(rr).forEach(function(k){soma(rr[k])})}
    else if(m==='dist'){var a=state.answers||{};Object.keys(a).forEach(function(k){if(a[k]&&a[k].status)soma(a[k].status)})}
+   else if(m==='pu')listaPu().forEach(function(s){s.itens.forEach(function(i){resp+=i.feitos||0})});
    else if(m==='drogaria'){var vis=function(o,d){if(!o||typeof o!=='object'||d>6)return;Object.keys(o).forEach(function(k){if(k==='answers'&&o[k]&&typeof o[k]==='object')Object.keys(o[k]).forEach(function(q){soma(o[k][q])});else vis(o[k],d+1)})};vis(DrogariaAPI.getState(),0);
     /* na drogaria há perguntas descritivas (Sim/Não); a contagem de NC vem das irregularidades do relatório */
     nc=irregularidades().length;c=Math.max(0,resp-nc-na)}
@@ -81,10 +87,12 @@
    if(m==='manip'){var i=state.identity||{};return i.fantasia||i.razao||''}
   }catch(e){}
   var alvo=null;try{alvo=m==='drogaria'?DrogariaAPI.getState():(typeof state!=='undefined'?state:null)}catch(e){}
+  if(!alvo&&m==='pu')try{alvo=typeof st!=='undefined'&&st?st:(typeof saved!=='undefined'?saved:null)}catch(e){}
   var pri=['fantasia','nomeFantasia','nome_fantasia','razao','razaoSocial','razao_social','empresa','estabelecimento','establishment','company'],ach='';
   (function vis(o,d){if(ach||!o||typeof o!=='object'||d>5)return;for(var k=0;k<pri.length&&!ach;k++){var v=o[pri[k]];if(typeof v==='string'&&v.trim())ach=v.trim()}Object.keys(o).forEach(function(x){vis(o[x],d+1)})})(alvo,0);
   return ach;
  }
+ window.__uvsNomeEstab=nomeEstab; /* checklist de documentos (documentos.js) */
  /* item aberto na tela: {titulo} ou null */
  function itemAtual(){
   try{if(window.UvsPrevia){var l=UvsPrevia.itens();if(l&&l[0]&&l[0].titulo)return {titulo:limpa(l[0].titulo)}}}catch(e){}
@@ -112,7 +120,7 @@
  function apagaFoto(id){var sc=escopoFotos();return idb('readwrite',function(s){return s.delete(sc+'|'+id)})}
 
  /* ---------------- pendente por pergunta ---------------- */
- var RESP=/^(Cumpre|Não cumpre|Não se aplica|Sim|Não|Registrado|Recomendar|Parcial|C|NC|NA)$/;
+ var RESP=/^(Cumpre|Não cumpre|Não se aplica|Sim|Não|Registrado|Recomendar|Parcial|C|NC|NA|Encontrado|Não localizado)$/;
  function grupos(){var g=[];[].forEach.call(document.querySelectorAll('button'),function(b){if(b.closest('#cmp-painel,#cmp-modal'))return;if(!RESP.test(b.textContent.trim()))return;var p=b.parentElement;if(p&&g.indexOf(p)<0)g.push(p)});
   return g.filter(function(p){return [].filter.call(p.children,function(x){return x.tagName==='BUTTON'&&RESP.test(x.textContent.trim())}).length>=2})}
  function chaveGrupo(p){var bs=[].filter.call(p.children,function(x){return x.tagName==='BUTTON'&&RESP.test(x.textContent.trim())});
@@ -266,9 +274,9 @@
  function k(v,r,al){return '<div class="k'+(al?' al':'')+'"><b>'+v+'</b><span>'+r+'</span></div>'}
  function corpo(){
   if(aba==='resumo'){var n=contagem(),pend=pendencias(),ach=C.achados,vinc=ach.filter(function(a){return a.item}).length,nome=nomeEstab();
-   var sec='';try{if(n.m==='rs'){var ss=UvisPadrao.secoes(),tot=0,ok=0;ss.forEach(function(s){s.itens.forEach(function(i){if(i.total){tot++;if(i.feitos>=i.total)ok++}})});sec=k(ok+'/'+tot,'itens concluídos')}}catch(e){}
+   var sec='';try{if(n.m==='rs'||n.m==='pu'){var ss=n.m==='pu'?listaPu():UvisPadrao.secoes(),tot=0,ok=0;ss.forEach(function(s){s.itens.forEach(function(i){if(i.total){tot++;if(i.feitos>=i.total)ok++}})});sec=k(ok+'/'+tot,'itens concluídos')}}catch(e){}
    return '<div class="lin"><b>'+esc(nome||'Estabelecimento não identificado')+'</b><small>'+esc(document.title||'')+' · início '+esc(dataHora(C.inicio))+' · última alteração '+esc(dataHora(C.alterado))+'</small></div>'
-    +'<h4>Respostas</h4><div class="grade">'+k(n.resp,'respondidas')+(n.m==='drogaria'?'':k(n.c,'conformes'))+k(n.nc,'não conformes'+(n.m==='drogaria'?' (irregularidades)':''),n.nc)+k(n.na,'não se aplica')+sec+'</div>'
+    +'<h4>Respostas</h4><div class="grade">'+k(n.resp,'respondidas')+(n.m==='pu'?'':(n.m==='drogaria'?'':k(n.c,'conformes'))+k(n.nc,'não conformes'+(n.m==='drogaria'?' (irregularidades)':''),n.nc)+k(n.na,'não se aplica'))+sec+'</div>'
     +'<h4>Controle</h4><div class="grade">'+k(Object.keys(C.pend).length,'perguntas pendentes',Object.keys(C.pend).length)+k(C.lemb.filter(function(l){return !l.feito}).length,'lembretes abertos',C.lemb.some(function(l){return !l.feito}))+k(vinc+'/'+ach.length,'achados vinculados',vinc<ach.length)+'<div class="k"><b data-fotos>…</b><span>fotos</span></div>'+k(C.verif.length,'verificações registradas')+'</div>'
     +(pend.length?'<h4>A resolver antes de encerrar ('+pend.length+')</h4>'+pend.slice(0,8).map(function(x){return '<div class="lin"><small>'+esc(x.tipo)+'</small>'+esc(x.txt)+'</div>'}).join('')+(pend.length>8?'<p class="nota">… e mais '+(pend.length-8)+' na aba Pendências.</p>':''):'<p class="nota">Nada pendente.</p>')
     +'<p class="nota">'+(n.m==='drogaria'?'Na drogaria há perguntas descritivas (Sim/Não); por isso o número de não conformes é o de irregularidades do relatório. ':'')+'Controle de completude da inspeção; não é pontuação sanitária.</p>'

@@ -137,7 +137,7 @@ function ddItemNodes(item,ctx){
  }
  return {nodes,houve,todasNA:alguma&&todasNA};
 }
-function ddVazio(item,r){if(r.todasNA)return 'Não se aplica.';if(/^12/.test(item)&&!(state.meta.activities||[]).includes('Importar'))return 'Não se aplica: o estabelecimento não realiza importação.';if(item==='7'||item==='7.1')return 'Não aplicável.';return 'Não avaliado nesta inspeção.'}
+function ddVazio(item,r){if(r.todasNA)return 'Não se aplica.';if(/^12/.test(item)&&!(state.meta.activities||[]).includes('Importar'))return 'Não se aplica: o estabelecimento não realiza importação.';if(item==='7'||item==='7.1')return 'Não aplicável.';return 'Não aplicável.'}
 
 /* ---------- Fotos: redução para o documento e legenda pela pergunta ---------- */
 function ddReduz(url){return new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1000/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);res({url:c.toDataURL('image/jpeg',.65),w:c.width,h:c.height})};im.onerror=()=>res(null);im.src=url})}
@@ -322,7 +322,7 @@ function ddAnexoIPendencias(final){
  if(!ddTem(R.previous)&&m.first!=='Sim')out.push('Item 6: não conformidades anteriores não preenchidas.');
  if(!R.emAtividade)out.push('Item 14: informe se o estabelecimento está em atividade.');
  const vazios=DD_ORDEM.filter(k=>k!=='1'&&k!=='2'&&!/^12/.test(k)&&!ddItemNodes(k,{nc:ddNcMapa(),fotosQ:{},ncUsadas:new Set()}).houve);
- if(vazios.length)out.push('Itens sem descrição nem respostas (sairão como “Não avaliado nesta inspeção”): '+vazios.join(', ')+'.');
+ if(vazios.length)out.push('Itens sem descrição nem respostas (sairão como “Não aplicável”, texto que o POP-O-SNVS-011 pede nos campos sem conteúdo): '+vazios.join(', ')+'.');
  allNCs().forEach((n,i)=>{if(!ncData(n).category)out.push('NC nº '+(i+1)+': categoria (POP-O-SNVS-032) não informada.')});
  if(final){if(!state.plan.classification)out.push('Item 14: classificação final não definida.');out.push(...ddPlanoPendencias())}
  return out;

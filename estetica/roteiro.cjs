@@ -230,7 +230,9 @@ const secoes = [
             inf: ['s25', 's26']}
         ],
         orient: [
-          {t: 'O PBA de serviço de saúde segue a RDC 50/2002 (regulamento técnico para projetos físicos de estabelecimentos assistenciais de saúde), que traz os ambientes, dimensões e instalações exigidos.', f: 'RDC Anvisa nº 50/2002; RDC Anvisa nº 63/2011, art. 34'}
+          {t: 'O PBA de serviço de saúde segue a RDC 50/2002 (regulamento técnico para projetos físicos de estabelecimentos assistenciais de saúde), que traz os ambientes, dimensões e instalações exigidos.', f: 'RDC Anvisa nº 50/2002; RDC Anvisa nº 63/2011, art. 34'},
+          {t: 'No Município de São Paulo, a avaliação do projeto físico pela vigilância (o antigo Laudo Técnico de Avaliação, LTA) foi substituída pela Declaração de Conformidade Físico-Funcional (DCFF): documento autodeclaratório, sem aprovação nem laudo, assinado pelo responsável legal e pelo engenheiro ou arquiteto, com a ART ou RRT e o memorial descritivo de atividades, exigido na licença inicial, na alteração de endereço e na ampliação que altere a estrutura física e o fluxo.', f: 'Portaria SMS/COVISA nº 404/2024, arts. 3º a 5º; Portaria SMS nº 266/2025, art. 2º, XII, e Anexo IV (documento 17)'},
+          {t: 'Quem precisa da DCFF é definido pelo documento 17 na coluna “Documentos” do Anexo I da Portaria SMS nº 266/2025 (site da Covisa, Licenciamento Sanitário – CMVS). Estética não médica, inclusive a de profissional de nível superior da saúde (CNAE 9602-5/02), é licenciada pelo CLI ou por DCA, sem DCFF: não há projeto aprovado a cobrar, e a estrutura é conferida na inspeção. Serviço médico com recursos cirúrgicos ou exames complementares (CNAE 8630-5/01 e 8630-5/02) exige a DCFF: confira-a no processo de licenciamento e se os ambientes vistos correspondem ao declarado.', f: 'Portaria SMS nº 266/2025, art. 13 e Anexo I (CNAE 9602-5/02, 8630-5/01 e 8630-5/02)'}
         ]},
       {id: 'agua', titulo: 'Controle de qualidade da água', curto: 'Água',
         perguntas: [
