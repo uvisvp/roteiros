@@ -102,7 +102,7 @@ const GUIA = `<div class="guide-body">
         <section class="guide-section">
           <h3>Ações do topo</h3>
           <div class="guide-routes">
-            <article class="guide-route"><b>Central de Consultas</b><p>Bases públicas da Anvisa e do CNES: registro ou notificação, processo, CNPJ, EAN/GTIN, AFE/AE, código CNES (município de São Paulo), lote ou modelo nas medidas fiscais e licença no SIVISA. Mostra cadastro, autorizações, produtos vinculados, Cannabis, CNES e produtos irregulares, cada base em bloco próprio, com a data da fonte. Não encontrar não atesta regularidade.</p></article>
+            <article class="guide-route"><b>Central de Consultas</b><p>Bases públicas da Anvisa e do CNES: registro ou notificação, processo, CNPJ, EAN/GTIN, AFE/AE, código CNES (município de São Paulo), lote ou modelo nas medidas fiscais, lista de produtos não regularizados como dispositivos médicos e licença no SIVISA. Mostra cadastro, autorizações, produtos vinculados, Cannabis, CNES e produtos irregulares, cada base em bloco próprio, com a data da fonte. Não encontrar não atesta regularidade.</p></article>
             <article class="guide-route"><b>Juntar PDF</b><p>Ferramenta externa para reunir documentos em um único PDF. Abre em nova aba e exige conexão com a internet.</p></article>
           </div>
         </section>

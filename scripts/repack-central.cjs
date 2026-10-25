@@ -38,6 +38,20 @@ troca("produtos_irregulares:'Produtos irregulares',produto:'Produto vinculado'};
 troca("produtos_irregulares:'Produtos irregulares (Anvisa)',", "produtos_irregulares:'Produtos irregulares (Anvisa)', cnes:'CNES — estabelecimentos de saúde (Ministério da Saúde/DATASUS)',", 'CNES: procedência');
 troca("function valor(k,v){", "Object.assign(field,{cnes:'CNES',tipo_unidade:'Tipo de unidade',cnpj_mantenedora:'CNPJ da mantenedora',endereco:'Endereço',telefone:'Telefone',email:'E-mail',gestao:'Gestão',turno:'Turno de atendimento',licenca_cnes:'Licença sanitária declarada no CNES',equipamentos:'Equipamentos declarados',servicos:'Serviços declarados',atualizacao_cnes:'Atualização no CNES'});\nfunction valor(k,v){", 'CNES: rótulos dos campos');
 troca("'Reúne, separados por base, as autorizações AFE/AE, os produtos vinculados ao CNPJ,", "'Reúne, separados por base, as autorizações AFE/AE, o cadastro no CNES (município de São Paulo), os produtos vinculados ao CNPJ,", 'CNES: dica do CNPJ');
+/* 4. Produtos não regularizados como dispositivos médicos (lista da Anvisa; pedido de 22/10/2026):
+      modo “DM não regularizado”, busca por nome ou trecho. Código em scripts/central-naoreg.js. */
+const NR_JS = '/* NAOREG-INICIO */\n' + fs.readFileSync(path.join(__dirname, 'central-naoreg.js'), 'utf8') + '/* NAOREG-FIM */\n';
+{ const i = app.indexOf('/* NAOREG-INICIO */'), j = app.indexOf('/* NAOREG-FIM */\n');
+  if (i >= 0 && j > i) app = app.slice(0, i) + NR_JS + app.slice(j + '/* NAOREG-FIM */\n'.length);
+  else troca("async function byCnpj(cnpj){", NR_JS + "async function byCnpj(cnpj){", 'naoreg: funções'); }
+troca('<button class="mode" data-mode="cnes" type="button">CNES</button>', '<button class="mode" data-mode="cnes" type="button">CNES</button><button class="mode" data-mode="naoreg" type="button">DM não regularizado</button>', 'naoreg: botão');
+troca(" cnes:['Número do CNES'", " naoreg:['Produto (nome ou trecho)','Ex.: <code>centrífuga</code> — ao menos 3 letras.','Procura na lista da Anvisa de <b>produtos não regularizados como dispositivos médicos</b>, que não exigem notificação nem registro. Leia a exceção de cada item (“exceto…”): se o produto se enquadra nela, é dispositivo médico. Não estar na lista não quer dizer que o produto seja dispositivo médico, e estar nela não dispensa outra regularização (saneante, cosmético etc.).'],\n cnes:['Número do CNES'", 'naoreg: cfg');
+troca("$('q').inputMode=next==='lote'?'text':'numeric';", "$('q').inputMode=next==='lote'||next==='naoreg'?'text':'numeric';", 'naoreg: teclado');
+troca("    else if(mode==='cnes'){", "    else if(mode==='naoreg'){r.main=await naoRegulados(raw)}\n    else if(mode==='cnes'){", 'naoreg: consulta');
+troca("const labels={dispositivos:", "const labels={produtos_nao_regulados:'Produtos não regularizados como dispositivos médicos',dispositivos:", 'naoreg: rótulo da base');
+troca("cnes:'CNES — estabelecimentos de saúde (Ministério da Saúde/DATASUS)',", "cnes:'CNES — estabelecimentos de saúde (Ministério da Saúde/DATASUS)', produtos_nao_regulados:'Produtos não regularizados como dispositivos médicos (Anvisa)',", 'naoreg: procedência');
+troca("Object.assign(field,{cnes:'CNES',", "Object.assign(field,{subitens:'Também incluídos',atualizacao_fonte:'Lista atualizada pela Anvisa em'});\nObject.assign(field,{cnes:'CNES',", 'naoreg: campos');
+troca("  <b>Não encontrado</b>", "  <b>DM não regularizado</b><span>Lista da Anvisa de produtos que não são regularizados como dispositivos médicos (não exigem notificação nem registro), com as exceções de cada item.</span>\n  <b>Não encontrado</b>", 'naoreg: guia');
 /* Procedência da base: sem o endereço do repositório. */
 const repo = "\n     +'<b>Repositório</b><span><a href=\"'+esc(m.repo)+'\" target=\"_blank\" rel=\"noopener noreferrer\">'+esc(m.repo)+'</a></span>'";
 if (app.includes(repo)) app = app.replace(repo, '');
