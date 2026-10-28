@@ -35,7 +35,7 @@
  function chave(d){var m=modAtual();return (m?m+':':'')+d.id}
  function nomeRoteiro(){var c=null;try{c=PAI&&PAI.UvisSalvas.CFG[APP]}catch(e){}var m=modAtual();return ((c&&c.nome)||document.title||APP)+(m?' — '+D.modalidades[m].nome:'')}
  function citacao(d){var por={},ordem=[];d.r.forEach(function(r){var t=D.textos[r];if(!t)return;if(!por[t.norma]){por[t.norma]=[];ordem.push(t.norma)}if(por[t.norma].indexOf(t.disp)<0)por[t.norma].push(t.disp)});
-  return ordem.map(function(n){return n+', '+por[n].join('; ')}).join('; ')}
+  return ordem.map(function(n){return n+', '+por[n].join('; ')}).concat(d.f?[d.f]:[]).join('; ')}
 
  /* ---------- marcação ---------- */
  function le(){try{var o=JSON.parse(localStorage.getItem(CH)||'{}');if(o&&typeof o==='object'){o.itens=o.itens||{};return o}}catch(e){}return {itens:{}}}
@@ -73,7 +73,7 @@
   +'#uvs-docs .st{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#uvs-docs .st button{flex:1;min-width:110px;min-height:40px;border:1px solid #c9d1d7;border-radius:9px;background:#fff;font:inherit;font-size:.84rem;cursor:pointer;color:inherit}'
   +'#uvs-docs .st button[data-s=a].on{background:#13764f;border-color:#13764f;color:#fff}#uvs-docs .st button[data-s=p].on{background:#b03749;border-color:#b03749;color:#fff}#uvs-docs .st button[data-s=n].on{background:#5d6e7a;border-color:#5d6e7a;color:#fff}'
   +'#uvs-docs textarea{display:block;width:100%;box-sizing:border-box;min-height:40px;padding:8px 10px;border:1px solid #c9d1d7;border-radius:9px;font:inherit;font-size:.88rem;resize:vertical}'
-  +'#uvs-docs .ac{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}#uvs-docs .ac .b{min-height:36px;padding:6px 10px}'
+  +'#uvs-docs .ac{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}#uvs-docs .ac textarea{flex:1;min-width:0;min-height:40px;height:40px}#uvs-docs .ac .b.ic{flex:0 0 44px;min-height:40px;padding:0;font-size:1.05rem}#uvs-docs .ac .b.ic.on{background:#eef3f5}#uvs-docs .ths{flex-basis:100%;display:flex;flex-wrap:wrap;gap:10px}#uvs-docs .ths:empty{display:none}'
   +'#uvs-docs .th{position:relative;display:inline-block}#uvs-docs .th img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #dde2e6;display:block}#uvs-docs .th button{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:0;background:#b03749;color:#fff;cursor:pointer;line-height:1}'
   +'#uvs-docs .info{margin-top:8px;padding:10px 12px;background:#f7f9fa;border-radius:9px;font-size:.86rem}#uvs-docs .info h4{margin:8px 0 4px;font-size:.82rem}#uvs-docs .info p{margin:0 0 6px}'
   +'#uvs-docs details{margin:4px 0}#uvs-docs summary{cursor:pointer;font-weight:600}#uvs-docs pre{white-space:pre-wrap;font:inherit;font-size:.82rem;margin:6px 0;padding:8px;background:#fff;border:1px solid #e3e7ea;border-radius:8px}'
@@ -103,9 +103,9 @@
   msg='';desenha();document.documentElement.style.overflow='hidden'}
  function fecha(){var p=document.getElementById('uvs-docs');if(p)p.remove();document.documentElement.style.overflow='';atualizaCartao()}
  function desenha(){var p=document.getElementById('uvs-docs');if(!p)return;var o=le(),c=conta(),gs=grupos(),l=lista(),y=p.scrollTop;
-  var h='<div class="cab"><div class="l1"><h2>📋 Checklist de documentos</h2><button type="button" class="b" data-a="fecha">Voltar ao roteiro</button></div><small>'+esc(nomeRoteiro())+'</small>'
-   +'<div class="bar"><button type="button" class="b pri" data-a="word">Relatório (Word)</button><button type="button" class="b" data-a="copia">Copiar texto</button><button type="button" class="b" data-a="exporta">Exportar marcação</button><button type="button" class="b" data-a="importa">Importar de outro aparelho</button><input type="file" accept="application/json,.json" data-imp hidden></div></div>'
-   +'<div class="corpo"><p class="nota-geral">Lista dos documentos que o estabelecimento deve ter, para pedir e conferir. Não substitui o roteiro: a análise do conteúdo e as infrações ficam nele. O relatório sai à parte.</p>'
+  var h='<div class="cab"><div class="l1"><h2>📋 Checklist de documentos</h2><button type="button" class="b" data-a="fecha">Voltar ao roteiro</button></div><small>'+esc(nomeRoteiro())+'</small></div>'
+   +'<div class="corpo"><div class="bar acoes-topo"><button type="button" class="b pri" data-a="word">Relatório (Word)</button><button type="button" class="b" data-a="copia">Copiar texto</button><button type="button" class="b" data-a="solicita">Solicitar pendentes</button><button type="button" class="b" data-a="exporta">Exportar marcação</button><button type="button" class="b" data-a="importa">Importar de outro aparelho</button><input type="file" accept="application/json,.json" data-imp hidden></div>'
+   +'<p class="nota-geral">Lista dos documentos que o estabelecimento deve ter, para pedir e conferir. Não substitui o roteiro: a análise do conteúdo e as infrações ficam nele. O relatório sai à parte.</p>'
    +'<label class="f">Estabelecimento<input type="text" data-estab value="'+esc(o.estab||'')+'" placeholder="Nome ou razão social"></label>'
    +'<div class="resumo"><span>✓ Apresentados: <b>'+c.a+'</b></span><span>⏳ Pendentes: <b>'+c.p+'</b></span><span>— Não se aplica: <b>'+c.n+'</b></span><span>Sem marcação: <b>'+c.x+'</b></span></div>'
    +'<div class="bar"><button type="button" class="b'+(filtro===''?' on':'')+'" data-f="">Todos</button><button type="button" class="b'+(filtro==='x'?' on':'')+'" data-f="x">Sem marcação</button><button type="button" class="b'+(filtro==='p'?' on':'')+'" data-f="p">Pendentes</button></div>'
@@ -120,9 +120,8 @@
  function linha(d,i){var s=i.s||'',k=chave(d),cit=citacao(d);
   return '<div class="d" data-k="'+esc(k)+'" data-s="'+s+'"><div class="nm"><b>'+esc(d.n)+'</b>'+(d.q?'<small>Quando: '+esc(d.q.replace(/^Quando\s+/i,''))+'</small>':'')+(cit?'<small>'+esc(cit)+'</small>':'')+'</div>'
    +'<div class="st">'+['a','p','n'].map(function(x){return '<button type="button" data-s="'+x+'" class="'+(s===x?'on':'')+'" aria-pressed="'+(s===x)+'">'+({a:'✓ ',p:'⏳ ',n:'— '})[x]+ST.s[x]+'</button>'}).join('')+'</div>'
-   +'<textarea data-nota rows="1" placeholder="Observação: número, validade, o que falta…">'+esc(i.nota||'')+'</textarea>'
-   +'<div class="ac"><button type="button" class="b" data-a="info">O que deve conter</button><button type="button" class="b" data-a="foto">📷 Foto</button><input type="file" accept="image/*" capture="environment" data-foto-doc data-sem-marca hidden><span class="ths" data-ths="'+esc((i.fotos||[]).join(','))+'"></span></div>'
-   +'<div class="info" hidden>'+(d.o?'<p>'+esc(d.o)+'</p>':'')+'<h4>Fundamento legal</h4>'+d.r.map(function(r){var t=D.textos[r];if(!t)return '';return '<details><summary>'+esc(t.norma+', '+t.disp)+'</summary><pre>'+esc(t.texto)+'</pre>'+(t.url?'<a href="'+esc(t.url)+'" target="_blank" rel="noopener">Fonte oficial</a>':'')+'</details>'}).join('')+'</div></div>'}
+   +'<div class="ac"><textarea data-nota rows="1" placeholder="Observação">'+esc(i.nota||'')+'</textarea><button type="button" class="b ic" data-a="info" title="O que deve conter e fundamento legal" aria-label="O que deve conter e fundamento legal" aria-expanded="false">ⓘ</button><button type="button" class="b ic" data-a="foto" title="Foto do documento" aria-label="Foto do documento">📷</button><input type="file" accept="image/*" capture="environment" data-foto-doc data-sem-marca hidden><span class="ths" data-ths="'+esc((i.fotos||[]).join(','))+'"></span></div>'
+   +'<div class="info" hidden>'+(d.o?'<p>'+esc(d.o)+'</p>':'')+'<h4>Fundamento legal</h4>'+(d.f?'<p>'+esc(d.f)+'</p>':'')+d.r.map(function(r){var t=D.textos[r];if(!t)return '';return '<details><summary>'+esc(t.norma+', '+t.disp)+'</summary><pre>'+esc(t.texto)+'</pre>'+(t.url?'<a href="'+esc(t.url)+'" target="_blank" rel="noopener">Fonte oficial</a>':'')+'</details>'}).join('')+'</div></div>'}
  function miniaturas(p){[].forEach.call(p.querySelectorAll('[data-ths]'),function(sp){var ids=sp.getAttribute('data-ths').split(',').filter(Boolean);sp.innerHTML='';ids.forEach(function(id){leFoto(id).then(function(u){if(!u)return;var e=document.createElement('span');e.className='th';e.innerHTML='<img alt="Foto do documento" src="'+u+'"><button type="button" data-a="tira-foto" data-id="'+esc(id)+'" aria-label="Excluir foto">×</button>';sp.appendChild(e)})})})}
  function docDe(el){var k=el.closest('.d')&&el.closest('.d').getAttribute('data-k');return k}
  function liga(p){
@@ -130,11 +129,12 @@
    if(t.hasAttribute('data-f')){filtro=t.getAttribute('data-f');desenha();return}
    if(t.parentElement&&t.parentElement.classList.contains('st')&&k){var o=le(),i=item(o,k),s=t.getAttribute('data-s');i.s=i.s===s?'':s;i.t=agora();grava(o);desenha();return}
    if(a==='fecha')return fecha();
-   if(a==='info'){var inf=t.closest('.d').querySelector('.info');inf.hidden=!inf.hidden;t.textContent=inf.hidden?'O que deve conter':'Ocultar';return}
+   if(a==='info'){var inf=t.closest('.d').querySelector('.info');inf.hidden=!inf.hidden;t.classList.toggle('on',!inf.hidden);t.setAttribute('aria-expanded',String(!inf.hidden));return}
    if(a==='foto'){t.parentElement.querySelector('[data-foto-doc]').click();return}
    if(a==='tira-foto'){var id=t.getAttribute('data-id'),o2=le(),i2=item(o2,k);i2.fotos=(i2.fotos||[]).filter(function(x){return x!==id});i2.t=agora();grava(o2);apagaFoto(id).then(desenha);return}
    if(a==='word')return word();
    if(a==='copia')return copia();
+   if(a==='solicita')return solicita();
    if(a==='exporta')return exporta();
    if(a==='importa'){p.querySelector('[data-imp]').click();return}});
   p.addEventListener('input',function(e){var t=e.target;
@@ -153,6 +153,16 @@
   var txt=t.filter(function(x,i){return x||t[i-1]}).join('\n');
   (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){aviso('Texto copiado. Cole no roteiro (observações) ou onde precisar.')}).catch(function(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');aviso('Texto copiado.')}catch(e){aviso('Não foi possível copiar.')}ta.remove()});
   return txt}
+ /* texto de solicitação dos pendentes, no formato dos e-mails da UVIS: blocos numerados e
+    documentos em letras (a, b, c…), para colar no e-mail ou no ofício */
+ function textoSolicitacao(){var o=le(),gs=grupos(),t=[],n=0,L='abcdefghijklmnopqrstuvwxyz';
+  gs.forEach(function(g){var ds=lista().filter(function(d){var i=o.itens[chave(d)];return d.g===g[0]&&i&&i.s==='p'});if(!ds.length)return;n++;t.push(n+'. '+g[1]+':');
+   ds.forEach(function(d,k){var i=o.itens[chave(d)];t.push('   '+(k<26?L[k]:k+1)+') '+d.n+(d.q?' ('+d.q.replace(/^Se aplicável:\s*/,'se aplicável: ').replace(/\.$/,'')+')':'')+(i.nota&&i.nota.trim()?' — '+i.nota.trim():'')+';')})});
+  return n?['Solicitamos o envio dos documentos listados abaixo:',''].concat(t).join('\n'):''}
+ function solicita(){var txt=textoSolicitacao();if(!txt)return aviso('Nenhum documento marcado como Pendente.');
+  (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){aviso('Lista de pendentes copiada, no formato de solicitação. Cole no e-mail ou no documento.')}).catch(function(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');aviso('Lista de pendentes copiada.')}catch(e){aviso('Não foi possível copiar.')}ta.remove()});
+  return txt}
+ window.__uvsDocsSolicitacao=textoSolicitacao;
  window.__uvsDocsTexto=function(){var s=secoes(),o=le(),t=[];['a','p','n','x'].forEach(function(k){if(s[k].length){t.push(TIT[k]+':');s[k].forEach(function(x){t.push('- '+x.d.n+(x.i.nota?' — '+x.i.nota.trim():''))})}});return (o.estab||'')+'\n'+t.join('\n')};
 
  /* DOCX mínimo (ZIP sem compressão), independente do motor de documentos do roteiro */

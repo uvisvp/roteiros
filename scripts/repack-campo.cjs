@@ -49,9 +49,9 @@ const casca = `(function(){
  var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js', 'teclado.js'].map(le).join('\n'))};
  /* checklist de documentos: só a lista (e os textos legais) do roteiro aberto */
  var DOCS=null;function docsDe(app){try{if(!DOCS){var e=document.getElementById('campo--documentos');if(!e)return '';DOCS=JSON.parse(LZString.decompressFromBase64(e.textContent.trim()))}
-  var a=DOCS.apps[app];if(!a)return '';var o=Array.isArray(a)?{lista:a}:{modalidades:a.modalidades},t={};
+  var a=DOCS.apps[app];if(!a)return '';var o=a.lista?{grupos:a.grupos,lista:a.lista}:{modalidades:a.modalidades},t={};
   (o.lista?[o.lista]:Object.keys(o.modalidades).map(function(m){return o.modalidades[m].lista})).forEach(function(l){l.forEach(function(d){d.r.forEach(function(r){if(DOCS.textos[r])t[r]=DOCS.textos[r]})})});
-  o.grupos=DOCS.grupos;o.textos=t;o.versao=DOCS.versao;
+  o.textos=t;o.versao=DOCS.versao;
   return 'window.__uvsDocs='+JSON.stringify(o).replace(/<\\//g,'<\\\\/').replace(/\\u2028/g,'\\\\u2028').replace(/\\u2029/g,'\\\\u2029')+';'}catch(e){return ''}}
  window.__uvisCampoInjeta=function(app,s){var k=s.lastIndexOf('</body>');if(k<0||s.indexOf('<!--UVS-CAMPO-->')>=0)return s;
   /* __uvsApp: o roteiro aberto (Lei 13.725 por roteiro, bordas do Word); a marca evita injetar duas vezes */

@@ -19,20 +19,23 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEklEQVR
     const c = document.querySelector('.uvs-docs-card'); return c && {pos: [...c.parentElement.children].indexOf(c), txt: c.textContent}; });
   ok(g && g.pos === 1 && /0 de \d+ conferidos/.test(g.txt), 'cartão logo após o de identificação, com a contagem');
   const n = await f.evaluate(async () => { document.querySelector('.uvs-docs-card').click(); await new Promise(r => setTimeout(r, 300)); return document.querySelectorAll('#uvs-docs .d').length; });
-  ok(n === DADOS.apps.vacinacao.length, 'painel com todos os documentos do roteiro (' + n + ')');
+  ok(n === DADOS.apps.vacinacao.lista.length, 'painel com todos os documentos do roteiro (' + n + ')');
   const r1 = await f.evaluate(async () => {
     const d = [...document.querySelectorAll('#uvs-docs .d')], st = (i, s) => d[i].querySelector('.st [data-s=' + s + ']').click();
     st(0, 'a'); await new Promise(r => setTimeout(r, 60));
     let x = [...document.querySelectorAll('#uvs-docs .d')]; x[1].querySelector('.st [data-s=p]').click(); await new Promise(r => setTimeout(r, 60));
     x = [...document.querySelectorAll('#uvs-docs .d')]; x[2].querySelector('.st [data-s=n]').click(); await new Promise(r => setTimeout(r, 60));
     const ta = document.querySelectorAll('#uvs-docs .d')[0].querySelector('textarea'); ta.value = 'Licença nº 123, validade 31/12/2026'; ta.dispatchEvent(new Event('input', {bubbles: true}));
-    const info = document.querySelectorAll('#uvs-docs .d')[1]; info.querySelector('[data-a=info]').click();
+    const info = document.querySelectorAll('#uvs-docs .d')[2]; info.querySelector('[data-a=info]').click();
     return {res: document.querySelector('#uvs-docs .resumo').textContent, info: !info.querySelector('.info').hidden && /Art\. 5º/.test(info.querySelector('.info').textContent),
-      pend: /Marcar como pendente/.test(document.getElementById('uvs-docs').textContent)};
+      pend: /Marcar como pendente/.test(document.getElementById('uvs-docs').textContent), nomes: [...document.querySelectorAll('#uvs-docs .d .nm b')].slice(0, 3).map(b => b.textContent),
+      solic: window.__uvsDocsSolicitacao(), bloco: document.querySelector('#uvs-docs h3').textContent};
   });
   ok(/Apresentados: 1/.test(r1.res) && /Pendentes: 1/.test(r1.res) && /Não se aplica: 1/.test(r1.res), 'Apresentado, Pendente e Não se aplica contados');
   ok(r1.info, '“O que deve conter” abre o conteúdo e o texto do dispositivo (RDC 197/2017, art. 5º)');
   ok(!r1.pend, 'botões do checklist não recebem o “Marcar como pendente” do botão Campo');
+  ok(r1.nomes[0] === 'Cartão CNPJ atualizado' && /^Documentação legal e administrativa/.test(r1.bloco), 'nomes e blocos no padrão das solicitações da UVIS (' + r1.nomes.join(' | ') + ')');
+  ok(/^Solicitamos o envio dos documentos listados abaixo:\n\n1\. Documentação legal e administrativa:\n   a\) Licença de Funcionamento Sanitária;/.test(r1.solic), 'Solicitar pendentes: blocos numerados e documentos em letras');
   const inp = await f.$('#uvs-docs .d [data-foto-doc]');
   await inp.setInputFiles({name: 'doc.png', mimeType: 'image/png', buffer: PNG}); await p.waitForTimeout(900);
   const foto = await f.evaluate(() => ({th: document.querySelectorAll('#uvs-docs .th img').length, ls: JSON.parse(localStorage.getItem('uvs-docs-vacinacao'))}));
@@ -49,7 +52,7 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEklEQVR
   ok(valido === '1', 'Word: pacote e XML válidos, com a foto embutida (' + valido + ')');
   let txt = '';
   try { txt = execFileSync('pandoc', ['-t', 'plain', arq]).toString(); } catch (e) { txt = ''; }
-  ok(/CHECKLIST DE DOCUMENTOS/.test(txt) && /Documentos apresentados \(1\)/.test(txt) && /Documentos pendentes \(1\)/.test(txt) && /Licença nº 123/.test(txt) && /Fundamento: RDC Anvisa nº 197\/2017, art\. 5º/.test(txt), 'Word: apresentados, pendentes com fundamento e observação');
+  ok(/CHECKLIST DE DOCUMENTOS/.test(txt) && /Documentos apresentados \(1\)/.test(txt) && /Documentos pendentes \(1\)/.test(txt) && /Licença nº 123/.test(txt) && /Fundamento: RDC Anvisa nº 197\/2017, art\. 4º/.test(txt), 'Word: apresentados, pendentes com fundamento e observação');
   ok(/Não\s+constitui\s+análise\s+do\s+conteúdo/.test(txt), 'Word: aviso de que não é análise nem capitulação');
   fs.rmSync(tmp, {recursive: true, force: true});
 
@@ -89,6 +92,10 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEklEQVR
   const y = await T.abre('Produtos', 'produtos-correlatos', 'Fabricante de cosméticos', 'atividade=fab_cosm', {browser: b});
   const ry = await y.f.evaluate(async () => { const c = document.querySelector('.uvs-docs-card'); if (!c) return null; c.click(); await new Promise(r => setTimeout(r, 300)); return document.querySelector('#uvs-docs .cab small').textContent; });
   ok(/Fabricante de cosméticos/.test(ry || ''), 'Produtos: lista da atividade (fabricante)');
+  const z = await T.abre('Medicamentos', 'drogaria', 'Drogaria', '', {browser: b});
+  const rz = await z.f.evaluate(async () => { document.querySelector('.uvs-docs-card').click(); await new Promise(r => setTimeout(r, 300)); return [...document.querySelectorAll('#uvs-docs h3')].map(h => h.textContent.replace(/\s*\d+\/\d+$/, '')); });
+  ok(rz.includes('Procedimentos Operacionais Padrão (POPs)') && rz.slice(-2).join('|') === 'Específico — Serviços farmacêuticos|Específico — Aplicação de injetáveis', 'Drogaria: POPs em bloco próprio e específicos (serviços farmacêuticos, injetáveis) no fim (' + rz.join(' | ') + ')');
+  await z.p.close();
   await y.p.close();
   await b.close();
 })().catch(e => { T.falha(e.stack || e); process.exit(1); });

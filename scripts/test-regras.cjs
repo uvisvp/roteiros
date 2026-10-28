@@ -115,8 +115,9 @@ for (const [id, b] of [['casca', html], ...blocks]) {
   const apps = CFG.map(x => x.replace(/[\s':]/g, '')).concat((html.match(/CFG=\{\n  '([a-z0-9-]+)'/) || [])[1] || []);
   const faltam = [...new Set(apps)].filter(a => !d.apps[a]);
   ok(apps.length >= 20 && !faltam.length, 'checklist de documentos: roteiros sem lista (' + faltam.join(', ') + ')');
-  const docs = Object.values(d.apps).flatMap(a => Array.isArray(a) ? a : Object.values(a.modalidades).flatMap(m => m.lista));
-  const ruins = docs.filter(x => !x.r.length || x.r.some(r => !d.textos[r] || !d.textos[r].texto)).map(x => x.id);
+  const docs = Object.values(d.apps).flatMap(a => a.lista ? a.lista : Object.values(a.modalidades).flatMap(m => m.lista));
+  /* sem dispositivo no banco, o documento traz a citação por extenso (f) */
+  const ruins = docs.filter(x => (!x.r.length && !x.f) || x.r.some(r => !d.textos[r] || !d.textos[r].texto)).map(x => x.id);
   ok(!ruins.length, 'checklist de documentos: documento sem fundamento ou sem texto (' + ruins.slice(0, 5).join(', ') + ')'); }
 
 if (falhas.length) { console.error('FALHA:\n  ' + falhas.join('\n  ')); process.exit(1); }
