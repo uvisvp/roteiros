@@ -3,12 +3,13 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const {unpack,unpackText,visaLocal}=require('./integrated-html.cjs');
 const {html,blocks}=unpack();
 /* Base: a versão publicada (origin/main) ou a indicada em PWA_BASE. Os módulos
-   (app--, rec--) podem mudar; o banco normativo (banco--) e o núcleo de citações
+   (app--, rec--) e os dados do checklist de documentos (campo--, conferidos em
+   test-regras) podem mudar; o banco normativo (banco--) e o núcleo de citações
    (nuc--) devem permanecer idênticos. */
 const baseRef=process.env.PWA_BASE||'origin/main';
 const base=unpackText(execFileSync('git',['show',baseRef+':index.html'],{encoding:'utf8',maxBuffer:40*1024*1024}));
 const allowed=new Set(['app--drogaria','app--estoque-produtos','app--distribuidoras-transportadoras','app--farmacia-manipulacao']);
-for(const id of base.blocks.keys())if(/^(app|rec)--/.test(id))allowed.add(id);
+for(const id of base.blocks.keys())if(/^(app|rec|campo)--/.test(id))allowed.add(id);
 /* Banco normativo: só se aceitam acréscimos de normas declaradas em scripts/banco/estruturar.py
    (texto oficial em scripts/banco/fontes/). Norma já existente continua intocável. */
 const declaradas=new Set([...fs.readFileSync(__dirname+'/banco/estruturar.py','utf8').matchAll(/\{'i': '([a-z0-9-]+)'/g)].map(m=>m[1]));

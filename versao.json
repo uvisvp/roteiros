@@ -1,6 +1,6 @@
 {
-  "versao": "20261025-3",
+  "versao": "20261028-1",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Checklist de documentos em todos os roteiros: cartão após a identificação, relatório à parte em Word e exportar/importar entre aparelhos. Relatórios do Atacadista e de Produtos nos modelos oficiais (POP-O-SNVS-011 e 013). Orientação sobre a DCFF nas perguntas de projeto. Citações revisadas e navegação padronizada. A janela de atualização passa a rolar quando o texto é longo."
+  "notas": "Checklist de documentos no padrão das solicitações da UVIS: nomes dos documentos como são pedidos, blocos (legal e administrativa, pessoal, infraestrutura, qualidade, qualificações, POPs um a um, registros) e itens específicos de cada atividade no fim. Novo botão “Solicitar pendentes”, que copia a lista no formato do e-mail de solicitação."
 }

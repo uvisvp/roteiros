@@ -148,22 +148,28 @@ const GRUPOS = C.GRUPOS.map(g => g[0]);
 function item(ent) {
   const [chave, o] = Array.isArray(ent) ? ent : [ent, {}];
   /* documento próprio do roteiro (fora do catálogo): traz g, n, o e r */
-  const d = {id: chave, ...(C.DOCS[chave] || {}), ...o};
+  const d = {id: chave, ...(C.DOCS[chave] || {}), ...(o || {})};
   if (!d.n || !d.o) throw Error('documento sem nome ou conteúdo: ' + chave);
   if (!GRUPOS.includes(d.g)) throw Error(chave + ': grupo inválido ' + d.g);
-  if (!d.r || !d.r.length) throw Error(chave + ': sem fundamento legal');
-  return {id: d.id, g: d.g, n: d.n, o: d.o, q: d.q || '', r: d.r};
+  /* sem dispositivo no banco, só com a citação por extenso (fonte) */
+  if (!(d.r && d.r.length) && !d.fonte) throw Error(chave + ': sem fundamento legal');
+  const x = {id: d.id, g: d.g, n: d.n, o: d.o, q: d.q || '', r: d.r || []};
+  if (d.fonte) x.f = d.fonte;
+  if (d.esp) x.esp = d.esp;
+  return x;
 }
+/* a lista e os grupos do roteiro: os blocos gerais e, no fim, um bloco por atividade específica */
 function lista(app, l0) {
-  const l = l0.map(item), ids = new Set();
+  const l = l0.map(item), ids = new Set(), grupos = C.GRUPOS.slice(), esp = [];
   l.forEach(d => { if (ids.has(d.id)) throw Error(app + ': documento repetido ' + d.id); ids.add(d.id); });
-  return l;
+  l.forEach(d => { if (!d.esp) return; let k = esp.indexOf(d.esp); if (k < 0) { esp.push(d.esp); k = esp.length - 1; grupos.push(['esp' + k, 'Específico — ' + d.esp]); } d.g = 'esp' + k; delete d.esp; });
+  return {grupos, lista: l};
 }
 const apps = {};
 for (const [app, v] of Object.entries(C.APPS)) {
   if (Array.isArray(v)) { apps[app] = lista(app, v); continue; }
   const mod = {};
-  for (const [k, m] of Object.entries(v.modalidades)) mod[k] = {nome: m.nome, lista: lista(app + '/' + k, m.lista)};
+  for (const [k, m] of Object.entries(v.modalidades)) mod[k] = {nome: m.nome, ...lista(app + '/' + k, m.lista)};
   apps[app] = {modalidades: mod};
 }
 
@@ -178,30 +184,30 @@ for (const [app, v] of Object.entries(C.APPS)) {
     sv.doc.forEach((x, i) => {
       if (/conferida na inspeção/i.test(x.i)) return; /* estrutura física: não é documento */
       let g = grupos.findIndex(y => y[1] === x.g); if (g < 0) { grupos.push(['m' + grupos.length, x.g]); g = grupos.length - 1; }
-      out.push({id: sv.id + '-' + (i + 1), g: grupos[g][0], n: x.i.replace(/\.$/, ''), o: '', q: x.ap === 'Condicional' ? 'Quando aplicável ao serviço.' : '', r: x.refs.map(r => r.law + ':' + r.node)});
+      out.push({id: sv.id + '-' + (i + 1), g: grupos[g][0], n: x.i.replace(/\.$/, ''), o: '', q: x.ap === 'Condicional' ? 'Se aplicável ao serviço.' : '', r: x.refs.map(r => r.law + ':' + r.node)});
     });
     mod[sv.id] = {nome: sv.nome, grupos, lista: out};
   }
   apps['servicos-assistenciais'] = {modalidades: mod};
 }
 
+const listas = a => a.lista ? [a] : Object.values(a.modalidades);
 const todos = new Set();
-Object.values(apps).forEach(a => (Array.isArray(a) ? a : Object.values(a.modalidades).flatMap(m => m.lista)).forEach(d => d.r.forEach(r => todos.add(r))));
+Object.values(apps).forEach(a => listas(a).forEach(m => m.lista.forEach(d => d.r.forEach(r => todos.add(r)))));
 const textos = resolve([...todos].sort());
 /* dispositivo citado por inteiro (capítulo ou item com todos os subitens): o texto embutido vai até
    ~4 mil caracteres e remete à fonte oficial pelo resto */
 for (const x of Object.values(textos)) if (x.texto.length > 4000) x.texto = x.texto.slice(0, x.texto.lastIndexOf('\n', 4000)) + '\n[…] O texto continua na fonte oficial.';
-/* a citação legível de cada documento vem dos textos: “RDC Anvisa nº 63/2011, art. 39; …” */
-fs.writeFileSync(SAIDA, JSON.stringify({versao: C.VERSAO, grupos: C.GRUPOS, textos, apps}) + '\n');
+fs.writeFileSync(SAIDA, JSON.stringify({versao: C.VERSAO, textos, apps}) + '\n');
 /* documentos/LISTAS.md: as listas em texto, para conferência roteiro a roteiro */
 {
-  const cit = d => { const por = {}, ordem = []; d.r.forEach(r => { const t = textos[r]; if (!por[t.norma]) { por[t.norma] = []; ordem.push(t.norma); } if (!por[t.norma].includes(t.disp)) por[t.norma].push(t.disp); }); return ordem.map(n => n + ', ' + por[n].join('; ')).join('; '); };
-  const bloco = (titulo, l, gs) => '## ' + titulo + '\n\n' + gs.map(([g, nome]) => { const ds = l.filter(d => d.g === g); return ds.length ? '### ' + nome + '\n\n' + ds.map(d => '- **' + d.n + '**' + (d.q ? ' — _' + d.q + '_' : '') + '  \n  ' + (d.o ? d.o + '  \n  ' : '') + 'Fundamento: ' + cit(d)).join('\n') + '\n' : ''; }).join('\n');
+  const cit = d => { const por = {}, ordem = []; d.r.forEach(r => { const t = textos[r]; if (!por[t.norma]) { por[t.norma] = []; ordem.push(t.norma); } if (!por[t.norma].includes(t.disp)) por[t.norma].push(t.disp); }); return ordem.map(n => n + ', ' + por[n].join('; ')).concat(d.f ? [d.f] : []).join('; '); };
+  const bloco = (titulo, m) => '## ' + titulo + '\n\n' + m.grupos.map(([g, nome]) => { const ds = m.lista.filter(d => d.g === g); return ds.length ? '### ' + nome + '\n\n' + ds.map(d => '- **' + d.n + '**' + (d.q ? ' — _' + d.q + '_' : '') + '  \n  ' + (d.o ? d.o + '  \n  ' : '') + 'Fundamento: ' + cit(d)).join('\n') + '\n' : ''; }).join('\n');
   const md = ['# Checklist de documentos — listas por roteiro', '', 'Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão ' + C.VERSAO + '.', ''];
   const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8'), nome = a => a === 'servicos-alimentacao-roteiro' ? 'Serviços de alimentação' : ((new RegExp("'" + a + "':\\{nome:'([^']+)'").exec(html) || [])[1] || a);
   for (const [app, v] of Object.entries(apps)) {
-    if (Array.isArray(v)) md.push(bloco(nome(app), v, C.GRUPOS));
-    else for (const [k, m] of Object.entries(v.modalidades)) md.push(bloco(nome(app) + ' — ' + m.nome, m.lista, m.grupos || C.GRUPOS));
+    if (v.lista) md.push(bloco(nome(app), v));
+    else for (const m of Object.values(v.modalidades)) md.push(bloco(nome(app) + ' — ' + m.nome, m));
   }
   fs.writeFileSync(path.join(RAIZ, 'documentos', 'LISTAS.md'), md.join('\n') + '\n');
 }
