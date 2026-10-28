@@ -1,6 +1,6 @@
 # Checklist de documentos — listas por roteiro
 
-Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão 2026-10-28.
+Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão 2026-10-28b.
 
 ## Drogaria
 
@@ -50,7 +50,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 44/2009, art. 7º; art. 88, IV
 - **Certificado de limpeza do reservatório de água (caixa d’água)**  
   Certificado ou registro da limpeza e desinfecção do reservatório, no mínimo a cada seis meses; em caixa d’água coletiva, cópia do documento do condomínio.  
-  Fundamento: A RDC 44/2009 não trata do reservatório; item da lista de solicitação da UVIS (não há dispositivo no banco)
+  Fundamento: RDC Anvisa nº 63/2011, art. 39, § 1º; art. 39, § 2º
 - **Certificado de calibração dos termo-higrômetros e termômetros**  
   Certificado de calibração dentro da validade (ou nota fiscal de aquisição com até 12 meses), por laboratório com rastreabilidade.  
   Fundamento: RDC Anvisa nº 44/2009, art. 35, § 4º; art. 88, V
@@ -66,7 +66,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual de Boas Práticas**  
   Manual próprio do estabelecimento, atualizado, que descreva as atividades, as responsabilidades e os procedimentos adotados.  
   Fundamento: RDC Anvisa nº 44/2009, art. 2º, V; art. 85
-- **Qualificação de 3 fornecedores (licença, AFE e CRT)**  
+- **Qualificação de fornecedores (licença, AFE e CRT)**  
   Licença sanitária, AFE e CRT de fornecedores (distribuidores) da drogaria.  
   Fundamento: RDC Anvisa nº 44/2009, art. 31, § 1º
 
@@ -104,7 +104,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Registro de divulgação do conteúdo dos POPs aos funcionários, conforme as atividades de cada um.  
   Fundamento: RDC Anvisa nº 44/2009, art. 88, III
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Comprovante de envio dos mapas e balanços à COVISA (Portaria 344/1998)** — _Se aplicável: dispensação de medicamentos sujeitos a controle especial._  
   Comprovantes de envio dos balanços (BMPO) e mapas dos períodos solicitados.  
@@ -216,13 +216,10 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual de Boas Práticas**  
   Manual de Boas Práticas de Manipulação com organograma e fluxograma da farmácia.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 15.3
-- **Registro da última autoinspeção, com conclusões e ações corretivas**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção, com conclusões e ações corretivas**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 15.6.1
-- **Registros de reclamações de clientes do último mês**  
-  Reclamações com as ações investigativas e as medidas tomadas.  
-  Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 15.7.1
-- **Qualificação completa de 2 fornecedores, com auditoria**  
+- **Qualificação completa de fornecedores, com auditoria**  
   Qualificação com auditoria de cumprimento das Boas Práticas de Fracionamento e Distribuição de Insumos.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 7.1.7
 - **Contrato com o laboratório das análises terceirizadas, com cronograma**  
@@ -301,24 +298,24 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 6.1; Anexo I, item 8.5
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
-- **Últimas 2 análises da água potável (semestral)**  
+- **Laudos das análises semestrais da água potável**  
   Laudos físico-químicos e microbiológicos semestrais da água de abastecimento.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 7.5.1.3
-- **Últimas 3 análises mensais da água purificada**  
+- **Laudos das análises mensais da água purificada**  
   Laudos físico-químicos e microbiológicos mensais da água purificada.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 7.5.2.2
-- **Últimas 3 análises bimestrais de teor e uniformidade de conteúdo (fármaco ≤ 25 mg)**  
+- **Laudos das análises bimestrais de teor e uniformidade de conteúdo (fármaco ≤ 25 mg)**  
   Análises de teor e uniformidade de conteúdo de fórmulas com fármaco em quantidade igual ou inferior a 25 mg, com prioridade para as de menos de 5 mg.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 9.2.1; Anexo I, item 9.2.3; Anexo I, item 9.2.3.1
-- **Últimas 3 análises trimestrais de teor e uniformidade (antibióticos, hormônios e citostáticos)** — _Se aplicável: manipulação de substâncias sensibilizantes (pode ser rodiziada)._  
+- **Laudos das análises trimestrais de teor e uniformidade (antibióticos, hormônios e citostáticos)** — _Se aplicável: manipulação de substâncias sensibilizantes (pode ser rodiziada)._  
   Análises trimestrais de cada classe terapêutica de sensibilizantes manipulada.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo III, item 2.16; Anexo III, item 2.16.1
-- **Últimas 3 análises mensais de pureza microbiológica (bases galênicas e preparações)**  
+- **Laudos das análises mensais de pureza microbiológica (bases galênicas e preparações)**  
   Monitoramento da pureza microbiológica de bases galênicas e de preparações magistrais e oficinais.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 11.2.4
-- **Comprovante dos últimos 3 envios dos mapas e balanços à COVISA (Portaria 344/1998)** — _Se aplicável: medicamentos e substâncias sujeitos a controle especial._  
+- **Comprovante de envio dos mapas e balanços à COVISA (Portaria 344/1998)** — _Se aplicável: medicamentos e substâncias sujeitos a controle especial._  
   Comprovantes de envio pelo Portal 156 dos balanços (BSPO/BMPO) e mapas.  
   Fundamento: Portaria SVS/MS nº 344/1998, art. 68; art. 69
 
@@ -327,7 +324,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Procedimentos específicos da manipulação homeopática**  
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo V, item 6.8
-- **Registros do controle de qualidade dos insumos inertes e ativos homeopáticos**  
+- **Laudos do controle de qualidade dos insumos inertes e ativos homeopáticos**  
   Avaliação dos insumos inertes e ativos conforme o item 9 do Anexo V.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo V, item 9.1; Anexo V, item 9.2
 
@@ -397,7 +394,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Certificado de limpeza da caixa d’água**  
   Certificado ou registro da limpeza e desinfecção do reservatório, no mínimo a cada seis meses; em caixa d’água coletiva, cópia do documento do condomínio.  
-  Fundamento: A RDC 430/2020 não trata do reservatório; item da lista de solicitação da UVIS (não há dispositivo no banco)
+  Fundamento: RDC Anvisa nº 63/2011, art. 39, § 1º; art. 39, § 2º
 - **Certificado de controle de pragas — área**  
   Certificado válido da empresa controladora de pragas licenciada, com data, produtos usados e validade do serviço.  
   Fundamento: RDC Anvisa nº 430/2020, art. 18, XV
@@ -416,8 +413,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual de Boas Práticas de Distribuição e Armazenagem**  
   Manual próprio do estabelecimento, atualizado, que descreva as atividades, as responsabilidades e os procedimentos adotados.  
   Fundamento: RDC Anvisa nº 16/2014, art. 28, I, alínea f
-- **Último registro de autoinspeção**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 430/2020, art. 37; art. 39
 - **Qualificação de fornecedores**  
   Documentação da qualificação dos fornecedores (licença sanitária, AFE, CRT e, quando couber, AE).  
@@ -425,9 +422,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Qualificação de clientes**  
   Comprovação de que os clientes são licenciados e autorizados para as atividades (licença, AFE e, quando couber, AE).  
   Fundamento: RDC Anvisa nº 430/2020, art. 6º; art. 18, X
-- **Registros de reclamações / SAC do ano vigente**  
-  Registros das reclamações com a investigação e as medidas adotadas; desvios de qualidade registrados à parte.  
-  Fundamento: RDC Anvisa nº 430/2020, art. 25; art. 27
 - **Relatório anual de simulação de recolhimento (recall)**  
   Relatório da simulação anual de recolhimento e de reconciliação para o pior caso da rede de distribuição.  
   Fundamento: RDC Anvisa nº 430/2020, art. 18, VI; art. 30, § 2º
@@ -510,14 +504,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 430/2020, art. 80
 
-### Registros e monitoramentos
-
-- **Planilhas de monitoramento de temperatura e umidade — áreas e equipamentos de cadeia fria**  
-  Registros do monitoramento, mantidos pelo prazo da norma.  
-  Fundamento: RDC Anvisa nº 430/2020, art. 43, § 3º
-- **Planilhas de registro de limpeza das áreas**  
-  Registros da limpeza das instalações.  
-  Fundamento: RDC Anvisa nº 430/2020, art. 46
 
 ### Específico — Frota própria
 
@@ -527,9 +513,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Certificado de controle de pragas — veículos**  
   Certificado de controle de pragas dos veículos.  
   Fundamento: RDC Anvisa nº 430/2020, art. 18, XV
-- **Planilhas de temperatura e umidade e de limpeza dos veículos**  
-  Registros do monitoramento das condições de transporte e da limpeza dos veículos.  
-  Fundamento: RDC Anvisa nº 430/2020, art. 64, II
 
 ## Atacadista de gases medicinais
 
@@ -589,8 +572,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual da qualidade (Sistema de Gestão da Qualidade)**  
   Sistema de Gestão da Qualidade que cubra armazenagem, distribuição, transporte e dispensação.  
   Fundamento: RDC Anvisa nº 887/2024, art. 18; art. 20
-- **Último registro de autoinspeção**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 887/2024, art. 42
 - **Qualificação de fornecedores**  
   Documentação da qualificação dos fornecedores (licença sanitária, AFE, CRT e, quando couber, AE).  
@@ -598,9 +581,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Qualificação de clientes**  
   Comprovação de que os clientes são licenciados e autorizados para as atividades (licença, AFE e, quando couber, AE).  
   Fundamento: RDC Anvisa nº 887/2024, art. 6º
-- **Registros de reclamações / SAC do ano vigente**  
-  Registros das reclamações com a investigação e as medidas adotadas; desvios de qualidade registrados à parte.  
-  Fundamento: RDC Anvisa nº 887/2024, art. 27; art. 30
 
 
 ### Procedimentos Operacionais Padrão (POPs)
@@ -630,11 +610,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 887/2024, art. 71
 
-### Registros e monitoramentos
-
-- **Registros das atividades de armazenagem, distribuição e transporte**  
-  Registros das ações efetuadas, prontamente recuperáveis.  
-  Fundamento: RDC Anvisa nº 887/2024, art. 24; art. 25
 
 ## Vacinação
 
@@ -711,11 +686,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   POPs escritos, aprovados, datados e assinados pelo responsável técnico, atualizados e disponíveis nos locais de uso.  
   Fundamento: RDC Anvisa nº 63/2011, art. 23, XVIII; RDC Anvisa nº 197/2017, art. 12
 
-### Registros e monitoramentos
-
-- **Registros diários de temperatura máxima e mínima dos equipamentos de vacinas**  
-  Planilhas diárias de temperatura máxima, mínima e de momento.  
-  Fundamento: RDC Anvisa nº 197/2017, art. 11, II
 
 ## EAC — Serviço Tipo I
 
@@ -813,7 +783,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 978/2025, art. 174
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios de controle externo da qualidade (CEQ) e registros do controle interno**  
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
@@ -915,7 +885,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 978/2025, art. 174
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios de controle externo da qualidade (CEQ) e registros do controle interno**  
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
@@ -1020,7 +990,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 978/2025, art. 174
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios de controle externo da qualidade (CEQ) e registros do controle interno**  
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
@@ -1169,14 +1139,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Registro de divulgação do conteúdo dos POPs aos funcionários, conforme as atividades de cada um.  
   Fundamento: Portaria SMS nº 1.101/2015, item 14.2
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
-- **Atestados médicos, PAR-Q e termos de responsabilidade dos alunos**  
-  PAR-Q renovados anualmente, termos de responsabilidade e atestados médicos (menores de 15 e maiores de 69 anos), organizados e disponíveis.  
-  Fundamento: Portaria SMS nº 1.101/2015, item 14.2; Lei Municipal nº 11.383/1993, art. 2º, § 5º
-- **Planilhas de cloro residual livre e pH da piscina e do lava-pés** — _Se aplicável: piscina._  
-  Medições antes de cada período, com data, hora e assinatura.  
-  Fundamento: Portaria SMS nº 1.101/2015, item 14.2.1; item 6.20
 - **Laudos de potabilidade da água de solução alternativa** — _Se aplicável: poço, caminhão-pipa ou outra solução alternativa._  
   Comprovantes de tratamento e controle da potabilidade e laudos dos fornecedores, arquivados por no mínimo 6 meses.  
   Fundamento: Portaria SMS nº 1.101/2015, item 14.2.1
@@ -1232,11 +1196,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Instruções escritas e padronizadas, disponíveis a todo o pessoal e revisadas anualmente ou quando o procedimento mudar.  
   Fundamento: RDC Anvisa nº 504/2021, art. 5º
 
-### Registros e monitoramentos
-
-- **Registros de não conformidades no transporte**  
-  Registro e investigação das não conformidades, com as medidas corretivas e preventivas.  
-  Fundamento: RDC Anvisa nº 504/2021, art. 6º
 
 ## Radiologia convencional
 
@@ -1322,7 +1281,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1418,7 +1377,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1511,7 +1470,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1601,7 +1560,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1685,7 +1644,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1778,7 +1737,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 611/2022, art. 38
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
@@ -1924,9 +1883,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual de Boas Práticas**  
   Manual que descreva as operações reais do estabelecimento, atualizado e disponível.  
   Fundamento: Portaria SMS nº 2.619/2011, item 16.2
-- **Registros de reclamações dos consumidores**  
-  Registros das reclamações com a investigação e as medidas adotadas; desvios de qualidade registrados à parte.  
-  Fundamento: Portaria SMS nº 2.619/2011, item 17.2
 - **Auditorias internas de Boas Práticas**  
   Auditorias periódicas com lista de verificação e planos de ação com prazos e responsáveis.  
   Fundamento: Portaria SMS nº 2.619/2011, item 14.2
@@ -2009,15 +1965,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Documentação de Boas Práticas de Fabricação**  
   Documentação elaborada, aprovada, atualizada e distribuída com controle de emissão e revisão.  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 10.4
-- **Último registro de autoinspeção**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 9.2; Anexo II, item 9.4
 - **Qualificação de fornecedores**  
   Documentação da qualificação dos fornecedores (licença sanitária, AFE, CRT e, quando couber, AE).  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 3.3.5
-- **Registros de reclamações / SAC do ano vigente**  
-  Registros das reclamações com a investigação e as medidas adotadas; desvios de qualidade registrados à parte.  
-  Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 6.1
 - **Contratos de terceirização** — _Se aplicável: serviço ou atividade terceirizada._  
   Contrato vigente de cada serviço terceirizado, com as responsabilidades das partes; contratada regularizada na vigilância quando couber.  
   Fundamento: RDC Anvisa nº 16/2014, art. 27, I, alínea f
@@ -2032,9 +1985,9 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 6.1; Anexo II, item 7.3
 
-### Registros e monitoramentos
+### Laudos, análises e comprovantes
 
-- **Registros do monitoramento da qualidade da água**  
+- **Laudos do monitoramento da qualidade da água**  
   Procedimentos e registros do monitoramento periódico nos pontos críticos.  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 13.6
 
@@ -2099,8 +2052,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Manual da qualidade (dispositivos médicos)** — _Se aplicável: dispositivos médicos ou IVD._  
   Política da qualidade descrita em manual, com sistema de qualidade e procedimentos próprios.  
   Fundamento: RDC Anvisa nº 665/2022, art. 4º; art. 5º
-- **Último registro de autoinspeção**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 16/2014, art. 28, II, alínea e
 - **Qualificação de fornecedores**  
   Documentação da qualificação dos fornecedores (licença sanitária, AFE, CRT e, quando couber, AE).  
@@ -2169,8 +2122,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Sistema de gestão da qualidade
 
-- **Último registro de autoinspeção**  
-  Relatório da última autoinspeção, com as conclusões e as ações corretivas.  
+- **Relatório de autoinspeção**  
+  Relatório da autoinspeção, com as conclusões e as ações corretivas.  
   Fundamento: RDC Anvisa nº 16/2014, art. 28, II, alínea e
 - **Contratos de terceirização** — _Se aplicável: serviço ou atividade terceirizada._  
   Contrato vigente de cada serviço terceirizado, com as responsabilidades das partes; contratada regularizada na vigilância quando couber.  
@@ -2220,14 +2173,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Contrato formal de prestação de serviço com cada residente, responsável legal ou curador**  
   Fundamento: RDC Anvisa nº 502/2021, art. 12; Lei Federal nº 10.741/2003 — Estatuto da Pessoa Idosa, art. 50; art. 50, I
-- **Registro individual atualizado de cada residente**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 68; RDC Anvisa nº 502/2021, art. 33; Lei Federal nº 10.741/2003 — Estatuto da Pessoa Idosa, art. 50; art. 50, XV
-- **Listagem dos residentes por grau de dependência I, II e III**  
-  Fundamento: RDC Anvisa nº 502/2021, art. 3º; art. 3º, IV
-- **Comprovação da vacinação obrigatória dos residentes conforme o PNI**  
-  Fundamento: RDC Anvisa nº 502/2021, art. 39
-- **Prescrições médicas dos medicamentos em uso pelos residentes**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; RDC Anvisa nº 502/2021, art. 40
 
 ### Planos e rotinas
 
@@ -2261,8 +2206,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Consolidado anual dos seis indicadores do Anexo da RDC nº 502/2021, encaminhado à VISA em janeiro**  
   Fundamento: RDC Anvisa nº 502/2021, art. 58; art. 59; art. 60
-- **Registros de notificação de eventos sentinela: queda com lesão e tentativa de suicídio**  
-  Fundamento: RDC Anvisa nº 502/2021, art. 55
 - **Cópia da RDC nº 502/2021 disponível para consulta dos interessados**  
   Fundamento: RDC Anvisa nº 502/2021, art. 35
 
@@ -2272,18 +2215,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 3º; art. 4º; art. 5º
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
-
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 63; art. 65; art. 68; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
 
 ### Equipamentos — quando utilizados
 
@@ -2326,10 +2257,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Contrato de prestação de serviços firmado com cada usuário**  
   Fundamento: Portaria SMS nº 5/2019, item 12
-- **Pasta individual com registro de entrada e saída, documentação, horário de permanência, contatos de emergência, receitas médicas e necessidades especiais**  
-  Fundamento: Portaria SMS nº 5/2019, item 12
-- **Livro de intercorrências com registros atualizados**  
-  Fundamento: Portaria SMS nº 5/2019, item 12
 - **Cópia da carteira de vacinação dos usuários e dos funcionários, atualizada**  
   Fundamento: Portaria SMS nº 5/2019, item 12
 
@@ -2341,8 +2268,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Portaria SMS nº 5/2019, item 12
 - **Procedimentos Operacionais Padronizados**  
   Fundamento: Portaria SMS nº 5/2019, item 12
-- **Planilha de controle de temperatura da geladeira de medicamentos termolábeis, com dois registros diários**  
-  Fundamento: Portaria SMS nº 5/2019, item 7.3.9.5
 
 ### Apoio e ambiente
 
@@ -2359,18 +2284,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 3º; art. 4º; art. 5º
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
-
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 63; art. 65; art. 68; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
 
 ### Equipamentos — quando utilizados
 
@@ -2409,16 +2322,10 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Residentes
 
-- **Ficha individual de cada residente, com registro periódico do atendimento e das intercorrências clínicas**  
-  Fundamento: RDC Anvisa nº 29/2011, art. 7º
 - **Declaração escrita de concordância do residente com as normas e rotinas, inclusive em caso de mandado judicial**  
   Fundamento: RDC Anvisa nº 29/2011, art. 19; art. 19, II
-- **Registro da avaliação diagnóstica prévia à admissão**  
-  Fundamento: RDC Anvisa nº 29/2011, art. 16
 - **Autorização escrita para divulgação de informação, imagem ou exposição, quando houver** — _Se aplicável ao serviço._  
   Fundamento: RDC Anvisa nº 29/2011, art. 19; art. 19, VI
-- **Prescrições médicas dos medicamentos em uso pelos residentes**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; RDC Anvisa nº 29/2011, art. 17
 
 ### Normas e rotinas
 
@@ -2447,18 +2354,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
 
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 63; art. 65; art. 68; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
-
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
@@ -2485,10 +2380,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Portaria de Consolidação GM/MS nº 3/2017 — Anexo V, Título V (SRT), art. 80, § 1º; art. 80, § 2º
 - **Projeto terapêutico individual de cada morador, atualizado**  
   Fundamento: Portaria de Consolidação GM/MS nº 3/2017 — Anexo V, Título V (SRT), art. 82; Anexo 4 do Anexo V
-- **Registros individuais de acompanhamento, prescrições e encaminhamentos**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 68
-- **Comprovação da vacinação dos moradores conforme o Plano Nacional de Imunização**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 81
 
 ### Equipe
 
@@ -2501,8 +2392,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Medicamentos
 
-- **Prescrições médicas vigentes dos medicamentos em uso pelos moradores**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67
 - **Controle dos medicamentos sujeitos a controle especial, quando houver** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 13.725/2004, art. 67; Portaria SVS/MS nº 344/1998, art. 67
 
@@ -2519,18 +2408,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 3º; art. 4º; art. 5º
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
-
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 67; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 63; art. 65; art. 68; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
 
 ### Equipamentos — quando utilizados
 
@@ -2562,12 +2439,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Resolução Conjunta nº 2/2014 CMDCA-SP e COMAS-SP, art. 52
 - **Guia de Acolhimento Institucional individual, expedida pela Vara da Infância e Juventude**  
   Fundamento: Resolução Conjunta nº 2/2014 CMDCA-SP e COMAS-SP, art. 32
-- **Registro das comunicações ao Ministério Público e ao Juízo nos acolhimentos emergenciais, em até 24 horas**  
-  Fundamento: Lei Federal nº 8.069/1990 — Estatuto da Criança e do Adolescente, art. 93; Resolução Conjunta nº 2/2014 CMDCA-SP e COMAS-SP, art. 14; art. 14, § 2º
 - **Carteira de vacinação de cada acolhido, atualizada**  
   Fundamento: Lei Municipal nº 13.725/2004, art. 81
-- **Prescrições médicas dos medicamentos em uso pelos acolhidos**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69
 
 ### Pessoal
 
@@ -2603,18 +2476,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
 
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
-
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
@@ -2648,11 +2509,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Usuários
 
-- **Registro individual de cada usuário acolhido, com data de entrada, contatos e necessidades de cuidado**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69
 - **Plano de atendimento ou projeto terapêutico individual, conforme a natureza do serviço**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69
-- **Prescrições médicas dos medicamentos em uso pelos usuários**  
   Fundamento: Lei Municipal nº 13.725/2004, art. 69
 
 ### Rotinas
@@ -2677,18 +2534,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 3º; art. 4º; art. 5º
 - **Contrato com empresa conservadora registrada, ART, Relatório de Inspeção Anual (RIA Online) e relatórios de manutenção do elevador ou da plataforma** — _Se aplicável ao serviço._  
   Fundamento: Lei Municipal nº 10.348/1987 — elevadores e aparelhos de transporte, art. 6º; art. 9º; art. 11; Decreto Municipal nº 47.334/2006 — RIA Online, art. 1º; art. 2º; art. 6º
-
-### Medicamentos — quando administrados ou guardados
-
-- **Relação dos medicamentos em uso, prescrições vigentes e registros individualizados de administração, recusa, omissão e intercorrência** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 9º; art. 11; art. 12
-- **Controle de medicamentos sujeitos a controle especial e registros de temperatura dos termolábeis, quando existentes** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Portaria SVS/MS nº 344/1998, art. 67
-
-### Cuidados em saúde — quando realizados no local
-
-- **Relação de procedimentos de enfermagem ou de saúde realizados no serviço, profissionais envolvidos, prescrições/protocolos e registros de execução** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º; art. 19
 
 ### Equipamentos — quando utilizados
 

@@ -9,17 +9,20 @@
      reservatório de água”, “PCMSO”), sem frase descritiva;
    - blocos das solicitações: Documentação legal e administrativa, Gestão de pessoal, Infraestrutura
      e higiene, Sistema de gestão da qualidade, Qualificações e validações, POPs (um item por POP) e
-     Registros e monitoramentos;
+     Laudos, análises e comprovantes;
    - o que é geral fica nesses blocos; o que depende de uma atividade (aplicação de injetáveis,
      homeopatia, SBIT, frota própria…) vai em “Específico — atividade”, no fim da lista (campo esp);
-   - documentos verificados na inspeção (notas fiscais, livros, receitas) ficam no roteiro.
+   - só documentos estáticos (licenças, certidões, programas, manuais, POPs, contratos, certificados,
+     laudos e relatórios), sem quantidade (na inspeção a conferência é por rastreabilidade);
+     registros de rotina conferidos na inspeção (notas fiscais, livros, receitas, planilhas de
+     temperatura, limpeza e cloro, fichas de reclamação, PAR-Q e atestados dos alunos) ficam no roteiro.
 
    Cada documento: g (bloco), n (nome), o (o que deve conter), q (condição: “Se aplicável: …”),
    esp (atividade específica), r (fundamento: ids do banco v12 'norma::artigo::N…' ou do banco v11
    'norma:nó') e, quando a exigência não está em norma do banco, fonte (texto da citação, sem texto
    embutido). Os textos são embutidos por scripts/documentos-checklist.cjs, que falha se um id não
    existir. Serviços assistenciais: a lista de cada modalidade vem do próprio módulo. */
-const VERSAO = '2026-10-28';
+const VERSAO = '2026-10-28b';
 const L90 = 'lei-municipal-13725-2004::artigo::90';
 const BOMB = ['decreto-estadual-sp-69118-2024::artigo::15::inciso::v', 'decreto-estadual-sp-69118-2024::artigo::3::inciso::xxvi'];
 const R63 = i => 'rdc-63-2011::artigo::23::inciso::' + i;
@@ -47,7 +50,7 @@ const GRUPOS = [
   ['sgq', 'Sistema de gestão da qualidade'],
   ['qual', 'Qualificações e validações'],
   ['pop', 'Procedimentos Operacionais Padrão (POPs)'],
-  ['reg', 'Registros e monitoramentos']
+  ['reg', 'Laudos, análises e comprovantes']
 ];
 
 /* catálogo: nome e fundamento padrão; cada roteiro pode trocar o fundamento, o texto ou a condição */
@@ -75,10 +78,9 @@ const DOCS = {
   manutencao: {g: 'infra', n: 'Registros de manutenção preventiva dos equipamentos', o: 'Programa e registros (ordens de serviço, laudos) da manutenção preventiva e corretiva dos equipamentos.', r: [R63('ix')]},
   edif_manut: {g: 'infra', n: 'Registros de manutenção da edificação e das instalações', o: 'Registros da manutenção preventiva e corretiva da edificação e das instalações (elétrica, hidráulica, climatização).', r: [R63('vii')]},
   manual: {g: 'sgq', n: 'Manual de Boas Práticas', o: 'Manual próprio do estabelecimento, atualizado, que descreva as atividades, as responsabilidades e os procedimentos adotados.', r: [D44(85)]},
-  autoinspecao: {g: 'sgq', n: 'Último registro de autoinspeção', o: 'Relatório da última autoinspeção, com as conclusões e as ações corretivas.', r: [R430(37), R430(39)]},
+  autoinspecao: {g: 'sgq', n: 'Relatório de autoinspeção', o: 'Relatório da autoinspeção, com as conclusões e as ações corretivas.', r: [R430(37), R430(39)]},
   fornecedores: {g: 'sgq', n: 'Qualificação de fornecedores', o: 'Documentação da qualificação dos fornecedores (licença sanitária, AFE, CRT e, quando couber, AE).', r: [R430('18::inciso::x')]},
   clientes: {g: 'sgq', n: 'Qualificação de clientes', o: 'Comprovação de que os clientes são licenciados e autorizados para as atividades (licença, AFE e, quando couber, AE).', r: [R430(6), R430('18::inciso::x')]},
-  reclamacoes: {g: 'sgq', n: 'Registros de reclamações / SAC do ano vigente', o: 'Registros das reclamações com a investigação e as medidas adotadas; desvios de qualidade registrados à parte.', r: [R430(25), R430(27)]},
   terceiros: {g: 'sgq', n: 'Contratos de terceirização', q: 'Se aplicável: serviço ou atividade terceirizada.', o: 'Contrato vigente de cada serviço terceirizado, com as responsabilidades das partes; contratada regularizada na vigilância quando couber.', r: ['rdc-63-2011::artigo::11']},
   psp: {g: 'sgq', n: 'Plano de Segurança do Paciente', o: 'Estratégias de gestão de risco do serviço (identificação do paciente, higiene das mãos, prevenção de infecções, eventos adversos e notificação).', r: ['rdc-36-2013::artigo::4', 'rdc-36-2013::artigo::5']},
   pgt: {g: 'sgq', n: 'Plano de Gerenciamento de Tecnologias em Saúde', o: 'Plano que cubra equipamentos, produtos para saúde, medicamentos e saneantes, com responsável, inventário e manutenções.', r: [O1002('a131')]},
@@ -103,12 +105,12 @@ const APPS = {
     ['treinamento', {n: 'Registro de treinamento de pessoal (RDC 44/2009, Seção III)', o: 'Registros dos cursos e treinamentos com descrição, data, carga horária, participantes e quem ministrou.', r: [D44(28), D44('88::inciso::i')]}],
     ['aso', {o: 'ASO admissional e periódico de todos os funcionários.', r: [], fonte: NR7}],
     ['pragas', {r: [D44(7), D44('88::inciso::iv')]}],
-    ['reservatorio', {r: [], fonte: 'A RDC 44/2009 não trata do reservatório; item da lista de solicitação da UVIS (não há dispositivo no banco)'}],
+    'reservatorio',
     ['calibracao', {r: [D44('35::paragrafo::4'), D44('88::inciso::v')]}],
     ['pgrss', {n: 'PGRSS — Plano de Gerenciamento de Resíduos de Serviços de Saúde (RDC 222/2018)', r: [D44(97), 'rdc-222-2018::artigo::5']}],
     'pmoc',
     ['manual', {r: [D44('2::inciso::v'), D44(85)]}],
-    ['fornecedores', {n: 'Qualificação de 3 fornecedores (licença, AFE e CRT)', o: 'Licença sanitária, AFE e CRT de fornecedores (distribuidores) da drogaria.', r: [D44('31::paragrafo::1')]}],
+    ['fornecedores', {n: 'Qualificação de fornecedores (licença, AFE e CRT)', o: 'Licença sanitária, AFE e CRT de fornecedores (distribuidores) da drogaria.', r: [D44('31::paragrafo::1')]}],
     pop('Higiene e limpeza dos ambientes', [D44('86::inciso::i')]),
     pop('Aquisição, recebimento e armazenamento de produtos', [D44('86::inciso::ii'), D44(32)]),
     pop('Monitoramento de temperatura e umidade', [D44('35::paragrafo::4'), D44('35::paragrafo::5')]),
@@ -152,9 +154,8 @@ const APPS = {
     ['manutencao', {n: 'Programa de manutenção preventiva (purificador de água, exaustores e ar-condicionado)', o: 'Programa de manutenção preventiva, próprio ou de empresa terceirizada, com os modelos de registro de troca e limpeza.', r: [M67('5-3-1'), M67('7-5-2-1'), M67('7-3-18')]}],
     ['calibracao', {n: 'Certificados de calibração das balanças e instrumentos de medição', o: 'Calibração anual por empresa certificada, com padrões rastreáveis à Rede Brasileira de Calibração.', r: [M67('5-2-1')]}],
     ['manual', {o: 'Manual de Boas Práticas de Manipulação com organograma e fluxograma da farmácia.', r: [M67('15-3')]}],
-    ['autoinspecao', {n: 'Registro da última autoinspeção, com conclusões e ações corretivas', r: [M67('15-6-1')]}],
-    ['reclamacoes', {n: 'Registros de reclamações de clientes do último mês', o: 'Reclamações com as ações investigativas e as medidas tomadas.', r: [M67('15-7-1')]}],
-    ['fornecedores', {n: 'Qualificação completa de 2 fornecedores, com auditoria', o: 'Qualificação com auditoria de cumprimento das Boas Práticas de Fracionamento e Distribuição de Insumos.', r: [M67('7-1-7')]}],
+    ['autoinspecao', {n: 'Relatório de autoinspeção, com conclusões e ações corretivas', r: [M67('15-6-1')]}],
+    ['fornecedores', {n: 'Qualificação completa de fornecedores, com auditoria', o: 'Qualificação com auditoria de cumprimento das Boas Práticas de Fracionamento e Distribuição de Insumos.', r: [M67('7-1-7')]}],
     ['contrato_lab', {g: 'sgq', n: 'Contrato com o laboratório das análises terceirizadas, com cronograma', o: 'Contrato com o laboratório que realiza as análises do monitoramento do processo magistral, com o cronograma dos ensaios.', r: [M67('7-3-15'), M67('9-2-4')]}],
     ['lab_licenca', {g: 'sgq', n: 'Licença ou declaração da vigilância de que o laboratório terceirizado segue a RDC 11/2012', q: 'Se aplicável: laboratório de controle de qualidade terceirizado.', o: 'Documento de licenciamento do laboratório ou declaração da vigilância local.', r: [M67('7-3-15-3')], fonte: 'RDC Anvisa nº 11/2012 (laboratórios analíticos) — texto não consta do banco'}],
     ['exaustao', {g: 'qual', n: 'Qualificação do sistema de exaustão de ar (QP, QI, QO e QD)', q: 'Se aplicável: etapas com matérias-primas em pó.', o: 'Qualificação de projeto, instalação, operação e desempenho, com parâmetros críticos definidos por análise de risco, conforme os guias da Anvisa.', r: [M67('8-7')]}],
@@ -178,15 +179,15 @@ const APPS = {
     pop('Registros de temperatura e umidade (laboratórios, geladeiras e almoxarifado), com modelo de planilha', [M67('4-2-1'), M67('8-8'), M67('7-4-3')]),
     pop('Manutenção preventiva dos equipamentos (registros e cronograma)', [M67('5-3-1'), M67('7-3-18')]),
     pop('Limpeza dos ambientes e equipamentos (com modelo de planilha)', [M67('6-1'), M67('8-5')]),
-    ['agua_analises', {g: 'reg', n: 'Últimas 2 análises da água potável (semestral)', o: 'Laudos físico-químicos e microbiológicos semestrais da água de abastecimento.', r: [M67('7-5-1-3')]}],
-    ['agua_purificada', {g: 'reg', n: 'Últimas 3 análises mensais da água purificada', o: 'Laudos físico-químicos e microbiológicos mensais da água purificada.', r: [M67('7-5-2-2')]}],
-    ['monit_teor', {g: 'reg', n: 'Últimas 3 análises bimestrais de teor e uniformidade de conteúdo (fármaco ≤ 25 mg)', o: 'Análises de teor e uniformidade de conteúdo de fórmulas com fármaco em quantidade igual ou inferior a 25 mg, com prioridade para as de menos de 5 mg.', r: [M67('9-2-1'), M67('9-2-3'), M67('9-2-3-1')]}],
-    ['monit_sensib', {g: 'reg', n: 'Últimas 3 análises trimestrais de teor e uniformidade (antibióticos, hormônios e citostáticos)', q: 'Se aplicável: manipulação de substâncias sensibilizantes (pode ser rodiziada).', o: 'Análises trimestrais de cada classe terapêutica de sensibilizantes manipulada.', r: [M67x('iii', '2-16'), M67x('iii', '2-16-1')]}],
-    ['monit_micro', {g: 'reg', n: 'Últimas 3 análises mensais de pureza microbiológica (bases galênicas e preparações)', o: 'Monitoramento da pureza microbiológica de bases galênicas e de preparações magistrais e oficinais.', r: [M67('11-2-4')]}],
-    ['mapas', {g: 'reg', n: 'Comprovante dos últimos 3 envios dos mapas e balanços à COVISA (Portaria 344/1998)', q: 'Se aplicável: medicamentos e substâncias sujeitos a controle especial.', o: 'Comprovantes de envio pelo Portal 156 dos balanços (BSPO/BMPO) e mapas.', r: ['portaria-svs-ms-344-1998::artigo::68', 'portaria-svs-ms-344-1998::artigo::69']}],
+    ['agua_analises', {g: 'reg', n: 'Laudos das análises semestrais da água potável', o: 'Laudos físico-químicos e microbiológicos semestrais da água de abastecimento.', r: [M67('7-5-1-3')]}],
+    ['agua_purificada', {g: 'reg', n: 'Laudos das análises mensais da água purificada', o: 'Laudos físico-químicos e microbiológicos mensais da água purificada.', r: [M67('7-5-2-2')]}],
+    ['monit_teor', {g: 'reg', n: 'Laudos das análises bimestrais de teor e uniformidade de conteúdo (fármaco ≤ 25 mg)', o: 'Análises de teor e uniformidade de conteúdo de fórmulas com fármaco em quantidade igual ou inferior a 25 mg, com prioridade para as de menos de 5 mg.', r: [M67('9-2-1'), M67('9-2-3'), M67('9-2-3-1')]}],
+    ['monit_sensib', {g: 'reg', n: 'Laudos das análises trimestrais de teor e uniformidade (antibióticos, hormônios e citostáticos)', q: 'Se aplicável: manipulação de substâncias sensibilizantes (pode ser rodiziada).', o: 'Análises trimestrais de cada classe terapêutica de sensibilizantes manipulada.', r: [M67x('iii', '2-16'), M67x('iii', '2-16-1')]}],
+    ['monit_micro', {g: 'reg', n: 'Laudos das análises mensais de pureza microbiológica (bases galênicas e preparações)', o: 'Monitoramento da pureza microbiológica de bases galênicas e de preparações magistrais e oficinais.', r: [M67('11-2-4')]}],
+    ['mapas', {g: 'reg', n: 'Comprovante de envio dos mapas e balanços à COVISA (Portaria 344/1998)', q: 'Se aplicável: medicamentos e substâncias sujeitos a controle especial.', o: 'Comprovantes de envio pelo Portal 156 dos balanços (BSPO/BMPO) e mapas.', r: ['portaria-svs-ms-344-1998::artigo::68', 'portaria-svs-ms-344-1998::artigo::69']}],
     /* específicos */
     pop('Procedimentos específicos da manipulação homeopática', [M67x('v', '6-8')], {esp: 'Homeopatia'}),
-    ['homeo_cq', {g: 'reg', esp: 'Homeopatia', n: 'Registros do controle de qualidade dos insumos inertes e ativos homeopáticos', o: 'Avaliação dos insumos inertes e ativos conforme o item 9 do Anexo V.', r: [M67x('v', '9-1'), M67x('v', '9-2')]}],
+    ['homeo_cq', {g: 'reg', esp: 'Homeopatia', n: 'Laudos do controle de qualidade dos insumos inertes e ativos homeopáticos', o: 'Avaliação dos insumos inertes e ativos conforme o item 9 do Anexo V.', r: [M67x('v', '9-1'), M67x('v', '9-2')]}],
     ['sbit_lista', {g: 'sgq', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Lista das substâncias de baixo índice terapêutico manipuladas', o: 'Relação das SBIT que a farmácia manipula ou pretende manipular.', r: [M67x('ii', '2-10')]}],
     ['sbit_dissolucao', {g: 'qual', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Estudo do perfil de dissolução', o: 'Comprovação da formulação dos sólidos com cada SBIT por perfil de dissolução.', r: [M67x('ii', '2-10')]}],
     ['sbit_excip', {g: 'qual', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Relação e estudo de padronização e compatibilidade dos excipientes', o: 'Excipientes padronizados e compatíveis com cada formulação, com o estudo que os fundamenta.', r: [M67x('ii', '2-10-1')]}],
@@ -206,13 +207,13 @@ const APPS = {
     'pgr',
     ['aso', {r: [R430(11)]}],
     ['treinamento', {r: [R430(12), R430('18::inciso::v')]}],
-    ['reservatorio', {n: 'Certificado de limpeza da caixa d’água', r: [], fonte: 'A RDC 430/2020 não trata do reservatório; item da lista de solicitação da UVIS (não há dispositivo no banco)'}],
+    ['reservatorio', {n: 'Certificado de limpeza da caixa d’água'}],
     ['pragas', {n: 'Certificado de controle de pragas — área', r: [R430('18::inciso::xv')]}],
     ['calibracao', {n: 'Certificado de calibração de todos os instrumentos', r: [R430('43::paragrafo::4'), R430('18::inciso::xi')]}],
     ['pgrss', {r: [A16('ii', 'j'), 'rdc-222-2018::artigo::5']}],
     'pmoc',
     ['manual', {n: 'Manual de Boas Práticas de Distribuição e Armazenagem', r: [A16('i', 'f')]}],
-    'autoinspecao', 'fornecedores', 'clientes', 'reclamacoes',
+    'autoinspecao', 'fornecedores', 'clientes',
     ['recall', {g: 'sgq', n: 'Relatório anual de simulação de recolhimento (recall)', o: 'Relatório da simulação anual de recolhimento e de reconciliação para o pior caso da rede de distribuição.', r: [R430('18::inciso::vi'), R430('30::paragrafo::2')]}],
     ['transportadora', {g: 'sgq', n: 'Transportadora: contrato de terceirização, licença, AFE e AE', q: 'Se aplicável: transporte terceirizado.', o: 'Contrato aprovado pela Garantia da Qualidade, com as responsabilidades das partes, e a regularização da transportadora.', r: [R430(72), R430(73), R430('63::inciso::i')]}],
     ['qt_areas', {g: 'qual', n: 'Qualificação térmica das áreas de armazenamento', o: 'Estudo de qualificação térmica que define a posição dos instrumentos de monitoramento.', r: [R430('43::paragrafo::1')]}],
@@ -238,12 +239,9 @@ const APPS = {
     pop('Manutenção preventiva e calibração de equipamentos', [R430(41), R430('43::paragrafo::4')]),
     pop('Gerenciamento de resíduos', [A16('ii', 'j')]),
     pop('Plano de contingência (falha de energia ou dos equipamentos de frio)', [R430(80)], {q: 'Se aplicável: termolábeis.'}),
-    ['planilhas_tu', {g: 'reg', n: 'Planilhas de monitoramento de temperatura e umidade — áreas e equipamentos de cadeia fria', o: 'Registros do monitoramento, mantidos pelo prazo da norma.', r: [R430('43::paragrafo::3')]}],
-    ['planilhas_limpeza', {g: 'reg', n: 'Planilhas de registro de limpeza das áreas', o: 'Registros da limpeza das instalações.', r: [R430(46)]}],
     /* específicos */
     ['veic_lista', {g: 'leg', esp: 'Frota própria', n: 'Relação dos veículos, com RENAVAM e licenciamento atual', o: 'Relação e identificação dos veículos próprios ou de terceiros sob responsabilidade da empresa, com os equipamentos de manutenção das condições de transporte.', r: [A16('ii', 'm')]}],
     ['veic_pragas', {g: 'infra', esp: 'Frota própria', n: 'Certificado de controle de pragas — veículos', o: 'Certificado de controle de pragas dos veículos.', r: [R430('18::inciso::xv')]}],
-    ['veic_planilhas', {g: 'reg', esp: 'Frota própria', n: 'Planilhas de temperatura e umidade e de limpeza dos veículos', o: 'Registros do monitoramento das condições de transporte e da limpeza dos veículos.', r: [R430('64::inciso::ii')]}]
   ],
   'gases-medicinais': [
     'cnpj', 'licenca',
@@ -259,7 +257,6 @@ const APPS = {
     ['manual', {n: 'Manual da qualidade (Sistema de Gestão da Qualidade)', o: 'Sistema de Gestão da Qualidade que cubra armazenagem, distribuição, transporte e dispensação.', r: [G887(18), G887(20)]}],
     ['autoinspecao', {r: [G887(42)]}],
     ['fornecedores', {r: [G887(6)]}], ['clientes', {r: [G887(6)]}],
-    ['reclamacoes', {r: [G887(27), G887(30)]}],
     pop('Gerenciamento de documentação', [G887(20)]),
     pop('Recebimento e expedição', [G887(61)]),
     pop('Reclamações por desvio de qualidade', [G887(28)]),
@@ -268,7 +265,6 @@ const APPS = {
     pop('Autoinspeção', [G887(42)]),
     pop('Rastreabilidade e integridade dos registros', [G887(48)]),
     pop('Operação e manutenção dos veículos e equipamentos de transporte', [G887(71)], {q: 'Se aplicável: transporte próprio.'}),
-    ['registros', {g: 'reg', n: 'Registros das atividades de armazenagem, distribuição e transporte', o: 'Registros das ações efetuadas, prontamente recuperáveis.', r: [G887(24), G887(25)]}]
   ],
 
   /* ---------------- Serviços ---------------- */
@@ -284,7 +280,6 @@ const APPS = {
     ['calibracao', {n: 'Certificado de calibração dos termômetros das câmaras e refrigeradores de vacinas', r: ['rdc-197-2017::artigo::11::inciso::ii']}],
     'pgrss', 'pmoc', 'manutencao', 'edif_manut', 'terceiros',
     ['pops', {n: 'POPs do serviço de vacinação (conservação, transporte, administração, eventos adversos, limpeza e resíduos)', r: [R63('xviii'), 'rdc-197-2017::artigo::12']}],
-    ['temperatura', {g: 'reg', n: 'Registros diários de temperatura máxima e mínima dos equipamentos de vacinas', o: 'Planilhas diárias de temperatura máxima, mínima e de momento.', r: ['rdc-197-2017::artigo::11::inciso::ii']}]
   ],
   'eac-tipo1': eac(1), 'eac-tipo2': eac(2), 'eac-tipo3': eac(3),
   'estetica': [
@@ -317,8 +312,6 @@ const APPS = {
     pop('Higienização do tanque em caso de acidentes (vômito, fezes, sangue)', [P1101('14-4')], {q: 'Se aplicável: piscina.'}),
     pop('Higienização de banheiras e saunas', [P1101('7-12')], {q: 'Se aplicável: banheiras ou saunas.'}),
     ['pops_ciencia', {r: [P1101('14-2')]}],
-    ['parq', {g: 'reg', n: 'Atestados médicos, PAR-Q e termos de responsabilidade dos alunos', o: 'PAR-Q renovados anualmente, termos de responsabilidade e atestados médicos (menores de 15 e maiores de 69 anos), organizados e disponíveis.', r: [P1101('14-2'), 'lei-municipal-sp-11383-1993::artigo::2::paragrafo::5']}],
-    ['controle_cloro', {g: 'reg', n: 'Planilhas de cloro residual livre e pH da piscina e do lava-pés', q: 'Se aplicável: piscina.', o: 'Medições antes de cada período, com data, hora e assinatura.', r: [P1101('14-2-1'), P1101('6-20')]}],
     ['agua_alt', {g: 'reg', n: 'Laudos de potabilidade da água de solução alternativa', q: 'Se aplicável: poço, caminhão-pipa ou outra solução alternativa.', o: 'Comprovantes de tratamento e controle da potabilidade e laudos dos fornecedores, arquivados por no mínimo 6 meses.', r: [P1101('14-2-1')]}]
   ],
   'transporte-biologico': [
@@ -331,7 +324,6 @@ const APPS = {
     ['contrato', {g: 'sgq', n: 'Contrato (instrumento escrito) com cada remetente', o: 'Responsabilidades de cada parte: documentação de expedição, biossegurança, conservação, tempo de transporte, treinamento e documentos à disposição da vigilância.', r: ['rdc-504-2021::artigo::7', 'rdc-504-2021::artigo::26', 'rdc-504-2021::artigo::8::paragrafo::unico']}],
     ['validacao', {g: 'qual', n: 'Validação do acondicionamento', o: 'Relatório de validação da etapa de acondicionamento, por tipo de material e finalidade do transporte.', r: ['rdc-504-2021::artigo::11']}],
     pop('Instruções escritas das operações de transporte', ['rdc-504-2021::artigo::5'], {o: 'Instruções escritas e padronizadas, disponíveis a todo o pessoal e revisadas anualmente ou quando o procedimento mudar.'}),
-    ['nc_registro', {g: 'reg', n: 'Registros de não conformidades no transporte', o: 'Registro e investigação das não conformidades, com as medidas corretivas e preventivas.', r: ['rdc-504-2021::artigo::6']}]
   ],
   'imagem-convencional': imagem('convencional'), 'imagem-mamografia': imagem('mamografia'), 'imagem-tomografia': imagem('tomografia'),
   'imagem-ressonancia': imagem('ressonancia'), 'imagem-ultrassom': imagem('ultrassom'), 'imagem-hemodinamica': imagem('hemodinamica'),
@@ -366,7 +358,6 @@ const APPS = {
     ['reservatorio', {r: [P2619('n11.5'), P2619('n17.2')]}],
     ['pragas', {r: [P2619('n12.4.2')]}],
     ['manual', {o: 'Manual que descreva as operações reais do estabelecimento, atualizado e disponível.', r: [P2619('n16.2')]}],
-    ['reclamacoes', {n: 'Registros de reclamações dos consumidores', r: [P2619('n17.2')]}],
     ['auditoria', {g: 'sgq', n: 'Auditorias internas de Boas Práticas', o: 'Auditorias periódicas com lista de verificação e planos de ação com prazos e responsáveis.', r: [P2619('n14.2')]}],
     ['recolhimento', {g: 'sgq', n: 'Programa de recolhimento de alimentos', q: 'Se aplicável: indústria ou produtos com marca própria.', o: 'Programa para suspeita ou constatação de alimento que possa causar dano à saúde.', r: [P2619('n14.7')]}],
     pop('Higienização das instalações, equipamentos, móveis e utensílios', [P2619('n14.10')]),
@@ -390,9 +381,8 @@ const APPS = {
       ['manual', {n: 'Documentação de Boas Práticas de Fabricação', o: 'Documentação elaborada, aprovada, atualizada e distribuída com controle de emissão e revisão.', r: [C48('n10.4')]}],
       ['autoinspecao', {r: [C48('n9.2'), C48('n9.4')]}],
       ['fornecedores', {r: [C48('n3.3.5')]}],
-      ['reclamacoes', {r: [C48('n6.1')]}],
       ['terceiros', {r: [F16('i', 'f')]}],
-      ['agua', {g: 'reg', n: 'Registros do monitoramento da qualidade da água', o: 'Procedimentos e registros do monitoramento periódico nos pontos críticos.', r: [C48('n13.6')]}],
+      ['agua', {g: 'reg', n: 'Laudos do monitoramento da qualidade da água', o: 'Procedimentos e registros do monitoramento periódico nos pontos críticos.', r: [C48('n13.6')]}],
       pop('POPs de recebimento, amostragem, lote, ensaios, limpeza, armazenamento, calibração e manutenção', [C48('n10.11'), F16('ii', 'h')]),
       pop('Reclamações e recolhimento', [C48('n6.1'), C48('n7.3')])
     ]},

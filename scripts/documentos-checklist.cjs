@@ -173,7 +173,10 @@ for (const [app, v] of Object.entries(C.APPS)) {
   apps[app] = {modalidades: mod};
 }
 
-/* Serviços assistenciais: a lista de documentos de cada modalidade, a do próprio módulo */
+/* Serviços assistenciais: a lista de documentos de cada modalidade, a do próprio módulo, sem os
+   registros individuais e de rotina (prescrições, fichas e pastas dos residentes, livro de
+   intercorrências, planilhas, registros de administração, de execução e de eventos) */
+const ROTINA = /prescri|ficha individual|registros? individua|pasta individual|livro de intercorr|planilha|registros de temperatura|registros de execução|listagem dos residentes|registro das comunicações|eventos sentinela|avaliação diagnóstica|comprovação da vacinação/i;
 {
   const D = jsonApos(blocks.get('app--servicos-assistenciais'), 'const DATA=');
   LEIS_MOD = D.laws || {};
@@ -183,6 +186,8 @@ for (const [app, v] of Object.entries(C.APPS)) {
     const out = [], grupos = [];
     sv.doc.forEach((x, i) => {
       if (/conferida na inspeção/i.test(x.i)) return; /* estrutura física: não é documento */
+      /* registros individuais e de rotina, conferidos na inspeção, ficam no roteiro (mesmo critério dos demais) */
+      if (ROTINA.test(x.i)) return;
       let g = grupos.findIndex(y => y[1] === x.g); if (g < 0) { grupos.push(['m' + grupos.length, x.g]); g = grupos.length - 1; }
       out.push({id: sv.id + '-' + (i + 1), g: grupos[g][0], n: x.i.replace(/\.$/, ''), o: '', q: x.ap === 'Condicional' ? 'Se aplicável ao serviço.' : '', r: x.refs.map(r => r.law + ':' + r.node)});
     });
