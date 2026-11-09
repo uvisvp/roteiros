@@ -108,7 +108,7 @@ const PERFIL3 = [
 
 /* ——— perguntas ——— */
 const LIC = [
-  {id: 'lic_farmacia', tipos: [1], t: 'A farmácia ou drogaria possui licença sanitária vigente para a atividade de farmácia/drogaria (que precede a licença do serviço de EAC)?', r: [LM(90)], naSe: CONS,
+  {id: 'lic_farmacia', tipos: [1], t: 'A farmácia ou drogaria possui licença sanitária vigente para a atividade de farmácia/drogaria (que precede a licença do serviço de EAC)?', r: ['rdc-44-2009::artigo::2::inciso::iii', LM(90)], naSe: CONS,
     c: 'A farmácia possui licença sanitária vigente para a atividade de farmácia ou drogaria, que precede a licença do serviço de EAC.',
     nc: 'A farmácia não possui licença sanitária vigente para a sua atividade.',
     na: 'O estabelecimento é consultório isolado, e não exerce a atividade de farmácia ou drogaria.', inf: ['farm_lic']},
@@ -685,7 +685,7 @@ const CQ = {
 };
 
 const INFRACOES = [
-  {id: 'farm_lic', grupo: 'Licenciamento e responsabilidade', texto: 'Exercer a atividade de farmácia sem licença sanitária vigente.', r: [LM(90)]},
+  {id: 'farm_lic', grupo: 'Licenciamento e responsabilidade', texto: 'Exercer a atividade de farmácia sem licença sanitária vigente.', r: ['rdc-44-2009::artigo::2::inciso::iii', LM(90)]},
   {id: 'eac_lic', grupo: 'Licenciamento e responsabilidade', texto: 'Executar Exames de Análises Clínicas sem licença sanitária que indique as atividades relacionadas ao EAC.', r: [LM(90), LM(90) + '::paragrafo::1', A(73)]},
   {id: 'eac_cnes', grupo: 'Licenciamento e responsabilidade', texto: 'Executar Exames de Análises Clínicas sem inscrição no Cadastro Nacional de Estabelecimentos de Saúde.', r: [LM(50), A(74)]},
   {id: 'eac_rt', grupo: 'Licenciamento e responsabilidade', texto: 'Executar Exames de Análises Clínicas sem a responsabilidade técnica e a supervisão do pessoal técnico exigidas durante o funcionamento.', r: [LM(50), A(75), A(122)]},

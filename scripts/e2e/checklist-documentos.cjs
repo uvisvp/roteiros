@@ -94,7 +94,7 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEklEQVR
   ok(/Fabricante de cosméticos/.test(ry || ''), 'Produtos: lista da atividade (fabricante)');
   const z = await T.abre('Medicamentos', 'drogaria', 'Drogaria', '', {browser: b});
   const rz = await z.f.evaluate(async () => { document.querySelector('.uvs-docs-card').click(); await new Promise(r => setTimeout(r, 300)); return [...document.querySelectorAll('#uvs-docs h3')].map(h => h.textContent.replace(/\s*\d+\/\d+$/, '')); });
-  ok(rz.includes('Procedimentos Operacionais Padrão (POPs)') && rz.slice(-2).join('|') === 'Específico — Serviços farmacêuticos|Específico — Aplicação de injetáveis', 'Drogaria: POPs em bloco próprio e específicos (serviços farmacêuticos, injetáveis) no fim (' + rz.join(' | ') + ')');
+  ok(rz.includes('Procedimentos Operacionais Padrão (POPs)') && rz.slice(-3).join('|') === 'Específico — Serviços farmacêuticos|Específico — Aplicação de injetáveis|Registros conferidos na inspeção', 'Drogaria: POPs em bloco próprio, específicos (serviços farmacêuticos, injetáveis) e, por último, os registros conferidos na inspeção (' + rz.join(' | ') + ')');
   await z.p.close();
   await y.p.close();
   await b.close();

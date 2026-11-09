@@ -160,9 +160,11 @@ function item(ent) {
 }
 /* a lista e os grupos do roteiro: os blocos gerais e, no fim, um bloco por atividade específica */
 function lista(app, l0) {
-  const l = l0.map(item), ids = new Set(), grupos = C.GRUPOS.slice(), esp = [];
+  /* “Registros conferidos na inspeção” fica por último, depois dos blocos específicos */
+  const l = l0.map(item), ids = new Set(), grupos = C.GRUPOS.filter(g => g[0] !== 'rot'), esp = [];
   l.forEach(d => { if (ids.has(d.id)) throw Error(app + ': documento repetido ' + d.id); ids.add(d.id); });
   l.forEach(d => { if (!d.esp) return; let k = esp.indexOf(d.esp); if (k < 0) { esp.push(d.esp); k = esp.length - 1; grupos.push(['esp' + k, 'Específico — ' + d.esp]); } d.g = 'esp' + k; delete d.esp; });
+  grupos.push(C.GRUPOS.find(g => g[0] === 'rot'));
   return {grupos, lista: l};
 }
 const apps = {};

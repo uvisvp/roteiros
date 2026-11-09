@@ -32,6 +32,13 @@ function __medLacunasDrogaria(catalog){
 
  /* referências das perguntas das telas próprias (serviços, documentos, venda remota) */
  [PG(61, 5), PG(61, 3), PG(69, 3), PG(69, 4), A(82), PG(59, 'unico'), A(67), A(25), A(26), A(27), A(89), A(55), A(54)].forEach(ref);
+ /* mapas e balanços: além do BMPO trimestral (art. 69), o anual (art. 69, § 1º) e a RMNRA (art. 72) */
+ (function(){ var b = R['portaria-svs-ms-344-1998::artigo::69']; if(!b) return;
+  [['portaria-svs-ms-344-1998::artigo::69::paragrafo::1', 'Art. 69, § 1º'], ['portaria-svs-ms-344-1998::artigo::72', 'Art. 72']].forEach(function(x){
+   if(!R[x[0]]) R[x[0]] = Object.assign({}, b, {id: x[0], dispositivo: x[1]}); });
+  P.forEach(function(q){ if(q.id === 'doc_bmpo_trim') ['portaria-svs-ms-344-1998::artigo::69::paragrafo::1', 'portaria-svs-ms-344-1998::artigo::72'].forEach(function(id){ if(q.refs.indexOf(id) < 0){ q.refs.push(id); if(q.norma) q.norma.push(b.norma); if(q.dispositivo) q.dispositivo.push(R[id].dispositivo); } }); }); })();
+ /* citações das telas de área física (drogaria-area-fisica.js) */
+ [A(9), A(11), A(12), A(13), A(32), A(36), A(38), A(39), A(40), PG(41, 1), PG(41, 2), PG(76, 2), PG(35, 1), PG(35, 2), PG(35, 4), PG(6, 2), PG(6, 4)].forEach(ref);
 
  /* card 4 — dispensação */
  add({id: 'disp_receita', card: 4, grupo: 'Dispensação e escrituração', refs: [A(43)],
@@ -43,21 +50,8 @@ function __medLacunasDrogaria(catalog){
   frase_positiva: 'A dispensação é feita mediante receita legível e sem ambiguidade, com contato com o prescritor em caso de dúvida.',
   frase_negativa: 'Foram dispensados medicamentos com receita ilegível ou que pode induzir a erro, ou o prescritor não é contatado em caso de dúvida.'});
 
- /* card 4 — exposição (o card 2 tem tela própria, que não mostra perguntas do catálogo) */
- add({id: 'med_area_restrita', card: 4, grupo: 'Exposição de medicamentos', refs: [A(40), PG(40, 1)],
-  pergunta: 'Os medicamentos ficam em área de circulação restrita aos funcionários, sem exposição direta ao alcance dos usuários?',
-  ajuda: 'Os medicamentos isentos de prescrição podem ficar ao alcance dos usuários (RDC 44/2009, art. 40, § 2º).',
-  frase_positiva: 'Os medicamentos ficam em área de circulação restrita aos funcionários, sem exposição direta ao alcance dos usuários.',
-  frase_negativa: 'Foram constatados medicamentos expostos ao alcance direto dos usuários, fora da área de circulação restrita aos funcionários.'});
- add({id: 'mip_principio', card: 4, grupo: 'Exposição de medicamentos', refs: [PG(41, 1)],
-  pergunta: 'Os MIPs de mesmo princípio ativo (ou associação) estão organizados em um mesmo local, identificados pelo nome do princípio ativo?',
-  frase_positiva: 'Os medicamentos isentos de prescrição de mesmo princípio ativo estão organizados em um mesmo local, identificados pelo princípio ativo.',
-  frase_negativa: 'Os medicamentos isentos de prescrição de mesmo princípio ativo não estão organizados em um mesmo local identificado pelo princípio ativo.'});
+ /* exposição (art. 40, art. 41, § 1º): perguntas na área de dispensação (drogaria-area-fisica.js, item 4.2); não se repetem nos controlados. */
 
- /* card 7 — produtos impróprios */
- add({id: 'emb_violada', card: 7, grupo: 'Produtos impróprios', refs: [PG(76, 2)],
-  pergunta: 'Os medicamentos armazenados estão com a embalagem primária íntegra?',
-  frase_positiva: 'Os medicamentos armazenados estão com a embalagem primária íntegra.',
-  frase_negativa: 'Foram encontrados medicamentos com embalagem primária violada armazenados no estabelecimento.'});
+ /* produtos impróprios: perguntas na área de armazenamento (drogaria-area-fisica.js, item 4.3). */
 
 }

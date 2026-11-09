@@ -12,17 +12,18 @@
      Laudos, análises e comprovantes;
    - o que é geral fica nesses blocos; o que depende de uma atividade (aplicação de injetáveis,
      homeopatia, SBIT, frota própria…) vai em “Específico — atividade”, no fim da lista (campo esp);
-   - só documentos estáticos (licenças, certidões, programas, manuais, POPs, contratos, certificados,
+   - documentos estáticos (licenças, certidões, programas, manuais, POPs, contratos, certificados,
      laudos e relatórios), sem quantidade (na inspeção a conferência é por rastreabilidade);
-     registros de rotina conferidos na inspeção (notas fiscais, livros, receitas, planilhas de
-     temperatura, limpeza e cloro, fichas de reclamação, PAR-Q e atestados dos alunos) ficam no roteiro.
+   - registros de rotina com dever de registro na norma (planilhas de temperatura e umidade, de
+     limpeza, de cloro, reclamações…) vão no bloco à parte “Registros conferidos na inspeção” (g: 'rot'),
+     no fim da lista e fora da solicitação por e-mail; notas fiscais, livros e receitas ficam no roteiro.
 
    Cada documento: g (bloco), n (nome), o (o que deve conter), q (condição: “Se aplicável: …”),
    esp (atividade específica), r (fundamento: ids do banco v12 'norma::artigo::N…' ou do banco v11
    'norma:nó') e, quando a exigência não está em norma do banco, fonte (texto da citação, sem texto
    embutido). Os textos são embutidos por scripts/documentos-checklist.cjs, que falha se um id não
    existir. Serviços assistenciais: a lista de cada modalidade vem do próprio módulo. */
-const VERSAO = '2026-10-28b';
+const VERSAO = '2026-11-09';
 const L90 = 'lei-municipal-13725-2004::artigo::90';
 const BOMB = ['decreto-estadual-sp-69118-2024::artigo::15::inciso::v', 'decreto-estadual-sp-69118-2024::artigo::3::inciso::xxvi'];
 const R63 = i => 'rdc-63-2011::artigo::23::inciso::' + i;
@@ -50,7 +51,9 @@ const GRUPOS = [
   ['sgq', 'Sistema de gestão da qualidade'],
   ['qual', 'Qualificações e validações'],
   ['pop', 'Procedimentos Operacionais Padrão (POPs)'],
-  ['reg', 'Laudos, análises e comprovantes']
+  ['reg', 'Laudos, análises e comprovantes'],
+  /* registros de rotina conferidos na inspeção, por rastreabilidade: bloco à parte, no fim, fora da solicitação por e-mail */
+  ['rot', 'Registros conferidos na inspeção']
 ];
 
 /* catálogo: nome e fundamento padrão; cada roteiro pode trocar o fundamento, o texto ou a condição */
@@ -101,7 +104,6 @@ const APPS = {
     ['ae', {r: [D44('2::inciso::ii')]}],
     ['crt', {n: 'Certidão de Regularidade Técnica (CRT) do CRF', r: [D44('2::inciso::iv'), D44('2::paragrafo::1')]}],
     'avcb', 'amlurb',
-    ['rt', {o: 'Farmacêutico responsável técnico e substituto com inscrição no CRF, presentes durante todo o horário de funcionamento.', r: ['lei-5991-1973::artigo::15']}],
     ['treinamento', {n: 'Registro de treinamento de pessoal (RDC 44/2009, Seção III)', o: 'Registros dos cursos e treinamentos com descrição, data, carga horária, participantes e quem ministrou.', r: [D44(28), D44('88::inciso::i')]}],
     ['aso', {o: 'ASO admissional e periódico de todos os funcionários.', r: [], fonte: NR7}],
     ['pragas', {r: [D44(7), D44('88::inciso::iv')]}],
@@ -120,12 +122,16 @@ const APPS = {
     pop('Produtos próximos ao vencimento', [D44('86::inciso::vi'), D44(51)]),
     pop('Materiais descartáveis e sua destinação', [D44('86::inciso::viii')]),
     pop('Transporte e entrega de medicamentos', [D44('56::paragrafo::3')], {q: 'Se aplicável: entrega em domicílio ou venda remota.'}),
+    pop('Serviços farmacêuticos prestados', [D44('86::inciso::vii'), D44(72)], {q: 'Se aplicável: prestação de serviços farmacêuticos.'}),
     'pops_ciencia',
     ['mapas', {g: 'reg', n: 'Comprovante de envio dos mapas e balanços à COVISA (Portaria 344/1998)', q: 'Se aplicável: dispensação de medicamentos sujeitos a controle especial.', o: 'Comprovantes de envio dos balanços (BMPO) e mapas dos períodos solicitados.', r: ['portaria-svs-ms-344-1998::artigo::69', 'portaria-svs-ms-344-1998::artigo::64']}],
+    ['sngpc_transmissao', {g: 'reg', n: 'Certificado de Transmissão Regular do SNGPC', q: 'Se aplicável: dispensação de medicamentos sujeitos a controle especial ou antimicrobianos.', o: 'Certificado emitido pelo SNGPC que comprova a transmissão regular dos dados de movimentação.', r: ['rdc-22-2014::artigo::5::inciso::vi', 'rdc-22-2014::artigo::10::paragrafo::4']}],
+    /* registros conferidos na inspeção */
+    ['rot_temp_umid', {g: 'rot', n: 'Planilhas de registro de temperatura e umidade', o: 'Registros de temperatura e umidade do ambiente e registro diário da temperatura do refrigerador de termolábeis.', r: [D44('35::paragrafo::3'), D44('35::paragrafo::4')]}],
+    ['rot_limpeza', {g: 'rot', n: 'Registros de limpeza dos ambientes', o: 'Registros da limpeza dos ambientes, conforme o POP de higiene e limpeza.', r: [D44('86::inciso::i')]}],
+    ['rot_limpeza_srv', {g: 'rot', n: 'Registros de limpeza da sala de serviços farmacêuticos', q: 'Se aplicável: prestação de serviços farmacêuticos.', o: 'Limpeza registrada diariamente, no início e ao término do horário de funcionamento.', r: [D44(16)]}],
     /* específicos */
-    ['srv_licenca', {g: 'leg', esp: 'Serviços farmacêuticos', n: 'Serviços farmacêuticos indicados na licença', o: 'Licença com cada serviço farmacêutico prestado; vacinação e exames de análises clínicas com licença e requisitos próprios (RDC 197/2017 e RDC 978/2025).', r: [D44('61::paragrafo::3'), 'rdc-197-2017::artigo::4', R978(73)]}],
     ['srv_equip', {g: 'infra', esp: 'Serviços farmacêuticos', n: 'Lista dos equipamentos dos serviços farmacêuticos, com lote e registro na Anvisa', o: 'Relação dos equipamentos com lote e registro na Anvisa, acompanhada da nota fiscal com até 12 meses de aquisição ou do certificado de calibração anual.', r: [D44(71), D44(77), D44('88::inciso::v')]}],
-    pop('Serviços farmacêuticos prestados', [D44('86::inciso::vii'), D44(72)], {esp: 'Serviços farmacêuticos'}),
     ['inj_delegacao', {g: 'pes', esp: 'Aplicação de injetáveis', n: 'Delegação formal aos profissionais que aplicam medicamentos injetáveis', o: 'Documento de delegação, pelo farmacêutico responsável técnico, aos farmacêuticos que aplicam injetáveis.', r: [D44('20::paragrafo::unico')]}],
     ['inj_curso', {g: 'pes', esp: 'Aplicação de injetáveis', n: 'Certificado do curso de técnica de aplicação de medicamentos injetáveis', o: 'Certificado de capacitação de cada profissional que aplica injetáveis.', r: [D44(21)]}],
     ['inj_vacina', {g: 'pes', esp: 'Aplicação de injetáveis', n: 'Carteira de vacinação dos aplicadores (hepatite B e dupla adulto)', o: 'Comprovante de vacinação contra hepatite B e dupla adulto (difteria e tétano) dos profissionais que aplicam injetáveis.', r: ['nr-32:n32.2.4.17.1']}]
@@ -193,7 +199,11 @@ const APPS = {
     ['sbit_excip', {g: 'qual', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Relação e estudo de padronização e compatibilidade dos excipientes', o: 'Excipientes padronizados e compatíveis com cada formulação, com o estudo que os fundamenta.', r: [M67x('ii', '2-10-1')]}],
     ['sbit_bula', {g: 'sgq', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Modelo da bula simplificada / informação ao paciente', o: 'Modelo da informação que acompanha os medicamentos com SBIT, nos padrões mínimos do item 3 do Anexo II.', r: [M67x('ii', '3-1')]}],
     ['sbit_treino', {g: 'pes', esp: 'Substâncias de baixo índice terapêutico (SBIT)', n: 'Comprovantes de capacitação da equipe para SBIT', o: 'Treinamento específico da equipe na atividade (Anexo I, item 3.2).', r: [M67('3-2-3')]}],
-    pop('POPs específicos para SBIT (aquisição, armazenamento segregado, pesagem com dupla checagem, diluição geométrica, controle do diluído, controle de qualidade, monitoramento e dispensação)', [M67x('ii', '2-11'), M67x('ii', '2-12'), M67x('ii', '2-14')], {esp: 'Substâncias de baixo índice terapêutico (SBIT)'})
+    pop('POPs específicos para SBIT (aquisição, armazenamento segregado, pesagem com dupla checagem, diluição geométrica, controle do diluído, controle de qualidade, monitoramento e dispensação)', [M67x('ii', '2-11'), M67x('ii', '2-12'), M67x('ii', '2-14')], {esp: 'Substâncias de baixo índice terapêutico (SBIT)'}),
+    /* registros conferidos na inspeção */
+    ['rot_temp_umid', {g: 'rot', n: 'Planilhas de registro de temperatura e umidade', o: 'Registros de temperatura e umidade do armazenamento e das salas de manipulação e dos equipamentos de termossensíveis.', r: [M67('4-2-1'), M67('8-8'), M67('13-1')]}],
+    ['rot_agua', {g: 'rot', n: 'Registros de limpeza e manutenção do sistema de purificação da água', q: 'Se aplicável: sistema de purificação de água.', o: 'Registros da limpeza e da manutenção do sistema, conforme procedimento escrito.', r: [M67('7-5-2-1')]}],
+    ['rot_reclamacoes', {g: 'rot', n: 'Registros de reclamações de clientes', o: 'Reclamações com as ações investigativas e as medidas tomadas.', r: [M67('15-7-1')]}],
   ],
   'distribuidoras-transportadoras': [
     ['afe', {n: 'Publicação da AFE'}],
@@ -242,6 +252,10 @@ const APPS = {
     /* específicos */
     ['veic_lista', {g: 'leg', esp: 'Frota própria', n: 'Relação dos veículos, com RENAVAM e licenciamento atual', o: 'Relação e identificação dos veículos próprios ou de terceiros sob responsabilidade da empresa, com os equipamentos de manutenção das condições de transporte.', r: [A16('ii', 'm')]}],
     ['veic_pragas', {g: 'infra', esp: 'Frota própria', n: 'Certificado de controle de pragas — veículos', o: 'Certificado de controle de pragas dos veículos.', r: [R430('18::inciso::xv')]}],
+    /* registros conferidos na inspeção */
+    ['rot_temp_umid', {g: 'rot', n: 'Planilhas de monitoramento de temperatura e umidade — áreas e equipamentos de cadeia fria', o: 'Registros do monitoramento, mantidos pelo prazo da norma.', r: [R430('43::paragrafo::3')]}],
+    ['rot_limpeza', {g: 'rot', n: 'Planilhas de registro de limpeza das áreas', o: 'Registros da limpeza das instalações.', r: [R430(46)]}],
+    ['rot_veiculos', {g: 'rot', n: 'Planilhas de temperatura e umidade e de limpeza dos veículos', q: 'Se aplicável: frota própria.', o: 'Registros do monitoramento das condições de transporte e da limpeza dos veículos.', r: [R430('64::inciso::ii')]}],
   ],
   'gases-medicinais': [
     'cnpj', 'licenca',
@@ -265,6 +279,8 @@ const APPS = {
     pop('Autoinspeção', [G887(42)]),
     pop('Rastreabilidade e integridade dos registros', [G887(48)]),
     pop('Operação e manutenção dos veículos e equipamentos de transporte', [G887(71)], {q: 'Se aplicável: transporte próprio.'}),
+    /* registros conferidos na inspeção */
+    ['rot_registros', {g: 'rot', n: 'Registros das atividades de armazenagem, distribuição e transporte', o: 'Registros das ações efetuadas, prontamente recuperáveis.', r: [G887(24), G887(25)]}],
   ],
 
   /* ---------------- Serviços ---------------- */
@@ -280,6 +296,8 @@ const APPS = {
     ['calibracao', {n: 'Certificado de calibração dos termômetros das câmaras e refrigeradores de vacinas', r: ['rdc-197-2017::artigo::11::inciso::ii']}],
     'pgrss', 'pmoc', 'manutencao', 'edif_manut', 'terceiros',
     ['pops', {n: 'POPs do serviço de vacinação (conservação, transporte, administração, eventos adversos, limpeza e resíduos)', r: [R63('xviii'), 'rdc-197-2017::artigo::12']}],
+    /* registros conferidos na inspeção */
+    ['rot_temperatura', {g: 'rot', n: 'Registros diários de temperatura máxima e mínima dos equipamentos de vacinas', o: 'Planilhas diárias de temperatura máxima, mínima e de momento.', r: ['rdc-197-2017::artigo::11::inciso::ii']}],
   ],
   'eac-tipo1': eac(1), 'eac-tipo2': eac(2), 'eac-tipo3': eac(3),
   'estetica': [
@@ -312,7 +330,9 @@ const APPS = {
     pop('Higienização do tanque em caso de acidentes (vômito, fezes, sangue)', [P1101('14-4')], {q: 'Se aplicável: piscina.'}),
     pop('Higienização de banheiras e saunas', [P1101('7-12')], {q: 'Se aplicável: banheiras ou saunas.'}),
     ['pops_ciencia', {r: [P1101('14-2')]}],
-    ['agua_alt', {g: 'reg', n: 'Laudos de potabilidade da água de solução alternativa', q: 'Se aplicável: poço, caminhão-pipa ou outra solução alternativa.', o: 'Comprovantes de tratamento e controle da potabilidade e laudos dos fornecedores, arquivados por no mínimo 6 meses.', r: [P1101('14-2-1')]}]
+    ['agua_alt', {g: 'reg', n: 'Laudos de potabilidade da água de solução alternativa', q: 'Se aplicável: poço, caminhão-pipa ou outra solução alternativa.', o: 'Comprovantes de tratamento e controle da potabilidade e laudos dos fornecedores, arquivados por no mínimo 6 meses.', r: [P1101('14-2-1')]}],
+    /* registros conferidos na inspeção */
+    ['rot_cloro', {g: 'rot', n: 'Planilhas de cloro residual livre e pH da piscina e do lava-pés', q: 'Se aplicável: piscina.', o: 'Medições antes de cada período, com data, hora e assinatura.', r: [P1101('14-2-1'), P1101('6-20')]}],
   ],
   'transporte-biologico': [
     'cnpj',
@@ -324,6 +344,8 @@ const APPS = {
     ['contrato', {g: 'sgq', n: 'Contrato (instrumento escrito) com cada remetente', o: 'Responsabilidades de cada parte: documentação de expedição, biossegurança, conservação, tempo de transporte, treinamento e documentos à disposição da vigilância.', r: ['rdc-504-2021::artigo::7', 'rdc-504-2021::artigo::26', 'rdc-504-2021::artigo::8::paragrafo::unico']}],
     ['validacao', {g: 'qual', n: 'Validação do acondicionamento', o: 'Relatório de validação da etapa de acondicionamento, por tipo de material e finalidade do transporte.', r: ['rdc-504-2021::artigo::11']}],
     pop('Instruções escritas das operações de transporte', ['rdc-504-2021::artigo::5'], {o: 'Instruções escritas e padronizadas, disponíveis a todo o pessoal e revisadas anualmente ou quando o procedimento mudar.'}),
+    /* registros conferidos na inspeção */
+    ['rot_nc', {g: 'rot', n: 'Registros de não conformidades no transporte', o: 'Registro e investigação das não conformidades, com as medidas corretivas e preventivas.', r: ['rdc-504-2021::artigo::6']}],
   ],
   'imagem-convencional': imagem('convencional'), 'imagem-mamografia': imagem('mamografia'), 'imagem-tomografia': imagem('tomografia'),
   'imagem-ressonancia': imagem('ressonancia'), 'imagem-ultrassom': imagem('ultrassom'), 'imagem-hemodinamica': imagem('hemodinamica'),
@@ -364,7 +386,9 @@ const APPS = {
     pop('Capacitação, higiene e saúde dos manipuladores', [P2619('n14.10')]),
     pop('Controle integrado de vetores e pragas urbanas', [P2619('n14.10')]),
     pop('Higienização do reservatório de água', [P2619('n14.10')]),
-    pop('Controle da potabilidade da água de fonte alternativa', [P2619('n14.10')], {q: 'Se aplicável: fonte alternativa de água.'})
+    pop('Controle da potabilidade da água de fonte alternativa', [P2619('n14.10')], {q: 'Se aplicável: fonte alternativa de água.'}),
+    /* registros conferidos na inspeção */
+    ['rot_reclamacoes', {g: 'rot', n: 'Registros de reclamações dos consumidores', o: 'Reclamações registradas e as providências adotadas.', r: [P2619('n17.2')]}],
   ],
 
   /* ---------------- Produtos ---------------- */

@@ -16,9 +16,12 @@
  if(window.__uvsCnpjAnvisa)return;window.__uvsCnpjAnvisa=true;
  var PROPRIOS=['drogaria','farmacia-manipulacao','distribuidoras-transportadoras','central-consultas','estoque-medicamentos','estoque-produtos','alimentos-integrado','analise-produtos'];
  var BASES=['https://uvisvp.github.io/base-vigilancia/dados/','https://raw.githubusercontent.com/uvisvp/base-vigilancia/main/dados/'];
+ /* módulos com busca própria na Anvisa que ganham só o complemento da Receita Federal (pedido de 09/11/2026) */
+ var SO_RECEITA=['farmacia-manipulacao'];
+ function soReceita(){return !window.ROTEIRO&&SO_RECEITA.indexOf(window.__uvsApp)>=0}
  function ativo(){return !window.ROTEIRO&&PROPRIOS.indexOf(window.__uvsApp)<0}
  function dig(v){return String(v||'').replace(/\D/g,'')}
- function rot(el){var l=el.closest('label'),t='';if(l){var c=l.cloneNode(true);[].forEach.call(c.querySelectorAll('input,select,textarea,button,small'),function(x){x.remove()});t=c.textContent}
+ function rot(el){var l=el.closest('label'),t='';/* Manipulação: rótulo em <label for> irmão do campo */if(!l&&el.id&&soReceita())l=document.querySelector('label[for="'+el.id.replace(/"/g,'')+'"]');if(l){var c=l.cloneNode(true);[].forEach.call(c.querySelectorAll('input,select,textarea,button,small'),function(x){x.remove()});t=c.textContent}
   return String(t||el.placeholder||el.getAttribute('aria-label')||'').replace(/\s+/g,' ').trim()}
  function ehCnpj(el){return el&&el.tagName==='INPUT'&&!el.readOnly&&!el.disabled&&/^(text|search|tel|)$/i.test(el.getAttribute('type')||'')&&!el.closest('#cmp-painel,#cmp-modal,.rs-eq')&&/^CNPJ( ou CPF)?\b/i.test(rot(el))}
  function jget(path){var i=0;function tenta(){var u=BASES[i++]+path;return fetch(u,{cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).catch(function(e){if(i<BASES.length)return tenta();throw e})}return tenta()}
@@ -61,7 +64,15 @@
   receita(c).then(function(x){if(!x){if(pre)msg(btn,pre+fim(n0),n0?'ok':'');else msg(btn,'CNPJ sem AFE/AE na Anvisa, sem cadastro no CNES e não encontrado na Receita Federal. Confira o número; os dados podem ser digitados.','aviso');return}
    var n=n0+enche(el,x);msg(btn,ini+'Receita Federal (dados públicos do CNPJ, via BrasilAPI): '+x.razao+(x.situacao?' — situação '+String(x.situacao).toLowerCase():'')+(x.cnae?'; atividade principal '+x.cnae:'')+'.'+fim(n),n?'ok':'')},
   function(){if(pre)msg(btn,pre+fim(n0),n0?'ok':'');else msg(btn,'CNPJ sem AFE/AE na Anvisa, e a Receita Federal não respondeu agora (sem internet?). Os dados podem ser digitados.','aviso')})}
- function marca(){if(!ativo())return;[].forEach.call(document.querySelectorAll('input'),function(el){if(!ehCnpj(el)||el.dataset.uvsCnpjBtn)return;
+ function soRec(btn,el){var c=dig(el.value);if(c.length!==14){msg(btn,'Digite o CNPJ completo (14 dígitos) antes de buscar.','aviso');return}
+  msg(btn,'Consultando os dados públicos do CNPJ na Receita Federal…');
+  receita(c).then(function(x){if(!x){msg(btn,'CNPJ não encontrado na Receita Federal. Confira o número; os dados podem ser digitados.','aviso');return}
+   var n=enche(el,x);msg(btn,'Receita Federal (dados públicos do CNPJ, via BrasilAPI): '+x.razao+(x.situacao?' — situação '+String(x.situacao).toLowerCase():'')+(x.cnae?'; atividade principal '+x.cnae:'')+'. '+(n?n+' campo(s) preenchido(s); confira.':'Os campos já estavam preenchidos; nada foi alterado.'),n?'ok':'')},
+  function(){msg(btn,'A Receita Federal não respondeu agora (sem internet?). Os dados podem ser digitados.','aviso')})}
+ function marcaReceita(){[].forEach.call(document.querySelectorAll('input'),function(el){if(!ehCnpj(el)||el.dataset.uvsCnpjRec)return;
+  el.dataset.uvsCnpjRec='1';var b=document.createElement('button');b.type='button';b.className='uvs-cnpj-btn';b.textContent='Buscar dados na Receita Federal (CNPJ)';
+  b.addEventListener('click',function(){soRec(b,el)});(el.closest('label')||el).insertAdjacentElement('afterend',b)})}
+ function marca(){if(soReceita()){marcaReceita();return}if(!ativo())return;[].forEach.call(document.querySelectorAll('input'),function(el){if(!ehCnpj(el)||el.dataset.uvsCnpjBtn)return;
   var sc=escopo(el);if([].some.call(sc.querySelectorAll('button'),function(b){return /(Buscar|Consultar).*CNPJ|CNPJ.*(Anvisa)/i.test(b.textContent)&&!b.classList.contains('uvs-cnpj-btn')}))return;
   el.dataset.uvsCnpjBtn='1';var b=document.createElement('button');b.type='button';b.className='uvs-cnpj-btn';b.textContent='Buscar dados pelo CNPJ (Anvisa, CNES e Receita)';
   b.addEventListener('click',function(){busca(b,el)});var alvo=el.closest('label')||el;

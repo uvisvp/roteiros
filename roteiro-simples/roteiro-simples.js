@@ -124,7 +124,8 @@
   return ''; }
 
  /* ---------- tela do item ---------- */
- function campoHtml(c){ var v = st.meta[c.id], cls = 'pu-campo rs-campo' + (c.largo ? ' rs-largo' : '');
+ /* c.se: o campo só aparece (e só vai ao relatório) quando a condição do perfil vale */
+ function campoHtml(c){ if(c.se && !cond(c.se)) return ''; var v = st.meta[c.id], cls = 'pu-campo rs-campo' + (c.largo ? ' rs-largo' : '');
   if(c.tipo === 'equipamentos') return equipHtml(c);
   if(c.tipo === 'ambientes') return ambHtml(c);
   if(c.tipo === 'checks'){ var a = Array.isArray(v) ? v : []; return '<fieldset class="' + cls + ' rs-largo"><legend>' + esc(c.rotulo) + '</legend><div class="rs-checks">' + c.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="' + esc(c.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div></fieldset>'; }
@@ -289,7 +290,7 @@
   var ab = {}; Object.keys(ambAberto).forEach(function(k){ var p = k.split('|'); if(p[0] !== id) ab[k] = ambAberto[k]; else if(+p[1] < i) ab[k] = ambAberto[k]; else if(+p[1] > i) ab[id + '|' + (+p[1] - 1)] = ambAberto[k]; }); ambAberto = ab; }
  function ambTemDados(id, i){ var a = ambLista(id)[i] || {}; return Object.keys(a.m || {}).length || String(a.outra || '').trim() || String(a.obs || '').trim() || st.fotos['amb:' + id + ':' + i]; }
  function ambSet(k, campo, v){ var p = k.split('|'), L = ambLista(p[0]).slice(), i = +p[1]; L[i] = Object.assign({}, L[i]); if(campo === 'm'){ L[i].m = Object.assign({}, L[i].m); if(v.on) L[i].m[v.id] = true; else delete L[i].m[v.id]; } else L[i][campo] = v; st.meta[p[0]] = L; salva(); }
- function campoRel(c){ var v = st.meta[c.id]; if(c.rel === false) return [];
+ function campoRel(c){ var v = st.meta[c.id]; if(c.rel === false || (c.se && !cond(c.se))) return [];
   if(c.tipo === 'ambientes'){ var V = ambValidos(c); if(!V.length) return [];
    var out = [{t: 'p', x: (c.possui || 'O estabelecimento possui') + ' ' + lista(V.map(function(x){ return minus(ambNome(x.a, x.i, c)); })) + '.'}], irr = [], ano = [];
    V.forEach(function(x){ var ir = ambIrrDe(c, x.a).map(function(r){ return minus(r.texto); }), ob = String(x.a.obs || '').trim(), nm = ambNome(x.a, x.i, c);
@@ -445,7 +446,7 @@
      '{campo}' no texto puxa o desc de outro campo. Título da frase: D.perfilRotulo. */
   var descr = function(c){ var t = c.desc && c.desc[st.meta[c.id]]; return t ? t.replace(/\{(\w+)\}/g, function(m, k){ var o = campoPorId(k); return o && o.desc && o.desc[st.meta[k]] || ''; }) : ''; };
   var faz = [];
-  D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.desc && c.rel !== false){ var t = descr(c); if(t) faz.push(t); return; } if(c.rel === false) return; var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
+  D.secoes[0].itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.desc && c.rel !== false){ var t = descr(c); if(t) faz.push(t); return; } if(c.rel === false || (c.se && !cond(c.se))) return; var v = st.meta[c.id]; if(Array.isArray(v)) v = v.map(function(x){ var o = (c.opcoes || []).filter(function(p){ return p[0] === x; })[0]; return o ? o[1] : x; }).join(', '); if(c.tipo === 'select'){ var op = (c.opcoes || []).filter(function(o){ return o[0] === v; })[0]; if(op) v = op[1]; } if(c.tipo === 'date') v = fmtData(v); if(String(v || '').trim()) B.push({t: 'kv', k: c.rotulo.replace(/\?$/, ''), v: String(v).trim()}); }); });
   if(faz.length) B.push({t: 'kv', k: D.perfilRotulo || 'Atividades e estrutura', v: lista(faz)});
   /* sem a lista de legislação no início (pedido de 17/10/2026): cada irregularidade traz o seu fundamento */
   B.push({t: 'h1', x: (++sec) + ' OBJETIVO'}, {t: 'p', x: R.objetivo});

@@ -42,7 +42,8 @@ function troca(s, de, para, rot) {
 const BASE = 'Lei Municipal nº 13.725/2004, arts. 46 e 50';
 
 /* ---------- Drogaria ---------- */
-const drogFinal = s => troca(s,
+/* o relatório final já cita a Lei 13.725/2004 em toda irregularidade (também nas da amostragem, agrupadas) */
+const drogFinal = s => s.includes('/* toda irregularidade cita a Lei 13.725/2004 */') ? s : troca(s,
   "const legal=(r.refs||[]).map(id=>cat.referencias?.[id]).filter(Boolean).map(x=>`${x.norma}, ${x.dispositivo}`);if(legal.length)t+=' Fundamento: '+legal.join('; ')+'.';",
   "const legal=(r.refs||[]).map(id=>cat.referencias?.[id]).filter(Boolean).map(x=>`${x.norma}, ${x.dispositivo}`);/* toda irregularidade cita a Lei 13.725/2004 */if(!legal.some(x=>/13\\.725/.test(x)))legal.push('" + BASE + "');t+=' Fundamento: '+legal.join('; ')+'.';",
   'drogaria: relatório final');
