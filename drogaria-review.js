@@ -120,3 +120,32 @@
   }
   window.DrogariaReview={sync,install,read,readSection,equipment,photos,photoScope,report,customRecords,clearSection};
 })();
+/* Dispensação e escrituração: as irregularidades da amostragem ficam recolhidas por lista
+   (A1, A2, B1…, antimicrobianos, GLP-1…); tocar abre. O estado aberto/fechado sobrevive à
+   nova renderização que cada marcação provoca. */
+(() => {
+  'use strict';
+  if (window.__drgAchadosRecolhidos) return; window.__drgAchadosRecolhidos = true;
+  const abertos = {};
+  const NOME = {antibiotico: 'Antimicrobianos', glp1: 'Análogos GLP-1', cannabis: 'Produtos de Cannabis', eletronico: 'Receita eletrônica', c5: 'Lista C5'};
+  const chave = id => { const p = String(id).split('_'); return p[0] === 'ctrl' ? p[0] + '_' + p[1] : p[0]; };
+  function nome(k, q) { const m = /^([A-Z]\d+):/.exec((q.textContent || '').trim()); return m ? 'Lista ' + m[1] : (NOME[k] || k); }
+  function aplica() {
+    const qs = [...document.querySelectorAll('#content .q[data-question]')].filter(q => q.querySelector('input[data-finding]') && !q.closest('details.drg-achados'));
+    let i = 0;
+    while (i < qs.length) {
+      const k = chave(qs[i].dataset.question), grupo = [qs[i]];
+      while (i + grupo.length < qs.length && chave(qs[i + grupo.length].dataset.question) === k && qs[i + grupo.length - 1].nextElementSibling === qs[i + grupo.length]) grupo.push(qs[i + grupo.length]);
+      const d = document.createElement('details'); d.className = 'drg-achados'; d.dataset.grupo = k; d.open = !!abertos[k];
+      const marcadas = grupo.filter(q => q.querySelector('input[data-finding]:checked')).length;
+      d.innerHTML = '<summary>Irregularidades — ' + nome(k, grupo[0]) + ' (' + grupo.length + ' itens' + (marcadas ? ', ' + marcadas + ' marcada(s)' : '') + ')</summary>';
+      d.addEventListener('toggle', () => { abertos[k] = d.open; });
+      grupo[0].before(d); grupo.forEach(q => d.append(q));
+      i += grupo.length;
+    }
+  }
+  const st = document.createElement('style');
+  st.textContent = 'details.drg-achados{border:1px solid #d7e0e5;border-radius:10px;margin:8px 0;padding:4px 10px}details.drg-achados>summary{cursor:pointer;font-weight:600;padding:6px 0}';
+  (document.head || document.documentElement).appendChild(st);
+  try { new MutationObserver(aplica).observe(document.documentElement, {childList: true, subtree: true}); } catch (e) {}
+})();

@@ -156,7 +156,7 @@
  /* texto de solicitação dos pendentes, no formato dos e-mails da UVIS: blocos numerados e
     documentos em letras (a, b, c…), para colar no e-mail ou no ofício */
  function textoSolicitacao(){var o=le(),gs=grupos(),t=[],n=0,L='abcdefghijklmnopqrstuvwxyz';
-  gs.forEach(function(g){var ds=lista().filter(function(d){var i=o.itens[chave(d)];return d.g===g[0]&&i&&i.s==='p'});if(!ds.length)return;n++;t.push(n+'. '+g[1]+':');
+  gs.forEach(function(g){if(g[0]==='rot')return;/* registros: conferidos na inspeção, não se pedem por e-mail */var ds=lista().filter(function(d){var i=o.itens[chave(d)];return d.g===g[0]&&i&&i.s==='p'});if(!ds.length)return;n++;t.push(n+'. '+g[1]+':');
    ds.forEach(function(d,k){var i=o.itens[chave(d)];t.push('   '+(k<26?L[k]:k+1)+') '+d.n+(d.q?' ('+d.q.replace(/^Se aplicável:\s*/,'se aplicável: ').replace(/\.$/,'')+')':'')+(i.nota&&i.nota.trim()?' — '+i.nota.trim():'')+';')})});
   return n?['Solicitamos o envio dos documentos listados abaixo:',''].concat(t).join('\n'):''}
  function solicita(){var txt=textoSolicitacao();if(!txt)return aviso('Nenhum documento marcado como Pendente.');

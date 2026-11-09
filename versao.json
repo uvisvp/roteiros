@@ -1,6 +1,6 @@
 {
-  "versao": "20261028-1",
+  "versao": "20261109-1",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Checklist de documentos no padrão das solicitações da UVIS: nomes dos documentos como são pedidos, blocos (legal e administrativa, pessoal, infraestrutura, qualidade, qualificações, POPs um a um, registros) e itens específicos de cada atividade no fim. Novo botão “Solicitar pendentes”, que copia a lista no formato do e-mail de solicitação."
+  "notas": "Drogaria: dados pelo CNPJ na Receita Federal, atividades licenciadas em lista, vacinação/EAC e ASO corretos no relatório, ajustes na área física, controlados com irregularidades da amostragem recolhidas e agrupadas. Checklist de documentos com o bloco “Registros conferidos na inspeção”."
 }

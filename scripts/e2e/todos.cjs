@@ -5,6 +5,7 @@ const D=__dirname,ROOT=path.join(D,'..','..');
 const PASSOS=[
  ['funções comuns (salvas, apagar, retorno)',['funcoes.cjs']],
  ['drogaria: respostas no relatório',['drogaria-relatorio.cjs']],
+ ['drogaria: Receita, atividades, vacinação/EAC e amostragem de controlados',['drogaria-ajustes.cjs']],
  ['manipulação: respostas no relatório',['varredura.cjs','Medicamentos','farmacia-manipulacao','Farmácia com manipulação','',"document.querySelector('#cardGrid button, .ui-card-grid button')?.click();;document.querySelector('.man-item-card,[data-man-item]')?.click()"]],
  ['produtos: navegação padrão e relatório',['padrao.cjs','Produtos','produtos-correlatos','Atacadista / distribuidor','atividade=atacadista']],
  ['alimentos: navegação padrão e relatório',['padrao.cjs','Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento']],

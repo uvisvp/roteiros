@@ -1,6 +1,6 @@
 # Checklist de documentos — listas por roteiro
 
-Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão 2026-10-28b.
+Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.cjs` (não editar à mão). Versão 2026-11-09.
 
 ## Drogaria
 
@@ -33,9 +33,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Gestão de pessoal
 
-- **Designação do responsável técnico e do substituto**  
-  Farmacêutico responsável técnico e substituto com inscrição no CRF, presentes durante todo o horário de funcionamento.  
-  Fundamento: Lei Federal nº 5.991/1973, art. 15
 - **Registro de treinamento de pessoal (RDC 44/2009, Seção III)**  
   Registros dos cursos e treinamentos com descrição, data, carga horária, participantes e quem ministrou.  
   Fundamento: RDC Anvisa nº 44/2009, art. 28; art. 88, I
@@ -100,6 +97,9 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Transporte e entrega de medicamentos** — _Se aplicável: entrega em domicílio ou venda remota._  
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 44/2009, art. 56, § 3º
+- **Serviços farmacêuticos prestados** — _Se aplicável: prestação de serviços farmacêuticos._  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 44/2009, art. 86, VII; art. 72
 - **Comprovante de ciência dos POPs pelos funcionários**  
   Registro de divulgação do conteúdo dos POPs aos funcionários, conforme as atividades de cada um.  
   Fundamento: RDC Anvisa nº 44/2009, art. 88, III
@@ -109,18 +109,15 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Comprovante de envio dos mapas e balanços à COVISA (Portaria 344/1998)** — _Se aplicável: dispensação de medicamentos sujeitos a controle especial._  
   Comprovantes de envio dos balanços (BMPO) e mapas dos períodos solicitados.  
   Fundamento: Portaria SVS/MS nº 344/1998, art. 69; art. 64
+- **Certificado de Transmissão Regular do SNGPC** — _Se aplicável: dispensação de medicamentos sujeitos a controle especial ou antimicrobianos._  
+  Certificado emitido pelo SNGPC que comprova a transmissão regular dos dados de movimentação.  
+  Fundamento: RDC Anvisa nº 22/2014, art. 5º, VI; art. 10, § 4º
 
 ### Específico — Serviços farmacêuticos
 
-- **Serviços farmacêuticos indicados na licença**  
-  Licença com cada serviço farmacêutico prestado; vacinação e exames de análises clínicas com licença e requisitos próprios (RDC 197/2017 e RDC 978/2025).  
-  Fundamento: RDC Anvisa nº 44/2009, art. 61, § 3º; RDC Anvisa nº 197/2017, art. 4º; RDC Anvisa nº 978/2025, art. 73
 - **Lista dos equipamentos dos serviços farmacêuticos, com lote e registro na Anvisa**  
   Relação dos equipamentos com lote e registro na Anvisa, acompanhada da nota fiscal com até 12 meses de aquisição ou do certificado de calibração anual.  
   Fundamento: RDC Anvisa nº 44/2009, art. 71; art. 77; art. 88, V
-- **Serviços farmacêuticos prestados**  
-  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
-  Fundamento: RDC Anvisa nº 44/2009, art. 86, VII; art. 72
 
 ### Específico — Aplicação de injetáveis
 
@@ -133,6 +130,18 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Carteira de vacinação dos aplicadores (hepatite B e dupla adulto)**  
   Comprovante de vacinação contra hepatite B e dupla adulto (difteria e tétano) dos profissionais que aplicam injetáveis.  
   Fundamento: NR-32, item 32.2.4.17.1
+
+### Registros conferidos na inspeção
+
+- **Planilhas de registro de temperatura e umidade**  
+  Registros de temperatura e umidade do ambiente e registro diário da temperatura do refrigerador de termolábeis.  
+  Fundamento: RDC Anvisa nº 44/2009, art. 35, § 3º; art. 35, § 4º
+- **Registros de limpeza dos ambientes**  
+  Registros da limpeza dos ambientes, conforme o POP de higiene e limpeza.  
+  Fundamento: RDC Anvisa nº 44/2009, art. 86, I
+- **Registros de limpeza da sala de serviços farmacêuticos** — _Se aplicável: prestação de serviços farmacêuticos._  
+  Limpeza registrada diariamente, no início e ao término do horário de funcionamento.  
+  Fundamento: RDC Anvisa nº 44/2009, art. 16
 
 ## Farmácia com Manipulação
 
@@ -349,6 +358,18 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 67/2007, Anexo II, item 2.11; Anexo II, item 2.12; Anexo II, item 2.14
 
+### Registros conferidos na inspeção
+
+- **Planilhas de registro de temperatura e umidade**  
+  Registros de temperatura e umidade do armazenamento e das salas de manipulação e dos equipamentos de termossensíveis.  
+  Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 4.2.1; Anexo I, item 8.8; Anexo I, item 13.1
+- **Registros de limpeza e manutenção do sistema de purificação da água** — _Se aplicável: sistema de purificação de água._  
+  Registros da limpeza e da manutenção do sistema, conforme procedimento escrito.  
+  Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 7.5.2.1
+- **Registros de reclamações de clientes**  
+  Reclamações com as ações investigativas e as medidas tomadas.  
+  Fundamento: RDC Anvisa nº 67/2007, Anexo I, item 15.7.1
+
 ## Atacadista de medicamentos
 
 ### Documentação legal e administrativa
@@ -514,6 +535,18 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Certificado de controle de pragas dos veículos.  
   Fundamento: RDC Anvisa nº 430/2020, art. 18, XV
 
+### Registros conferidos na inspeção
+
+- **Planilhas de monitoramento de temperatura e umidade — áreas e equipamentos de cadeia fria**  
+  Registros do monitoramento, mantidos pelo prazo da norma.  
+  Fundamento: RDC Anvisa nº 430/2020, art. 43, § 3º
+- **Planilhas de registro de limpeza das áreas**  
+  Registros da limpeza das instalações.  
+  Fundamento: RDC Anvisa nº 430/2020, art. 46
+- **Planilhas de temperatura e umidade e de limpeza dos veículos** — _Se aplicável: frota própria._  
+  Registros do monitoramento das condições de transporte e da limpeza dos veículos.  
+  Fundamento: RDC Anvisa nº 430/2020, art. 64, II
+
 ## Atacadista de gases medicinais
 
 ### Documentação legal e administrativa
@@ -611,6 +644,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 887/2024, art. 71
 
 
+### Registros conferidos na inspeção
+
+- **Registros das atividades de armazenagem, distribuição e transporte**  
+  Registros das ações efetuadas, prontamente recuperáveis.  
+  Fundamento: RDC Anvisa nº 887/2024, art. 24; art. 25
+
 ## Vacinação
 
 ### Documentação legal e administrativa
@@ -686,6 +725,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   POPs escritos, aprovados, datados e assinados pelo responsável técnico, atualizados e disponíveis nos locais de uso.  
   Fundamento: RDC Anvisa nº 63/2011, art. 23, XVIII; RDC Anvisa nº 197/2017, art. 12
 
+
+### Registros conferidos na inspeção
+
+- **Registros diários de temperatura máxima e mínima dos equipamentos de vacinas**  
+  Planilhas diárias de temperatura máxima, mínima e de momento.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 11, II
 
 ## EAC — Serviço Tipo I
 
@@ -789,6 +834,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
   Fundamento: RDC Anvisa nº 978/2025, art. 117, VI; art. 185
 
+
 ## EAC — Serviço Tipo II
 
 ### Documentação legal e administrativa
@@ -890,6 +936,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Relatórios de controle externo da qualidade (CEQ) e registros do controle interno**  
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
   Fundamento: RDC Anvisa nº 978/2025, art. 117, VI; art. 185
+
 
 ## EAC — Serviço Tipo III
 
@@ -996,6 +1043,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
   Fundamento: RDC Anvisa nº 978/2025, art. 117, VI; art. 185
 
+
 ## Estética e beleza
 
 ### Documentação legal e administrativa
@@ -1078,6 +1126,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 63/2011, art. 51
 
 
+
 ## Academias e piscinas
 
 ### Documentação legal e administrativa
@@ -1145,6 +1194,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Comprovantes de tratamento e controle da potabilidade e laudos dos fornecedores, arquivados por no mínimo 6 meses.  
   Fundamento: Portaria SMS nº 1.101/2015, item 14.2.1
 
+### Registros conferidos na inspeção
+
+- **Planilhas de cloro residual livre e pH da piscina e do lava-pés** — _Se aplicável: piscina._  
+  Medições antes de cada período, com data, hora e assinatura.  
+  Fundamento: Portaria SMS nº 1.101/2015, item 14.2.1; item 6.20
+
 ## Transporte de material biológico
 
 ### Documentação legal e administrativa
@@ -1196,6 +1251,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Instruções escritas e padronizadas, disponíveis a todo o pessoal e revisadas anualmente ou quando o procedimento mudar.  
   Fundamento: RDC Anvisa nº 504/2021, art. 5º
 
+
+### Registros conferidos na inspeção
+
+- **Registros de não conformidades no transporte**  
+  Registro e investigação das não conformidades, com as medidas corretivas e preventivas.  
+  Fundamento: RDC Anvisa nº 504/2021, art. 6º
 
 ## Radiologia convencional
 
@@ -1289,6 +1350,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Laudo de levantamento radiométrico**  
   Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.  
   Fundamento: RDC Anvisa nº 611/2022, art. 63
+
 
 ## Mamografia
 
@@ -1386,6 +1448,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.  
   Fundamento: RDC Anvisa nº 611/2022, art. 63
 
+
 ## Tomografia computadorizada
 
 ### Documentação legal e administrativa
@@ -1479,6 +1542,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.  
   Fundamento: RDC Anvisa nº 611/2022, art. 63
 
+
 ## Ressonância magnética
 
 ### Documentação legal e administrativa
@@ -1566,6 +1630,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
   Fundamento: RDC Anvisa nº 611/2022, art. 28, parágrafo único; art. 29
 
+
 ## Ultrassonografia
 
 ### Documentação legal e administrativa
@@ -1649,6 +1714,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Relatórios dos testes de aceitação e de constância**  
   Relatórios conforme a IN da modalidade e protocolos oficiais.  
   Fundamento: RDC Anvisa nº 611/2022, art. 28, parágrafo único; art. 29
+
 
 ## Hemodinâmica e radiologia intervencionista
 
@@ -1749,6 +1815,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Laudo técnico semestral dos aventais e demais EPI, com resultados e imagens.  
   Fundamento: IN Anvisa nº 91/2021, art. 9º
 
+
 ## Odontologia
 
 ### Documentação legal e administrativa
@@ -1837,6 +1904,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 1.002/2025, art. 115
 
 
+
 ## Serviços de alimentação
 
 ### Documentação legal e administrativa
@@ -1909,6 +1977,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: Portaria SMS nº 2.619/2011, item 14.10
 
+
+### Registros conferidos na inspeção
+
+- **Registros de reclamações dos consumidores**  
+  Reclamações registradas e as providências adotadas.  
+  Fundamento: Portaria SMS nº 2.619/2011, item 17.2
 
 ## Produtos e correlatos — Fabricante de cosméticos
 
@@ -1990,6 +2064,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Laudos do monitoramento da qualidade da água**  
   Procedimentos e registros do monitoramento periódico nos pontos críticos.  
   Fundamento: RDC Anvisa nº 48/2013, Anexo II, item 13.6
+
 
 ## Produtos e correlatos — Atacadista / distribuidor
 
@@ -2073,6 +2148,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 16/2014, art. 28, II, alínea d
 
 
+
 ## Produtos e correlatos — Transportador
 
 ### Documentação legal e administrativa
@@ -2135,6 +2211,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Recepção, conservação da carga, segregação e controle em trânsito**  
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: RDC Anvisa nº 16/2014, art. 28, II, alínea d
+
 
 
 ## Serviços assistenciais — ILPI

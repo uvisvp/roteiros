@@ -64,6 +64,12 @@ const bad=structuredClone(state);bad.meta.drogaria_secoes.area_refeitorio.answer
 const badReport=ctx.DrogariaEngine.report(catalog,bad,data);assert.ok(badReport.irregularities.some(r=>r.id==='final_refeitorio_sifao'));assert.ok(badReport.irregularities.some(r=>/final_cold_t1_nc_higienizacao/.test(r.id)));assert.ok(badReport.irregularities.some(r=>/pop_vencimento/.test(r.id)));
 const reqBad=structuredClone(state);reqBad.meta.drogaria_secoes.area_dispensacao.answers.extintor='nao';assert.ok(ctx.DrogariaEngine.report(catalog,reqBad,data).irregularities.some(r=>r.id==='final_req_area_dispensacao_extintor'),'requisito com Não cumpre deve gerar irregularidade');
 const noCold=structuredClone(state);noCold.meta.drogaria_secoes.termolabeis.answers.aplica='nao';noCold.answers.thermo='nao';const noColdText=ctx.DrogariaEngine.report(catalog,noCold,data).blocks.map(b=>b.x||'').join('\n');assert.ok(noColdText.includes('não comercializa medicamentos termolábeis'));
+/* 09/11/2026: vacinação/EAC em “Não” não saem na identificação, mesmo com resposta antiga de licença; ASO “Sim” sai */
+{const v=structuredClone(state);v.answers.vaccine='nao';v.answers.vaccine_licensed='sim';v.answers.eac='nao';v.answers.eac_licensed='sim';(v.meta.section1_answers||={}).doc_aso='sim';
+ const r=ctx.DrogariaEngine.report(catalog,v,data),t=r.blocks.map(b=>[b.k,b.x,b.v].filter(Boolean).join(' ')).join('\n');
+ assert.ok(!/Licença sanitária específica/.test(t),'vacinação/EAC em “Não” não sai no relatório');
+ assert.ok(t.includes('Foram apresentados os Atestados de Saúde Ocupacional'),'ASO “Sim” sai no relatório');
+}
 for(const n of bridgeNames)assert.equal(blocks.get('rec--'+n+'.js'),fs.readFileSync(path.join(root,n+'.js'),'utf8'),'index integrado deve conter '+n);
 for(const[id,source]of blocks)if(['app--drogaria','app--estoque-produtos'].includes(id))for(const s of scripts(source))if(!/src=|application\/json|text\/plain/.test(s.attrs))new vm.Script(s.source,{filename:id});
 assert.ok(html.includes("'drogaria-report-final.js','saber-mais.js','drogaria-relatorio-revisao.js'"),'a casca deve carregar a revisão do relatório depois do compositor final');
