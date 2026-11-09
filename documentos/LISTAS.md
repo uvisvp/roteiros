@@ -2214,6 +2214,191 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 
 
+## eac-drogaria
+
+### Documentação legal e administrativa
+
+- **Cartão CNPJ atualizado**  
+  Comprovante de inscrição no CNPJ, atualizado, com a atividade econômica exercida no endereço.  
+  Fundamento: Portaria SMS nº 266/2025, art. 29
+- **Licença de Funcionamento Sanitária**  
+  Alvará de licenciamento indicando as atividades de EAC (na farmácia ou consultório isolado, além das atividades principais).  
+  Fundamento: RDC Anvisa nº 978/2025, art. 73; Lei Municipal nº 13.725/2004, art. 90
+- **CNES — Cadastro Nacional de Estabelecimentos de Saúde**  
+  Cadastro ativo, com endereço, serviços e profissionais atualizados.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 74
+- **AVCB ou CLCB (Corpo de Bombeiros)**  
+  Auto de Vistoria (AVCB) ou Certificado de Licença (CLCB) do Corpo de Bombeiros vigente para a área ocupada, salvo dispensa prevista no regulamento estadual.  
+  Fundamento: Decreto Estadual SP nº 69.118/2024, art. 15, V; art. 3º, XXVI
+- **Código gerador Amlurb (SP Regula)**  
+  Cadastro ativo como gerador de resíduos de serviços de saúde no órgão municipal de limpeza urbana.  
+  Fundamento: Lei Municipal nº 13.478/2002, art. 144
+
+### Gestão de pessoal
+
+- **Designação do responsável técnico e do substituto**  
+  Responsável técnico legalmente habilitado e substituto; supervisor do pessoal técnico presente durante o funcionamento.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 75; art. 122
+- **Estrutura organizacional documentada (organograma)**  
+  Organograma e descrição das responsabilidades.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 76
+- **Relação nominal da equipe, com atribuições, qualificação e carga horária**  
+  Relação de toda a equipe e registros de formação e qualificação.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 117, IV; art. 123
+- **PCMSO — Programa de Controle Médico de Saúde Ocupacional**  
+  Programa vigente, elaborado por médico do trabalho, com os exames previstos para cada função.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **PGR — Programa de Gerenciamento de Riscos**  
+  Inventário de riscos ocupacionais e plano de ação vigentes (substituiu o PPRA).  
+  Fundamento: NR-1 (Ministério do Trabalho e Emprego), Programa de Gerenciamento de Riscos — norma trabalhista, sem texto no banco
+- **ASO — Atestado de Saúde Ocupacional dos funcionários**  
+  ASO admissional e periódico de todos os funcionários, dentro da validade.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **Programa de Educação Permanente e registros**  
+  Programa para toda a equipe e registros de sua execução.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 124; art. 117, V
+
+### Infraestrutura e higiene
+
+- **Certificado de limpeza do reservatório de água (caixa d’água)**  
+  Certificado ou registro da limpeza e desinfecção do reservatório, no mínimo a cada seis meses; em caixa d’água coletiva, cópia do documento do condomínio.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 39, § 1º; art. 39, § 2º
+- **Certificado de controle de pragas urbanas (desinsetização e desratização)**  
+  Certificado válido da empresa controladora de pragas licenciada, com data, produtos usados e validade do serviço.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, VIII
+- **Certificados de calibração dos equipamentos**  
+  Calibração na frequência do fabricante ou, na falta, anual, com procedimento documentado.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 94
+- **PGRSS — Plano de Gerenciamento de Resíduos de Serviços de Saúde**  
+  Plano conforme a RDC 222/2018: estimativa dos resíduos por grupo; manejo da geração à disposição final; emergências; capacitação; contrato e licença ambiental das empresas de coleta e destinação. Quem gera só resíduo do Grupo D pode substituí-lo por notificação.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 111; RDC Anvisa nº 222/2018, art. 5º
+- **Comprovante de manutenção do ar-condicionado (PMOC)** — _Se aplicável: ambiente com ar-condicionado._  
+  Plano de Manutenção, Operação e Controle e o registro da última manutenção.  
+  Fundamento: Lei Federal nº 13.589/2018, art. 1º
+- **Registros de manutenção preventiva dos equipamentos**  
+  Registros da manutenção preventiva e corretiva e das verificações dos equipamentos.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 92; art. 93
+- **Registros de manutenção da edificação e das instalações**  
+  Registros da manutenção preventiva e corretiva da edificação e das instalações (elétrica, hidráulica, climatização).  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, VII
+
+### Sistema de gestão da qualidade
+
+- **Programa de Garantia da Qualidade (PGQ)**  
+  PGQ com os componentes mínimos e indicadores de desempenho monitorados pelo RT.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 84; art. 86; art. 87
+- **Contratos de terceirização** — _Se aplicável: serviço ou atividade terceirizada._  
+  Contratos dos serviços terceirizados, inclusive com o laboratório da fase analítica, quando houver.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 82; RDC Anvisa nº 63/2011, art. 11
+
+
+### Procedimentos Operacionais Padrão (POPs)
+
+- **Instruções de biossegurança (EPI, EPC, acidentes e transporte de material)**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 110
+- **Limpeza, desinfecção e esterilização**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 112
+- **Registro e liberação de resultados e assinatura de laudos**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 119; art. 165
+- **Instruções de uso dos equipamentos em português**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 99
+- **Controle interno da qualidade**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 174
+
+### Laudos, análises e comprovantes
+
+- **Relatórios de controle externo da qualidade (CEQ) e registros do controle interno**  
+  Relatórios do ensaio de proficiência/CEQ (no mínimo anuais) ou da forma alternativa, e registros do controle interno.  
+  Fundamento: RDC Anvisa nº 978/2025, art. 117, VI; art. 185
+
+
+## vacina-drogaria
+
+### Documentação legal e administrativa
+
+- **Cartão CNPJ atualizado**  
+  Comprovante de inscrição no CNPJ, atualizado, com a atividade econômica exercida no endereço.  
+  Fundamento: Portaria SMS nº 266/2025, art. 29
+- **Licença de Funcionamento Sanitária**  
+  Licença vigente que contemple a vacinação (e a vacinação extramuros, se houver).  
+  Fundamento: RDC Anvisa nº 197/2017, art. 4º; Lei Municipal nº 13.725/2004, art. 90
+- **CNES — Cadastro Nacional de Estabelecimentos de Saúde**  
+  Cadastro ativo, com endereço, serviços e profissionais atualizados.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 5º
+- **AVCB ou CLCB (Corpo de Bombeiros)**  
+  Auto de Vistoria (AVCB) ou Certificado de Licença (CLCB) do Corpo de Bombeiros vigente para a área ocupada, salvo dispensa prevista no regulamento estadual.  
+  Fundamento: Decreto Estadual SP nº 69.118/2024, art. 15, V; art. 3º, XXVI
+- **Código gerador Amlurb (SP Regula)**  
+  Cadastro ativo como gerador de resíduos de serviços de saúde no órgão municipal de limpeza urbana.  
+  Fundamento: Lei Municipal nº 13.478/2002, art. 144
+
+### Gestão de pessoal
+
+- **Designação do responsável técnico e do substituto**  
+  Responsável técnico e substituto formalmente designados pelo responsável legal.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 7º
+- **PCMSO — Programa de Controle Médico de Saúde Ocupacional**  
+  Programa vigente, elaborado por médico do trabalho, com os exames previstos para cada função.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **PGR — Programa de Gerenciamento de Riscos**  
+  Inventário de riscos ocupacionais e plano de ação vigentes (substituiu o PPRA).  
+  Fundamento: NR-1 (Ministério do Trabalho e Emprego), Programa de Gerenciamento de Riscos — norma trabalhista, sem texto no banco
+- **ASO — Atestado de Saúde Ocupacional dos funcionários**  
+  ASO admissional e periódico de todos os funcionários, dentro da validade.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **Registro das capacitações em vacinação**  
+  Capacitações periódicas (conservação, administração, eventos adversos, resíduos, registros, calendário), com data, horário, carga horária, conteúdo e quem ministrou.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 9º; art. 9º, parágrafo único
+
+### Infraestrutura e higiene
+
+- **Certificado de limpeza do reservatório de água (caixa d’água)**  
+  Certificado ou registro da limpeza e desinfecção do reservatório, no mínimo a cada seis meses; em caixa d’água coletiva, cópia do documento do condomínio.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 39, § 1º; art. 39, § 2º
+- **Certificado de controle de pragas urbanas (desinsetização e desratização)**  
+  Certificado válido da empresa controladora de pragas licenciada, com data, produtos usados e validade do serviço.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, VIII
+- **Certificado de calibração dos termômetros das câmaras e refrigeradores de vacinas**  
+  Certificado de calibração dentro da validade (ou nota fiscal de aquisição com até 12 meses), por laboratório com rastreabilidade.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 11, II
+- **PGRSS — Plano de Gerenciamento de Resíduos de Serviços de Saúde**  
+  Plano conforme a RDC 222/2018: estimativa dos resíduos por grupo; manejo da geração à disposição final; emergências; capacitação; contrato e licença ambiental das empresas de coleta e destinação. Quem gera só resíduo do Grupo D pode substituí-lo por notificação.  
+  Fundamento: RDC Anvisa nº 222/2018, art. 5º; art. 6º
+- **Comprovante de manutenção do ar-condicionado (PMOC)** — _Se aplicável: ambiente com ar-condicionado._  
+  Plano de Manutenção, Operação e Controle e o registro da última manutenção.  
+  Fundamento: Lei Federal nº 13.589/2018, art. 1º
+- **Registros de manutenção preventiva dos equipamentos**  
+  Programa e registros (ordens de serviço, laudos) da manutenção preventiva e corretiva dos equipamentos.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, IX
+- **Registros de manutenção da edificação e das instalações**  
+  Registros da manutenção preventiva e corretiva da edificação e das instalações (elétrica, hidráulica, climatização).  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, VII
+
+### Sistema de gestão da qualidade
+
+- **Contratos de terceirização** — _Se aplicável: serviço ou atividade terceirizada._  
+  Contrato vigente de cada serviço terceirizado, com as responsabilidades das partes; contratada regularizada na vigilância quando couber.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 11
+
+
+### Procedimentos Operacionais Padrão (POPs)
+
+- **POPs do serviço de vacinação (conservação, transporte, administração, eventos adversos, limpeza e resíduos)**  
+  POPs escritos, aprovados, datados e assinados pelo responsável técnico, atualizados e disponíveis nos locais de uso.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, XVIII; RDC Anvisa nº 197/2017, art. 12
+
+
+### Registros conferidos na inspeção
+
+- **Registros diários de temperatura máxima e mínima dos equipamentos de vacinas**  
+  Planilhas diárias de temperatura máxima, mínima e de momento.  
+  Fundamento: RDC Anvisa nº 197/2017, art. 11, II
+
 ## Serviços assistenciais — ILPI
 
 ### Constituição e licenciamento

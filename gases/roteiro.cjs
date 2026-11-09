@@ -9,6 +9,8 @@ const d = copia(require('../medicamentos/roteiros/gases-medicinais.cjs'));
 const ORIENT = require('../medicamentos/orientacoes/orientacoes.cjs').rs['gases-medicinais'] || {};
 d.secoes.forEach(s => s.itens.forEach(i => { if (ORIENT[i.id]) i.orient = copia(ORIENT[i.id]); }));
 d.store = 'uvis-gases-medicinais-v1';
+/* respostas Sim / Não, padrão do núcleo Medicamentos (09/11/2026) */
+d.respostas = 'simnao';
 const perg = id => { for (const s of d.secoes) for (const i of s.itens) for (const q of i.perguntas || []) if (q.id === id) return q; throw Error('pergunta ' + id); };
 const PONTOS = {
   afe: ['A autorização de funcionamento não atende: {}.', [['afe', 'AFE para as atividades exercidas'], ['classe', 'classe gases medicinais distinta da de medicamentos'], ['ae', 'AE, quando aplicável']]],

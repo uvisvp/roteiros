@@ -572,10 +572,19 @@ for (const app of ['eac-tipo1', 'vacinacao']) if (!h.includes(`id="app--${app}"`
   h = gravaBloco(h, lz, G.app, pagina(G, LEGAL, '#1F4E99', BLOCOS).html);
   h = C.registra(h, {app: G.app, titulo: G.titulo, nucleo: 'Medicamentos', store: G.store, icone: C.ICONES.cilindro});
 }
+/* EAC e Vacinação em drogaria (09/11/2026): roteiros próprios do núcleo, com o estabelecimento
+   fixo em farmácia ou drogaria (eac/roteiro-drogaria.cjs, vacina/roteiro-drogaria.cjs). Os de
+   Serviços (eac-tipo1/2/3, vacinacao) continuam os gerais e não mudam. */
+for (const [dir, ic] of [['eac', C.ICONES.frasco], ['vacina', C.ICONES.seringa]]) {
+  const R = require(path.join(ROT, dir, 'roteiro-drogaria.cjs'));
+  const LEGAL = JSON.parse(fs.readFileSync(path.join(ROT, dir, 'legislacao-drogaria.json'), 'utf8'));
+  h = gravaBloco(h, lz, R.app, pagina(R, LEGAL, '#1F4E99', BLOCOS).html);
+  h = C.registra(h, {app: R.app, titulo: R.titulo, nucleo: 'Medicamentos', store: R.store, icone: ic});
+}
 h = C.grupo(h, 'grupo-drogaria', {titulo: 'Drogaria', itens: [
   ['Drogaria', 'Roteiro completo, inclusive drogaria em supermercado (marque em Área física › Informações gerais). A conferência de estoque já está dentro da inspeção.', 'drogaria'],
-  ['Exames de análises clínicas (EAC)', 'Serviço Tipo I em farmácia e drogaria (RDC 978/2025). O mesmo roteiro do núcleo Serviços.', 'eac-tipo1'],
-  ['Vacinação', 'Serviço de vacinação humana (RDC 197/2017). O mesmo roteiro do núcleo Serviços.', 'vacinacao']]});
+  ['Exames de análises clínicas (EAC) em drogaria', 'Serviço Tipo I em farmácia ou drogaria (RDC 978/2025).', 'eac-drogaria'],
+  ['Vacinação em drogaria', 'Serviço de vacinação em farmácia ou drogaria (RDC 197/2017 e RDC 44/2009).', 'vacina-drogaria']]});
 h = C.grupo(h, 'grupo-atacadista', {titulo: 'Atacadista de medicamentos', itens: [
   ['Atacadista de medicamentos', 'Distribuidora e/ou transportadora (RDC 430/2020): escolha o tipo de operação na identificação.', 'distribuidoras-transportadoras'],
   ['Atacadista de gases medicinais', 'Distribuição, armazenagem, transporte e dispensação de gases medicinais (RDC 887/2024 e RDC 870/2024).', 'gases-medicinais']]});
@@ -588,6 +597,14 @@ h = C.catalogo(h, 'Medicamentos', [
 troca("'distribuidoras-transportadoras':{nome:'Distribuidora / transportadora',nucleo:'Medicamentos',", "'distribuidoras-transportadoras':{nome:'Atacadista de medicamentos',nucleo:'Medicamentos',", 'salvas atacadista');
 /* EAC e Vacinação abrem nos dois núcleos: a cor segue o núcleo de onde o roteiro foi aberto */
 troca("function temaApp(app){\n    var n = APP_NUCLEO[app];", "function temaApp(app){\n    var n = nucleoAtual || APP_NUCLEO[app];", 'cor do núcleo aberto');
+
+/* 7z. Respostas no padrão do núcleo Medicamentos (09/11/2026): Sim / Não / Não se aplica,
+   como na Drogaria, EAC, Vacinação e Gases. Os valores gravados (C / NC / NA) não mudam. */
+blocoAltera('app--farmacia-manipulacao', s => {
+  s = trocaEm(s, "{C:'Cumpre',NC:'Não cumpre',NA:'Não se aplica'}[v]", "{C:'Sim',NC:'Não',NA:'Não se aplica'}[v]", 'manipulação: botões Sim/Não');
+  return trocaEm(s, 'requisito(s) marcado(s) como Não cumpre. O relatório transcreve Cumpre e Não cumpre por item', 'requisito(s) com resposta Não. O relatório transcreve as respostas Sim e Não por item', 'manipulação: aviso das respostas');
+});
+blocoAltera('app--distribuidoras-transportadoras', s => trocaEm(s, "{C:'Cumpre',NC:'Não cumpre',NA:'Não se aplica'}[v]", "{C:'Sim',NC:'Não',NA:'Não se aplica'}[v]", 'atacadista: botões Sim/Não'));
 
 fs.writeFileSync(FILE, h);
 console.log('Núcleo Medicamentos: ajustes do site Medicamentos aplicados; catálogo com Drogaria, Manipulação e Atacadista.');

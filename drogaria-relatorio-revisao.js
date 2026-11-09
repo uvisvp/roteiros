@@ -92,9 +92,9 @@
   try{document.addEventListener('drogaria:render',agenda)}catch(e){}
 })();
 
-/* Respostas: nos requisitos (resposta negativa gera irregularidade), os botões
-   passam a Cumpre / Não cumpre / Não se aplica. Perguntas descritivas e de
-   escopo (“realiza vacinação?”, “há venda remota?”) continuam Sim / Não.
+/* Respostas: padrão do núcleo Medicamentos (09/11/2026) — Sim / Não / Não se aplica
+   em todas as perguntas (antes, Cumpre / Não cumpre nos requisitos). A lista REQ
+   continua marcando quais respostas negativas geram irregularidade.
    Os valores gravados não mudam (sim / nao / nsa). */
 (function(){
   'use strict';
@@ -113,7 +113,7 @@
     servicos_farmaceuticos:['licenca','ambiente','lavatório','primeiros_socorros','materiais','perfuro','orientacao','epi','limpeza','rede_publica','declaracao','injecao','vacinacao'],
     transporte:['licenca_entrega','controle_temperatura','qualificacao']
   };
-  var ROT={sim:'Cumpre',nao:'Não cumpre',nsa:'Não se aplica'};
+  var ROT={sim:'Sim',nao:'Não',nsa:'Não se aplica'};
   var catalogo=null;
   function cat(){if(catalogo)return catalogo;try{var c=window.DrogariaAPI&&DrogariaAPI.getCatalog&&DrogariaAPI.getCatalog();if(c&&c.perguntas){catalogo={};c.perguntas.forEach(function(q){catalogo[q.id]=q})}}catch(e){}return catalogo||{}}
   function ehReq(bt){
@@ -128,7 +128,7 @@
   function aplicar(){
     document.querySelectorAll('#content [data-s1-answer],#content [data-af-answer],#content [data-sd-answer],#content [data-fb-answer],#content button[data-answer][data-value]').forEach(function(bt){
       if(bt.dataset.drgRot)return;var v=valor(bt);if(!ROT[v])return;
-      if(ehReq(bt)){bt.textContent=ROT[v];bt.dataset.drgRot='req'}else bt.dataset.drgRot='desc';
+      if(bt.textContent!==ROT[v])bt.textContent=ROT[v];bt.dataset.drgRot=ehReq(bt)?'req':'desc';
     });
     /* Termo de inutilização: fora do escopo da inspeção */
     document.querySelectorAll('#content [data-sd-answer^="documentos_descarte|termo|"]').forEach(function(bt){var q=bt.closest('.q')||bt.parentElement&&bt.parentElement.parentElement;if(q&&!q.hidden)q.hidden=true});

@@ -36,6 +36,8 @@ const PASSOS=[
  ['Produtos: relatórios e Anexo III no modelo do POP-O-SNVS-013 rev. 9',['produtos-pop13.cjs']],
  ['Checklist de documentos: cartão, marcação, foto, Word à parte, exportar/importar e modalidades',['checklist-documentos.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
+ ['EAC em drogaria: navegação padrão e relatório',['padrao.cjs','Medicamentos','eac-drogaria','EAC em drogaria']],
+ ['vacinação em drogaria: navegação padrão e relatório',['padrao.cjs','Medicamentos','vacina-drogaria','Vacinação em drogaria']],
  ['grupos: Serviços (vacinação, EAC) e Medicamentos igual ao site Medicamentos',['grupos.cjs']],
  ['checklist por ponto, anotação, inventário por ambiente e perfil (EAC)',['checklist.cjs']],
  ['checklist por ponto: odontologia, alimentos, produtos e assistenciais',['pontos.cjs']],
