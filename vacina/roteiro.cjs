@@ -36,7 +36,7 @@ item('dados').campos = [
   {id: 'razao', rotulo: 'Razão social / mantenedora'}, {id: 'fantasia', rotulo: 'Nome do estabelecimento ou da unidade'},
   {id: 'cnpj', rotulo: 'CNPJ', tipo: 'cnpj'}, {id: 'endereco', rotulo: 'Endereço', largo: true},
   {id: 'licenca', rotulo: 'Licença sanitária / CMVS nº'}, {id: 'cnes', rotulo: 'CNES'},
-  {id: 'sts', rotulo: 'Supervisão Técnica de Saúde (serviço público)', se: PUBLICO},
+  {id: 'sts', rotulo: 'Supervisão Técnica de Saúde (serviço público)'},
   {id: 'rl', rotulo: 'Responsável legal / gerente'}, {id: 'rt', rotulo: 'Responsável técnico (nome e registro no conselho)'},
   {id: 'rt_sub', rotulo: 'Responsável técnico substituto'}, {id: 'acompanhou', rotulo: 'Acompanhou a inspeção'},
   {id: 'data', rotulo: 'Data da inspeção', tipo: 'date'}, {id: 'equipe', rotulo: 'Equipe de inspeção', largo: true}
@@ -126,18 +126,6 @@ d.secoes.forEach(s => s.itens.forEach(it => (it.perguntas || []).forEach(q => {
   q.r = q.r.filter(r => !eLei(r)).concat(l.length ? l.sort((a, b) => ordem(a) - ordem(b)) : [LM(63)]);
 })));
 d.leiBase = [LM(63)];
-
-/* 09/11/2026 — revisão da vacinação na drogaria:
-   - leituras da geladeira das vacinas no momento da inspeção (vão ao relatório);
-   - drogaria ou farmácia: limpeza da sala registrada no início e no fim do expediente (RDC 44/2009, art. 16). */
-const FARMACIA = {campo: 'tipo_est', igual: 'farmacia'};
-item('refrigeracao').campos.push(
-  {id: 'temp_momento', rotulo: 'Temperatura no momento da inspeção (°C)'},
-  {id: 'temp_max', rotulo: 'Temperatura máxima registrada (°C)'},
-  {id: 'temp_min', rotulo: 'Temperatura mínima registrada (°C)'});
-d.infracoes.push({id: 'vac_limpeza', grupo: 'Infraestrutura', se: FARMACIA, texto: 'Deixar de registrar a limpeza da sala de vacinação no início e ao término do horário de funcionamento.', r: ['rdc-44-2009::artigo::16', LM(65)]});
-item('sala').perguntas.push({id: 'limpeza_sala', se: FARMACIA, t: 'A limpeza da sala de vacinação é registrada diariamente, no início e ao término do horário de funcionamento?', r: ['rdc-44-2009::artigo::16', LM(65)],
-  c: 'A limpeza da sala de vacinação é registrada diariamente, no início e ao término do horário de funcionamento.', nc: 'A limpeza da sala de vacinação não é registrada diariamente no início e ao término do horário de funcionamento.', inf: ['vac_limpeza']});
 
 /* inventário de infraestrutura por ambiente, no início da seção Infraestrutura */
 d.secoes.find(s => s.id === 'infra').itens.unshift({id: 'inventario', titulo: 'Ambientes do estabelecimento', curto: 'Ambientes',

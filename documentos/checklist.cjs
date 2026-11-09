@@ -505,4 +505,7 @@ function imagem(m) {
   return l;
 }
 
+/* núcleo Medicamentos: EAC e Vacinação em drogaria (roteiros próprios, 09/11/2026) usam as mesmas listas */
+APPS['eac-drogaria'] = APPS['eac-tipo1'];
+APPS['vacina-drogaria'] = APPS['vacinacao'];
 module.exports = {VERSAO, GRUPOS, DOCS, APPS};
