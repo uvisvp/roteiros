@@ -56,10 +56,14 @@
   window.addEventListener('popstate',function(e){var s=e.state&&e.state.pu;if(!s)return;nav={aba:s.aba,secao:s.secao,item:s.item};desenha(false)});
  }
 
+ /* centraliza o chip atual na faixa só na horizontal: scrollIntoView também rolava a
+    página até o topo a cada resposta (09/11/2026: “a lista suspensa tira do lugar”) */
+ function centraliza(at){if(!at)return;var c=at.parentElement;while(c&&c!==document.body){var o=getComputedStyle(c).overflowX;if((o==='auto'||o==='scroll')&&c.scrollWidth>c.clientWidth)break;c=c.parentElement}
+  if(!c||c===document.body)return;var r=at.getBoundingClientRect(),q=c.getBoundingClientRect();try{c.scrollLeft+=(r.left+r.width/2)-(q.left+q.width/2)}catch(e){}}
  function faixaSecoes(){var el=$('.pu-secoes',raiz);if(!el)return;var ss=secoes();
   if(nav.aba!=='roteiro'){el.hidden=true;return}el.hidden=false;
   el.innerHTML='<button type="button" data-pu-secao=""'+(nav.secao?'':' aria-current="page"')+'>Todas</button>'+ss.map(function(s,i){return '<button type="button" data-pu-secao="'+esc(s.id)+'"'+(nav.secao===s.id?' aria-current="page"':'')+'>'+esc(s.curto||s.titulo)+'</button>'}).join('');
-  var at=el.querySelector('[aria-current=page]');if(at&&at.scrollIntoView)try{at.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}}
+  var at=el.querySelector('[aria-current=page]');centraliza(at)}
 
  function telaTodas(m){var ss=secoes();
   m.innerHTML=(cfg.topo?'<div class="pu-topo">'+cfg.topo()+'</div>':'')+'<div class="ui-card-grid pu-secoes-grade">'+ss.map(function(s,i){var p=progresso(s);return '<button type="button" data-pu-secao="'+esc(s.id)+'"><span class="ui-card-icon">'+icone(s.icone||'note')+'</span><span><span class="ui-card-index">SEÇÃO '+(i+1)+'</span><strong>'+esc(s.titulo)+'</strong>'+(s.resumo?'<small>'+esc(s.resumo)+'</small>':'')+(p.t?'<small class="pu-prog">'+p.f+'/'+p.t+' respondidos</small>':'')+'</span></button>'}).join('')+'</div>';}
@@ -73,7 +77,7 @@
   m.innerHTML='<div class="pu-fixo"><div class="pu-faixa" role="tablist" aria-label="Itens da seção">'+s.itens.map(function(x,j){return '<button type="button" data-pu-item="'+esc(x.id)+'"'+(x.id===it.id?' aria-current="step"':'')+'>'+esc(x.numero||((idx+1)+'.'+(j+1)))+' · '+esc(x.curto||x.titulo)+'</button>'}).join('')+'</div>'
    +'<div class="ui-section-heading pu-cab-item">'+esc(it.numero||((idx+1)+'.'+(k+1)))+' '+esc(it.titulo)+'</div></div><div class="pu-conteudo" id="pu-conteudo"></div>';
   var c=$('#pu-conteudo',m);try{cfg.item(s,it,c)}catch(e){console.error(e);c.innerHTML='<p class="pu-erro">Não foi possível abrir este item.</p>'}
-  var at=m.querySelector('.pu-faixa [aria-current=step]');if(at&&at.scrollIntoView)try{at.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}}
+  var at=m.querySelector('.pu-faixa [aria-current=step]');centraliza(at)}
 
  function telaAba(m){m.innerHTML='<div class="pu-aba-conteudo" id="pu-aba"></div>';try{cfg.aba(nav.aba,$('#pu-aba',m))}catch(e){console.error(e)}}
 

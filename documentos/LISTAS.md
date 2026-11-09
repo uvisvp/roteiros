@@ -2214,7 +2214,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 
 
-## eac-drogaria
+## EAC em drogaria
 
 ### Documentação legal e administrativa
 
@@ -2236,9 +2236,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Gestão de pessoal
 
-- **Designação do responsável técnico e do substituto**  
-  Responsável técnico legalmente habilitado e substituto; supervisor do pessoal técnico presente durante o funcionamento.  
-  Fundamento: RDC Anvisa nº 978/2025, art. 75; art. 122
 - **Estrutura organizacional documentada (organograma)**  
   Organograma e descrição das responsabilidades.  
   Fundamento: RDC Anvisa nº 978/2025, art. 76
@@ -2317,7 +2314,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 978/2025, art. 117, VI; art. 185
 
 
-## vacina-drogaria
+## Vacinação em drogaria
 
 ### Documentação legal e administrativa
 

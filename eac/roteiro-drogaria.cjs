@@ -17,4 +17,14 @@ perg('lic').t = troca(perg('lic').t, 'além das atividades de farmácia ou de co
 const L44 = 'rdc-44-2009::artigo::2::inciso::iii';
 perg('lic_farmacia').r = [L44].concat(perg('lic_farmacia').r.filter(r => r !== L44));
 const fl = d.infracoes.find(i => i.id === 'farm_lic'); if (!fl) throw Error('infração farm_lic'); fl.r = [L44].concat(fl.r.filter(r => r !== L44));
+/* revisão de 09/11/2026 (conteúdo):
+   - identificação › exames: sem “Equipamentos de medição em uso” (já estão em Produtos, equipamentos e armazenamento);
+   - SP Regula: só o cadastro como gerador de RSS (Lei Municipal 13.478/2002, art. 144), sem checklist de contrato e comprovantes. */
+item('exames').campos = item('exames').campos.filter(c => c.id !== 'equipamentos');
+Object.assign(perg('spregula'), {
+  t: 'O estabelecimento está cadastrado como gerador de resíduos de serviços de saúde no SP Regula (antiga Amlurb)?',
+  r: ['lei-municipal-sp-13478-2002::artigo::144'].concat(perg('spregula').r.filter(r => /lei-municipal-13725/.test(r))),
+  c: 'O estabelecimento está cadastrado como gerador de resíduos de serviços de saúde no SP Regula.',
+  nc: 'O estabelecimento não está cadastrado como gerador de resíduos de serviços de saúde no SP Regula.'});
+delete perg('spregula').pontos; delete perg('spregula').ncPontos;
 module.exports = d;

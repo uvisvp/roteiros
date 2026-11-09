@@ -41,5 +41,13 @@ const rota=p=>p.route(/brasilapi\.com\.br\/api\/cnpj\/v1\//,r=>r.fulfill({status
   await f.evaluate(()=>[...document.querySelectorAll('button')].find(x=>/Receita Federal/.test(x.textContent)).click());await p.waitForTimeout(1200);
   const v=await f.evaluate(()=>({razao:(document.querySelector('#id_razao')||{}).value,fantasia:(document.querySelector('#id_fantasia')||{}).value}));
   ok(v.razao==='EMPRESA TESTE LTDA'&&v.fantasia==='TESTE','manipulação: botão da Receita Federal preenche razão social e fantasia ('+JSON.stringify(v)+')');await p.close()}
+ /* EAC em drogaria: escolher na lista suspensa ou responder não tira a página do lugar */
+ {const {p,f}=await T.abre('Medicamentos','eac-drogaria','EAC em drogaria','',{browser:b,viewport:{width:400,height:800}});
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'dados'}));await p.waitForTimeout(500);
+  await f.evaluate(()=>document.querySelector('select[data-rs-meta]').scrollIntoView({block:'center'}));await p.waitForTimeout(200);
+  const y0=await f.evaluate(()=>Math.round(scrollY));await f.locator('select[data-rs-meta]').first().selectOption({index:1});await p.waitForTimeout(500);
+  const y1=await f.evaluate(()=>Math.round(scrollY));ok(y0>0&&Math.abs(y1-y0)<5,'EAC em drogaria: a lista suspensa não tira a página do lugar ('+y0+' → '+y1+')');
+  const t=await f.evaluate(()=>document.body.innerText);ok(!/Equipamentos de medição em uso/.test(t),'EAC em drogaria: identificação sem “Equipamentos de medição em uso”');
+  await p.close()}
  await b.close();
 })().catch(e=>{T.falha(e.stack||e);process.exit(1)});
