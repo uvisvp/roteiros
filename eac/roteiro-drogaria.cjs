@@ -29,4 +29,34 @@ Object.assign(perg('spregula'), {
 delete perg('spregula').pontos; delete perg('spregula').ncPontos;
 /* a resposta e a lista de itens andam juntas, sem contradição (10/11/2026) */
 d.pontosSeguem = true;
+/* mesmo padrão da Vacinação em drogaria (10/11/2026): nas perguntas com lista de itens, o enunciado pergunta pelo
+   conjunto e os itens ficam só na lista; o que era explicação entre parênteses vira orientação (ajuda). */
+const TEXTO = {
+  rt: 'A responsabilidade técnica e a supervisão do serviço de EAC atendem às exigências?',
+  iluminacao: 'A iluminação da sala de coleta e execução é adequada?',
+  mobiliario: 'A sala de coleta e execução dispõe dos itens obrigatórios?',
+  refrigerador: 'O equipamento de refrigeração dos produtos e controles atende aos requisitos?',
+  limpeza: 'A limpeza e a desinfecção dos ambientes atendem às exigências?',
+  saneantes: 'Os saneantes utilizados atendem às exigências?',
+  coletor_tipo: 'Os coletores de resíduos têm as características exigidas?',
+  descarte: 'O descarte dos perfurocortantes atende às exigências?',
+  manejo: 'O manejo dos sacos de resíduos atende às exigências?',
+  abrigo: 'O abrigo de resíduos atende às exigências?',
+  regularizados: 'Os produtos para diagnóstico in vitro, reagentes e equipamentos atendem às exigências de regularização e de uso?',
+  recebimento: 'O recebimento dos produtos é registrado com os dados exigidos?',
+  armazenamento: 'O armazenamento garante a conservação dos produtos?',
+  manutencao: 'A manutenção dos equipamentos está registrada conforme o exigido?',
+  calibracao: 'A calibração dos equipamentos atende às exigências?',
+  prazo_registros: 'A guarda e a alteração dos registros atendem às exigências?',
+  identificacao: 'O material biológico é identificado, na coleta ou no recebimento, com os dados mínimos?',
+  instrucoes_an: 'As instruções e a rastreabilidade da fase analítica atendem às exigências?',
+  criticos: 'Os valores críticos ou de alerta e a sua comunicação estão definidos?',
+  ciq: 'O controle interno da qualidade (CIQ) atende às exigências?'
+};
+for (const [id, t] of Object.entries(TEXTO)) { const q = perg(id); if (!q.pontos) throw Error('pergunta sem lista de itens: ' + id); q.t = t; }
+perg('identificacao').ajuda = 'A identificação pode ser simplificada quando o laudo é entregue no ato.';
+perg('instrucoes_an').ajuda = 'As instruções podem ser as do fabricante.';
+perg('calibracao').ajuda = 'Frequência: a do fabricante ou, na falta dela, anual.';
+perg('manutencao').ajuda = 'Preventiva no mínimo anual, quando o fabricante não definir.';
+perg('refrigerador').ajuda = 'O equipamento pode ser compartilhado só com medicamentos que não exijam equipamento exclusivo.';
 module.exports = d;
