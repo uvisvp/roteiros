@@ -79,6 +79,8 @@
  function ambNome(a, i, c){ return String(a.nome || '').trim() || ((c && c.termo) || 'ambiente') + ' ' + (i + 1); }
  function campoPorId(id){ var r = null; D.secoes.forEach(function(s){ s.itens.forEach(function(it){ (it.campos || []).forEach(function(c){ if(c.id === id) r = c; }); }); }); return r; }
  function lista(xs){ return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + ' e ' + xs[xs.length - 1]; }
+ /* lista com trechos que já têm vírgula: separa por ponto e vírgula */
+ function listaPV(xs){ return xs.length < 3 || !xs.some(function(x){ return /,/.test(x); }) ? lista(xs) : xs.slice(0, -1).join('; ') + '; e ' + xs[xs.length - 1]; }
 
  /* ---------- citações ---------- */
  function rotulo(id){ var l = D.legal[id]; return l ? l.norma.replace(/^(RDC|Lei) (Anvisa |Federal |Municipal )?nº /, '$1 ') + ' · ' + l.disp : id; }
@@ -311,22 +313,29 @@
  /* checklist da pergunta composta: cada ponto Atende / Não atende / N/A */
  var PT_OPTS = [['C', 'Atende', 'ok'], ['NC', 'Não atende', 'nao'], ['NA', 'N/A', 'na']];
  function pontosHtml(q){ if(!q.pontos) return ''; var m = st.pt[q.id] || {}, n = q.pontos.filter(function(p){ return m[p[0]]; }).length, x = q.pontos.filter(function(p){ return m[p[0]] === 'NC'; }).length;
-  return '<div class="pu-bloco rs-pontos"><p class="rs-pontos-tit"><b>Checklist</b> <small>' + n + '/' + q.pontos.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + ' — o resultado acompanha os pontos</small></p>'
+  return '<div class="pu-bloco rs-pontos"><p class="rs-pontos-tit"><b>' + (D.pontosSeguem ? 'Itens exigidos' : 'Checklist') + '</b> <small>' + n + '/' + q.pontos.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + (D.pontosSeguem ? ' — a resposta acompanha os itens' : ' — o resultado acompanha os pontos') + '</small></p>'
    + q.pontos.map(function(p){ return '<div class="rs-ponto' + (m[p[0]] === 'NC' ? ' rs-ponto-nc' : '') + '"><span>' + esc(p[1].charAt(0).toUpperCase() + p[1].slice(1)) + '</span><div class="rs-ponto-tog" role="group">' + PT_OPTS.map(function(o){ return '<button type="button" data-rs-pt="' + esc(q.id) + '|' + esc(p[0]) + '|' + o[0] + '" data-v="' + o[2] + '" aria-pressed="' + (m[p[0]] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>'; }).join('') + '</div>'; }
  /* resultado pelos pontos: algum “Não atende” → Não cumpre; todos marcados sem “Não atende” → Cumpre (ou N/A se todos N/A) */
  function autoPontos(q){ var m = st.pt[q.id] || {}, v = q.pontos.map(function(p){ return m[p[0]]; });
   if(v.indexOf('NC') >= 0) st.r[q.id] = 'nc'; else if(v.every(function(x){ return x === 'C' || x === 'NA'; })) st.r[q.id] = v.every(function(x){ return x === 'NA'; }) ? 'na' : 'c'; else if(st.r[q.id] === 'nc' && !v.some(Boolean)) delete st.r[q.id];
   delete st.auto[q.id]; }
+ /* D.pontosSeguem (núcleo Medicamentos, 10/11/2026): a resposta e a lista de itens nunca se contradizem —
+    Sim marca todos os itens como “Atende”; Não se aplica, todos como N/A; Não mantém os itens já marcados
+    como “Não atende” (sem nenhum, limpa a lista, para marcar o que falta); resposta desfeita limpa a lista. */
+ function sincPontos(q){ if(!D.pontosSeguem || !q || !q.pontos) return; var r = st.r[q.id], a = st.pt[q.id] || {}, m = {};
+  if(r === 'c' || r === 'na') q.pontos.forEach(function(p){ m[p[0]] = r === 'c' ? 'C' : 'NA'; });
+  else if(r === 'nc' && q.pontos.some(function(p){ return a[p[0]] === 'NC'; })) m = a;
+  st.pt[q.id] = m; }
  /* anotação em toda pergunta (digitada ou ditada): entra no relatório depois da frase */
  function anotHtml(q, r){ var s = String(st.sit[q.id] || ''), ab = anotAberta[q.id] !== undefined ? anotAberta[q.id] : !!s.trim() || r === 'nc';
   return '<details class="pu-mais rs-anot" data-rs-anot="' + esc(q.id) + '"' + (ab ? ' open' : '') + '><summary>📝 ' + (r === 'nc' ? 'Situação encontrada' : 'Anotação') + (s.trim() ? ' ✓' : '') + '</summary><div><label class="pu-campo rs-campo rs-largo"><span>' + (r === 'nc' ? 'Situação encontrada' : 'Anotação') + ' <small>(digite ou dite; entra no relatório depois da frase)</small></span><textarea data-rs-sit="' + esc(q.id) + '" rows="2" placeholder="' + (r === 'nc' ? 'Ex.: não havia registro de temperatura nos últimos 15 dias.' : 'Observação ou consideração sobre esta verificação.') + '">' + esc(s) + '</textarea></label></div></details>'; }
  function perguntaHtml(q){ var r = st.r[q.id] || '', f = st.fotos[q.id], o = ONDE[q.id];
   var simnao = D.respostas === 'simnao', vs = q.sim === 'nc' ? 'nc' : 'c', vn = vs === 'c' ? 'nc' : 'c', temNa = q.na || D.naSempre;
   var bt = (simnao ? [[vs, 'Sim', vs === 'c' ? 'ok' : 'nao'], [vn, 'Não', vn === 'c' ? 'ok' : 'nao']] : [['c', 'Cumpre', 'ok'], ['nc', 'Não cumpre', 'nao']]).concat(temNa ? [['na', 'Não se aplica', 'na']] : []);
-  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(numero(q.id)) + '</b> ' + esc(q.t) + '</p><div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
+  return '<div class="pu-q rs-q" data-rs-q="' + esc(q.id) + '"><div><p class="pu-q-texto"><b>' + esc(numero(q.id)) + '</b> ' + esc(q.t) + '</p>' + (q.ajuda ? '<p class="pu-q-ajuda">' + esc(q.ajuda) + '</p>' : '') + '<div class="rs-cits">' + botoesCit(q.r) + '</div></div>'
    + '<div class="pu-resp" role="group" aria-label="Resultado"' + (bt.length === 2 ? ' style="grid-template-columns:repeat(2,minmax(0,1fr))"' : '') + '>' + bt.map(function(b){ return '<button type="button" data-rs-r="' + esc(q.id) + '|' + b[0] + '" data-v="' + b[2] + '" aria-pressed="' + (r === b[0]) + '">' + b[1] + '</button>'; }).join('') + '</div>'
    + pontosHtml(q)
-   + (r === 'nc' && q.pontos && !pontosNC(q).length ? '<p class="pu-q-ajuda rs-pt-aviso">Marque no checklist o ponto que não atende: é a frase dele que vai ao relatório. Sem isso, sai a frase geral.</p>' : '')
+   + (r === 'nc' && q.pontos && !pontosNC(q).length ? '<p class="pu-q-ajuda rs-pt-aviso">' + (D.pontosSeguem ? 'Marque na lista o item que não atende: é ele que vai ao relatório. Sem isso, sai a frase geral.' : 'Marque no checklist o ponto que não atende: é a frase dele que vai ao relatório. Sem isso, sai a frase geral.') + '</p>' : '')
    + (r === 'c' && q.checks ? (function(){ var a = Array.isArray(st.meta['chk_' + q.id]) ? st.meta['chk_' + q.id] : [], temOutro = q.checks.opcoes.some(function(o){ return o[0] === 'outro'; });
       return '<fieldset class="pu-bloco rs-sub"><legend>' + esc(q.checks.rotulo || 'Detalhe (vai ao relatório; não gera infração)') + '</legend><div class="rs-checks">' + q.checks.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="chk_' + esc(q.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div>'
        + (!q.checks.semOutro && (!temOutro || a.indexOf('outro') >= 0) ? '<label class="pu-campo rs-campo"><span>' + esc(q.checks.outro || 'Outro (descrever)') + '</span><input type="text" data-rs-meta="chk_' + esc(q.id) + '_outro" value="' + esc(st.meta['chk_' + q.id + '_outro'] || '') + '"></label>' : '') + '</fieldset>'; })() : '')
@@ -454,7 +463,11 @@
   var ns = 0;
   D.secoes.slice(1).forEach(function(s){ var partes = [];
    s.itens.forEach(function(it){ if(!itemVisivel(it)) return; var ps = perguntasDe(it).filter(function(q){ return st.r[q.id] && !(D.relSemNa && st.r[q.id] === 'na'); }), cps = [].concat.apply([], (it.campos || []).map(campoRel)); if(!ps.length && !cps.length) return;
-    var fr = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }).map(frase);
+    var psF = ps.filter(function(q){ return st.r[q.id] !== 'na' || typeof q.na === 'string'; }), fr = psF.map(frase);
+    /* it.cJunta ('O estabelecimento dispõe de {}.') + q.cf (trecho): as conformidades do item saem numa frase só, em vez de
+       uma frase por pergunta (“Há sanitário. Há sala…”); as demais (irregularidades, não se aplica) seguem com a frase própria */
+    if(it.cJunta){ var jun = psF.filter(function(q){ return q.cf && st.r[q.id] === 'c' && !checksTxt(q); });
+     if(jun.length > 1) fr = [it.cJunta.replace('{}', listaPV(jun.map(function(q){ return q.cf; })))].concat(jun.map(function(q){ return String(st.sit[q.id] || '').trim(); }).filter(Boolean).map(cap)).concat(psF.filter(function(q){ return jun.indexOf(q) < 0; }).map(frase)); }
     /* it.cTodos: todas as perguntas visíveis do item em “Atende” viram uma frase só, consolidada; as anotações seguem depois */
     var vis = perguntasDe(it);
     if(it.cTodos && vis.length > 1 && vis.every(function(q){ return st.r[q.id] === 'c' && !checksTxt(q); })) fr = [it.cTodos].concat(vis.map(function(q){ return String(st.sit[q.id] || '').trim(); }).filter(Boolean).map(cap));
@@ -568,10 +581,10 @@
  function mascaraCnpj(v){ var d = String(v).replace(/\D/g, '').slice(0, 14); return d.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); }
  document.addEventListener('click', function(e){ var b;
   if((b = e.target.closest('[data-legal]'))){ e.preventDefault(); abreLegal(b.dataset.legal); return; }
-  if((b = e.target.closest('[data-rs-r]'))){ var p = b.dataset.rsR.split('|'); st.r[p[0]] = st.r[p[0]] === p[1] ? '' : p[1]; if(!st.r[p[0]]) delete st.r[p[0]]; delete st.auto[p[0]]; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-r]'))){ var p = b.dataset.rsR.split('|'); st.r[p[0]] = st.r[p[0]] === p[1] ? '' : p[1]; if(!st.r[p[0]]) delete st.r[p[0]]; delete st.auto[p[0]]; sincPontos(PERG[p[0]]); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-pt]'))){ var pp = b.dataset.rsPt.split('|'), qq = PERG[pp[0]], mm = st.pt[pp[0]] = Object.assign({}, st.pt[pp[0]]); if(mm[pp[1]] === pp[2]) delete mm[pp[1]]; else mm[pp[1]] = pp[2]; autoPontos(qq); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-item-na]'))){ var ni = UvisPadrao.estado(), si = D.secoes.filter(function(x){ return x.id === ni.secao; })[0], ii = si && si.itens.filter(function(x){ return x.id === ni.item; })[0];
-   if(ii){ var pi = perguntasDe(ii), reabre = pi.every(function(q){ return st.r[q.id] === 'na'; }); pi.forEach(function(q){ if(reabre){ delete st.r[q.id]; delete st.auto[q.id]; } else st.r[q.id] = 'na'; }); } salva(); redesenha(); return; }
+   if(ii){ var pi = perguntasDe(ii), reabre = pi.every(function(q){ return st.r[q.id] === 'na'; }); pi.forEach(function(q){ if(reabre){ delete st.r[q.id]; delete st.auto[q.id]; } else st.r[q.id] = 'na'; sincPontos(q); }); } salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-amb-chip]'))){ var pc = b.dataset.rsAmbChip.split('|'), Lc = ambLista(pc[0]), ic = Lc.map(function(a){ return String(a.nome || '').trim(); }).indexOf(pc[1]);
    if(ic >= 0){ if(ambTemDados(pc[0], ic) && !confirm('O ambiente “' + pc[1] + '” tem irregularidades, anotação ou foto. Remover do estabelecimento?')) return; ambRemove(pc[0], ic); }
    else { st.meta[pc[0]] = Lc.concat([{nome: pc[1], tipo: pc[2] || 'geral', m: {}}]); }
@@ -579,7 +592,7 @@
   if((b = e.target.closest('[data-rs-amb-add]'))){ var La2 = ambLista(b.dataset.rsAmbAdd).concat([{nome: '', tipo: 'geral', m: {}}]); st.meta[b.dataset.rsAmbAdd] = La2; ambAberto[b.dataset.rsAmbAdd + '|' + (La2.length - 1)] = true; salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-amb-del]'))){ var pd2 = b.dataset.rsAmbDel.split('|'), Ld2 = ambLista(pd2[0]); var Cd2 = CAMPO[pd2[0]] || {}; if(!confirm('Remover o ' + (Cd2.termo || 'ambiente') + ' “' + ambNome(Ld2[+pd2[1]] || {}, +pd2[1], Cd2) + '”?')) return; ambRemove(pd2[0], +pd2[1]); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-lote]'))){ var n = UvisPadrao.estado(), s = D.secoes.filter(function(x){ return x.id === n.secao; })[0], it = s && s.itens.filter(function(x){ return x.id === n.item; })[0];
-   if(it) perguntasDe(it).forEach(function(q){ if(!st.r[q.id] && (b.dataset.rsLote === 'c' || q.na || D.naSempre)) st.r[q.id] = b.dataset.rsLote; }); salva(); redesenha(); return; }
+   if(it) perguntasDe(it).forEach(function(q){ if(!st.r[q.id] && (b.dataset.rsLote === 'c' || q.na || D.naSempre)){ st.r[q.id] = b.dataset.rsLote; sincPontos(q); } }); salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-acao]'))){ if(b.dataset.rsAcao === 'anvisa_cnpj') acaoAnvisa(); else if(b.dataset.rsAcao === 'ocr_crt') acaoCrt(); return; }
   if((b = e.target.closest('[data-rs-eq-buscar]'))){ eqBuscar(b.dataset.rsEqBuscar); return; }
   if((b = e.target.closest('[data-rs-eq-add]'))){ var La = eqLista(b.dataset.rsEqAdd).slice(); if(!La.length) La.push({}); La.push({}); st.meta[b.dataset.rsEqAdd] = La; salva(); redesenha(); return; }

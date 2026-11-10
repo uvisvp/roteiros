@@ -49,5 +49,37 @@ const rota=p=>p.route(/brasilapi\.com\.br\/api\/cnpj\/v1\//,r=>r.fulfill({status
   const y1=await f.evaluate(()=>Math.round(scrollY));ok(y0>0&&Math.abs(y1-y0)<5,'EAC em drogaria: a lista suspensa não tira a página do lugar ('+y0+' → '+y1+')');
   const t=await f.evaluate(()=>document.body.innerText);ok(!/Equipamentos de medição em uso/.test(t),'EAC em drogaria: identificação sem “Equipamentos de medição em uso”');
   await p.close()}
+ /* 10/11/2026 — Vacinação em drogaria: resposta e lista de itens coerentes, licença inicial, relatório consolidado */
+ {const {p,f}=await T.abre('Medicamentos','vacina-drogaria','Vacinação em drogaria','',{browser:b,viewport:{width:400,height:800}});
+  const st=()=>f.evaluate(()=>JSON.parse(localStorage.getItem('uvis-vacina-drogaria-v1')));
+  const R=async(q,v)=>{await f.evaluate(([q,v])=>document.querySelector('[data-rs-r="'+q+'|'+v+'"]').click(),[q,v]);await p.waitForTimeout(300)};
+  const P=async(q,k,v)=>{await f.evaluate(([q,k,v])=>document.querySelector('[data-rs-pt="'+q+'|'+k+'|'+v+'"]').click(),[q,k,v]);await p.waitForTimeout(300)};
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'organizacao',item:'regularidade'}));await p.waitForTimeout(500);
+  ok(/contempla a atividade de vacinação\?[\s\S]*licença inicial/.test(await f.evaluate(()=>document.querySelector('[data-rs-q="lic"]').innerText)),'vacinação em drogaria: pergunta da licença com a orientação para licença inicial');
+  await R('lic','na');
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'ambientes'}));await p.waitForTimeout(500);
+  await R('recepcao','c');let s=await st();ok(Object.values(s.pt.recepcao).join('')==='CCC','vacinação em drogaria: Sim marca todos os itens como Atende');
+  await P('recepcao','dimensionada','NC');s=await st();ok(s.r.recepcao==='nc','vacinação em drogaria: um item Não atende muda a resposta para Não');
+  await R('sanitario','c');await R('sala','c');
+  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'sala'}));await p.waitForTimeout(500);
+  await P('mobiliario','maca','NC');await R('mobiliario','c');s=await st();ok(s.r.mobiliario==='c'&&s.pt.mobiliario.maca==='C','vacinação em drogaria: Sim depois de um Não atende deixa a lista coerente');
+  await p.waitForTimeout(1200);
+  await f.evaluate(()=>document.querySelector('[data-rs-pt="descarte|perfuro|NC"]').scrollIntoView({block:'center'}));await p.waitForTimeout(250);
+  const y0=await f.evaluate(()=>Math.round(document.querySelector('[data-rs-pt="descarte|perfuro|NC"]').getBoundingClientRect().top));await P('descarte','perfuro','NC');await p.waitForTimeout(1100);
+  const y1=await f.evaluate(()=>Math.round(document.querySelector('[data-rs-pt="descarte|perfuro|NC"]').getBoundingClientRect().top));ok(Math.abs(y1-y0)<=2,'vacinação em drogaria: marcar item da lista não move a tela ('+y0+' → '+y1+')');
+  await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(1200);
+  const t=await f.evaluate(()=>document.querySelector('.rs-relatorio').innerText);
+  ok(/O estabelecimento dispõe de sanitário e sala de vacinação fechada por paredes em todo o perímetro e com porta\. A área de recepção não é dimensionada à demanda\./.test(t)&&!/Há sanitário\./.test(t),'vacinação em drogaria: conformidades do item numa frase só');
+  ok(/Trata-se de licença inicial da atividade de vacinação/.test(t),'vacinação em drogaria: licença inicial sai no relatório');
+  await p.close()}
+ /* Drogaria: responder não move a tela (âncora de rolagem) */
+ {const {p,f}=await T.abre('Medicamentos','drogaria','Drogaria','',{browser:b,viewport:{width:400,height:800}});
+  await f.evaluate(()=>document.querySelector('.ui-card-grid [data-card="2"]').click());await p.waitForTimeout(600);
+  await f.evaluate(()=>[...document.querySelectorAll('button')].find(x=>/Dispensação/.test(x.textContent)&&/Abrir/.test(x.textContent)).click());await p.waitForTimeout(700);
+  const S='[data-af-answer="area_dispensacao|mips|sim"]';
+  await f.evaluate(s=>document.querySelector(s).scrollIntoView({block:'center'}),S);await p.waitForTimeout(300);
+  const y0=await f.evaluate(s=>Math.round(document.querySelector(s).getBoundingClientRect().top),S);await f.evaluate(s=>document.querySelector(s).click(),S);await p.waitForTimeout(1300);
+  const y1=await f.evaluate(s=>Math.round(document.querySelector(s).getBoundingClientRect().top),S);ok(Math.abs(y1-y0)<=2,'drogaria: responder não move a tela ('+y0+' → '+y1+')');
+  await p.close()}
  await b.close();
 })().catch(e=>{T.falha(e.stack||e);process.exit(1)});

@@ -27,4 +27,6 @@ Object.assign(perg('spregula'), {
   c: 'O estabelecimento está cadastrado como gerador de resíduos de serviços de saúde no SP Regula.',
   nc: 'O estabelecimento não está cadastrado como gerador de resíduos de serviços de saúde no SP Regula.'});
 delete perg('spregula').pontos; delete perg('spregula').ncPontos;
+/* a resposta e a lista de itens andam juntas, sem contradição (10/11/2026) */
+d.pontosSeguem = true;
 module.exports = d;
