@@ -42,4 +42,16 @@ for (const [id, [nc, pts]] of Object.entries(PONTOS)) Object.assign(perg(id), {p
 d.leiBase = ['lei-municipal-13725-2004::artigo::46', 'lei-municipal-13725-2004::artigo::50'];
 /* a resposta e a lista de itens andam juntas, sem contradição (10/11/2026) */
 d.pontosSeguem = true;
+/* Documentos nos modelos do POP-O-SNVS-011 rev. 3 (10/11/2026): o POP cita a RDC 887/2024 entre as
+   referências. Cada item do roteiro cai num item do Anexo I; `perguntas` desvia perguntas isoladas. */
+d.pop011 = {
+  itens: {autorizacoes: '2', cadeia: '11.2', equipe: '8', sgq: '11', documentos: '11.1', autoinspecao: '11.4', reclamacoes: '11.7', recolhimento: '11.3',
+    rastreabilidade: '9.2', areas: '9.2', recebimento: '9.1', transporte: '10', fracionamento: '10', dispensacao: '9.3'},
+  perguntas: {licenca: '1', rt: '8', organograma: '8', estrutura: '5', saude: '8.1', conduta: '8.1', mudancas: '11.6', pragas: '5', residuos: '11.5',
+    qualificacao: '11', calibracao: '11', manutencao: '11', sistema: '11.3', notas: '11.3', expedicao: '9.3'}
+};
+{ const itens = new Set(d.secoes.flatMap(s => s.itens.map(i => i.id))), pergs = new Set(d.secoes.flatMap(s => s.itens.flatMap(i => (i.perguntas || []).map(q => q.id))));
+  for (const k of Object.keys(d.pop011.itens)) if (!itens.has(k)) throw Error('pop011: item inexistente ' + k);
+  for (const k of Object.keys(d.pop011.perguntas)) if (!pergs.has(k)) throw Error('pop011: pergunta inexistente ' + k);
+  for (const s of d.secoes.slice(1)) for (const i of s.itens) if ((i.perguntas || []).length && !d.pop011.itens[i.id]) throw Error('pop011: item sem destino no Anexo I: ' + i.id); }
 module.exports = d;

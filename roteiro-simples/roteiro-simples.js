@@ -563,7 +563,9 @@
    + '<label class="pu-campo rs-largo"><span>Conclusão (se vazio, sai o texto padrão)</span><textarea data-rs-concl rows="4" placeholder="' + esc(D.relatorio.conclusao) + '">' + esc(st.concl || '') + '</textarea></label>'
    + '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-rs-copia>Copiar texto</button>' + (resp < tot.length ? '<button type="button" class="pu-btn" data-rs-pendente>Ir à próxima pendente</button>' : '') + '</div>'
    + '<p class="pu-q-ajuda">As fotos saem à parte, em PDF, no botão Fotos do cabeçalho.</p></div>'
-   + '<div class="pu-bloco rs-relatorio' + (PB ? ' rs-pb' : '') + '"><h3>Prévia do relatório</h3>' + blocosHtml(blocos()) + '</div>'; }
+   + '<div class="pu-bloco rs-relatorio' + (PB ? ' rs-pb' : '') + '"><h3>Prévia do relatório</h3>' + blocosHtml(blocos()) + '</div>';
+  /* D.pop011: documentos nos modelos do POP-O-SNVS-011 (roteiro-simples/pop011.js) */
+  if(D.pop011 && window.RsPop011) window.RsPop011.painel(el, {D: D, st: function(){ return st; }, salva: salva, visivel: visivel, ORDEM: ORDEM, PERG: PERG, ONDE: ONDE, frase: frase, fundamento: fundamento, esc: esc, fmtData: fmtData, baixa: baixa}); }
 
  /* ---------- fotos ---------- */
  function foto(id){ var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none'; document.body.appendChild(inp);

@@ -35,6 +35,7 @@ const PASSOS=[
  ['Padronização: Campo, Apagar dados, rótulos, progresso das seções, Atacadista e cor da resposta',['padronizacao.cjs']],
  ['Produtos: relatórios e Anexo III no modelo do POP-O-SNVS-013 rev. 9',['produtos-pop13.cjs']],
  ['Checklist de documentos: cartão, marcação, foto, Word à parte, exportar/importar e modalidades',['checklist-documentos.cjs']],
+ ['Atacadista de medicamentos e de gases: documentos nos modelos da Anvisa (POP-O-SNVS-011 e 023), roteiro e citações',['atacadista-modelos.cjs']],
  ['gases medicinais: navegação padrão e relatório',['padrao.cjs','Medicamentos','gases-medicinais','Atacadista de gases medicinais']],
  ['EAC em drogaria: navegação padrão e relatório',['padrao.cjs','Medicamentos','eac-drogaria','EAC em drogaria']],
  ['vacinação em drogaria: navegação padrão e relatório',['padrao.cjs','Medicamentos','vacina-drogaria','Vacinação em drogaria']],

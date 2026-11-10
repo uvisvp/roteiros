@@ -1,5 +1,5 @@
 {
-  "versao": "20261110-1",
+  "versao": "20261110-2",
   "banco": "13.1",
   "correcoes": 0,
   "notas": "Núcleo Medicamentos: EAC e Vacinação em drogaria como roteiros próprios, respostas Sim / Não em todo o núcleo, tela parada ao responder (não “anda sozinha”), perguntas compostas com lista de itens coerente com a resposta e relatório da vacinação com as conformidades numa frase só."
