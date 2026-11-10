@@ -506,6 +506,7 @@ function imagem(m) {
 }
 
 /* núcleo Medicamentos: EAC e Vacinação em drogaria (roteiros próprios, 09/11/2026) usam as mesmas listas */
-APPS['eac-drogaria'] = APPS['eac-tipo1'];
+/* EAC em drogaria: sem a designação do RT (a Certidão de Regularidade do CRF já a traz), pedido de 09/11/2026 */
+APPS['eac-drogaria'] = APPS['eac-tipo1'].filter(x => (Array.isArray(x) ? x[0] : x) !== 'rt');
 APPS['vacina-drogaria'] = APPS['vacinacao'];
 module.exports = {VERSAO, GRUPOS, DOCS, APPS};

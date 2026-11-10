@@ -45,8 +45,8 @@ function troca(de, para, rot) {
 }
 const casca = `(function(){
  var SO_DITADO=${JSON.stringify(SO_DITADO)};
- var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js', 'apagar-padrao.js', 'documentos.js'].map(le).join('\n'))};
- var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js', 'teclado.js'].map(le).join('\n'))};
+ var CAMPO_JS=${jsStr(['cnpj-guarda.js', 'campo.js', 'foto-marca.js', 'ditado.js', 'relatorio-pb.js', 'relatorio-frases.js', 'teclado.js', 'roteiro-citacoes.js', 'roteiro-saber-mais.js', 'cnpj-anvisa.js', 'apagar-padrao.js', 'documentos.js', 'ancora.js'].map(le).join('\n'))};
+ var DITADO_JS=${jsStr(['ditado.js', 'relatorio-pb.js', 'teclado.js', 'ancora.js'].map(le).join('\n'))};
  /* checklist de documentos: só a lista (e os textos legais) do roteiro aberto */
  var DOCS=null;function docsDe(app){try{if(!DOCS){var e=document.getElementById('campo--documentos');if(!e)return '';DOCS=JSON.parse(LZString.decompressFromBase64(e.textContent.trim()))}
   var a=DOCS.apps[app];if(!a)return '';var o=a.lista?{grupos:a.grupos,lista:a.lista}:{modalidades:a.modalidades},t={};
