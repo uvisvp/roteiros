@@ -50,6 +50,8 @@ function pagina(D, LEGAL, cor, blocks) {
     /* D.ocr: leitor de documentos (certidão do conselho etc.), o mesmo motor da drogaria */
     + (D.ocr ? ['rec--drogaria-ocr-tools.js', 'rec--ocr-extractors.js', 'rec--ocr-padrao.js'].map(b => `<script>${blocks.get(b).replace(/<\/script/gi, '<\\/script')}</script>`).join('') : '')
     + `<script>window.ROTEIRO=${dados};</script>`
+    /* D.pop011: documentos nos modelos do POP-O-SNVS-011 (relatório, comunicação de NC, par técnico) */
+    + (D.pop011 ? `<script>${le('roteiro-simples/pop011.js')}</script>` : '')
     + `<script>${le('roteiro-simples/roteiro-simples.js')}</script></body></html>`};
 }
 /* grava (ou troca) o bloco app--<app> antes da Central de Consultas */
