@@ -11,7 +11,14 @@
    Não se aplica, se todos N/A). O relatório usa UvsPontos.frase(id): a frase
    de irregularidade com os pontos não atendidos. Estado em localStorage (a
    chave vai nas Inspeções salvas); se o módulo apagar a resposta (Apagar tudo,
-   Nova inspeção), os pontos da pergunta também saem. */
+   Nova inspeção), os pontos da pergunta também saem.
+   Padronização de 11/11/2026 (a mesma do núcleo Medicamentos):
+   - a resposta e a lista nunca se contradizem. Cumpre marca todos os itens como “Atende”;
+     Não se aplica, todos como N/A; Não cumpre mantém os itens já marcados como “Não atende”
+     (sem nenhum, limpa a lista, para marcar o que falta); resposta desfeita limpa a lista.
+     A conferência é feita pelo estado da tela (resposta × lista gravada), a cada redesenho;
+   - a lista é recolocada na mesma hora em que o módulo redesenha a pergunta (antes, 30 ms
+     depois: a tela “piscava” e os botões saíam do lugar). */
 (function(){
  var D = window.__UVS_PONTOS; if(!D || window.UvsPontos) return;
  var KEY = D.chave, OPTS = [['C', 'Atende', 'ok'], ['NC', 'Não atende', 'nao'], ['NA', 'N/A', 'na']], RESP = ['c', 'nc', 'na'];
@@ -45,7 +52,7 @@
   if(v.every(function(x){ return x === 'C' || x === 'NA'; })) return v.every(function(x){ return x === 'NA'; }) ? 'na' : 'c';
   return ''; }
  function caixa(id){ var q = def(id), m = le()[id] || {}, n = q.p.filter(function(p){ return m[p[0]]; }).length, x = q.p.filter(function(p){ return m[p[0]] === 'NC'; }).length;
-  return '<p class="uvs-pontos-tit"><b>Checklist</b> <small>' + n + '/' + q.p.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + ' — o resultado acompanha os pontos</small></p>'
+  return '<p class="uvs-pontos-tit"><b>Itens exigidos</b> <small>' + n + '/' + q.p.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + ' — a resposta acompanha os itens</small></p>'
    + q.p.map(function(p){ return '<div class="uvs-ponto' + (m[p[0]] === 'NC' ? ' uvs-ponto-nc' : '') + '"><span>' + esc(p[1].charAt(0).toUpperCase() + p[1].slice(1)) + '</span><div class="uvs-ponto-tog" role="group" aria-label="' + esc(p[1]) + '">'
     + OPTS.map(function(o){ return '<button type="button" data-uvs-pt="' + esc(id + '¦' + p[0] + '¦' + o[0]) + '" data-v="' + o[2] + '" aria-pressed="' + (m[p[0]] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>'; }).join(''); }
  function injeta(){
@@ -53,14 +60,20 @@
   document.querySelectorAll('.pu-q').forEach(function(el){
    var id = qid(el); if(!id || !def(id)) return;
    s = s || le();
-   /* a resposta que o checklist marcou sumiu: o módulo apagou a pergunta */
-   if(s[id] && s[id]._r && !resposta(el)){ delete s[id]; mudou = true; }
+   /* a resposta mudou fora do checklist (botões da pergunta, “marcar pendentes”, apagar): a lista acompanha */
+   var r = resposta(el), m = s[id] || {}, troca = false;
+   if(r !== (m._r || '') && el.querySelector('.pu-resp')){ var q = def(id), n = {};
+    if(r === 'c' || r === 'na') q.p.forEach(function(p){ n[p[0]] = r === 'c' ? 'C' : 'NA'; });
+    else if(r === 'nc') q.p.forEach(function(p){ if(m[p[0]] === 'NC') n[p[0]] = 'NC'; });
+    if(r) n._r = r;
+    if(Object.keys(n).length) s[id] = n; else delete s[id];
+    mudou = troca = true; }
    var box = el.querySelector(':scope > .uvs-pontos');
    if(!box){ box = document.createElement('div'); box.className = 'uvs-pontos'; box.setAttribute('data-uvs-q', id);
     var r = el.querySelector('.pu-resp'); if(r && r.parentNode) r.parentNode.insertBefore(box, r.nextSibling); else el.appendChild(box); }
-   if(mudou || !box.childNodes.length) box.innerHTML = caixa(id);
+   if(troca){ grava(s); }
+   if(troca || !box.childNodes.length) box.innerHTML = caixa(id);
   });
-  if(mudou) grava(s);
  }
  document.addEventListener('click', function(e){
   var b = e.target.closest && e.target.closest('[data-uvs-pt]'); if(!b) return;
@@ -71,6 +84,7 @@
   var res = resultado(q, m); if(res) m._r = res;
   grava(s);
   var el = b.closest('.pu-q'), box = b.closest('.uvs-pontos'); if(box) box.innerHTML = caixa(id);
+  /* lista incompleta sem “Não atende”: a resposta anterior (se era do checklist) fica registrada como está */
   if(res && el) marca(el, res);
  }, true);
  var css = document.createElement('style');
@@ -85,8 +99,9 @@
   + '.uvs-ponto-tog button[aria-pressed=true][data-v=na]{background:#5d6e7a;border-color:#5d6e7a;color:#fff}'
   + '@media(max-width:560px){.uvs-ponto{grid-template-columns:1fr}.uvs-ponto-tog{justify-self:stretch;grid-template-columns:repeat(3,minmax(0,1fr))}}';
  (document.head || document.documentElement).appendChild(css);
- var agenda = null;
- new MutationObserver(function(){ if(agenda) return; agenda = setTimeout(function(){ agenda = null; injeta(); }, 30); }).observe(document.documentElement, {childList: true, subtree: true});
+ /* na mesma hora do redesenho (antes de o navegador pintar); as próprias inserções são descartadas */
+ var dentro = false, obs = new MutationObserver(function(){ if(dentro) return; dentro = true; try { injeta(); } finally { obs.takeRecords(); dentro = false; } });
+ obs.observe(document.documentElement, {childList: true, subtree: true, attributes: true, attributeFilter: ['aria-pressed']});
  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injeta); else injeta();
  window.UvsPontos = {
   tem: function(id){ return !!def(id); },

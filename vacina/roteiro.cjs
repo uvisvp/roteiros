@@ -133,4 +133,28 @@ d.secoes.find(s => s.id === 'infra').itens.unshift({id: 'inventario', titulo: 'A
   campos: [INV.campo({ambientes: ['Recepção', 'Sala de vacinação', 'Sanitário', 'Depósito de material de limpeza', 'Área de resíduos', 'Copa / área de funcionários'], inf: ['vac_infra']})]});
 d.infracoes.find(i => i.id === 'vac_infra').r.push('rdc-63-2011::artigo::36');
 d.secoes.push({id: 'consulta', titulo: 'Calendários de vacinação', curto: 'Calendários', icone: 'note', itens: [copia(CALENDARIO)]});
+/* Enunciados das perguntas com lista de itens (11/11/2026): os mesmos aprovados na Vacinação em drogaria —
+   perguntam pelo conjunto; os itens ficam na lista. Vale para todos os tipos de estabelecimento. */
+require('../roteiro-simples/enunciados.cjs')(d, {
+  calendario: 'O Calendário Nacional de Vacinação do SUS está exposto ao usuário conforme o exigido?',
+  rt: 'A responsabilidade técnica do serviço de vacinação está designada?',
+  capacitacao: 'Os profissionais são capacitados periodicamente nos temas exigidos?',
+  registro_capac: 'As capacitações estão registradas com os dados exigidos?',
+  recepcao: 'A área de recepção atende aos requisitos?',
+  sala: 'A sala de vacinação é fechada conforme o exigido?',
+  mobiliario: 'A sala de vacinação tem o mobiliário obrigatório?',
+  descarte: 'A sala de vacinação tem os recipientes de descarte obrigatórios?',
+  caixa: 'A sala de vacinação tem os itens obrigatórios para as caixas térmicas?',
+  exclusivo: 'O equipamento de refrigeração das vacinas atende aos requisitos?',
+  temperatura: 'O controle da temperatura das vacinas atende aos requisitos?',
+  prescricao: 'A aplicação de vacinas fora do Calendário Nacional do SUS segue as regras de prescrição e dispensação?',
+  transporte: 'O transporte das vacinas atende aos requisitos?',
+  intercorrencia: 'O serviço garante o atendimento às intercorrências?',
+  cartao_sistema: 'As vacinas aplicadas são registradas nos meios exigidos?',
+  prontuario: 'O prontuário individual de vacinação atende aos requisitos?',
+  cartao: 'O cartão de vacinação traz, de forma legível, os dados exigidos?',
+  erros: 'Os erros de vacinação recebem o tratamento exigido?',
+  extra_aut: 'A vacinação extramuros atende às exigências de autorização?',
+  civp_emissao: 'A emissão do CIVP atende às exigências?'
+});
 module.exports = d;

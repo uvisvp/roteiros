@@ -120,8 +120,9 @@
     if(r.re.test(tx)){ qs[i].insertAdjacentHTML('beforeend', caixa(r)); break; } }
   });
  }
- var agenda = 0;
- function depois(){ if(agenda) return; agenda = setTimeout(function(){ agenda = 0; poe(); }, 40); }
- function liga(){ poe(); new MutationObserver(depois).observe(document.body, {childList: true, subtree: true}); }
+ /* na mesma hora do redesenho (antes, 40 ms depois: a caixa sumia e voltava, e a tela “piscava”) */
+ var dentro = false, obs = null;
+ function depois(){ if(dentro) return; dentro = true; try { poe(); } finally { if(obs) obs.takeRecords(); dentro = false; } }
+ function liga(){ poe(); obs = new MutationObserver(depois); obs.observe(document.body, {childList: true, subtree: true}); }
  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', liga); else liga();
 })();

@@ -304,3 +304,12 @@ module.exports = {
   ],
   secoes, infracoes: INFRACOES
 };
+
+/* Enunciados das perguntas com lista de itens (11/11/2026): perguntam pelo conjunto; os itens ficam na lista. */
+require('../roteiro-simples/enunciados.cjs')(module.exports, {
+  instrucoes: 'As instruções escritas das operações de transporte atendem aos requisitos?',
+  treinamento: 'O treinamento do pessoal envolvido atende aos requisitos?',
+  embalagem: 'O sistema de embalagem do material atende aos requisitos da sua classificação?',
+  validacao: 'A validação do acondicionamento e o monitoramento da temperatura atendem aos requisitos?',
+  acidente: 'O procedimento para acidente, avaria ou derramamento no trânsito tem o conteúdo exigido?'
+});

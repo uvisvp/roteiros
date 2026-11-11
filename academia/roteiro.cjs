@@ -510,3 +510,42 @@ module.exports.secoes.find(s => s.id === 'instal').itens.unshift({
       residuos: {rotulo: 'Área de resíduos', lista: [['r01', 'Recicláveis sujos', [P('11.3')], 'residuos'], ['r02', 'Recicláveis desorganizados', [P('11.3')], 'residuos'], ['r03', 'Recicláveis em local desprotegido', [P('11.3')], 'residuos'], ['r04', 'Área de resíduos sem revestimento lavável', [P('11.4')], 'residuos'], ['r05', 'Área de resíduos desprotegida', [P('11.4')], 'residuos'], ['r06', 'Área de resíduos incompatível com o volume gerado', [P('11.4')], 'residuos']]}
     }}]
 });
+
+/* Enunciados das perguntas com lista de itens (11/11/2026): perguntam pelo conjunto; os itens ficam na lista. */
+require('../roteiro-simples/enunciados.cjs')(module.exports, {
+  parq_aplic: 'O PAR-Q é aplicado aos alunos de 15 a 69 anos conforme o exigido?',
+  atestado_idade: 'O atestado médico dos alunos com menos de 15 ou mais de 69 anos atende aos requisitos?',
+  federado: 'O exame médico prévio dos atletas federados atende aos requisitos?',
+  separados: 'Os sanitários e vestiários atendem aos requisitos?',
+  trocador: 'O trocador de fraldas tem os itens exigidos?',
+  colchonetes: 'A higienização dos colchonetes e assentos atende aos requisitos?',
+  aval_hig: 'A sala de avaliação física atende aos requisitos de higienização?',
+  dea_capac: 'Há pessoal capacitado no uso do desfibrilador, conforme o exigido?',
+  limpidez: 'A água do tanque atende aos requisitos de limpidez?',
+  recirc: 'O sistema de recirculação e tratamento da água do tanque atende aos requisitos?',
+  analises: 'Com cloro ou pH fora da faixa, ou sem monitoramento, foram apresentadas as análises exigidas da água?',
+  guardiao: 'O profissional responsável pela segurança dos banhistas atende aos requisitos?',
+  profundidade: 'A indicação de profundidade do tanque atende aos requisitos?',
+  perimetro: 'O perímetro e a borda do tanque atendem aos requisitos?',
+  revest: 'O revestimento interno e as escadas do tanque atendem aos requisitos?',
+  hidraulico: 'O sistema hidráulico do tanque atende aos requisitos de segurança?',
+  lp_uso: 'O lava-pés atende aos requisitos de acesso e de dimensão?',
+  lp_cloro: 'A água do lava-pés atende aos requisitos?',
+  lp_limpeza: 'A limpeza do lava-pés atende aos requisitos?',
+  cm_espaco: 'A casa de máquinas atende aos requisitos?',
+  reg_medicao: 'As medições de pH e de cloro são feitas e registradas conforme o exigido?',
+  reg_acidente: 'Os acidentes com fezes, vômito ou animal morto no tanque são registrados com os dados exigidos?',
+  pop_piscina: 'Os POPs da piscina têm o conteúdo exigido?',
+  banheiras: 'As banheiras e os recipientes de banho atendem aos requisitos?',
+  sauna_estr: 'A sauna atende aos requisitos de estrutura e de segurança?',
+  sauna_chuveiro: 'A sauna atende aos requisitos de chuveiros, água e aromatizantes?',
+  prod_reg: 'Os produtos de interesse da saúde usados ou vendidos atendem aos requisitos?',
+  alimentos: 'Havendo manipulação de alimentos, os requisitos estão atendidos?',
+  reservatorio: 'O reservatório de água potável atende aos requisitos?',
+  res_limpeza: 'A limpeza e a desinfecção do reservatório estão comprovadas conforme o exigido?',
+  bebedouros: 'Os bebedouros e filtros atendem aos requisitos?',
+  pragas: 'O controle de pragas atende aos requisitos?',
+  epi: 'Os EPIs atendem aos requisitos?',
+  pops_gerais: 'Os POPs de higienização e do reservatório atendem aos requisitos?',
+  docs_disp: 'A guarda dos documentos exigidos atende aos requisitos?'
+});

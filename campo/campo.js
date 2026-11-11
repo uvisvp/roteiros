@@ -138,7 +138,7 @@
    var txt=on?'⏳ Pendente de verificação — tocar para retirar':'⏳ Marcar como pendente';if(btn.textContent!==txt)btn.textContent=txt;
    if(btn.classList.contains('on')!==on)btn.classList.toggle('on',on);
    var cx=caixaGrupo(p);if(cx.classList.contains('cmp-pend')!==on)cx.classList.toggle('cmp-pend',on)})}
-  finally{setTimeout(function(){varre.ocupado=false},0)}}
+  finally{varre.ocupado=false}}
  function alternaPend(btn){var k=btn.dataset.k,p=btn.previousElementSibling;if(!k)return;
   if(C.pend[k])delete C.pend[k];else{var it=itemAtual();C.pend[k]={rotulo:p?rotuloGrupo(p):'',item:it?it.titulo:'',ts:agora()}}
   marcaInicio();grava();varre();pintaFab()}
@@ -404,7 +404,13 @@
    if(b.id==='uvs-fotos'&&adFotos()){e.preventDefault();e.stopImmediatePropagation();return abrePainel('fotos')}
    if(b.classList.contains('cmp-pbtn')){e.preventDefault();e.stopImmediatePropagation();return alternaPend(b)}
    emissao(e);if(!e.defaultPrevented)respondeu(b);setTimeout(function(){confereReinicio();pintaFab()},300)},true);
-  var tm=0;new MutationObserver(function(ms){if(varre.ocupado)return;if(ms.every(function(m){return m.target.closest&&m.target.closest('#cmp-painel,#cmp-modal,#cmp-aviso,#cmp-fab')}))return;clearTimeout(tm);tm=setTimeout(varre,120)}).observe(document.body,{childList:true,subtree:true});
+  /* o botão “Marcar como pendente” volta na mesma hora em que o roteiro redesenha as perguntas (11/11/2026).
+     Antes voltava 120 ms depois: cada pergunta perdia a altura do botão por um instante e a tela “piscava”.
+     Só quando entram botões na página; as demais alterações seguem com a espera, para não pesar. */
+  var tm=0,obsV=new MutationObserver(function(ms){if(varre.ocupado)return;if(ms.every(function(m){return m.target.closest&&m.target.closest('#cmp-painel,#cmp-modal,#cmp-aviso,#cmp-fab')}))return;
+   var botoes=ms.some(function(m){return [].some.call(m.addedNodes,function(n){return n.nodeType===1&&!n.classList.contains('cmp-pbtn')&&(n.tagName==='BUTTON'||n.querySelector('button'))})});
+   if(botoes){clearTimeout(tm);varre();obsV.takeRecords();return}
+   clearTimeout(tm);tm=setTimeout(varre,120)});obsV.observe(document.body,{childList:true,subtree:true});
   window.addEventListener('change',function(e){var t=e.target;if(t&&t.type==='file'&&!t.closest('#cmp-painel')){clearTimeout(tFotos);tFotos=setTimeout(function(){registraFotos(true);tFotos=setTimeout(function(){registraFotos(true)},5000)},2500)}},true);
   /* fotos já existentes quando o roteiro abre ficam sem hora (não se sabe quando foram tiradas) */
   setTimeout(function(){registraFotos(false)},3000);
