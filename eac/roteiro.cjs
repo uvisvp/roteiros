@@ -872,5 +872,40 @@ function lei13725(secoes, infracoes) {
     q.r = q.r.filter(r => !eLei(r)).concat(l.length ? ord(l) : [LM(63)]);
   })));
 }
-module.exports = [1, 2, 3].map(monta);
+/* Enunciados das perguntas com lista de itens (11/11/2026): os mesmos aprovados no EAC em drogaria (Tipo I) e,
+   para as perguntas próprias dos Tipos II e III, a mesma forma — perguntam pelo conjunto; os itens ficam na lista. */
+const ENUNCIADOS = {
+  rt: 'A responsabilidade técnica e a supervisão do serviço de EAC atendem às exigências?',
+  iluminacao: 'A iluminação da sala de coleta e execução é adequada?',
+  mobiliario: 'A sala de coleta e execução dispõe dos itens obrigatórios?',
+  refrigerador: 'O equipamento de refrigeração dos produtos e controles atende aos requisitos?',
+  limpeza: 'A limpeza e a desinfecção dos ambientes atendem às exigências?',
+  saneantes: 'Os saneantes utilizados atendem às exigências?',
+  coletor_tipo: 'Os coletores de resíduos têm as características exigidas?',
+  descarte: 'O descarte dos perfurocortantes atende às exigências?',
+  manejo: 'O manejo dos sacos de resíduos atende às exigências?',
+  abrigo: 'O abrigo de resíduos atende às exigências?',
+  regularizados: 'Os produtos para diagnóstico in vitro, reagentes e equipamentos atendem às exigências de regularização e de uso?',
+  recebimento: 'O recebimento dos produtos é registrado com os dados exigidos?',
+  armazenamento: 'O armazenamento garante a conservação dos produtos?',
+  manutencao: 'A manutenção dos equipamentos está registrada conforme o exigido?',
+  calibracao: 'A calibração dos equipamentos atende às exigências?',
+  prazo_registros: 'A guarda e a alteração dos registros atendem às exigências?',
+  identificacao: 'O material biológico é identificado, na coleta ou no recebimento, com os dados mínimos?',
+  instrucoes_an: 'As instruções e a rastreabilidade da fase analítica atendem às exigências?',
+  criticos: 'Os valores críticos ou de alerta e a sua comunicação estão definidos?',
+  ciq: 'O controle interno da qualidade (CIQ) atende às exigências?'
+};
+const ENUNCIADOS_TIPO = {
+  2: {refrig_material: 'O equipamento de refrigeração do material biológico atende aos requisitos?'},
+  3: {iluminacao: 'A iluminação da sala de coleta é adequada?', refrigerador: 'Os equipamentos de temperatura controlada atendem aos requisitos?',
+    apoio_contrato: 'O contrato com o laboratório de apoio tem o conteúdo exigido?',
+    itin_reg: 'O serviço de EAC itinerante é regularizado conforme o exigido?', itin_exec: 'A execução dos EAC no serviço itinerante atende aos requisitos?',
+    itin_destino: 'O destino do material coletado e o controle da qualidade do serviço itinerante atendem aos requisitos?',
+    cd_reg: 'A Central de Distribuição atende aos requisitos de regularização?', cd_registro: 'A Central de Distribuição registra no recebimento as verificações exigidas?'},
+  23: {riscos: 'O gerenciamento de riscos tem os elementos exigidos?', fracionados: 'Os reagentes e insumos fracionados ou preparados no serviço atendem aos requisitos?',
+    transporte: 'O transporte do material biológico atende à RDC nº 504/2021?'}
+};
+const enunciados = require('../roteiro-simples/enunciados.cjs');
+module.exports = [1, 2, 3].map(monta).map((D, i) => enunciados(D, Object.assign({}, ENUNCIADOS, i ? ENUNCIADOS_TIPO[23] : {}, ENUNCIADOS_TIPO[i + 1] || {}), {opcional: true}));
 module.exports.monta = monta;
