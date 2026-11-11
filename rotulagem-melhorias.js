@@ -70,7 +70,14 @@
   if(n.length>=15&&n.length<=17)return 'processo';
   if(n.length>=8&&n.length<=11)return 'registro';
   return null}
- function smart(){var q=$('#food-smart-q');if(!q)return;var v=(q.value||'').trim();var md=modo(v);if(!md&&/[a-zà-ÿ]{3}/i.test(v)&&!/^ins\b/i.test(v)&&$('#p-produto')&&$('#p-produto').classList.contains('on')){(function tn(k){if(!$('#p-produto .rm-nome')){if(k<30)setTimeout(function(){tn(k+1)},100);return}prepararNome();ativaNome(true);var i=$('#pr-q');if(i)i.value=v;mostraNome(v)})(0);return}if(!md)return;
+ /* o termo digitado na busca inteligente segue para o campo do painel aberto (Suplementos, Aditivos) */
+ function preenche(sel,val,k){var i=[].find.call(document.querySelectorAll(sel),function(x){return x.offsetParent});if(!i){if((k||0)<40)setTimeout(function(){preenche(sel,val,(k||0)+1)},100);return}
+  i.value=val;i.dispatchEvent(new Event('input',{bubbles:true}));i.dispatchEvent(new Event('change',{bubbles:true}))}
+ function aditivo(val,k){var ab=[].find.call(document.querySelectorAll('#p-aditivos button,#p-aditivos [role=tab]'),function(x){return x.offsetParent&&/^Por aditivo/.test(x.textContent.trim())});
+  if(!ab){if((k||0)<40)setTimeout(function(){aditivo(val,(k||0)+1)},100);return}ab.click();setTimeout(function(){preenche('#p-aditivos input[type=search]',val)},120)}
+ function smart(){var q=$('#food-smart-q');if(!q)return;var v=(q.value||'').trim();var md=modo(v);
+  if(v&&$('#p-suplementos')&&$('#p-suplementos').classList.contains('on')){preenche('#p-suplementos input[type=search]',v);return}
+  if(v&&$('#p-aditivos')&&$('#p-aditivos').classList.contains('on')){aditivo(v.replace(/^ins\s*/i,''));return}if(!md&&/[a-zà-ÿ]{3}/i.test(v)&&!/^ins\b/i.test(v)&&$('#p-produto')&&$('#p-produto').classList.contains('on')){(function tn(k){if(!$('#p-produto .rm-nome')){if(k<30)setTimeout(function(){tn(k+1)},100);return}prepararNome();ativaNome(true);var i=$('#pr-q');if(i)i.value=v;mostraNome(v)})(0);return}if(!md)return;
   (function tenta(k){var t=$('#p-produto .consulta-tipo[data-tipo="'+md+'"]'),i=$('#pr-q');if(!t||!i){if(k<30)setTimeout(function(){tenta(k+1)},100);return}
    t.click();i.value=v;var bt=[].find.call(document.querySelectorAll('#p-produto button'),function(x){return x.textContent.trim()==='Consultar'});if(bt)bt.click()})(0)}
  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#food-smart-go'))setTimeout(smart,150)});
@@ -89,7 +96,9 @@
   var b=document.createElement('button');b.type='button';b.className='consulta-tipo rm-nome';b.textContent='Nome ou marca';b.setAttribute('aria-pressed','false');modos.appendChild(b);
   document.querySelectorAll('#p-produto .prov-nota').forEach(function(n){if(/não possui índice por nome/.test(n.textContent))n.textContent='A busca por nome ou marca usa o índice da cópia local dos alimentos registrados ou notificados na Anvisa. Produtos dispensados de registro não constam; ausência na lista não prova irregularidade.'})}
  function ativaNome(on){nomeOn=on;var modos=$('#p-produto .consulta-tipos');if(!modos)return;modos.querySelectorAll('.consulta-tipo').forEach(function(x){var s=x.classList.contains('rm-nome')?on:(on?false:x.classList.contains('on'));x.classList.toggle('on',s);x.setAttribute('aria-pressed',String(s))});
-  var i=$('#pr-q');if(on&&i){i.placeholder='ex.: biscoito recheado, nome da marca';i.inputMode='text'}}
+  var i=$('#pr-q');if(on&&i){i.placeholder='ex.: biscoito recheado, nome da marca';i.inputMode='text'}
+  /* a legenda do modo acompanha a busca por nome (antes ficava “Registro / notificação” ou “CNPJ”) */
+  if(on)[].forEach.call(document.querySelectorAll('#p-produto *'),function(x){if(!x.children.length&&/^Consulta selecionada:/.test(x.textContent))x.textContent='Consulta selecionada: Nome ou marca.'})}
  function mostraNome(txt){var res=$('#pr-res');if(!res)return;res.innerHTML='<div class="info-box">Consultando o índice de nomes…</div>';
   porNome(txt).then(function(r){var it=r.itens.slice(0,60);if(!it.length){res.innerHTML='<div class="aviso-box">Nenhum alimento registrado ou notificado começa com “'+esc(txt)+'”. Tente o início do nome do produto ou da marca, ou use a busca oficial.</div>';return}
    res.innerHTML='<div class="bloco"><h2>'+r.itens.length+' resultado(s) para “'+esc(txt)+'”'+(r.parcial?' — digite mais letras para refinar':'')+'</h2><p class="leg">Toque no produto para abrir a ficha completa pelo registro.</p><div class="rm-nomes">'+it.map(function(x,i){return '<button type="button" data-rm-reg="'+esc(x.registro)+'"><b>'+esc(x.produto)+'</b><span>'+esc([x.marca&&('marca '+x.marca),x.detentor,x.categoria].filter(Boolean).join(' · '))+'</span><span>'+esc(['reg./notif. '+x.registro,x.situacao].filter(Boolean).join(' · '))+'</span></button>'}).join('')+'</div>'+(r.itens.length>60?'<p class="leg">Mostrando 60 de '+r.itens.length+'. Refine o nome.</p>':'')+'</div>'})
