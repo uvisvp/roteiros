@@ -13,7 +13,8 @@
      lida do botão já descartado (topo 0) e a própria âncora levava o botão ao topo da tela;
    - a correção roda a cada alteração da página (MutationObserver), antes de o navegador
      pintar: some o “pisca” de 50 a 100 px que aparecia quando as caixas eram reinseridas;
-   - passa a valer também para as opções de perfil (chips) e para controles sem data-*. */
+   - passa a valer também para as opções de perfil (chips) e para controles sem data-*;
+   - a correção é instantânea mesmo onde a página usa rolagem suave (scroll-behavior:smooth). */
 (function(){
  'use strict';
  if(window.__uvsAncora)return;window.__uvsAncora=true;
@@ -46,7 +47,9 @@
  function corrige(){if(!alvo)return;if(Date.now()>alvo.fim){solta();return}
   var l=iguais(alvo.tag,alvo.d),e=l[alvo.i]||l[0];
   if(e&&(e.offsetParent||e.getClientRects().length)){var dif=e.getBoundingClientRect().top-alvo.top;
-   if(Math.abs(dif)>1){var r=rolador(e);if(r){var a=r.scrollTop;r.scrollTop=a+dif;dif-=r.scrollTop-a}if(Math.abs(dif)>1)window.scrollBy(0,dif)}}}
+   /* behavior 'instant': com scroll-behavior:smooth no roteiro (Produtos), a correção deslizava por ~300 ms */
+   if(Math.abs(dif)>1){var r=rolador(e);if(r){var a=r.scrollTop;try{r.scrollTo({top:a+dif,behavior:'instant'})}catch(x){r.scrollTop=a+dif}dif-=r.scrollTop-a}
+    if(Math.abs(dif)>1){try{window.scrollBy({top:dif,left:0,behavior:'instant'})}catch(x){window.scrollBy(0,dif)}}}}}
  function laco(){quadro=0;if(!alvo)return;corrige();if(alvo)quadro=requestAnimationFrame(laco)}
  function solta(){alvo=null;if(obs){obs.disconnect();obs=null}}
  document.addEventListener('click',marca,true);

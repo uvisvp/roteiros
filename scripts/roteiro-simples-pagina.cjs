@@ -42,7 +42,10 @@ function valida(D, LEGAL) {
 }
 function pagina(D, LEGAL, cor, blocks) {
   const legal = valida(D, LEGAL);
-  const dados = JSON.stringify({...D, cor, legal}).replace(/<\//g, '<\\/');
+  /* pontosSeguem é o padrão de todos os roteiros do motor (11/11/2026): a resposta e a lista de itens andam
+     juntas, sem contradição — Sim/Cumpre marca todos os itens como “Atende”; Não se aplica, todos como N/A;
+     Não/Não cumpre mantém os “Não atende”. Um roteiro pode desligar com pontosSeguem: false. */
+  const dados = JSON.stringify({pontosSeguem: true, ...D, cor, legal}).replace(/<\//g, '<\\/');
   return {legal, html: `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>${esc(D.titulo)}</title>`
     + `<style>${le('roteiro-simples/roteiro-simples.css')}</style></head><body>`
     + `<script>${blocks.get('rec--jszip.js')}</script>`

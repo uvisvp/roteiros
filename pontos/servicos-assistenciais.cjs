@@ -180,4 +180,8 @@ Q(E + 'normas e rotinas escritas de acolhida', 'Não há normas e rotinas escrit
 Q(E + 'plano de atendimento ou projeto terapêutico individual e acompanhamento', 'Não há: {}.', 'plano de atendimento ou projeto terapêutico individual', 'acompanhamento pelo serviço de referência');
 Q(E + 'encaminhamento dos usuários à rede de saúde', 'Não há: {}.', 'encaminhamento dos usuários à rede de saúde', 'fluxo de urgência');
 
+/* 11/11/2026: a pergunta repetida da Inspeção saiu (scripts/repack-assistenciais-repeticao.cjs); a lista de itens
+   que só existia nela passa ao documento correspondente */
+Q('Alvará sanitário atualizado, afixado', 'O alvará sanitário não atende: {}.', 'atualizado', 'afixado em local visível ao público');
+Q('Licença sanitária atualizada, afixada', 'A licença sanitária não está: {}.', 'atualizada', 'afixada em local visível ao público');
 module.exports = T;
