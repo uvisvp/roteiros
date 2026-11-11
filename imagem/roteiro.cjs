@@ -554,5 +554,16 @@ function monta(m) {
     secoes, infracoes
   };
 }
-module.exports = ['conv', 'mamo', 'tc', 'rm', 'us', 'hemo'].map(monta);
+/* Enunciados das perguntas com lista de itens (11/11/2026): perguntam pelo conjunto; os itens ficam na lista. */
+const ENUNCIADOS = {
+  rt: 'A designação do responsável técnico do setor e do substituto atende aos requisitos?',
+  testes: 'Os testes de aceitação e de constância dos equipamentos atendem aos requisitos?',
+  sala: 'A sala de exames atende aos requisitos de área controlada?',
+  sinal_luz: 'A sinalização da porta da sala de exames atende aos requisitos?',
+  epi: 'Os EPIs e os meios de imobilização do paciente atendem aos requisitos?',
+  levantamento: 'O levantamento radiométrico atende aos requisitos?',
+  dosimetro: 'A dosimetria individual dos trabalhadores expostos atende aos requisitos?'
+};
+const enunciados = require('../roteiro-simples/enunciados.cjs');
+module.exports = ['conv', 'mamo', 'tc', 'rm', 'us', 'hemo'].map(monta).map(D => enunciados(D, ENUNCIADOS, {opcional: true}));
 module.exports.monta = monta;
