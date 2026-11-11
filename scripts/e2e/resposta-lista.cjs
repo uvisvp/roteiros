@@ -82,6 +82,31 @@ const marcados=(f,pre,v)=>f.evaluate(([pre,v])=>[...document.querySelectorAll('[
    await clicaEMede(f,p,'[data-rs-r="'+id+'|c"]');ok(await marcados(f,id+'|')==='C'.repeat(n),app+': a resposta positiva deveria marcar os '+n+' itens como Atende ('+await marcados(f,id+'|')+')');
    const m=await clicaEMede(f,p,'[data-rs-r="'+id+'|na"]');if(m.t0!==null&&m.med[2]!==null)ok(m.max<=4,app+': a resposta saiu do lugar ('+JSON.stringify(m)+')')}
   ok(!erros.length,app+': erros de página — '+erros.join(' | '));await p.close()}
+ /* ---------- Sim / Não / Não se aplica em todos os núcleos; enunciados em Vacinação e EAC (Serviços) ---------- */
+ for(const [nuc,app,tit,qs] of [['Odontologia','odontologia','Odontologia',''],['Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento',''],['Produtos','produtos-correlatos','Atacadista / distribuidor','atividade=atacadista'],['Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi'],['Serviços','academia-piscina','Academias e piscinas',''],['Serviços','vacinacao','Vacinação','']]){
+  const {p,f,erros}=await T.abre(nuc,app,tit,qs,{browser:b,...V,carga:3500});
+  ok(await vaiAte(f,p,'#pu-conteudo .pu-resp button'),app+': nenhuma pergunta encontrada');
+  const rot=await f.evaluate(()=>[...new Set([...document.querySelectorAll('#pu-conteudo .pu-resp')].map(r=>[...r.querySelectorAll('button')].slice(0,3).map(x=>x.textContent.trim()).join(' / ')))].join(' ; '));
+  ok(/^Sim \/ Não( \/ Não se aplica)?( ; Sim \/ Não( \/ Não se aplica)?)*$/.test(rot),app+': respostas deveriam ser Sim / Não / Não se aplica — '+rot);
+  if(app==='vacinacao'){ok(await vaiAte(f,p,'[data-rs-q="mobiliario"]'),'vacinação: pergunta do mobiliário não encontrada');
+   const t=await f.evaluate(()=>document.querySelector('[data-rs-q="mobiliario"] .pu-q-texto').textContent);ok(/A sala de vacinação tem o mobiliário obrigatório\?/.test(t),'vacinação (Serviços): enunciado — '+t)}
+  ok(!erros.length,app+': erros de página — '+erros.join(' | '));await p.close()}
+ {const {p,f}=await T.abre('Serviços','eac-tipo3','EAC — Serviço Tipo III','',{browser:b,...V,carga:3500});
+  const t=await f.evaluate(()=>{const q=ROTEIRO.secoes.flatMap(s=>s.itens.flatMap(i=>i.perguntas||[]));return [q.find(x=>x.id==='ciq').t,q.find(x=>x.id==='refrigerador').t].join(' | ')});
+  ok(/O controle interno da qualidade \(CIQ\) atende às exigências\?/.test(t)&&/Os equipamentos de temperatura controlada atendem aos requisitos\?/.test(t),'EAC Tipo III: enunciados — '+t);await p.close()}
+ /* ---------- Manipulação: citações do Anexo VII abrem; lista suspensa fica no lugar ---------- */
+ {const {p,f,erros}=await T.abre('Medicamentos','farmacia-manipulacao','Farmácia com manipulação','',{browser:b,...V});
+  const r=await f.evaluate(async()=>{if(!window.LegisV12)return {sem:1};const base=await LegisV12.texto({law:'RDC nº 67/2007',device:'Regulamento Técnico · Item 5.1'});if(!base)return {rede:1};
+   const refs=[];for(const c of Object.values(APP_DATA.cards))for(const s of c.sections)for(const q of s.requirements)for(const x of q.refs||[])if(!String(x.text||'').trim())refs.push([q.id,x]);
+   const falha=[];for(const [id,x] of refs){let a=null;try{a=await LegisV12.texto({law:x.law,device:x.device})}catch(e){}if(!(a&&a.some(y=>y.exato&&String(y.texto).trim())))falha.push(id+': '+x.law+' '+x.device)}
+   const a=await LegisV12.texto({law:'RDC nº 67/2007',device:'Anexo VII · Item 5.6'});return {n:refs.length,falha,ex:a&&a[0].texto}});
+  if(r.rede)console.log('aviso: banco de legislação inacessível neste ambiente; citações da Manipulação não conferidas');
+  else{ok(!r.sem&&r.n>100&&!r.falha.length,'manipulação: citações sem texto que não abrem — '+(r.falha||[]).slice(0,5).join(' | '));ok(/^5\.6\. As balanças.*\(imprescindível\)$/.test(r.ex||''),'manipulação: item 5.6 do Anexo VII — '+r.ex)}
+  await f.evaluate(()=>document.querySelector('[data-open-card="1"]').click());await p.waitForTimeout(400);await f.evaluate(()=>document.querySelector('[data-man-item="i1.2"]').click());await p.waitForTimeout(500);
+  const S='[data-char-scalar="bases"]';await f.evaluate(s=>document.querySelector(s).scrollIntoView({block:'center'}),S);await p.waitForTimeout(300);
+  const topo=()=>f.evaluate(s=>Math.round(document.querySelector(s).getBoundingClientRect().top),S);const t0=await topo();await (await f.$(S)).focus();await p.keyboard.press('ArrowDown');await p.waitForTimeout(500);const t1=await topo();
+  ok(Math.abs(t1-t0)<=4,'manipulação: a lista suspensa saiu do lugar ('+t0+' → '+t1+')');
+  ok(!erros.length,'manipulação: erros de página — '+erros.join(' | '));await p.close()}
  await b.close();
  if(!process.exitCode)console.log('PASS: tela parada ao responder, lista de itens acompanhando a resposta (motor próprio e roteiro-simples), enunciados pelo conjunto e Serviços assistenciais sem exigência repetida.');
 })();

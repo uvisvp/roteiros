@@ -19,7 +19,7 @@
  'use strict';
  if(window.__uvsAncora)return;window.__uvsAncora=true;
  var FORA=/^data-(drg-rot|centrado|cmp-|uvs-cnpj)/,GRUPO='.answers,.pu-resp,.seg,.rs-ponto-tog,.uvs-ponto-tog,.chips,[role=group],[role=radiogroup]';
- var alvo=null,quadro=0,pre=null,obs=null;
+ var alvo=null,quadro=0,pre=null,obs=null,sel=null;
  function texto(e){return ((e.tagName==='INPUT'?(e.closest('label')||e).textContent:e.tagName==='SELECT'?(e.getAttribute('name')||e.id||''):e.textContent)||'').replace(/\s+/g,' ').trim().slice(0,80)}
  function dados(e){var o={},n=0;[].forEach.call(e.attributes,function(a){if(/^data-/.test(a.name)&&!FORA.test(a.name)){o[a.name]=a.value;n++}});
   if(e.tagName==='INPUT'&&e.hasAttribute('value')&&/^(checkbox|radio)$/.test(e.type)){o.value=e.getAttribute('value');}
@@ -35,7 +35,10 @@
  /* toque: o usuário assumiu a tela (para a correção em curso) e a posição do controle é guardada */
  function toque(ev){solta();var e=ev.type==='pointerdown'||ev.type==='touchstart'?controle(ev.target):null;pre=e?foto(e):null}
  function marca(ev){var e=controle(ev.target),f=null,recente=pre&&Date.now()-pre.t<1500;
-  if(e&&e.tagName==='SELECT')f=foto(e);                               /* lista: o toque que abriu a lista é antigo */
+  /* lista suspensa: vale a posição de quando recebeu o foco, se o usuário não rolou a página desde então
+     (no 'change' o roteiro pode já ter redesenhado a tela) */
+  if(ev.type==='input'&&!(e&&e.tagName==='SELECT'))return;            /* 'input' só interessa nas listas: há roteiro que redesenha nele e o 'change' não chega */
+  if(e&&e.tagName==='SELECT')f=(sel&&e.tagName===sel.tag&&bate(e,sel.d)?sel:null)||foto(e);
   else if(e&&recente&&e.tagName===pre.tag&&bate(e,pre.d))f=pre;        /* posição de antes do redesenho */
   else if(e)f=foto(e)||(recente?pre:null);
   else if(recente&&ev.type==='click'&&Date.now()-pre.t<700)f=pre;      /* o botão tocado foi trocado antes do clique */
@@ -52,7 +55,10 @@
     if(Math.abs(dif)>1){try{window.scrollBy({top:dif,left:0,behavior:'instant'})}catch(x){window.scrollBy(0,dif)}}}}}
  function laco(){quadro=0;if(!alvo)return;corrige();if(alvo)quadro=requestAnimationFrame(laco)}
  function solta(){alvo=null;if(obs){obs.disconnect();obs=null}}
+ document.addEventListener('focusin',function(ev){var t=ev.target;if(t&&t.tagName==='SELECT'&&!t.closest('#uvs-docs,dialog,[role=dialog]')){sel=foto(t);}},true);
  document.addEventListener('click',marca,true);
  document.addEventListener('change',marca,true);
+ document.addEventListener('input',marca,true);
+ ['wheel','touchmove'].forEach(function(n){window.addEventListener(n,function(){sel=null},{capture:true,passive:true})});
  ['touchstart','pointerdown','wheel','keydown'].forEach(function(n){window.addEventListener(n,toque,{capture:true,passive:true})});
 })();

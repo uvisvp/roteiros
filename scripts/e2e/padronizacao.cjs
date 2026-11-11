@@ -25,7 +25,7 @@ const ok = (c, m) => c ? console.log('ok  ' + m) : T.falha(m);
       const resumo = await f.evaluate(async () => {
         const L = UvisPadrao.lista(); let feito = false;
         for (const s of L) { for (const it of s.itens) { if (!it.total) continue; UvisPadrao.vai({aba: 'roteiro', secao: s.id, item: it.id}); await new Promise(r => setTimeout(r, 400));
-          const bt = [...document.querySelectorAll('.pu-resp button')].find(x => x.textContent.trim() === 'Cumpre'); if (bt) { bt.click(); feito = true; break; } } if (feito) break; }
+          const bt = [...document.querySelectorAll('.pu-resp button')].find(x => /^(Sim|Cumpre)$/.test(x.textContent.trim())); if (bt) { bt.click(); feito = true; break; } } if (feito) break; }
         await new Promise(r => setTimeout(r, 400)); MedCampo.abre('resumo'); await new Promise(r => setTimeout(r, 600));
         const t = (document.getElementById('cmp-painel') || {}).innerText || ''; return {cor: getComputedStyle([...document.querySelectorAll('.pu-resp button[aria-pressed=true]')][0] || document.body).backgroundColor, t};
       });

@@ -47,17 +47,41 @@ const TROCAS = [
    + "    });\n"
    + "    var arts = [];\n    var reArt = /art\\.?\\s*(\\d+)/gi, mArt;"]
 ];
+/* 4. Roteiro de inspeção da RDC 67/2007 (Anexo VII) e demais anexos em quadro: o banco guarda cada linha do
+      quadro em três blocos seguidos — o número (“18.1.1.”), a classificação (I, N, R ou INF) e o texto do item —,
+      sem identificador de item. As 163 citações “Anexo VII · Item …” da Manipulação não abriam nada. No
+      carregamento, cada trio vira um item (…::anexo-vii::anexo::vii::item::18-1-1) com o número, o texto e a
+      classificação por extenso. (11/11/2026) */
+const MARCA2 = '/* resolvedor: itens de anexo em quadro (número, classificação, texto) */';
+const ANCORA2 = "          mapa[base + no.id.slice(k + 14)] = no;\n        });";
+const QUADRO = ANCORA2 + "\n        " + MARCA2 + "\n"
+  + "        var CLASSE = {I: 'imprescindível', N: 'necessário', R: 'recomendável', INF: 'informativo'};\n"
+  + "        for (var qi = 0; qi + 1 < j.nos.length; qi++) {\n"
+  + "          var nb = j.nos[qi], mb = /^(.+?::anexo-([ivx]+))::bloco::/.exec(nb.id), nu = String(nb.texto || '').trim();\n"
+  + "          if (!mb || !/^\\d+(\\.\\d+)*\\.?$/.test(nu)) continue;\n"
+  + "          var c1 = j.nos[qi + 1], c2 = j.nos[qi + 2], cl = c1 && String(c1.texto || '').trim(), temCl = !!CLASSE[cl];\n"
+  + "          var tx = temCl ? c2 : c1;\n"
+  + "          if (!tx || tx.id.indexOf(mb[1] + '::bloco::') !== 0 || /^\\d+(\\.\\d+)*\\.?$/.test(String(tx.texto || '').trim())) continue;\n"
+  + "          var idItem = mb[1] + '::anexo::' + mb[2] + '::item::' + nu.replace(/\\.$/, '').replace(/\\./g, '-');\n"
+  + "          if (mapa[idItem]) continue;\n"
+  + "          mapa[idItem] = {id: idItem, norma: nb.norma, tipo: 'item', rotulo: 'Anexo ' + mb[2].toUpperCase() + ', item ' + nu.replace(/\\.$/, ''),\n"
+  + "            texto: nu.replace(/\\.$/, '') + '. ' + String(tx.texto || '').trim() + (temCl ? ' (' + CLASSE[cl] + ')' : ''), status_vigencia: nb.status_vigencia};\n"
+  + "        }";
 let feito = false;
 html = html.replace(/(<script type="text\/plain" id="([^"]+)">)([\s\S]*?)(<\/script>)/g, (m, a, id, enc, z) => {
   if (id !== ID) return m;
   feito = true;
   const src = lz.decompressFromBase64(enc.trim());
-  if (src.includes(MARCA)) return m;
   let s = src;
-  for (const [de, para] of TROCAS) {
+  if (!s.includes(MARCA)) for (const [de, para] of TROCAS) {
     if (s.split(de).length !== 2) throw Error('Trecho não localizado de forma única: ' + de.slice(0, 60));
     s = s.replace(de, () => para);
   }
+  if (!s.includes(MARCA2)) {
+    if (s.split(ANCORA2).length !== 2) throw Error('âncora do quadro não localizada');
+    s = s.replace(ANCORA2, () => QUADRO);
+  }
+  if (s === src) return m;
   new Function(s);
   const novo = lz.compressToBase64(s);
   if (lz.decompressFromBase64(novo) !== s) throw Error('round-trip ' + ID);
