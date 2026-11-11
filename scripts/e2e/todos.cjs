@@ -9,6 +9,7 @@ const PASSOS=[
  ['manipulação: respostas no relatório',['varredura.cjs','Medicamentos','farmacia-manipulacao','Farmácia com manipulação','',"document.querySelector('#cardGrid button, .ui-card-grid button')?.click();;document.querySelector('.man-item-card,[data-man-item]')?.click()"]],
  ['produtos: navegação padrão e relatório',['padrao.cjs','Produtos','produtos-correlatos','Atacadista / distribuidor','atividade=atacadista']],
  ['alimentos: navegação padrão e relatório',['padrao.cjs','Alimentos','servicos-alimentacao-roteiro','Inspeção do estabelecimento']],
+ ['alimentos: setores, atalhos, módulos por setor, filtragem, licenciamento e relatório',['alimentos-setores.cjs']],
  ['odontologia: navegação padrão e relatório',['padrao.cjs','Odontologia','odontologia','Odontologia']],
  ['serviços assistenciais (ILPI): navegação padrão e relatório',['padrao.cjs','Serviços assistenciais','servicos-assistenciais','ILPI','servico=ilpi']],
  ['academias e piscinas: navegação padrão e relatório',['padrao.cjs','Serviços','academia-piscina','Academias e piscinas']],

@@ -1,6 +1,6 @@
 {
-  "versao": "20261111-1",
+  "versao": "20261111-2",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Núcleo Medicamentos: EAC e Vacinação em drogaria como roteiros próprios, respostas Sim / Não em todo o núcleo, tela parada ao responder (não “anda sozinha”), perguntas compostas com lista de itens coerente com a resposta e relatório da vacinação com as conformidades numa frase só."
+  "notas": "Alimentos: inspeção por setores (atalhos para supermercado, restaurante, padaria…; açougue, padaria, frios, hortifrúti, rotisseria e demais setores com verificações próprias), o perfil esconde o que não se aplica, licenciamento sanitário (CMVS, CLI, MEI, isento) na identificação e documentos só no checklist. Rotulagem: busca inteligente leva o termo ao painel de Suplementos e Aditivos."
 }
