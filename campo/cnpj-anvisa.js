@@ -57,7 +57,7 @@
    var log=[x.descricao_tipo_de_logradouro,x.logradouro].filter(Boolean).join(' '),end=[[log,x.numero].filter(Boolean).join(', '),x.complemento,x.bairro,x.municipio&&(x.municipio+(x.uf?'/'+x.uf:'')),x.cep&&'CEP '+String(x.cep).replace(/\D/g,'').replace(/^(\d{5})(\d{3})$/,'$1-$2')].filter(Boolean).join(', ');
    var adm=(x.qsa||[]).filter(function(q){return /administrador/i.test(q.qualificacao_socio||'')})[0]||(x.qsa||[])[0];
    /* CNAE principal e secundários: o roteiro de alimentos sugere os setores por eles */
-   try{var cod=function(n){return String(n).replace(/\D/g,'').replace(/^(\d{4})(\d)(\d{2})$/,'$1-$2/$3')};window.dispatchEvent(new CustomEvent('uvs-cnpj-cnaes',{detail:[x.cnae_fiscal].concat((x.cnaes_secundarios||[]).map(function(c){return c&&c.codigo})).filter(Boolean).map(cod)}))}catch(e){}
+   try{var cod=function(n){return String(n).replace(/\D/g,'').replace(/^(\d{4})(\d)(\d{2})$/,'$1-$2/$3')};var lst=[x.cnae_fiscal].concat((x.cnaes_secundarios||[]).map(function(c){return c&&c.codigo})).filter(Boolean).map(cod);setTimeout(function(){window.dispatchEvent(new CustomEvent('uvs-cnpj-cnaes',{detail:lst}))},0)}catch(e){}
    return {razao:x.razao_social,fantasia:x.nome_fantasia,endereco:end,rl:adm&&adm.nome_socio,situacao:x.descricao_situacao_cadastral,cnae:x.cnae_fiscal?String(x.cnae_fiscal).replace(/^(\d{4})(\d)(\d{2})$/,'$1-$2/$3')+(x.cnae_fiscal_descricao?' — '+x.cnae_fiscal_descricao:''):''}})}
  function enche(el,val){var sc=escopo(el),n=0;[].forEach.call(sc.querySelectorAll('input,textarea'),function(inp){if(inp===el||!inp.offsetParent||/^(date|number|checkbox|radio|file)$/i.test(inp.type))return;var r=rot(inp);
    for(var k=0;k<ALVOS.length;k++)if(ALVOS[k][1].test(r)){n+=poe(inp,val[ALVOS[k][0]]);break}});return n}

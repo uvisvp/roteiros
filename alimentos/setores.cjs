@@ -114,7 +114,7 @@ const NOVOS = {
 const MODULOS = [
   {id: 'm-acougue', setor: 'acougue', title: 'Açougue', items: [
     {id: 'ac1', text: 'As carnes recebidas têm rotulagem íntegra, registro no serviço oficial de inspeção e temperatura dentro do limite (resfriadas até 7 °C; congeladas até 12 °C), ou conforme o fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7 e 5.8.', critical: true},
-    {id: 'ac2', text: 'Carne seca, carne de sol, charque e outros produtos cárneos vêm de estabelecimento com registro no órgão oficial competente.', legal: 'Portaria SMS nº 2.619/2011, item 9.12.', critical: true},
+    {id: 'ac2', text: 'Os produtos cárneos, como carne seca, carne de sol e charque, são provenientes de estabelecimento com registro no órgão oficial competente.', legal: 'Portaria SMS nº 2.619/2011, item 9.12.', critical: true},
     {id: 'ac3', text: 'As carnes manipuladas cruas ficam a no máximo 4 °C por até 3 dias, e as preparações com carne moída, empanadas, espetos e bife rolê, por até 2 dias, salvo indicação do fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 6.30, III e IV, e 6.31.1.', critical: true},
     {id: 'ac4', text: 'A carne moída é moída a pedido e na presença do comprador ou vem processada e embalada por estabelecimento regularizado.', legal: 'Portaria SMS nº 2.619/2011, itens 9.10 e 9.10.1.', critical: true},
     {id: 'ac5', text: 'O tempero e o empanamento de carnes ocorrem em local com os requisitos da área de pré-preparo, por funcionário com treinamento específico, sem preparações com carne moída e sem sais de cura.', legal: 'Portaria SMS nº 2.619/2011, itens 9.11, 9.11.1 e 17.3, III.'},
@@ -126,7 +126,7 @@ const MODULOS = [
     {id: 'px1', text: 'Os pescados recebidos têm rotulagem íntegra, registro no serviço oficial de inspeção e temperatura dentro do limite (resfriados crus até 3 °C; congelados até 12 °C), ou conforme o fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7 e 5.8.', critical: true},
     {id: 'px2', text: 'Os pescados manipulados crus ficam a no máximo 2 °C por até 3 dias, e os pós-cocção, a 2 °C por até 1 dia, salvo indicação do fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 6.30, V e IX, e 6.31.1.', critical: true},
     {id: 'px3', text: 'Peixes salgados e secos em embalagem de madeira estão rotulados e em equipamento de refrigeração exclusivo ou separados dos demais produtos.', legal: 'Portaria SMS nº 2.619/2011, item 6.25.'},
-    {id: 'px4', text: 'Na manipulação de pescados é usado avental plástico limpo e conservado, longe de fonte de calor.', legal: 'Portaria SMS nº 2.619/2011, item 15.10.'}
+    {id: 'px4', text: 'O avental plástico usado na manipulação de pescados é mantido limpo, conservado e longe de fonte de calor.', legal: 'Portaria SMS nº 2.619/2011, item 15.10.'}
   ]},
   {id: 'm-frios', setor: 'frios', title: 'Frios e laticínios fatiados', items: [
     {id: 'fr1', text: 'Frios e embutidos fatiados, picados ou moídos ficam a no máximo 4 °C por até 3 dias, e leite e derivados abertos, a 7 °C por até 5 dias, salvo indicação do fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 6.30, I e VII, e 6.31.1.', critical: true},
@@ -141,7 +141,7 @@ const MODULOS = [
   ]},
   {id: 'm-padaria', setor: 'padaria', title: 'Padaria e confeitaria', items: [
     {id: 'pd1', text: 'A área de produção é separada da área de venda, com fluxo ordenado e acesso restrito ao pessoal do setor.', legal: 'Portaria SMS nº 2.619/2011, itens 2.4 e 2.4.2.'},
-    {id: 'pd2', text: 'Produtos com cobertura ou recheio que exija refrigeração ficam a no máximo 5 °C por até 5 dias.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7, VI, f, 6.30, VI, e 6.31.1.', critical: true},
+    {id: 'pd2', text: 'Os produtos com cobertura ou recheio que exija refrigeração são mantidos a no máximo 5 °C por até 5 dias.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7, VI, f, 6.30, VI, e 6.31.1.', critical: true},
     {id: 'pd3', text: 'Pães e similares em autosserviço ficam em recipientes com protetores higiênicos, com pegadores, data de fabricação e validade afixadas e aviso para não tocar os alimentos com as mãos.', legal: 'Portaria SMS nº 2.619/2011, itens 9.9, 9.9.1 e 9.9.2.', critical: true},
     {id: 'pd4', text: 'Os produtos de fabricação própria embalados trazem denominação, ingredientes, validade e condições de conservação.', legal: 'Portaria SMS nº 2.619/2011, itens 8.2.1 e 8.2.2.'},
     {id: 'pd5', text: 'Cilindros, masseiras, batedeiras e fatiadores têm proteção nas zonas de perigo e são desmontados para a higienização.', legal: 'Portaria SMS nº 2.619/2011, itens 3.21 e 4.2.'}

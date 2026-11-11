@@ -240,7 +240,7 @@ function iniciaPadrao() {
     + '.pu-ativo .pu-link{border:0;background:none;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}';
   document.head.appendChild(css);
   /* CNAE da Receita (busca pelo CNPJ, campo/cnpj-anvisa.js): sugere setores */
-  window.addEventListener('uvs-cnpj-cnaes', function (e) { st.cnaesReceita = (e.detail || []).slice(0, 40); salva(); var n = UvisPadrao.estado(); if (n.secao === 'perfil') saRedesenha(); });
+  window.addEventListener('uvs-cnpj-cnaes', function (e) { st.cnaesReceita = (e.detail || []).slice(0, 40); salva(); var n = UvisPadrao.estado(); if (n.secao === 'perfil' && n.item === 'tipo') saRedesenha(); });
   var raiz = document.createElement('div'); raiz.id = 'pu-raiz'; document.body.insertBefore(raiz, document.body.firstChild);
   var semTipo = !saTipos().length;
   UvisPadrao.monta({
