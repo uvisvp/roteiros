@@ -41,8 +41,9 @@
    });
   });
  }
- var agenda = 0;
- function depois(){ if(agenda) return; agenda = setTimeout(function(){ agenda = 0; filtra(); }, 30); }
- function liga(){ filtra(); new MutationObserver(depois).observe(document.body, {childList: true, subtree: true}); }
+ /* na mesma hora do redesenho (antes, 30 ms depois: os botões de citação mudavam de tamanho com a tela já pintada) */
+ var dentro = false, obs = null;
+ function depois(){ if(dentro) return; dentro = true; try { filtra(); } finally { if(obs) obs.takeRecords(); dentro = false; } }
+ function liga(){ filtra(); obs = new MutationObserver(depois); obs.observe(document.body, {childList: true, subtree: true}); }
  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', liga); else liga();
 })();
