@@ -73,6 +73,8 @@
    linhas:function(){var out=[];if(!current)return out;
     /* como no relatório descritivo: a frase da constatação (com os pontos não atendidos do checklist) e, na irregularidade, o fundamento */
     var F=window.UvsFrase||function(t){return t},D=window.UvsFrase&&UvsFrase.doc;
+    /* características declaradas (assistenciais-perfil.inc.js) */
+    try{var ct=typeof asCaracTexto==='function'?asCaracTexto():'';if(ct)out.push({x:limpa(ct)})}catch(e){}
     ['doc','rot'].forEach(function(k){(current[k]||[]).forEach(function(it,i){var st=mark(k,i);if(!st)return;
      var fr=st==='NA'?'Não se aplica: '+limpa(it.i):((st==='NC'&&window.UvsPontos&&UvsPontos.frase(current.id+'|'+it.i))||(k==='doc'&&D?D(it.i,st==='C'?'c':'nc','O estabelecimento'):F(it.i,st==='C'?'c':'nc')));
      out.push({x:limpa(fr)+(st==='NC'?' Fundamento: '+limpa((window.UvsLei||function(c){return c})(it.l,current.id,it.g,it.i)):'')})})});

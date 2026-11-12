@@ -49,6 +49,7 @@ const PASSOS=[
  ['Produtos: inventário por requisito ligado às perguntas (sugestão pela resposta “Não”)',['produtos-inventario.cjs']],
  ['Serviços assistenciais: redação direta, licença uma vez, repetições fora da tela e fundamentos revistos',['assistenciais-revisao.cjs']],
  ['Odontologia: perfil pelo tipo de estabelecimento (atalhos, salas, listas recolhíveis), roteiro filtrado e conteúdo íntegro',['odontologia-perfil.cjs']],
+ ['Serviços assistenciais: modalidade dos demais acolhimentos e características do serviço filtram o roteiro',['assistenciais-perfil.cjs']],
  ['prévia do relatório na aba Relatório e cores da Central de Consultas',['relatorio-aba.cjs']],
  ['“Para saber mais” com fonte e Lei 13.725 só onde não há norma específica, no roteiro',['saber-mais-roteiros.cjs']],
  ['saber mais e orientações não escondem perguntas (odontologia)',['saber-mais.cjs','Odontologia','odontologia','Odontologia']],
