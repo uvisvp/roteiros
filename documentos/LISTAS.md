@@ -1936,6 +1936,9 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Programa e comprovantes de capacitação dos manipuladores**  
   Registro de cada treinamento: data, carga horária, conteúdo, participantes e quem ministrou.  
   Fundamento: Portaria SMS nº 2.619/2011, item 15.37; item 15.38
+- **Certificado de treinamento em manipulação de carnes temperadas** — _Se aplicável: açougue que prepara e tempera carnes._  
+  Certificado do responsável que trabalha no local, emitido por entidade de ensino com reconhecimento técnico, e comprovante de treinamento específico com registro nominal dos funcionários que temperam carnes.  
+  Fundamento: Portaria SMS nº 2.619/2011, item 17.3, III; Decreto Estadual nº 12.342/1978, art. 461, § 2º (redação do Decreto nº 66.634/2022); Resolução Conjunta SS/SAA nº 1/2001, arts. 2º e 3º
 
 ### Infraestrutura e higiene
 
@@ -1976,6 +1979,9 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 - **Controle da potabilidade da água de fonte alternativa** — _Se aplicável: fonte alternativa de água._  
   Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
   Fundamento: Portaria SMS nº 2.619/2011, item 14.10
+- **Carne moída resfriada de bovino embalada no açougue (11 POPs, com registro da temperatura na saída do moedor e do local de moagem)** — _Se aplicável: açougue que mói, embala e rotula carne na ausência do cliente._  
+  Higiene e saúde e capacitação dos funcionários, recepção das matérias-primas, higienização, água, resíduos, pragas, temperatura da moagem e do local, rastreabilidade do produto embalado e manutenção e calibração dos equipamentos; controles registrados.  
+  Fundamento: Decreto Estadual nº 12.342/1978, art. 461-C (redação do Decreto nº 66.634/2022)
 
 
 ### Registros conferidos na inspeção

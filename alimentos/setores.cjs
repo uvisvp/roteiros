@@ -112,14 +112,20 @@ const NOVOS = {
 
 /* módulos por setor: cada um vira um item da seção “Setores do estabelecimento” */
 const MODULOS = [
+  /* Açougue: Portaria SMS nº 2.619/2011 (municipal) e o Regulamento estadual (Decreto nº 12.342/1978, arts. 461 a 461-K,
+     redação dos Decretos nº 66.634/2022 e nº 66.739/2022), que revogou o Decreto nº 45.248/2000. Onde as duas divergem,
+     vale a mais restritiva: o estadual veda empanados e preparações à base de carne moída no açougue (art. 461-K, I);
+     a moagem prévia e a embalagem da carne moída bovina no próprio açougue seguem os arts. 461-B a 461-H. */
   {id: 'm-acougue', setor: 'acougue', title: 'Açougue', items: [
-    {id: 'ac1', text: 'As carnes recebidas têm rotulagem íntegra, registro no serviço oficial de inspeção e temperatura dentro do limite (resfriadas até 7 °C; congeladas até 12 °C), ou conforme o fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7 e 5.8.', critical: true},
+    {id: 'ac1', text: 'As carnes recebidas têm rotulagem íntegra, registro no serviço oficial de inspeção, temperatura dentro do limite (resfriadas até 7 °C; congeladas até 12 °C, ou conforme o fabricante) e procedência que permite rastrear a peça original.', legal: 'Portaria SMS nº 2.619/2011, itens 5.7 e 5.8; Decreto Estadual nº 12.342/1978 (redação do Decreto nº 66.634/2022), art. 461-A.', critical: true},
     {id: 'ac2', text: 'Os produtos cárneos, como carne seca, carne de sol e charque, são provenientes de estabelecimento com registro no órgão oficial competente.', legal: 'Portaria SMS nº 2.619/2011, item 9.12.', critical: true},
-    {id: 'ac3', text: 'As carnes manipuladas cruas ficam a no máximo 4 °C por até 3 dias, e as preparações com carne moída, empanadas, espetos e bife rolê, por até 2 dias, salvo indicação do fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 6.30, III e IV, e 6.31.1.', critical: true},
-    {id: 'ac4', text: 'A carne moída é moída a pedido e na presença do comprador ou vem processada e embalada por estabelecimento regularizado.', legal: 'Portaria SMS nº 2.619/2011, itens 9.10 e 9.10.1.', critical: true},
-    {id: 'ac5', text: 'O tempero e o empanamento de carnes ocorrem em local com os requisitos da área de pré-preparo, por funcionário com treinamento específico, sem preparações com carne moída e sem sais de cura.', legal: 'Portaria SMS nº 2.619/2011, itens 9.11, 9.11.1 e 17.3, III.'},
+    {id: 'ac3', text: 'As carnes manipuladas cruas, inclusive as temperadas, ficam a no máximo 4 °C por até 3 dias, e espetos e bife rolê, por até 2 dias, salvo indicação do fabricante.', legal: 'Portaria SMS nº 2.619/2011, itens 6.30, III e IV, e 6.31.1.', critical: true},
+    {id: 'ac4', text: 'A carne moída vendida sem embalagem é moída na presença do comprador, no tipo por ele pedido.', legal: 'Portaria SMS nº 2.619/2011, itens 9.10 e 9.10.1; Decreto Estadual nº 12.342/1978 (redação do Decreto nº 66.634/2022), arts. 461-I, 461-J e 461-K, IV e VII.', critical: true},
+    {id: 'ac9', text: 'A carne moída resfriada de bovino moída, embalada e rotulada no próprio açougue atende às exigências.', legal: 'Decreto Estadual nº 12.342/1978 (redação do Decreto nº 66.634/2022), arts. 461-B a 461-H e 461-K, parágrafo único.', critical: true},
+    {id: 'ac5', text: 'O preparo e o tempero de carnes atendem às exigências, com responsável treinado e certificado apresentado à autoridade sanitária.', legal: 'Portaria SMS nº 2.619/2011, itens 9.11, 9.11.1, 8.2.2 e 17.3, III; Decreto Estadual nº 12.342/1978 (redação do Decreto nº 66.634/2022), art. 461, § 1º, item 3, e § 2º; Resolução Conjunta SS/SAA nº 1/2001, arts. 1º a 3º.', critical: true},
+    {id: 'ac10', text: 'O açougue se limita às atividades permitidas.', legal: 'Decreto Estadual nº 12.342/1978, art. 461-K (Decretos nº 66.634/2022 e nº 66.739/2022); Portaria SMS nº 2.619/2011, item 9.11.1.', critical: true},
     {id: 'ac6', text: 'A carne descongelada exposta à venda segue a recomendação do fabricante, em equipamento próprio, identificada como descongelada, com a data do descongelamento e o aviso de não recongelar.', legal: 'Portaria SMS nº 2.619/2011, itens 9.13 e 9.14.'},
-    {id: 'ac7', text: 'Moedores, serras e fatiadores são desmontados para a higienização e têm proteção nas zonas de corte.', legal: 'Portaria SMS nº 2.619/2011, itens 3.21 e 4.2.'},
+    {id: 'ac7', text: 'Moedores, serras e fatiadores são desmontados para a higienização, o moedor ao menos uma vez ao dia, e têm proteção nas zonas de corte.', legal: 'Portaria SMS nº 2.619/2011, itens 3.21 e 4.2; Decreto Estadual nº 12.342/1978 (redação do Decreto nº 66.634/2022), art. 461-D.'},
     {id: 'ac8', text: 'No corte de carnes são usados luva de malha de aço e avental plástico, limpos e guardados protegidos.', legal: 'Portaria SMS nº 2.619/2011, itens 15.10 e 15.17.'}
   ]},
   {id: 'm-peixaria', setor: 'peixaria', title: 'Peixaria', items: [
