@@ -624,6 +624,8 @@ function montaMulti() {
   const ident = secoes.find(s => s.id === 'ident');
   ident.descricao = 'Dados do serviço e as modalidades que ele tem. As modalidades marcadas abrem as verificações; o perfil tira do roteiro o que não existir.';
   const perfil = ident.itens.find(i => i.id === 'perfil');
+  /* um serviço com vários equipamentos: as demais perguntas do perfil valem para o serviço inteiro */
+  perfil.descricao = 'Marque todas as modalidades do serviço: elas abrem as verificações. As demais perguntas valem para o serviço inteiro: responda Sim se alguma modalidade tiver (laudo no local, PACS, telerradiologia, unidade móvel); “Não” tira a verificação de todas.';
   perfil.campos.unshift({id: 'p_mod', rotulo: 'Modalidades do serviço', tipo: 'checks', largo: true, refaz: true, opcoes: MODS.map(m => [m, MOD[m].titulo])});
   /* equipamentos: os tipos de todas as modalidades, com a data do levantamento radiométrico */
   const eq = secoes.find(s => s.id === 'qualidade').itens.find(i => i.id === 'equipamentos');

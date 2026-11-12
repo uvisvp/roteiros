@@ -109,6 +109,7 @@ const secoes = [
         orient: [
           {t: 'Serviço de saúde é o estabelecimento destinado a prestar assistência à população na prevenção de doenças, no tratamento, na recuperação e na reabilitação. O serviço de estética em que o procedimento é executado por profissional de saúde, dentro do que o respectivo conselho autoriza, segue as boas práticas da RDC 63/2011 e é o objeto do ROI de Estética da Anvisa.', f: 'RDC Anvisa nº 63/2011, art. 4º, XII; ' + ROI},
           {t: 'Técnico em estética e esteticista e cosmetólogo trabalham com produtos cosméticos, técnicas e equipamentos com registro na Anvisa; a lei deles não abrange a estética médica. O estabelecimento só com esses profissionais é de interesse à saúde: cumpre a biossegurança e a legislação sanitária, mas não as exigências próprias de serviço de saúde (RT de nível superior, prontuário, plano de segurança do paciente).', f: 'Lei Federal nº 13.643/2018, arts. 1º, parágrafo único, 5º, I, e 8º; Lei Municipal nº 13.725/2004, art. 69'},
+          {t: 'Profissionais de beleza (cabeleireiro, barbeiro, esteticista, manicure, pedicure, depilador e maquiador) devem obedecer às normas sanitárias e esterilizar os materiais e utensílios usados no atendimento: é a Lei 12.592/2012, art. 4º, citada na biossegurança do interesse à saúde. A Lei 13.643/2018 (formação, limites de atuação e art. 8º) só vale para esteticista e técnico em estética. Por isso, marque as atividades do estabelecimento: sem procedimentos estéticos, a Lei 13.643/2018 sai das citações e da capitulação.', f: 'Lei Federal nº 12.592/2012, arts. 1º e 4º; Lei Federal nº 13.643/2018, arts. 1º e 8º'},
           {t: 'A Nota Técnica nº 2/2024/GGTES/Anvisa (orientações sobre serviços de estética e embelezamento) está suspensa desde 23/09/2026, enquanto um Grupo de Trabalho reavalia o tema. As normas sanitárias continuam valendo, e a suspensão não autoriza procedimento, produto ou prática vedados. Este roteiro não usa a nota: a classificação se apoia nas normas citadas.', f: 'Anvisa, notícia “Anvisa suspende temporariamente Nota Técnica sobre serviços de estética” (23/09/2026)'}
         ]}
     ]
@@ -476,7 +477,21 @@ secoes.forEach(s => s.itens.forEach(i => {
 }));
 /* formação e limites do esteticista (Lei 13.643): só com estética entre as atividades, ou sem resposta */
 const SO_ESTETICISTA = new Set(['i03', 'i04', 'i05', 'i06']);
-const infracoes = CAT.infracoes.map(x => Object.assign({id: x.id, grupo: x.grupo, texto: x.texto, fund: x.fund, r: x.r, se: x.perfil === 'saude' ? SAUDE : SO_ESTETICISTA.has(x.id) ? {todos: [INT, ESTETICISTA]} : INT}, usadas.has(x.id) ? {} : {avulsa: true}));
+/* capitulação de biossegurança no interesse à saúde (12/11/2026): onde o catálogo dizia “c/c art. 8º da Lei
+   Federal nº 13.643/2018, quando aplicável”, entra a Lei 12.592/2012, art. 4º, que vale para todos os
+   profissionais de beleza; a Lei 13.643 fica “para esteticista e técnico em estética” e sai quando as
+   atividades marcadas não incluem procedimentos estéticos (fundSe). O texto do catálogo não muda. */
+const C8 = ' c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável';
+/* atividades marcadas, sem procedimentos estéticos */
+const SEM_ESTETICA = {nao: ESTETICISTA};
+const capitula = x => {
+  if (!x.fund.endsWith(C8)) return {fund: x.fund, r: x.r};
+  const base = x.fund.slice(0, -C8.length), r = x.r.slice(), k = r.indexOf('lei-federal-13643-2018::a8');
+  r.splice(k < 0 ? r.length : k, 0, 'lei-federal-12592-2012::a4');
+  return {fund: base + ' c/c art. 4º da Lei Federal nº 12.592/2012 e, para esteticista e técnico em estética, art. 8º da Lei Federal nº 13.643/2018', r,
+    fundSe: [[SEM_ESTETICA, base + ' c/c art. 4º da Lei Federal nº 12.592/2012']]};
+};
+const infracoes = CAT.infracoes.map(x => Object.assign({id: x.id, grupo: x.grupo, texto: x.texto}, x.perfil === 'saude' ? {fund: x.fund, r: x.r} : capitula(x), {se: x.perfil === 'saude' ? SAUDE : SO_ESTETICISTA.has(x.id) ? {todos: [INT, ESTETICISTA]} : INT}, usadas.has(x.id) ? {} : {avulsa: true}));
 
 module.exports = {
   app: 'estetica',
@@ -489,6 +504,8 @@ module.exports = {
   filtroPerfil: true,
   naOculta: true,
   refsSe: {'lei-federal-13643-2018::': ESTETICISTA},
+  /* aviso (pedido de 12/11/2026): a capitulação de biossegurança depende das atividades marcadas */
+  avisoInf: [{se: {todos: [INT, {campo: 'p_ativ', vazio: true}]}, t: 'Atividades do estabelecimento sem resposta: a capitulação cita a Lei 12.592/2012, art. 4º, e, para esteticista e técnico em estética, a Lei 13.643/2018, art. 8º. Marque as atividades em Identificação › Perfil: sem procedimentos estéticos (só salão, barbearia, manicure, depilação ou maquiagem), sai a Lei 13.643/2018.'}],
   constatacao: true,
   perfilRotulo: 'Classificação e atividades',
   relatorio: {

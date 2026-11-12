@@ -49,9 +49,16 @@ const doRoteiro = app => new Set(SEIS.find(D => D.app === app).secoes.flatMap(s 
   ok((await perguntas(f)).length === todasQ.size, 'as seis modalidades: todas as ' + todasQ.size + ' perguntas');
   if (erros.length) T.falha('erros de página: ' + erros.join(' | '));
   await p.close();
-  /* os seis roteiros por modalidade continuam */
+  /* o card abre direto o roteiro único; os seis por modalidade saíram do card, mas ainda abrem (inspeção salva) */
+  { const q = await b.newPage({viewport: {width: 430, height: 900}}); q.on('dialog', d => d.accept());
+    await q.goto(T.INDEX); await q.waitForTimeout(1200);
+    await q.evaluate(() => document.querySelector('[data-nucleo="Serviços"]').click()); await q.waitForTimeout(400);
+    await q.evaluate(() => [...document.querySelectorAll('#lista-corpo .rot-card')].find(x => /Diagnóstico por imagem/.test(x.textContent)).click()); await q.waitForTimeout(4500);
+    const g = q.frames().find(x => x !== q.mainFrame());
+    ok(!!g && await g.evaluate(() => window.ROTEIRO && ROTEIRO.app) === 'imagem-servico', 'card “Diagnóstico por imagem” abre direto o roteiro único');
+    await q.close(); }
   const r = await T.abre('Serviços', 'imagem-convencional', 'Radiologia convencional', '', {browser: b});
-  ok((await secoes(r.f)).includes('modalidade'), 'roteiro por modalidade continua no card');
+  ok((await secoes(r.f)).includes('modalidade'), 'roteiro por modalidade fora do card ainda abre (inspeção salva)');
   await r.p.close();
   await b.close();
   if (!process.exitCode) console.log('PASS: Diagnóstico por imagem — um roteiro para uma ou mais modalidades, conteúdo íntegro.');

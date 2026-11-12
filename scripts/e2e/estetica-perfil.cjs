@@ -37,6 +37,9 @@ const rel = f => f.evaluate(() => { const e = UvisPadrao.estado(); UvisPadrao.va
   /* interesse à saúde: salão (cabeleireiro e manicure) */
   await sel(f, 'p_tipo', 'interesse'); await p.waitForTimeout(400);
   ok((await itens(f)).includes('rh'), 'atividades sem resposta: a formação do esteticista continua');
+  await f.evaluate(() => UvisPadrao.vai({aba: 'infracoes'})); await p.waitForTimeout(400);
+  let av = await f.evaluate(() => ({aviso: (document.querySelector('.rs-aviso-inf') || {}).textContent || '', cap: document.querySelector('input[data-rs-inf="i21"]').closest('.rs-inf').textContent}));
+  ok(/Atividades do estabelecimento sem resposta/.test(av.aviso) && /art\. 4º da Lei Federal nº 12\.592\/2012 e, para esteticista e técnico em estética, art\. 8º da Lei Federal nº 13\.643\/2018/.test(av.cap), 'atividades sem resposta: aviso na aba Infrações e capitulação com as duas leis');
   await marca(f, 'cabelo', true); await marca(f, 'unhas', true); await p.waitForTimeout(400);
   it = await itens(f);
   ok(!it.includes('rh'), 'salão sem procedimentos estéticos: sai a formação do esteticista');
@@ -45,6 +48,8 @@ const rel = f => f.evaluate(() => { const e = UvisPadrao.estado(); UvisPadrao.va
   await f.evaluate(() => UvisPadrao.vai({aba: 'infracoes'})); await p.waitForTimeout(400);
   const inf = await f.evaluate(() => [...document.querySelectorAll('input[data-rs-inf]')].map(x => x.dataset.rsInf));
   ok(inf.length === 32 && !inf.includes('i03') && inf.includes('i31'), 'salão: 32 enquadramentos, sem os da formação do esteticista');
+  av = await f.evaluate(() => ({aviso: !!document.querySelector('.rs-aviso-inf'), cap: document.querySelector('input[data-rs-inf="i21"]').closest('.rs-inf').textContent}));
+  ok(!av.aviso && /c\/c art\. 4º da Lei Federal nº 12\.592\/2012$/.test(av.cap.trim()) && !/13\.643/.test(av.cap), 'salão: capitulação só com a Lei 12.592, art. 4º, e sem o aviso');
   await f.evaluate(() => { UvisPadrao.vai({aba: 'roteiro', secao: 'bio', item: 'epi'}); const q = document.querySelector('[data-rs-q="epi_i"]'); [...q.querySelectorAll('.pu-resp button')].find(b => b.textContent.trim() === 'Não').click(); }); await p.waitForTimeout(300);
   let r = await rel(f);
   ok(/Atividades do estabelecimento: Cabeleireiro ou barbeiro, Manicure ou pedicure/.test(r), 'relatório: atividades do estabelecimento');
@@ -56,7 +61,7 @@ const rel = f => f.evaluate(() => { const e = UvisPadrao.estado(); UvisPadrao.va
   ok(/Fundamento: Lei Federal nº 12\.592\/2012, art\. 4º; Lei Federal nº 13\.643\/2018, art\. 8º; Lei Municipal nº 13\.725\/2004, art\. 69\./.test(r), 'com procedimentos estéticos: Leis 12.592 e 13.643');
   /* toda pergunta aparece em algum perfil (condições do roteiro avaliadas aqui, como no motor) */
   const D = require('../../estetica/roteiro.cjs');
-  const cond = (c, m) => { if (!c) return true; if (c.todos) return c.todos.every(x => cond(x, m)); if (c.algum) return c.algum.some(x => cond(x, m)); const v = m[c.campo];
+  const cond = (c, m) => { if (!c) return true; if (c.todos) return c.todos.every(x => cond(x, m)); if (c.algum) return c.algum.some(x => cond(x, m)); if (c.nao) return !cond(c.nao, m); const v = m[c.campo];
     if (c.vazio) return Array.isArray(v) ? !v.length : (v == null || v === ''); if (c.inclui) return Array.isArray(v) && v.includes(c.inclui); if (c.em) return c.em.includes(v); if (c.igual !== undefined) return v === c.igual; return true; };
   const vistas = new Set();
   for (const tipo of ['saude', 'interesse']) for (const ativ of [[], ['estetica'], ['cabelo']]) for (const proc of ['', 'interno', 'externo']) {

@@ -39,8 +39,8 @@
  D.secoes.forEach(function(s, si){ s.itens.forEach(function(it, ii){ (it.perguntas || []).forEach(function(q, qi){ PERG[q.id] = q; ONDE[q.id] = {s: s, it: it, n: (si + 1) + '.' + (ii + 1) + '.' + (qi + 1)}; ORDEM.push(q.id); }); }); });
  var INF = {}; D.infracoes.forEach(function(i){ INF[i.id] = i; });
  /* condição do perfil: {campo, igual} | {campo, em: [...]} | {campo, inclui} (lista marcada) | {campo, incluiAlgum: [...]}
-    | {campo, vazio: true} (sem resposta) | {todos: [cond...]} | {algum: [cond...]} */
- function cond(c){ if(!c) return true; if(c.todos) return c.todos.every(cond); if(c.algum) return c.algum.some(cond);
+    | {campo, vazio: true} (sem resposta) | {todos: [cond...]} | {algum: [cond...]} | {nao: cond} */
+ function cond(c){ if(!c) return true; if(c.todos) return c.todos.every(cond); if(c.algum) return c.algum.some(cond); if(c.nao) return !cond(c.nao);
   var v = st.meta[c.campo]; if(c.vazio) return Array.isArray(v) ? !v.length : (v == null || v === '');
   if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.incluiAlgum) return Array.isArray(v) && c.incluiAlgum.some(function(x){ return v.indexOf(x) >= 0; });
   if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
@@ -560,12 +560,15 @@
  /* D.constatacao: a infração marcada abre o campo “Constatação”; preenchido, ele descreve a infração no enquadramento */
  function notaInf(i){ return D.constatacao ? String((st.infNota || {})[i.id] || '').trim() : ''; }
  /* i.fund: capitulação já redigida no catálogo (“art. 63 da Lei 13.725/2004 c/c art. 39 da RDC 63/2011”) */
- function fundInf(i){ return i.fund || fundamento(comLei(i.r)); }
+ /* i.fundSe [[condição, capitulação]]: a capitulação que vale para o perfil (a primeira condição que bate) */
+ function fundInf(i){ var a = (i.fundSe || []).filter(function(x){ return cond(x[0]); })[0]; return a ? a[1] : (i.fund || fundamento(comLei(i.r))); }
+ /* D.avisoInf [{se, t}]: aviso no alto da aba Infrações enquanto a condição vale (ex.: perfil ainda sem a resposta que define a capitulação) */
+ function avisoInf(){ return (D.avisoInf || []).filter(function(a){ return cond(a.se); }).map(function(a){ return '<div class="pu-bloco pu-aviso rs-aviso-inf"><p>' + esc(a.t) + '</p></div>'; }).join(''); }
  function descInf(i){ var n = notaInf(i); return n ? n.charAt(0).toUpperCase() + n.slice(1) + (/[.!?]$/.test(n) ? '' : '.') : i.texto; }
  function abaInfracoes(el){ var sug = sugeridas(), grupos = [], INFS = D.infracoes.filter(infVisivel);
   INFS.forEach(function(i){ if(grupos.indexOf(i.grupo) < 0) grupos.push(i.grupo); });
   var nsug = Object.keys(sug).filter(function(k){ return !st.inf[k]; }).length;
-  el.innerHTML = '<div class="pu-bloco"><h3>Enquadramento das infrações</h3><p>Marque as infrações que serão enquadradas. As sugeridas vêm dos itens marcados como “Não cumpre”. O enquadramento sai no relatório, em tabela própria.</p>'
+  el.innerHTML = avisoInf() + '<div class="pu-bloco"><h3>Enquadramento das infrações</h3><p>Marque as infrações que serão enquadradas. As sugeridas vêm dos itens marcados como “Não cumpre”. O enquadramento sai no relatório, em tabela própria.</p>'
    + (nsug ? '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-sugeridas>Marcar as ' + nsug + ' sugeridas</button></div>' : '') + '</div>'
    + grupos.map(function(g){ return '<div class="pu-bloco rs-inf-grupo"><h3>' + esc(g) + '</h3>' + INFS.filter(function(i){ return i.grupo === g; }).map(function(i){
      return '<label class="rs-inf' + (sug[i.id] ? ' rs-sug' : '') + '"><input type="checkbox" data-rs-inf="' + esc(i.id) + '"' + (st.inf[i.id] ? ' checked' : '') + '><span><b>' + esc(i.texto) + '</b><small>' + esc(fundInf(i)) + '</small>'
