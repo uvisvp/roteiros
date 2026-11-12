@@ -71,21 +71,45 @@
   "texto": "Art. 2º Todo equipamento de fluoroscopia ou de radiologia intervencionista deve possuir, além do estabelecido nas demais normativas aplicáveis:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;\nII - dispositivo para controlar o tempo acumulado de fluoroscopia, de modo que:\na) o tempo não exceda 5 (cinco) minutos sem que o dispositivo seja reajustado ou reiniciado; e\nb) produza alarme sonoro audível na sala de exames, o qual indique o término do tempo pré-selecionado e continue soando enquanto os raios X são emitidos, até que o dispositivo seja reajustado ou reiniciado;\nIII - filtração total permanente do feixe útil de radiação em qualquer tensão de, no mínimo, o equivalente a 2,5 mm (dois inteiros e cinco décimos de milímetro) de alumínio;\nIV - diafragma regulável, para limitar o campo de radiação à região de interesse e garantir que o feixe de radiação seja completamente restrito à área do receptor de imagem, em qualquer distância foco-receptor e qualquer tamanho de campo selecionado;\nV - sistema para identificar quando o eixo do feixe de radiação está perpendicular ao plano do receptor de imagem, para equipamentos comercializados a partir da publicação desta Instrução Normativa;\nVI - indicação visual do tubo selecionado no painel de controle, para equipamentos com mais de 1 (um) tubo;\nVII - para salas com equipamentos fixos ou utilizados como fixos, cortina ou saiote plumbífero inferior/lateral íntegros para a proteção do operador contra a radiação espalhada pelo paciente, com espessura não inferior a 0,5 mm (cinco décimos de milímetro) equivalente de chumbo, a 100 kVp (cem quilovolts de pico). Este critério não é aplicável a equipamentos com tubo de raios X instalado sobre a mesa;\nVIII - sistema para impedir que a distância foco-pele seja inferior a 30 cm (trinta centímetros) para equipamentos fixos e 20 cm (vinte centímetros) para equipamentos móveis;\nIX - sinais sonoro e luminoso perceptíveis no interior da sala de exames, quando o modo cine (registro ou gravação) estiver acionado;\nX - componentes, tais como gerador, tubo, cabeçote, mesa e sistema de colimação devem possuir identificação própria (marca, modelo, número de série), mediante etiqueta fixada em lugar visível;\nXI - controle automático de intensidade;\nXII - indicação do produto kerma x área (pka) acumulado no exame ou do kerma no ar de referência, sendo recomendadas as duas indicações, para equipamentos comercializados a partir da data de publicação desta Instrução Normativa;\nXIII - visor plumbífero íntegro, com atenuação mínima equivalente a 0,25 mm (vinte e cinco centésimos de milímetro) de chumbo, a 100 kVp (cem quilovolts de pico), para salas com equipamento fixo ou utilizado como fixo; e\nXIV - gerador e tubo de raios X com potência mínima de 60 kW (sessenta quilowatts), para equipamentos utilizados em cardiologia intervencionista.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
  },
+ "in-91-2021::artigo::2::inciso::i": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 2º, I",
+  "texto": "Art. 2º Todo equipamento de fluoroscopia ou de radiologia intervencionista deve possuir, além do estabelecido nas demais normativas aplicáveis:\nI - blindagem no cabeçote de modo a garantir nível mínimo de radiação de fuga, restringida à taxa de kerma no ar de 1 mGy/h (um miligray por hora) a 1 (um) metro do ponto focal, quando operado em condições de ensaio de fuga, comprovada com certificado de adequação emitido pelo fabricante na instalação do tubo de raios X;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::2::inciso::vii": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 2º, VII",
+  "texto": "Art. 2º Todo equipamento de fluoroscopia ou de radiologia intervencionista deve possuir, além do estabelecido nas demais normativas aplicáveis:\nVII - para salas com equipamentos fixos ou utilizados como fixos, cortina ou saiote plumbífero inferior/lateral íntegros para a proteção do operador contra a radiação espalhada pelo paciente, com espessura não inferior a 0,5 mm (cinco décimos de milímetro) equivalente de chumbo, a 100 kVp (cem quilovolts de pico). Este critério não é aplicável a equipamentos com tubo de raios X instalado sobre a mesa;",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::2::inciso::xiii": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 2º, XIII",
+  "texto": "Art. 2º Todo equipamento de fluoroscopia ou de radiologia intervencionista deve possuir, além do estabelecido nas demais normativas aplicáveis:\nXIII - visor plumbífero íntegro, com atenuação mínima equivalente a 0,25 mm (vinte e cinco centésimos de milímetro) de chumbo, a 100 kVp (cem quilovolts de pico), para salas com equipamento fixo ou utilizado como fixo; e",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
  "in-91-2021::artigo::3": {
   "norma": "IN Anvisa nº 91/2021",
   "disp": "art. 3º",
   "texto": "Art. 3º Ficam proibidas:\nI - a instalação de equipamentos com gerador que não seja de alta frequência;\nII - a instalação de equipamentos de fluoroscopia sem feixe pulsado; e\nIII - a utilização de equipamentos sem controle automático de intensidade.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
  },
+ "in-91-2021::artigo::4": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 4º",
+  "texto": "Art. 4º A absorção produzida pela mesa do equipamento ou pelo portareceptor de imagens vertical, quando aplicável, deve ser comprovada por meio de certificado de adequação emitido pelo fabricante.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "in-91-2021::artigo::5": {
+  "norma": "IN Anvisa nº 91/2021",
+  "disp": "art. 5º",
+  "texto": "Art. 5º Os parâmetros operacionais, tais como tensão do tubo, filtração adicional, distância fonte-receptor de imagem, tamanho de abertura de campo, tempo acumulado em fluoroscopia, corrente do tubo de raios X, taxa de kerma no ar, kerma no ar de referência e produto kerma x área, quando aplicável, devem estar claramente indicados no equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
  "in-91-2021::artigo::6": {
   "norma": "IN Anvisa nº 91/2021",
   "disp": "art. 6º",
-  "texto": "Art. 6º A emissão de raios X, enquanto durar a exposição, deve ser indicada por sinal luminoso localizado no painel de controle do equipamento e no interior da sala de exames.\nParágrafo único. No caso de equipamentos fixos, a emissão de raios X também deve ser indicada por sinal luminoso no lado externo da(s) porta(s) de acesso à sala de exames.",
-  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
- },
- "in-91-2021::artigo::6::paragrafo::unico": {
-  "norma": "IN Anvisa nº 91/2021",
-  "disp": "art. 6º, parágrafo único",
   "texto": "Art. 6º A emissão de raios X, enquanto durar a exposição, deve ser indicada por sinal luminoso localizado no painel de controle do equipamento e no interior da sala de exames.\nParágrafo único. No caso de equipamentos fixos, a emissão de raios X também deve ser indicada por sinal luminoso no lado externo da(s) porta(s) de acesso à sala de exames.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=INM&numeroAto=00000091&seqAto=000&valorAno=2021&orgao=DC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
  },
@@ -683,6 +707,18 @@
   "texto": "Art. 59. Todos os profissionais necessários ao funcionamento da sala devem:\nI - posicionar-se de tal forma que nenhuma parte do corpo, incluindo extremidades, quando possível, seja atingida pelo feixe primário de radiação ionizante sem estar protegida por, no mínimo, 0,5 mm (cinco décimos de milímetro) equivalente de chumbo; e\nII - proteger-se da radiação ionizante espalhada, por meio de equipamentos de proteção individual e coletiva com atenuação compatível com a energia da radiação, não inferior a 0,25 mm (vinte e cinco centésimos de milímetro) equivalente de chumbo.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
  },
+ "rdc-611-2022::artigo::59::inciso::i": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 59, I",
+  "texto": "Art. 59. Todos os profissionais necessários ao funcionamento da sala devem:\nI - posicionar-se de tal forma que nenhuma parte do corpo, incluindo extremidades, quando possível, seja atingida pelo feixe primário de radiação ionizante sem estar protegida por, no mínimo, 0,5 mm (cinco décimos de milímetro) equivalente de chumbo; e",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-611-2022::artigo::59::inciso::ii": {
+  "norma": "RDC Anvisa nº 611/2022",
+  "disp": "art. 59, II",
+  "texto": "Art. 59. Todos os profissionais necessários ao funcionamento da sala devem:\nII - proteger-se da radiação ionizante espalhada, por meio de equipamentos de proteção individual e coletiva com atenuação compatível com a energia da radiação, não inferior a 0,25 mm (vinte e cinco centésimos de milímetro) equivalente de chumbo.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
  "rdc-611-2022::artigo::61": {
   "norma": "RDC Anvisa nº 611/2022",
   "disp": "art. 61",
@@ -850,5 +886,11 @@
   "disp": "art. 9º",
   "texto": "Art. 9º A iluminação da sala de interpretação e laudos deve ser planejada de modo a não prejudicar a avaliação da imagem.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&link=S&tipo=RDC&numeroAto=00000611&seqAto=000&valorAno=2022&orgao=RDC%2FDC%2FANVISA%2FMS&cod_modulo=310&cod_menu=9431"
+ },
+ "rdc-63-2011::artigo::58": {
+  "norma": "RDC Anvisa nº 63/2011",
+  "disp": "art. 58",
+  "texto": "Art. 58 O serviço de saúde deve garantir que todos os usuários recebam suporte imediato a vida quando necessário.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9431&cod_modulo=310&link=S&numeroAto=00000063&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2011"
  }
 }
