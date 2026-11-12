@@ -144,7 +144,7 @@
    prefixos: {lic: '90', ap: '65', fi: '65', cc: '65', eq: '65', em: '65', rx: '65', pe: '65', pr: '61', es: '61', de: '61', am: '61', te: '63', qu: '63', rs: '62', ex: '63'},
    ids: {eq7: '65', eq9: '61', ex1: '65', ex2: '61', ex3: '61', fi16: '65', pe12: '62', pr9: '61', qu4: '63'}},
   'servicos-alimentacao-roteiro': {padrao: '46', ids: {a5: '93', a6: '46, § 1º', b1: '50', b6: '50', c8: '46', d2: '46', d3: '46', e2: '46', e4: '46 e 49', g5: '46 e 49', h6: '46'}},
-  'produtos-correlatos': {padrao: '46', ids: {p07: '50', p09: '46', p10: '46', p11: '46', p48: '46', dc4: '55', df1: '46', di5: '46', ds3: '46', ds6: '46', fi5: '19, § 2º', fm10: '46', fm12: '46', fn1: '46', fo7: '46, § 1º', fpr9: '46', fs6: '46', fw2: '50', fw3: '46', l7: '50', l8: '46', tv1: '91', tv5: '46', tv7: '46'}},
+  'produtos-correlatos': {padrao: '46', ids: {p07: '50', p09: '46', p10: '46', p11: '46', p48: '46', dc4: '55', df1: '46', di5: '46', ds3: '46', ds6: '46', ds13: '46', ds15: '90', fi5: '19, § 2º', fm10: '46', fm12: '46', fn1: '46', fo7: '46, § 1º', fpr9: '46', fs6: '46', fw2: '50', fw3: '46', l7: '50', l8: '46', tv1: '91', tv5: '46', tv7: '46'}},
   /* assistenciais: SAICA e demais acolhimentos, art. 69; ILPI, Centro Dia, comunidade e residência terapêutica, pelo assunto */
   'servicos-assistenciais': {saude: true, padrao: '63', fixos: {saica: '69', demais: '69'}}
  };

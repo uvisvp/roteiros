@@ -27,7 +27,8 @@ const trocaTodas = (de, para, rot) => { if (!app.includes(de)) { if (app.include
 troca("box.innerHTML=html(st);const sel=box.querySelector('#pop13Objetivo');if(sel)sel.value=st.objetivo||'';updateSummary(box,st)}",
   "const h13=html(st);if(box.__h13===h13)return;box.__h13=h13;box.innerHTML=h13;const sel=box.querySelector('#pop13Objetivo');if(sel)sel.value=st.objetivo||'';updateSummary(box,st)}", 'pop13 render');
 troca('"cnaeMap": {"fab_cosm": {', '"cnaeMap": {"fabricante": {', 'cnaeMap fabricante');
-trocaTodas("const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked')||/dispositivos\\/IVD|dispositivos médicos.*diagnóstico in vitro/i.test(document.body?.innerText||'');",
+/* hasDisp: depois reescrito para ler a marcação gravada (uvis-produtos-v2) por outro empacotador; só troca a forma antiga */
+if (app.includes("const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked')||")) trocaTodas("const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked')||/dispositivos\\/IVD|dispositivos médicos.*diagnóstico in vitro/i.test(document.body?.innerText||'');",
   "const hasDisp=()=>!!document.querySelector('[data-flag=cls_disp]:checked');", 'hasDisp');
 const START = '<!--PRODUTOS_NAV_INICIO-->', END = '<!--PRODUTOS_NAV_FIM-->';
 const i0 = app.indexOf(START); if (i0 >= 0) app = app.slice(0, i0) + app.slice(app.indexOf(END) + END.length);

@@ -11,7 +11,7 @@ let {html, lz} = unpack(file);
 const ID = 'app--produtos-correlatos';
 const TROCAS = [
   ['Lei Federal nº 6.360/1976, art. 12; RDC Anvisa nº 830/2023."', 'Lei Federal nº 6.360/1976, art. 12; RDC Anvisa nº 830/2023, arts. 6º e 7º."'],
-  ['ou RDC Anvisa nº 830/2023."', 'ou RDC Anvisa nº 830/2023, arts. 6º e 7º."'],
+  /* p09 (“ou RDC Anvisa nº 830/2023”) passou a vir de scripts/produtos/revisao.py já com os artigos (12/11/2026) */
   ['Resolução ANTT nº 5.998/2022, quando houver produto perigoso."', 'Resolução ANTT nº 5.998/2022, art. 2º, quando houver produto perigoso."'],
   ['e Resolução ANTT nº 5.998/2022."', 'e Resolução ANTT nº 5.998/2022, art. 2º."'],
   ['c/c Portaria SVS/MS nº 344/1998."', 'c/c Portaria SVS/MS nº 344/1998, art. 2º."'],
