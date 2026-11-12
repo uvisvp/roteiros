@@ -191,6 +191,12 @@
   "texto": "Art. 14 Produtos para saúde classificados como não-críticos devem ser submetidos, no mínimo, ao processo de limpeza.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
+ "rdc-anvisa-15-2012::a15": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 15",
+  "texto": "Art. 15 O processamento de produtos devem seguir um fluxo direcionado sempre da área suja para a área limpa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
  "rdc-anvisa-15-2012::a16": {
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 16",
@@ -221,6 +227,12 @@
   "texto": "Art. 24 Cada etapa do processamento do instrumental cirúrgico e dos produtos para saúde deve seguir Procedimento Operacional Padrão - POP elaborado com base em referencial científico atualizado e normatização pertinente.\nParágrafo único O POP deve ser amplamente divulgado e estar disponível para consulta.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
+ "rdc-anvisa-15-2012::a24pu": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 24, parágrafo único",
+  "texto": "Art. 24 Cada etapa do processamento do instrumental cirúrgico e dos produtos para saúde deve seguir Procedimento Operacional Padrão - POP elaborado com base em referencial científico atualizado e normatização pertinente.\nParágrafo único O POP deve ser amplamente divulgado e estar disponível para consulta.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
  "rdc-anvisa-15-2012::a25": {
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 25",
@@ -233,10 +245,28 @@
   "texto": "Art. 26 O CME e a empresa processadora devem dispor de um sistema de informação manual ou automatizado com registro do monitoramento e controle das etapas de limpeza e desinfecção ou esterilização constante nesta resolução, bem como da manutenção e monitoramento dos equipamentos.\nParágrafo único Os registros devem ser arquivados, de forma a garantir a sua rastreabilidade, em conformidade com o estabelecido em legislação específica ou, na ausência desta, por um prazo mínimo de cinco anos, para efeitos de inspeção sanitária.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
+ "rdc-anvisa-15-2012::a26pu": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 26, parágrafo único",
+  "texto": "Art. 26 O CME e a empresa processadora devem dispor de um sistema de informação manual ou automatizado com registro do monitoramento e controle das etapas de limpeza e desinfecção ou esterilização constante nesta resolução, bem como da manutenção e monitoramento dos equipamentos.\nParágrafo único Os registros devem ser arquivados, de forma a garantir a sua rastreabilidade, em conformidade com o estabelecido em legislação específica ou, na ausência desta, por um prazo mínimo de cinco anos, para efeitos de inspeção sanitária.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a29": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 29",
+  "texto": "Art. 29 Os profissionais da CME e da empresa processadora devem receber capacitação específica e periódica nos seguintes temas:\nI - classificação de produtos para saúde;\nII - conceitos básicos de microbiologia;\nIII - transporte dos produtos contaminados;\nIV - processo de limpeza, desinfecção, preparo, inspeção, acondicionamento, embalagens, esterilização, funcionamento dos equipamentos existentes;\nV - monitoramento de processos por indicadores químicos, biológicos e físicos;\nVI - rastreabilidade, armazenamento e distribuição dos produtos para saúde;\nVII - manutenção da esterilidade do produto.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
  "rdc-anvisa-15-2012::a3": {
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 3º",
   "texto": "Art. 3 Este Regulamento se aplica aos Centros de Material e Esterilização - CME dos serviços de saúde públicos e privados, civis e militares, e às empresas processadoras envolvidas no processamento de produtos para saúde.\nParágrafo único Excluem-se do escopo desse regulamento o processamento de produtos para saúde realizados em consultórios odontológicos, consultórios individualizados e não vinculados a serviços de saúde, unidades de processamento de endoscópios, serviços de terapia renal substitutiva, serviços de assistência veterinária.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a31": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 31",
+  "texto": "Art. 31 O trabalhador do CME e da empresa processadora deve utilizar os seguintes Equipamentos de Proteção Individual (EPI) de acordo com a sala/área, conforme anexo desta resolução.\n§ 1º Para a descarga de secadoras e termodesinfetadoras e carga e descarga de autoclaves é obrigatória a utilização de luvas de proteção térmica impermeável.\n§ 2º Na sala de recepção e limpeza, o protetor facial pode substituir o uso de máscara e óculos.\n§ 3º Quando não especificado, o equipamento de proteção deve ser compatível com o risco inerente à atividade.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
  "rdc-anvisa-15-2012::a33": {
@@ -249,6 +279,18 @@
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 33, parágrafo único",
   "texto": "Art. 33 Compete ao Responsável Técnico do serviço de saúde e ao Responsável Legal da empresa processadora:\nParágrafo único O Responsável Técnico do serviço de saúde deve ainda qualificar a empresa terceirizada de processamento de produtos para saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a37": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 37",
+  "texto": "Art. 37 Deve ser realizada qualificação de instalação, qualificação de operação e qualificação de desempenho, para os equipamentos utilizados na limpeza automatizada e na esterilização de produtos para saúde, com periodicidade mínima anual.\nParágrafo único Sempre que a carga de esterilização apresentar desafios superiores àquela utilizada na qualificação de desempenho, esta qualificação deve ser refeita.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a42": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 42",
+  "texto": "Art. 42 A área de monitoramento da esterilização de produtos para saúde deve dispor de incubadoras de indicadores biológicos.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
  "rdc-anvisa-15-2012::a44": {
@@ -377,10 +419,154 @@
   "texto": "Art. 65 Os produtos para saúde passíveis de processamento, independente da sua classificação de risco, inclusive os consignados ou de propriedade do cirurgião, devem ser submetidos ao processo de limpeza, dentro do próprio CME do serviço de saúde ou na empresa processadora, antes de sua desinfecção ou esterilização.\nParágrafo único A limpeza de produtos para saúde não críticos pode ser realizado em outras unidades do serviço de saúde desde que de acordo com Procedimento Operacional Padronizado - POP definido pelo CME.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
+ "rdc-anvisa-15-2012::a66": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 66",
+  "texto": "Art. 66 Na limpeza manual, a fricção deve ser realizada com acessórios não abrasivos e que não liberem partículas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a68": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 68",
+  "texto": "Art. 68 O enxágue dos produtos para saúde deve ser realizado com água que atenda aos padrões de potabilidade definidos em normatização específica.\nParágrafo único O enxágue final de produtos para saúde críticos utilizados em cirurgias de implantes ortopédicos, oftalmológicos, cirurgias cardíacas e neurológicas deve ser realizado com água purificada.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a70": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 70",
+  "texto": "Art. 70 O CME Classe I deve dispor de ar comprimido medicinal, gás inerte ou ar filtrado, seco e isento de óleo para secagem dos produtos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
  "rdc-anvisa-15-2012::a72": {
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 72",
   "texto": "Art. 72 Antes de serem encaminhados para empresa processadora, os produtos para saúde devem ser submetidos à pré-limpeza no serviço de saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a73": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 73",
+  "texto": "Art. 73 É obrigatório o monitoramento, com periodicidade definida em protocolo elaborado pelo CME ou pela Empresa Processadora, da limpeza dos produtos para saúde e dos equipamentos automatizados de limpeza dos produtos para saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a76": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 76",
+  "texto": "Art. 76 A limpeza dos produtos para saúde, seja manual ou automatizada, deve ser avaliada por meio da inspeção visual, com o auxílio de lentes intensificadoras de imagem, de no mínimo oito vezes de aumento, complementada, quando indicado, por testes químicos disponíveis no mercado.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a77": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 77",
+  "texto": "Art. 77 O CME e a empresa processadora devem utilizar embalagens que garantam a manutenção da esterilidade do conteúdo, bem como a sua transferência sob técnica asséptica.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a78": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 78",
+  "texto": "Art. 78 As embalagens utilizadas para a esterilização de produtos para saúde devem estar regularizadas junto à Anvisa, para uso especifico em esterilização.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a79": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 79",
+  "texto": "Art. 79 Não é permitido o uso de embalagens de papel kraft, papel toalha, papel manilha, papel jornal e lâminas de alumínio, assim como as embalagens tipo envelope de plástico transparente não destinadas ao uso em equipamentos de esterilização.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a80": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 80",
+  "texto": "Art. 80 A selagem de embalagens tipo envelope deve ser feita por termoseladora ou conforme orientação do fabricante.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a81": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 81",
+  "texto": "Art. 81 Não é permitido o uso de caixas metálicas sem furos para esterilização de produtos para saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a83": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 83",
+  "texto": "Art. 83 É obrigatória a identificação nas embalagens dos produtos para saúde submetidos à esterilização por meio de rótulos ou etiquetas.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a84": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 84",
+  "texto": "Art. 84 O rótulo dos produtos para saúde processados deve ser capaz de se manter legível e afixado nas embalagens durante a esterilização, transporte, armazenamento, distribuição e até o momento do uso.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a85": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 85",
+  "texto": "Art. 85 O rótulo de identificação da embalagem deve conter:\nI - nome do produto;\nII - número do lote;\nIII - data da esterilização;\nIV - data limite de uso;\nV - método de esterilização;\nVI - nome do responsável pelo preparo.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a86": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 86",
+  "texto": "Art. 86 O CME que realize desinfecção química deve dispor de uma sala exclusiva. Caso o serviço realize desinfecção ou esterilização química líquida automatizada, deve também dispor de área e condições técnicas necessárias para instalação do equipamento.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a87": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 87",
+  "texto": "Art. 87 Na sala de desinfecção química o enxágue dos produtos para saúde deve ser realizado com água que atenda aos padrões de potabilidade definidos em normatização específica.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a89": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 89",
+  "texto": "Art. 89 O CME deve adotar as medidas de segurança preconizadas pelo fabricante, em relação ao uso de saneantes.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a9": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 9º",
+  "texto": "Art. 9 O CME e as empresas processadoras só podem processar produtos para saúde regularizados junto à Anvisa.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a90": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 90",
+  "texto": "Art. 90 O CME deve realizar a monitorização dos parâmetros indicadores de efetividade dos desinfetantes para artigo semicrítico, como concentração, pH ou outros, no mínimo 1 vez ao dia, antes do inicio das atividades.\n§ 1º Os desinfetantes para artigo semicrítico devem ser utilizados de acordo com os parâmetros definidos no registro do produto.\n§ 2º Os parâmetros, inicial e subsequentes, dos desinfetantes para artigo semicrítico, devem ser registrados e arquivados pelo prazo mínimo de cinco anos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a90p1": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 90, § 1º",
+  "texto": "Art. 90 O CME deve realizar a monitorização dos parâmetros indicadores de efetividade dos desinfetantes para artigo semicrítico, como concentração, pH ou outros, no mínimo 1 vez ao dia, antes do inicio das atividades.\n§ 1º Os desinfetantes para artigo semicrítico devem ser utilizados de acordo com os parâmetros definidos no registro do produto.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a90p2": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 90, § 2º",
+  "texto": "Art. 90 O CME deve realizar a monitorização dos parâmetros indicadores de efetividade dos desinfetantes para artigo semicrítico, como concentração, pH ou outros, no mínimo 1 vez ao dia, antes do inicio das atividades.\n§ 2º Os parâmetros, inicial e subsequentes, dos desinfetantes para artigo semicrítico, devem ser registrados e arquivados pelo prazo mínimo de cinco anos.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a91": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 91",
+  "texto": "Art. 91 É proibido o uso de autoclave gravitacional de capacidade superior a 100 litros.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a92": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 92",
+  "texto": "Art. 92 Não é permitido o uso de estufas para a esterilização de produtos para saúde.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a93": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 93",
+  "texto": "Art. 93 É obrigatório a realização de teste para avaliar o desempenho do sistema de remoção de ar (Bowie & Dick) da autoclave assistida por bomba de vácuo, no primeiro ciclo do dia.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a94": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 94",
+  "texto": "Art. 94 Não é permitido à alteração dos parâmetros estabelecidos na qualificação de operação e de desempenho de qualquer ciclo dos equipamentos de esterilização.\n§ 1º O ciclo de esterilização a vapor para uso imediato só pode ocorrer em caso de urgência e emergência.\n§ 2º O ciclo de esterilização a vapor para uso imediato deve ser documentado contendo data, hora, motivo do uso, nome do instrumental cirúrgico ou produto para saúde, nome e assinatura do profissional responsável pelo CME e identificação do paciente.\n§ 3º O registro do ciclo mencionado no § 2º deve estar disponível para a avaliação pela Autoridade Sanitária.\n§ 4º O instrumental cirúrgico e os produtos para saúde processados conforme o § 1º devem ser utilizados imediatamente após o processo de esterilização.\n§ 5º O ciclo para uso imediato deve ser monitorado por integrador ou emulador químico.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
  "rdc-anvisa-15-2012::a96": {
@@ -393,6 +579,12 @@
   "norma": "RDC Anvisa nº 15/2012",
   "disp": "art. 97",
   "texto": "Art. 97 O monitoramento do processo de esterilização com indicadores físicos deve ser registrado a cada ciclo de esterilização.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
+ },
+ "rdc-anvisa-15-2012::a98": {
+  "norma": "RDC Anvisa nº 15/2012",
+  "disp": "art. 98",
+  "texto": "Art. 98 No monitoramento do processo de esterilização dos produtos para saúde implantáveis deve ser adicionado um indicador biológico, a cada carga.\nParágrafo único A carga só deve ser liberada para utilização após leitura negativa do indicador biológico.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000015&seqAto=000&valorAno=2012&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=9434&cod_modulo=310&pesquisa=true"
  },
  "rdc-anvisa-15-2012::a99": {
@@ -423,6 +615,18 @@
   "norma": "RDC Anvisa nº 156/2006",
   "disp": "art. 8º",
   "texto": "Art. 8 É proibido em todo o território nacional, por qualquer tipo de empresa, ou serviço de saúde, público ou privado, o reprocessamento dos produtos quando:\nI - Se enquadrarem no inciso I do art. 4° desta Resolução, apresentando na rotulagem os dizeres: “Proibido Reprocessar”.\nII - Constarem de Resolução Específica RE/ANVISA , que contém a relação dos produtos proibidos de ser reprocessados.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000156&seqAto=002&valorAno=2006&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true"
+ },
+ "rdc-anvisa-156-2006::a8-i": {
+  "norma": "RDC Anvisa nº 156/2006",
+  "disp": "art. 8º, I",
+  "texto": "Art. 8 É proibido em todo o território nacional, por qualquer tipo de empresa, ou serviço de saúde, público ou privado, o reprocessamento dos produtos quando:\nI - Se enquadrarem no inciso I do art. 4° desta Resolução, apresentando na rotulagem os dizeres: “Proibido Reprocessar”.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000156&seqAto=002&valorAno=2006&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true"
+ },
+ "rdc-anvisa-156-2006::a8-ii": {
+  "norma": "RDC Anvisa nº 156/2006",
+  "disp": "art. 8º, II",
+  "texto": "Art. 8 É proibido em todo o território nacional, por qualquer tipo de empresa, ou serviço de saúde, público ou privado, o reprocessamento dos produtos quando:\nII - Constarem de Resolução Específica RE/ANVISA , que contém a relação dos produtos proibidos de ser reprocessados.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000156&seqAto=002&valorAno=2006&orgao=RDC/DC/ANVISA/MS&codTipo=&desItem=&desItemFim=&cod_menu=1696&cod_modulo=134&pesquisa=true"
  },
  "rdc-anvisa-222-2018::a10": {
