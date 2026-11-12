@@ -63,7 +63,9 @@
     {nome, tipo, m: {id: true}, outra, obs}. */
  function ambSug(c){ return (c.ambientes || []).map(function(x){ return Array.isArray(x) ? {nome: x[0], tipo: x[1] || 'geral'} : {nome: x, tipo: 'geral'}; }); }
  function ambTipo(c, a){ if(a.tipo && (a.tipo === 'geral' || (c.tipos || {})[a.tipo])) return a.tipo; var nm = String(a.nome || '').trim(), s = ambSug(c).filter(function(x){ return x.nome === nm; })[0]; return s ? s.tipo : 'geral'; }
- function ambOpcoes(c, a){ var T = (c.tipos || {})[ambTipo(c, a)]; return (c.lista || []).concat(T && T.lista ? T.lista : []).filter(function(x){ return x[0] !== '—'; }); }
+ /* tipo com “omite”: itens da lista geral que o tipo já cobre na sua própria lista (sem pergunta repetida) */
+ function ambGeral(c, T){ var om = (T && T.omite) || []; return (c.lista || []).filter(function(x){ return om.indexOf(x[0]) < 0; }); }
+ function ambOpcoes(c, a){ var T = (c.tipos || {})[ambTipo(c, a)]; return ambGeral(c, T).concat(T && T.lista ? T.lista : []).filter(function(x){ return x[0] !== '—'; }); }
  function ambValidos(c){ return ambLista(c.id).map(function(a, i){ return {a: a, i: i}; }).filter(function(x){ return String(x.a.nome || '').trim() || Object.keys(x.a.m || {}).length || String(x.a.outra || '').trim(); }); }
  function ambIrrDe(c, a){ var m = a.m || {}, out = ambOpcoes(c, a).filter(function(x){ return m[x[0]]; }).map(function(x){ return {id: x[0], texto: x[1], refs: [].concat(x[2] || []), inf: x[3]}; });
   if(String(a.outra || '').trim()) out.push({id: '', texto: String(a.outra).trim().replace(/\.$/, ''), refs: [].concat(c.r || [])}); return out; }
@@ -280,7 +282,7 @@
       + (Object.keys(tipos).length ? '<label class="pu-campo rs-campo"><span>Tipo de ambiente</span><select data-rs-amb-tipo="' + esc(k) + '">' + [['geral', 'Outro']].concat(Object.keys(tipos).map(function(x){ return [x, tipos[x].rotulo]; })).map(function(o){ return '<option value="' + esc(o[0]) + '"' + (t === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' : '') + '</div>')
     + '<p class="rs-amb-sub">Marque só o que estiver irregular neste ' + TM + '.</p>'
     + (T && T.lista && T.lista.length ? '<p class="rs-amb-grupo">' + esc(T.rotulo) + '</p><div class="rs-amb-lista">' + T.lista.map(ck(k, m)).join('') + '</div><p class="rs-amb-grupo">Em qualquer ambiente</p>' : '')
-    + '<div class="rs-amb-lista">' + (c.lista || []).map(ck(k, m)).join('') + '</div>'
+    + '<div class="rs-amb-lista">' + ambGeral(c, T).map(ck(k, m)).join('') + '</div>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Outra irregularidade (descrever)</span><input type="text" data-rs-amb="' + esc(k) + '|outra" value="' + esc(a.outra || '') + '"></label>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ' + TM + ' <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
     + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ' + TM : 'Foto do ' + TM) + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '<button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ' + TM + '</button></div>' + (f ? '<img class="rs-foto" alt="Foto do ' + TM + '" src="' + esc(f) + '">' : '') + '</div></details>'; }).join('');

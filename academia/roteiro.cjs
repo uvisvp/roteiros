@@ -164,8 +164,8 @@ module.exports = {
       itens: [
         {id: 'areas', titulo: 'Higienização de colchonetes e assentos', curto: 'Colchonetes e assentos',
           perguntas: [
-            {id: 'colchonetes', t: 'Colchonetes e assentos estão conservados e são higienizados após cada uso com produto indicado, identificado e à disposição dos usuários, com separação entre higienizados e não higienizados?', r: [P('5.6'), P('5.6.1'), P('5.6.2'), P('5.6.2.1'), P('5.6.3')],
-              c: 'Os colchonetes e assentos estão conservados e são higienizados após cada uso, com produto identificado à disposição e separação entre higienizados e não higienizados.',
+            {id: 'colchonetes', t: 'Colchonetes e assentos são higienizados após cada uso com produto indicado, identificado e à disposição dos usuários, com separação entre higienizados e não higienizados?', r: [P('5.6'), P('5.6.1'), P('5.6.2'), P('5.6.2.1'), P('5.6.3')],
+              c: 'Os colchonetes e assentos são higienizados após cada uso, com produto identificado à disposição e separação entre higienizados e não higienizados.',
               nc: 'A higienização dos colchonetes e assentos não atende às exigências.', inf: ['higiene']}
           ],
           orient: [
@@ -470,7 +470,7 @@ for (const [id, pts] of Object.entries(PONTOS)) {
    ambiente, cada irregularidade um problema só (sem “ou”) */
 const SIN = LM(19, 'paragrafo', '2');
 const PRATICA = [
-  ['—', 'Piso e proteção contra quedas'], ['p01', 'Piso escorregadio', [P('5.2')], 'pratica'], ['p02', 'Piso solto', [P('5.2')], 'pratica'], ['p03', 'Piso desnivelado', [P('5.2')], 'pratica'],
+  ['—', 'Piso e proteção contra quedas'], ['a01', 'Piso danificado', [P('3.1')]], ['p01', 'Piso escorregadio', [P('5.2')], 'pratica'], ['p02', 'Piso solto', [P('5.2')], 'pratica'], ['p03', 'Piso desnivelado', [P('5.2')], 'pratica'],
   ['p04', 'Local com risco de queda sem barreira física', [P('5.1')], 'pratica'],
   ['—', 'Equipamentos'], ['p05', 'Equipamento sujo', [P('5.3')], 'pratica'], ['p06', 'Equipamento enferrujado', [P('5.3')], 'pratica'], ['p07', 'Equipamento danificado', [P('5.3')], 'pratica'],
   ['p08', 'Equipamento instalado sem estabilidade', [P('5.3')], 'pratica'], ['p09', 'Circulação entre os equipamentos obstruída', [P('5.3.1')], 'pratica'],
@@ -488,7 +488,7 @@ module.exports.secoes.find(s => s.id === 'instal').itens.unshift({
   descricao: 'Marque os ambientes que o estabelecimento possui e, em cada um, só o que estiver irregular. Limpeza, sinantrópicos, elétrica, ventilação, iluminação, ralos, lixeiras, pisos, equipamentos e itens de sanitários e vestiários são verificados aqui, ambiente por ambiente.',
   campos: [{id: 'amb_inv', rotulo: 'Ambientes do estabelecimento', tipo: 'ambientes', largo: true, inf: ['instal'], r: [P('3.1')],
     ambientes: [['Recepção', 'geral'], ['Sala de musculação', 'pratica'], ['Sala de ginástica / dança', 'pratica'], ['Sala de lutas', 'lutas'], ['Sala de avaliação física', 'pratica'],
-      ['Área da piscina', 'geral'], ['Sauna', 'geral'], ['Vestiário masculino', 'vestiario'], ['Vestiário feminino', 'vestiario'], ['Sanitário masculino', 'sanitario'], ['Sanitário feminino', 'sanitario'],
+      ['Área da piscina', 'geral'], ['Sauna', 'sauna'], ['Vestiário masculino', 'vestiario'], ['Vestiário feminino', 'vestiario'], ['Sanitário masculino', 'sanitario'], ['Sanitário feminino', 'sanitario'],
       ['Quadra', 'quadra'], ['Depósito de material de limpeza', 'geral'], ['Área de resíduos', 'residuos'], ['Lanchonete / copa', 'geral']],
     lista: [
       ['—', 'Estrutura'], ['a01', 'Piso danificado', [P('3.1')]], ['a02', 'Paredes danificadas', [P('3.1')]], ['a03', 'Teto danificado', [P('3.1')]],
@@ -502,10 +502,12 @@ module.exports.secoes.find(s => s.id === 'instal').itens.unshift({
       ['—', 'Lixeiras'], ['a20', 'Lixeira sem tampa de acionamento sem contato manual', [P('11.1'), P('11.2')], 'residuos'], ['a21', 'Lixeira sem saco plástico', [P('11.2.1')], 'residuos'], ['a22', 'Lixeira transbordando', [P('11.2.1')], 'residuos']
     ],
     tipos: {
-      pratica: {rotulo: 'Sala de atividades', lista: PRATICA},
-      lutas: {rotulo: 'Sala de lutas', lista: [['l01', 'Piso sem revestimento que amortece quedas', [P('5.2.1')], 'pratica'], ['l02', 'Piso sem revestimento higienizável', [P('5.2.1')], 'pratica'], ['l03', 'Paredes e obstáculos sem proteção até 1,0 m de altura', [P('5.2.1')], 'pratica']].concat(PRATICA)},
+      pratica: {rotulo: 'Sala de atividades', lista: PRATICA, omite: ['a01']},
+      lutas: {rotulo: 'Sala de lutas', lista: [['l01', 'Piso sem revestimento que amortece quedas', [P('5.2.1')], 'pratica'], ['l02', 'Piso sem revestimento higienizável', [P('5.2.1')], 'pratica'], ['l03', 'Paredes e obstáculos sem proteção até 1,0 m de altura', [P('5.2.1')], 'pratica']].concat(PRATICA), omite: ['a01']},
       quadra: {rotulo: 'Quadra', lista: [['q01', 'Piso da quadra com rachaduras', [P('5.7.1')], 'pratica'], ['q02', 'Piso da quadra com desníveis', [P('5.7.1')], 'pratica'], ['q03', 'Equipamentos da quadra enferrujados', [P('5.7.2')], 'pratica'], ['q04', 'Equipamentos da quadra com saliências cortantes', [P('5.7.2')], 'pratica']]},
       sanitario: {rotulo: 'Sanitário', lista: SANIT},
+      /* limpeza, conservação e piso da sauna estão na pergunta da sauna (sauna_estr) */
+      sauna: {rotulo: 'Sauna', lista: [], omite: ['a01', 'a06']},
       vestiario: {rotulo: 'Vestiário', lista: [['v00', 'Chuveiro sem regulação de temperatura', [P('4.4')], 'sanit']].concat(SANIT.map(x => ['v' + x[0].slice(1), x[1], [P('4.4')], x[3]]))},
       residuos: {rotulo: 'Área de resíduos', lista: [['r01', 'Recicláveis sujos', [P('11.3')], 'residuos'], ['r02', 'Recicláveis desorganizados', [P('11.3')], 'residuos'], ['r03', 'Recicláveis em local desprotegido', [P('11.3')], 'residuos'], ['r04', 'Área de resíduos sem revestimento lavável', [P('11.4')], 'residuos'], ['r05', 'Área de resíduos desprotegida', [P('11.4')], 'residuos'], ['r06', 'Área de resíduos incompatível com o volume gerado', [P('11.4')], 'residuos']]}
     }}]
