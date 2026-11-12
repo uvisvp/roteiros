@@ -379,7 +379,7 @@ const APPS = {
     ['treinamento', {n: 'Programa e comprovantes de capacitação dos manipuladores', r: [P2619('n15.37'), P2619('n15.38')]}],
     /* açougue (12/11/2026): tempero de carnes e carne moída embalada no açougue — Regulamento estadual (Decreto nº 12.342/1978,
        redação do Decreto nº 66.634/2022), sem texto no banco: vai em “fonte” */
-    ['carnes_temperadas', {g: 'pes', n: 'Certificado de treinamento em manipulação de carnes temperadas', q: 'Se aplicável: açougue que prepara e tempera carnes.', o: 'Certificado do responsável que trabalha no local, emitido por entidade de ensino com reconhecimento técnico, e comprovante de treinamento específico com registro nominal dos funcionários que temperam carnes.', r: [P2619('n17.3-iii')], fonte: 'Decreto Estadual nº 12.342/1978, art. 461, § 2º (redação do Decreto nº 66.634/2022); Resolução Conjunta SS/SAA nº 1/2001, arts. 2º e 3º'}],
+    ['carnes_temperadas', {g: 'pes', n: 'Certificado de treinamento em manipulação de carnes temperadas', q: 'Se aplicável: açougue que prepara e tempera carnes.', o: 'Certificado de treinamento emitido por entidade de ensino, capacitação ou qualificação profissional com reconhecimento técnico, apresentado à autoridade sanitária, e comprovante de treinamento específico com registro nominal dos funcionários que temperam ou empanam carnes.', r: [P2619('n17.3-iii')], fonte: 'Decreto Estadual nº 12.342/1978, art. 461, § 2º (redação do Decreto nº 66.634/2022)'}],
     ['reservatorio', {r: [P2619('n11.5'), P2619('n17.2')]}],
     ['pragas', {r: [P2619('n12.4.2')]}],
     ['manual', {o: 'Manual que descreva as operações reais do estabelecimento, atualizado e disponível.', r: [P2619('n16.2')]}],
