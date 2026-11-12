@@ -40,6 +40,8 @@ const ORIENT={
 };
 (async()=>{const b=await T.navegador();
  for(const [n,app,t,q,esperadas,proibidas] of CASOS){const {p,f,erros}=await T.abre(n,app,t,q,{browser:b});
+  /* alimentos: o perfil esconde o que não se aplica; um restaurante mostra preparo e exposição */
+  if(app==='servicos-alimentacao-roteiro'){await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'perfil',item:'tipo'}));await p.waitForTimeout(300);await f.evaluate(()=>[...document.querySelectorAll('[data-sa-preset]')].find(x=>/Restaurante/.test(x.textContent)).click());await p.waitForTimeout(300)}
   const itens=[];(await f.evaluate(()=>UvisPadrao.lista())).forEach(s=>s.itens.forEach(i=>itens.push([s.id,i.id])));
   const achou=new Set(),semFonte=[],misturado=[],orient=[];let retirada=0,retiradaComLei=0,antigo=0;
   for(const [s,i] of itens){await f.evaluate(([s,i])=>UvisPadrao.vai({aba:'roteiro',secao:s,item:i}),[s,i]);await p.waitForTimeout(250);
