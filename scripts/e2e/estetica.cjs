@@ -102,7 +102,7 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  ok(!await f.evaluate(()=>!!document.querySelector('[data-rs-amb-m="amb_i|0|alcool"]')),'interesse à saúde: sem a linha de preparação alcoólica (RDC 42/2010 é de serviço de saúde)');
  await f.check('[data-rs-amb-m="amb_i|0|sabonete"]');await p.waitForTimeout(300);
  await f.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(600);
- ok(/Pia sem sabonete líquido: sanitário\. Fundamento: Lei Federal nº 13\.643\/2018, art\. 8º; Lei Municipal nº 13\.725\/2004, art\. 69\./.test(await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'')),'interesse à saúde: irregularidade do inventário com a Lei 13.643 e o art. 69');
+ ok(/Pia sem sabonete líquido: sanitário\. Fundamento: Lei Federal nº 12\.592\/2012, art\. 4º; Lei Federal nº 13\.643\/2018, art\. 8º; Lei Municipal nº 13\.725\/2004, art\. 69\./.test(await f.evaluate(()=>(document.querySelector('.rs-relatorio')||{}).innerText||'')),'interesse à saúde (atividades sem resposta): irregularidade do inventário com as Leis 12.592 e 13.643 e o art. 69');
  /* orientações com fonte (perfil e equipamentos) */
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'ident',item:'perfil'}));await p.waitForTimeout(400);
  const o1=await f.evaluate(()=>(document.querySelector('.rs-orient')||{}).textContent||'');

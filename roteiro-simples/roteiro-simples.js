@@ -38,21 +38,32 @@
  var PERG = {}, ONDE = {}, ORDEM = [];
  D.secoes.forEach(function(s, si){ s.itens.forEach(function(it, ii){ (it.perguntas || []).forEach(function(q, qi){ PERG[q.id] = q; ONDE[q.id] = {s: s, it: it, n: (si + 1) + '.' + (ii + 1) + '.' + (qi + 1)}; ORDEM.push(q.id); }); }); });
  var INF = {}; D.infracoes.forEach(function(i){ INF[i.id] = i; });
- function cond(c){ if(!c) return true; var v = st.meta[c.campo]; if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
+ /* condição do perfil: {campo, igual} | {campo, em: [...]} | {campo, inclui} (lista marcada) | {campo, incluiAlgum: [...]}
+    | {campo, vazio: true} (sem resposta) | {todos: [cond...]} | {algum: [cond...]} */
+ function cond(c){ if(!c) return true; if(c.todos) return c.todos.every(cond); if(c.algum) return c.algum.some(cond);
+  var v = st.meta[c.campo]; if(c.vazio) return Array.isArray(v) ? !v.length : (v == null || v === '');
+  if(c.inclui) return Array.isArray(v) && v.indexOf(c.inclui) >= 0; if(c.incluiAlgum) return Array.isArray(v) && c.incluiAlgum.some(function(x){ return v.indexOf(x) >= 0; });
+  if(c.em) return c.em.indexOf(v) >= 0; if(c.igual !== undefined) return v === c.igual; return true; }
  /* it.se: o item inteiro depende do perfil (sai da navegação e do relatório); i.se: a infração idem */
  function itemVisivel(it){ return cond(it.se); }
  function infVisivel(i){ return cond(i.se); }
- function visivel(q){ var o = ONDE[q.id]; return (!o || itemVisivel(o.it)) && cond(q.se); }
+ /* D.naOculta: a pergunta que o próprio perfil pôs em “Não se aplica” (q.naSe) sai da tela, como nos
+    demais roteiros por perfil; a resposta dada pelo inspetor continua */
+ function visivel(q){ var o = ONDE[q.id]; return (!o || itemVisivel(o.it)) && cond(q.se) && !(D.naOculta && q.naSe && st.auto && st.auto[q.id] && st.r[q.id] === 'na'); }
+ /* D.refsSe {prefixo: condição}: dispositivo que só vale para parte do perfil (ex.: a lei do esteticista);
+    fora da condição, sai dos botões de citação e do fundamento */
+ function filtraRefs(refs){ var S = D.refsSe, r = [].concat(refs || []); if(!S) return r; return r.filter(function(id){ for(var p in S) if(id.indexOf(p) === 0 && !cond(S[p])) return false; return true; }); }
  /* D.filtroPerfil: o perfil filtra o roteiro — itens sem verificação visível saem da navegação e a numeração
     corre só entre seções, itens e perguntas visíveis (sem saltos) */
- function itemMostra(it){ return itemVisivel(it) && (!D.filtroPerfil || perguntasDe(it).length || (it.campos || []).length || !!it.consulta); }
+ function camposDe(it){ return (it.campos || []).filter(function(c){ return !c.se || cond(c.se); }); }
+ function itemMostra(it){ return itemVisivel(it) && (!D.filtroPerfil || perguntasDe(it).length || camposDe(it).length || !!it.consulta); }
  function numero(id){ var o = ONDE[id]; if(!D.filtroPerfil) return o.n; var si = 0, ii = 0, qi = 0;
   D.secoes.some(function(s){ var its = s.itens.filter(itemMostra); if(!its.length) return false; si++;
    if(s !== o.s) return false; ii = its.indexOf(o.it) + 1; qi = perguntasDe(o.it).indexOf(PERG[id]) + 1; return true; });
   return si + '.' + ii + '.' + qi; }
  function perguntasDe(it){ return (it.perguntas || []).filter(visivel); }
  function campoPreenchido(c){ var v = st.meta[c.id]; return Array.isArray(v) ? v.some(function(x){ return x && typeof x === 'object' ? eqTem(x) : true; }) : !!String(v || '').trim(); }
- function progressoItem(it){ var ps = perguntasDe(it), cs = it.campos || []; return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
+ function progressoItem(it){ var ps = perguntasDe(it), cs = camposDe(it); return {feitos: ps.filter(function(q){ return st.r[q.id]; }).length + cs.filter(campoPreenchido).length, total: ps.length + cs.length}; }
  function nNC(){ return ORDEM.filter(function(id){ return st.r[id] === 'nc' && visivel(PERG[id]); }).length + ambIrr().length; }
  /* ---------- ambientes ----------
     c.ambientes: sugestões [nome, tipo] (ou só o nome); c.lista: irregularidades de qualquer
@@ -88,7 +99,7 @@
  function rotulo(id){ var l = D.legal[id]; return l ? l.norma.replace(/^(RDC|Lei) (Anvisa |Federal |Municipal )?nº /, '$1 ') + ' · ' + l.disp : id; }
  function citacao(id){ var l = D.legal[id]; return l ? l.norma + ', ' + l.disp : id; }
  /* irregularidade: soma a Lei 13.725/2004 (D.leiBase) — sempre, com D.leiSempre; senão, quando ela não cita a lei */
- function comLei(refs){ var r = [].concat(refs || []), tem = r.some(function(x){ return /^lei-municipal-13725-2004::/.test(x); });
+ function comLei(refs){ var r = filtraRefs(refs), tem = r.some(function(x){ return /^lei-municipal-13725-2004::/.test(x); });
   (D.leiBase || []).forEach(function(x){ if((D.leiSempre || !tem) && r.indexOf(x) < 0) r.push(x); }); return r; }
  function fundamento(refs){ /* agrupa por norma: “RDC Anvisa nº 978/2025, art. 10, I, e art. 173” */
   var g = [], m = {}; (refs || []).forEach(function(id){ var l = D.legal[id]; if(!l) return; if(!m[l.norma]){ m[l.norma] = []; g.push(l.norma); } if(m[l.norma].indexOf(l.disp) < 0) m[l.norma].push(l.disp); });
@@ -99,7 +110,7 @@
  /* A janela padrão de citações (injetada pela casca) intercepta [data-legal] e
     pergunta o texto a window.UvisLocalReferences; o modal próprio fica de reserva. */
  window.UvisLocalReferences = function(b){ return String(b.dataset.legal || '').split(',').map(function(id){ return D.legal[id]; }).filter(Boolean).map(function(x){ return {law: x.norma, device: x.disp, text: x.texto, url: x.url}; }); };
- function botoesCit(refs){ return (refs || []).map(function(id){ return '<button type="button" class="rs-cit" data-legal="' + esc(id) + '">' + esc(rotulo(id)) + '</button>'; }).join(''); }
+ function botoesCit(refs){ return filtraRefs(refs).map(function(id){ return '<button type="button" class="rs-cit" data-legal="' + esc(id) + '">' + esc(rotulo(id)) + '</button>'; }).join(''); }
  function abreLegal(id){ var l = D.legal[id]; if(!l) return; var m = document.getElementById('rs-modal');
   if(!m){ m = document.createElement('div'); m.id = 'rs-modal'; m.innerHTML = '<div class="rs-modal-caixa" role="dialog" aria-modal="true"><header><b></b><button type="button" data-rs-fecha aria-label="Fechar">×</button></header><div class="rs-modal-corpo"></div></div>'; document.body.appendChild(m);
    m.addEventListener('click', function(e){ if(e.target === m || e.target.closest('[data-rs-fecha]')) m.classList.remove('on'); }); }
@@ -419,7 +430,7 @@
    acaoMsg = {t: 'Certidão do CRF lida: ' + (n ? n + ' campo(s) preenchido(s); confira.' : 'os campos já estavam preenchidos; nada foi alterado.'), tipo: n ? 'ok' : ''}; redesenha(); }}); }
  /* q.naSe {campo, igual}: ao escolher o valor no campo, a pergunta sem resposta passa a “Não se aplica” */
  /* condição {campo, igual} ou {campo, em: [valores]} */
- function bateCond(c){ var v = st.meta[c.campo]; return c.em ? c.em.indexOf(v) >= 0 : v === c.igual; }
+ function bateCond(c){ if(c.todos || c.algum) return cond(c); var v = st.meta[c.campo]; return c.em ? c.em.indexOf(v) >= 0 : v === c.igual; }
  function naAuto(){ ORDEM.forEach(function(id){ var q = PERG[id], c = q.naSe; if(!c) return; var bate = bateCond(c);
    if(bate && !st.r[id]){ st.r[id] = 'na'; st.auto[id] = 1; }
    /* perfil desfeito: sai o “Não se aplica” que o próprio perfil pôs */
@@ -439,7 +450,7 @@
   if(it.campos && it.campos.length) h += '<div class="pu-bloco"><div class="pu-campos rs-campos">' + it.campos.map(campoHtml).join('') + '</div></div>';
   var naI = naItem(it); if(naI) h = '<div class="pu-bloco rs-na-item"><b>Não se aplica a este estabelecimento</b><p>' + esc(naI) + '</p></div>' + h;
   h += ps.map(perguntaHtml).join('');
-  if(!ps.length && !(it.campos || []).length && !it.consulta) h += '<div class="pu-bloco pu-aviso"><p>' + esc(it.vazio || 'Nenhuma verificação se aplica a este item.') + '</p></div>';
+  if(!ps.length && !camposDe(it).length && !it.consulta) h += '<div class="pu-bloco pu-aviso"><p>' + esc(it.vazio || 'Nenhuma verificação se aplica a este item.') + '</p></div>';
   var todasNA = ps.length && ps.every(function(q){ return st.r[q.id] === 'na'; });
   if(ps.length) h += '<div class="pu-acoes-item">' + (ps.some(function(q){ return q.na || D.naSempre; }) ? '<button type="button" class="pu-btn" data-rs-item-na>' + (todasNA ? 'Reabrir o item (desfazer “Não se aplica”)' : 'O item todo não se aplica') + '</button>' : '') + (todasNA ? '' : '<button type="button" class="pu-btn" data-rs-lote="c">' + (D.respostas === 'simnao' ? 'Marcar pendentes como conformes' : 'Marcar pendentes como Cumpre') + '</button>') + '</div>';
   el.innerHTML = h; }
@@ -622,7 +633,7 @@
  document.addEventListener('change', function(e){ var t = e.target;
   if(t.matches('[data-rs-amb-m]')){ var qm = t.dataset.rsAmbM.split('|'); ambSet(qm[0] + '|' + qm[1], 'm', {id: qm[2], on: t.checked}); var box = t.closest('.rs-amb'); if(box){ var am = ambLista(qm[0])[+qm[1]] || {}, nn = box.querySelectorAll('[data-rs-amb-m]:checked').length + (String(am.outra || '').trim() ? 1 : 0); box.classList.toggle('rs-amb-irr', nn > 0); var lb = box.querySelector('.rs-amb-n'); if(lb) lb.textContent = nn ? nn + ' irregularidade' + (nn > 1 ? 's' : '') : 'nenhuma irregularidade marcada'; } UvisPadrao.atualiza(); return; }
   if(t.matches('[data-rs-amb-tipo]')){ var qt = t.dataset.rsAmbTipo.split('|'); ambSet(qt[0] + '|' + qt[1], 'tipo', t.value); salva(); redesenha(); return; }
-  if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck)) redesenha(); else UvisPadrao.atualiza(); return; }
+  if(t.matches('[data-rs-check]')){ var a = Array.isArray(st.meta[t.dataset.rsCheck]) ? st.meta[t.dataset.rsCheck].slice() : [], v = t.value; if(t.checked){ if(a.indexOf(v) < 0) a.push(v); } else a = a.filter(function(x){ return x !== v; }); st.meta[t.dataset.rsCheck] = a; salva(); if(/^chk_/.test(t.dataset.rsCheck) || (campoPorId(t.dataset.rsCheck) || {}).refaz) redesenha(); else UvisPadrao.atualiza(); return; }
   if(t.matches('select[data-rs-eq]')){ var qs = t.dataset.rsEq.split('|'), ds = {}; ds[qs[2]] = t.value; eqSet(qs[0] + '|' + qs[1], ds);
    /* categoria do produto: muda a base e o rótulo da busca */
    if(qs[2] === 'tipo' && perfil(CAMPO[qs[0]]).porTipo){ delete eqMsg[qs[0] + '|' + qs[1]]; redesenha(); return; }
