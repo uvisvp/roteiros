@@ -188,6 +188,7 @@ const ROTINA = /prescri|ficha individual|registros? individua|pasta individual|l
     const out = [], grupos = [];
     sv.doc.forEach((x, i) => {
       if (/conferida na inspeção/i.test(x.i)) return; /* estrutura física: não é documento */
+      if (x.rep != null) return; /* repetido na modalidade (scripts/assistenciais/revisao.cjs): sai da tela e da lista */
       /* registros individuais e de rotina, conferidos na inspeção, ficam no roteiro (mesmo critério dos demais) */
       if (ROTINA.test(x.i)) return;
       let g = grupos.findIndex(y => y[1] === x.g); if (g < 0) { grupos.push(['m' + grupos.length, x.g]); g = grupos.length - 1; }

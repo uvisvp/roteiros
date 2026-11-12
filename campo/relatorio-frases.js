@@ -90,7 +90,8 @@
    rotulagem, 48 importados, 55 eventos adversos, 93 RT, 90 licença, 91 veículos, 31,
    § 2º, resíduos, 50 instalações e autorizações, 46, § 1º, manual e POPs, 46 o restante.
    O roteiro vem de window.__uvsApp (gravado pela casca); o id da verificação acerta os
-   casos em que o texto engana. SAICA e demais acolhimentos: art. 69. */
+   casos em que o texto engana. Centro Dia (Portaria SMS nº 5/2019, arts. 10 e 69), SAICA e demais
+   acolhimentos: art. 69. */
 (function(){
  if(window.UvsLei) return;
  var EQ_SEM_USO = function(t){ return /equipament/i.test(t) && /sem condi[çc][õo]es de uso|fora de uso|em desuso/i.test(t) ? '66, § 2º' : ''; };
@@ -146,7 +147,7 @@
   'servicos-alimentacao-roteiro': {padrao: '46', ids: {a5: '93', a6: '46, § 1º', b1: '50', b6: '50', c8: '46', d2: '46', d3: '46', e2: '46', e4: '46 e 49', g5: '46 e 49', h6: '46'}},
   'produtos-correlatos': {padrao: '46', ids: {p07: '50', p09: '46', p10: '46', p11: '46', p48: '46', dc4: '55', df1: '46', di5: '46', ds3: '46', ds6: '46', ds13: '46', ds15: '90', fi5: '19, § 2º', fm10: '46', fm12: '46', fn1: '46', fo7: '46, § 1º', fpr9: '46', fs6: '46', fw2: '50', fw3: '46', l7: '50', l8: '46', tv1: '91', tv5: '46', tv7: '46'}},
   /* assistenciais: SAICA e demais acolhimentos, art. 69; ILPI, Centro Dia, comunidade e residência terapêutica, pelo assunto */
-  'servicos-assistenciais': {saude: true, padrao: '63', fixos: {saica: '69', demais: '69'}}
+  'servicos-assistenciais': {saude: true, padrao: '63', fixos: {centrodia: '69', saica: '69', demais: '69'}}
  };
  function regra(R, t){ for(var i = 0; i < R.length; i++){ var a = R[i][1] === undefined ? R[i][0](t) : (R[i][0].test(t) ? R[i][1] : ''); if(typeof a === 'function') a = a(t); if(a) return a; } return ''; }
  function artigo(M, id, t){

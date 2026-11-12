@@ -20,11 +20,13 @@ const file = path.join(__dirname, '..', 'index.html');
 let {html, lz} = unpack(file);
 const ID = 'app--servicos-assistenciais';
 /* [modalidade, pergunta repetida da Inspeção, documento que fica] */
+/* 12/11/2026: na ILPI, no Centro Dia e na CT a licença que fica é a da norma específica (a genérica
+   saiu, scripts/assistenciais/revisao.cjs); a pergunta do enquadramento aponta para ela. */
 const REPETIDAS = [
   ["ilpi", "Está atendida a exigência de enquadramento da atividade no licenciamento municipal e situação da licença sanitária ou da dispensa?",
-    "Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal."],
+    "Alvará sanitário (Licença de Funcionamento Sanitária) atualizado, expedido pelo órgão sanitário competente."],
   ["ilpi", "Está atendida a exigência de alvará sanitário atualizado e afixado em local visível ao público?",
-    "Alvará sanitário atualizado, afixado em local visível."],
+    "Alvará sanitário (Licença de Funcionamento Sanitária) atualizado, expedido pelo órgão sanitário competente."],
   ["ilpi", "Está atendida a exigência de contrato e alvará sanitário das empresas terceirizadas de alimentação, limpeza ou lavanderia?",
     "Contrato e cópia do alvará sanitário das empresas de alimentação, limpeza ou lavanderia terceirizadas."],
   ["ilpi", "Está atendida a exigência de rotinas técnicas do processamento de roupas de uso pessoal e coletivo?",
@@ -46,7 +48,7 @@ const REPETIDAS = [
   ["ilpi", "Está atendida a exigência de rotinas de limpeza e higienização de artigos e ambientes?",
     "Rotinas de limpeza e higienização de artigos e ambientes."],
   ["centrodia", "Está atendida a exigência de enquadramento da atividade no licenciamento municipal e situação da licença sanitária ou da dispensa?",
-    "Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal."],
+    "Licença sanitária emitida pelo órgão sanitário competente."],
   ["centrodia", "Está atendida a exigência de certificado de higienização do reservatório de água a cada seis meses?",
     "Certificado de higienização do reservatório de água, a cada seis meses."],
   ["centrodia", "Está atendida a exigência de identificação externa do Centro Dia em local visível?",
@@ -58,7 +60,7 @@ const REPETIDAS = [
   ["centrodia", "Está atendida a exigência de carteira de vacinação atualizada dos usuários e dos funcionários?",
     "Cópia da carteira de vacinação dos usuários e dos funcionários, atualizada."],
   ["ct", "Está atendida a exigência de enquadramento da atividade no licenciamento municipal e situação da licença sanitária ou da dispensa?",
-    "Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal."],
+    "Licença sanitária atualizada, afixada em local visível ao público."],
   ["ct", "Está atendida a exigência de licença sanitária atualizada e afixada em local visível ao público?",
     "Licença sanitária atualizada, afixada em local visível ao público."],
   ["ct", "Está atendida a exigência de regularização das instalações prediais perante o Poder Público local?",

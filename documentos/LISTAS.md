@@ -2406,12 +2406,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Constituição e licenciamento
 
-- **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
-  Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
-- **Alvará sanitário atualizado, afixado em local visível**  
-  Fundamento: RDC Anvisa nº 502/2021, art. 8º
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
+- **Alvará sanitário (Licença de Funcionamento Sanitária) atualizado, expedido pelo órgão sanitário competente**  
+  Fundamento: RDC Anvisa nº 502/2021, art. 8º; Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Estatuto registrado, registro de entidade social e Regimento Interno**  
   Fundamento: RDC Anvisa nº 502/2021, art. 9º
 - **Comprovante de inscrição do programa junto ao Conselho Municipal do Idoso**  
@@ -2490,12 +2486,8 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 ### Constituição e licenciamento
 
-- **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
-  Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Licença sanitária emitida pelo órgão sanitário competente**  
-  Fundamento: Portaria SMS nº 5/2019, item 12.1
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
+  Fundamento: Portaria SMS nº 5/2019, item 12.1; Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Cadastro Nacional de Pessoa Jurídica — CNPJ**  
   Fundamento: Portaria SMS nº 5/2019, item 12
 - **Contrato Social com dados atualizados, Estatuto registrado ou Registro de Entidade Social**  
@@ -2553,18 +2545,14 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 65; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º
+  Fundamento: Lei Municipal nº 13.725/2004, art. 69
 
 ## Serviços assistenciais — Comunidade Terapêutica
 
 ### Licenciamento
 
-- **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
-  Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Licença sanitária atualizada, afixada em local visível ao público**  
-  Fundamento: RDC Anvisa nº 29/2011, art. 3º
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
+  Fundamento: RDC Anvisa nº 29/2011, art. 3º; Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Documento atualizado que descreva finalidades e atividades administrativas, técnicas e assistenciais**  
   Fundamento: RDC Anvisa nº 29/2011, art. 4º
 - **Comprovante de regularização das instalações prediais perante o Poder Público local**  
@@ -2622,7 +2610,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 65; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º
+  Fundamento: Lei Municipal nº 13.725/2004, art. 65
 
 ## Serviços assistenciais — Residência Terapêutica
 
@@ -2630,8 +2618,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
   Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
 - **Identificação do CNES do serviço ou equipe de saúde mental de referência; o SRT não possui CNES próprio**  
   Fundamento: Portaria de Consolidação GM/MS nº 3/2017 — Anexo V, Título V (SRT), art. 83, IV; Anexo 4 do Anexo V
 - **Identificação do serviço ou equipe de saúde mental de referência ao qual o módulo está vinculado**  
@@ -2685,16 +2671,12 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
   Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
 - **Registro do serviço no CMDCA-SP, reavaliado no máximo a cada dois anos**  
   Fundamento: Lei Federal nº 8.069/1990 — Estatuto da Criança e do Adolescente, art. 90; Resolução Conjunta nº 2/2014 CMDCA-SP e COMAS-SP, art. 7º; art. 7º, § 1º; art. 7º, § 2º
 - **Inscrição no COMAS-SP, revalidada anualmente**  
   Fundamento: Resolução Conjunta nº 2/2014 CMDCA-SP e COMAS-SP, art. 7º; art. 7º, § 1º; art. 7º, § 2º
 - **Auto de Vistoria do Corpo de Bombeiros vigente**  
   Fundamento: Lei Municipal nº 13.725/2004, art. 69
-- **Laudo ou licença da vigilância sanitária, quando exigido para a modalidade**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
 
 ### Acolhidos
 
@@ -2744,7 +2726,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º
+  Fundamento: Lei Municipal nº 13.725/2004, art. 69
 
 ## Serviços assistenciais — Demais acolhimentos
 
@@ -2752,8 +2734,6 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 
 - **Licença ou dispensa de licença sanitária, conforme o enquadramento da atividade no licenciamento municipal**  
   Fundamento: Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
-- **Cadastro Municipal de Vigilância em Saúde (CMVS) do estabelecimento**  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 90
 - **Documento constitutivo da entidade e identificação do responsável legal**  
   Fundamento: Lei Municipal nº 13.725/2004, art. 94
 - **Auto de Vistoria do Corpo de Bombeiros vigente**  
@@ -2803,5 +2783,5 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 ### Equipamentos — quando utilizados
 
 - **Inventário de equipamentos de saúde, instruções de uso, registros de limpeza, manutenção, calibração ou checagem funcional, conforme o equipamento** — _Se aplicável ao serviço._  
-  Fundamento: Lei Municipal nº 13.725/2004, art. 69; Lei Federal nº 15.378/2026 — Estatuto dos Direitos do Paciente, art. 8º; art. 9º
+  Fundamento: Lei Municipal nº 13.725/2004, art. 69
 
