@@ -480,7 +480,10 @@ function eac(tipo) {
 }
 /* Diagnóstico por imagem: RDC 611/2022 e as IN específicas */
 function imagem(m) {
-  const ion = m !== 'ressonancia' && m !== 'ultrassom';
+  /* 'varias' (12/11/2026): o roteiro único do serviço com uma ou mais modalidades — tudo o que alguma modalidade
+     pede, com o “Se aplicável” de cada uma */
+  const v = m === 'varias', ion = v || (m !== 'ressonancia' && m !== 'ultrassom');
+  const se = (x, q) => v ? [x[0], Object.assign({}, x[1], {q: 'Se aplicável: ' + q + '.'})] : x;
   const l = [
     'cnpj', 'licenca', 'cnes', 'avcb', 'amlurb',
     ['rt', {o: 'Designação formal, pelo responsável legal, do responsável técnico de cada setor e do substituto.', r: [R611(13)]}],
@@ -490,21 +493,21 @@ function imagem(m) {
     ['calibracao', {n: 'Certificados de calibração dos instrumentos de avaliação dos equipamentos', o: 'Calibração por laboratório credenciado.', r: [R611(30)]}],
     'pgrss', 'pmoc',
     ['manutencao', {r: [R63('ix'), R611('28::paragrafo::unico')]}],
-    ['programas', {g: 'sgq', n: 'Programa de Garantia da Qualidade' + (ion ? ' e Programa de Proteção Radiológica' : ''), o: 'Programas implementados, com medidas de prevenção, controle, vigilância e monitoramento.', r: [R611(5)].concat(ion ? [R611(42)] : [])}],
+    ['programas', {g: 'sgq', n: 'Programa de Garantia da Qualidade' + (v ? ' e, nos raios X, Programa de Proteção Radiológica' : ion ? ' e Programa de Proteção Radiológica' : ''), o: 'Programas implementados, com medidas de prevenção, controle, vigilância e monitoramento.', r: [R611(5)].concat(ion ? [R611(42)] : [])}],
     ['comite', {g: 'sgq', n: 'Atas do Comitê de Gerenciamento de Riscos em Radiologia', q: 'Se aplicável: exigido pelo porte do serviço.', o: 'Constituição do comitê e registros da revisão sistemática dos programas.', r: [R611(39)]}],
     'terceiros',
     pop('Normas, rotinas, protocolos e procedimentos de todas as atividades', [R611(38)]),
     ['testes', {g: 'reg', n: 'Relatórios dos testes de aceitação e de constância', o: 'Relatórios conforme a IN da modalidade e protocolos oficiais.', r: [R611('28::paragrafo::unico'), R611(29)]}]
   ];
-  if (m !== 'ultrassom') l.push(['blindagem', {g: 'infra', n: 'Projeto de blindagem aprovado', o: 'Projeto elaborado e assinado por profissional habilitado, aprovado e assinado pelo responsável legal, com a aprovação da vigilância' + (m === 'ressonancia' ? '; na RM, com blindagem eletromagnética, isolamento acústico, evacuação de gases e laudo de compatibilidade eletromagnética.' : '.'), r: [R611(7), R611(8)].concat(m === 'ressonancia' ? ['in-97-2021::artigo::4'] : [])}]);
+  if (m !== 'ultrassom') l.push(se(['blindagem', {g: 'infra', n: 'Projeto de blindagem aprovado', o: 'Projeto elaborado e assinado por profissional habilitado, aprovado e assinado pelo responsável legal, com a aprovação da vigilância' + (m === 'ressonancia' || v ? '; na RM, com blindagem eletromagnética, isolamento acústico, evacuação de gases e laudo de compatibilidade eletromagnética.' : '.'), r: [R611(7), R611(8)].concat(m === 'ressonancia' || v ? ['in-97-2021::artigo::4'] : [])}], 'todas as modalidades, exceto ultrassonografia'));
   if (ion) l.push(
-    ['spr', {g: 'pes', n: 'Designação do supervisor de proteção radiológica e do substituto', o: 'Membros legalmente habilitados da equipe, formalmente designados.', r: [R611(14)]}],
-    ['levantamento', {g: 'reg', n: 'Laudo de levantamento radiométrico', o: 'Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.', r: [R611(63)]}]
+    se(['spr', {g: 'pes', n: 'Designação do supervisor de proteção radiológica e do substituto', o: 'Membros legalmente habilitados da equipe, formalmente designados.', r: [R611(14)]}], 'modalidades com raios X'),
+    se(['levantamento', {g: 'reg', n: 'Laudo de levantamento radiométrico', o: 'Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.', r: [R611(63)]}], 'modalidades com raios X')
   );
-  if (m === 'mamografia') l.push(['pnqm', {g: 'sgq', n: 'Comprovante de participação no PNQM', o: 'Participação no Programa Nacional de Qualidade em Mamografia.', r: ['portaria-de-consolidacao-ms-5-2017::artigo::216']}]);
-  if (m === 'hemodinamica') l.push(
-    ['epi_laudo', {g: 'reg', n: 'Laudos semestrais de integridade dos EPI plumbíferos', o: 'Laudo técnico semestral dos aventais e demais EPI, com resultados e imagens.', r: ['in-91-2021::artigo::9']}],
-    ['psp', {n: 'Núcleo e Plano de Segurança do Paciente', o: 'Ato de constituição do NSP e Plano de Segurança do Paciente que alcance a hemodinâmica.'}]
+  if (m === 'mamografia' || v) l.push(se(['pnqm', {g: 'sgq', n: 'Comprovante de participação no PNQM', o: 'Participação no Programa Nacional de Qualidade em Mamografia.', r: ['portaria-de-consolidacao-ms-5-2017::artigo::216']}], 'mamografia'));
+  if (m === 'hemodinamica' || v) l.push(
+    se(['epi_laudo', {g: 'reg', n: 'Laudos semestrais de integridade dos EPI plumbíferos', o: 'Laudo técnico semestral dos aventais e demais EPI, com resultados e imagens.', r: ['in-91-2021::artigo::9']}], 'hemodinâmica'),
+    se(['psp', {n: 'Núcleo e Plano de Segurança do Paciente', o: 'Ato de constituição do NSP e Plano de Segurança do Paciente que alcance a hemodinâmica.'}], 'hemodinâmica')
   );
   return l;
 }
@@ -513,4 +516,6 @@ function imagem(m) {
 /* EAC em drogaria: sem a designação do RT (a Certidão de Regularidade do CRF já a traz), pedido de 09/11/2026 */
 APPS['eac-drogaria'] = APPS['eac-tipo1'].filter(x => (Array.isArray(x) ? x[0] : x) !== 'rt');
 APPS['vacina-drogaria'] = APPS['vacinacao'];
+/* Diagnóstico por imagem, uma ou mais modalidades (12/11/2026): no fim, para não renumerar os POPs das listas acima */
+APPS['imagem-servico'] = imagem('varias');
 module.exports = {VERSAO, GRUPOS, DOCS, APPS};

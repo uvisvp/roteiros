@@ -585,6 +585,78 @@ const ENUNCIADOS = {
   levantamento: 'O levantamento radiométrico atende aos requisitos?',
   dosimetro: 'A dosimetria individual dos trabalhadores expostos atende aos requisitos?'
 };
+/* Serviço com uma ou mais modalidades (12/11/2026, como em Alimentos e Odontologia): um roteiro e um
+   relatório para o serviço que tem várias modalidades. O perfil marca as modalidades (p_mod); a parte
+   comum da RDC 611/2022 aparece uma vez — a pergunta que só vale para algumas modalidades, só quando
+   uma delas está marcada — e cada modalidade marcada abre a sua seção da IN. Perguntas, citações,
+   pontos, orientações e infrações são as dos seis roteiros por modalidade, montados aqui por monta();
+   nada é reescrito. Na infração com a IN da modalidade, a IN de modalidade não marcada sai do
+   fundamento (refsSe). Sem modalidade marcada, só a identificação. */
+const MODS = ['conv', 'mamo', 'tc', 'rm', 'us', 'hemo'];
+const IN_DE = {conv: 'in-90-2021::', mamo: 'in-92-2021::', tc: 'in-93-2021::', rm: 'in-97-2021::', us: 'in-96-2021::', hemo: 'in-91-2021::'};
+function montaMulti() {
+  const Ds = MODS.map(m => [m, monta(m)]);
+  const mod = ms => ({campo: 'p_mod', incluiAlgum: MODS.filter(m => ms.includes(m))});
+  const juntaSe = (a, b) => a ? {todos: [a, b]} : b;
+  /* une listas na ordem em que aparecem: o que falta entra logo depois do anterior da mesma lista */
+  const une = (dest, lista, chave) => { let ant = -1; for (const x of lista) { const k = dest.findIndex(y => chave(y) === chave(x)); if (k >= 0) { ant = k; continue; } dest.splice(ant + 1, 0, x); ant = ant + 1; } };
+  const onde = {}, ondeQ = {}, ondeC = {}, ondeInf = {};
+  for (const [m, D] of Ds) for (const s of D.secoes) for (const it of s.itens) {
+    if (s.id === 'modalidade') continue;
+    (onde[s.id + '|' + it.id] = onde[s.id + '|' + it.id] || []).push(m);
+    (it.perguntas || []).forEach(q => (ondeQ[q.id] = ondeQ[q.id] || []).push(m));
+    (it.campos || []).forEach(c => (ondeC[it.id + '|' + c.id] = ondeC[it.id + '|' + c.id] || []).push(m));
+  }
+  for (const [m, D] of Ds) D.infracoes.forEach(i => (ondeInf[i.id] = ondeInf[i.id] || []).push(m));
+  /* seções comuns, na ordem do roteiro mais completo */
+  const secoes = [];
+  for (const [, D] of Ds) une(secoes, D.secoes.filter(s => s.id !== 'modalidade').map(s => copia(Object.assign({}, s, {itens: []}))), s => s.id);
+  for (const s of secoes) for (const [, D] of Ds) { const o = D.secoes.find(x => x.id === s.id); if (o) une(s.itens, copia(o.itens).map(it => Object.assign(it, {perguntas: [], campos: it.campos ? [] : undefined})), it => it.id); }
+  for (const s of secoes) for (const it of s.itens) {
+    for (const [, D] of Ds) { const o = (D.secoes.find(x => x.id === s.id) || {itens: []}).itens.find(x => x.id === it.id); if (!o) continue;
+      une(it.perguntas, copia(o.perguntas || []), q => q.id); if (o.campos) une(it.campos, copia(o.campos), c => c.id); }
+    if (!it.perguntas.length) delete it.perguntas; if (it.campos === undefined) delete it.campos;
+    if (s.id !== 'ident') it.se = mod(onde[s.id + '|' + it.id]);
+    (it.perguntas || []).forEach(q => { const ms = ondeQ[q.id]; if (ms.length < onde[s.id + '|' + it.id].length) q.se = juntaSe(q.se, mod(ms)); });
+    (it.campos || []).forEach(c => { const ms = ondeC[it.id + '|' + c.id]; if (ms.length < MODS.length) c.se = juntaSe(c.se, mod(ms)); });
+    delete it.cTodos; /* a frase única das vedações é só dos equipamentos com filme */
+  }
+  const ident = secoes.find(s => s.id === 'ident');
+  ident.descricao = 'Dados do serviço e as modalidades que ele tem. As modalidades marcadas abrem as verificações; o perfil tira do roteiro o que não existir.';
+  const perfil = ident.itens.find(i => i.id === 'perfil');
+  perfil.campos.unshift({id: 'p_mod', rotulo: 'Modalidades do serviço', tipo: 'checks', largo: true, refaz: true, opcoes: MODS.map(m => [m, MOD[m].titulo])});
+  /* equipamentos: os tipos de todas as modalidades, com a data do levantamento radiométrico */
+  const eq = secoes.find(s => s.id === 'qualidade').itens.find(i => i.id === 'equipamentos');
+  eq.descricao = 'Liste os equipamentos de todas as modalidades: busque pelo registro na Anvisa ou pelo processo, ou digite os dados, com as datas do último teste de constância e, nos raios X, do levantamento radiométrico. A lista sai em tabela no relatório.';
+  const tipos = [...new Set(MODS.flatMap(m => MOD[m].tipos.filter(x => x !== 'Outro')))].concat(['Outro']);
+  eq.campos.forEach(c => { if (c.id === 'equip_lista') { c.tipos = tipos; c.omite = []; delete c.se; } });
+  /* uma seção por modalidade, com a IN própria */
+  for (const [m, D] of Ds) { const s = copia(D.secoes.find(x => x.id === 'modalidade'));
+    s.id = 'mod_' + m; s.curto = MOD[m].titulo.replace(/ e radiologia intervencionista$/, '');
+    s.itens.forEach(it => { it.id = 'esp_' + m; it.se = mod([m]); });
+    secoes.push(s); }
+  /* infrações: uma vez cada; a IN de cada modalidade junta-se no fundamento e sai quando a modalidade não está marcada */
+  const infracoes = [];
+  const eLei = r => /^lei-municipal-13725-2004::/.test(r);
+  for (const [, D] of Ds) for (const i of copia(D.infracoes)) { const j = infracoes.find(x => x.id === i.id);
+    if (j) { j.r = [...new Set(j.r.filter(r => !eLei(r)).concat(i.r.filter(r => !eLei(r))))].concat([...new Set(j.r.concat(i.r).filter(eLei))]); continue; } infracoes.push(i); }
+  infracoes.forEach(i => { i.se = mod(ondeInf[i.id]); });
+  const refsSe = {}; MODS.forEach(m => { refsSe[IN_DE[m]] = {campo: 'p_mod', inclui: m}; });
+  const normas = []; for (const [, D] of Ds) for (const n of copia(D.normas)) if (!normas.some(x => x[0] === n[0])) normas.push(n);
+  normas.sort((a, b) => /13\.725/.test(a[0]) - /13\.725/.test(b[0]));
+  const base = Ds[0][1];
+  return Object.assign({}, base, {
+    app: 'imagem-servico', titulo: 'Diagnóstico por imagem', tituloCurto: 'Diagnostico_por_imagem', store: 'uvis-imagem-servico-v1',
+    filtroPerfil: true, naOculta: true, refsSe,
+    relatorio: Object.assign({}, base.relatorio, {
+      subtitulo: 'Diagnóstico por imagem — RDC Anvisa nº 611/2022 e as Instruções Normativas das modalidades do serviço',
+      objetivo: 'Verificar as condições de funcionamento do serviço de diagnóstico por imagem, nas modalidades que ele mantém, nos termos da RDC Anvisa nº 611/2022, da Instrução Normativa da Anvisa própria de cada modalidade e, quando aplicáveis, do Programa Nacional de Qualidade em Mamografia e da RDC Anvisa nº 36/2013.'}),
+    normas, secoes, infracoes
+  });
+}
 const enunciados = require('../roteiro-simples/enunciados.cjs');
 module.exports = ['conv', 'mamo', 'tc', 'rm', 'us', 'hemo'].map(monta).map(D => enunciados(D, ENUNCIADOS, {opcional: true}));
+/* o roteiro único vem primeiro na lista do card */
+module.exports.unshift(enunciados(montaMulti(), ENUNCIADOS, {opcional: true}));
 module.exports.monta = monta;
+module.exports.montaMulti = montaMulti;

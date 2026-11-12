@@ -8,6 +8,9 @@
 .rs-checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px 12px;margin-top:4px}
 .rs-checks label{display:flex;align-items:center;gap:9px;min-height:44px;padding:6px 10px;border:1px solid #dbe3e8;border-radius:9px;background:#fff;color:#1b262d;cursor:pointer}
 .rs-checks input{width:20px;height:20px;accent-color:var(--pu-cor,#1E5A8A)}
+/* lista de marcar: as regras gerais dos campos (largura total, 44 px de altura, rótulo em grade) não valem para a caixa (12/11/2026) */
+.pu-ativo .pu-campos .rs-checks label,.rs-campo .rs-checks label{display:flex;align-items:center;gap:9px;font-weight:500}
+.pu-ativo .pu-campos .rs-checks input,.rs-campo .rs-checks input{width:20px;height:20px;min-height:0;padding:0;margin:0;flex:0 0 auto}
 .rs-cits{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
 .rs-cit{min-height:32px;padding:4px 10px;border:1px solid #cfdbe3;border-radius:8px;background:#f3f7fa;color:var(--pu-cor,#1E5A8A);font:inherit;font-size:.78rem;font-weight:650;cursor:pointer}
 .rs-cit:hover{border-color:var(--pu-cor,#1E5A8A)}
