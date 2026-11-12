@@ -94,7 +94,7 @@
    {id: 'as-sentinela', re: /eventos sentinela/i, serv: ['ilpi'], tit: 'eventos sentinela', l: [
     ['Na ILPI, queda com lesão e tentativa de suicídio são eventos sentinela, com notificação imediata à vigilância sanitária local.', 'RDC Anvisa nº 502/2021, art. 55, I e II'],
     ['Além disso, a ILPI avalia continuamente o seu desempenho pelos indicadores do Anexo da RDC e envia todo mês de janeiro o consolidado do ano anterior à vigilância sanitária.', 'RDC Anvisa nº 502/2021, arts. 58 a 60']]},
-   {id: 'as-ct', re: /permanência voluntária/i, serv: ['ct'], tit: 'comunidade terapêutica', l: [
+   {id: 'as-ct', re: /permanência (é )?voluntária/i, serv: ['ct'], tit: 'comunidade terapêutica', l: [
     ['A permanência é voluntária e o residente pode interromper o tratamento a qualquer momento, salvo risco imediato de vida para si ou para terceiros ou intoxicação por substâncias psicoativas, avaliados e documentados por médico.', 'RDC Anvisa nº 29/2011, art. 19, III e IV'],
     ['São proibidos castigos físicos, psíquicos ou morais.', 'RDC Anvisa nº 29/2011, art. 20, IV'],
     ['O serviço define critérios para alta terapêutica, desistência (alta a pedido), desligamento (administrativo ou por mandado judicial) e evasão.', 'RDC Anvisa nº 29/2011, art. 21'],

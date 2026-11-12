@@ -44,10 +44,11 @@ const marcados=(f,pre,v)=>f.evaluate(([pre,v])=>[...document.querySelectorAll('[
   await clicaEMede(f,p,'[data-answer="r4"][data-value="yes"]');ok(/^C+$/.test(await marcados(f,'r4¦')),'produtos: “Cumpre” deveria marcar todos os itens como Atende ('+await marcados(f,'r4¦')+')');
   ok(!erros.length,'produtos: erros de página — '+erros.join(' | '));await p.close()}
  /* ---------- Serviços assistenciais: exigência repetida ---------- */
- for(const [serv,n] of Object.entries({ilpi:13,centrodia:6,ct:13,srt:7,saica:4,demais:4})){
+ /* 47 repetições de 11/11 e as da revisão de 12/11 (scripts/assistenciais/revisao.cjs) */
+ for(const [serv,n] of Object.entries({ilpi:18,centrodia:9,ct:14,srt:11,saica:9,demais:8})){
   const {p,f,erros}=await T.abre('Serviços assistenciais','servicos-assistenciais','x','servico='+serv,{browser:b,...V,carga:3500});
   const r=await f.evaluate(()=>({rep:current.rot.filter(x=>x.rep!=null).length,tot:current.rot.length,tela:asGrupos('rot').reduce((a,g)=>a+g.idx.length,0),
-   pares:current.rot.filter(x=>x.rep!=null).every(x=>current.doc[x.rep]&&current.doc[x.rep].rep==null),prog:(()=>{updateProgress();return document.querySelector('#progress').textContent})(),docs:current.doc.length}));
+   pares:current.rot.filter(x=>x.rep!=null).every(x=>{const m=/^(doc|rot)(\d+)$/.exec(x.rep),alvo=m?current[m[1]][+m[2]]:current.doc[x.rep];return alvo&&alvo.rep==null}),prog:(()=>{updateProgress();return document.querySelector('#progress').textContent})(),docs:current.doc.filter(x=>x.rep==null).length}));
   ok(r.rep===n,serv+': esperava '+n+' perguntas repetidas retiradas, achei '+r.rep);
   ok(r.tela===r.tot-r.rep,serv+': a seção Inspeção deveria mostrar '+(r.tot-r.rep)+' perguntas, mostra '+r.tela);
   ok(r.pares,serv+': pergunta retirada sem o documento correspondente');
