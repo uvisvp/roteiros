@@ -16,13 +16,24 @@ const LM = (a, ...r) => 'lei-municipal-13725-2004::artigo::' + a + (r.length ? '
 const N = lei => (...nos) => nos.map(n => lei + '::' + n);
 const R63 = N('rdc-anvisa-63-2011'), R509 = N('rdc-anvisa-509-2021'), R222 = N('rdc-anvisa-222-2018'), R42 = N('rdc-anvisa-42-2010');
 const R15 = N('rdc-anvisa-15-2012'), R156 = N('rdc-anvisa-156-2006'), R67 = N('rdc-anvisa-67-2007'), R751 = N('rdc-anvisa-751-2022'), P344 = N('portaria-svs-ms-344-1998');
-const L13643 = N('lei-federal-13643-2018'), L6360 = N('lei-federal-6360-1976');
+const L13643 = N('lei-federal-13643-2018'), L6360 = N('lei-federal-6360-1976'), L12592 = N('lei-federal-12592-2012');
 const SN = [['sim', 'Sim'], ['nao', 'Não']];
 const SAUDE = {campo: 'p_tipo', igual: 'saude'}, INT = {campo: 'p_tipo', igual: 'interesse'};
 const NAO = campo => ({campo, igual: 'nao'});
 const ROI = 'Roteiro Objetivo de Inspeção — Serviços de Estética classificados como Serviços de Saúde (Anvisa, versão 1.3, 16/12/2025)';
-/* esteticista: biossegurança e legislação sanitária (Lei 13.643, art. 8º) + Código Sanitário, art. 69 */
-const INT_BIO = [...L13643('a8'), LM(69)];
+/* interesse à saúde, por atividade (12/11/2026): o estabelecimento marca o que faz — estética
+   (esteticista ou técnico em estética), cabeleireiro ou barbeiro, manicure ou pedicure, depilação,
+   maquiagem. A Lei 13.643/2018 só vale para esteticista e técnico em estética: sem estética marcada,
+   ela sai dos botões e do fundamento (refsSe) e a pergunta da formação sai do roteiro; sem resposta,
+   fica tudo. A Lei 12.592/2012, art. 4º (normas sanitárias e esterilização de materiais e utensílios),
+   vale para todas essas profissões, inclusive a de esteticista. */
+const ATIV = [['estetica', 'Procedimentos estéticos (limpeza de pele, massagem, equipamentos estéticos)'], ['cabelo', 'Cabeleireiro ou barbeiro'], ['unhas', 'Manicure ou pedicure'], ['depil', 'Depilação'], ['maquiagem', 'Maquiagem ou design de sobrancelhas']];
+/* processamento no local (ou ainda sem resposta): os campos do processamento interno */
+const SEM_PROC_LOCAL = {campo: 'p_proc', em: ['externo', 'nao']};
+const PROC_LOCAL = {algum: [{campo: 'p_proc', vazio: true}, {campo: 'p_proc', em: ['interno', 'ambos']}]};
+const ESTETICISTA = {algum: [{campo: 'p_ativ', vazio: true}, {campo: 'p_ativ', inclui: 'estetica'}]};
+/* biossegurança e legislação sanitária: Lei 12.592, art. 4º, e Lei 13.643, art. 8º (esteticista) + Código Sanitário, art. 69 */
+const INT_BIO = [...L12592('a4'), ...L13643('a8'), LM(69)];
 
 /* Inventário dos ambientes (como na academia): os ambientes que o estabelecimento possui e,
    em cada um, só as irregularidades encontradas — uma irregularidade por linha. A mesma lista
@@ -80,11 +91,12 @@ const secoes = [
           {id: 'equipe', rotulo: 'Equipe de inspeção', largo: true}
         ]},
       {id: 'perfil', titulo: 'Classificação e perfil do serviço', curto: 'Perfil',
-        descricao: 'Comece pela classificação: ela abre as verificações do roteiro. As demais respostas marcam “Não se aplica” no que o serviço não faz (pode ser alterado depois).',
+        descricao: 'Comece pela classificação: ela abre as verificações do roteiro. As demais respostas tiram do roteiro o que o serviço não faz (pode ser alterado depois; o que já foi respondido fica).',
         campos: [
           {id: 'p_tipo', rotulo: 'Classificação do serviço', tipo: 'select', largo: true,
             opcoes: [['saude', 'Serviço de saúde — procedimentos estéticos executados por profissional de saúde'], ['interesse', 'Serviço de interesse à saúde — estética e embelezamento sem profissional de saúde']],
             desc: {saude: 'serviço de estética classificado como serviço de saúde', interesse: 'serviço de estética e embelezamento de interesse à saúde'}},
+          {id: 'p_ativ', se: INT, rotulo: 'Atividades do estabelecimento', tipo: 'checks', largo: true, refaz: true, opcoes: ATIV},
           {id: 'p_equip', rotulo: 'Usa equipamentos estéticos (laser, luz pulsada, radiofrequência, ultrassom, criolipólise etc.)?', tipo: 'select', opcoes: SN, desc: {sim: 'uso de equipamentos estéticos'}},
           {id: 'p_proc', rotulo: 'Instrumentais reutilizáveis: onde são processados?', tipo: 'select',
             opcoes: [['interno', 'No próprio estabelecimento'], ['externo', 'Em empresa processadora (terceirizado)'], ['ambos', 'Parte no local, parte terceirizado'], ['nao', 'Não há: só material de uso único']],
@@ -97,6 +109,7 @@ const secoes = [
         orient: [
           {t: 'Serviço de saúde é o estabelecimento destinado a prestar assistência à população na prevenção de doenças, no tratamento, na recuperação e na reabilitação. O serviço de estética em que o procedimento é executado por profissional de saúde, dentro do que o respectivo conselho autoriza, segue as boas práticas da RDC 63/2011 e é o objeto do ROI de Estética da Anvisa.', f: 'RDC Anvisa nº 63/2011, art. 4º, XII; ' + ROI},
           {t: 'Técnico em estética e esteticista e cosmetólogo trabalham com produtos cosméticos, técnicas e equipamentos com registro na Anvisa; a lei deles não abrange a estética médica. O estabelecimento só com esses profissionais é de interesse à saúde: cumpre a biossegurança e a legislação sanitária, mas não as exigências próprias de serviço de saúde (RT de nível superior, prontuário, plano de segurança do paciente).', f: 'Lei Federal nº 13.643/2018, arts. 1º, parágrafo único, 5º, I, e 8º; Lei Municipal nº 13.725/2004, art. 69'},
+          {t: 'Profissionais de beleza (cabeleireiro, barbeiro, esteticista, manicure, pedicure, depilador e maquiador) devem obedecer às normas sanitárias e esterilizar os materiais e utensílios usados no atendimento: é a Lei 12.592/2012, art. 4º, citada na biossegurança do interesse à saúde. A Lei 13.643/2018 (formação, limites de atuação e art. 8º) só vale para esteticista e técnico em estética. Por isso, marque as atividades do estabelecimento: sem procedimentos estéticos, a Lei 13.643/2018 sai das citações e da capitulação.', f: 'Lei Federal nº 12.592/2012, arts. 1º e 4º; Lei Federal nº 13.643/2018, arts. 1º e 8º'},
           {t: 'A Nota Técnica nº 2/2024/GGTES/Anvisa (orientações sobre serviços de estética e embelezamento) está suspensa desde 23/09/2026, enquanto um Grupo de Trabalho reavalia o tema. As normas sanitárias continuam valendo, e a suspensão não autoriza procedimento, produto ou prática vedados. Este roteiro não usa a nota: a classificação se apoia nas normas citadas.', f: 'Anvisa, notícia “Anvisa suspende temporariamente Nota Técnica sobre serviços de estética” (23/09/2026)'}
         ]}
     ]
@@ -129,7 +142,7 @@ const secoes = [
             c: 'Os profissionais de saúde são legalmente habilitados, registrados no conselho e atuam nos limites autorizados, com comprovantes disponíveis.', nc: 'Os profissionais de saúde do serviço não atendem às exigências de habilitação.',
             pontos: [['habilitados', 'legalmente habilitados para as atividades', 'Há profissionais de saúde sem habilitação para as atividades executadas.'], ['conselho', 'registro no conselho de classe', 'Há profissionais de saúde sem registro no conselho de classe.'], ['limites', 'procedimentos autorizados pelo conselho', 'Há profissionais de saúde realizando procedimentos estéticos não autorizados pelo seu conselho de classe.'], ['comprovantes', 'comprovantes disponíveis', 'Os comprovantes de formação e registro dos profissionais não foram apresentados.']],
             inf: ['s07', 's08', 's09']},
-          {id: 'rh_i', se: INT, t: 'Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo) e trabalha só com cosméticos, técnicas e equipamentos registrados, nos limites da profissão, com comprovantes disponíveis?', r: [...L13643('a3', 'a4', 'a5', 'a5-i', 'a6'), LM(69)],
+          {id: 'rh_i', se: {todos: [INT, ESTETICISTA]}, t: 'Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo) e trabalha só com cosméticos, técnicas e equipamentos registrados, nos limites da profissão, com comprovantes disponíveis?', r: [...L13643('a3', 'a4', 'a5', 'a5-i', 'a6'), LM(69)],
             c: 'Os procedimentos são executados por profissionais com formação compatível, nos limites da Lei 13.643/2018, com comprovantes disponíveis.', nc: 'Os profissionais que executam os procedimentos não atendem às exigências de formação e de limites de atuação.',
             pontos: [['formacao', 'formação de técnico em estética ou de esteticista e cosmetólogo', 'Há procedimento estético executado por pessoa sem a formação exigida.'], ['comprovantes', 'comprovantes de formação disponíveis', 'Os comprovantes de formação dos profissionais não foram apresentados.'], ['injetavel', 'sem medicamento ou substância injetável', 'Esteticista ou técnico em estética administra medicamento ou substância injetável.'], ['cosmeticos', 'só produtos cosméticos regularizados', 'Esteticista ou técnico em estética usa produto que não é cosmético.']],
             inf: ['i03', 'i04', 'i05', 'i06']}
@@ -319,12 +332,12 @@ const secoes = [
       {id: 'interno', se: {campo: 'p_tipo', em: ['saude', 'interesse']}, titulo: 'Processamento no próprio estabelecimento', curto: 'Processamento interno',
         descricao: 'Do uso ao armazenamento: classificação do material, limpeza, desinfecção, esterilização, monitoramento, identificação dos estéreis e guarda.',
         campos: [
-          {id: 'proc_ester', rotulo: 'Esterilização no local — método', tipo: 'select',
+          {id: 'proc_ester', se: PROC_LOCAL, rotulo: 'Esterilização no local — método', tipo: 'select',
             opcoes: [['vacuo', 'Autoclave a vapor com bomba de vácuo (pré-vácuo)'], ['grav', 'Autoclave a vapor gravitacional'], ['estufa', 'Estufa (calor seco)'], ['quimica', 'Esterilização química líquida'], ['nao', 'Não esteriliza no local']]},
-          {id: 'proc_autoclave', rotulo: 'Autoclave: marca, modelo e capacidade (litros)', largo: true},
-          {id: 'proc_desinf', rotulo: 'Desinfecção de instrumentos ou acessórios', tipo: 'select',
+          {id: 'proc_autoclave', se: PROC_LOCAL, rotulo: 'Autoclave: marca, modelo e capacidade (litros)', largo: true},
+          {id: 'proc_desinf', se: PROC_LOCAL, rotulo: 'Desinfecção de instrumentos ou acessórios', tipo: 'select',
             opcoes: [['quimica', 'Química (imersão em desinfetante)'], ['termica', 'Térmica (termodesinfetadora)'], ['nao', 'Não faz desinfecção']]},
-          {id: 'proc_produtos', rotulo: 'Detergente e desinfetante em uso: nome, nº de registro ou notificação na Anvisa, diluição e tempo de contato', largo: true}
+          {id: 'proc_produtos', se: PROC_LOCAL, rotulo: 'Detergente e desinfetante em uso: nome, nº de registro ou notificação na Anvisa, diluição e tempo de contato', largo: true}
         ],
         perguntas: [
           /* ——— serviço de saúde: RDC 15/2012 (CME do serviço de saúde) e RDC 63/2011, art. 57 ——— */
@@ -347,23 +360,23 @@ const secoes = [
           {id: 'proc_ester_q', se: SAUDE, t: 'O equipamento e o ciclo de esterilização atendem às exigências?', r: [...R15('a37', 'a91', 'a92', 'a93', 'a94', 'a97'), LM(65)],
             c: 'A esterilização é feita em autoclave qualificada anualmente, sem estufa, com teste de Bowie & Dick no primeiro ciclo do dia (autoclave com vácuo) e registro dos parâmetros de cada ciclo.', nc: 'A esterilização não atende às exigências.', ncPontos: 'Na esterilização, não se atende: {}.',
             pontos: [['estufa', 'sem uso de estufa', 'Há uso de estufa para esterilização, o que é proibido.'], ['grav', 'autoclave gravitacional só até 100 litros', 'Há autoclave gravitacional com capacidade acima de 100 litros, o que é proibido.'], ['qualif', 'qualificação de instalação, operação e desempenho, no mínimo anual', 'A autoclave não tem qualificação de instalação, operação e desempenho anual.'], ['bowie', 'teste de Bowie & Dick no primeiro ciclo do dia (autoclave com bomba de vácuo)', 'Não é feito o teste de Bowie & Dick no primeiro ciclo do dia da autoclave com bomba de vácuo.'], ['param', 'parâmetros do ciclo sem alteração e registrados a cada ciclo', 'Os parâmetros dos ciclos não são registrados a cada ciclo ou foram alterados em relação aos da qualificação.']],
-            naSe: {campo: 'proc_ester', igual: 'nao'}, na: 'O estabelecimento não esteriliza no local.', inf: ['s57', 's58']},
+            naSe: {algum: [SEM_PROC_LOCAL, {campo: 'proc_ester', igual: 'nao'}]}, na: 'O estabelecimento não esteriliza no local.', inf: ['s57', 's58']},
           {id: 'proc_monit', se: SAUDE, t: 'O monitoramento da esterilização e os registros atendem às exigências?', r: [...R15('a26', 'a26pu', 'a42', 'a96', 'a98', 'a99'), LM(65)],
             c: 'A esterilização é monitorada com integrador químico em cada carga e indicador biológico diário, com incubadora e registros guardados por cinco anos.', nc: 'O monitoramento da esterilização não atende às exigências.', ncPontos: 'No monitoramento da esterilização, não há: {}.',
             pontos: [['quimico', 'integrador químico (classe 5 ou 6) em pacote desafio a cada carga', 'Não há integrador químico (classe 5 ou 6) em pacote desafio a cada carga.'], ['biologico', 'indicador biológico diário, no ponto de maior desafio', 'Não há monitoramento diário com indicador biológico.'], ['incubadora', 'incubadora para leitura do indicador biológico', 'Não há incubadora para a leitura do indicador biológico.'], ['registro', 'registros do monitoramento guardados por no mínimo cinco anos', 'Os registros do monitoramento não são guardados por, no mínimo, cinco anos.']],
-            naSe: {campo: 'proc_ester', igual: 'nao'}, na: 'O estabelecimento não esteriliza no local.', inf: ['s58', 's60']},
+            naSe: {algum: [SEM_PROC_LOCAL, {campo: 'proc_ester', igual: 'nao'}]}, na: 'O estabelecimento não esteriliza no local.', inf: ['s58', 's60']},
           {id: 'proc_embal', se: SAUDE, t: 'A embalagem e a identificação dos produtos esterilizados atendem às exigências?', r: [...R15('a77', 'a78', 'a79', 'a80', 'a81', 'a83', 'a84', 'a85'), LM(65)],
             c: 'Os estéreis estão em embalagem regularizada para esterilização, selada, com rótulo legível que traz o nome do produto, o lote, a data da esterilização, a data limite de uso, o método e o responsável pelo preparo.', nc: 'A embalagem ou a identificação dos produtos esterilizados não atende às exigências.', ncPontos: 'Nos produtos esterilizados, não há: {}.',
             pontos: [['embalagem', 'embalagem regularizada na Anvisa para esterilização (sem papel kraft, papel toalha, alumínio, plástico comum ou caixa metálica sem furos)', 'Os produtos são esterilizados em embalagem não regularizada para esterilização ou proibida (papel kraft, papel toalha, alumínio, plástico comum ou caixa metálica sem furos).'], ['selagem', 'selagem por termosseladora ou conforme o fabricante', 'A selagem das embalagens não é feita por termosseladora ou conforme o fabricante.'], ['nome', 'nome do produto no rótulo', 'O rótulo dos produtos esterilizados não traz o nome do produto.'], ['lote', 'número do lote', 'O rótulo dos produtos esterilizados não traz o número do lote.'], ['data', 'data da esterilização', 'O rótulo dos produtos esterilizados não traz a data da esterilização.'], ['limite', 'data limite de uso', 'O rótulo dos produtos esterilizados não traz a data limite de uso.'], ['metodo', 'método de esterilização', 'O rótulo dos produtos esterilizados não traz o método de esterilização.'], ['resp', 'nome do responsável pelo preparo', 'O rótulo dos produtos esterilizados não traz o nome do responsável pelo preparo.']],
-            naSe: {campo: 'proc_ester', igual: 'nao'}, na: 'O estabelecimento não esteriliza no local.', inf: ['s59']},
+            naSe: {algum: [SEM_PROC_LOCAL, {campo: 'proc_ester', igual: 'nao'}]}, na: 'O estabelecimento não esteriliza no local.', inf: ['s59']},
           {id: 'proc_guarda', se: SAUDE, t: 'A guarda dos produtos esterilizados atende às exigências?', r: [...R15('a60', 'a61', 'a101', 'a102'), LM(65)],
             c: 'Os estéreis ficam em local exclusivo, limpo, seco e de acesso restrito, sem luz solar direta, em prateleira não porosa, dentro da data limite de uso e com a embalagem íntegra.', nc: 'A guarda dos produtos esterilizados não atende às exigências.', ncPontos: 'Na guarda dos estéreis, não se atende: {}.',
             pontos: [['local', 'local exclusivo e de acesso restrito, fora da circulação', 'Os produtos esterilizados não ficam em local exclusivo e de acesso restrito.'], ['condicao', 'limpo, seco e sem luz solar direta', 'O local de guarda dos estéreis não é limpo e seco, ou recebe luz solar direta.'], ['prateleira', 'prateleira de material não poroso', 'As prateleiras dos estéreis não são de material não poroso.'], ['validade', 'nenhum produto vencido ou com embalagem violada, úmida ou rasgada', 'Há produto esterilizado vencido ou com embalagem violada, úmida ou rasgada.']],
-            naSe: {campo: 'proc_ester', igual: 'nao'}, na: 'O estabelecimento não esteriliza no local.', inf: ['s59']},
+            naSe: {algum: [SEM_PROC_LOCAL, {campo: 'proc_ester', igual: 'nao'}]}, na: 'O estabelecimento não esteriliza no local.', inf: ['s59']},
           {id: 'proc_desinf_q', se: SAUDE, t: 'A desinfecção química atende às exigências?', r: [...R15('a86', 'a87', 'a89', 'a90', 'a90p1', 'a90p2'), LM(65)],
             c: 'A desinfecção química é feita em sala exclusiva, com desinfetante usado conforme o registro, concentração ou pH conferidos e registrados diariamente e enxágue com água potável.', nc: 'A desinfecção química não atende às exigências.', ncPontos: 'Na desinfecção química, não se atende: {}.',
             pontos: [['sala', 'sala exclusiva para a desinfecção química', 'A desinfecção química não é feita em sala exclusiva.'], ['produto', 'desinfetante regularizado, usado conforme o registro (diluição, tempo de contato, validade da solução)', 'O desinfetante não é usado conforme o registro (diluição, tempo de contato ou validade da solução).'], ['monit', 'concentração ou pH conferidos todo dia antes das atividades, com registro guardado por cinco anos', 'A concentração ou o pH do desinfetante não são conferidos e registrados diariamente antes das atividades.'], ['enxague', 'enxágue com água potável', 'O enxágue após a desinfecção química não é feito com água potável.'], ['seguranca', 'medidas de segurança do fabricante do saneante (EPI, ventilação)', 'Não são adotadas as medidas de segurança do fabricante do saneante.']],
-            naSe: {campo: 'proc_desinf', em: ['termica', 'nao']}, na: 'Não há desinfecção química no local.', inf: ['s57', 's60']},
+            naSe: {algum: [SEM_PROC_LOCAL, {campo: 'proc_desinf', em: ['termica', 'nao']}]}, na: 'Não há desinfecção química no local.', inf: ['s57', 's60']},
           /* ——— interesse à saúde: biossegurança (Lei 13.643/2018, art. 8º) ——— */
           {id: 'proc_i', se: INT, t: 'A limpeza, a desinfecção e a esterilização de utensílios e instrumentos atendem às boas práticas de biossegurança?', r: [...INT_BIO],
             c: 'Utensílios e instrumentos são limpos e, conforme o risco, desinfetados ou esterilizados, com identificação dos esterilizados e descarte do material de uso único.', nc: 'A limpeza, a desinfecção ou a esterilização dos utensílios e instrumentos não atende às exigências.', ncPontos: 'No processamento de utensílios e instrumentos, não se atende: {}.',
@@ -462,7 +475,23 @@ secoes.forEach(s => s.itens.forEach(i => {
   (i.perguntas || []).forEach(q => (q.inf || []).forEach(f => usadas.add(f)));
   (i.campos || []).forEach(c => { (c.inf || []).forEach(f => usadas.add(f)); (c.lista || []).forEach(x => [].concat(x[3] || []).forEach(f => usadas.add(f))); });
 }));
-const infracoes = CAT.infracoes.map(x => Object.assign({id: x.id, grupo: x.grupo, texto: x.texto, fund: x.fund, r: x.r, se: x.perfil === 'saude' ? SAUDE : INT}, usadas.has(x.id) ? {} : {avulsa: true}));
+/* formação e limites do esteticista (Lei 13.643): só com estética entre as atividades, ou sem resposta */
+const SO_ESTETICISTA = new Set(['i03', 'i04', 'i05', 'i06']);
+/* capitulação de biossegurança no interesse à saúde (12/11/2026): onde o catálogo dizia “c/c art. 8º da Lei
+   Federal nº 13.643/2018, quando aplicável”, entra a Lei 12.592/2012, art. 4º, que vale para todos os
+   profissionais de beleza; a Lei 13.643 fica “para esteticista e técnico em estética” e sai quando as
+   atividades marcadas não incluem procedimentos estéticos (fundSe). O texto do catálogo não muda. */
+const C8 = ' c/c art. 8º da Lei Federal nº 13.643/2018, quando aplicável';
+/* atividades marcadas, sem procedimentos estéticos */
+const SEM_ESTETICA = {nao: ESTETICISTA};
+const capitula = x => {
+  if (!x.fund.endsWith(C8)) return {fund: x.fund, r: x.r};
+  const base = x.fund.slice(0, -C8.length), r = x.r.slice(), k = r.indexOf('lei-federal-13643-2018::a8');
+  r.splice(k < 0 ? r.length : k, 0, 'lei-federal-12592-2012::a4');
+  return {fund: base + ' c/c art. 4º da Lei Federal nº 12.592/2012 e, para esteticista e técnico em estética, art. 8º da Lei Federal nº 13.643/2018', r,
+    fundSe: [[SEM_ESTETICA, base + ' c/c art. 4º da Lei Federal nº 12.592/2012']]};
+};
+const infracoes = CAT.infracoes.map(x => Object.assign({id: x.id, grupo: x.grupo, texto: x.texto}, x.perfil === 'saude' ? {fund: x.fund, r: x.r} : capitula(x), {se: x.perfil === 'saude' ? SAUDE : SO_ESTETICISTA.has(x.id) ? {todos: [INT, ESTETICISTA]} : INT}, usadas.has(x.id) ? {} : {avulsa: true}));
 
 module.exports = {
   app: 'estetica',
@@ -473,6 +502,10 @@ module.exports = {
   naSempre: true,
   relSemNa: true,
   filtroPerfil: true,
+  naOculta: true,
+  refsSe: {'lei-federal-13643-2018::': ESTETICISTA},
+  /* aviso (pedido de 12/11/2026): a capitulação de biossegurança depende das atividades marcadas */
+  avisoInf: [{se: {todos: [INT, {campo: 'p_ativ', vazio: true}]}, t: 'Atividades do estabelecimento sem resposta: a capitulação cita a Lei 12.592/2012, art. 4º, e, para esteticista e técnico em estética, a Lei 13.643/2018, art. 8º. Marque as atividades em Identificação › Perfil: sem procedimentos estéticos (só salão, barbearia, manicure, depilação ou maquiagem), sai a Lei 13.643/2018.'}],
   constatacao: true,
   perfilRotulo: 'Classificação e atividades',
   relatorio: {
@@ -484,6 +517,7 @@ module.exports = {
   normas: [
     ['RDC Anvisa nº 63/2011', 'Boas práticas de funcionamento para os serviços de saúde.'],
     ['Lei Federal nº 13.643/2018', 'Profissões de esteticista e cosmetólogo e de técnico em estética.'],
+    ['Lei Federal nº 12.592/2012', 'Profissões de cabeleireiro, barbeiro, esteticista, manicure, pedicure, depilador e maquiador.'],
     ['RDC Anvisa nº 509/2021', 'Gerenciamento de tecnologias em saúde.'],
     ['RDC Anvisa nº 222/2018', 'Gerenciamento dos resíduos de serviços de saúde.'],
     ['RDC Anvisa nº 42/2010', 'Preparação alcoólica para higiene das mãos.'],

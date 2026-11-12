@@ -35,7 +35,8 @@ const marcados=(f,pre,v)=>f.evaluate(([pre,v])=>[...document.querySelectorAll('[
   await clicaEMede(f,p,'[data-uvs-pt="lic1¦a¦NC"]');await clicaEMede(f,p,'[data-uvs-pt="lic1¦b¦C"]');
   await clicaEMede(f,p,'[data-a="lic1"][data-v="nao"]');await p.waitForTimeout(200);
   /* opção de perfil (chip): também fica no lugar */
-  if(await vaiAte(f,p,'button.chip[data-v="extra"]')){m=await clicaEMede(f,p,'button.chip[data-v="extra"]');ok(m.max<=4,'odontologia: a opção de perfil saiu do lugar ('+JSON.stringify(m)+')')}
+  /* perfil da tela padrão (12/11/2026): características em caixas de marcação */
+  if(await vaiAte(f,p,'#pu-conteudo [data-odo-flag="extra"]')){m=await clicaEMede(f,p,'#pu-conteudo [data-odo-flag="extra"]');ok(m.max<=4,'odontologia: a opção de perfil saiu do lugar ('+JSON.stringify(m)+')')}
   ok(!erros.length,'odontologia: erros de página — '+erros.join(' | '));await p.close()}
  /* ---------- Produtos (rolagem suave na página) ---------- */
  {const {p,f,erros}=await T.abre('Produtos','produtos-correlatos','Atacadista / distribuidor','atividade=atacadista',{browser:b,...V});

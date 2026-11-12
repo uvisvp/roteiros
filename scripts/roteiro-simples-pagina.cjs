@@ -21,12 +21,16 @@ function valida(D, LEGAL) {
   const rep = ids.filter((x, i) => ids.indexOf(x) !== i);
   if (rep.length) throw Error(`${D.app}: perguntas com id repetido: ${rep.join(', ')}`);
   const campos = new Set(D.secoes.flatMap(s => s.itens.flatMap(i => (i.campos || []).map(c => c.id))));
-  /* condições de perfil do item (it.se) e da infração (i.se) */
-  for (const s of D.secoes) for (const i of s.itens) if (i.se && !campos.has(i.se.campo)) throw Error(`${D.app}: condição com campo inexistente no item ${i.id}`);
-  for (const x of D.infracoes) if (x.se && !campos.has(x.se.campo)) throw Error(`${D.app}: condição com campo inexistente na infração ${x.id}`);
+  /* condições de perfil do item (it.se) e da infração (i.se); combinadas ({todos}, {algum}): todos os campos existem */
+  const condOk = c => !c || (c.nao ? condOk(c.nao) : c.todos || c.algum ? (c.todos || c.algum).every(condOk) : campos.has(c.campo));
+  for (const a of D.avisoInf || []) if (!condOk(a.se)) throw Error(`${D.app}: condição com campo inexistente no aviso das infrações`);
+  for (const [p, c] of Object.entries(D.refsSe || {})) if (!condOk(c)) throw Error(`${D.app}: condição com campo inexistente em refsSe ${p}`);
+  for (const s of D.secoes) for (const i of s.itens) if (!condOk(i.se)) throw Error(`${D.app}: condição com campo inexistente no item ${i.id}`);
+  for (const x of D.infracoes) for (const [c] of x.fundSe || []) if (!condOk(c)) throw Error(`${D.app}: condição com campo inexistente na capitulação da infração ${x.id}`);
+  for (const x of D.infracoes) if (!condOk(x.se)) throw Error(`${D.app}: condição com campo inexistente na infração ${x.id}`);
   for (const s of D.secoes) for (const i of s.itens) for (const q of i.perguntas || []) {
     for (const f of q.inf || []) if (!D.infracoes.some(x => x.id === f)) throw Error(`${D.app}: infração inexistente ${f} em ${q.id}`);
-    for (const c of [q.naSe, q.se]) if (c && !campos.has(c.campo)) throw Error(`${D.app}: condição com campo inexistente em ${q.id}`);
+    for (const c of [q.naSe, q.se]) if (!condOk(c)) throw Error(`${D.app}: condição com campo inexistente em ${q.id}`);
   }
   /* infrações sugeridas pelas perguntas e pelo inventário de ambientes (c.inf e o 4º elemento de cada irregularidade) */
   const usadas = new Set();

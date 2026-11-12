@@ -12,6 +12,8 @@ let {html, lz, blocks} = unpack(file);
 const LEGAL = JSON.parse(fs.readFileSync(path.join(root, 'imagem', 'legislacao.json'), 'utf8'));
 const TIPOS = require(path.join(root, 'imagem', 'roteiro.cjs'));
 const DESC = {
+  /* 12/11/2026: um roteiro e um relatório para o serviço com uma ou mais modalidades (imagem/roteiro.cjs, montaMulti) */
+  'imagem-servico': ['Uma ou mais modalidades', 'Marque as modalidades do serviço: a parte comum aparece uma vez e cada modalidade abre a sua IN. Um relatório.'],
   'imagem-convencional': ['Radiologia convencional', 'Raios X fixo e móvel, radiografia digital e com filme (IN 90/2021).'],
   'imagem-mamografia': ['Mamografia', 'Mamógrafo, testes do Anexo I e Programa Nacional de Qualidade em Mamografia (IN 92/2021).'],
   'imagem-tomografia': ['Tomografia computadorizada', 'Tomógrafo, protocolos pediátricos e indicação de dose (IN 93/2021).'],
@@ -23,8 +25,11 @@ for (const D of TIPOS) {
   html = gravaBloco(html, lz, D.app, pagina(D, LEGAL, '#5B3CC4', blocks).html);
   html = C.registra(html, {app: D.app, titulo: D.titulo, nucleo: 'Serviços', store: D.store, icone: C.ICONES.imagem});
 }
-html = C.grupo(html, 'grupo-imagem', {titulo: 'Diagnóstico por imagem', itens: TIPOS.map(D => [DESC[D.app][0], DESC[D.app][1], D.app])});
-html = C.icone(html, 'grupo-imagem', C.ICONES.imagem);
-html = C.cartao(html, 'Serviços', ['Diagnóstico por imagem', 'Radiologia, mamografia, tomografia, ressonância, ultrassom e hemodinâmica (RDC 611/2022).', 'grupo-imagem'], 'transporte-biologico');
+/* 12/11/2026: o card abre direto o roteiro único (uma ou mais modalidades); os seis por modalidade saem do card
+   (pedido do usuário), mas continuam registrados, para que inspeção salva neles ainda abra em Salvas. */
+html = C.grupo(html, 'grupo-imagem', null);
+html = html.replace(/\n    "grupo-imagem": '[^\n]*',/, '');
+if (!/"imagem-servico"\]/.test(html) && !/"grupo-imagem"\]/.test(html)) html = C.cartao(html, 'Serviços', ['Diagnóstico por imagem', '', 'imagem-servico'], 'transporte-biologico');
+html = C.trocaCartao(html, 'Serviços', 'grupo-imagem', ['Diagnóstico por imagem', 'Radiologia, mamografia, tomografia, ressonância, ultrassom e hemodinâmica (RDC 611/2022): marque as modalidades do serviço.', 'imagem-servico']);
 fs.writeFileSync(file, html);
 for (const D of TIPOS) { let n = 0; D.secoes.forEach(s => s.itens.forEach(i => n += (i.perguntas || []).length)); console.log(`${D.titulo}: ${n} perguntas, ${D.infracoes.length} infrações.`); }

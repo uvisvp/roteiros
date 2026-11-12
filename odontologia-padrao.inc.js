@@ -7,8 +7,12 @@
    · Seção 1 “Perfil e identificação”: identificação e perfil do serviço (situação,
      tipologia, organização, processamento, características).
    · Seções 2 a 5: as etapas da RDC nº 1.002/2025 agrupadas por área; cada etapa é um item.
-   · O perfil não esconde etapas (decisão da equipe): o que não corresponde ao perfil
-     marcado traz aviso e pode ser marcado como “Não se aplica”. */
+   · Perfil pelo tipo de estabelecimento (12/11/2026, como em Alimentos): atalhos (consultório,
+     clínica, sedação, centro cirúrgico, radiologia, clínica-escola…), salas e ambientes existentes
+     (mais de uma tipologia no mesmo serviço), organização, processamento, características e
+     situação, em listas recolhíveis. O roteiro mostra só o que se aplica ao perfil; verificação já
+     respondida que sai do perfil continua na tela, com o aviso “Fora do perfil atual”, e no
+     relatório. Perguntas, citações e enquadramentos não mudam. */
 const ODO_PADRAO=!!(window.UvisPadrao&&window.__uvsPadrao);
 const ODO_GRUPOS=[
  {id:'docs',titulo:'Licenciamento e ambientes de apoio',icone:'folder',etapas:['lic','apoio']},
@@ -16,13 +20,34 @@ const ODO_GRUPOS=[
  {id:'processa',titulo:'Processamento de dispositivos médicos',icone:'lab',etapas:['estr','proc','est','des','arm','terc']},
  {id:'gestao',titulo:'Qualidade, resíduos e atendimento externo',icone:'shield',etapas:['qual','res','extra']}
 ];
-/* avaliação do perfil sem depender de ok() (que passa a aceitar tudo) */
+/* atalhos: tipos de estabelecimento comuns; marcam salas, organização e características típicas,
+   que o inspetor ajusta. O processamento de DM é sempre escolhido (não se presume). */
+const ODO_ATALHOS=[
+ {id:'isolado',rot:'Consultório isolado',desc:'Um consultório Classe I (anestesia local).',salas:['classe1'],org:'individual'},
+ {id:'isolado_rx',rot:'Consultório com raio-X',desc:'Consultório Classe I com raio-X intraoral na sala.',salas:['classe1'],org:'individual',flags:['rx_intraoral']},
+ {id:'clinica2',rot:'Clínica com até 2 consultórios',desc:'Consultórios Classe I, raio-X intraoral.',salas:['classe1'],org:'clinica2',flags:['rx_intraoral']},
+ {id:'clinica3',rot:'Clínica com 3 ou mais consultórios',desc:'Consultórios Classe I, raio-X intraoral.',salas:['classe1'],org:'clinica3',flags:['rx_intraoral']},
+ {id:'sedacao',rot:'Clínica com sedação inalatória',desc:'Consultório Classe I com óxido nitroso.',salas:['classe1','classe1_sed'],flags:['rx_intraoral']},
+ {id:'classe2',rot:'Sedação endovenosa (Classe II)',desc:'Sala Classe II, monitorização e emergência.',salas:['classe1','classe2'],flags:['rx_intraoral','p344']},
+ {id:'cco',rot:'Clínica com centro cirúrgico',desc:'Centro Cirúrgico Odontológico além dos consultórios.',salas:['classe1','cco'],flags:['rx_intraoral','p344']},
+ {id:'radiologia',rot:'Radiologia odontológica',desc:'Sala de imagem (panorâmica, tomografia), sem atendimento clínico.',salas:['imagem']},
+ {id:'ensino',rot:'Clínica-escola',desc:'Consultório coletivo em instituição de ensino.',salas:['coletivo'],org:'ensino',flags:['rx_intraoral']},
+ {id:'cowork',rot:'Consultório compartilhado',desc:'Coworking: profissionais diferentes no mesmo espaço.',salas:['classe1'],org:'compartilhado'},
+ {id:'semanest',rot:'Ambiente sem anestesia',desc:'Atendimento sem anestesia (ex.: moldagem, ortodontia).',salas:['amb'],org:'individual'}
+];
+/* características que os atalhos marcam (trocadas a cada atalho; as demais ficam como o inspetor deixou) */
+const ODO_FLAGS_ATALHO=[...new Set(ODO_ATALHOS.flatMap(a=>a.flags||[]))];
+/* tipologia principal (a mais complexa entre as salas), usada no cabeçalho e nas rotinas antigas */
+const ODO_ORDEM=['cco','classe2','classe1_sed','coletivo','classe1','imagem','amb'];
+function odoSincTip(){const s=odoSalas();state.p.tip=ODO_ORDEM.find(t=>s.includes(t))||''}
+function odoSalasTexto(){const s=odoSalas();return ODO_ORDEM.filter(t=>s.includes(t)).map(t=>LBL[t]||t).join('; ')}
+/* avaliação do perfil: tipologia pelas salas marcadas (o serviço pode ter mais de uma) */
 function odoNoPerfil(w){
  if(!w||!Object.keys(w).length)return true;
  if(w.or)return Object.entries(w.or).some(([k,v])=>odoNoPerfil({[k]:v}));
- const P=state.p;
- if(w.tip&&!w.tip.includes(P.tip))return false;
- if(w.tipNot&&w.tipNot.includes(P.tip))return false;
+ const P=state.p,salas=odoSalas();
+ if(w.tip&&!w.tip.some(t=>salas.includes(t)))return false;
+ if(w.tipNot&&!salas.some(t=>!w.tipNot.includes(t)))return false;
  if(w.org&&!w.org.includes(P.org))return false;
  if(w.proc&&!w.proc.includes(P.proc))return false;
  if(w.procNot&&w.procNot.includes(P.proc))return false;
@@ -31,44 +56,54 @@ function odoNoPerfil(w){
  return true;
 }
 function odoMotivo(w){
- if(!w||!state.p.tip||odoNoPerfil(w))return '';
+ if(!w||odoNoPerfil(w))return '';
  const L=[],nomes=a=>a.map(v=>LBL[v]||v).join(' / ');
  (function junta(x){if(!x)return;
-  if(x.tip)L.push('tipologia '+nomes(x.tip));if(x.tipNot)L.push('tipologia diferente de '+nomes(x.tipNot));
+  if(x.tip)L.push('sala '+nomes(x.tip));if(x.tipNot)L.push('tipologia diferente de '+nomes(x.tipNot));
   if(x.org)L.push('organização '+nomes(x.org));if(x.proc)L.push('processamento '+nomes(x.proc));if(x.procNot)L.push('processamento que não seja '+nomes(x.procNot));
   if(x.flag)L.push(nomes(x.flag));if(x.flagAny)L.push(nomes(x.flagAny));
   if(x.or)Object.entries(x.or).forEach(([k,v])=>junta({[k]:v}));})(w);
  return L.join('; ')||'perfil marcado';
 }
-if(ODO_PADRAO)ok=function(){return true};
+/* ok() do motor (etapas, contagens, relatório): o que está no perfil e o que já foi respondido.
+   Cada condição é um objeto próprio da etapa ou da verificação; o mapa diz de quem ela é. */
+const ODO_DONO=new Map();
+DATA.route.forEach(s=>{if(s.when)ODO_DONO.set(s.when,{s});s.items.forEach(i=>{if(i.when)ODO_DONO.set(i.when,{s,i})})});
+if(ODO_PADRAO)ok=function(w){
+ const d=w&&ODO_DONO.get(w);if(!d)return odoNoPerfil(w);
+ if(d.i)return (odoNoPerfil(d.s.when)&&odoNoPerfil(d.i.when))||!!state.a[d.i.id];
+ return odoNoPerfil(d.s.when)||d.s.items.some(i=>state.a[i.id]);
+};
 const odoEtapa=id=>DATA.route.find(s=>s.id===id);
 const odoFora=(s,i)=>odoMotivo(s.when)||odoMotivo(i.when);
+const odoVisiveis=s=>s.items.filter(i=>ok(i.when));
 
 function odoSecoes(){
  const P=state.p,campos=Object.keys(DEF.meta);
  const perfil={id:'perfil',titulo:'Perfil e identificação',curto:'Perfil',icone:'building',
-  resumo:(P.tip?LBL[P.tip]:'Tipologia não escolhida')+(state.meta.company?' · '+state.meta.company:''),
+  resumo:(odoSalasTexto()||'Tipo de estabelecimento não escolhido')+(state.meta.company?' · '+state.meta.company:''),
   itens:[
    {id:'ident',titulo:'Identificação da inspeção',curto:'Identificação',feitos:campos.filter(k=>state.meta[k]).length,total:campos.length},
-   {id:'perfil',titulo:'Perfil do serviço',curto:'Perfil do serviço',resumo:'Situação, tipologia, organização, processamento e características.',feitos:['situacao','tip','org','proc'].filter(k=>P[k]).length,total:4}
+   {id:'tipo',titulo:'Tipo de estabelecimento e salas',curto:'Tipo e salas',resumo:odoSalasTexto()||'Atalhos e salas existentes no serviço.',feitos:odoSalas().length?1:0,total:1},
+   {id:'servico',titulo:'Organização, processamento e características',curto:'Organização e processamento',resumo:'Organização, processamento de DM, características e situação do serviço.',feitos:['situacao','org','proc'].filter(k=>P[k]).length,total:3}
   ]};
  const lista=[perfil];
  ODO_GRUPOS.forEach(g=>{
-  const itens=g.etapas.map(odoEtapa).filter(Boolean).map(s=>{
-   const fora=odoMotivo(s.when);
-   return {id:s.id,titulo:s.title,curto:s.title,resumo:fora?'Fora do perfil marcado':s.place,feitos:s.items.filter(i=>state.a[i.id]).length,total:s.items.length};
+  const itens=g.etapas.map(odoEtapa).filter(s=>s&&ok(s.when)&&odoVisiveis(s).length).map(s=>{
+   const fora=odoMotivo(s.when),vis=odoVisiveis(s);
+   return {id:s.id,titulo:s.title,curto:s.title,resumo:fora?'Fora do perfil atual (só o já respondido)':s.place,feitos:vis.filter(i=>state.a[i.id]).length,total:vis.length};
   });
   if(itens.length)lista.push({id:g.id,titulo:g.titulo,curto:g.titulo,icone:g.icone,itens});
  });
  return lista;
 }
 
-function odoPergunta(s,i,n,porSala){
- const a=state.a[i.id]||'',fora=porSala&&odoDaSala(i)?'':odoFora(s,i);
+function odoPergunta(s,i,n){
+ const a=state.a[i.id]||'',fora=odoFora(s,i);
  return `<div class="pu-q${fora?' pu-q-fora':''}" data-odo-q="${esc(i.id)}"><div><p class="pu-q-texto item-t"><b>${n}.</b> ${esc(i.t)}</p>`
-  +(fora?`<div class="pu-tags"><span class="pu-tag pu-tag-fora">Fora do perfil marcado</span></div><p class="pu-q-ajuda">Depende de: ${esc(fora)}. Se não existir no serviço, marque “Não se aplica”.</p>`:'')
+  +(fora?`<div class="pu-tags"><span class="pu-tag pu-tag-fora">Fora do perfil atual</span></div><p class="pu-q-ajuda">Depende de: ${esc(fora)}. A resposta já dada foi mantida; se não se aplica, mude para “Não se aplica”.</p>`:'')
   +`<div class="cite pu-cit-odo">${uvisOdontoCitation(i.ch,i.c)}</div></div>`
-  +`<div class="pu-resp" role="group" aria-label="Resultado">${[['ok','Cumpre'],['nao','Não cumpre'],['na','Não se aplica']].map(([v,l])=>`<button type="button" data-a="${esc(i.id)}" data-v="${v}" aria-pressed="${a===v}">${l}</button>`).join('')}</div>`
+  +`<div class="pu-resp" role="group" aria-label="Resultado">${[['ok','Sim'],['nao','Não'],['na','Não se aplica']].map(([v,l])=>`<button type="button" data-a="${esc(i.id)}" data-v="${v}" aria-pressed="${a===v}">${l}</button>`).join('')}</div>`
   +(a==='nao'?`<div class="pu-bloco pu-nc">${assessmentHtml(i)}</div>`:'')
   +odoNotaHtml(i)
   +odoFotoHtml(i.id)
@@ -90,40 +125,43 @@ function odoFoto(id){const fi=document.createElement('input');fi.type='file';fi.
  document.body.appendChild(fi);fi.click()}
 window.__uvsFotosMeta=()=>({estab:state.meta.company||'',data:state.meta.date||''});
 window.__uvsFotosItens=()=>{const out=[];DATA.route.forEach(s=>s.items.forEach(i=>{const f=state.fotos&&state.fotos[i.id];if(f)out.push({src:f,legenda:s.title+' — '+String(i.t).replace(/\s+/g,' ').slice(0,160)})}));return out};
-/* Ambiente finalístico: “uma resposta abre outra” — as exigências de área e instalação dependem
-   do tipo de sala; o serviço pode ter mais de um (ex.: consultório Classe I + sala de imagem). */
+/* Salas existentes: a tipologia passa a ser múltipla (consultório Classe I + sala de imagem…). Ficam em
+   state.salas, como antes; quem só tinha a tipologia única começa com ela. */
 const ODO_SALAS=['amb','classe1','classe1_sed','classe2','coletivo','imagem','cco'];
 function odoSalas(){if(!Array.isArray(state.salas)||(!state.salas.length&&!state.salasMarcadas))state.salas=ODO_SALAS.includes(state.p.tip)?[state.p.tip]:[];return state.salas}
-const odoDaSala=i=>!!(i.when&&i.when.tip&&Object.keys(i.when).length===1);
-function odoItemSalas(el,s){
- const salas=odoSalas(),mostra=i=>!odoDaSala(i)||!salas.length||i.when.tip.some(t=>salas.includes(t));
- const vis=[],outras=[];s.items.forEach((i,k)=>(mostra(i)?vis:outras).push([i,k+1]));
- const pend=outras.filter(([i])=>!state.a[i.id]).length;
- el.innerHTML=`<p class="pu-desc">${esc(s.place||'')}</p>`
-  +`<div class="pu-bloco pu-salas"><h3>Salas existentes no serviço</h3><p>Marque todos os tipos de sala do estabelecimento. As exigências de área e instalação de cada tipo aparecem abaixo; as dos demais tipos ficam recolhidas no fim.</p><div class="pu-marcas">`
-  +ODO_SALAS.map(t=>`<label class="pu-marca"><input type="checkbox" data-odo-sala="${esc(t)}"${salas.includes(t)?' checked':''}><span><strong>${esc(LBL[t]||t)}</strong></span></label>`).join('')+`</div></div>`
-  +vis.map(([i,n])=>odoPergunta(s,i,n,true)).join('')
-  +(outras.length?`<details class="pu-mais pu-outras-salas"><summary>Exigências de outros tipos de sala (${outras.length}${pend?' · '+pend+' pendente(s)':''})</summary><div>${pend?`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="salas">Marcar as ${pend} pendentes como Não se aplica</button></div>`:''}${outras.map(([i,n])=>odoPergunta(s,i,n,true)).join('')}</div></details>`:'')
-  +`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="pendentes">Marcar pendentes como Não se aplica</button></div>`;
-}
 function odoItemEtapa(el,s){
- if(s.id==='fin')return odoItemSalas(el,s);
- const fora=s.items.filter(i=>odoFora(s,i)&&!state.a[i.id]).length,motivo=odoMotivo(s.when);
+ const vis=odoVisiveis(s),motivo=odoMotivo(s.when);
  el.innerHTML=`<p class="pu-desc">${esc(s.place||'')}</p>`
-  +(motivo?`<div class="pu-bloco pu-aviso"><p><b>Fora do perfil marcado</b> (${esc(motivo)}). Se a etapa não existir no serviço, marque tudo como “Não se aplica”.</p><button type="button" class="pu-btn" data-odo-na="todos">Marcar tudo como Não se aplica</button></div>`:'')
-  +s.items.map((i,k)=>odoPergunta(s,i,k+1)).join('')
-  +`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="pendentes">Marcar pendentes como Não se aplica</button>`
-  +(fora&&!motivo?`<button type="button" class="pu-btn" data-odo-na="fora">Marcar as ${fora} fora do perfil como Não se aplica</button>`:'')+`</div>`;
+  +(motivo?`<div class="pu-bloco pu-aviso"><p><b>Fora do perfil atual</b> (${esc(motivo)}). Aparecem só as verificações já respondidas.</p></div>`:'')
+  +(vis.length?vis.map((i,k)=>odoPergunta(s,i,k+1)).join(''):'<p class="pu-q-ajuda">Nenhuma verificação desta etapa se aplica ao perfil marcado.</p>')
+  +`<div class="pu-acoes-item"><button type="button" class="pu-btn" data-odo-na="pendentes">Marcar pendentes como Não se aplica</button></div>`;
 }
 /* os campos originais (com seus ouvintes) são levados para a tela do item */
 const odoNos={};
 function odoNo(chave,sel){if(!odoNos[chave])odoNos[chave]=document.querySelector(sel);return odoNos[chave]}
 function odoPerfil(el,id){
  if(id==='ident'){el.innerHTML='<div class="pu-bloco"><h3>Dados do serviço e da inspeção</h3></div>';const g=odoNo('meta','#mcard .meta-grid');if(g){g.classList.add('pu-campos');el.firstChild.appendChild(g)}renderMeta();return}
- const fora=allItems().filter(i=>{const s=DATA.route.find(x=>x.items.includes(i));return s&&odoFora(s,i)&&!state.a[i.id]}).length;
- el.innerHTML=`<div class="pu-bloco"><h3>Perfil do serviço</h3><p>Todas as etapas continuam no roteiro. O que não corresponder ao perfil aparece com o aviso “Fora do perfil marcado”.</p><div id="odo-pf"></div><p class="pu-q-ajuda">${esc(adaptationNote())}</p></div>`
-  +(fora?`<div class="pu-bloco pu-aviso"><p>${fora} verificação(ões) pendente(s) fora do perfil marcado.</p><button type="button" class="pu-btn" data-odo-na="perfil">Marcar todas como Não se aplica</button></div>`:'');
- const pf=odoNo('pf','#pfields');if(pf)el.querySelector('#odo-pf').appendChild(pf);renderProfile();
+ const P=state.p,opts=gid=>(DATA.profile.find(g=>g.id===gid)||{opts:[]}).opts;
+ const grupo=(titulo,n,corpo,aberto)=>`<details class="odo-grupo"${aberto?' open':''}><summary>${esc(titulo)}${n?` <span class="odo-n">${n}</span>`:''}</summary><div class="pu-marcas">${corpo}</div></details>`;
+ const marca=(tipo,attr,v,l,on,desc)=>`<label class="pu-marca"><input type="${tipo}" ${attr}="${esc(v)}"${tipo==='radio'?` name="${attr}"`:''}${on?' checked':''}><span><strong>${esc(l)}</strong>${desc?`<small>${esc(desc)}</small>`:''}</span></label>`;
+ if(id==='tipo'){
+  const salas=odoSalas();
+  el.innerHTML=`<div class="pu-bloco"><h3>Atalhos</h3><p>Um toque marca as salas e características típicas; depois ajuste ao que existe no local.</p><div class="odo-atalhos">`
+   +ODO_ATALHOS.map(a=>`<button type="button" class="pu-btn" data-odo-atalho="${esc(a.id)}" title="${esc(a.desc)}">${esc(a.rot)}</button>`).join('')+`</div></div>`
+   +`<div class="pu-bloco"><h3>Salas e ambientes do serviço${salas.length?` <small>(${salas.length} marcada${salas.length>1?'s':''})</small>`:''}</h3><p>Marque todos os tipos de sala existentes. Cada um traz as suas exigências; o que não existe sai do roteiro.</p>`
+   +grupo('Atendimento clínico',salas.filter(t=>['amb','classe1','coletivo'].includes(t)).length,['amb','classe1','coletivo'].map(t=>marca('checkbox','data-odo-sala',t,LBL[t],salas.includes(t))).join(''),true)
+   +grupo('Sedação e cirurgia',salas.filter(t=>['classe1_sed','classe2','cco'].includes(t)).length,['classe1_sed','classe2','cco'].map(t=>marca('checkbox','data-odo-sala',t,LBL[t],salas.includes(t))).join(''),true)
+   +grupo('Imagem',salas.includes('imagem')?1:0,marca('checkbox','data-odo-sala','imagem',LBL.imagem,salas.includes('imagem'),'Panorâmica, telerradiografia ou tomografia em sala própria.'),true)
+   +`</div>`;
+  return;
+ }
+ const nf=Object.keys(P.flags||{}).filter(k=>P.flags[k]).length;
+ el.innerHTML=`<div class="pu-bloco"><h3>Organização, processamento e características</h3><p>Definem as exigências de apoio, de processamento de dispositivos médicos e de atividades específicas.</p>`
+  +grupo('Organização do serviço',P.org?1:0,opts('org').map(([v,l])=>marca('radio','data-odo-org',v,l,P.org===v)).join(''),!P.org)
+  +grupo('Processamento de dispositivos médicos',P.proc?1:0,opts('proc').map(([v,l])=>marca('radio','data-odo-proc',v,l,P.proc===v)).join(''),!P.proc)
+  +grupo('Características do serviço',nf,opts('flags').map(([v,l])=>marca('checkbox','data-odo-flag',v,l,!!(P.flags||{})[v])).join(''),true)
+  +grupo('Situação do serviço — adequação à RDC nº 1.002/2025',P.situacao?1:0,opts('situacao').map(([v,l])=>marca('radio','data-odo-sit',v,l,P.situacao===v)).join(''),!P.situacao)
+  +`<p class="pu-q-ajuda">${esc(adaptationNote())}</p></div>`;
 }
 function odoDesenhaItem(secao,item,el){
  if(secao==='perfil')odoPerfil(el,item);
@@ -136,8 +174,8 @@ function odoRedesenha(){
 }
 function odoRelatorio(el){
  const c=counts(),n=nSel();
- el.innerHTML=`<div class="pu-bloco"><h3>Resumo da inspeção</h3><p>${esc(state.p.tip?LBL[state.p.tip]:'Tipologia não escolhida')}${state.meta.company?' · '+esc(state.meta.company):''}</p>
-  <div class="pu-campos"><div class="pu-campo">Respondidos<b>${c.ans} de ${c.it.length}</b></div><div class="pu-campo">Não cumpre<b>${c.nao}</b></div><div class="pu-campo">Não avaliados<b>${c.pend}</b></div><div class="pu-campo">Enquadramentos selecionados<b>${n}</b></div></div>
+ el.innerHTML=`<div class="pu-bloco"><h3>Resumo da inspeção</h3><p>${esc(odoSalasTexto()||'Tipo de estabelecimento não escolhido')}${state.meta.company?' · '+esc(state.meta.company):''}</p>
+  <div class="pu-campos"><div class="pu-campo">Respondidos<b>${c.ans} de ${c.it.length}</b></div><div class="pu-campo">Irregulares<b>${c.nao}</b></div><div class="pu-campo">Não avaliados<b>${c.pend}</b></div><div class="pu-campo">Enquadramentos selecionados<b>${n}</b></div></div>
   <div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-odo-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-odo-pdf>Gerar PDF</button><button type="button" class="pu-btn" data-odo-copia>Copiar texto</button><button type="button" class="pu-btn" data-odo-gen>Opções do relatório</button><button type="button" class="pu-btn" data-odo-pendente>Ir à próxima verificação pendente</button></div>
   <p class="pu-q-ajuda">O relatório usa apenas o roteiro. A tabela de infrações é emitida na aba Infrações. As fotos saem à parte, no botão Fotos do cabeçalho.</p></div>
   <div class="pu-bloco uvs-rel-previa"><h3>Prévia do relatório</h3><div>${odoPreviaHtml(blocks())}</div></div>`;
@@ -156,7 +194,7 @@ function iniciaPadrao(){
  UvisPadrao.monta({
   raiz,titulo:'Odontologia',cor:'#35565B',
   abas:[{id:'roteiro',rotulo:'Roteiro'},{id:'infracoes',rotulo:'Infrações'},{id:'relatorio',rotulo:'Relatório'}],
-  inicio:state.p.tip?null:{aba:'roteiro',secao:'perfil',item:null},
+  inicio:odoSalas().length?null:{aba:'roteiro',secao:'perfil',item:'tipo'},
   secoes:odoSecoes,
   item:(s,it,el)=>odoDesenhaItem(s.id,it.id,el),
   aba:(id,el)=>{ui.tab=id;
@@ -164,7 +202,7 @@ function iniciaPadrao(){
    else if(id==='relatorio')odoRelatorio(el)},
   contagem:id=>id==='roteiro'?counts().nao:id==='infracoes'?nSel():0,
   limpar:(s,it)=>{
-   if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id==='perfil'){state.p=structuredClone(DEF.p);state.assessment={};delete state.salas;delete state.salasMarcadas}}
+   if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id!=='ident'){state.p=structuredClone(DEF.p);state.assessment={};delete state.salas;delete state.salasMarcadas}}
    else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id];delete state.fotos?.[i.id]})});
    save();renderProfile();renderMeta();
   },
@@ -180,12 +218,12 @@ function iniciaPadrao(){
  raiz.addEventListener('click',e=>{
   const na=e.target.closest('[data-odo-na]');
   if(na){const modo=na.dataset.odoNa,n=UvisPadrao.estado();
-   const alvo=modo==='perfil'?DATA.route:[odoEtapa(n.item)].filter(Boolean);
-   const salas=odoSalas();
-   alvo.forEach(s=>s.items.forEach(i=>{if(state.a[i.id]&&modo!=='todos')return;if((modo==='fora'||modo==='perfil')&&!odoFora(s,i))return;if(modo==='salas'&&!(odoDaSala(i)&&salas.length&&!i.when.tip.some(t=>salas.includes(t))))return;state.a[i.id]='na'}));
+   [odoEtapa(n.item)].filter(Boolean).forEach(s=>odoVisiveis(s).forEach(i=>{if(!state.a[i.id])state.a[i.id]='na'}));
    save();odoRedesenha();return}
   const fb=e.target.closest('[data-odo-foto]');if(fb){odoFoto(fb.dataset.odoFoto);return}
   const sf=e.target.closest('[data-odo-sem-foto]');if(sf){if(confirm('Remover a foto desta verificação?')){delete state.fotos[sf.dataset.odoSemFoto];save();odoFotoAberta=sf.dataset.odoSemFoto;odoRedesenha()}return}
+  const at=e.target.closest('[data-odo-atalho]');
+  if(at){const a=ODO_ATALHOS.find(x=>x.id===at.dataset.odoAtalho);if(a){state.salas=a.salas.slice();state.salasMarcadas=true;if(a.org)state.p.org=a.org;state.p.flags=state.p.flags||{};ODO_FLAGS_ATALHO.forEach(f=>{if((a.flags||[]).includes(f))state.p.flags[f]=true;else delete state.p.flags[f]});odoSincTip();save();renderProfile();odoRedesenha();toast(a.rot+': salas e características marcadas. Ajuste ao que existe no local.')}return}
   if(e.target.closest('[data-odo-word]')){download();return}
   if(e.target.closest('[data-odo-pdf]')){printPdf();return}
   if(e.target.closest('[data-odo-copia]')){copyTxt();return}
@@ -193,6 +231,22 @@ function iniciaPadrao(){
   if(e.target.closest('[data-odo-pendente]')){for(const s of odoSecoes())for(const it of s.itens)if(it.total&&it.feitos<it.total){UvisPadrao.vai({aba:'roteiro',secao:s.id,item:it.id});return}toast('Todas as verificações foram respondidas.');return}
  });
  raiz.addEventListener('input',e=>{if(e.target.matches('[data-meta]'))UvisPadrao.atualiza()});
- raiz.addEventListener('change',e=>{const c=e.target.closest('[data-odo-sala]');if(!c)return;const l=odoSalas(),t=c.dataset.odoSala,p=l.indexOf(t);if(c.checked&&p<0)l.push(t);if(!c.checked&&p>=0)l.splice(p,1);state.salasMarcadas=true;save();odoRedesenha()});
+ raiz.addEventListener('change',e=>{const x=e.target;
+  if(x.matches('[data-odo-sala]')){const l=odoSalas(),t=x.dataset.odoSala,p=l.indexOf(t);if(x.checked&&p<0)l.push(t);if(!x.checked&&p>=0)l.splice(p,1);state.salasMarcadas=true;odoSincTip()}
+  else if(x.matches('[data-odo-org]'))state.p.org=x.dataset.odoOrg;
+  else if(x.matches('[data-odo-proc]'))state.p.proc=x.dataset.odoProc;
+  else if(x.matches('[data-odo-flag]')){state.p.flags=state.p.flags||{};if(x.checked)state.p.flags[x.dataset.odoFlag]=true;else delete state.p.flags[x.dataset.odoFlag]}
+  else if(x.matches('[data-odo-sit]')){state.p.situacao=x.dataset.odoSit;state.assessment={}}
+  else return;
+  save();renderProfile();odoRedesenha()});
+ const css=document.createElement('style');
+ css.textContent='.pu-ativo .odo-atalhos{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}'
+  +'.pu-ativo .odo-grupo{border:1px solid var(--ui-line,#d9e2e8);border-radius:10px;margin:10px 0;background:#fff}'
+  +'.pu-ativo .odo-grupo>summary{min-height:44px;display:flex;align-items:center;gap:8px;padding:0 14px;font-weight:700;cursor:pointer}'
+  +'.pu-ativo .odo-grupo>.pu-marcas{padding:0 12px 12px}'
+  +'.pu-ativo .odo-n{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--pu-cor,#35565B);color:#fff;font-size:.78rem}';
+ document.head.appendChild(css);
+ /* quem tinha só a tipologia única: as salas começam com ela */
+ odoSalas();odoSincTip();
 }
 if(ODO_PADRAO)iniciaPadrao();

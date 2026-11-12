@@ -2402,6 +2402,109 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Planilhas diárias de temperatura máxima, mínima e de momento.  
   Fundamento: RDC Anvisa nº 197/2017, art. 11, II
 
+## imagem-servico
+
+### Documentação legal e administrativa
+
+- **Cartão CNPJ atualizado**  
+  Comprovante de inscrição no CNPJ, atualizado, com a atividade econômica exercida no endereço.  
+  Fundamento: Portaria SMS nº 266/2025, art. 29
+- **Licença de Funcionamento Sanitária**  
+  Licença vigente, com o endereço, a razão social e todas as atividades (CNAE) exercidas no local.  
+  Fundamento: Lei Municipal nº 13.725/2004, art. 90
+- **CNES — Cadastro Nacional de Estabelecimentos de Saúde**  
+  Cadastro ativo, com endereço, serviços e profissionais atualizados.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 13
+- **AVCB ou CLCB (Corpo de Bombeiros)**  
+  Auto de Vistoria (AVCB) ou Certificado de Licença (CLCB) do Corpo de Bombeiros vigente para a área ocupada, salvo dispensa prevista no regulamento estadual.  
+  Fundamento: Decreto Estadual SP nº 69.118/2024, art. 15, V; art. 3º, XXVI
+- **Código gerador Amlurb (SP Regula)**  
+  Cadastro ativo como gerador de resíduos de serviços de saúde no órgão municipal de limpeza urbana.  
+  Fundamento: Lei Municipal nº 13.478/2002, art. 144
+
+### Gestão de pessoal
+
+- **Designação do responsável técnico e do substituto**  
+  Designação formal, pelo responsável legal, do responsável técnico de cada setor e do substituto.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 13
+- **PCMSO — Programa de Controle Médico de Saúde Ocupacional**  
+  Programa vigente, elaborado por médico do trabalho, com os exames previstos para cada função.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **PGR — Programa de Gerenciamento de Riscos**  
+  Inventário de riscos ocupacionais e plano de ação vigentes (substituiu o PPRA).  
+  Fundamento: NR-1 (Ministério do Trabalho e Emprego), Programa de Gerenciamento de Riscos — norma trabalhista, sem texto no banco
+- **ASO — Atestado de Saúde Ocupacional dos funcionários**  
+  ASO admissional e periódico de todos os funcionários, dentro da validade.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, II; NR-7 (Ministério do Trabalho e Emprego) — norma trabalhista, sem texto no banco
+- **Registros do Programa de Educação Permanente**  
+  Registros dos treinamentos, no conteúdo e na periodicidade mínimos.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 15
+- **Designação do supervisor de proteção radiológica e do substituto** — _Se aplicável: modalidades com raios X._  
+  Membros legalmente habilitados da equipe, formalmente designados.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 14
+
+### Infraestrutura e higiene
+
+- **Certificado de limpeza do reservatório de água (caixa d’água)**  
+  Certificado ou registro da limpeza e desinfecção do reservatório, no mínimo a cada seis meses; em caixa d’água coletiva, cópia do documento do condomínio.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 39, § 1º; art. 39, § 2º
+- **Certificado de controle de pragas urbanas (desinsetização e desratização)**  
+  Certificado válido da empresa controladora de pragas licenciada, com data, produtos usados e validade do serviço.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, VIII
+- **Certificados de calibração dos instrumentos de avaliação dos equipamentos**  
+  Calibração por laboratório credenciado.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 30
+- **PGRSS — Plano de Gerenciamento de Resíduos de Serviços de Saúde**  
+  Plano conforme a RDC 222/2018: estimativa dos resíduos por grupo; manejo da geração à disposição final; emergências; capacitação; contrato e licença ambiental das empresas de coleta e destinação. Quem gera só resíduo do Grupo D pode substituí-lo por notificação.  
+  Fundamento: RDC Anvisa nº 222/2018, art. 5º; art. 6º
+- **Comprovante de manutenção do ar-condicionado (PMOC)** — _Se aplicável: ambiente com ar-condicionado._  
+  Plano de Manutenção, Operação e Controle e o registro da última manutenção.  
+  Fundamento: Lei Federal nº 13.589/2018, art. 1º
+- **Registros de manutenção preventiva dos equipamentos**  
+  Programa e registros (ordens de serviço, laudos) da manutenção preventiva e corretiva dos equipamentos.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 23, IX; RDC Anvisa nº 611/2022, art. 28, parágrafo único
+- **Projeto de blindagem aprovado** — _Se aplicável: todas as modalidades, exceto ultrassonografia._  
+  Projeto elaborado e assinado por profissional habilitado, aprovado e assinado pelo responsável legal, com a aprovação da vigilância; na RM, com blindagem eletromagnética, isolamento acústico, evacuação de gases e laudo de compatibilidade eletromagnética.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 7º; art. 8º; IN Anvisa nº 97/2021, art. 4º
+
+### Sistema de gestão da qualidade
+
+- **Programa de Garantia da Qualidade e, nos raios X, Programa de Proteção Radiológica**  
+  Programas implementados, com medidas de prevenção, controle, vigilância e monitoramento.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 5º; art. 42
+- **Atas do Comitê de Gerenciamento de Riscos em Radiologia** — _Se aplicável: exigido pelo porte do serviço._  
+  Constituição do comitê e registros da revisão sistemática dos programas.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 39
+- **Contratos de terceirização** — _Se aplicável: serviço ou atividade terceirizada._  
+  Contrato vigente de cada serviço terceirizado, com as responsabilidades das partes; contratada regularizada na vigilância quando couber.  
+  Fundamento: RDC Anvisa nº 63/2011, art. 11
+- **Comprovante de participação no PNQM** — _Se aplicável: mamografia._  
+  Participação no Programa Nacional de Qualidade em Mamografia.  
+  Fundamento: Portaria de Consolidação GM/MS nº 5/2017, art. 216
+- **Núcleo e Plano de Segurança do Paciente** — _Se aplicável: hemodinâmica._  
+  Ato de constituição do NSP e Plano de Segurança do Paciente que alcance a hemodinâmica.  
+  Fundamento: RDC Anvisa nº 36/2013, art. 4º; art. 5º
+
+
+### Procedimentos Operacionais Padrão (POPs)
+
+- **Normas, rotinas, protocolos e procedimentos de todas as atividades**  
+  Procedimento escrito, aprovado, datado e assinado pelo responsável técnico, atualizado e disponível no local de uso.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 38
+
+### Laudos, análises e comprovantes
+
+- **Relatórios dos testes de aceitação e de constância**  
+  Relatórios conforme a IN da modalidade e protocolos oficiais.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 28, parágrafo único; art. 29
+- **Laudo de levantamento radiométrico** — _Se aplicável: modalidades com raios X._  
+  Laudo com croqui, equipamentos, pontos medidos e conclusões, refeito após mudança na instalação ou nos equipamentos.  
+  Fundamento: RDC Anvisa nº 611/2022, art. 63
+- **Laudos semestrais de integridade dos EPI plumbíferos** — _Se aplicável: hemodinâmica._  
+  Laudo técnico semestral dos aventais e demais EPI, com resultados e imagens.  
+  Fundamento: IN Anvisa nº 91/2021, art. 9º
+
+
 ## Serviços assistenciais — ILPI
 
 ### Constituição e licenciamento

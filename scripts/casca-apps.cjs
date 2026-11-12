@@ -83,4 +83,12 @@ const ICONES = {
   caminhao: '<path d="M2 6h11v10H2zM13 9h4l4 4v3h-8M7 19a2 2 0 1 0 0-.01M17 19a2 2 0 1 0 0-.01"/>',
   imagem: '<path d="M3 5h18v12H3zM8 21h8M12 17v4M9 11a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/>'
 };
-module.exports = {registra, remove, icone, grupo, catalogo, cartao, ICONES};
+/* troca o card que abre `de` (grupo ou roteiro) pela linha nova, no mesmo lugar; idempotente */
+function trocaCartao(html, nucleo, de, linha) {
+  const re = /\n  var ROTEIROS = (\{[^\n]*\});/;
+  const {m, obj} = linhaJson(html, re, 'ROTEIROS');
+  const lista = obj[nucleo] || [], i = lista.findIndex(r => r[2] === de), j = lista.findIndex(r => r[2] === linha[2]);
+  if (i >= 0) lista[i] = linha; else if (j >= 0) lista[j] = linha; else throw Error('card ' + de + ' não encontrado em ' + nucleo);
+  return html.replace(m[0], () => `\n  var ROTEIROS = ${JSON.stringify(obj)};`);
+}
+module.exports = {registra, remove, icone, grupo, catalogo, cartao, trocaCartao, ICONES};
