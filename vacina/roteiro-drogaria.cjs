@@ -63,13 +63,13 @@ for (const [id, t] of Object.entries(TEXTO)) { const q = perg(id); if (!q.pontos
 perg('transporte').ajuda = 'Se o serviço não transporta vacinas, marque “Não se aplica”.';
 perg('sanitario').t = 'O estabelecimento dispõe de sanitário?';
 perg('pia').t = 'A sala de vacinação tem pia de lavagem?';
-perg('calendario').c = 'O Calendário Nacional de Vacinação do SUS está afixado em local visível ao usuário, com a indicação das vacinas disponibilizadas.';
+perg('calendario').c = 'O Calendário Nacional de Vacinação do SUS, na versão vigente, está afixado em local visível ao usuário, com a indicação das vacinas disponibilizadas.';
 /* relatório: frase única das conformidades, por item */
 const JUNTA = {
   regularidade: ['O estabelecimento {}.', {
     lic: 'possui licença sanitária que contempla a atividade de vacinação',
     cnes: 'está inscrito no CNES com dados atualizados',
-    calendario: 'mantém o Calendário Nacional de Vacinação do SUS afixado em local visível ao usuário, com a indicação das vacinas disponibilizadas'}],
+    calendario: 'mantém o Calendário Nacional de Vacinação do SUS, na versão vigente, afixado em local visível ao usuário, com a indicação das vacinas disponibilizadas'}],
   pessoal: ['O serviço de vacinação {}.', {
     rt: 'tem responsável técnico e substituto designados',
     habilitado: 'conta com profissional legalmente habilitado durante todo o período em que é oferecido',

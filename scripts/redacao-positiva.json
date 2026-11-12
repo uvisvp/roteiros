@@ -1,12 +1,10 @@
 {
   "_sobre": "Redação positiva (pedido de 20/10/2026): a pergunta e a frase de conformidade descrevem o que o estabelecimento faz certo, não a ausência do erro. Fica a negativa só no escopo (atividade que o estabelecimento não exerce). Aplicada aos blocos por scripts/repack-redacao.cjs e às fontes uma vez; test-regras barra a volta das frases antigas. As perguntas do catálogo embutido da Drogaria (VISA_LOCAL, protegido) são reescritas na carga, em medicamentos/drogaria-lacunas.js.",
   "trocas": [
-
     [
       "A casa de máquinas tem espaço, ventilação e iluminação adequados e não guarda produtos químicos nem materiais estranhos.",
       "A casa de máquinas tem espaço, ventilação e iluminação adequados e está livre de produtos químicos e de materiais estranhos à atividade."
     ],
-
     [
       "Há abrigo de resíduos, com ambiente para os resíduos infectantes e perfurocortantes separado do resíduo comum, e não há coletores armazenados fora do abrigo.",
       "Há abrigo de resíduos, com ambiente para os resíduos infectantes e perfurocortantes separado do resíduo comum, e todos os coletores ficam no abrigo."
@@ -78,10 +76,6 @@
     [
       "Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo), trabalha só com cosméticos, técnicas e equipamentos registrados e não aplica medicamento ou injetável, com comprovantes disponíveis?",
       "Quem executa os procedimentos tem a formação exigida (técnico em estética, esteticista e cosmetólogo) e trabalha só com cosméticos, técnicas e equipamentos registrados, nos limites da profissão, com comprovantes disponíveis?"
-    ],
-    [
-      "Utensílios e instrumentos reutilizáveis são limpos, desinfetados ou esterilizados após o uso, conforme o risco, e o material de uso único não é reutilizado?",
-      "Utensílios e instrumentos reutilizáveis são limpos, desinfetados ou esterilizados após o uso, conforme o risco, e o material de uso único é descartado após o uso?"
     ],
     [
       "Está atendida a exigência de ausência de comunicação direta com dependências residenciais e não uso do imóvel como moradia ou dormitório?",

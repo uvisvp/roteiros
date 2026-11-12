@@ -240,6 +240,8 @@ const DM_PERGUNTAS={
  'q396':{legal:'RDC Anvisa nº 166/2017, art. 5º'},
  'q397':{legal:'RDC Anvisa nº 166/2017, art. 7º'},
  'q417':{legal:'RDC Anvisa nº 670/2022, art. 4º; RDC Anvisa nº 670/2022, art. 9º, § 6º'},
+ /* amostras de referência: o dispositivo é o art. 7º da RDC 670/2022 (o art. 50 da RDC 430/2020 trata das condições de armazenagem) */
+ 'q390':{legal:'RDC Anvisa nº 670/2022, art. 7º; RDC Anvisa nº 430/2020, art. 50'},
  'expedicao-documento':{legal:'RDC Anvisa nº 430/2020, art. 59, I a IX; RDC Anvisa nº 430/2020, art. 60'},
  'dist-id-licenca':{ncText:'A licença sanitária apresentada não identifica o estabelecimento ou não abrange as atividades inspecionadas.'},
  'dist-id-afe':{ncText:'A Autorização de Funcionamento (AFE) não abrange as atividades com medicamentos efetivamente realizadas.'},
@@ -270,8 +272,13 @@ const DM_PERGUNTAS={
 /* Os blocos de IFA, qualificação térmica e sistemas entram no roteiro depois deste arquivo
    (script que a casca acrescenta ao montar o módulo): a revisão é reaplicada quando a página
    termina de carregar. Reaplicar não muda o que já foi ajustado. */
+/* Importadora: laboratório de controle de qualidade próprio é exigência da RDC Anvisa nº 670/2022, art. 7º
+   (pedido de 12/11/2026) — pergunta própria no início de “Controle de Qualidade — instalações”. */
+const DM_NOVAS={cq_instalacoes:[{id:'cq-lab',text:'A importadora possui laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para as amostras de referência?',legal:'RDC Anvisa nº 670/2022, art. 7º',ncText:'A importadora não possui laboratório de controle de qualidade e local de armazenamento próprios, com local específico para as amostras de referência.'}]};
 function dmRoteiro(){
+ try{if(typeof POP_ORIENT!=='undefined'&&POP_ORIENT.cq_instalacoes)POP_ORIENT.cq_instalacoes[0]='O Controle de Qualidade aplica-se apenas aos estabelecimentos importadores, que devem possuir laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para amostras de referência (RDC Anvisa nº 670/2022, art. 7º).'}catch(e){}
  for(const s of DATA.sections){
+  for(const n of (DM_NOVAS[s.id]||[]))if(!s.questions.some(q=>q.id===n.id))s.questions.unshift(Object.assign({},n));
   if(s.questions.some(q=>DM_REPETIDAS[q.id]))s.questions=s.questions.filter(q=>!DM_REPETIDAS[q.id]);
   for(const q of s.questions){const a=DM_PERGUNTAS[q.id];if(a)Object.assign(q,a);if(q.legal)q.legal=String(q.legal).trim().replace(/\.$/,'')}
  }

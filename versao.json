@@ -1,6 +1,6 @@
 {
-  "versao": "20261111-2",
+  "versao": "20261112-1",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Alimentos: inspeção por setores (atalhos para supermercado, restaurante, padaria…; açougue, padaria, frios, hortifrúti, rotisseria e demais setores com verificações próprias), o perfil esconde o que não se aplica, licenciamento sanitário (CMVS, CLI, MEI, isento) na identificação e documentos só no checklist. Rotulagem: busca inteligente leva o termo ao painel de Suplementos e Aditivos."
+  "notas": "Serviços: Estética com processamento detalhado (método de esterilização, monitoramento, identificação dos estéreis, desinfecção e produtos; RDC 15/2012 no serviço de saúde); Vacinação com o calendário da Instrução Normativa do CNV 2026; Academias sem verificação repetida no inventário; Hemodinâmica com as verificações próprias da intervencionista. Atacadista de medicamentos: laboratório próprio da importadora (RDC 670/2022, art. 7º)."
 }

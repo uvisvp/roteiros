@@ -19,6 +19,7 @@ const RI = (art, inc) => R(art, 'inciso', inc);
 const RP = (art, par) => R(art, 'paragrafo', par);
 const N = n => (art, ...resto) => 'in-' + n + '-2021::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
 const N90 = N(90), N91 = N(91), N92 = N(92), N93 = N(93), N96 = N(96), N97 = N(97);
+const R63 = (art, ...resto) => 'rdc-63-2011::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
 const R36 = (art, ...resto) => 'rdc-36-2013::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
 const PRC = (art, ...resto) => 'portaria-de-consolidacao-ms-5-2017::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
 const LM = (art, ...resto) => 'lei-municipal-13725-2004::artigo::' + art + (resto.length ? '::' + resto.join('::') : '');
@@ -339,8 +340,9 @@ const ESPEC = {
     {id: 'hemo_proib', t: 'Os equipamentos têm gerador de alta frequência, feixe pulsado e controle automático de intensidade?', r: [N91(3)],
       c: 'Os equipamentos têm gerador de alta frequência, feixe pulsado e controle automático de intensidade, como exige a IN 91/2021.', nc: 'Há equipamento sem gerador de alta frequência, sem feixe pulsado ou sem controle automático de intensidade, vedado pela IN 91/2021.',
       na: NAO_FUNC, inf: ['im_inabilita']},
-    {id: 'hemo_sinal', t: 'A emissão de raios X é indicada por sinal luminoso no painel, dentro da sala e, nos fixos, do lado de fora da porta?', r: [N91(6), N91(6, 'paragrafo', 'unico')],
-      c: 'A emissão de raios X é indicada por sinal luminoso no painel, na sala e do lado de fora da porta.', nc: 'A emissão de raios X não é indicada pelos sinais luminosos exigidos.',
+    /* a luz da porta está na pergunta geral de sinalização (sinal_luz, RDC 611, art. 52) */
+    {id: 'hemo_sinal', t: 'A emissão de raios X é indicada por sinal luminoso no painel de controle e no interior da sala de exames?', r: [N91(6)],
+      c: 'A emissão de raios X é indicada por sinal luminoso no painel de controle e no interior da sala de exames.', nc: 'A emissão de raios X não é indicada por sinal luminoso no painel e no interior da sala.',
       na: NAO_FUNC, inf: ['im_equip_in']},
     {id: 'hemo_inabilita', t: 'Os equipamentos em uso atendem às condições mínimas de funcionamento (nenhuma das condições do checklist, que inabilitam o uso)?', r: [N91(7)],
       c: 'Os equipamentos em uso atendem às condições mínimas de funcionamento exigidas pela instrução normativa da modalidade.', nc: 'Há equipamento em uso em condição que inabilita o uso.', ncPontos: 'Há equipamento em uso com: {}.',
@@ -352,6 +354,23 @@ const ESPEC = {
     {id: 'hemo_epi', t: 'Os EPI da radiologia intervencionista são testados semestralmente, com laudo técnico de integridade e imagens?', r: [N91(9)],
       c: 'Os EPI são testados semestralmente, com laudo técnico de integridade.', nc: 'Os EPI não são testados semestralmente com laudo técnico de integridade.',
       na: NAO_FUNC, inf: ['im_epi']},
+    /* próprios da intervencionista (pente fino de 12/11/2026): o que a convencional não tem */
+    {id: 'hemo_param', t: 'Os parâmetros operacionais estão claramente indicados no equipamento?', r: [N91(5)],
+      c: 'Os parâmetros operacionais (tensão, corrente, campo, distância fonte-receptor, tempo acumulado de fluoroscopia, taxa de kerma, kerma de referência e produto kerma-área, quando aplicáveis) estão indicados no equipamento.', nc: 'Os parâmetros operacionais não estão claramente indicados no equipamento.', ncPontos: 'O equipamento não indica: {}.',
+      pontos: [['tensao', 'tensão e corrente do tubo'], ['tempo', 'tempo acumulado de fluoroscopia'], ['geometria', 'distância fonte-receptor e tamanho do campo'], ['dose', 'taxa de kerma no ar, kerma de referência e produto kerma-área (quando aplicáveis)']],
+      na: NAO_FUNC, inf: ['im_equip_in']},
+    {id: 'hemo_certif', t: 'Há os certificados do fabricante exigidos para o tubo e para a mesa?', r: [N91(2, 'inciso', 'i'), N91(4)],
+      c: 'Há certificado do fabricante da radiação de fuga do cabeçote (até 1 mGy/h a 1 m) e da absorção da mesa e do porta-receptor vertical.', nc: 'Faltam certificados do fabricante exigidos para o tubo ou para a mesa.',
+      pontos: [['fuga', 'certificado de radiação de fuga do cabeçote, emitido na instalação do tubo', 'Não há certificado do fabricante da radiação de fuga do cabeçote.'], ['mesa', 'certificado de absorção da mesa e do porta-receptor vertical (quando houver)', 'Não há certificado do fabricante da absorção da mesa ou do porta-receptor vertical.']],
+      na: NAO_FUNC, inf: ['im_equip_in']},
+    {id: 'hemo_prot', t: 'Durante o procedimento, a proteção da equipe na sala é usada como exigido?', r: [R(59, 'inciso', 'i'), R(59, 'inciso', 'ii'), N91(2, 'inciso', 'vii'), N91(2, 'inciso', 'xiii')],
+      c: 'Durante o procedimento, a equipe na sala usa avental e protetor de tireoide plumbíferos, o anteparo suspenso e o saiote da mesa estão posicionados e ninguém expõe parte do corpo ao feixe primário sem proteção.', nc: 'A proteção da equipe durante o procedimento não é usada como exigido.',
+      pontos: [['epi', 'avental e protetor de tireoide (mínimo 0,25 mm equivalente de chumbo) em todos na sala', 'Há profissional na sala sem avental ou protetor de tireoide plumbífero.'], ['anteparo', 'anteparo suspenso ou visor plumbífero posicionado entre o operador e o paciente', 'O anteparo suspenso ou visor plumbífero não está posicionado.'], ['saiote', 'saiote ou cortina plumbífera da mesa posicionado', 'O saiote ou a cortina plumbífera da mesa não está posicionado.'], ['feixe', 'mãos e demais partes do corpo fora do feixe primário, ou protegidas', 'Há profissional com parte do corpo no feixe primário sem proteção.']],
+      na: 'Não havia procedimento em andamento durante a inspeção.', inf: ['im_epi']},
+    {id: 'hemo_suporte', t: 'A sala de hemodinâmica tem os recursos para suporte imediato à vida?', r: [R63(58)],
+      c: 'A sala de hemodinâmica tem carrinho de emergência com desfibrilador em funcionamento e medicamentos e materiais conferidos e dentro da validade.', nc: 'A sala de hemodinâmica não tem os recursos para suporte imediato à vida.',
+      pontos: [['carrinho', 'carrinho de emergência na sala ou ao lado', 'Não há carrinho de emergência na sala de hemodinâmica ou ao lado.'], ['desfib', 'desfibrilador testado, com registro', 'O desfibrilador não está testado ou não há registro do teste.'], ['conferencia', 'medicamentos e materiais conferidos, com registro, e dentro da validade', 'Os medicamentos e materiais de emergência não são conferidos ou estão vencidos.']],
+      na: NAO_FUNC, inf: ['im_suporte']},
     {id: 'nsp', t: 'Há Núcleo de Segurança do Paciente constituído e Plano de Segurança do Paciente implantado, que alcança o serviço de hemodinâmica?', r: [R36(4), R36(5), R36(7, 'inciso', 'iv'), R36(8)],
       c: 'Há Núcleo de Segurança do Paciente constituído e Plano de Segurança do Paciente implantado, que alcança o serviço.', nc: 'Não há Núcleo de Segurança do Paciente ou Plano de Segurança do Paciente que alcance o serviço.',
       pontos: [['nsp', 'Núcleo de Segurança do Paciente nomeado', 'O Núcleo de Segurança do Paciente não foi constituído.'], ['psp', 'Plano de Segurança do Paciente implantado', 'Não há Plano de Segurança do Paciente implantado.'], ['protocolos', 'protocolos (identificação, cirurgia segura, medicamentos, quedas)', 'Os protocolos de segurança do paciente não estão implantados.'], ['notifica', 'eventos adversos notificados no Notivisa', 'Os eventos adversos não são notificados ao Sistema Nacional de Vigilância Sanitária.']],
@@ -391,6 +410,7 @@ const INFRACOES = [
   {id: 'im_pnqm', grupo: 'Equipamentos da modalidade', texto: 'Deixar de cumprir as obrigações do serviço no Programa Nacional de Qualidade em Mamografia.', r: [PRC(216)]},
   {id: 'im_rm_acesso', grupo: 'Equipamentos da modalidade', texto: 'Deixar de classificar as zonas e de controlar o acesso de pessoas e objetos às zonas III e IV da ressonância magnética.', r: [N97(8), N97(9), N97(10)]},
   {id: 'im_rm_instal', grupo: 'Equipamentos da modalidade', texto: 'Manter sala de ressonância magnética sem a sinalização, a comunicação, a proteção acústica e a evacuação de gases exigidas.', r: [N97(2), N97(3), N97(5), N97(6), N97(7), N97(12)]},
+  {id: 'im_suporte', grupo: 'Segurança do paciente', texto: 'Deixar de garantir os recursos para suporte imediato à vida na sala de procedimentos.', r: [R63(58)]},
   {id: 'im_nsp', grupo: 'Segurança do paciente', texto: 'Deixar de constituir o Núcleo de Segurança do Paciente e de implantar o Plano de Segurança do Paciente.', r: [R36(4), R36(7), R36(8)]}
 ];
 /* artigos da IN da modalidade nas infrações genéricas de equipamento */
@@ -410,7 +430,7 @@ const LEI = {
   im_pop: [LM(63)], im_riscos: [LM(63)], im_ppr: [LM(42), LM(63)], im_justificacao: [LM(63)], im_sala: [LM(65)], im_sinalizacao: [LM(65)],
   im_acompanhante: [LM(63)], im_epi: [LM(42), LM(65)], im_levantamento: [LM(42), LM(65)], im_dosimetria: [LM(42)], im_proibido: [LM(65)],
   im_imagens: [LM(68)], im_tele: [LM(63)], im_itinerante: [LM(63)], im_equip_in: [LM(65), LM(66)], im_inabilita: [LM(66)],
-  im_pnqm: [LM(63)], im_rm_acesso: [LM(63)], im_rm_instal: [LM(65)], im_nsp: [LM(63)]
+  im_pnqm: [LM(63)], im_rm_acesso: [LM(63)], im_rm_instal: [LM(65)], im_nsp: [LM(63)], im_suporte: [LM(65)]
 };
 function lei13725(secoes, infracoes) {
   const eLei = r => /^lei-municipal-13725-2004::/.test(r), uniq = l => l.filter((x, k) => l.indexOf(x) === k);
@@ -451,7 +471,8 @@ const MAIS = {
   ],
   hemo: [
     {t: 'Cardiologia intervencionista: o operador usa avental plumbífero e óculos plumbíferos (o cristalino é sensível), além de anteparo suspenso e saiote na mesa; o dosímetro de tórax vai sobre o avental, conforme o Programa de Proteção Radiológica. No paciente, acompanha-se a dose de pele em procedimento longo.', f: 'ICRP, Publicação 120, Radiological protection in cardiology (2013); RDC Anvisa nº 611/2022, arts. 59 e 66; IN Anvisa nº 91/2021, arts. 2º e 9º'},
-    {t: 'Limite de dose no cristalino do trabalhador: 20 mSv por ano.', f: CNEN}
+    {t: 'Limite de dose no cristalino do trabalhador: 20 mSv por ano.', f: CNEN},
+    {t: 'Estrutura da hemodinâmica: unidade de acesso restrito, com área de comando, área de escovação (2 torneiras por sala), sala de exames com 1,0 m livre das bordas laterais da mesa e área de recuperação com número de leitos igual ao de salas mais um; vestiário de barreira e Central de Material Esterilizado no estabelecimento.', f: 'RDC Anvisa nº 50/2002, Parte II, unidade 4 (Hemodinâmica), e Parte III, itens B.1.1, B.1.6 e 5.3'}
   ]
 };
 

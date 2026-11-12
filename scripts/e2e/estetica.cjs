@@ -32,7 +32,7 @@ const responde=(f,id,val)=>f.evaluate(([id,val])=>{const q=document.querySelecto
  ok(!await f.evaluate(()=>!!document.querySelector('[data-rs-q="lic_i"]')),'pergunta de interesse à saúde fora do perfil de saúde');
  await responde(f,'lic','Não');await p.waitForTimeout(300);
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'proc',item:'interno'}));await p.waitForTimeout(400);
- await responde(f,'proc_s','Não');await p.waitForTimeout(300);
+ await responde(f,'proc_class','Não');await responde(f,'proc_unico','Não');await p.waitForTimeout(300);
  /* inventário dos ambientes: lista do serviço de saúde, só o que estiver irregular */
  await f.evaluate(()=>UvisPadrao.vai({aba:'roteiro',secao:'infra',item:'ambientes'}));await p.waitForTimeout(400);
  ok(await f.evaluate(()=>!!document.querySelector('[data-rs-amb-chip^="amb_s|Sala de procedimentos|"]')&&!document.querySelector('[data-rs-amb-chip^="amb_i|"]')),'inventário dos ambientes do serviço de saúde');
