@@ -8,7 +8,7 @@
    Cada pergunta (.pu-q) com pontos ganha o checklist logo depois dos botões de
    resposta; o resultado marca a resposta pelo próprio botão do módulo: algum
    “Não atende” → Não cumpre; todos verificados sem “Não atende” → Cumpre (ou
-   Não se aplica, se todos N/A). O relatório usa UvsPontos.frase(id): a frase
+   Não se aplica, se todos N/A); lista incompleta sem “Não atende” → sem resposta. O relatório usa UvsPontos.frase(id): a frase
    de irregularidade com os pontos não atendidos. Estado em localStorage (a
    chave vai nas Inspeções salvas); se o módulo apagar a resposta (Apagar tudo,
    Nova inspeção), os pontos da pergunta também saem.
@@ -46,6 +46,8 @@
   return (achado[id] = k ? D.q[k] : null); }
  function botoes(el){ var r = el.querySelector('.pu-resp'); return r ? r.querySelectorAll('button') : []; }
  function resposta(el){ var b = botoes(el); for(var i = 0; i < b.length && i < 3; i++) if(b[i].getAttribute('aria-pressed') === 'true') return RESP[i]; return ''; }
+ /* desfaz a resposta pelo próprio botão do módulo (tocar na resposta marcada desfaz) */
+ function desmarca(el){ var b = botoes(el); for(var i = 0; i < b.length && i < 3; i++) if(b[i].getAttribute('aria-pressed') === 'true'){ b[i].click(); return; } }
  function marca(el, v){ var b = botoes(el), i = RESP.indexOf(v); if(i >= 0 && b[i] && b[i].getAttribute('aria-pressed') !== 'true') b[i].click(); }
  function resultado(q, m){ var v = q.p.map(function(p){ return m[p[0]]; });
   if(v.indexOf('NC') >= 0) return 'nc';
@@ -81,11 +83,14 @@
   var pp = b.getAttribute('data-uvs-pt').split('¦'), id = pp[0], q = def(id); if(!q) return;
   var s = le(), m = s[id] = Object.assign({}, s[id]);
   if(m[pp[1]] === pp[2]) delete m[pp[1]]; else m[pp[1]] = pp[2];
-  var res = resultado(q, m); if(res) m._r = res;
+  /* lista incompleta sem “Não atende”: a resposta volta a pendente (15/11/2026 — antes ficava a anterior, e o
+     relatório afirmava por inteiro o que teve a confirmação de um item retirada). _r sai junto, para a
+     conferência do redesenho (resposta × lista) não apagar os itens que continuam marcados. */
+  var res = resultado(q, m); if(res) m._r = res; else delete m._r;
+  if(!Object.keys(m).length) delete s[id];
   grava(s);
   var el = b.closest('.pu-q'), box = b.closest('.uvs-pontos'); if(box) box.innerHTML = caixa(id);
-  /* lista incompleta sem “Não atende”: a resposta anterior (se era do checklist) fica registrada como está */
-  if(res && el) marca(el, res);
+  if(el){ if(res) marca(el, res); else desmarca(el); }
  }, true);
  var css = document.createElement('style');
  css.textContent = '.uvs-pontos{margin:10px 0 0;padding:10px 12px;border:1px solid color-mix(in srgb,var(--pu-cor,#1E5A8A) 28%,#fff);border-radius:10px;background:color-mix(in srgb,var(--pu-cor,#1E5A8A) 4%,#fff)}'

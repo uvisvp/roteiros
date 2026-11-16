@@ -276,9 +276,11 @@ function iniciaPadrao() {
   raizEl.addEventListener('click', function (e) {
     var b;
     if ((b = e.target.closest('[data-sa-resp]'))) {
-      var id = b.dataset.saResp, v = b.dataset.v;
-      st.resp[id] = v; salva();
-      [].forEach.call(b.parentNode.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      /* tocar de novo na resposta marcada desfaz (como nos demais roteiros; 15/11/2026) */
+      var id = b.dataset.saResp, v = b.dataset.v, desfaz = st.resp[id] === v;
+      if (desfaz) delete st.resp[id]; else st.resp[id] = v;
+      salva();
+      [].forEach.call(b.parentNode.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(!desfaz && x === b)); });
       UvisPadrao.atualiza(); return;
     }
     if ((b = e.target.closest('[data-sa-apaga]'))) { var ap = b.dataset.saApaga; delete st.resp[ap]; delete st.notas[ap]; salva(); saRedesenha(); return; }

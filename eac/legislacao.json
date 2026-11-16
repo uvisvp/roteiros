@@ -494,7 +494,7 @@
  "rdc-978-2025::artigo::122": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 122",
-  "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 1º O supervisor do pessoal técnico poderá ser o Responsável Técnico.\n§ 2º O Serviço que executa as atividades relacionadas ao EAC pode possuir um ou mais supervisores do pessoal técnico.\n§ 3º Em caso de impedimento do supervisor do pessoal técnico, o Serviço que executa as atividades relacionadas ao EAC deve contar com um profissional legalmente habilitado para substituí-lo.",
+  "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 1º O supervisor do pessoal técnico poderá ser o Responsável Técnico.\n§ 2º O Serviço que executa as atividades relacionadas ao EAC pode possuir um ou mais supervisores do pessoal técnico.\n§ 3º Em caso de impedimento do supervisor do pessoal técnico, o Serviço que executa as atividades relacionadas ao EAC deve contar com um profissional legalmente habilitado para substituí-lo.\n§ 4º É permitida a supervisão do pessoal técnico de forma remota somente para a Central de Distribuição que proceder unicamente à manipulação da embalagem secundária ou da embalagem terciária.\n§ 5º A supervisão do pessoal técnico de forma remota deve ser documentada.\n§ 6º O registro da supervisão do pessoal técnico de forma remota deve conter, no mínimo:\nI - todas as comunicações realizadas entre o supervisor e o pessoal técnico;\nII - todas as ocorrências observadas; e\nIII - as ações preventivas e corretivas adotadas.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::122::paragrafo::1": {
@@ -507,6 +507,24 @@
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 122, § 3º",
   "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 3º Em caso de impedimento do supervisor do pessoal técnico, o Serviço que executa as atividades relacionadas ao EAC deve contar com um profissional legalmente habilitado para substituí-lo.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
+ },
+ "rdc-978-2025::artigo::122::paragrafo::4": {
+  "norma": "RDC Anvisa nº 978/2025",
+  "disp": "art. 122, § 4º",
+  "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 4º É permitida a supervisão do pessoal técnico de forma remota somente para a Central de Distribuição que proceder unicamente à manipulação da embalagem secundária ou da embalagem terciária.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
+ },
+ "rdc-978-2025::artigo::122::paragrafo::5": {
+  "norma": "RDC Anvisa nº 978/2025",
+  "disp": "art. 122, § 5º",
+  "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 5º A supervisão do pessoal técnico de forma remota deve ser documentada.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
+ },
+ "rdc-978-2025::artigo::122::paragrafo::6": {
+  "norma": "RDC Anvisa nº 978/2025",
+  "disp": "art. 122, § 6º",
+  "texto": "Art. 122. O Serviço que executa as atividades relacionadas ao EAC deve possuir um profissional legalmente habilitado como supervisor do pessoal técnico, presencialmente, durante seu período de funcionamento.\n§ 6º O registro da supervisão do pessoal técnico de forma remota deve conter, no mínimo:\nI - todas as comunicações realizadas entre o supervisor e o pessoal técnico;\nII - todas as ocorrências observadas; e\nIII - as ações preventivas e corretivas adotadas.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::123": {
@@ -1190,13 +1208,7 @@
  "rdc-978-2025::artigo::25": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 25",
-  "texto": "Art. 25. É proibido ao Serviço Tipo II o recebimento de material biológico encaminhado por outro Serviço que realiza atividades relacionadas ao EAC.\nParágrafo único. Excetua-se do disposto no caput deste artigo, o recebimento de material biológico encaminhado pelo Serviço de EAC Itinerante para o Posto de Coleta.",
-  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
- },
- "rdc-978-2025::artigo::25::paragrafo::unico": {
-  "norma": "RDC Anvisa nº 978/2025",
-  "disp": "art. 25, parágrafo único",
-  "texto": "Art. 25. É proibido ao Serviço Tipo II o recebimento de material biológico encaminhado por outro Serviço que realiza atividades relacionadas ao EAC.\nParágrafo único. Excetua-se do disposto no caput deste artigo, o recebimento de material biológico encaminhado pelo Serviço de EAC Itinerante para o Posto de Coleta.",
+  "texto": "Art. 25. É proibido ao Consultório Isolado classificado como Serviço Tipo II o recebimento de material biológico encaminhado por outro serviço que realize atividades relacionadas aos EAC.\nParágrafo único. (Revogado pela Resolução da Diretoria Colegiada Anvisa nº 1.043, de 01/10/2026, republicada no DOU nº 195, de 15/10/2026)",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::27": {
@@ -1328,19 +1340,19 @@
  "rdc-978-2025::artigo::43": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 43",
-  "texto": "Art. 43. Somente o Serviço Tipo III pode manter Serviço de EAC Itinerante, seja ele próprio ou contratado.",
+  "texto": "Art. 43. Somente o Serviço Tipo II (Posto de Coleta) e o Serviço Tipo III podem manter Serviço de EAC Itinerante, próprio ou contratado.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::44": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 44",
-  "texto": "Art. 44. O Serviço de EAC Itinerante contratado deve possuir sede fixa com alvará de licenciamento ou equivalente, expedido pelo órgão sanitário local, indicando expressamente as atividades realizadas.\nParágrafo único. O Serviço de EAC Itinerante próprio pode ter sua sede fixa no Serviço Tipo III que o mantém.",
+  "texto": "Art. 44. O Serviço de EAC Itinerante contratado deve possuir sede fixa com alvará de licenciamento ou equivalente, expedido pelo órgão sanitário local, indicando expressamente as atividades realizadas.\nParágrafo único. O Serviço de EAC Itinerante próprio pode ter sua sede fixa no Serviço Tipo III ou no Serviço Tipo II (Posto de Coleta) que o mantém.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::44::paragrafo::unico": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 44, parágrafo único",
-  "texto": "Art. 44. O Serviço de EAC Itinerante contratado deve possuir sede fixa com alvará de licenciamento ou equivalente, expedido pelo órgão sanitário local, indicando expressamente as atividades realizadas.\nParágrafo único. O Serviço de EAC Itinerante próprio pode ter sua sede fixa no Serviço Tipo III que o mantém.",
+  "texto": "Art. 44. O Serviço de EAC Itinerante contratado deve possuir sede fixa com alvará de licenciamento ou equivalente, expedido pelo órgão sanitário local, indicando expressamente as atividades realizadas.\nParágrafo único. O Serviço de EAC Itinerante próprio pode ter sua sede fixa no Serviço Tipo III ou no Serviço Tipo II (Posto de Coleta) que o mantém.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::45": {
@@ -1376,19 +1388,19 @@
  "rdc-978-2025::artigo::50": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 50",
-  "texto": "Art. 50. O Serviço de EAC Itinerante somente pode coletar e transportar material biológico para o Serviço Tipo III a ele vinculado.\nParágrafo único. É permitido ao Serviço Tipo III a contratação de Serviço de EAC Itinerante para a coleta de material biológico a ser enviado ao Posto de Coleta vinculado a ele.",
+  "texto": "Art. 50. O Serviço de EAC Itinerante somente pode coletar e transportar material biológico para o Serviço Tipo III ou para o Serviço Tipo II (Posto de Coleta) que o mantém.\nParágrafo único. São permitidas a coleta e o transporte de material biológico pelo Serviço de EAC Itinerante, para o Serviço Tipo III vinculado ao Serviço Tipo II (Posto de Coleta) que o mantém.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::50::paragrafo::unico": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 50, parágrafo único",
-  "texto": "Art. 50. O Serviço de EAC Itinerante somente pode coletar e transportar material biológico para o Serviço Tipo III a ele vinculado.\nParágrafo único. É permitido ao Serviço Tipo III a contratação de Serviço de EAC Itinerante para a coleta de material biológico a ser enviado ao Posto de Coleta vinculado a ele.",
+  "texto": "Art. 50. O Serviço de EAC Itinerante somente pode coletar e transportar material biológico para o Serviço Tipo III ou para o Serviço Tipo II (Posto de Coleta) que o mantém.\nParágrafo único. São permitidas a coleta e o transporte de material biológico pelo Serviço de EAC Itinerante, para o Serviço Tipo III vinculado ao Serviço Tipo II (Posto de Coleta) que o mantém.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::51": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 51",
-  "texto": "Art. 51. O Serviço de EAC Itinerante somente pode executar EAC se cumprir os seguintes requisitos obrigatórios:\nI - executar EAC exclusivamente em material biológico obtido por coleta por punção capilar, coleta em cavidade oral, em nasofaringe ou em orofaringe;\nII - não realizar Metodologia própria (in house); e,\nIII - utilizar somente equipamento que não requeira o uso de água reagente produzida no serviço.\n§ 1º É permitida ao Serviço de EAC itinerante a coleta de outros materiais biológicos além dos previstos no inciso I do caput deste artigo, desde que realizada por profissional legalmente habilitado ou profissional capacitado sob supervisão, e somente no âmbito da fase pré-analítica, para a execução da fase analítica do EAC no Serviço Tipo III a ele vinculado.\n§ 2º Somente é permitido ao Serviço de EAC Itinerante coletar, armazenar, acondicionar, processar e transportar material biológico no âmbito da realização da fase pré-analítica para a execução do EAC no Serviço Tipo III.\n§ 3º Não é permitida ao Serviço de EAC Itinerante a transcrição do laudo liberado pelo Serviço Tipo III.\n§ 4º É permitido ao Serviço de EAC Itinerante a execução de EAC presencial, cuja realização ocorra no ato da coleta.\n§ 5º O local onde serão realizadas as atividades de coleta e execução de EAC deve dispor, pelo menos, de meios que garantam a privacidade e o atendimento individualizado.",
+  "texto": "Art. 51. O Serviço de EAC Itinerante somente pode executar EAC se cumprir os seguintes requisitos obrigatórios:\nI - executar EAC exclusivamente em material biológico obtido por coleta por punção capilar, coleta em cavidade oral, em nasofaringe ou em orofaringe;\nII - não realizar Metodologia própria (in house); e,\nIII - utilizar somente equipamento que não requeira o uso de água reagente produzida no serviço.\n§ 1º É permitida ao Serviço de EAC Itinerante a coleta de outros materiais biológicos além dos previstos no inciso I do caput deste artigo, desde que realizada por profissional legalmente habilitado ou profissional capacitado sob supervisão, e somente no âmbito da fase pré-analítica, para execução da fase analítica no Serviço Tipo II (Posto de Coleta) ou no Serviço Tipo III que o mantém.\n§ 2º Somente é permitido ao Serviço de EAC Itinerante coletar, armazenar, acondicionar, processar e transportar material biológico no âmbito da fase pré-analítica para a execução do EAC no Serviço Tipo II (Posto de Coleta) ou no Serviço Tipo III que o mantém.\n§ 3º Não é permitida ao Serviço de EAC Itinerante a transcrição do laudo liberado pelo Serviço Tipo II (Posto de Coleta) ou pelo Serviço Tipo III que o mantém.\n§ 4º É permitido ao Serviço de EAC Itinerante a execução de EAC presencial, cuja realização ocorra no ato da coleta.\n§ 5º O local onde serão realizadas as atividades de coleta e execução de EAC deve dispor, pelo menos, de meios que garantam a privacidade e o atendimento individualizado.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::51::paragrafo::5": {
@@ -1406,7 +1418,13 @@
  "rdc-978-2025::artigo::53": {
   "norma": "RDC Anvisa nº 978/2025",
   "disp": "art. 53",
-  "texto": "Art. 53. O Serviço de EAC Itinerante deve realizar o CIQ e o CEQ, conforme estabelecido nesta Resolução.\nParágrafo único. O Serviço de EAC Itinerante próprio poderá realizar o CIQ e o CEQ, conforme determinado pelo Serviço Tipo III que o mantém.",
+  "texto": "Art. 53. O Serviço de EAC Itinerante deve realizar o CIQ e o CEQ, conforme estabelecido nesta Resolução.\nParágrafo único. O Serviço de EAC Itinerante próprio poderá realizar o CIQ e o CEQ, conforme determinado pelo Serviço Tipo II (Posto de Coleta) ou pelo Serviço Tipo III que o mantém.",
+  "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
+ },
+ "rdc-978-2025::artigo::53::paragrafo::unico": {
+  "norma": "RDC Anvisa nº 978/2025",
+  "disp": "art. 53, parágrafo único",
+  "texto": "Art. 53. O Serviço de EAC Itinerante deve realizar o CIQ e o CEQ, conforme estabelecido nesta Resolução.\nParágrafo único. O Serviço de EAC Itinerante próprio poderá realizar o CIQ e o CEQ, conforme determinado pelo Serviço Tipo II (Posto de Coleta) ou pelo Serviço Tipo III que o mantém.",
   "url": "https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=8542&cod_modulo=310&link=S&numeroAto=00000978&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2025"
  },
  "rdc-978-2025::artigo::60": {

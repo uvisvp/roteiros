@@ -2402,7 +2402,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Planilhas diárias de temperatura máxima, mínima e de momento.  
   Fundamento: RDC Anvisa nº 197/2017, art. 11, II
 
-## imagem-servico
+## Diagnóstico por imagem
 
 ### Documentação legal e administrativa
 
@@ -2513,7 +2513,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
   Fundamento: RDC Anvisa nº 502/2021, art. 8º; Portaria SMS nº 266/2025 — texto consolidado, art. 1º; art. 4º
 - **Estatuto registrado, registro de entidade social e Regimento Interno**  
   Fundamento: RDC Anvisa nº 502/2021, art. 9º
-- **Comprovante de inscrição do programa junto ao Conselho Municipal do Idoso**  
+- **Comprovante de inscrição do programa junto ao Conselho Municipal da Pessoa Idosa**  
   Fundamento: RDC Anvisa nº 502/2021, art. 8º; Lei Federal nº 10.741/2003 — Estatuto da Pessoa Idosa, art. 48; art. 48, parágrafo único
 - **Auto de Vistoria do Corpo de Bombeiros (AVCB) vigente**  
   Fundamento: RDC Anvisa nº 502/2021, art. 23
@@ -2536,7 +2536,7 @@ Gerado por `scripts/documentos-checklist.cjs` a partir de `documentos/checklist.
 ### Residentes
 
 - **Contrato formal de prestação de serviço com cada residente, responsável legal ou curador**  
-  Fundamento: RDC Anvisa nº 502/2021, art. 12; Lei Federal nº 10.741/2003 — Estatuto da Pessoa Idosa, art. 50; art. 50, I
+  Fundamento: RDC Anvisa nº 502/2021, art. 12; Lei Federal nº 10.741/2003 — Estatuto da Pessoa Idosa, art. 50; art. 50, IB
 
 ### Planos e rotinas
 

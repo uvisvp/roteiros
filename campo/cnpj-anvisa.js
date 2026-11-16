@@ -21,6 +21,8 @@
  function soReceita(){return !window.ROTEIRO&&SO_RECEITA.indexOf(window.__uvsApp)>=0}
  function ativo(){return !window.ROTEIRO&&PROPRIOS.indexOf(window.__uvsApp)<0}
  function dig(v){return String(v||'').replace(/\D/g,'')}
+ /* CNPJ numérico ou alfanumérico (Receita Federal, desde julho de 2026): a busca usa o identificador inteiro */
+ function cnpjId(v){return String(v||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
  function rot(el){var l=el.closest('label'),t='';/* Manipulação: rótulo em <label for> irmão do campo */if(!l&&el.id&&soReceita())l=document.querySelector('label[for="'+el.id.replace(/"/g,'')+'"]');if(l){var c=l.cloneNode(true);[].forEach.call(c.querySelectorAll('input,select,textarea,button,small'),function(x){x.remove()});t=c.textContent}
   return String(t||el.placeholder||el.getAttribute('aria-label')||'').replace(/\s+/g,' ').trim()}
  function ehCnpj(el){return el&&el.tagName==='INPUT'&&!el.readOnly&&!el.disabled&&/^(text|search|tel|)$/i.test(el.getAttribute('type')||'')&&!el.closest('#cmp-painel,#cmp-modal,.rs-eq')&&/^CNPJ( ou CPF)?\b/i.test(rot(el))}
@@ -30,7 +32,7 @@
  function escopo(el){var e=el.closest('fieldset,form,section,.pu-bloco,.meta-grid,.card');return e&&e.querySelectorAll('input,textarea').length>1?e:document}
  function poe(inp,v){if(!inp||!v||String(inp.value||'').trim())return 0;inp.value=v;inp.dispatchEvent(new Event('input',{bubbles:true}));inp.dispatchEvent(new Event('change',{bubbles:true}));return 1}
  function msg(btn,t,tipo){var m=btn.nextElementSibling;if(!(m&&m.classList.contains('uvs-cnpj-msg'))){m=document.createElement('small');m.className='uvs-cnpj-msg';m.setAttribute('role','status');btn.insertAdjacentElement('afterend',m)}m.textContent=t;m.dataset.tipo=tipo||''}
- function busca(btn,el){var c=dig(el.value);if(c.length!==14){msg(btn,'Digite o CNPJ completo (14 dígitos) antes de buscar.','aviso');return}
+ function busca(btn,el){var c=cnpjId(el.value);if(c.length!==14){msg(btn,'Digite o CNPJ completo (14 caracteres) antes de buscar.','aviso');return}
   msg(btn,'Consultando a base da Anvisa (AFE/AE)…');
   jget('afe_ae/'+c.slice(0,3)+'.json').then(function(d){var a=(Array.isArray(d)?d:(d&&(d.registros||d.dados))||[]).filter(function(x){return dig(x.cnpj)===c});
    if(!a.length){viaCnes(btn,el,c);return}
@@ -66,7 +68,7 @@
   receita(c).then(function(x){if(!x){if(pre)msg(btn,pre+fim(n0),n0?'ok':'');else msg(btn,'CNPJ sem AFE/AE na Anvisa, sem cadastro no CNES e não encontrado na Receita Federal. Confira o número; os dados podem ser digitados.','aviso');return}
    var n=n0+enche(el,x);msg(btn,ini+'Receita Federal (dados públicos do CNPJ, via BrasilAPI): '+x.razao+(x.situacao?' — situação '+String(x.situacao).toLowerCase():'')+(x.cnae?'; atividade principal '+x.cnae:'')+'.'+fim(n),n?'ok':'')},
   function(){if(pre)msg(btn,pre+fim(n0),n0?'ok':'');else msg(btn,'CNPJ sem AFE/AE na Anvisa, e a Receita Federal não respondeu agora (sem internet?). Os dados podem ser digitados.','aviso')})}
- function soRec(btn,el){var c=dig(el.value);if(c.length!==14){msg(btn,'Digite o CNPJ completo (14 dígitos) antes de buscar.','aviso');return}
+ function soRec(btn,el){var c=cnpjId(el.value);if(c.length!==14){msg(btn,'Digite o CNPJ completo (14 caracteres) antes de buscar.','aviso');return}
   msg(btn,'Consultando os dados públicos do CNPJ na Receita Federal…');
   receita(c).then(function(x){if(!x){msg(btn,'CNPJ não encontrado na Receita Federal. Confira o número; os dados podem ser digitados.','aviso');return}
    var n=enche(el,x);msg(btn,'Receita Federal (dados públicos do CNPJ, via BrasilAPI): '+x.razao+(x.situacao?' — situação '+String(x.situacao).toLowerCase():'')+(x.cnae?'; atividade principal '+x.cnae:'')+'. '+(n?n+' campo(s) preenchido(s); confira.':'Os campos já estavam preenchidos; nada foi alterado.'),n?'ok':'')},

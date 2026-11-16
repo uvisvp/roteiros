@@ -17,7 +17,15 @@
    farmácia, com checklist nas perguntas compostas e inventário por ambiente.
    monta(tipo) devolve os dados do roteiro (motor roteiro-simples). Perguntas
    com tipos:[…] só entram nesses tipos; sem tipos, entram nos três.
-   Base sancionatória: Lei Municipal nº 13.725/2004. */
+   Base sancionatória: Lei Municipal nº 13.725/2004.
+   RDC Anvisa nº 1.043, de 01/10/2026 (altera a RDC 978; incorporada em 15/11/2026):
+   - art. 25: o recebimento de material de outro serviço só é proibido ao consultório isolado
+     Tipo II (o parágrafo único foi revogado) — a pergunta não vale mais para o posto de coleta;
+   - arts. 43, 44, 50, 51 e 53: o posto de coleta (Tipo II) também pode manter serviço de EAC
+     itinerante — o Tipo II ganha o perfil e o item do itinerante, com o destino do material
+     conforme quem o mantém; o consultório isolado não pode manter;
+   - art. 122, §§ 4º a 6º: supervisão remota só na Central de Distribuição que manipula
+     unicamente embalagem secundária ou terciária, documentada (pergunta nova na Central). */
 'use strict';
 const INV = require('../roteiro-simples/inventario-saude.cjs');
 const ORIENT = require('../medicamentos/orientacoes/orientacoes.cjs').rs.eac;
@@ -94,6 +102,10 @@ function exames(t) {
       ['capilar', 'Sangue por punção capilar'], ['oral', 'Cavidade oral'], ['naso', 'Nasofaringe'], ['oro', 'Orofaringe']].concat(t === 2 ? [['venoso', 'Sangue venoso'], ['arterial', 'Sangue arterial'], ['urina', 'Urina'], ['fezes', 'Fezes'], ['secrecoes', 'Secreções e outros']] : [['outro_mat', 'Outro material']])},
     {id: 'equipamentos', rotulo: 'Equipamentos de medição em uso (marca/modelo)', tipo: 'textarea', largo: true}];
 }
+/* perfil do Tipo II (15/11/2026): o posto de coleta pode manter itinerante (art. 43, redação da RDC 1.043/2026) */
+const PERFIL2 = [
+  {id: 'p_itinerante', rotulo: 'Mantém serviço de EAC itinerante (próprio ou contratado)? Só o posto de coleta pode; o consultório isolado, não (art. 43)', tipo: 'select', opcoes: SN, desc: {sim: 'serviço de EAC itinerante'}}
+];
 /* perfil do Tipo III: o que o laboratório faz; “Não” marca as verificações como “Não se aplica” */
 const PERFIL3 = [
   {id: 'p_apoio', rotulo: 'Envia exames a laboratório de apoio?', tipo: 'select', opcoes: SN, desc: {sim: 'envio de exames a laboratório de apoio{p_apoio_ext}'}},
@@ -200,8 +212,9 @@ const REQ2 = [
     na: 'Estabelecimento da administração pública: é permitido encaminhar o material a outro Serviço Tipo II ou Tipo III da administração pública (art. 70).',
     pontos: [['vinculo', 'vínculo societário ou contratual com o Serviço Tipo III comprovado', 'Não foi comprovado o vínculo (societário, contratual) com o Serviço Tipo III.'], ['unico', 'vínculo com um único Serviço Tipo III', 'O posto de coleta está vinculado a mais de um Serviço Tipo III.'], ['envio', 'material enviado só ao Serviço Tipo III vinculado', 'O material coletado é enviado a serviço com o qual não há vínculo.']],
     inf: ['eac_vinculo']},
-  {id: 'recebe', t: 'O serviço recebe material biológico encaminhado por outro serviço (exceto do Serviço de EAC Itinerante, no posto de coleta)?', r: [A(25), P(25, 'unico')], sim: 'nc', naSe: PUB,
-    c: 'O serviço processa apenas o material biológico que ele mesmo coleta.', nc: 'O serviço recebe material biológico encaminhado por outro serviço, o que é proibido ao Serviço Tipo II.',
+  /* art. 25 (redação da RDC 1.043/2026): a proibição alcança só o consultório isolado; no posto de coleta a pergunta sai */
+  {id: 'recebe', se: {nao: {campo: 'tipo_est', igual: 'posto'}}, t: 'O consultório isolado recebe material biológico encaminhado por outro serviço que realiza atividades de EAC?', r: [A(25)], sim: 'nc', naSe: PUB,
+    c: 'O consultório isolado processa apenas o material biológico que ele mesmo coleta.', nc: 'O consultório isolado recebe material biológico encaminhado por outro serviço, o que é proibido ao consultório isolado classificado como Serviço Tipo II.',
     na: 'Estabelecimento da administração pública: é permitido receber material de outro serviço da administração pública na fase pré-analítica (art. 70).', inf: ['eac_tipo2']},
   {id: 'transcricao', t: 'Quando o serviço transcreve o laudo emitido pelo Serviço Tipo III, a transcrição é fiel e permite rastrear o serviço responsável pela fase analítica?', r: [P(23, '3'), A(129)],
     c: 'A transcrição do laudo do Serviço Tipo III é fiel e identifica o serviço responsável pela fase analítica.',
@@ -233,21 +246,25 @@ const REQ3 = [
     c: 'Os postos de coleta vinculados têm vínculo formalizado e enviam material apenas a este laboratório.', nc: 'O vínculo dos postos de coleta não atende às exigências.',
     na: 'O laboratório não tem postos de coleta vinculados.', pontos: [['vinculo', 'vínculo formalizado', 'Há posto de coleta sem vínculo formalizado com o laboratório.'], ['unico', 'envio só a este laboratório', 'Há posto de coleta vinculado a mais de um Serviço Tipo III.']], inf: ['eac_vinculo']}
 ];
-const ITIN = [
+/* itinerante: mantido pelo Serviço Tipo III ou pelo posto de coleta (Tipo II) — arts. 43 a 53, com a RDC 1.043/2026 */
+const itin = tp => {
+  const NA = tp === 3 ? 'O laboratório não mantém serviço de EAC itinerante.' : 'O serviço não mantém serviço de EAC itinerante.';
+  const quem = tp === 3 ? 'este Serviço Tipo III, que o mantém' : 'o posto de coleta que o mantém ou o Serviço Tipo III vinculado a ele';
+  return [
   {id: 'itin_reg', t: 'O serviço de EAC itinerante é regularizado (sede fixa licenciada, inclusive quando contratado) junto à autoridade sanitária do local onde atua, com responsável técnico e substituto?', r: [A(43), A(44), P(44, 'unico'), A(45), A(46), P(46, 'unico')], naSe: NAO('p_itinerante'),
     c: 'O serviço de EAC itinerante é regularizado, com sede fixa licenciada e responsável técnico com substituto.', nc: 'O serviço de EAC itinerante não atende aos requisitos de regularização e responsabilidade técnica.',
-    na: 'O laboratório não mantém serviço de EAC itinerante.',
-    pontos: [['sede', 'sede fixa com licença que indica as atividades', 'A sede fixa do serviço itinerante não tem licença que indica as atividades.'], ['local', 'regularização no local onde atua', 'O serviço itinerante não é regularizado no local onde atua.'], ['rt', 'responsável técnico legalmente habilitado', 'O serviço itinerante não tem responsável técnico legalmente habilitado.'], ['subst', 'substituto do responsável técnico', 'O serviço itinerante não tem substituto do responsável técnico.']],
+    na: NA,
+    pontos: (tp === 2 ? [['quem', 'mantido por posto de coleta (o consultório isolado não pode manter itinerante)', 'O consultório isolado mantém serviço de EAC itinerante, permitido só ao posto de coleta (Serviço Tipo II) e ao Serviço Tipo III.']] : []).concat([['sede', 'sede fixa com licença que indica as atividades', 'A sede fixa do serviço itinerante não tem licença que indica as atividades.'], ['local', 'regularização no local onde atua', 'O serviço itinerante não é regularizado no local onde atua.'], ['rt', 'responsável técnico legalmente habilitado', 'O serviço itinerante não tem responsável técnico legalmente habilitado.'], ['subst', 'substituto do responsável técnico', 'O serviço itinerante não tem substituto do responsável técnico.']]),
     inf: ['eac_itinerante']},
   {id: 'itin_exec', t: 'No itinerante, os EAC são executados com a estrutura parada, após verificação registrada dos equipamentos montados, só em material permitido e com privacidade no atendimento?', r: [A(47), A(48), A(51), P(51, '5'), A(52)], naSe: NAO('p_itinerante'),
     c: 'O serviço itinerante executa EAC com a estrutura parada, após verificação registrada dos equipamentos, em material permitido e com privacidade no atendimento.', nc: 'A execução de EAC pelo serviço itinerante não atende às exigências.',
-    na: 'O laboratório não mantém serviço de EAC itinerante.',
+    na: NA,
     pontos: [['parado', 'execução com a estrutura parada (não em movimento)', 'Os EAC do serviço itinerante são executados com a estrutura em movimento.'], ['verificacao', 'verificação registrada após a montagem dos equipamentos', 'Não há verificação registrada dos equipamentos após a montagem.'], ['material', 'execução só em material capilar, oral, de nasofaringe ou orofaringe', 'O serviço itinerante executa EAC em material não permitido.'], ['privacidade', 'privacidade e atendimento individualizado', 'O atendimento no serviço itinerante não tem privacidade.'], ['profissional', 'coleta por profissional habilitado ou capacitado sob supervisão', 'Há coleta no serviço itinerante por profissional sem habilitação legal e sem capacitação sob supervisão.']],
     inf: ['eac_itinerante']},
-  {id: 'itin_destino', t: 'O material coletado pelo itinerante vai apenas ao Serviço Tipo III vinculado (ou ao posto de coleta deste), sem passar por Central de Distribuição, e o itinerante faz CIQ e CEQ?', r: [A(50), P(50, 'unico'), A(145), A(53)], naSe: NAO('p_itinerante'),
-    c: 'O material coletado pelo itinerante vai apenas ao Serviço Tipo III vinculado, e o itinerante realiza os controles da qualidade.', nc: 'O destino do material e os controles da qualidade do serviço itinerante não atendem às exigências.',
-    na: 'O laboratório não mantém serviço de EAC itinerante.', pontos: [['destino', 'material só ao Serviço Tipo III vinculado (e ao seu posto de coleta)', 'O material coletado pelo serviço itinerante vai a serviço não vinculado.'], ['cd', 'sem passagem por Central de Distribuição', 'O material coletado pelo serviço itinerante passa por Central de Distribuição.'], ['controles', 'controle interno e externo da qualidade feitos pelo itinerante', 'O serviço itinerante não faz o controle interno e o controle externo da qualidade.']], inf: ['eac_itinerante']}
-];
+  {id: 'itin_destino', t: 'O material coletado pelo itinerante vai apenas a ' + quem + ', sem passar por Central de Distribuição, e o itinerante faz CIQ e CEQ?', r: [A(50), P(50, 'unico'), A(145), A(53), P(53, 'unico')], naSe: NAO('p_itinerante'),
+    c: 'O material coletado pelo itinerante vai apenas ' + (tp === 3 ? 'ao Serviço Tipo III que o mantém' : 'ao posto de coleta que o mantém ou ao Serviço Tipo III vinculado') + ', e o itinerante realiza os controles da qualidade.', nc: 'O destino do material e os controles da qualidade do serviço itinerante não atendem às exigências.',
+    na: NA, pontos: [['destino', tp === 3 ? 'material só ao Serviço Tipo III que mantém o itinerante' : 'material só ao posto de coleta que mantém o itinerante ou ao Serviço Tipo III vinculado a ele', 'O material coletado pelo serviço itinerante vai a serviço diferente do que o mantém' + (tp === 3 ? '.' : ' e do Serviço Tipo III vinculado.')], ['cd', 'sem passagem por Central de Distribuição', 'O material coletado pelo serviço itinerante passa por Central de Distribuição.'], ['controles', 'controle interno e externo da qualidade feitos pelo itinerante (o próprio, conforme determinado por quem o mantém)', 'O serviço itinerante não faz o controle interno e o controle externo da qualidade.']], inf: ['eac_itinerante']}
+  ]; };
 const CD = [
   {id: 'cd_reg', t: 'A Central de Distribuição possui licença que indica as atividades, responsável técnico e estrutura organizacional documentada?', r: [A(146), A(149), A(150)], naSe: NAO('p_cd'),
     c: 'A Central de Distribuição possui licença que indica as atividades, responsável técnico e estrutura organizacional documentada.', nc: 'A Central de Distribuição não atende aos requisitos de regularização.',
@@ -263,6 +280,12 @@ const CD = [
   {id: 'cd_ativ', t: 'A Central de Distribuição viola a embalagem primária, executa fases analítica ou pós-analítica, recebe material do itinerante ou faz outra atividade além de armazenar, acondicionar e transportar?', r: [A(145), A(148), A(152)], sim: 'nc', naSe: NAO('p_cd'),
     c: 'A Central de Distribuição se limita ao armazenamento, acondicionamento e transporte de material biológico.', nc: 'A Central de Distribuição realiza atividade não permitida.',
     na: 'O laboratório não mantém Central de Distribuição.', inf: ['eac_cd']},
+  /* art. 122, §§ 4º a 6º (RDC 1.043/2026): supervisão remota só nesta hipótese */
+  {id: 'cd_superv', t: 'A supervisão do pessoal técnico da Central de Distribuição é presencial ou, quando remota, limita-se à Central que manipula unicamente embalagem secundária ou terciária e é documentada?', r: [A(122), P(122, '4'), P(122, '5'), P(122, '6')], naSe: NAO('p_cd'),
+    c: 'A supervisão do pessoal técnico da Central de Distribuição atende aos requisitos.', nc: 'A supervisão do pessoal técnico da Central de Distribuição não atende aos requisitos.',
+    na: 'O laboratório não mantém Central de Distribuição.',
+    pontos: [['supervisor', 'supervisor legalmente habilitado durante todo o funcionamento', 'A Central de Distribuição funciona sem supervisão do pessoal técnico.'], ['remota', 'supervisão remota só quando a Central manipula unicamente embalagem secundária ou terciária', 'A supervisão do pessoal técnico é remota em Central de Distribuição que não se limita à embalagem secundária ou terciária.'], ['registro', 'supervisão remota documentada (comunicações, ocorrências e ações preventivas e corretivas)', 'A supervisão remota não é documentada com as comunicações, as ocorrências e as ações adotadas.']],
+    inf: ['eac_cd']},
   {id: 'cd_registro', t: 'A Central de Distribuição verifica e registra no recebimento as condições de transporte (temperatura, umidade, luz), quantidades e integridade da carga?', r: [A(147)], naSe: NAO('p_cd'),
     c: 'A Central de Distribuição verifica e registra as condições de transporte, as quantidades e a integridade da carga.', nc: 'O registro de recebimento da Central de Distribuição não atende às exigências.',
     na: 'O laboratório não mantém Central de Distribuição.', pontos: [['condicoes', 'condições de transporte (temperatura, umidade, luz)', 'A Central de Distribuição não registra as condições de transporte no recebimento.'], ['quantidades', 'quantidades recebidas', 'A Central de Distribuição não registra as quantidades recebidas.'], ['integridade', 'integridade da carga', 'A Central de Distribuição não registra a integridade da carga recebida.']], inf: ['eac_cd']}
@@ -695,7 +718,7 @@ const INFRACOES = [
   {id: 'eac_vinculo', grupo: 'Licenciamento e responsabilidade', texto: 'Deixar de manter o vínculo exigido entre o serviço que coleta e o Serviço Tipo III que recebe o material biológico.', r: [LM(50), A(61), A(62)]},
   {id: 'eac_dsf', grupo: 'Licenciamento e responsabilidade', texto: 'Deixar de registrar o resultado do Exame de Análises Clínicas na Declaração de Serviço Farmacêutico.', r: [LM(50), P(60, '2')]},
   {id: 'eac_apoio', grupo: 'Relações com terceiros', texto: 'Utilizar laboratório de apoio sem o contrato formal, a avaliação anual da qualidade e a comprovação da regularidade exigidos.', r: [LM(50), A(37), A(38), A(39), A(82)]},
-  {id: 'eac_itinerante', grupo: 'Relações com terceiros', texto: 'Manter serviço de EAC itinerante em desacordo com os requisitos da RDC Anvisa nº 978/2025.', r: [LM(50), A(44), A(45), A(46), A(47), A(48), A(50), A(51), A(53)]},
+  {id: 'eac_itinerante', grupo: 'Relações com terceiros', texto: 'Manter serviço de EAC itinerante em desacordo com os requisitos da RDC Anvisa nº 978/2025.', r: [LM(50), A(43), A(44), A(45), A(46), A(47), A(48), A(50), A(51), A(53)]},
   {id: 'eac_cd', grupo: 'Relações com terceiros', texto: 'Manter Central de Distribuição em desacordo com os requisitos da RDC Anvisa nº 978/2025.', r: [LM(50), A(146), A(147), A(148), A(149), A(151), A(152)]},
   {id: 'eac_infra', grupo: 'Infraestrutura', texto: 'Manter o serviço de Exames de Análises Clínicas sem os ambientes e itens de infraestrutura obrigatórios.', r: [LM(50)]},
   {id: 'eac_temp', grupo: 'Produtos e equipamentos', texto: 'Armazenar produtos para diagnóstico in vitro, materiais de controle e material biológico sem as condições de conservação e o registro de temperatura exigidos.', r: [LM(46), A(95), A(96)]},
@@ -764,19 +787,23 @@ function monta(t) {
           t === 1 ? {acoes: [{id: 'anvisa_cnpj', rotulo: 'Buscar dados pelo CNPJ (Anvisa, CNES e Receita)', pri: true}, {id: 'ocr_crt', rotulo: 'Ler certidão do CRF'}],
             acoesNota: 'A busca usa a base de AFE/AE da Anvisa (a mesma da Central de Consultas), o CNES (Ministério da Saúde, município de São Paulo) e, sem AFE/AE, os dados públicos do CNPJ na Receita Federal; a certidão do CRF é lida no próprio aparelho. Só os campos vazios são preenchidos — confira antes de seguir.'} : {}),
         {id: 'exames', titulo: t === 3 ? 'Setores e equipamentos' : 'Exames realizados e equipamentos', curto: t === 3 ? 'Setores' : 'Exames', campos: exames(t)}
-      ].concat(t === 3 ? [{id: 'perfil', titulo: 'Perfil do laboratório', curto: 'Perfil', campos: copia(PERFIL3)}] : [])},
+      ].concat(t === 3 ? [{id: 'perfil', titulo: 'Perfil do laboratório', curto: 'Perfil', campos: copia(PERFIL3)}] : t === 2 ? [{id: 'perfil', titulo: 'Perfil do serviço', curto: 'Perfil', campos: copia(PERFIL2)}] : [])},
     {id: 'classif', titulo: 'Classificação e responsabilidade', curto: 'Classificação', icone: 'folder', itens: [
       item('lic', 'Licenciamento e cadastro', 'Licenciamento', LIC, {campos: [{id: 'lic_inicial', rotulo: 'Trata-se de licença inicial do serviço de EAC?', tipo: 'select', rel: false, opcoes: [['sim', 'Sim — o serviço ainda não é licenciado'], ['nao', 'Não — o serviço já é licenciado']]}]}),
       item('resp', 'Responsável técnico e supervisão', 'Responsáveis', RESP),
       t !== 3 ? item('req', 'Requisitos do Serviço Tipo ' + ['', 'I', 'II'][t], 'Serviço Tipo ' + ['', 'I', 'II'][t], REQ,
-        {descricao: 'Requisitos obrigatórios da classificação (RDC 978/2025, ' + (t === 1 ? 'arts. 10 a 12' : 'arts. 22 a 25 e 32') + '). Atenção: nas perguntas sobre ' + (t === 1 ? 'guarda de material, ' : 'recebimento de material, ') + 'metodologia própria e água reagente, a resposta “Sim” é a irregular.'}) : null
+        {descricao: 'Requisitos obrigatórios da classificação (RDC 978/2025, ' + (t === 1 ? 'arts. 10 a 12' : 'arts. 22 a 25 e 32') + '). Atenção: nas perguntas sobre ' + (t === 1 ? 'guarda de material, ' : 'recebimento de material pelo consultório isolado, ') + 'metodologia própria e água reagente, a resposta “Sim” é a irregular.'}) : null
     ].filter(Boolean)},
   ];
   if (t === 3) secoes.push({id: 'relacoes', titulo: 'Relações com outros serviços', curto: 'Relações', icone: 'folder',
     descricao: 'Verificações que dependem do perfil do laboratório; o que ele não faz fica como “Não se aplica”.', itens: [
       item('apoio', 'Laboratório de apoio e postos de coleta', 'Apoio e postos', REQ3),
-      item('itinerante', 'Serviço de EAC itinerante', 'Itinerante', ITIN),
+      item('itinerante', 'Serviço de EAC itinerante', 'Itinerante', itin(3)),
       item('cd', 'Central de Distribuição', 'Central de Distribuição', CD)
+    ]});
+  if (t === 2) secoes.push({id: 'relacoes', titulo: 'Serviço de EAC itinerante', curto: 'Itinerante', icone: 'folder',
+    descricao: 'Só o posto de coleta pode manter serviço de EAC itinerante (art. 43, com a RDC 1.043/2026). Sem itinerante, as verificações ficam como “Não se aplica”.', itens: [
+      item('itinerante', 'Serviço de EAC itinerante', 'Itinerante', itin(2))
     ]});
   secoes.push(
     {id: 'infra', titulo: 'Infraestrutura', curto: 'Infraestrutura', icone: 'plan',
@@ -828,7 +855,7 @@ function monta(t) {
       conclusao: 'Diante do exposto, o serviço de Exames de Análises Clínicas foi avaliado conforme os itens acima. As irregularidades relacionadas devem ser corrigidas nos prazos fixados pela autoridade sanitária.'
     },
     normas: [
-      ['RDC Anvisa nº 978/2025', 'Funcionamento de serviços que executam atividades relacionadas aos Exames de Análises Clínicas (EAC).'],
+      ['RDC Anvisa nº 978/2025', 'Funcionamento de serviços que executam atividades relacionadas aos Exames de Análises Clínicas (EAC), com as alterações das RDC nº 986/2025 e nº 1.043/2026.'],
       t === 1 ? ['RDC Anvisa nº 44/2009', 'Boas práticas farmacêuticas e serviços farmacêuticos em farmácias e drogarias.', {campo: 'tipo_est', em: ['farmacia']}] : null,
       ['RDC Anvisa nº 63/2011', 'Boas Práticas de Funcionamento para os Serviços de Saúde.'],
       ['RDC Anvisa nº 222/2018', 'Gerenciamento dos resíduos de serviços de saúde.'],
@@ -897,12 +924,14 @@ const ENUNCIADOS = {
   ciq: 'O controle interno da qualidade (CIQ) atende às exigências?'
 };
 const ENUNCIADOS_TIPO = {
-  2: {refrig_material: 'O equipamento de refrigeração do material biológico atende aos requisitos?'},
+  2: {refrig_material: 'O equipamento de refrigeração do material biológico atende aos requisitos?',
+    itin_reg: 'O serviço de EAC itinerante é regularizado conforme o exigido?', itin_exec: 'A execução dos EAC no serviço itinerante atende aos requisitos?',
+    itin_destino: 'O destino do material coletado e o controle da qualidade do serviço itinerante atendem aos requisitos?'},
   3: {iluminacao: 'A iluminação da sala de coleta é adequada?', refrigerador: 'Os equipamentos de temperatura controlada atendem aos requisitos?',
     apoio_contrato: 'O contrato com o laboratório de apoio tem o conteúdo exigido?',
     itin_reg: 'O serviço de EAC itinerante é regularizado conforme o exigido?', itin_exec: 'A execução dos EAC no serviço itinerante atende aos requisitos?',
     itin_destino: 'O destino do material coletado e o controle da qualidade do serviço itinerante atendem aos requisitos?',
-    cd_reg: 'A Central de Distribuição atende aos requisitos de regularização?', cd_registro: 'A Central de Distribuição registra no recebimento as verificações exigidas?'},
+    cd_reg: 'A Central de Distribuição atende aos requisitos de regularização?', cd_superv: 'A supervisão do pessoal técnico da Central de Distribuição atende aos requisitos?', cd_registro: 'A Central de Distribuição registra no recebimento as verificações exigidas?'},
   23: {riscos: 'O gerenciamento de riscos tem os elementos exigidos?', fracionados: 'Os reagentes e insumos fracionados ou preparados no serviço atendem aos requisitos?',
     transporte: 'O transporte do material biológico atende à RDC nº 504/2021?'}
 };
