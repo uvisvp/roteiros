@@ -18,6 +18,9 @@ else { const ancora = '/*AS-PU-FIM*/\n'; if (app.split(ancora).length !== 2) thr
 /* relatório: características declaradas no cabeçalho, depois do CNAE */
 { const de = "kv('CNAE',c?(c.cod+\" — \"+c.desc):'')+'</div>'", para = "kv('CNAE',c?(c.cod+\" — \"+c.desc):'')+(typeof asCaracTexto==='function'&&asCaracTexto()?'<p>'+esc(asCaracTexto())+'</p>':'')+'</div>'";
   if (!app.includes(para)) { if (app.split(de).length !== 2) throw Error('cabeçalho do relatório'); app = app.replace(de, () => para); } }
+/* relatório: a calculadora só sai com números válidos (auditoria de 14/11/2026, E06) */
+{ const de = "const calc=current.calc&&Object.keys(calcState()).length?", para = "const calc=current.calc&&Object.keys(calcState()).length&&!(typeof asCalcErros==='function'&&(asCalcErros().length||asCalcVazia()))?";
+  if (!app.includes(para)) { if (app.split(de).length !== 2) throw Error('calculadora no relatório'); app = app.replace(de, () => para); } }
 const enc = lz.compressToBase64(app); if (lz.decompressFromBase64(enc) !== app) throw Error('round-trip');
 html = html.replace(re, () => m[1] + enc + m[3]);
 fs.writeFileSync(file, html);

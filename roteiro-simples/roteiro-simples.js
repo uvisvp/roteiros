@@ -146,7 +146,7 @@
   if(c.tipo === 'checks'){ var a = Array.isArray(v) ? v : []; return '<fieldset class="' + cls + ' rs-largo"><legend>' + esc(c.rotulo) + '</legend><div class="rs-checks">' + c.opcoes.map(function(o){ return '<label><input type="checkbox" data-rs-check="' + esc(c.id) + '" value="' + esc(o[0]) + '"' + (a.indexOf(o[0]) >= 0 ? ' checked' : '') + '><span>' + esc(o[1]) + '</span></label>'; }).join('') + '</div></fieldset>'; }
   if(c.tipo === 'select') return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><select data-rs-meta="' + esc(c.id) + '">' + [['', 'Selecione']].concat(c.opcoes).map(function(o){ return '<option value="' + esc(o[0]) + '"' + (v === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>';
   if(c.tipo === 'textarea') return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><textarea data-rs-meta="' + esc(c.id) + '" rows="3">' + esc(v || '') + '</textarea></label>';
-  return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><input type="' + (c.tipo === 'date' ? 'date' : 'text') + '"' + (c.tipo === 'cnpj' ? ' inputmode="numeric" maxlength="18" data-rs-cnpj' : '') + ' data-rs-meta="' + esc(c.id) + '" value="' + esc(v || '') + '"></label>'; }
+  return '<label class="' + cls + '"><span>' + esc(c.rotulo) + '</span><input type="' + (c.tipo === 'date' ? 'date' : 'text') + '"' + (c.tipo === 'cnpj' ? ' inputmode="text" autocapitalize="characters" maxlength="18" data-rs-cnpj' : '') + ' data-rs-meta="' + esc(c.id) + '" value="' + esc(v || '') + '"></label>'; }
  /* ---------- listas de produtos com busca nas bases públicas da Anvisa ----------
     Campo tipo 'equipamentos' com c.perfil: 'refrigeracao' (equipamentos de
     refrigeração das vacinas), 'teste' (testes rápidos e reagentes do EAC) e
@@ -328,9 +328,11 @@
  function pontosHtml(q){ if(!q.pontos) return ''; var m = st.pt[q.id] || {}, n = q.pontos.filter(function(p){ return m[p[0]]; }).length, x = q.pontos.filter(function(p){ return m[p[0]] === 'NC'; }).length;
   return '<div class="pu-bloco rs-pontos"><p class="rs-pontos-tit"><b>' + (D.pontosSeguem ? 'Itens exigidos' : 'Checklist') + '</b> <small>' + n + '/' + q.pontos.length + ' verificados' + (x ? ' · ' + x + ' não atende' + (x > 1 ? 'm' : '') : '') + (D.pontosSeguem ? ' — a resposta acompanha os itens' : ' — o resultado acompanha os pontos') + '</small></p>'
    + q.pontos.map(function(p){ return '<div class="rs-ponto' + (m[p[0]] === 'NC' ? ' rs-ponto-nc' : '') + '"><span>' + esc(p[1].charAt(0).toUpperCase() + p[1].slice(1)) + '</span><div class="rs-ponto-tog" role="group">' + PT_OPTS.map(function(o){ return '<button type="button" data-rs-pt="' + esc(q.id) + '|' + esc(p[0]) + '|' + o[0] + '" data-v="' + o[2] + '" aria-pressed="' + (m[p[0]] === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>'; }).join('') + '</div>'; }
- /* resultado pelos pontos: algum “Não atende” → Não cumpre; todos marcados sem “Não atende” → Cumpre (ou N/A se todos N/A) */
+ /* resultado pelos pontos: algum “Não atende” → Não cumpre; todos marcados sem “Não atende” → Cumpre (ou N/A se todos N/A);
+    lista incompleta sem “Não atende” → a resposta volta a pendente (15/11/2026: antes ficava a resposta anterior, e o
+    relatório afirmava por inteiro o que teve a confirmação de um item retirada) */
  function autoPontos(q){ var m = st.pt[q.id] || {}, v = q.pontos.map(function(p){ return m[p[0]]; });
-  if(v.indexOf('NC') >= 0) st.r[q.id] = 'nc'; else if(v.every(function(x){ return x === 'C' || x === 'NA'; })) st.r[q.id] = v.every(function(x){ return x === 'NA'; }) ? 'na' : 'c'; else if(st.r[q.id] === 'nc' && !v.some(Boolean)) delete st.r[q.id];
+  if(v.indexOf('NC') >= 0) st.r[q.id] = 'nc'; else if(v.every(function(x){ return x === 'C' || x === 'NA'; })) st.r[q.id] = v.every(function(x){ return x === 'NA'; }) ? 'na' : 'c'; else delete st.r[q.id];
   delete st.auto[q.id]; }
  /* D.pontosSeguem (núcleo Medicamentos, 10/11/2026): a resposta e a lista de itens nunca se contradizem —
     Sim marca todos os itens como “Atende”; Não se aplica, todos como N/A; Não mantém os itens já marcados
@@ -370,8 +372,8 @@
     Só preenchem campos vazios; o que já foi digitado fica. */
  var acaoMsg = null;
  function preenche(pares){ var n = 0; pares.forEach(function(p){ var v = String(p[1] || '').trim(); if(v && CAMPO[p[0]] && !String(st.meta[p[0]] || '').trim()){ st.meta[p[0]] = v; n++; } }); salva(); return n; }
- function acaoAnvisa(){ var c = dig(st.meta.cnpj); if(c.length !== 14 && CAMPO.cnes && dig(st.meta.cnes).length >= 6){ acaoCnesCodigo(dig(st.meta.cnes)); return; }
-  if(c.length !== 14){ acaoMsg = {t: 'Digite o CNPJ completo (14 dígitos) antes de buscar.', tipo: 'aviso'}; redesenha(); return; }
+ function acaoAnvisa(){ var c = cnpjId(st.meta.cnpj); if(c.length !== 14 && CAMPO.cnes && dig(st.meta.cnes).length >= 6){ acaoCnesCodigo(dig(st.meta.cnes)); return; }
+  if(c.length !== 14){ acaoMsg = {t: 'Digite o CNPJ completo (14 caracteres) antes de buscar.', tipo: 'aviso'}; redesenha(); return; }
   acaoMsg = {t: 'Consultando a base da Anvisa (AFE/AE)…'}; redesenha();
   jget('afe_ae/' + c.slice(0, 3) + '.json').then(function(d){ var a = (Array.isArray(d) ? d : (d && (d.registros || d.dados)) || []).filter(function(x){ return dig(x.cnpj) === c; });
    if(!a.length){ acaoCnes(c); return; }
@@ -498,7 +500,10 @@
   else B.push({t: 'p', x: 'Não foram registradas irregularidades nesta inspeção.'});
   var sel = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); });
   if(sel.length){ B.push({t: 'h1', x: (++sec) + ' ENQUADRAMENTO DAS INFRAÇÕES SANITÁRIAS'}); B.push({t: 'table', head: ['Nº', 'Infração sanitária', 'Dispositivos infringidos'], widths: [600, 4700, 4000], rows: sel.map(function(i, k){ return [String(k + 1), descInf(i), fundInf(i)]; })}); }
-  B.push({t: 'h1', x: (++sec) + ' CONCLUSÃO'}, {t: 'p', x: String(st.concl || '').trim() || R.conclusao});
+  /* sem nenhuma verificação, irregularidade ou infração registrada, a conclusão padrão (“foi avaliado conforme os itens
+     acima”) não cabe: o relatório é um rascunho (auditoria de 14/11/2026, E04). A conclusão escrita pela equipe prevalece. */
+  var vazio = !ns && !irr.length && !sel.length;
+  B.push({t: 'h1', x: (++sec) + ' CONCLUSÃO'}, {t: 'p', x: String(st.concl || '').trim() || (vazio ? 'Nenhuma verificação foi registrada: este relatório é um rascunho e não permite concluir sobre as condições sanitárias do estabelecimento.' : R.conclusao)});
   if(st.meta.equipe) B.push({t: 'kv', k: 'Equipe de inspeção', v: st.meta.equipe});
   B.push({t: 'sign'});
   return B; }
@@ -596,7 +601,9 @@
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
  /* ---------- eventos ---------- */
- function mascaraCnpj(v){ var d = String(v).replace(/\D/g, '').slice(0, 14); return d.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); }
+ /* CNPJ numérico ou alfanumérico (Receita Federal, desde julho de 2026): letras maiúsculas e dígitos, sem perder caractere */
+ function cnpjId(v){ return String(v || '').toUpperCase().replace(/[^0-9A-Z]/g, '').slice(0, 14); }
+ function mascaraCnpj(v){ var d = cnpjId(v); return d.slice(0, 2) + (d.length > 2 ? '.' + d.slice(2, 5) : '') + (d.length > 5 ? '.' + d.slice(5, 8) : '') + (d.length > 8 ? '/' + d.slice(8, 12) : '') + (d.length > 12 ? '-' + d.slice(12) : ''); }
  document.addEventListener('click', function(e){ var b;
   if((b = e.target.closest('[data-legal]'))){ e.preventDefault(); abreLegal(b.dataset.legal); return; }
   if((b = e.target.closest('[data-rs-r]'))){ var p = b.dataset.rsR.split('|'); st.r[p[0]] = st.r[p[0]] === p[1] ? '' : p[1]; if(!st.r[p[0]]) delete st.r[p[0]]; delete st.auto[p[0]]; sincPontos(PERG[p[0]]); salva(); redesenha(); return; }

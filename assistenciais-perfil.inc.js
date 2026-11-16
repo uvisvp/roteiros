@@ -33,6 +33,43 @@ function asAplicaPerfil(){
   if(fora&&!mark(kind,i))x.rep='perfil';else delete x.rep;
  }));
 }
+/* ——— Dimensionamento: entradas conferidas antes do cálculo (auditoria de 14/11/2026, E06) ———
+   Antes, a fórmula rodava com qualquer número: −21 acolhidos davam −2 educadores, e meia pessoa era aceita.
+   Pessoas, turnos e tipo: número inteiro dentro do mínimo e do máximo do campo; área: número igual ou maior
+   que zero, com decimais; no SAICA, os acolhidos com demandas específicas não passam do total. Com erro, não há
+   resultado na tela nem no relatório; com todos os campos vazios, a calculadora pede os números. */
+const AS_CALC_DECIMAL=['area'];
+const AS_CALC_COERENCIA={saica:[['esp','n','Os acolhidos com demandas específicas não podem ser mais que o total de acolhidos.']]};
+function asCalcNum(v){const s=String(v??'').trim().replace(',','.');return s===''?null:(/^-?\d+(\.\d+)?$/.test(s)?Number(s):NaN)}
+function asCalcVazia(){const c=current&&current.calc,cs=c?calcState():{};return !c||c.entradas.every(x=>asCalcNum(cs[x.k])===null)}
+function asCalcErros(){
+ const c=current&&current.calc;if(!c)return [];
+ const cs=calcState(),e=[],val={};
+ c.entradas.forEach(x=>{
+  const v=asCalcNum(cs[x.k]??x.pad),min=x.min??0,rot=x.r;val[x.k]=v;
+  if(v===null)return;
+  if(Number.isNaN(v)){e.push({k:x.k,t:rot+': informe um número.'});return}
+  if(AS_CALC_DECIMAL.includes(x.k)){if(v<min)e.push({k:x.k,t:rot+': informe um número igual ou maior que '+min+'.'});return}
+  if(!Number.isInteger(v)||v<min||(x.max!=null&&v>x.max))e.push({k:x.k,t:rot+': informe um número inteiro '+(x.max!=null?'de '+min+' a '+x.max:'igual ou maior que '+min)+'.'});
+ });
+ (AS_CALC_COERENCIA[current.id]||[]).forEach(([a,b,msg])=>{if(!e.length&&val[a]!=null&&val[b]!=null&&val[a]>val[b])e.push({k:a,t:msg})});
+ return e;
+}
+{
+ const calcValuesOriginal=calcValues;
+ calcValues=function(){return asCalcErros().length||asCalcVazia()?current.calc.regras.map(r=>({...r,v:'—'})):calcValuesOriginal()};
+ calculate=function(){
+  const box=document.getElementById('calcResults');if(!box)return;
+  const erros=asCalcErros();
+  current.calc.entradas.forEach(x=>{const i=document.getElementById('calc-'+x.k);if(i){if(erros.some(z=>z.k===x.k))i.setAttribute('aria-invalid','true');else i.removeAttribute('aria-invalid')}});
+  if(erros.length){box.innerHTML='<div class="calc-result as-calc-erro" role="alert" style="grid-column:1/-1"><strong>Confira os números</strong>'+erros.map(z=>'<small>'+esc(z.t)+'</small>').join('')+'<small>Sem resultado enquanto houver número inválido.</small></div>';return}
+  if(asCalcVazia()){box.innerHTML='<div class="calc-result" style="grid-column:1/-1"><small>Informe os números para calcular.</small></div>';return}
+  box.innerHTML=calcValuesOriginal().map(r=>'<div class="calc-result"><strong>'+esc(r.r)+'</strong><span>'+esc(r.v)+' '+esc(r.u)+'</span><small>'+esc(r.l)+'</small></div>').join('');
+ };
+ const st2=document.createElement('style');
+ st2.textContent='.as-calc-erro{background:#fbecee!important;border:1px solid #c0394b}.as-calc-erro strong{color:#8a2433}.calc input[aria-invalid="true"]{border-color:#c0394b!important}';
+ document.head.appendChild(st2);
+}
 if(AS_PADRAO){
  const asGruposPerfil=asGrupos;
  asGrupos=function(kind){asAplicaPerfil();return asGruposPerfil(kind)};

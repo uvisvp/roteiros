@@ -52,6 +52,8 @@ const PASSOS=[
  ['Serviços assistenciais: modalidade dos demais acolhimentos e características do serviço filtram o roteiro',['assistenciais-perfil.cjs']],
  ['Estética: atividades do estabelecimento, citação por atividade e roteiro pelo perfil',['estetica-perfil.cjs']],
  ['Diagnóstico por imagem: um roteiro para uma ou mais modalidades, conteúdo íntegro',['imagem-servico.cjs']],
+ ['Auditoria de 14/11: resposta e itens exigidos coerentes em todas as transições',['auditoria-pontos.cjs']],
+ ['Auditoria de 14/11: EAC (RDC 1.043/2026), CNPJ alfanumérico, conclusão de rascunho, citações vigentes e calculadora',['auditoria-1411.cjs']],
  ['prévia do relatório na aba Relatório e cores da Central de Consultas',['relatorio-aba.cjs']],
  ['“Para saber mais” com fonte e Lei 13.725 só onde não há norma específica, no roteiro',['saber-mais-roteiros.cjs']],
  ['saber mais e orientações não escondem perguntas (odontologia)',['saber-mais.cjs','Odontologia','odontologia','Odontologia']],
