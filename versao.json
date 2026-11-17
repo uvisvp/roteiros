@@ -1,6 +1,6 @@
 {
-  "versao": "20261116-1",
+  "versao": "20261117-1",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Auditoria de 14/11/2026: resposta volta a pendente quando um item exigido fica sem confirmação (todos os núcleos); EAC com a RDC 1.043/2026 (posto de coleta × consultório isolado, itinerante no posto, supervisão remota da Central de Distribuição); CNPJ alfanumérico aceito e validado; redação vigente do ECA e do Estatuto da Pessoa Idosa nos Serviços assistenciais; texto oficial nas citações de radiologia da Odontologia; calculadora de dimensionamento confere os números; relatório sem verificações sai como rascunho."
+  "notas": "Conferência de 17/11/2026 com o texto oficial: Portaria SMS 2.619/2011 sem a redação revogada do item 16.1.2 e só com a redação vigente dos itens 9.9 e 16.1.4, e com os incisos dos itens 9.9.2 e 9.24 no lugar certo; Lei 6.360/1976, art. 12 sem os parágrafos revogados e art. 67 com os incisos III a VI separados (“prazo de validade”); Lei 13.725/2004, art. 49 sem resto de título; ECA, art. 22, na redação da Lei 15.240/2025 nos Serviços assistenciais."
 }
