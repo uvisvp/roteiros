@@ -18,10 +18,11 @@ function semAcrescimos(txt){const B=JSON.parse(txt);for(const g of Object.keys(B
   if(B.reprocessado&&B.reprocessado.etapas)B.reprocessado.etapas=B.reprocessado.etapas.filter(e=>!/^acréscimos \d{4}-\d{2}-\d{2}:/.test(e));
   return JSON.stringify(B,(k,v)=>k==='g'&&v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(n=>[n,v[n]])):v);}
 /* Correções pontuais em norma existente: só as declaradas em scripts/banco/correcoes.cjs, com a fonte oficial de cada uma. */
-const {aplica}=require('./banco/correcoes.cjs');
+const {aplica}=require('./banco/correcoes.cjs'),{aplica:aplicaNucleo}=require('./citacoes/nucleo-correcoes.cjs');
 function corrigido(txt){const B=JSON.parse(txt);aplica(B);return JSON.stringify(B);}
 for(const[id,source]of base.blocks)if(!allowed.has(id)){
   if(id==='banco--v11')assert.equal(semAcrescimos(blocks.get(id)),semAcrescimos(corrigido(source)),'Banco normativo alterado além dos acréscimos declarados em scripts/banco/estruturar.py e das correções declaradas em scripts/banco/correcoes.cjs');
+  else if(id==='nuc--citacoes.js')assert.equal(blocks.get(id),aplicaNucleo(source),'Motor de citações alterado além das correções declaradas em scripts/citacoes/nucleo-correcoes.cjs');
   else assert.equal(blocks.get(id),source,'Bloco protegido (banco normativo / citações) alterado em relação a '+baseRef+': '+id);}
 assert.deepEqual(visaLocal(blocks.get('app--drogaria')),visaLocal(base.blocks.get('app--drogaria')),'Banco normativo/catálogo integrado não devem ser reescritos');
 const sw=fs.readFileSync('sw.js','utf8'),version=JSON.parse(fs.readFileSync('versao.json','utf8')).versao;
