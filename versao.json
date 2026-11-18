@@ -1,6 +1,6 @@
 {
-  "versao": "20261118-1",
+  "versao": "20261118-2",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Motor de citações: o parágrafo aparece antes dos seus incisos (ex.: Lei 6.360/1976, art. 12, § 8º) e o rótulo segue a LC 95/1998 (§ 9º, § 10). Inclui a conferência de 17/11/2026 com o texto oficial (Portaria SMS 2.619/2011, Lei 6.360/1976, Lei 13.725/2004, art. 49, e ECA, art. 22)."
+  "notas": "Motor de citações: a redação vigente de inciso ou alínea guardada com sufixo técnico aparece com o rótulo certo e ao lado da antiga (ex.: ECA, art. 101, IV, e não “ivb”); o parágrafo aparece antes dos seus incisos e o rótulo segue a LC 95/1998 (§ 9º, § 10)."
 }
