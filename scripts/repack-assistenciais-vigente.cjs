@@ -45,7 +45,15 @@ const PLANO = {
 /* nome do conselho no documento da ILPI, como na redação vigente do art. 48, parágrafo único (Lei 14.423/2022) */
 const TEXTOS = [['ilpi', 'doc', 'Comprovante de inscrição do programa junto ao Conselho Municipal do Idoso.', 'Comprovante de inscrição do programa junto ao Conselho Municipal da Pessoa Idosa.']];
 const BANCO = [].concat(...Object.values(JSON.parse(blocks.get('banco--v11')).g));
-const doBanco = (lei, id) => { const L = BANCO.find(x => x.i === lei), n = L && L.n.find(x => x[0] === id); if (!n) throw Error(lei + ': ' + id + ' não está no banco integrado'); return String(n[1]); };
+/* Leis já reconstruídas só com a redação vigente (scripts/banco/vigente, texto atualizado da Câmara,
+   18/11/2026): o texto vem de lá, onde o rótulo não leva sufixo de redação (a11b2 -> a11, a92b-ib -> a92-i).
+   Assim o resultado não depende de o banco integrado já ter sido trocado. */
+const {FONTES} = require('./banco/vigente/fontes.cjs');
+const semRedacao = id => id.replace(/^(a\d+)b\d*/, '$1').replace(/(p\d+|pu|-[ivxl]+)b\d*/g, '$1');
+const doBanco = (lei, id) => {
+  if (FONTES[lei]) { const v = require('./banco/vigente/' + lei + '.json'), n = v.find(x => x[0] === semRedacao(id)); if (!n) throw Error(lei + ': ' + id + ' (' + semRedacao(id) + ') não está no texto vigente'); return String(n[1]); }
+  const L = BANCO.find(x => x.i === lei), n = L && L.n.find(x => x[0] === id); if (!n) throw Error(lei + ': ' + id + ' não está no banco integrado'); return String(n[1]);
+};
 
 const conta = {refs: 0, nos: 0, tirados: 0, textos: 0};
 let feito = false;
