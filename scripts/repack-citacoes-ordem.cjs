@@ -1,6 +1,6 @@
 'use strict';
 /* Motor de citações (nuc--citacoes.js): aplica as correções declaradas em
-   scripts/citacoes/nucleo-correcoes.cjs (parágrafo antes dos seus incisos; § 10 sem ordinal).
+   scripts/citacoes/nucleo-correcoes.cjs (lista e motivo de cada troca no próprio arquivo).
    Idempotente. Uso: node scripts/repack-citacoes-ordem.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');

@@ -41,7 +41,7 @@ function editaConst(src, nome, fn) {
   fn(D);
   return src.slice(0, i + tag.length) + JSON.stringify(D) + bruto.slice(txt.length) + src.slice(j);
 }
-const poe = (lei, id) => { const c = CORRECOES.find(x => x.norma === lei), p = c && c.poe.find(x => x[0] === id); if (!p) throw Error(lei + ': ' + id + ' fora das correções'); return p[1]; };
+const poe = (lei, id) => { const c = CORRECOES.find(x => x.norma === lei), p = c && (c.poe || c.vigente).find(x => x[0] === id); if (!p) throw Error(lei + ': ' + id + ' fora das correções'); return p[1]; };
 
 /* 1. banco */
 bloco('banco--v11', src => {
@@ -123,6 +123,40 @@ const CAMPO = path.join(__dirname, '..', 'campo', 'documentos-dados.json');
   fs.writeFileSync(CAMPO, out);
 })(fs.readFileSync(CAMPO, 'utf8'));
 
+/* 2d. Checklist de documentos: os textos das leis reconstruídas (ECA e Estatuto da Pessoa Idosa) misturavam a
+   redação antiga e a vigente (dois parágrafos únicos no art. 48 da Lei 10.741; incisos antigos e novos no art. 90
+   do ECA). Passam a vir do texto vigente (scripts/banco/vigente). A chave fica (é o que os itens citam). */
+{
+  const {FONTES} = require('./banco/vigente/fontes.cjs');
+  const semRedacao = id => id.replace(/^(a\d+)b\d*/, '$1').replace(/(p\d+|pu|-[ivxl]+)b\d*/g, '$1');
+  const ROM = /^[ivxlc]+$/, letra = b => b ? '-' + String.fromCharCode(64 + b.length) : '';
+  /* rótulo da linha pelo último segmento do id; um segmento só é alínea quando o pai tem alínea “a” */
+  const rot = (id, V) => {
+    let m;
+    if ((m = /p(\d+)(b*)(?:_\d+)?$/.exec(id))) return '§ ' + m[1] + (+m[1] < 10 ? 'º' : '') + letra(m[2]) + ' ';
+    if (/pu(?:_\d+)?$/.test(id)) return 'Parágrafo único. ';
+    m = /^(.*)-([a-z]+?)(b*)(?:_\d+)?$/.exec(id); if (!m) return '';
+    const segs = id.replace(/^a\d+b*(?:p(?:u|\d+)b*)?/, '').split('-').filter(Boolean);
+    const inciso = segs.length === 1 && ROM.test(m[2]) && !V.some(x => x[0] === m[1] + '-a');
+    return inciso ? m[2].toUpperCase() + letra(m[3]) + ' - ' : m[2] + letra(m[3]) + ') ';
+  };
+  const C = JSON.parse(fs.readFileSync(CAMPO, 'utf8')); let n = 0;
+  for (const k of Object.keys(C.textos)) {
+    const [lei, id] = k.split(':'); if (!FONTES[lei] || !id) continue;
+    const V = require('./banco/vigente/' + lei + '.json'), vid = semRedacao(id);
+    const art = /^a\d+b*/.exec(vid)[0], caput = V.find(x => x[0] === art); if (!caput) throw Error('documentos: ' + k + ' sem artigo vigente');
+    const ehArt = vid === art, raiz = V.find(x => x[0] === vid); if (!raiz) throw Error('documentos: ' + k + ' (' + vid + ') fora do texto vigente');
+    const filhos = V.filter(x => x[0] !== art && (ehArt ? (x[0].startsWith(art + 'p') || x[0].startsWith(art + '-')) : (x[0] === vid || x[0].startsWith(vid + '-'))));
+    const numArt = art.slice(1).replace(/b+$/, b => '-' + String.fromCharCode(64 + b.length));
+    const texto = ['Art. ' + numArt + ' ' + caput[1]].concat(filhos.map(x => rot(x[0], V) + x[1])).join('\n');
+    const disp = 'art. ' + numArt + (ehArt ? '' : ', ' + rot(vid, V).replace(/^Parágrafo único\. $/, 'parágrafo único').replace(/ - $/, '').replace(/\) $/, '').trim());
+    const T = C.textos[k];
+    if (T.texto !== texto || T.disp !== disp) { T.texto = texto; T.disp = disp; n++; }
+  }
+  conta.documentos2 = n;
+  if (n) fs.writeFileSync(CAMPO, JSON.stringify(C) + '\n');
+}
+
 fs.writeFileSync(file, html);
 console.log('Conferência de 17/11/2026 — banco: ' + conta.banco + ' mudança(s); banco de Alimentos: ' + conta.alimentos + '; assistenciais: ' + conta.assistenciais +
-  '; estética: ' + conta.estetica + '; checklist de documentos: ' + conta.documentos + '.');
+  '; estética: ' + conta.estetica + '; checklist de documentos: ' + conta.documentos + ' + ' + conta.documentos2 + ' texto(s) de lei.');
