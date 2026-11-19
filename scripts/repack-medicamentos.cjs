@@ -606,5 +606,10 @@ blocoAltera('app--farmacia-manipulacao', s => {
 });
 blocoAltera('app--distribuidoras-transportadoras', s => trocaEm(s, "{C:'Cumpre',NC:'Não cumpre',NA:'Não se aplica'}[v]", "{C:'Sim',NC:'Não',NA:'Não se aplica'}[v]", 'atacadista: botões Sim/Não'));
 
+/* 7za. Drogaria — correções declaradas no VISA_LOCAL (scripts/drogaria/visa-local-correcoes.cjs),
+   cada uma com motivo e data da autorização. */
+blocoAltera('app--drogaria', s => catalogoDrogaria(s, visa => require('./drogaria/visa-local-correcoes.cjs').aplica(visa)),
+  fs.readFileSync(path.join(__dirname, 'drogaria', 'visa-local-correcoes.cjs'), 'utf8'));
+
 fs.writeFileSync(FILE, h);
 console.log('Núcleo Medicamentos: ajustes do site Medicamentos aplicados; catálogo com Drogaria, Manipulação e Atacadista.');

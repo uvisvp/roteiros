@@ -24,7 +24,8 @@ for(const[id,source]of base.blocks)if(!allowed.has(id)){
   if(id==='banco--v11')assert.equal(semAcrescimos(blocks.get(id)),semAcrescimos(corrigido(source)),'Banco normativo alterado além dos acréscimos declarados em scripts/banco/estruturar.py e das correções declaradas em scripts/banco/correcoes.cjs');
   else if(id==='nuc--citacoes.js')assert.equal(blocks.get(id),aplicaNucleo(source),'Motor de citações alterado além das correções declaradas em scripts/citacoes/nucleo-correcoes.cjs');
   else assert.equal(blocks.get(id),source,'Bloco protegido (banco normativo / citações) alterado em relação a '+baseRef+': '+id);}
-assert.deepEqual(visaLocal(blocks.get('app--drogaria')),visaLocal(base.blocks.get('app--drogaria')),'Banco normativo/catálogo integrado não devem ser reescritos');
+/* Catálogo integrado da Drogaria: só as correções declaradas em scripts/drogaria/visa-local-correcoes.cjs. */
+assert.deepEqual(visaLocal(blocks.get('app--drogaria')),require('./drogaria/visa-local-correcoes.cjs').aplica(visaLocal(base.blocks.get('app--drogaria'))),'Banco normativo/catálogo integrado não devem ser reescritos além das correções declaradas em scripts/drogaria/visa-local-correcoes.cjs');
 const sw=fs.readFileSync('sw.js','utf8'),version=JSON.parse(fs.readFileSync('versao.json','utf8')).versao;
 assert.ok(sw.includes("const VERSAO = '"+version+"'"));assert.ok(html.includes(version));assert.ok(/manifest\.webmanifest/.test(html)&&/serviceWorker\.register/.test(html));
 const events={},deleted=[];const self={addEventListener:(k,f)=>events[k]=f,clients:{claim:async()=>{}},location:{origin:'https://example.test'}};
