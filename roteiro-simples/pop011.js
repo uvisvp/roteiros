@@ -23,6 +23,8 @@
   '11.1': 'Gerenciamento das documentações', '11.2': 'Cadastro de fornecedores e clientes', '11.3': 'Recolhimento e devolução', '11.4': 'Autoinspeção', '11.5': 'Gerenciamento de resíduos',
   '11.6': 'Sistema de investigação de desvios e controle de ações corretivas', '11.7': 'Gerenciamento de reclamações', '11.8': 'Sistemas computadorizados', '11.9': 'Mecanismos de gerenciamento de medicamentos sujeitos ao controle especial',
   '12.1': 'Instalações', '12.2': 'Atividades', '12.3': 'Padrões de referência e especificações', '12.4': 'Investigação de resultados fora de especificação', '12.5': 'Liberação de lotes'};
+ /* campo não preenchido: lacuna a preencher à mão (pedido de 23/11/2026) */
+ var LAC = '______________________________', LACD = '____/____/______';
  var MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 
  /* ---------- dados ---------- */
@@ -42,9 +44,12 @@
  function equipe(){ var e = linhas(P().equipe); if(e.length) return e.map(function(l){ return {nome: l[0] || '', inst: l[1] || '', mat: l[2] || '', esfera: l[3] || ''}; });
   return String(M().equipe || '').split(/[;\n]+/).map(tx).filter(Boolean).map(function(n){ return {nome: n, inst: P().orgao || '', mat: '', esfera: 'Municipal'}; }); }
  function itemDe(q){ var c = A.D.pop011 || {}, o = A.ONDE[q.id]; return (c.perguntas || {})[q.id] || (c.itens || {})[o && o.it && o.it.id] || '11'; }
- function legalDe(q){ var r = q.r || [], esp = r.filter(function(x){ return !/^lei-municipal-13725-2004::/.test(x); }); return A.fundamento(esp.length ? esp : r); }
- function ncs(){ var s = A.st(); return A.ORDEM.filter(function(id){ return s.r[id] === 'nc' && A.visivel(A.PERG[id]); }).map(function(id, i){ var q = A.PERG[id]; return {id: id, num: i + 1, q: q, texto: fim(A.frase(q)), legal: legalDe(q), e: P().nc[id] || {}}; }); }
- function ncTexto(n){ return n.texto.replace(/\.$/, '') + (n.legal ? ' (' + n.legal + ').' : '.'); }
+ function legalDe(q, comLei){ var r = q.r || [], esp = r.filter(function(x){ return !/^lei-municipal-13725-2004::/.test(x); }); if(!esp.length) return A.fundamento(r); if(!comLei) return A.fundamento(esp);
+  /* Anexo I (relatório): norma específica e, em seguida, a Lei 13.725/2004 (D.leiBase) — toda irregularidade do relatório cita a lei.
+     Anexo II, plano de ação e par técnico: só a norma específica (Norma e Artigo Infringido). */
+  var lei = r.filter(function(x){ return esp.indexOf(x) < 0; }); if(!lei.length) lei = (A.D.leiBase || []).slice(); return A.fundamento(esp.concat(lei)); }
+ function ncs(){ var s = A.st(); return A.ORDEM.filter(function(id){ return s.r[id] === 'nc' && A.visivel(A.PERG[id]); }).map(function(id, i){ var q = A.PERG[id]; return {id: id, num: i + 1, q: q, texto: fim(A.frase(q)), legal: legalDe(q), legalLei: legalDe(q, true), e: P().nc[id] || {}}; }); }
+ function ncTexto(n){ return n.texto.replace(/\.$/, '') + (n.legalLei ? ' (' + n.legalLei + ').' : '.'); }
  function respondidas(item){ var s = A.st(); return A.ORDEM.map(function(id){ return A.PERG[id]; }).filter(function(q){ return A.visivel(q) && s.r[q.id] && itemDe(q) === item; }); }
 
  /* ---------- Word ---------- */
@@ -93,11 +98,21 @@
   if(comEstab) nodes.push({k: 'p', al: 'left', after: 2200, runs: [['Estabelecimento: ', {b: true, sz: 11}], [M().razao || '', {sz: 11}]]}, {k: 'p', al: 'center', runs: [[(p.cidade || 'São Paulo') + ', ' + extenso(p.dataRel) + '.', {sz: 11}]]});
   nodes.push({k: 'pb'}); }
 
+ /* Item 5: o que a equipe registrou em “Atividades e produtos” da identificação (atividades exercidas, outros produtos, apresentações). */
+ function infoGerais(){ var m = M(), out = [], sec = (A.D.secoes || [])[0], its = sec && sec.itens || [];
+  its.forEach(function(it){ if(it.id === 'dados') return; (it.campos || []).forEach(function(c){ var v = m[c.id], o = c.opcoes || [], rot = String(c.rotulo || '').replace(/\?$/, ''), t = '';
+   var nome = function(k){ var x = o.filter(function(y){ return y[0] === k; })[0]; return x ? x[1] : k; };
+   if(c.tipo === 'checks'){ var a = Array.isArray(v) ? v : []; t = a.map(nome).join(', '); }
+   else if(c.tipo === 'select') t = tem(v) ? nome(v).toLowerCase() : '';
+   else t = tx(v);
+   if(t) out.push(rot + ': ' + fim(t)); }); });
+  return out; }
+
  /* ---------- Anexo I ---------- */
  function anexoI(){
   var m = M(), p = P(), L = ncs(), nodes = [], s = A.st();
   var it = function(n, t){ nodes.push({k: 'h1', n: n, t: t}); }, sub = function(n){ nodes.push({k: 'h2', n: n, t: TIT[n]}); }, pp = function(t){ nodes.push({k: 'p', t: t}); };
-  var campo = function(n, rot, v, b){ nodes.push({k: 'p', al: 'left', runs: [[n + ' ' + rot + ': ', {b: !!b}], [tx(v) || '—', {}]]}); };
+  var campo = function(n, rot, v, b){ nodes.push({k: 'p', al: 'left', runs: [[n + ' ' + rot + ': ', {b: !!b}], [tx(v) || LAC, {}]]}); };
   var linhaAtiv = function(lista){ return {k: 'tbl', cols: [1870, 1871, 1871, 1871, 1871], o: {nb: true}, rows: [ATIV.map(function(a){ return box(lista.indexOf(a) >= 0, a); })]}; };
   var bloco = function(item, extra){ var qs = respondidas(item), n0 = nodes.length;
    var conf = qs.filter(function(q){ return s.r[q.id] === 'c' || (s.r[q.id] === 'na' && typeof q.na === 'string'); }).map(function(q){ return fim(A.frase(q)); });
@@ -109,22 +124,22 @@
   /* 1 */
   it(1, 'Identificação do estabelecimento');
   campo('1.1.', 'Nome Fantasia', m.fantasia); campo('1.2.', 'Razão Social', m.razao);
-  nodes.push({k: 'p', al: 'left', runs: [['1.3. CNPJ: ' + (tx(m.cnpj) || '—') + '     ' + box(p.unidade === 'Matriz', 'Matriz') + '     ' + box(p.unidade === 'Filial', 'Filial'), {}]]});
+  nodes.push({k: 'p', al: 'left', runs: [['1.3. CNPJ: ' + (tx(m.cnpj) || LAC) + '     ' + box(p.unidade === 'Matriz', 'Matriz') + '     ' + box(p.unidade === 'Filial', 'Filial'), {}]]});
   campo('1.4.', 'Endereço', m.endereco); campo('1.5.', 'Fone', p.fone); campo('1.6.', 'E-mail', p.email);
   var rl = duas(m.rl), rt = duas(m.rt);
-  pp('1.7. Responsável legal: ' + (rl[0] || '—') + ' / CPF: ' + (rl[1] || '—'));
-  pp('1.8. Responsável técnico: ' + (rt[0] || '—') + ' / CRF/UF: ' + (rt[1] || '—'));
+  pp('1.7. Responsável legal: ' + (rl[0] || LAC) + ' / CPF: ' + (rl[1] || '_______________'));
+  pp('1.8. Responsável técnico: ' + (rt[0] || LAC) + ' / CRF/UF: ' + (rt[1] || '_______________'));
   var semLic = p.licSit === 'Não possui';
-  pp('1.9. Licença de Funcionamento n° ' + (semLic ? '—' : (tx(m.licenca) || '—')) + '   Data: ' + (semLic ? '—' : (data(p.licData) || '—')) + '  -  ' + box(semLic, 'Não possui Licença.'));
+  pp('1.9. Licença de Funcionamento n° ' + (semLic ? '—' : (tx(m.licenca) || '_______________')) + '   Data: ' + (semLic ? '—' : (data(p.licData) || LACD)) + '  -  ' + box(semLic, 'Não possui Licença.'));
   var la = sel('licAct'), ck = function(a){ return box(la.indexOf(a) >= 0, a); };
   nodes.push({k: 'p', al: 'left', after: 40, t: '1.10. Atividades Licenciadas:'});
   nodes.push({k: 'tbl', cols: [1870, 1871, 1871, 1871, 1871], rows: [[ck('Distribuir'), ck('Transportar') + '\n' + ck('Transporte próprio') + '\n' + ck('Transporte para terceiros'), ck('Importar'), ck('Armazenar') + '\n' + ck('Armazenamento próprio') + '\n' + ck('Armazenamento para terceiros'), ck('Expedir')]]});
-  campo('1.11.', 'Relação dos demais estabelecimentos', p.outros || 'Não se aplica'); campo('1.12.', 'Documentos anexos', p.docsAnexos || 'Não há.');
+  campo('1.11.', 'Relação dos demais estabelecimentos', p.outros); campo('1.12.', 'Documentos anexos', p.docsAnexos);
   {var q1 = respondidas('1'); if(q1.length) bloco('1'); }
   /* 2 */
   it(2, 'Dados da autorização de funcionamento');
   var aut = function(n, rot, num, sit, dt, re){ if(sit === 'Não possui' || sit === 'Não se aplica'){ nodes.push({k: 'p', al: 'left', runs: [[n + ' ', {b: true}], [rot + ': ' + (sit === 'Não possui' ? 'não possui.' : 'não aplicável.'), {}]]}); return; }
-   nodes.push({k: 'p', al: 'left', runs: [[n + ' ', {b: true}], [rot + ' n° ' + (tx(num) || '—') + ' publicada em ' + (data(dt) || '—') + (tem(re) ? ' (RE nº ' + tx(re) + ')' : '') + '.', {}]]}); };
+   nodes.push({k: 'p', al: 'left', runs: [[n + ' ', {b: true}], [rot + ' n° ' + (tx(num) || '_______________') + ' publicada em ' + (data(dt) || LACD) + (tem(re) ? ' (RE nº ' + tx(re) + ')' : '') + '.', {}]]}); };
   aut('2.1.', 'Autorização de Funcionamento', m.afe, p.afeSit, p.afeData, p.afeRe);
   nodes.push({k: 'p', al: 'left', after: 40, runs: [['2.2. ', {b: true}], ['Atividades:', {}]]}, linhaAtiv(sel('afeAct')));
   aut('2.3.', 'Autorização Especial', m.ae, p.aeSit || (tem(m.ae) ? '' : 'Não se aplica'), p.aeData, p.aeRe);
@@ -134,21 +149,21 @@
   it(3, 'Dados da inspeção');
   campo('3.1.', 'Período', periodo(p.inicio || m.data, p.fim || p.inicio || m.data), true);
   campo('3.2.', 'Objetivo da inspeção', p.objetivo || A.D.relatorio.objetivo, true);
-  var primeira = p.primeira === 'Sim'; campo('3.3.', 'Período da última inspeção', primeira ? '—' : p.ultima, true);
+  var primeira = p.primeira === 'Sim'; campo('3.3.', 'Período da última inspeção', primeira ? 'não se aplica (primeira inspeção)' : p.ultima, true);
   pp(box(primeira, 'O estabelecimento está sendo inspecionado pela primeira vez.'));
   /* 4 */
   it(4, 'Pessoas contactadas');
   var cont = linhas(p.contatos); if(!cont.length && tem(m.acompanhou)) cont = [[tx(m.acompanhou), '', '']];
-  (cont.length ? cont : [['', '', '']]).forEach(function(c){ nodes.push({k: 'p', al: 'left', t: 'Nome: ' + (c[0] || '') + '      Cargo: ' + (c[1] || '') + '      Contato: ' + (c[2] || '')}); });
+  (cont.length ? cont : [['', '', '']]).forEach(function(c){ nodes.push({k: 'p', al: 'left', t: 'Nome: ' + (c[0] || LAC) + '   Cargo: ' + (c[1] || '____________________') + '   Contato: ' + (c[2] || '____________________')}); });
   /* 5 e 6 */
-  it(5, 'Informações gerais'); bloco('5', p.gerais);
-  it(6, 'Não conformidades anteriores'); paras(p.anteriores).forEach(pp); if(!tem(p.anteriores)) pp(primeira ? 'Não se aplica: primeira inspeção.' : 'Não informado.');
+  it(5, 'Informações gerais'); infoGerais().forEach(pp); bloco('5', p.gerais);
+  it(6, 'Não conformidades anteriores'); paras(p.anteriores).forEach(pp); if(!tem(p.anteriores)) pp(primeira ? 'Não se aplica: primeira inspeção.' : LAC + LAC);
   /* 7 */
   it(7, 'Terceirização e prestação de serviços');
   var ter = linhas(p.terceiros);
   if(ter.length) nodes.push({k: 'tbl', head: true, cols: [1900, 2000, 1500, 1150, 1150, 1654], rows: [['Atividades Terceirizadas', 'Empresa(s) Contratada(s)', 'CNPJ', 'AFE', 'AE', 'Produto/Ensaio']].concat(ter.map(function(l){ return [0, 1, 2, 3, 4, 5].map(function(i){ return {t: l[i] || '', sz: 9}; }); }))});
   else pp('Não Aplicável.');
-  sub('7.1'); paras(p.qualPrest).forEach(pp); if(!tem(p.qualPrest)) pp(ter.length ? 'Não informado.' : 'Não aplicável.');
+  sub('7.1'); paras(p.qualPrest).forEach(pp); if(!tem(p.qualPrest)) pp(ter.length ? LAC + LAC : 'Não aplicável.');
   /* 8 a 12 */
   it(8, 'Pessoal'); bloco('8'); sub('8.1'); bloco('8.1', p.higiene);
   it(9, 'Áreas físicas'); ['9.1', '9.2', '9.3'].forEach(function(k){ sub(k); bloco(k); });
@@ -160,8 +175,8 @@
   /* 13 */
   it(13, 'Considerações finais / avaliação de riscos');
   paras(p.risco).forEach(pp);
-  if(L.length) nodes.push({k: 'tbl', head: true, cols: [700, 4854, 2400, 1400], rows: [['Nº', 'Não conformidade', 'Norma e artigo', 'Categoria']].concat(L.map(function(n){ return [String(n.num), n.texto, n.legal, n.e.cat || 'Não categorizada'].map(function(t){ return {t: t, sz: 9}; }); }))});
-  if(!tem(p.risco) && !L.length) pp('Não foram constatadas não conformidades.'); else if(!tem(p.risco)) pp('Avaliação de risco não informada.');
+  if(L.length) nodes.push({k: 'tbl', head: true, cols: [700, 4854, 2400, 1400], rows: [['Nº', 'Não conformidade', 'Norma e artigo', 'Categoria']].concat(L.map(function(n){ return [String(n.num), n.texto, n.legalLei, n.e.cat || ''].map(function(t){ return {t: t, sz: 9}; }); }))});
+  if(!tem(p.risco) && !L.length) pp('Não foram constatadas não conformidades.'); else if(!tem(p.risco)) pp('Avaliação de risco: ' + LAC + LAC);
   /* 14 */
   it(14, 'Conclusão');
   nodes.push({k: 'p', al: 'left', t: p.emAtividade === 'Não' ? 'Estabelecimento em atividade: não.' : 'Estabelecimento em atividade'});
@@ -171,14 +186,14 @@
   var med = [];
   if(p.anexo2Em) med.push('Emitido e entregue à empresa o Formulário de Comunicação de Não Conformidades (Anexo II do POP-O-SNVS-011) em ' + data(p.anexo2Em) + (p.e2data ? ', recebido em ' + data(p.e2data) : '') + '.');
   if(L.length && tem(p.planoRecebido)) med.push('O plano de ação apresentado pela empresa, recebido em ' + data(p.planoRecebido) + (tem(p.planoSei) ? ' (' + tx(p.planoSei) + ')' : '') + ', foi analisado pela equipe inspetora.');
-  med.forEach(pp); paras(p.medidas).forEach(pp); if(!med.length && !tem(p.medidas)) pp('Não informado.');
+  med.forEach(pp); paras(p.medidas).forEach(pp); if(!med.length && !tem(p.medidas)) pp(LAC + LAC);
   it(16, 'Anexos');
   if(L.length && tem(p.planoRecebido)) pp('Análise do plano de ação, em documento próprio.');
-  paras(p.anexos).forEach(pp); if(!(L.length && tem(p.planoRecebido)) && !tem(p.anexos)) pp('Não há.');
+  paras(p.anexos).forEach(pp); if(!(L.length && tem(p.planoRecebido)) && !tem(p.anexos)) pp(LAC + LAC);
   it(17, 'Equipe inspetora');
   var eq = equipe(); nodes.push({k: 'tbl', head: true, cols: [4200, 2000, 3154], rows: [['Inspetores/ Instituição', 'Matrícula', 'Assinatura']].concat((eq.length ? eq : [{}]).map(function(e){ return [(e.nome || '') + (e.inst ? '\n' + e.inst : ''), e.mat || '', '\n\n']; }))});
   it(18, 'Registro de revisão pelo par técnico');
-  var pr = p.par; pp(pr.nome && pr.data && pr.status ? 'Revisão realizada por ' + pr.nome + ' em ' + data(pr.data) + '. Resultado: ' + pr.status.toLowerCase() + '.' : 'Pendente.');
+  var pr = p.par; pp(pr.nome && pr.data && pr.status ? 'Revisão realizada por ' + pr.nome + ' em ' + data(pr.data) + '. Resultado: ' + pr.status.toLowerCase() + '.' : 'Nome do par técnico: ' + LAC + '   Data: ' + LACD + '   Assinatura: ' + LAC);
   it(19, 'Registro de entrega do relatório, termos e autos');
   pp('19.1 Termos e autos entregues: ' + (tx(p.e1termos) || '______________________________________')); pp('19.2 Recebido em: ' + (data(p.e1data) || '____/____/______') + '.'); pp('19.3 Nome do Responsável Legal ou Técnico: ' + (tx(p.e1nome) || '______________________________________')); pp('19.4 Documento de identificação: ' + (tx(p.e1doc) || '______________________________')); pp('19.5 Assinatura: ______________________________________');
   return nodes; }
@@ -303,5 +318,5 @@
    A.salva(); };
   d.addEventListener('input', grava); d.addEventListener('change', grava);
   d.addEventListener('click', function(ev){ var b = ev.target.closest && ev.target.closest('[data-p11-doc]'); if(b) emite(b.dataset.p11Doc); }); }
- window.RsPop011 = {painel: painel, nos: function(k){ return k === 'I' ? anexoI() : k === 'II' ? anexoII() : k === 'plano' ? plano() : anexoIII(); }, texto: function(k){ return window.RsPop011.nos(k).map(nodeTexto).join('\n'); }, pendencias: function(k){ return k === 'I' ? pendI() : k === 'II' ? pendII() : pendPlano(); }, emite: emite};
+ window.RsPop011 = {painel: painel, emite: emite, nos: function(k){ return k === 'I' ? anexoI() : k === 'II' ? anexoII() : k === 'plano' ? plano() : anexoIII(); }, texto: function(k){ return window.RsPop011.nos(k).map(nodeTexto).join('\n'); }, pendencias: function(k){ return k === 'I' ? pendI() : k === 'II' ? pendII() : pendPlano(); }, emite: emite};
 })();

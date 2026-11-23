@@ -76,7 +76,7 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   await f.evaluate(()=>location.reload());await p.waitForTimeout(4000);
   const g=p.frames().find(x=>x!==p.mainFrame());
   await g.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(700);
-  const r=await g.evaluate(()=>({painel:!!document.querySelector('.p11'),botoes:[...document.querySelectorAll('[data-p11-doc]')].map(x=>x.dataset.p11Doc).join(','),ncs:document.querySelectorAll('.p11-nc').length,previa:!!document.querySelector('.rs-relatorio'),
+  const r=await g.evaluate(()=>({painel:!!document.querySelector('.p11'),botoes:[...document.querySelectorAll('[data-p11-doc]')].map(x=>x.dataset.p11Doc).join(','),ncs:document.querySelectorAll('.p11-nc').length,previa:!!document.querySelector('.rs-relatorio'),previaTx:(document.querySelector('.rs-relatorio')||{}).innerText||'',word:(document.querySelector('[data-rs-word]')||{}).textContent||'',
    I:RsPop011.texto('I'),II:RsPop011.texto('II'),P:RsPop011.texto('plano'),III:RsPop011.texto('III'),pend:[RsPop011.pendencias('I'),RsPop011.pendencias('II'),RsPop011.pendencias('plano')]}));
   if(!r.painel||r.botoes!=='I,II,plano,III')T.falha('gases: painel dos documentos do POP-011 ausente na aba Relatório ('+r.botoes+')');
   if(r.ncs!==1)T.falha('gases: esperava 1 não conformidade no painel, veio '+r.ncs);
@@ -84,6 +84,10 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   if(r.pend.some(x=>x.length))T.falha('gases: pendências inesperadas: '+JSON.stringify(r.pend));
   for(const s of ['RELATÓRIO DE INSPEÇÃO','Estabelecimento: Gases Teste Ltda','1.1. Nome Fantasia: GasTeste','☒ Filial','1.7. Responsável legal: João da Silva / CPF: 000.000.000-00','1.10. Atividades Licenciadas:','2.1. Autorização de Funcionamento n° 1.23456-7','2.3. Autorização Especial: não aplicável.','3.1. Período: 20/10/2026','☒ O estabelecimento está sendo inspecionado pela primeira vez.','11.4 Autoinspeção','Não conformidade nº 1 — maior: Não há programa de autoinspeção','Situação encontrada: último relatório de 2022 (RDC Anvisa nº 887/2024, art. 42','14.3 Cumpre as Boas Práticas com Ação Corretiva ☒','14.3.1 ATIVIDADES(S): Distribuir gases medicinais','Inspetores/ Instituição','19.5 Assinatura:'])tem(r.I,s,'gases, Anexo I');
   sem(r.I,'..','gases, Anexo I');
+  /* o relatório do módulo é o Anexo I (23/11/2026): prévia e botão principal; Lei 13.725 em toda irregularidade; campo vazio vira lacuna */
+  if(!/RELATÓRIO DE INSPEÇÃO/.test(r.previaTx)||!/Anexo I/.test(r.word))T.falha('gases: a prévia e o botão principal deveriam ser do Anexo I ('+r.word+')');
+  tem(r.I,'Lei Municipal nº 13.725/2004, art. 46','gases, Anexo I (Lei 13.725 na não conformidade)');
+  for(const s of ['Não categorizada','Avaliação de risco não informada','Não informado.'])sem(r.I,s,'gases, Anexo I (campo vazio deveria ser lacuna)');
   for(const s of ['Formulário de Comunicação de Não Conformidades','1.1. Razão Social: Gases Teste Ltda','Nome do inspetor: Inspetora Um','Norma e Artigo Infringido | RDC Anvisa nº 887/2024, art. 42','☐ Finalizada\n☒ Em andamento','☒ Avaliação Documental'])tem(r.II,s,'gases, Anexo II');
   sem(r.II,'13.725','gases, Anexo II (a não conformidade cita a norma específica)');
   for(const s of ['ANÁLISE DO PLANO DE AÇÃO','Ação proposta pela empresa | Refazer o programa','☒ Aceita'])tem(r.P,s,'gases, análise do plano');

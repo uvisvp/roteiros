@@ -582,11 +582,13 @@
  function abaRelatorio(el){ var tot = ORDEM.filter(function(id){ return visivel(PERG[id]); }), resp = tot.filter(function(id){ return st.r[id]; }).length, ninf = D.infracoes.filter(function(i){ return st.inf[i.id] && infVisivel(i); }).length;
   el.innerHTML = '<div class="pu-bloco"><h3>Resumo</h3><div class="pu-campos"><div class="pu-campo">Respondidas<b>' + resp + ' de ' + tot.length + '</b></div><div class="pu-campo">' + (D.respostas === 'simnao' ? 'Irregulares' : 'Não cumpre') + '<b>' + nNC() + '</b></div><div class="pu-campo">Pendentes<b>' + (tot.length - resp) + '</b></div><div class="pu-campo">Infrações enquadradas<b>' + ninf + '</b></div></div>'
    + '<label class="pu-campo rs-largo"><span>Conclusão (se vazio, sai o texto padrão)</span><textarea data-rs-concl rows="4" placeholder="' + esc(D.relatorio.conclusao) + '">' + esc(st.concl || '') + '</textarea></label>'
-   + '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-word>Baixar relatório em Word</button><button type="button" class="pu-btn" data-rs-copia>Copiar texto</button>' + (resp < tot.length ? '<button type="button" class="pu-btn" data-rs-pendente>Ir à próxima pendente</button>' : '') + '</div>'
+   + '<div class="pu-acoes-item"><button type="button" class="pu-btn pu-btn-pri" data-rs-word>' + (D.pop011 ? 'Baixar relatório (Anexo I) em Word' : 'Baixar relatório em Word') + '</button><button type="button" class="pu-btn" data-rs-copia>Copiar texto</button>' + (resp < tot.length ? '<button type="button" class="pu-btn" data-rs-pendente>Ir à próxima pendente</button>' : '') + '</div>'
    + '<p class="pu-q-ajuda">As fotos saem à parte, em PDF, no botão Fotos do cabeçalho.</p></div>'
-   + '<div class="pu-bloco rs-relatorio' + (PB ? ' rs-pb' : '') + '"><h3>Prévia do relatório</h3>' + blocosHtml(blocos()) + '</div>';
-  /* D.pop011: documentos nos modelos do POP-O-SNVS-011 (roteiro-simples/pop011.js) */
-  if(D.pop011 && window.RsPop011) window.RsPop011.painel(el, {D: D, st: function(){ return st; }, salva: salva, visivel: visivel, ORDEM: ORDEM, PERG: PERG, ONDE: ONDE, frase: frase, fundamento: fundamento, esc: esc, fmtData: fmtData, baixa: baixa}); }
+   + '<div class="pu-bloco rs-relatorio' + (PB ? ' rs-pb' : '') + '"><h3>Prévia do relatório</h3>' + (D.pop011 && window.RsPop011 ? '' : blocosHtml(blocos())) + '</div>';
+  /* D.pop011: documentos nos modelos do POP-O-SNVS-011 (roteiro-simples/pop011.js). O relatório é o
+     Anexo I (pedido de 23/11/2026): o botão principal, o texto copiado e a prévia saem dele. */
+  if(D.pop011 && window.RsPop011){ window.RsPop011.painel(el, {D: D, st: function(){ return st; }, salva: salva, visivel: visivel, ORDEM: ORDEM, PERG: PERG, ONDE: ONDE, frase: frase, fundamento: fundamento, esc: esc, fmtData: fmtData, baixa: baixa});
+   var pv = el.querySelector('.rs-relatorio'); if(pv) pv.insertAdjacentHTML('beforeend', '<div class="rs-p11-previa" style="white-space:pre-wrap">' + esc(window.RsPop011.texto('I').replace(/^\s+/, '')) + '</div>'); } }
 
  /* ---------- fotos ---------- */
  function foto(id){ var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none'; document.body.appendChild(inp);
@@ -625,8 +627,9 @@
   if((b = e.target.closest('[data-rs-foto]'))){ foto(b.dataset.rsFoto); return; }
   if((b = e.target.closest('[data-rs-sem-foto]'))){ delete st.fotos[b.dataset.rsSemFoto]; fotoAberta = b.dataset.rsSemFoto; salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-sugeridas]'))){ Object.keys(sugeridas()).forEach(function(k){ st.inf[k] = true; }); salva(); abaInfracoes(document.getElementById('pu-aba')); UvisPadrao.atualiza(); return; }
+  if((b = e.target.closest('[data-rs-word]')) && D.pop011 && window.RsPop011){ b.disabled = true; Promise.resolve(window.RsPop011.emite('I')).then(function(){ b.disabled = false; }, function(){ b.disabled = false; aviso('Não foi possível gerar o Word.'); }); return; }
   if((b = e.target.closest('[data-rs-word]'))){ b.disabled = true; docx(blocos(), D.relatorio.titulo + ' — ' + D.titulo).then(function(blob){ baixa(blob, nomeArq('docx')); aviso('Relatório em Word gerado.'); }, function(){ aviso('Não foi possível gerar o Word.'); }).then(function(){ b.disabled = false; }); return; }
-  if((b = e.target.closest('[data-rs-copia]'))){ var t = blocosTexto(blocos()); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ aviso('Texto do relatório copiado.'); }, function(){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); aviso('Texto do relatório copiado.'); } catch(x){} ta.remove(); }); return; }
+  if((b = e.target.closest('[data-rs-copia]'))){ var t = D.pop011 && window.RsPop011 ? window.RsPop011.texto('I') : blocosTexto(blocos()); (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ aviso('Texto do relatório copiado.'); }, function(){ var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); aviso('Texto do relatório copiado.'); } catch(x){} ta.remove(); }); return; }
   if((b = e.target.closest('[data-rs-pendente]'))){ var id = ORDEM.filter(function(k){ return visivel(PERG[k]) && !st.r[k]; })[0]; if(id) UvisPadrao.vai({aba: 'roteiro', secao: ONDE[id].s.id, item: ONDE[id].it.id}); return; }
  });
  document.addEventListener('keydown', function(e){ var t = e.target; if(e.key === 'Enter' && t && t.matches && t.matches('[data-rs-eq$="|busca"]')){ e.preventDefault(); var q = t.dataset.rsEq.split('|'); eqBuscar(q[0] + '|' + q[1]); } });
