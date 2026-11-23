@@ -24,7 +24,7 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
     alXml:xml(dmAlertaNodes({})),a1Xml:xml(a1.nodes),
     ids:qs.map(q=>q.id),vagos:qs.filter(q=>/A equipe registrou|requisito avaliado/.test(q.ncText||'')).map(q=>q.id),semNc:qs.filter(q=>!q.escopo&&!q.ncText).map(q=>q.id),
     plural:qs.filter(q=>/\barts\. \d+º? e \d|, incisos /.test(q.legal||'')&&/^(ifa|si)-|expedicao-documento|q417/.test(q.id)).map(q=>q.id),ponto:qs.filter(q=>/\.$/.test(q.legal||'')).map(q=>q.id),
-    legais:qs.map(q=>[q.id,q.legal||'']),rod:[DM_RODAPE.I,DM_RODAPE.II,DM_RODAPE.III,DM_RODAPE.ALERTA]}});
+    legais:qs.map(q=>[q.id,q.legal||'']),p2:ddAnexo2Pendencias(),iss:distIssues(),card:ncCard(allNCs()[0]),rod:[DM_RODAPE.I,DM_RODAPE.II,DM_RODAPE.III,DM_RODAPE.ALERTA]}});
   /* Anexo I */
   for(const s of ['RELATÓRIO DE INSPEÇÃO','Estabelecimento: Distribuidora Teste Ltda','1.1. Nome Fantasia: DistriTeste','1.2. Razão Social:','1.3. CNPJ:','☒ Matriz','1.7. Responsável legal: João da Silva / CPF: 000.000.000-00','1.8. Responsável técnico: Maria Souza / CRF/UF: CRF-SP 12345','1.9. Licença de Funcionamento n° 123','1.10. Atividades Licenciadas:','1.11. Relação dos demais estabelecimentos:','1.12. Documentos anexos:','2.1. Autorização de Funcionamento n° 1.23456-7 publicada em 02/03/2020','2.2. Atividades:','2.3. Autorização Especial: não aplicável.','2.4. Atividades:','3.1. Período: 20/10/2026 a 21/10/2026','3.2. Objetivo da inspeção:','3.3. Período da última inspeção:','Nome: Maria Souza      Cargo: RT      Contato: maria@teste.com.br','Estabelecimento em atividade','14.1 Cumpre as Boas Práticas ☐','14.3 Cumpre as Boas Práticas com Ação Corretiva ☒','14.3.1 ATIVIDADES(S): Distribuir e armazenar medicamentos','14.4 Não cumpre as Boas Práticas ☐','15. MEDIDAS ADOTADAS/ DOCUMENTOS EMITIDOS','Inspetores/ Instituição','19.5 Assinatura:'])tem(r.a1,s,'Anexo I');
   for(const s of ['..','não se aplica publicada em','Nome fantasia:'])sem(r.a1.replace(/\.{3,}|_+/g,''),s,'Anexo I');
@@ -32,6 +32,10 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   /* Anexo II */
   for(const s of ['Formulário de Comunicação de Não Conformidades','1.1. Razão Social: Distribuidora Teste Ltda','1.4. País: Brasil','\nPeríodo: 20/10/2026 a 21/10/2026','Nome do inspetor: Inspetora Um\nCódigo do inspetor: 1234567','Norma e Artigo Infringido | RDC Anvisa nº 430/2020, art. 68','Requisito regulamentar descumprido com a evidência','☐ Finalizada\n☐ Em andamento','☐ Avaliação Documental\n☐ Inspeção de Acompanhamento\n☐ Próxima Inspeção Planejada de BPDAIT conforme POP-O-SNVS-031\n☐ Sem necessidade de monitoramento','6. REGISTRO DE ENTREGA DO FORMULÁRIO, RELATÓRIO, TERMOS E AUTOS'])tem(r.a2,s,'Anexo II');
   for(const s of ['2.1 Período','limpeza..'])sem(r.a2,s,'Anexo II');
+  /* situação e estratégia: marcadas na análise do plano (POP-O-SNVS-011, item 8.3), não na comunicação */
+  if(r.p2.some(x=>/situação|estratégia/.test(x)))T.falha('Anexo II: a comunicação não deveria exigir situação nem estratégia: '+JSON.stringify(r.p2));
+  if(!r.iss.some(x=>/situação da NC e a estratégia/.test(x)))T.falha('relatório final: deveria exigir a situação e a estratégia marcadas na análise do plano');
+  if(/Situação da NC<select|Estratégia de monitoramento<select/.test(r.card)||!/marcadas na aba Análise do plano de ação/.test(r.card))T.falha('cartão da NC: situação e estratégia deveriam ficar só na análise do plano');
   /* Anexo III */
   for(const s of ['Formulário de Revisão por Par Técnico','I. Dados do Estabelecimento','II. Itens avaliados','Os itens avaliados estão adequados?','III. Nome da Equipe Inspetora','Nome: Inspetora Um','IV. Identificação do Par Técnico','Data da Devolução: 08/11/2026','V. Comentários (obrigatório o preenchimento no caso de reprovação)','VI. Status Final','☒ Aprovado','☐ Reprovado'])tem(r.a3,s,'Anexo III');
   /* alerta rápido */
@@ -99,6 +103,13 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   /* campo digitado grava no rascunho */
   await g.evaluate(()=>{document.querySelector('[data-p11-g="ident"]').open=true});await g.fill('[data-p11="fone"]','(11) 3333-4444');await p.waitForTimeout(300);
   const fone=await g.evaluate(K=>JSON.parse(localStorage.getItem(K)).pop.fone,K);if(fone!=='(11) 3333-4444')T.falha('gases: campo do painel não gravou ('+fone+')');
+  /* sem situação e estratégia: o Anexo II sai em branco nesses campos; a análise do plano exige */
+  await g.evaluate(K=>{const st=JSON.parse(localStorage.getItem(K));delete st.pop.nc.programa.sit;delete st.pop.nc.programa.mon;localStorage.setItem(K,JSON.stringify(st))},K);
+  await g.evaluate(()=>location.reload());await p.waitForTimeout(4000);
+  {const g2=p.frames().find(x=>x!==p.mainFrame());await g2.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(700);const q=await g2.evaluate(()=>({II:RsPop011.pendencias('II'),P:RsPop011.pendencias('plano'),tx:RsPop011.texto('II')}));
+   if(q.II.some(x=>/situação|estratégia/.test(x)))T.falha('gases: a comunicação (Anexo II) não deveria exigir situação nem estratégia: '+JSON.stringify(q.II));
+   if(!q.P.some(x=>/situação da NC após a análise/.test(x))||!q.P.some(x=>/estratégia/.test(x)))T.falha('gases: a análise do plano deveria exigir situação e estratégia: '+JSON.stringify(q.P));
+   tem(q.tx,'☐ Finalizada\n☐ Em andamento','gases, Anexo II em branco');}
   if(erros.length)T.falha('erros na página (gases): '+erros.join(' | '));
   await p.close();}
  /* os demais roteiros do motor não ganham o painel */

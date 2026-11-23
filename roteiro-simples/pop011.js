@@ -229,7 +229,7 @@
   nodes.push({k: 'p', al: 'left', t: 'Termos e autos entregues: ' + (tx(p.e2termos) || '______________________________________________')}, {k: 'p', al: 'left', t: 'Recebido em: ' + (data(p.e2data) || '____/____/______') + '.'}, {k: 'p', al: 'left', t: 'Nome e título do responsável pelo recebimento do relatório: ' + (tx(p.e2nome) || '________________________________')}, {k: 'p', al: 'left', t: 'Documento de identificação: ' + (tx(p.e2doc) || '______________________________')}, {k: 'p', al: 'left', t: 'Assinatura: ______________________________________'});
   return nodes; }
  function pendII(){ var o = []; if(!tem(P().orgao)) o.push('Capa: informe o órgão de vigilância sanitária.'); if(!equipe().length) o.push('Informe a equipe inspetora.');
-  ncs().forEach(function(n){ if(!n.e.sit) o.push('Não conformidade nº ' + n.num + ': falta a situação.'); if(!n.e.mon) o.push('Não conformidade nº ' + n.num + ': falta a estratégia de monitoramento.'); }); return o; }
+  return o; } /* situação e estratégia: marcadas na análise do plano (POP-O-SNVS-011, item 8.3); na comunicação saem em branco */
 
  /* ---------- análise do plano de ação (sem modelo oficial: POP-O-SNVS-011, item 8.3) ---------- */
  function plano(){ var m = M(), p = P(), L = ncs(), nodes = [];
@@ -243,7 +243,7 @@
   var eq = equipe(); nodes.push({k: 'tbl', head: true, cols: [4200, 2000, 3154], rows: [['Inspetores/ Instituição', 'Matrícula', 'Assinatura']].concat((eq.length ? eq : [{}]).map(function(e){ return [(e.nome || '') + (e.inst ? '\n' + e.inst : ''), e.mat || '', '\n\n']; }))});
   return nodes; }
  function pendPlano(){ var o = []; if(!tem(P().planoRecebido)) o.push('Informe a data de recebimento do plano de ação.');
-  ncs().forEach(function(n){ if(!tem(n.e.acao)) o.push('Não conformidade nº ' + n.num + ': falta a ação proposta.'); if(!n.e.aval) o.push('Não conformidade nº ' + n.num + ': falta a avaliação.'); }); return o; }
+  ncs().forEach(function(n){ if(!tem(n.e.acao)) o.push('Não conformidade nº ' + n.num + ': falta a ação proposta.'); if(!n.e.aval) o.push('Não conformidade nº ' + n.num + ': falta a avaliação.'); if(!n.e.sit) o.push('Não conformidade nº ' + n.num + ': falta a situação da NC após a análise.'); if(!n.e.mon) o.push('Não conformidade nº ' + n.num + ': falta a estratégia de monitoramento.'); }); return o; }
 
  /* ---------- Anexo III ---------- */
  function anexoIII(){ var m = M(), p = P(), pr = p.par, eq = equipe(), nodes = [], C = [5354, 2000, 2000];
@@ -270,12 +270,12 @@
  function ncHtml(n){ var a = function(c){ return ' data-p11-nc="' + e(n.id) + '|' + c + '"'; }, s = function(c, ops){ return '<select' + a(c) + '><option value=""></option>' + ops.map(function(o){ return '<option' + (n.e[c] === o ? ' selected' : '') + '>' + e(o) + '</option>'; }).join('') + '</select>'; };
   return '<div class="p11-nc"><p><b>Não conformidade nº ' + n.num + '</b> — ' + e(n.texto) + ' <small>' + e(n.legal) + '</small></p><div class="pu-campos">'
    + '<label class="pu-campo rs-campo"><span>Categoria <small>(POP-O-SNVS-032)</small></span>' + s('cat', CATEG) + '</label>'
-   + '<label class="pu-campo rs-campo"><span>Situação da NC</span>' + s('sit', ['Finalizada', 'Em andamento']) + '</label>'
-   + '<label class="pu-campo rs-campo rs-largo"><span>Estratégia de monitoramento</span>' + s('mon', MONITOR) + '</label>'
    + '<label class="pu-campo rs-campo rs-largo"><span>Plano de ação — ação proposta pela empresa</span><textarea rows="2"' + a('acao') + '>' + e(n.e.acao || '') + '</textarea></label>'
    + '<label class="pu-campo rs-campo"><span>Prazo</span><input type="text"' + a('prazo') + ' value="' + e(n.e.prazo || '') + '"></label>'
    + '<label class="pu-campo rs-campo"><span>Avaliação do plano</span>' + s('aval', ['Aceita', 'Aceita com ressalva', 'Não aceita']) + '</label>'
-   + '<label class="pu-campo rs-campo rs-largo"><span>Comentários da equipe</span><textarea rows="2"' + a('coment') + '>' + e(n.e.coment || '') + '</textarea></label></div></div>'; }
+   + '<label class="pu-campo rs-campo rs-largo"><span>Comentários da equipe</span><textarea rows="2"' + a('coment') + '>' + e(n.e.coment || '') + '</textarea></label>'
+   + '<label class="pu-campo rs-campo"><span>Situação da NC <small>(após a análise do plano)</small></span>' + s('sit', ['Finalizada', 'Em andamento']) + '</label>'
+   + '<label class="pu-campo rs-campo rs-largo"><span>Estratégia de monitoramento <small>(após a análise do plano)</small></span>' + s('mon', MONITOR) + '</label></div></div>'; }
  function painelHtml(){ var L = ncs(), pr = P().par;
   return '<h3>Documentos nos modelos da Anvisa (POP-O-SNVS-011 rev. 3)</h3><p>Relatório de inspeção (Anexo I), comunicação de não conformidades (Anexo II), análise do plano de ação e revisão por par técnico (Anexo III). Os dados do estabelecimento e as respostas vêm do roteiro; complete abaixo o que só existe nos modelos.</p>'
    + grupo('ident', 'Capa e itens 1 a 4 do relatório', cmp('orgao', 'Órgão de vigilância sanitária') + cmp('cidade', 'Cidade', 'text', '(padrão: São Paulo)') + cmp('dataRel', 'Data do relatório', 'date') + cmp('unidade', 'Matriz ou filial', ['Matriz', 'Filial']) + cmp('fone', 'Fone') + cmp('email', 'E-mail')
