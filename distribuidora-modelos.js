@@ -272,13 +272,59 @@ const DM_PERGUNTAS={
 /* Os blocos de IFA, qualificação térmica e sistemas entram no roteiro depois deste arquivo
    (script que a casca acrescenta ao montar o módulo): a revisão é reaplicada quando a página
    termina de carregar. Reaplicar não muda o que já foi ajustado. */
-/* Importadora: laboratório de controle de qualidade próprio é exigência da RDC Anvisa nº 670/2022, art. 7º
-   (pedido de 12/11/2026) — pergunta própria no início de “Controle de Qualidade — instalações”. */
-const DM_NOVAS={cq_instalacoes:[{id:'cq-lab',text:'A importadora possui laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para as amostras de referência?',legal:'RDC Anvisa nº 670/2022, art. 7º',ncText:'A importadora não possui laboratório de controle de qualidade e local de armazenamento próprios, com local específico para as amostras de referência.'}]};
+/* Importação — enquadramento (pedido de 23/11/2026). Quem precisa de laboratório:
+   - medicamento: a “importadora” da RDC 670/2022 é a detentora do registro, inclusive quando
+     terceiriza a importação (art. 3º, II); ela deve ter laboratório e local de armazenamento
+     próprios (art. 7º). Quem importa para outro detentor precisa da declaração do detentor a cada
+     importação (RDC 81/2008, Capítulo VII, item 7, “b”; Capítulo XXXIX, item 45, “i”); os ensaios
+     cabem ao detentor (Capítulo VII, item 5, “b”). Biológicos estão fora da RDC 670 (art. 2º, p. ú.);
+   - IFA: só importa empresa com AFE (RDC 81/2008, Capítulo IV, item 2.1); todos os lotes analisados,
+     em laboratório próprio ou de terceiro, com amostra de referência (IN 62/2020, art. 4º, §§ 8º e 9º);
+     lotes não fracionados só para a indústria farmacêutica estão fora da IN (art. 1º, p. ú.);
+   - excipientes: controle por avaliação formal de risco (IN 62/2020, art. 5º).
+   Textos conferidos no AnvisaLegis em 23/11/2026. A triagem fica na etapa 1 (Atividades → Importar) e
+   orienta: todos os blocos continuam disponíveis (a casca torna applicable sempre verdadeiro) e a
+   equipe marca “Não se aplica” conforme o enquadramento. */
+const DM_NOVAS={
+ cq_instalacoes:[{id:'cq-lab',text:'Sendo detentora do registro dos medicamentos que importa, a empresa possui laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para as amostras de referência?',legal:'RDC Anvisa nº 670/2022, art. 3º, II; RDC Anvisa nº 670/2022, art. 7º',ncText:'A importadora detentora do registro não possui laboratório de controle de qualidade e local de armazenamento próprios, com local específico para as amostras de referência.'}],
+ 'dist-identificacao-preparacao':[{id:'dist-id-imp-terceiro',text:'Quando importa medicamento para outro detentor do registro, há, a cada importação, declaração do detentor autorizando-a, vinculada só a esta empresa, com validade de até 90 dias e assinada pelo responsável legal e pelo responsável técnico do detentor?',legal:'RDC Anvisa nº 81/2008, Capítulo VII, item 7, alínea “b”; RDC Anvisa nº 81/2008, Capítulo XXXIX, item 45, alínea “i”',ncText:'A empresa importa medicamento para outro detentor do registro sem a declaração do detentor autorizando a importação, nas condições exigidas (vinculada só a esta empresa, válida por até 90 dias, assinada pelo responsável legal e pelo responsável técnico).',dmFim:true}]
+};
+const DM_IMP_FLAGS=['imp_detentor','imp_terceiro','imp_ifa','imp_exc'];
+function dmImp(){const a=(state.meta&&state.meta.activities)||[],f=(state.meta&&state.meta.flags)||[];const imp=a.includes('Importar'),tri=f.some(x=>DM_IMP_FLAGS.includes(x));return {imp,tri,f,cq:imp&&(!tri||f.includes('imp_detentor'))}}
+function dmEnquadramento(){
+ const m=dmImp();if(!m.imp)return '';const f=m.f,L=[];
+ if(!m.tri)return '<div class="note">Marque o que a empresa importa: o enquadramento diz se ela precisa de laboratório próprio. Os blocos da etapa 8 continuam disponíveis; use “Não se aplica” conforme o enquadramento.</div>';
+ L.push('Importar exige AFE com a atividade de importar (RDC 81/2008, Capítulo IV, item 1).');
+ if(f.includes('imp_detentor'))L.push('<b>Detentora do registro:</b> laboratório de controle de qualidade e local de armazenamento próprios, com local para amostras de referência, são obrigatórios, também quando a importação é terceirizada (RDC 670/2022, arts. 3º, II, e 7º). Ensaios completos de cada carga, lote a lote (art. 8º); cumpridos os requisitos do art. 9º, no mínimo teor e produtos de degradação em cada lote. Etapa 8: blocos de controle de qualidade aplicáveis.');
+ if(f.includes('imp_terceiro'))L.push('<b>Importação para outro detentor:</b> só com declaração do detentor autorizando cada importação, vinculada a esta empresa, válida por até 90 dias e assinada pelo responsável legal e pelo responsável técnico do detentor (RDC 81/2008, Capítulo VII, item 7, “b”). Sem a declaração, não pode importar. Laboratório não é exigido desta empresa: os ensaios cabem ao detentor, em laboratório no país (RDC 670/2022, art. 3º, II; RDC 81/2008, Capítulo VII, item 5, “b”). Pergunta na Análise da documentação.');
+ if(f.includes('imp_bio'))L.push('<b>Biológicos:</b> fora da RDC 670/2022 (art. 2º, parágrafo único); o controle de qualidade segue legislação específica, não verificada neste roteiro.');
+ if(f.includes('imp_ifa'))L.push('<b>IFA:</b> só empresa com AFE pode importar (RDC 81/2008, Capítulo IV, item 2.1); não há registro nem autorização de detentor. Todos os lotes devem ser analisados conforme compêndio oficial ou especificação do fabricante, <b>em laboratório próprio ou de terceiro</b>, com amostra de referência de cada lote (IN 62/2020, art. 4º, §§ 8º e 9º). Laboratório próprio não é obrigatório. Perguntas no bloco de IFA, nesta etapa 8.');
+ if(f.includes('imp_ifa')&&f.includes('imp_ifa_ind'))L.push('Lotes não fracionados distribuídos só à indústria farmacêutica estão fora da IN 62/2020 (art. 1º, parágrafo único): para eles, as análises e a amostra de referência dessa IN não se aplicam.');
+ if(f.includes('imp_exc'))L.push('<b>Excipientes e outros insumos:</b> controle do insumo e do fornecedor por avaliação formal de risco (IN 62/2020, art. 5º); a IN não exige análise de todos os lotes.');
+ if(!m.cq)L.push('Etapa 8, blocos de controle de qualidade da importadora de medicamentos (itens 12.1 a 12.5 do relatório): marque “Não se aplica”.');
+ return '<div class="note dm-imp"><b>Enquadramento da importação</b><ul>'+L.map(x=>'<li>'+x+'</li>').join('')+'</ul></div>';
+}
+function dmTriagem(){
+ if(!dmImp().imp)return '';
+ return '<h4>Importação — o que a empresa importa</h4><div class="checks">'+flagCheck('imp_detentor','Medicamentos de que é detentora do registro')+flagCheck('imp_terceiro','Medicamentos para outro detentor do registro')+flagCheck('imp_bio','Há biológicos entre os medicamentos importados')+flagCheck('imp_ifa','Insumos farmacêuticos ativos (IFA)')+flagCheck('imp_ifa_ind','IFA sem fracionamento, só para a indústria farmacêutica')+flagCheck('imp_exc','Excipientes ou outros insumos')+'</div>'+dmEnquadramento();
+}
+/* Etapa 8: os blocos de insumos (IN 62/2020) entram quando a empresa importa IFA ou outros insumos. */
+function dmCartao8(){if(typeof DIST_CARDS==='undefined'||!DIST_CARDS[7])return;const c=DIST_CARDS[7][1].filter(x=>!/^insumos_/.test(x)),m=dmImp();if(m.imp&&(m.f.includes('imp_ifa')||m.f.includes('imp_exc')))c.push('insumos_gerais','insumos_ifa');DIST_CARDS[7][1]=c}
+function dmPendurar(){
+ if(typeof distTela1View==='function'&&!distTela1View.__dm){const o=distTela1View;distTela1View=function(){const h=o.apply(this,arguments),k=h.indexOf('<h4>Equipe inspetora');return k<0?h:h.slice(0,k)+dmTriagem()+h.slice(k)};distTela1View.__dm=1}
+ if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const p=h.indexOf('Toque no número'),k=p<0?-1:h.indexOf('</div>',p);const box=dmEnquadramento()||'';return k<0?h+box:h.slice(0,k+6)+'<div class="panel">'+box+'</div>'+h.slice(k+6)};roteiroView.__dm=1}
+  if(typeof DD_ROTA!=='undefined')DD_ROTA['dist-id-imp-terceiro']='2';
+}
+/* Item 12 vazio: diz por que não se aplica. */
+function ddVazio(item,r){if(r.todasNA)return 'Não se aplica.';if(/^12/.test(item)){const m=dmImp();if(!m.imp)return 'Não se aplica: o estabelecimento não realiza importação.';if(!m.cq)return 'Não se aplica: o estabelecimento não importa medicamento de que seja detentor do registro; o controle de qualidade cabe ao detentor (RDC Anvisa nº 670/2022, art. 3º, II).'}if(item==='7'||item==='7.1')return 'Não aplicável.';return 'Não aplicável.'}
 function dmRoteiro(){
- try{if(typeof POP_ORIENT!=='undefined'&&POP_ORIENT.cq_instalacoes)POP_ORIENT.cq_instalacoes[0]='O Controle de Qualidade aplica-se apenas aos estabelecimentos importadores, que devem possuir laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para amostras de referência (RDC Anvisa nº 670/2022, art. 7º).'}catch(e){}
+ try{if(typeof POP_ORIENT!=='undefined'&&POP_ORIENT.cq_instalacoes)POP_ORIENT.cq_instalacoes[0]='O Controle de Qualidade aplica-se à importadora detentora do registro do medicamento, inclusive quando terceiriza a importação: ela deve possuir laboratório de controle de qualidade e local de armazenamento próprios, incluindo local específico para amostras de referência (RDC Anvisa nº 670/2022, arts. 3º, II, e 7º). Quem só importa para outro detentor não precisa de laboratório; o enquadramento está na etapa 1.'}catch(e){}
+ try{dmPendurar()}catch(e){}
+ try{const add=(name,role,url)=>{if(DATA.sources&&!DATA.sources.some(x=>x.name===name))DATA.sources.push({name,rev:'—',vigencia:'vigente',role,url})};
+  add('RDC Anvisa nº 81/2008','Regulamento técnico de bens e produtos importados: empresas autorizadas a importar (Capítulo IV), importação terceirizada e declaração do detentor do registro (Capítulos VII e XXXIX).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=RDC&numeroAto=00000081&seqAto=000&valorAno=2008&orgao=RDC/DC/ANVISA/MS&cod_menu=1696&cod_modulo=134');
+  add('IN Anvisa nº 62/2020','Qualificação de fornecedores de insumos farmacêuticos; importadora de IFA analisa todos os lotes, em laboratório próprio ou de terceiro, e guarda amostra de referência (art. 4º, §§ 8º e 9º).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&tipo=INM&numeroAto=00000062&seqAto=000&valorAno=2020&orgao=DC/ANVISA/MS&cod_menu=1696&cod_modulo=134')}catch(e){}
  for(const s of DATA.sections){
-  for(const n of (DM_NOVAS[s.id]||[]))if(!s.questions.some(q=>q.id===n.id))s.questions.unshift(Object.assign({},n));
+  for(const n of (DM_NOVAS[s.id]||[])){const q=Object.assign({},n);delete q.dmFim;const e=s.questions.find(x=>x.id===n.id);if(e)Object.assign(e,q);else if(n.dmFim)s.questions.push(q);else s.questions.unshift(q)}
   if(s.questions.some(q=>DM_REPETIDAS[q.id]))s.questions=s.questions.filter(q=>!DM_REPETIDAS[q.id]);
   for(const q of s.questions){const a=DM_PERGUNTAS[q.id];if(a)Object.assign(q,a);if(q.legal)q.legal=String(q.legal).trim().replace(/\.$/,'')}
  }

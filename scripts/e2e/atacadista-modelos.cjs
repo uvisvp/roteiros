@@ -49,6 +49,20 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   /* citações que o botão não abria */
   const res=await f.evaluate(async L=>{const out=[];if(!window.LegisV12)return ['LegisV12 ausente'];/* sem rede o banco não carrega: a conferência fica para o teste com rede */let base=null;try{base=await LegisV12.texto({law:'RDC Anvisa nº 430/2020, art. 14',device:'RDC Anvisa nº 430/2020, art. 14'})}catch(e){}if(!base)return ['SEM_REDE'];for(const [id,legal] of L)for(const parte of String(legal).split(';').map(x=>x.trim()).filter(Boolean)){if(/13\.725/.test(parte))continue;let a=null;try{a=await LegisV12.texto({law:parte,device:parte})}catch(e){}if(!(a&&a.some(x=>x.exato&&String(x.texto).trim())))out.push(id+': '+parte);else if(/430\/2020, art\. (15|53)\b/.test(parte)&&!/^Art\. (15|53)\./.test(a[0].texto))out.push(id+': abre o preâmbulo — '+parte)}return out},r.legais.filter(x=>/^(ifa|si)-|^q39[367]$|^q417$|^q402$|expedicao-documento|^q1[0-9]{2}$/.test(x[0])));
   if(res[0]==='SEM_REDE')console.log('aviso: banco de legislação inacessível neste ambiente; abertura das citações não conferida');else if(res.length)T.falha('citações sem texto: '+res.slice(0,8).join(' | '));
+  /* importação: enquadramento (laboratório só da detentora do registro; IFA em laboratório próprio ou de terceiro) */
+  const im=await f.evaluate(()=>{const o={};const sv=JSON.stringify(state.meta);
+   state.meta.activities=['Distribuir','Importar'];state.meta.flags=[];o.tela=distTela1View().includes('Importação — o que a empresa importa');
+   state.meta.flags=['imp_terceiro'];o.terc=dmEnquadramento();o.vazio=ddVazio('12.1',{todasNA:false});o.card8=(dmCartao8(),DIST_CARDS[7][1].slice());
+   state.meta.flags=['imp_detentor','imp_ifa'];o.det=dmEnquadramento();o.card8ifa=(dmCartao8(),DIST_CARDS[7][1].slice());o.vazioDet=ddVazio('12.1',{todasNA:false});
+   state.meta.activities=['Distribuir'];o.semImp=distTela1View().includes('Importação — o que a empresa importa');
+   const qs=DATA.sections.flatMap(s=>s.questions);o.q=qs.find(q=>q.id==='dist-id-imp-terceiro');o.lab=qs.find(q=>q.id==='cq-lab');o.item=ddItemDe('dist-identificacao-preparacao','dist-id-imp-terceiro');
+   state.meta=JSON.parse(sv);dmCartao8();return o});
+  if(!im.tela||im.semImp)T.falha('importação: a triagem deveria aparecer só com a atividade Importar');
+  tem(im.terc,'declaração do detentor','enquadramento (para outro detentor)');tem(im.terc,'Laboratório não é exigido desta empresa','enquadramento (para outro detentor)');tem(im.vazio,'cabe ao detentor','item 12 vazio (para outro detentor)');
+  tem(im.det,'são obrigatórios','enquadramento (detentora)');tem(im.det,'em laboratório próprio ou de terceiro','enquadramento (IFA)');if(im.vazioDet!=='Não aplicável.')T.falha('item 12 vazio (detentora): '+im.vazioDet);
+  if(im.card8.includes('insumos_ifa')||!im.card8ifa.includes('insumos_ifa'))T.falha('etapa 8: blocos de insumos só quando importa IFA ou outros insumos');
+  if(!im.q||!/Capítulo VII, item 7, alínea “b”/.test(im.q.legal)||im.item!=='2')T.falha('pergunta da declaração do detentor: '+JSON.stringify(im.q)+' item '+im.item);
+  if(!im.lab||!/^Sendo detentora do registro/.test(im.lab.text)||!/art\. 3º, II/.test(im.lab.legal))T.falha('pergunta do laboratório próprio: '+JSON.stringify(im.lab));
   if(erros.length)T.falha('erros na página (atacadista): '+erros.join(' | '));
   await p.close();}
  /* ---------- Atacadista de gases medicinais ---------- */
@@ -62,7 +76,7 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   await f.evaluate(()=>location.reload());await p.waitForTimeout(4000);
   const g=p.frames().find(x=>x!==p.mainFrame());
   await g.evaluate(()=>UvisPadrao.vai({aba:'relatorio'}));await p.waitForTimeout(700);
-  const r=await g.evaluate(()=>({painel:!!document.querySelector('.p11'),botoes:[...document.querySelectorAll('[data-p11-doc]')].map(x=>x.dataset.p11Doc).join(','),ncs:document.querySelectorAll('.p11-nc').length,previa:!!document.querySelector('.rs-relatorio'),
+  const r=await g.evaluate(()=>({painel:!!document.querySelector('.p11'),botoes:[...document.querySelectorAll('[data-p11-doc]')].map(x=>x.dataset.p11Doc).join(','),ncs:document.querySelectorAll('.p11-nc').length,previa:!!document.querySelector('.rs-relatorio'),previaTx:(document.querySelector('.rs-relatorio')||{}).innerText||'',word:(document.querySelector('[data-rs-word]')||{}).textContent||'',
    I:RsPop011.texto('I'),II:RsPop011.texto('II'),P:RsPop011.texto('plano'),III:RsPop011.texto('III'),pend:[RsPop011.pendencias('I'),RsPop011.pendencias('II'),RsPop011.pendencias('plano')]}));
   if(!r.painel||r.botoes!=='I,II,plano,III')T.falha('gases: painel dos documentos do POP-011 ausente na aba Relatório ('+r.botoes+')');
   if(r.ncs!==1)T.falha('gases: esperava 1 não conformidade no painel, veio '+r.ncs);
@@ -70,6 +84,10 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   if(r.pend.some(x=>x.length))T.falha('gases: pendências inesperadas: '+JSON.stringify(r.pend));
   for(const s of ['RELATÓRIO DE INSPEÇÃO','Estabelecimento: Gases Teste Ltda','1.1. Nome Fantasia: GasTeste','☒ Filial','1.7. Responsável legal: João da Silva / CPF: 000.000.000-00','1.10. Atividades Licenciadas:','2.1. Autorização de Funcionamento n° 1.23456-7','2.3. Autorização Especial: não aplicável.','3.1. Período: 20/10/2026','☒ O estabelecimento está sendo inspecionado pela primeira vez.','11.4 Autoinspeção','Não conformidade nº 1 — maior: Não há programa de autoinspeção','Situação encontrada: último relatório de 2022 (RDC Anvisa nº 887/2024, art. 42','14.3 Cumpre as Boas Práticas com Ação Corretiva ☒','14.3.1 ATIVIDADES(S): Distribuir gases medicinais','Inspetores/ Instituição','19.5 Assinatura:'])tem(r.I,s,'gases, Anexo I');
   sem(r.I,'..','gases, Anexo I');
+  /* o relatório do módulo é o Anexo I (23/11/2026): prévia e botão principal; Lei 13.725 em toda irregularidade; campo vazio vira lacuna */
+  if(!/RELATÓRIO DE INSPEÇÃO/.test(r.previaTx)||!/Anexo I/.test(r.word))T.falha('gases: a prévia e o botão principal deveriam ser do Anexo I ('+r.word+')');
+  tem(r.I,'Lei Municipal nº 13.725/2004, art. 46','gases, Anexo I (Lei 13.725 na não conformidade)');
+  for(const s of ['Não categorizada','Avaliação de risco não informada','Não informado.'])sem(r.I,s,'gases, Anexo I (campo vazio deveria ser lacuna)');
   for(const s of ['Formulário de Comunicação de Não Conformidades','1.1. Razão Social: Gases Teste Ltda','Nome do inspetor: Inspetora Um','Norma e Artigo Infringido | RDC Anvisa nº 887/2024, art. 42','☐ Finalizada\n☒ Em andamento','☒ Avaliação Documental'])tem(r.II,s,'gases, Anexo II');
   sem(r.II,'13.725','gases, Anexo II (a não conformidade cita a norma específica)');
   for(const s of ['ANÁLISE DO PLANO DE AÇÃO','Ação proposta pela empresa | Refazer o programa','☒ Aceita'])tem(r.P,s,'gases, análise do plano');

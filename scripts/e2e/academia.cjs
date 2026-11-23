@@ -55,6 +55,14 @@ const ok=(c,m)=>{if(c)console.log('ok  '+m);else T.falha(m)};
  await f.evaluate(()=>document.querySelector('[data-rs-foto="placa"]').click());await p.waitForTimeout(1500);
  await f.evaluate(()=>{const b=document.querySelector('.mfm-ok');if(b)b.click()});await p.waitForTimeout(1500);
  s=await st();ok(!!(s.fotos&&s.fotos.placa),'foto vinculada à pergunta');
+ // segunda foto na mesma pergunta (23/11/2026)
+ await f.evaluate(()=>document.querySelector('[data-rs-foto="placa"]').click());await p.waitForTimeout(1500);
+ await f.evaluate(()=>{const b=document.querySelector('.mfm-ok');if(b)b.click()});await p.waitForTimeout(1500);
+ s=await st();ok(!!(s.fotos&&s.fotos.placa&&s.fotos['placa#2']),'segunda foto na mesma pergunta');
+ ok(await f.evaluate(()=>window.__uvsFotosItens().filter(x=>/\(foto [12]\)/.test(x.legenda)).length===2),'as duas fotos no relatório fotográfico');
+ ok(await f.evaluate(()=>document.querySelectorAll('[data-rs-sem-foto^="placa"]').length===2&&/Adicionar outra foto/.test(document.querySelector('[data-rs-foto="placa"]').textContent)),'tela com as duas fotos e o botão de adicionar outra');
+ await f.evaluate(()=>document.querySelector('[data-rs-sem-foto="placa"]').click());await p.waitForTimeout(500);
+ s=await st();ok(!!(s.fotos&&s.fotos.placa&&!s.fotos['placa#2']),'remover a primeira: a segunda passa a ser a primeira');
  // infrações
  await f.evaluate(()=>UvisPadrao.vai({aba:'infracoes'}));await p.waitForTimeout(400);
  ok(await f.evaluate(()=>!!document.querySelector('.rs-inf.rs-sug input[data-rs-inf="placa"]')),'infração da placa sugerida');
