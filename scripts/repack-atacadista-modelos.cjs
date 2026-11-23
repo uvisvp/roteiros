@@ -37,7 +37,18 @@ const TROCAS = [
    "if(n.k==='tbl')return '<table class=\"dd-tbl'+(n.o&&n.o.nb?' nb':'')+'\">'+"],
   /* ddPackage: rodapé */
   ["<w:p><w:pPr><w:jc w:val=\"right\"/></w:pPr>${ddRun((o.footer?o.footer+' · ':'')+'Página ',{sz:8})}${fld('PAGE')}${ddRun(' de ',{sz:8})}${fld('NUMPAGES')}</w:p></w:ftr>`;",
-   "<w:p><w:pPr><w:jc w:val=\"right\"/></w:pPr>${o.rodapeSo?ddRun(o.rodapeSo,{sz:8}):(o.rodape?ddRun(o.rodape+'\\n',{sz:8})+ddRun('Página ',{sz:8,b:true}):ddRun((o.footer?o.footer+' · ':'')+'Página ',{sz:8}))+fld('PAGE')+ddRun(' de ',{sz:8})+fld('NUMPAGES')}</w:p></w:ftr>`;"]
+   "<w:p><w:pPr><w:jc w:val=\"right\"/></w:pPr>${o.rodapeSo?ddRun(o.rodapeSo,{sz:8}):(o.rodape?ddRun(o.rodape+'\\n',{sz:8})+ddRun('Página ',{sz:8,b:true}):ddRun((o.footer?o.footer+' · ':'')+'Página ',{sz:8}))+fld('PAGE')+ddRun(' de ',{sz:8})+fld('NUMPAGES')}</w:p></w:ftr>`;"],
+  /* Situação da NC e estratégia de monitoramento: marcadas na análise do plano de ação, que o
+     POP-O-SNVS-011 (item 8.3) manda registrar no próprio Anexo II. Na comunicação ao fim da
+     inspeção, esses campos saem em branco; a exigência passa para o relatório final. */
+  ["out.push('NC nº '+(i+1)+': evidência não registrada.');if(!d.status)out.push('NC nº '+(i+1)+': marque a situação (Finalizada ou Em andamento).');if(!d.monitor)out.push('NC nº '+(i+1)+': marque a estratégia de monitoramento.')})",
+   "out.push('NC nº '+(i+1)+': evidência não registrada.')})"],
+  ["Revise a redação, a evidência, a categorização, a situação e a estratégia de monitoramento antes de emitir.",
+   "Revise a redação, a evidência e a categorização antes de emitir. A situação da NC e a estratégia de monitoramento são marcadas depois, na análise do plano de ação (POP-O-SNVS-011, item 8.3); até lá o Anexo II sai com esses campos em branco."],
+  ["${selectLike(n.id,'status','Situação da NC',['Finalizada','Em andamento'],d.status)}${selectLike(n.id,'monitor','Estratégia de monitoramento',['Avaliação documental','Inspeção de acompanhamento','Próxima inspeção planejada de BPDAIT conforme POP-O-SNVS-031','Sem necessidade de monitoramento'],d.monitor)}</div><div class=\"toolbar\"><button class=\"btn\" data-nc-compose=",
+   "</div><p class=\"mini\">Situação da NC e estratégia de monitoramento: marcadas na aba Análise do plano de ação.</p><div class=\"toolbar\"><button class=\"btn\" data-nc-compose="],
+  ["issues.push(n.id+': registre a análise do plano, responsável e data.');",
+   "issues.push(n.id+': registre a análise do plano, responsável e data.');if(!d.status||!d.monitor)issues.push(n.id+': marque a situação da NC e a estratégia de monitoramento na análise do plano.');"]
 ];
 
 let feito = false;
