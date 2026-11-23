@@ -113,18 +113,21 @@ function odoPergunta(s,i,n){
    saem à parte no relatório fotográfico em PDF (botão Fotos do cabeçalho). */
 function odoNotaHtml(i){const a=state.a[i.id]||'',nc=a==='nao';return `<label class="pu-anot">${nc?'Evidência da constatação':'Anotação'} <small>(digite ou dite)</small><textarea rows="2" data-evidence="${esc(i.id)}" placeholder="${nc?'O que foi constatado, onde, documento conferido…':'Opcional: o que foi visto ou conferido'}">${esc(state.evidence?.[i.id]||'')}</textarea></label>`}
 let odoFotoAberta='';
-function odoFotoHtml(id){const f=state.fotos&&state.fotos[id];
- return `<details class="pu-mais"${odoFotoAberta===id?' open':''}><summary>Foto${f?' ✓':''}</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-odo-foto="${esc(id)}">📷 ${f?'Trocar foto':'Tirar ou anexar foto'}</button>${f?`<button type="button" class="pu-btn" data-odo-sem-foto="${esc(id)}">Remover foto</button>`:''}</div>${f?`<img class="photo-thumb" alt="Foto vinculada à verificação" src="${esc(f)}">`:''}<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>`}
+/* Várias fotos por verificação (23/11/2026): a primeira em state.fotos[id], as seguintes em id#2, id#3… */
+function odoFotosDe(id){const F=state.fotos||{},pre=id+'#';return (F[id]?[id]:[]).concat(Object.keys(F).filter(k=>k.indexOf(pre)===0&&F[k]).sort((a,b)=>+a.slice(pre.length)-+b.slice(pre.length)))}
+function odoFotoLivre(id){const F=state.fotos||{};if(!F[id])return id;for(let n=2;;n++)if(!F[id+'#'+n])return id+'#'+n}
+function odoFotoHtml(id){const L=odoFotosDe(id);
+ return `<details class="pu-mais"${odoFotoAberta===id?' open':''}><summary>${L.length>1?'Fotos ('+L.length+')':'Foto'+(L.length?' ✓':'')}</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-odo-foto="${esc(id)}">📷 ${L.length?'Adicionar outra foto':'Tirar ou anexar foto'}</button></div>${L.map((k,n)=>`<figure class="odo-foto-item" style="margin:10px 0 0"><img class="photo-thumb" alt="Foto ${n+1} vinculada à verificação" src="${esc(state.fotos[k])}"><figcaption>${L.length>1?'Foto '+(n+1)+' ':''}<button type="button" class="pu-btn" data-odo-sem-foto="${esc(k)}">Remover${L.length>1?'':' foto'}</button></figcaption></figure>`).join('')}<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>`}
 function odoFoto(id){const fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.setAttribute('capture','environment');fi.style.display='none';
  fi.onchange=()=>{const f=fi.files&&fi.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>(window.__uvsReduzFoto||((u,cb)=>cb(u)))(r.result,url=>{state.fotos=state.fotos||{};const antes=state.fotos[id];state.fotos[id]=url;let ok=true;
+  r.onload=()=>(window.__uvsReduzFoto||((u,cb)=>cb(u)))(r.result,url=>{state.fotos=state.fotos||{};const base=id;id=odoFotoLivre(base);const antes=state.fotos[id];state.fotos[id]=url;let ok=true;
    try{save();ok=(localStorage.getItem(STORE)||'').indexOf(url.slice(-40))>=0}catch(e){ok=false}
    if(!ok){if(antes)state.fotos[id]=antes;else delete state.fotos[id];try{save()}catch(e){}alert('Não há mais espaço para fotos neste aparelho. Gere o relatório fotográfico e remova fotos antigas.')}
-   odoFotoAberta=id;odoRedesenha()});
+   odoFotoAberta=base;odoRedesenha()});
   r.readAsDataURL(f);fi.remove()};
  document.body.appendChild(fi);fi.click()}
 window.__uvsFotosMeta=()=>({estab:state.meta.company||'',data:state.meta.date||''});
-window.__uvsFotosItens=()=>{const out=[];DATA.route.forEach(s=>s.items.forEach(i=>{const f=state.fotos&&state.fotos[i.id];if(f)out.push({src:f,legenda:s.title+' — '+String(i.t).replace(/\s+/g,' ').slice(0,160)})}));return out};
+window.__uvsFotosItens=()=>{const out=[];DATA.route.forEach(s=>s.items.forEach(i=>{const L=odoFotosDe(i.id);L.forEach((k,n)=>out.push({src:state.fotos[k],legenda:s.title+' — '+String(i.t).replace(/\s+/g,' ').slice(0,160)+(L.length>1?' (foto '+(n+1)+')':'')}))}));return out};
 /* Salas existentes: a tipologia passa a ser múltipla (consultório Classe I + sala de imagem…). Ficam em
    state.salas, como antes; quem só tinha a tipologia única começa com ela. */
 const ODO_SALAS=['amb','classe1','classe1_sed','classe2','coletivo','imagem','cco'];
@@ -203,7 +206,7 @@ function iniciaPadrao(){
   contagem:id=>id==='roteiro'?counts().nao:id==='infracoes'?nSel():0,
   limpar:(s,it)=>{
    if(s.id==='perfil'){if(!it||it.id==='ident')state.meta=Object.assign({},DEF.meta);if(!it||it.id!=='ident'){state.p=structuredClone(DEF.p);state.assessment={};delete state.salas;delete state.salasMarcadas}}
-   else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id];delete state.fotos?.[i.id]})});
+   else (it?[it.id]:s.itens.map(x=>x.id)).forEach(eid=>{(odoEtapa(eid)?.items||[]).forEach(i=>{delete state.a[i.id];delete state.evidence?.[i.id];delete state.assessment?.[i.id];odoFotosDe(i.id).forEach(k=>delete state.fotos[k])})});
    save();renderProfile();renderMeta();
   },
   depois:n=>{if(n.aba==='roteiro')ui.tab='roteiro'}
@@ -221,7 +224,7 @@ function iniciaPadrao(){
    [odoEtapa(n.item)].filter(Boolean).forEach(s=>odoVisiveis(s).forEach(i=>{if(!state.a[i.id])state.a[i.id]='na'}));
    save();odoRedesenha();return}
   const fb=e.target.closest('[data-odo-foto]');if(fb){odoFoto(fb.dataset.odoFoto);return}
-  const sf=e.target.closest('[data-odo-sem-foto]');if(sf){if(confirm('Remover a foto desta verificação?')){delete state.fotos[sf.dataset.odoSemFoto];save();odoFotoAberta=sf.dataset.odoSemFoto;odoRedesenha()}return}
+  const sf=e.target.closest('[data-odo-sem-foto]');if(sf){if(confirm('Remover esta foto?')){const k=sf.dataset.odoSemFoto,b=k.split('#')[0],L=odoFotosDe(b),p=L.indexOf(k);if(p>=0){for(let j=p;j<L.length-1;j++)state.fotos[L[j]]=state.fotos[L[j+1]];delete state.fotos[L[L.length-1]]}else delete state.fotos[k];save();odoFotoAberta=b;odoRedesenha()}return}
   const at=e.target.closest('[data-odo-atalho]');
   if(at){const a=ODO_ATALHOS.find(x=>x.id===at.dataset.odoAtalho);if(a){state.salas=a.salas.slice();state.salasMarcadas=true;if(a.org)state.p.org=a.org;state.p.flags=state.p.flags||{};ODO_FLAGS_ATALHO.forEach(f=>{if((a.flags||[]).includes(f))state.p.flags[f]=true;else delete state.p.flags[f]});odoSincTip();save();renderProfile();odoRedesenha();toast(a.rot+': salas e características marcadas. Ajuste ao que existe no local.')}return}
   if(e.target.closest('[data-odo-word]')){download();return}

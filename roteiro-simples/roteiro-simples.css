@@ -18,6 +18,7 @@
 .rs-nc small{font-weight:400;color:#6b4c52}
 .rs-nc textarea{width:100%;min-height:60px;padding:9px 11px;border:1px solid #e3c2c8;border-radius:9px;font:inherit;font-size:.93rem}
 .rs-foto{display:block;max-width:100%;max-height:260px;margin-top:10px;border-radius:8px;border:1px solid #d6e0e6}
+.rs-foto-item{margin:10px 0 0}.rs-foto-item .rs-foto{margin-top:0}.rs-foto-item figcaption{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:.85rem;color:#456477}
 .rs-previa p{margin:0 0 6px;color:#26343d;font-size:.9rem;line-height:1.5}
 .rs-inf{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid #dbe3e8;border-radius:10px;background:#fff;margin:8px 0;cursor:pointer}
 .rs-inf input{flex:0 0 auto;width:22px;height:22px;margin-top:2px;accent-color:var(--pu-cor,#1E5A8A)}

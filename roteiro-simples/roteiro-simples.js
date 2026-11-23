@@ -296,12 +296,12 @@
     + '<div class="rs-amb-lista">' + ambGeral(c, T).map(ck(k, m)).join('') + '</div>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Outra irregularidade (descrever)</span><input type="text" data-rs-amb="' + esc(k) + '|outra" value="' + esc(a.outra || '') + '"></label>'
     + '<label class="pu-campo rs-campo rs-largo"><span>Anotação do ' + TM + ' <small>(digite ou dite)</small></span><textarea rows="2" data-rs-amb="' + esc(k) + '|obs">' + esc(a.obs || '') + '</textarea></label>'
-    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="amb:' + esc(c.id) + ':' + i + '">📷 ' + (f ? 'Trocar foto do ' + TM : 'Foto do ' + TM) + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="amb:' + esc(c.id) + ':' + i + '">Remover foto</button>' : '') + '<button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ' + TM + '</button></div>' + (f ? '<img class="rs-foto" alt="Foto do ' + TM + '" src="' + esc(f) + '">' : '') + '</div></details>'; }).join('');
+    + fotosHtml('amb:' + c.id + ':' + i, TM) + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-amb-del="' + esc(k) + '">Remover ' + TM + '</button></div></div></details>'; }).join('');
   return '<fieldset class="pu-campo rs-campo rs-largo rs-ambs"><legend>' + esc(c.rotulo) + '</legend><p class="pu-q-ajuda">' + esc(c.ajuda || 'Toque nos ambientes que o estabelecimento possui. Depois abra cada um e marque só o que estiver irregular. No relatório saem a lista dos ambientes e as irregularidades encontradas.') + '</p>'
    + '<div class="rs-amb-chips">' + chips + '</div>' + h + '</fieldset>'; }
  /* remove o ambiente i (as fotos dos seguintes sobem uma posição) */
  function ambRemove(id, i){ var L = ambLista(id).slice(); L.splice(i, 1); st.meta[id] = L;
-  for(var fi = i; fi <= L.length; fi++){ var ka = 'amb:' + id + ':' + fi, kb = 'amb:' + id + ':' + (fi + 1); if(st.fotos[kb]) st.fotos[ka] = st.fotos[kb]; else delete st.fotos[ka]; }
+  for(var fi = i; fi <= L.length; fi++){ var ka = 'amb:' + id + ':' + fi, kb = 'amb:' + id + ':' + (fi + 1); fotosApaga(ka); fotosDe(kb).forEach(function(k){ st.fotos[ka + k.slice(kb.length)] = st.fotos[k]; delete st.fotos[k]; }); }
   var ab = {}; Object.keys(ambAberto).forEach(function(k){ var p = k.split('|'); if(p[0] !== id) ab[k] = ambAberto[k]; else if(+p[1] < i) ab[k] = ambAberto[k]; else if(+p[1] > i) ab[id + '|' + (+p[1] - 1)] = ambAberto[k]; }); ambAberto = ab; }
  function ambTemDados(id, i){ var a = ambLista(id)[i] || {}; return Object.keys(a.m || {}).length || String(a.outra || '').trim() || String(a.obs || '').trim() || st.fotos['amb:' + id + ':' + i]; }
  function ambSet(k, campo, v){ var p = k.split('|'), L = ambLista(p[0]).slice(), i = +p[1]; L[i] = Object.assign({}, L[i]); if(campo === 'm'){ L[i].m = Object.assign({}, L[i].m); if(v.on) L[i].m[v.id] = true; else delete L[i].m[v.id]; } else L[i][campo] = v; st.meta[p[0]] = L; salva(); }
@@ -356,7 +356,7 @@
        + (!q.checks.semOutro && (!temOutro || a.indexOf('outro') >= 0) ? '<label class="pu-campo rs-campo"><span>' + esc(q.checks.outro || 'Outro (descrever)') + '</span><input type="text" data-rs-meta="chk_' + esc(q.id) + '_outro" value="' + esc(st.meta['chk_' + q.id + '_outro'] || '') + '"></label>' : '') + '</fieldset>'; })() : '')
    + (r === 'nc' && (q.inf || []).length ? '<p class="pu-q-ajuda rs-nc-inf">Enquadramento sugerido na aba Infrações: ' + esc(q.inf.map(function(i){ return INF[i] ? INF[i].texto : i; }).join(' · ')) + '</p>' : '')
    + anotHtml(q, r)
-   + '<details class="pu-mais"' + (fotoAberta === q.id ? ' open' : '') + '><summary>Foto' + (f ? ' ✓' : '') + '</summary><div><div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="' + esc(q.id) + '">📷 ' + (f ? 'Trocar foto' : 'Tirar ou anexar foto') + '</button>' + (f ? '<button type="button" class="pu-btn" data-rs-sem-foto="' + esc(q.id) + '">Remover foto</button>' : '') + '</div>' + (f ? '<img class="rs-foto" alt="Foto vinculada à verificação" src="' + esc(f) + '">' : '') + '<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>'
+   + '<details class="pu-mais"' + (fotoAberta === q.id ? ' open' : '') + '><summary>' + (function(n){ return n > 1 ? 'Fotos (' + n + ')' : 'Foto' + (n ? ' ✓' : ''); })(fotosDe(q.id).length) + '</summary><div>' + fotosHtml(q.id) + '<p class="pu-q-ajuda">As fotos saem à parte, no botão Fotos do cabeçalho.</p></div></details>'
    + (r ? '<details class="pu-mais rs-previa"' + (previaAberta[q.id] ? ' open' : '') + ' data-rs-previa="' + esc(q.id) + '"><summary>👁 Como sai no relatório</summary><div><p>' + esc(frase(q)) + '</p>' + (r === 'nc' ? '<p class="pu-q-ajuda">Fundamento: ' + esc(fundamento(comLei(q.r))) + '.</p>' : '') + '</div></details>' : '')
    + '</div>'; }
  /* item só de consulta (ex.: calendário de vacinação): texto e tabelas, sem respostas nem relatório */
@@ -591,15 +591,25 @@
    var pv = el.querySelector('.rs-relatorio'); if(pv) pv.insertAdjacentHTML('beforeend', '<div class="rs-p11-previa" style="white-space:pre-wrap">' + esc(window.RsPop011.texto('I').replace(/^\s+/, '')) + '</div>'); } }
 
  /* ---------- fotos ---------- */
- function foto(id){ var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none'; document.body.appendChild(inp);
+ /* Várias fotos por verificação (23/11/2026): a primeira fica em st.fotos[id] (como antes); as
+    seguintes em st.fotos[id + '#2'], '#3'… */
+ function fotosDe(base){ var o = st.fotos[base] ? [base] : [], pre = base + '#';
+  Object.keys(st.fotos).filter(function(k){ return k.indexOf(pre) === 0 && st.fotos[k]; }).sort(function(a, b){ return +a.slice(pre.length) - +b.slice(pre.length); }).forEach(function(k){ o.push(k); }); return o; }
+ function fotoLivre(base){ if(!st.fotos[base]) return base; for(var n = 2; ; n++) if(!st.fotos[base + '#' + n]) return base + '#' + n; }
+ function fotoBase(k){ return String(k).split('#')[0]; }
+ function fotosApaga(base){ fotosDe(base).forEach(function(k){ delete st.fotos[k]; }); }
+ function fotosHtml(base, nome){ var L = fotosDe(base);
+  return '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-rs-foto="' + esc(base) + '">📷 ' + (L.length ? 'Adicionar outra foto' : (nome ? 'Foto do ' + nome : 'Tirar ou anexar foto')) + '</button></div>'
+   + L.map(function(k, i){ return '<figure class="rs-foto-item"><img class="rs-foto" alt="Foto ' + (i + 1) + (nome ? ' do ' + esc(nome) : ' vinculada à verificação') + '" src="' + esc(st.fotos[k]) + '"><figcaption>' + (L.length > 1 ? 'Foto ' + (i + 1) + ' ' : '') + '<button type="button" class="pu-btn" data-rs-sem-foto="' + esc(k) + '">Remover' + (L.length > 1 ? '' : ' foto') + '</button></figcaption></figure>'; }).join(''); }
+ function foto(base){ var id = fotoLivre(base); var inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.style.display = 'none'; document.body.appendChild(inp);
   inp.onchange = function(){ var f = inp.files && inp.files[0]; inp.remove(); if(!f) return; var r = new FileReader();
-   r.onload = function(){ var grava = function(url){ var ant = st.fotos[id]; st.fotos[id] = url; fotoAberta = id; try { localStorage.setItem(STORE, JSON.stringify(st)); } catch(e){ if(ant) st.fotos[id] = ant; else delete st.fotos[id]; aviso('Sem espaço para a foto neste aparelho. Remova fotos antigas ou exporte as Salvas.'); } redesenha(); };
+   r.onload = function(){ var grava = function(url){ var ant = st.fotos[id]; st.fotos[id] = url; fotoAberta = fotoBase(id); try { localStorage.setItem(STORE, JSON.stringify(st)); } catch(e){ if(ant) st.fotos[id] = ant; else delete st.fotos[id]; aviso('Sem espaço para a foto neste aparelho. Remova fotos antigas ou exporte as Salvas.'); } redesenha(); };
     if(window.__uvsReduzFoto) window.__uvsReduzFoto(r.result, grava); else grava(r.result); };
    r.readAsDataURL(f); };
   inp.click(); }
  window.__uvsFotosMeta = function(){ return {estab: st.meta.fantasia || st.meta.razao || '', data: st.meta.data || ''}; };
- window.__uvsFotosItens = function(){ var out = ORDEM.filter(function(id){ return st.fotos[id]; }).map(function(id){ var o = ONDE[id]; return {src: st.fotos[id], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + numero(id) + ' ' + PERG[id].t}; });
-  Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var f = st.fotos['amb:' + id + ':' + i]; if(f) out.push({src: f, legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i, CAMPO[id])}); }); }); return out; };
+ window.__uvsFotosItens = function(){ var out = []; ORDEM.forEach(function(id){ var o = ONDE[id], L = fotosDe(id); L.forEach(function(k, i){ out.push({src: st.fotos[k], legenda: o.s.titulo + ' — ' + o.it.titulo + ' — ' + numero(id) + ' ' + PERG[id].t + (L.length > 1 ? ' (foto ' + (i + 1) + ')' : '')}); }); });
+  Object.keys(CAMPO).forEach(function(id){ if(CAMPO[id].tipo !== 'ambientes') return; ambLista(id).forEach(function(a, i){ var L = fotosDe('amb:' + id + ':' + i); L.forEach(function(k, j){ out.push({src: st.fotos[k], legenda: CAMPO[id].rotulo + ' — ' + ambNome(a, i, CAMPO[id]) + (L.length > 1 ? ' (foto ' + (j + 1) + ')' : '')}); }); }); }); return out; };
  if(window.UvsFotosPDF && window.UvsFotosPDF.adaptadores) window.UvsFotosPDF.adaptadores[D.app] = {titulo: 'Relatório fotográfico — ' + D.titulo, meta: window.__uvsFotosMeta, fotos: function(){ return Promise.resolve(window.__uvsFotosItens()); }};
 
  /* ---------- eventos ---------- */
@@ -625,7 +635,10 @@
   if((b = e.target.closest('[data-rs-eq-add]'))){ var La = eqLista(b.dataset.rsEqAdd).slice(); if(!La.length) La.push({}); La.push({}); st.meta[b.dataset.rsEqAdd] = La; salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-eq-del]'))){ var pd = b.dataset.rsEqDel.split('|'), Ld = eqLista(pd[0]).slice(); Ld.splice(+pd[1], 1); st.meta[pd[0]] = Ld; eqMsg = {}; salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-foto]'))){ foto(b.dataset.rsFoto); return; }
-  if((b = e.target.closest('[data-rs-sem-foto]'))){ delete st.fotos[b.dataset.rsSemFoto]; fotoAberta = b.dataset.rsSemFoto; salva(); redesenha(); return; }
+  if((b = e.target.closest('[data-rs-sem-foto]'))){ var kf = b.dataset.rsSemFoto, bf = fotoBase(kf), Lf = fotosDe(bf), pf = Lf.indexOf(kf);
+   /* as fotos seguintes sobem uma posição: a primeira continua em st.fotos[base] */
+   if(pf >= 0){ for(var j = pf; j < Lf.length - 1; j++) st.fotos[Lf[j]] = st.fotos[Lf[j + 1]]; delete st.fotos[Lf[Lf.length - 1]]; } else delete st.fotos[kf];
+   fotoAberta = bf; salva(); redesenha(); return; }
   if((b = e.target.closest('[data-rs-sugeridas]'))){ Object.keys(sugeridas()).forEach(function(k){ st.inf[k] = true; }); salva(); abaInfracoes(document.getElementById('pu-aba')); UvisPadrao.atualiza(); return; }
   if((b = e.target.closest('[data-rs-word]')) && D.pop011 && window.RsPop011){ b.disabled = true; Promise.resolve(window.RsPop011.emite('I')).then(function(){ b.disabled = false; }, function(){ b.disabled = false; aviso('Não foi possível gerar o Word.'); }); return; }
   if((b = e.target.closest('[data-rs-word]'))){ b.disabled = true; docx(blocos(), D.relatorio.titulo + ' — ' + D.titulo).then(function(blob){ baixa(blob, nomeArq('docx')); aviso('Relatório em Word gerado.'); }, function(){ aviso('Não foi possível gerar o Word.'); }).then(function(){ b.disabled = false; }); return; }
@@ -678,7 +691,7 @@
    depois: function(nav){ if(nav.aba !== 'roteiro' || nav.secao) return; var g = document.querySelector('.pu-secoes-grade'); if(!g || g.querySelector('[data-rs-apagar]')) return;
     var z = document.createElement('div'); z.className = 'rs-apagar'; z.innerHTML = '<div class="rs-apagar-txt"><strong>Apagar dados da inspeção</strong><span>Remove todas as respostas, anotações, fotos e dados desta inspeção salvos neste aparelho. Não há como desfazer; para guardar, use antes o botão Salvas.</span></div><button type="button" class="rs-apagar-btn" data-rs-apagar><span aria-hidden="true">🗑</span> Apagar dados</button>'; g.appendChild(z); },
    limpar: function(s, it){ var S = D.secoes.filter(function(x){ return x.id === s.id; })[0];
-    (it ? S.itens.filter(function(x){ return x.id === it.id; }) : S.itens).forEach(function(I){ (I.campos || []).forEach(function(c){ delete st.meta[c.id]; }); (I.perguntas || []).forEach(function(q){ delete st.r[q.id]; delete st.sit[q.id]; delete st.fotos[q.id]; delete st.pt[q.id]; delete st.auto[q.id]; }); (I.campos || []).forEach(function(c){ Object.keys(st.fotos).forEach(function(k){ if(k.indexOf('amb:' + c.id + ':') === 0) delete st.fotos[k]; }); }); });
+    (it ? S.itens.filter(function(x){ return x.id === it.id; }) : S.itens).forEach(function(I){ (I.campos || []).forEach(function(c){ delete st.meta[c.id]; }); (I.perguntas || []).forEach(function(q){ delete st.r[q.id]; delete st.sit[q.id]; fotosApaga(q.id); delete st.pt[q.id]; delete st.auto[q.id]; }); (I.campos || []).forEach(function(c){ Object.keys(st.fotos).forEach(function(k){ if(k.indexOf('amb:' + c.id + ':') === 0) delete st.fotos[k]; }); }); });
     salva(); }
   });
   try { parent.postMessage({__casca: 'pronto'}, '*'); } catch(e){}

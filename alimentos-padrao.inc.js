@@ -95,15 +95,15 @@ function saSecoes() {
 }
 
 function saPergunta(it, n, b) {
-  var v = st.resp[it.id] || '', fora = saForaDoPerfil(it, b), foto = st.fotos && st.fotos[it.id], nota = st.notas[it.id];
+  var v = st.resp[it.id] || '', fora = saForaDoPerfil(it, b), fotos = saFotosDe(it.id), foto = fotos.length, nota = st.notas[it.id];
   var h = '<div class="pu-q' + (fora ? ' pu-q-fora' : '') + '" data-sa-q="' + saEsc(it.id) + '"><p class="pu-q-texto"><b>' + n + '.</b> ' + saEsc(it.text) + '</p>';
   if (it.critical || fora) h += '<div class="pu-tags">' + (it.critical ? '<span class="pu-tag">Prioritário</span>' : '') + (fora ? '<span class="pu-tag pu-tag-fora">Fora do perfil atual</span>' : '') + '</div>';
   if (fora) h += '<p class="pu-q-ajuda">Respondida antes da mudança do perfil. Mantenha, se a verificação foi feita, ou <button type="button" class="pu-link" data-sa-apaga="' + saEsc(it.id) + '">apague a resposta</button>.</p>';
   h += '<div class="pu-cit"></div>';
   h += '<div class="pu-resp" role="group" aria-label="Resposta">' + SA_RESP.map(function (r) { return '<button type="button" data-sa-resp="' + saEsc(it.id) + '" data-v="' + r[0] + '" aria-pressed="' + (v === r[0]) + '">' + r[1] + '</button>'; }).join('') + '</div>';
   h += '<details class="pu-mais"><summary>Foto, nota e fontes' + (foto || nota ? ' ✓' : '') + '</summary><div>'
-    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-sa-foto="' + saEsc(it.id) + '">📷 ' + (foto ? 'Trocar foto' : 'Tirar ou anexar foto') + '</button>' + (foto ? '<button type="button" class="pu-btn" data-sa-sem-foto="' + saEsc(it.id) + '">Remover foto</button>' : '') + '</div>'
-    + (foto ? '<img class="photo-thumb" alt="Foto vinculada ao item" src="' + saEsc(foto) + '">' : '')
+    + '<div class="pu-foto-acoes"><button type="button" class="pu-btn" data-sa-foto="' + saEsc(it.id) + '">📷 ' + (foto ? 'Adicionar outra foto' : 'Tirar ou anexar foto') + '</button></div>'
+    + fotos.map(function (k, n) { return '<figure style="margin:10px 0 0"><img class="photo-thumb" alt="Foto ' + (n + 1) + ' vinculada ao item" src="' + saEsc(st.fotos[k]) + '"><figcaption>' + (fotos.length > 1 ? 'Foto ' + (n + 1) + ' ' : '') + '<button type="button" class="pu-btn" data-sa-sem-foto="' + saEsc(k) + '">Remover' + (fotos.length > 1 ? '' : ' foto') + '</button></figcaption></figure>'; }).join('')
     + '<label class="pu-campo">Nota factual<textarea data-sa-nota="' + saEsc(it.id) + '" rows="3" placeholder="Anotação factual, no momento da constatação.">' + saEsc(nota || '') + '</textarea></label>'
     + ((it.links || []).length ? (it.links || []).map(function (lk) { return '<a class="prov-nota" style="display:block;margin:6px 0" href="' + saEsc(lk.url) + '" target="_blank" rel="noopener noreferrer">' + saEsc(lk.label) + ' ↗</a>'; }).join('') : '')
     + (it.legal ? '<p class="pu-q-ajuda">Referência: ' + saEsc(it.legal) + '</p>' : '')
@@ -208,7 +208,18 @@ function saRedesenha() {
 }
 function saItemAberto() { var n = UvisPadrao.estado(); return n.secao !== 'perfil' && n.item ? saBloco(n.item) : null; }
 
-function saFoto(id) {
+/* Várias fotos por item (23/11/2026): a primeira em st.fotos[id], as seguintes em id#2, id#3…
+   O relatório fotográfico (window.__uvsFotosItens) é redefinido aqui para levar todas. */
+function saFotosDe(id) { var F = st.fotos || {}, pre = id + '#'; return (F[id] ? [id] : []).concat(Object.keys(F).filter(function (k) { return k.indexOf(pre) === 0 && F[k]; }).sort(function (a, b) { return +a.slice(pre.length) - +b.slice(pre.length); })); }
+function saFotoLivre(id) { var F = st.fotos || {}; if (!F[id]) return id; for (var n = 2; ; n++) if (!F[id + '#' + n]) return id + '#' + n; }
+function saFotosPatch() { var velho = window.__uvsFotosItens; if (!velho || velho.__sa) return; var nova = function () {
+  var out = velho ? velho() : [], extra = [];
+  /* a função do módulo só leva a primeira foto de cada item: acrescenta as demais logo depois dela */
+  out.forEach(function (f) { extra.push(f); var id = Object.keys(st.fotos || {}).filter(function (k) { return st.fotos[k] === f.src && k.indexOf('#') < 0; })[0]; if (!id) return;
+   var L = saFotosDe(id); if (L.length < 2) return; f.legenda += ' (foto 1)'; L.slice(1).forEach(function (k, n) { extra.push({src: st.fotos[k], legenda: f.legenda.replace(/ \(foto 1\)$/, '') + ' (foto ' + (n + 2) + ')'}); }); });
+  return extra; }; nova.__sa = true; window.__uvsFotosItens = nova; }
+saFotosPatch(); window.addEventListener('load', saFotosPatch);
+function saFoto(base) { var id = saFotoLivre(base);
   var fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*'; fi.setAttribute('capture', 'environment'); fi.style.display = 'none';
   fi.onchange = function () {
     var f = fi.files && fi.files[0]; if (!f) return;
@@ -265,7 +276,7 @@ function iniciaPadrao() {
         if (!it || it.id === 'processos') { st.flags = ini.flags; st.flagsAuto = {}; }
       } else {
         (it ? [it.id] : s.itens.map(function (x) { return x.id; })).forEach(function (bid) {
-          ((saBloco(bid) || {}).items || []).forEach(function (q) { delete st.resp[q.id]; delete st.notas[q.id]; if (st.fotos) delete st.fotos[q.id]; });
+          ((saBloco(bid) || {}).items || []).forEach(function (q) { delete st.resp[q.id]; delete st.notas[q.id]; if (st.fotos) saFotosDe(q.id).forEach(function (k) { delete st.fotos[k]; }); });
         });
       }
       salva();
@@ -291,7 +302,7 @@ function iniciaPadrao() {
     }
     if ((b = e.target.closest('[data-sa-sugere]'))) { saMarcaSetor(b.dataset.saSugere, true); salva(); saRedesenha(); return; }
     if ((b = e.target.closest('[data-sa-foto]'))) { saFoto(b.dataset.saFoto); return; }
-    if ((b = e.target.closest('[data-sa-sem-foto]'))) { if (confirm('Remover a foto deste item?')) { if (st.fotos) delete st.fotos[b.dataset.saSemFoto]; salva(); saRedesenha(); } return; }
+    if ((b = e.target.closest('[data-sa-sem-foto]'))) { if (confirm('Remover esta foto?') && st.fotos) { var kf = b.dataset.saSemFoto, Lf = saFotosDe(kf.split('#')[0]), pf = Lf.indexOf(kf); if (pf >= 0) { for (var j = pf; j < Lf.length - 1; j++) st.fotos[Lf[j]] = st.fotos[Lf[j + 1]]; delete st.fotos[Lf[Lf.length - 1]]; } else delete st.fotos[kf]; salva(); saRedesenha(); } return; }
     if ((b = e.target.closest('[data-sa-na]'))) {
       var bl = saItemAberto(); if (!bl) return;
       saItensVisiveis(bl).forEach(function (q) { if (!st.resp[q.id]) st.resp[q.id] = 'na'; });
