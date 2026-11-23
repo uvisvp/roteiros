@@ -49,6 +49,20 @@ const sem=(t,s,nome)=>{if(t.includes(s))T.falha(nome+': não deveria trazer “'
   /* citações que o botão não abria */
   const res=await f.evaluate(async L=>{const out=[];if(!window.LegisV12)return ['LegisV12 ausente'];/* sem rede o banco não carrega: a conferência fica para o teste com rede */let base=null;try{base=await LegisV12.texto({law:'RDC Anvisa nº 430/2020, art. 14',device:'RDC Anvisa nº 430/2020, art. 14'})}catch(e){}if(!base)return ['SEM_REDE'];for(const [id,legal] of L)for(const parte of String(legal).split(';').map(x=>x.trim()).filter(Boolean)){if(/13\.725/.test(parte))continue;let a=null;try{a=await LegisV12.texto({law:parte,device:parte})}catch(e){}if(!(a&&a.some(x=>x.exato&&String(x.texto).trim())))out.push(id+': '+parte);else if(/430\/2020, art\. (15|53)\b/.test(parte)&&!/^Art\. (15|53)\./.test(a[0].texto))out.push(id+': abre o preâmbulo — '+parte)}return out},r.legais.filter(x=>/^(ifa|si)-|^q39[367]$|^q417$|^q402$|expedicao-documento|^q1[0-9]{2}$/.test(x[0])));
   if(res[0]==='SEM_REDE')console.log('aviso: banco de legislação inacessível neste ambiente; abertura das citações não conferida');else if(res.length)T.falha('citações sem texto: '+res.slice(0,8).join(' | '));
+  /* importação: enquadramento (laboratório só da detentora do registro; IFA em laboratório próprio ou de terceiro) */
+  const im=await f.evaluate(()=>{const o={};const sv=JSON.stringify(state.meta);
+   state.meta.activities=['Distribuir','Importar'];state.meta.flags=[];o.tela=distTela1View().includes('Importação — o que a empresa importa');
+   state.meta.flags=['imp_terceiro'];o.terc=dmEnquadramento();o.vazio=ddVazio('12.1',{todasNA:false});o.card8=(dmCartao8(),DIST_CARDS[7][1].slice());
+   state.meta.flags=['imp_detentor','imp_ifa'];o.det=dmEnquadramento();o.card8ifa=(dmCartao8(),DIST_CARDS[7][1].slice());o.vazioDet=ddVazio('12.1',{todasNA:false});
+   state.meta.activities=['Distribuir'];o.semImp=distTela1View().includes('Importação — o que a empresa importa');
+   const qs=DATA.sections.flatMap(s=>s.questions);o.q=qs.find(q=>q.id==='dist-id-imp-terceiro');o.lab=qs.find(q=>q.id==='cq-lab');o.item=ddItemDe('dist-identificacao-preparacao','dist-id-imp-terceiro');
+   state.meta=JSON.parse(sv);dmCartao8();return o});
+  if(!im.tela||im.semImp)T.falha('importação: a triagem deveria aparecer só com a atividade Importar');
+  tem(im.terc,'declaração do detentor','enquadramento (para outro detentor)');tem(im.terc,'Laboratório não é exigido desta empresa','enquadramento (para outro detentor)');tem(im.vazio,'cabe ao detentor','item 12 vazio (para outro detentor)');
+  tem(im.det,'são obrigatórios','enquadramento (detentora)');tem(im.det,'em laboratório próprio ou de terceiro','enquadramento (IFA)');if(im.vazioDet!=='Não aplicável.')T.falha('item 12 vazio (detentora): '+im.vazioDet);
+  if(im.card8.includes('insumos_ifa')||!im.card8ifa.includes('insumos_ifa'))T.falha('etapa 8: blocos de insumos só quando importa IFA ou outros insumos');
+  if(!im.q||!/Capítulo VII, item 7, alínea “b”/.test(im.q.legal)||im.item!=='2')T.falha('pergunta da declaração do detentor: '+JSON.stringify(im.q)+' item '+im.item);
+  if(!im.lab||!/^Sendo detentora do registro/.test(im.lab.text)||!/art\. 3º, II/.test(im.lab.legal))T.falha('pergunta do laboratório próprio: '+JSON.stringify(im.lab));
   if(erros.length)T.falha('erros na página (atacadista): '+erros.join(' | '));
   await p.close();}
  /* ---------- Atacadista de gases medicinais ---------- */

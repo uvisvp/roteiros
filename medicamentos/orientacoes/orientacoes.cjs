@@ -135,15 +135,15 @@ module.exports = {
     {t: 'Confira a data do último ensaio (requalificação periódica) gravada no cilindro; cilindro com prazo vencido não deve ser envasado nem expedido.', f: 'Normas técnicas de requalificação de cilindros (ABNT) e RDC Anvisa nº 870/2024, art. 7º'}
    ],
    areas: [
-    {t: 'Cilindros em pé, presos por corrente ou suporte, com capacete de proteção da válvula; área ventilada, coberta e longe de fontes de calor; cheios separados de vazios e gases medicinais separados dos industriais.', f: 'RDC Anvisa nº 887/2024, arts. 7º, 53 e 54'},
+    {t: 'Área de cilindros e tanques ventilada, coberta e protegida do tempo, com tamanho proporcional às operações; segregação entre gases medicinais e não medicinais, entre gases diferentes e entre recipientes cheios e vazios.', f: 'RDC Anvisa nº 887/2024, arts. 7º, 53 e 54'},
     {t: 'Oxigênio é comburente: sem óleo ou graxa em válvulas e conexões; separação de inflamáveis; sinalização de “proibido fumar”.', f: 'ABNT NBR 14619 (incompatibilidade química); fichas de informações de segurança (FDS)'}
    ],
    recebimento: [
     {t: 'No recebimento confira: lote e validade na nota fiscal, lacre íntegro, rótulo, cor e data de requalificação do cilindro; carga fora do padrão vai para quarentena.', f: 'RDC Anvisa nº 887/2024, arts. 60 e 61'}
    ],
    transporte: [
-    {t: 'Gases são produtos perigosos (classe 2 da ONU): o transporte rodoviário segue o regulamento da ANTT, com rótulos de risco e painéis de segurança, ficha de emergência, conjunto de equipamentos para emergência e motorista com curso MOPP, respeitadas as isenções por quantidade.', f: 'Resolução ANTT nº 5.998/2022; ABNT NBR 7500, NBR 7503 e NBR 9735'},
-    {t: 'Cilindros fixados na posição vertical, com capacete, em veículo ventilado; nunca transportar cilindros em compartimento fechado junto ao motorista.', f: 'Resolução ANTT nº 5.998/2022; RDC Anvisa nº 887/2024, art. 65'}
+    {t: 'Gases são produtos perigosos: o transporte rodoviário segue o regulamento da ANTT, com veículo sinalizado (rótulos de risco e painéis de segurança), documento para o transporte, conjunto de equipamentos para emergência fora do compartimento de carga e EPI na cabine, respeitadas as isenções por quantidade limitada. A fiscalização dessas exigências cabe à ANTT e aos órgãos de trânsito.', f: 'Resolução ANTT nº 5.998/2022, arts. 6º, 8º, 9º, 23 e 46'},
+    {t: 'Cilindros acondicionados e estivados no compartimento de carga de modo que não possam deslocar-se, cair ou tombar; gases medicinais segregados dos não medicinais e em condições ambientais que cumpram as especificações dos fabricantes.', f: 'Resolução ANTT nº 5.998/2022, art. 16; RDC Anvisa nº 887/2024, art. 65, II'}
    ],
    fracionamento: [
     {t: 'Tanques criogênicos estacionários são vasos de pressão: prontuário, inspeções de segurança periódicas e profissional habilitado.', f: 'NR-13 (Caldeiras, vasos de pressão, tubulações e tanques metálicos de armazenamento)'},
