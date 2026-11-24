@@ -12,6 +12,7 @@
         texto (o.rodapeSo), como nos anexos publicados.
    Não usar scripts/repack-distribuidora-docs.cjs: ele reinjeta as fontes antigas e apaga as
    trocas feitas pelos outros scripts dentro da região.
+      3. Injeta também distribuidora-xivh.js (licença inicial pelo Formulário XIV.H), na mesma região.
    Idempotente. Uso: node scripts/repack-atacadista-modelos.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
@@ -19,8 +20,12 @@ const root = path.join(__dirname, '..'), file = path.join(root, 'index.html');
 let {html, lz} = unpack(file);
 const ID = 'app--distribuidoras-transportadoras';
 const INI = '/*__DIST_MODELOS_INICIO__*/', FIM = '/*__DIST_MODELOS_FIM__*/', ANCORA = '/*__DIST_DOCS_FIM__*/';
-const fonte = fs.readFileSync(path.join(root, 'distribuidora-modelos.js'), 'utf8');
-new Function('state', 'DATA', 'document', 'window', fonte.replace(/\ndmRoteiro\(\);[\s\S]*$/, ''));
+const modelos = fs.readFileSync(path.join(root, 'distribuidora-modelos.js'), 'utf8');
+new Function('state', 'DATA', 'document', 'window', modelos.replace(/\ndmRoteiro\(\);[\s\S]*$/, ''));
+/* Formulário XIV.H (trilha “xivh”, card “Atacadista — licença inicial”): só compila aqui, roda no bloco */
+const xivh = fs.readFileSync(path.join(root, 'distribuidora-xivh.js'), 'utf8');
+new Function(xivh.replace(/\nxhIniciar\(\);[\s\S]*$/, ''));
+const fonte = modelos.trimEnd() + '\n' + xivh;
 
 const TROCAS = [
   /* ddTbl */

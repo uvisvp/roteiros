@@ -121,8 +121,11 @@ function ddAnexoIMontar(o,fotos){
  /* 14 */
  it(14,'Conclusão');
  const cl=state.plan.classification||'',ativ=state.plan.activities||(m.activities||[]).join(', ');
+ /* Formulário XIV.H (distribuidora-xivh.js): conclusão por atividade e classe, cada uma na sua linha */
+ const xc=typeof xhConclusao==='function'?xhConclusao():null,marca=t=>xc?xc[t].length>0:cl===t,lista=t=>xc?xc[t].join('; '):(cl===t?ativ:'');
  nodes.push({k:'p',al:'left',t:R.emAtividade==='Não'?'Estabelecimento em atividade: não.':'Estabelecimento em atividade'});
- nodes.push({k:'tbl',cols:[4677,4677],o:{hf:''},rows:[['14.1','Cumpre as Boas Práticas','14.1.1'],['14.3','Cumpre as Boas Práticas com Ação Corretiva','14.3.1'],['14.4','Não cumpre as Boas Práticas','14.4.1']].map(([n,t,na])=>[{sz:10,runs:[[n+' '+t+' '+(cl===t?'☒':'☐'),{b:true}]]},{sz:10,runs:[[na+' ATIVIDADES(S): ',{b:true}],[cl===t?ativ:'',{}]]}])});
+ nodes.push({k:'tbl',cols:[4677,4677],o:{hf:''},rows:[['14.1','Cumpre as Boas Práticas','14.1.1'],['14.3','Cumpre as Boas Práticas com Ação Corretiva','14.3.1'],['14.4','Não cumpre as Boas Práticas','14.4.1']].map(([n,t,na])=>[{sz:10,runs:[[n+' '+t+' '+(marca(t)?'☒':'☐'),{b:true}]]},{sz:10,runs:[[na+' ATIVIDADES(S): ',{b:true}],[lista(t),{}]]}])});
+ if(xc){if(xc.decl344)p(xc.decl344);if(xc.inicial)p(xc.inicial)}
  /* 15 */
  it(15,'Medidas adotadas/ documentos emitidos');
  const com=state.cycle&&state.cycle.communication;const med=[];
