@@ -49,6 +49,51 @@ const T=require('./lib.cjs');
   if(!/Conclusão por atividade e classe/.test(r.plan)||!/data-xh-cel="dist\|01"/.test(r.plan))T.falha('análise do plano: quadro de conclusão ausente');
   const a1=r.a1;
   for(const s of ['14.1 Cumpre as Boas Práticas ☒','14.3 Cumpre as Boas Práticas com Ação Corretiva ☒','14.4 Não cumpre as Boas Práticas ☒','Fracionar insumo farmacêutico: insumos farmacêuticos, insumos farmacêuticos sujeitos ao controle especial','Importar: gases medicinais','Estabelecimento em atividade: não.','cumpre os requisitos de controle especial da Portaria SVS/MS nº 344/1998 e da Portaria SVS/MS nº 6/1999','(RDC Anvisa nº 16/2014, art. 15, § 4º)','Licença inicial: foram verificados'])if(!a1.includes(s))T.falha('Anexo I, item 14: falta “'+s+'”');
+  /* módulo de insumos, importação de insumos, fracionamento e laboratório */
+  const m=await f.evaluate(async()=>{const o={};const x=xh();
+   x.ativ=['dist','arm'];x.classes=['01'];xhSync();o.sem=DATA.sections.filter(s=>s.__xh).map(s=>s.id);dmCartao8();o.card8sem=DIST_CARDS[7][0];
+   x.classes=['01','03'];xhSync();o.ins=DATA.sections.filter(s=>s.__xh).map(s=>s.id);
+   x.ativ=['dist','arm','imp','frac'];x.classes=['01','03','15'];xhSync();dmCartao8();o.tudo=DATA.sections.filter(s=>s.__xh).map(s=>s.id);o.card8=DIST_CARDS[7].slice();
+   const qs=DATA.sections.filter(s=>s.__xh).flatMap(s=>s.questions);o.n=qs.length;o.ids=qs.map(q=>q.id);
+   o.mal=qs.filter(q=>!q.legal||!/«evidência» \(/.test(q.ncText||'')||!/\?$/.test(q.text)).map(q=>q.id);
+   o.reg=['xi-13','xr-07','xa-08','xo-10','xl-13'].filter(k=>!XH_REGISTRO.includes(k));o.sis=['xl-01','xf-01','xm-02'].filter(k=>XH_REGISTRO.includes(k));
+   state.answers['xf-04']={status:'NC',evidence:'ralo na sala de fracionamento de sólidos.'};state.answers['xl-01']={status:'NC',evidence:'análises microbiológicas feitas fora da empresa.'};state.answers['xm-02']={status:'C'};save();
+   o.item92=ddPerguntas('9.2').map(z=>z.q.id);o.item121=ddPerguntas('12.1').map(z=>z.q.id);o.item122=ddPerguntas('12.2').map(z=>z.q.id);
+   const a1=await ddAnexoI({final:false});o.a1=a1.nodes.map(ddNodeText).join('\n');
+   /* citações: abrem o texto no banco de legislação, quando ele carrega */
+   o.cit=[];let base=null;try{base=await LegisV12.texto({law:'RDC Anvisa nº 430/2020, art. 14',device:'RDC Anvisa nº 430/2020, art. 14'})}catch(e){}
+   if(!base)o.cit=['SEM_REDE'];else for(const q of qs)for(const parte of String(q.legal).split(';').map(s=>s.trim()).filter(Boolean)){let a=null;try{a=await LegisV12.texto({law:parte,device:parte})}catch(e){}if(!(a&&a.some(z=>z.exato&&String(z.texto).trim())))o.cit.push(q.id+': '+parte)}
+   return o});
+  if(m.sem.length)T.falha('módulo de insumos: sem classe 03/15 não deveria haver blocos: '+m.sem);
+  if(!/^Controle de qualidade/i.test(m.card8sem))T.falha('etapa 8 sem insumos deveria manter o título original: '+m.card8sem);
+  for(const s of ['xh-ins-geral','xh-ins-receb','xh-ins-arm','xh-ins-exp'])if(!m.ins.includes(s))T.falha('módulo de insumos: falta o bloco '+s);
+  for(const s of ['xh-ins-imp','xh-frac-area','xh-lab-inst'])if(m.ins.includes(s))T.falha('módulo de insumos: bloco '+s+' sem importar/fracionar marcado');
+  for(const s of ['xh-ins-imp','xh-frac-area','xh-frac-op','xh-frac-val','xh-lab-inst','xh-lab-ativ'])if(!m.tudo.includes(s))T.falha('módulo completo: falta o bloco '+s);
+  if(!/^Insumos, fracionamento/.test(m.card8[0])||!m.card8[1].includes('xh-frac-op')||!m.card8[1].includes('insumos_gerais'))T.falha('etapa 8: '+JSON.stringify(m.card8));
+  if(new Set(m.ids).size!==m.ids.length)T.falha('módulo: ids repetidos');
+  if(m.mal.length)T.falha('módulo: pergunta sem citação, sem texto de NC ou sem interrogação: '+m.mal.join(', '));
+  if(m.reg.length||m.sis.length)T.falha('módulo: classificação registro/sistema errada: '+m.reg.concat(m.sis).join(', '));
+  if(!m.item92.includes('xf-04')||!m.item121.includes('xl-01')||!m.item122.includes('xm-02'))T.falha('módulo: perguntas fora do item do relatório');
+  for(const s of ['Há ralo em sala de fracionamento: ralo na sala de fracionamento de sólidos','RDC Anvisa nº 204/2006, Anexo, item 4.3.9','A fracionadora não possui laboratório de controle da qualidade próprio'])if(!m.a1.includes(s))T.falha('Anexo I: falta “'+s+'”');
+  if(m.cit[0]==='SEM_REDE')console.log('aviso: banco de legislação inacessível; abertura das citações do módulo não conferida');else if(m.cit.length)console.log('citações do módulo que não abrem texto ('+m.cit.length+'): '+m.cit.slice(0,12).join(' | '));
+  /* controle especial (02/15) e gases medicinais (20) */
+  const g=await f.evaluate(async()=>{const o={};const x=xh();
+   x.ativ=['dist','trp'];x.classes=['02','20'];xhSync();dmCartao8();o.secs=DATA.sections.filter(s=>s.__xh).map(s=>s.id);o.card8=DIST_CARDS[7][0];
+   const qs=DATA.sections.filter(s=>s.__xh).flatMap(s=>s.questions);o.ids=qs.map(q=>q.id);o.legal=Object.fromEntries(qs.map(q=>[q.id,q.legal]));
+   o.mal=qs.filter(q=>!q.legal||!/«evidência» \(/.test(q.ncText||'')).map(q=>q.id);o.reg=['xg-notas','xg-lacre','xg-rotulo','xc-09'].filter(k=>!XH_REGISTRO.includes(k));
+   x.ativ=['dist'];x.classes=['15'];xhSync();o.so15=DATA.sections.filter(s=>s.__xh).flatMap(s=>s.questions).map(q=>q.id);
+   o.cit=[];let base=null;try{base=await LegisV12.texto({law:'RDC Anvisa nº 430/2020, art. 14',device:'RDC Anvisa nº 430/2020, art. 14'})}catch(e){}
+   if(!base)o.cit=['SEM_REDE'];else for(const q of qs)for(const parte of String(q.legal).split(';').map(s=>s.trim()).filter(Boolean)){let a=null;try{a=await LegisV12.texto({law:parte,device:parte})}catch(e){}if(!(a&&a.some(z=>z.exato&&String(z.texto).trim())))o.cit.push(q.id+': '+parte)}
+   return o});
+  for(const s of ['xh-ce','xh-gas-reg','xh-gas-areas','xh-gas-rast','xh-gas-transp'])if(!g.secs.includes(s))T.falha('controle especial e gases: falta o bloco '+s);
+  for(const s of ['xh-ins-geral','xh-frac-op'])if(g.secs.includes(s))T.falha('classes 02 e 20 não deveriam abrir '+s);
+  if(g.card8!=='Controlados e gases')T.falha('etapa 8: título '+g.card8);
+  if(g.ids.includes('xc-04')||!g.ids.includes('xc-07'))T.falha('controle especial: xc-04 só com classe 15 e xc-07 só com classe 02');
+  if(!g.so15.includes('xc-04')||g.so15.includes('xc-07'))T.falha('controle especial, classe 15: '+g.so15.filter(x=>/^xc-/.test(x)));
+  if(!/^RDC Anvisa nº 887\/2024, art\. 9º, § 1º$/.test(g.legal['xg-afe']||''))T.falha('gases: citação da AFE '+g.legal['xg-afe']);
+  if(/dispens|prescri/.test(g.ids.join(' ')))T.falha('gases: dispensação fora do Formulário XIV.H');
+  if(g.mal.length||g.reg.length)T.falha('controle especial e gases: '+g.mal.concat(g.reg).join(', '));
+  if(g.cit[0]!=='SEM_REDE'&&g.cit.length)console.log('citações de controle especial e gases que não abrem texto ('+g.cit.length+'): '+g.cit.slice(0,12).join(' | '));
   if(erros.length)T.falha('erros na página: '+erros.slice(0,3).join(' | '));
   await p.close()}
  /* card comum: sem o painel do XIV.H numa inspeção nova */
