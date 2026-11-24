@@ -587,6 +587,7 @@ h = C.grupo(h, 'grupo-drogaria', {titulo: 'Drogaria', itens: [
   ['Vacinação em drogaria', 'Serviço de vacinação em farmácia ou drogaria (RDC 197/2017 e RDC 44/2009).', 'vacina-drogaria']]});
 h = C.grupo(h, 'grupo-atacadista', {titulo: 'Atacadista de medicamentos', itens: [
   ['Atacadista de medicamentos', 'Distribuidora e/ou transportadora (RDC 430/2020): escolha o tipo de operação na identificação.', 'distribuidoras-transportadoras'],
+  ['Atacadista — licença inicial (Formulário XIV.H)', 'Atividades e classes do Formulário XIV.H (medicamentos, controlados, insumos, fracionamento, importação, exportação e gases): cobra o exigido para iniciar e conclui por atividade e classe (RDC 16/2014, art. 15).', 'distribuidoras-transportadoras', 'trilha=xivh'],
   ['Atacadista de gases medicinais', 'Distribuição, armazenagem, transporte e dispensação de gases medicinais (RDC 887/2024 e RDC 870/2024).', 'gases-medicinais']]});
 h = C.icone(h, 'grupo-drogaria', C.ICONES.drogaria);
 h = C.icone(h, 'grupo-atacadista', C.ICONES.atacadista);

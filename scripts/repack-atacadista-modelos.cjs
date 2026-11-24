@@ -12,6 +12,7 @@
         texto (o.rodapeSo), como nos anexos publicados.
    Não usar scripts/repack-distribuidora-docs.cjs: ele reinjeta as fontes antigas e apaga as
    trocas feitas pelos outros scripts dentro da região.
+      3. Injeta também distribuidora-xivh.js (licença inicial pelo Formulário XIV.H), na mesma região.
    Idempotente. Uso: node scripts/repack-atacadista-modelos.cjs */
 const fs = require('node:fs'), path = require('node:path');
 const {unpack} = require('./integrated-html.cjs');
@@ -19,8 +20,26 @@ const root = path.join(__dirname, '..'), file = path.join(root, 'index.html');
 let {html, lz} = unpack(file);
 const ID = 'app--distribuidoras-transportadoras';
 const INI = '/*__DIST_MODELOS_INICIO__*/', FIM = '/*__DIST_MODELOS_FIM__*/', ANCORA = '/*__DIST_DOCS_FIM__*/';
-const fonte = fs.readFileSync(path.join(root, 'distribuidora-modelos.js'), 'utf8');
-new Function('state', 'DATA', 'document', 'window', fonte.replace(/\ndmRoteiro\(\);[\s\S]*$/, ''));
+const modelos = fs.readFileSync(path.join(root, 'distribuidora-modelos.js'), 'utf8');
+new Function('state', 'DATA', 'document', 'window', modelos.replace(/\ndmRoteiro\(\);[\s\S]*$/, ''));
+/* Formulário XIV.H (trilha “xivh”, card “Atacadista — licença inicial”): só compila aqui, roda no bloco */
+const xivh = fs.readFileSync(path.join(root, 'distribuidora-xivh.js'), 'utf8');
+new Function(xivh.replace(/\nxhIniciar\(\);[\s\S]*$/, ''));
+/* Gases medicinais (classe 20): perguntas específicas de gás reaproveitadas do card de Gases
+   (medicamentos/roteiros/gases-medicinais.cjs), com a citação montada pelo gases/legislacao.json.
+   Ficam fora as que repetem a base do Atacadista e as de dispensação (fora do Formulário XIV.H). */
+const GAS = require(path.join(root, 'medicamentos', 'roteiros', 'gases-medicinais.cjs'));
+const GLEG = JSON.parse(fs.readFileSync(path.join(root, 'gases', 'legislacao.json'), 'utf8'));
+const gq = id => { for (const s of GAS.secoes) for (const i of s.itens) for (const q of i.perguntas || []) if (q.id === id) return q; throw Error('gases: pergunta ' + id); };
+const glegal = r => { const ids = r.filter(x => !r.some(y => y !== x && y.startsWith(x + '::'))); return ids.map(x => { const L = GLEG[x]; if (!L) throw Error('gases: citação ' + x); return L.norma + ', ' + L.disp; }).join('; '); };
+const GSEC = [
+  ['xh-gas-reg', '11.2', 'Gases medicinais — autorização, fornecedores, clientes e produtos', 'gas', ['afe', 'fornecedores', 'clientes', 'regularizados*', 'entre_distrib', 'envase', 'industrial']],
+  ['xh-gas-areas', '9.2', 'Gases medicinais — áreas, recebimento e armazenagem', 'gas', ['areas_minimas', 'segregacao', 'ventilacao', 'pragas', 'conferencia', 'avariados*']],
+  ['xh-gas-rast', '11.3', 'Gases medicinais — rastreabilidade, lacres, rotulagem, devoluções e recolhimento', 'gas', ['sistema', 'devolucoes', 'furto', 'notas*', 'lacre*', 'rotulo*', 'cilindros*', 'simulacao*']],
+  ['xh-gas-transp', '10', 'Gases medicinais — transporte', 'gas-trp', ['segregacao_transp', 'instrucoes', 'veiculos', 'sinistro', 'registro_transp*', 'entrega_limpa*']]
+];
+const XH_GAS = GSEC.map(([id, item, title, quando, ids]) => ({ id, item, title, quando, q: ids.map(k => { const reg = k.endsWith('*'), q = gq(k.replace('*', '')); return ['xg-' + q.id, q.t, glegal(q.r || []), String(q.nc).replace(/\.\s*$/, ''), reg ? 1 : 0]; }) }));
+const fonte = modelos.trimEnd() + '\nconst XH_GAS_SECOES=' + JSON.stringify(XH_GAS) + ';\n' + xivh;
 
 const TROCAS = [
   /* ddTbl */
