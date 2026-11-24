@@ -1,6 +1,6 @@
 {
-  "versao": "20261124-2",
+  "versao": "20261124-3",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Atacadista — licença inicial (Formulário XIV.H): categorias de produto do item IX por classe; bloco de radiofármacos (RDC 430/2020, arts. 6º e 71, e Guia CNEN de distribuidoras de radiofármacos — licenciamento nuclear, proteção radiológica, rejeitos, transporte autorizado, registro de vendas); importação de hemoderivados e de soros e vacinas (RDC 81/2008, Capítulo XXXIX, Procedimentos 2 e 2A); na licença inicial, licença sanitária, AFE e AE vão como não aplicáveis (Portaria SMS 266/2025, art. 17, § 1º) e o item 14 registra as categorias declaradas. Correções: o painel do XIV.H e a triagem do Atacadista não se repetem mais na tela Dados da inspeção; o card comum do Atacadista não assume mais o modo XIV.H e avisa quando a inspeção em andamento foi começada no outro card."
+  "notas": "Atacadista — licença inicial (Formulário XIV.H): a etapa 8 passa a ser “Classes e categorias — condições específicas”, com o que vai além dos aspectos gerais da RDC 430/2020, por classe e categoria declaradas: cadeia de frio (termolábeis, vacinas, soros e hemoderivados, com as faixas do detentor do registro — refrigerado, congelado ou ultracongelado —, equipamento qualificado, contingência e transporte por faixa: RDC 430/2020, arts. 50, 78, 80, 81, 83 e 85), controle especial, insumos, fracionamento e laboratório, gases, radiofármacos, biológicos importados e controle de qualidade da importadora. As etapas 1 a 7 ficam com os aspectos gerais; o relatório não muda. O card comum do Atacadista continua como estava."
 }
