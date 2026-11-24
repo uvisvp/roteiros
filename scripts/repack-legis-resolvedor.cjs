@@ -67,6 +67,27 @@ const QUADRO = ANCORA2 + "\n        " + MARCA2 + "\n"
   + "          mapa[idItem] = {id: idItem, norma: nb.norma, tipo: 'item', rotulo: 'Anexo ' + mb[2].toUpperCase() + ', item ' + nu.replace(/\\.$/, ''),\n"
   + "            texto: nu.replace(/\\.$/, '') + '. ' + String(tx.texto || '').trim() + (temCl ? ' (' + CLASSE[cl] + ')' : ''), status_vigencia: nb.status_vigencia};\n"
   + "        }";
+/* 5. Regulamento dividido em capítulos com itens que recomeçam a cada capítulo (RDC 81/2008): o banco guarda
+      …::capitulo::iv::item::2-1 e …::capitulo::vii::item::7::alinea::b. “RDC Anvisa nº 81/2008, Capítulo IV,
+      item 2.1”, “Capítulo XXXI, itens 5 e 9” e “Capítulo VII, item 7, alínea “b”” passam a abrir o texto. As
+      RDC 81/2008 e 637/2022 entram na reserva usada quando o manifest não carrega. (24/11/2026) */
+const MARCA3 = '/* resolvedor: capítulo e item (RDC 81/2008) */';
+const ANCORA3 = "    var anx = dev.match(/Anexo\\s+([IVX]+)/i);";
+const CAPITULO = "    " + MARCA3 + "\n"
+  + "    var capM = dev.match(/Cap[íi]tulo\\s+([IVXLC]+(?:-[A-Z])?)\\b/i);\n"
+  + "    if (capM) {\n"
+  + "      var capId = slug + '::capitulo::' + capM[1].toLowerCase();\n"
+  + "      var capResto = dev.slice(capM.index + capM[0].length);\n"
+  + "      var capIt = (capResto.match(/\\bite(?:m|ns)\\b([^;]*)/i) || [])[1];\n"
+  + "      if (!capIt) return [[capId]];\n"
+  + "      var capAl = (capIt.match(/al[íi]nea\\s*[\"'“”‘’]?\\s*([a-z])\\b/i) || [])[1];\n"
+  + "      var capNums = capIt.replace(/al[íi]nea[\\s\\S]*$/i, '').match(/\\d+(?:\\.\\d+)*/g) || [];\n"
+  + "      return capNums.map(function (it, i) {\n"
+  + "        var b = capId + '::item::' + it.replace(/\\./g, '-');\n"
+  + "        return capAl && i === capNums.length - 1 ? [b + '::alinea::' + capAl.toLowerCase(), b] : [b];\n"
+  + "      });\n"
+  + "    }\n" + ANCORA3;
+const RES_DE = "'rdc-672-2022', 'rdc-362-2020',", RES_PARA = "'rdc-672-2022', 'rdc-362-2020', 'rdc-81-2008', 'rdc-637-2022',";
 let feito = false;
 html = html.replace(/(<script type="text\/plain" id="([^"]+)">)([\s\S]*?)(<\/script>)/g, (m, a, id, enc, z) => {
   if (id !== ID) return m;
@@ -80,6 +101,12 @@ html = html.replace(/(<script type="text\/plain" id="([^"]+)">)([\s\S]*?)(<\/scr
   if (!s.includes(MARCA2)) {
     if (s.split(ANCORA2).length !== 2) throw Error('âncora do quadro não localizada');
     s = s.replace(ANCORA2, () => QUADRO);
+  }
+  if (!s.includes(MARCA3)) {
+    if (s.split(ANCORA3).length !== 2) throw Error('âncora do capítulo não localizada');
+    s = s.replace(ANCORA3, () => CAPITULO);
+    if (s.split(RES_DE).length !== 2) throw Error('reserva do manifest não localizada');
+    s = s.replace(RES_DE, () => RES_PARA);
   }
   if (s === src) return m;
   new Function(s);

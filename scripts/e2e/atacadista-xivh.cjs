@@ -75,7 +75,7 @@ const T=require('./lib.cjs');
   if(m.reg.length||m.sis.length)T.falha('módulo: classificação registro/sistema errada: '+m.reg.concat(m.sis).join(', '));
   if(!m.item92.includes('xf-04')||!m.item121.includes('xl-01')||!m.item122.includes('xm-02'))T.falha('módulo: perguntas fora do item do relatório');
   for(const s of ['Há ralo em sala de fracionamento: ralo na sala de fracionamento de sólidos','RDC Anvisa nº 204/2006, Anexo, item 4.3.9','A fracionadora não possui laboratório de controle da qualidade próprio'])if(!m.a1.includes(s))T.falha('Anexo I: falta “'+s+'”');
-  if(m.cit[0]==='SEM_REDE')console.log('aviso: banco de legislação inacessível; abertura das citações do módulo não conferida');else if(m.cit.length)console.log('citações do módulo que não abrem texto ('+m.cit.length+'): '+m.cit.slice(0,12).join(' | '));
+  if(m.cit[0]==='SEM_REDE')console.log('aviso: banco de legislação inacessível; abertura das citações do módulo não conferida');else if(m.cit.length)T.falha('citações do módulo que não abrem texto ('+m.cit.length+'): '+m.cit.slice(0,12).join(' | '));
   /* controle especial (02/15) e gases medicinais (20) */
   const g=await f.evaluate(async()=>{const o={};const x=xh();
    x.ativ=['dist','trp'];x.classes=['02','20'];xhSync();dmCartao8();o.secs=DATA.sections.filter(s=>s.__xh).map(s=>s.id);o.card8=DIST_CARDS[7][0];
@@ -93,7 +93,7 @@ const T=require('./lib.cjs');
   if(!/^RDC Anvisa nº 887\/2024, art\. 9º, § 1º$/.test(g.legal['xg-afe']||''))T.falha('gases: citação da AFE '+g.legal['xg-afe']);
   if(/dispens|prescri/.test(g.ids.join(' ')))T.falha('gases: dispensação fora do Formulário XIV.H');
   if(g.mal.length||g.reg.length)T.falha('controle especial e gases: '+g.mal.concat(g.reg).join(', '));
-  if(g.cit[0]!=='SEM_REDE'&&g.cit.length)console.log('citações de controle especial e gases que não abrem texto ('+g.cit.length+'): '+g.cit.slice(0,12).join(' | '));
+  if(g.cit[0]!=='SEM_REDE'&&g.cit.length)T.falha('citações de controle especial e gases que não abrem texto ('+g.cit.length+'): '+g.cit.slice(0,12).join(' | '));
   if(erros.length)T.falha('erros na página: '+erros.slice(0,3).join(' | '));
   await p.close()}
  /* card comum: sem o painel do XIV.H numa inspeção nova */
