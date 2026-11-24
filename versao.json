@@ -1,6 +1,6 @@
 {
-  "versao": "20261124-1",
+  "versao": "20261124-2",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Novo card “Atacadista — licença inicial (Formulário XIV.H)”: triagem pelas atividades e classes do Formulário XIV.H; na licença inicial, só as perguntas de registro de operação aceitam “não aplicável — atividade não iniciada”; blocos de insumos (RDC 204/2006, IN 62/2020, RDC 637/2022), importação de insumos (RDC 81/2008), fracionamento e laboratório, controle especial (Portaria 344/1998 e Portaria 6/1999) e gases medicinais (RDC 887/2024 e RDC 870/2024); conclusão por atividade e classe no item 14 do relatório (RDC 16/2014, art. 15). Banco de legislação: RDC 637/2022 e RDC 81/2008 incluídas; as citações por capítulo e item da RDC 81/2008 passam a abrir o texto."
+  "notas": "Atacadista — licença inicial (Formulário XIV.H): categorias de produto do item IX por classe; bloco de radiofármacos (RDC 430/2020, arts. 6º e 71, e Guia CNEN de distribuidoras de radiofármacos — licenciamento nuclear, proteção radiológica, rejeitos, transporte autorizado, registro de vendas); importação de hemoderivados e de soros e vacinas (RDC 81/2008, Capítulo XXXIX, Procedimentos 2 e 2A); na licença inicial, licença sanitária, AFE e AE vão como não aplicáveis (Portaria SMS 266/2025, art. 17, § 1º) e o item 14 registra as categorias declaradas. Correções: o painel do XIV.H e a triagem do Atacadista não se repetem mais na tela Dados da inspeção; o card comum do Atacadista não assume mais o modo XIV.H e avisa quando a inspeção em andamento foi começada no outro card."
 }

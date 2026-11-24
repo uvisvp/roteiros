@@ -16,14 +16,32 @@
    dependem de registro de operação (XH_REGISTRO) aceitam “não aplicável — atividade não iniciada”. */
 const XH_ATIV=[['dist','Distribuir'],['imp','Importar'],['exp','Exportar'],['arm','Armazenar em área própria'],['trp','Transporte próprio'],['frac','Fracionar insumo farmacêutico'],['dep','Armazenar em depósito fechado']];
 const XH_CLASSES=[['01','Medicamentos'],['02','Medicamentos sujeitos ao controle especial'],['03','Insumos farmacêuticos'],['15','Insumos farmacêuticos sujeitos ao controle especial'],['20','Gases medicinais']];
+/* item IX do Formulário XIV.H: categorias de produto por classe (códigos do formulário) */
+const XH_CATS={'01':[['001','Anovulatórios'],['002','Antibióticos'],['242','Antroposóficos'],['115','Cefalosporínicos e penicilínicos'],['243','Outros produtos estéreis'],['176','Penicilínicos'],['008','Oncológicos/citostáticos'],['124','Opoterápicos'],['014','Produtos oficinais'],['244','Radiofármacos'],['145','Soros e vacinas'],['146','Solução parenteral de grande volume (SPGV)'],['011','Fitoterápicos'],['012','Homeopáticos'],['007','Hormônios'],['006','Hemoderivados'],['004','Demais categorias']],
+ '02':[['003','Controle especial'],['005','Entorpecentes'],['245','Hormônios'],['009','Psicotrópicos']]};
+function xhCat(c){return xh().cat.includes(c)}
 const XH_CL=['Cumpre as Boas Práticas','Cumpre as Boas Práticas com Ação Corretiva','Não cumpre as Boas Práticas'];
 const XH_NA='Atividade não iniciada (licença inicial): não há registros de operação a verificar.';
+/* licença inicial: AFE, AE e licença ainda não existem. A licença é pedida antes da AFE e só é deferida
+   depois da publicação da AFE (Portaria SMS nº 266/2025, art. 17, caput e § 1º); a AFE e a AE são
+   concedidas pela Anvisa com base no relatório desta inspeção (RDC Anvisa nº 16/2014, art. 15, I, “c”). */
+const XH_AUT=['dist-id-licenca','dist-id-afe','dist-id-ae'];
+const XH_NA_AUT='Licença inicial: a AFE e a AE são concedidas pela Anvisa com base no relatório desta inspeção (RDC Anvisa nº 16/2014, art. 15, I, “c”), e a licença sanitária só é deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, caput e § 1º).';
 /* Perguntas que dependem de operação já realizada (lotes recebidos, expedições, auditorias feitas,
    análises de lotes, reclamações, inventários). As demais tratam de instalações, pessoal,
    procedimentos, programas, contratos e qualificações, exigidos antes de iniciar. */
 const XH_REGISTRO=['dist-id-imp-terceiro','q902','q911','q912','q913','q914','q915','q916','q142','q175','q176','q177','q178','q179','q180','q181','q201','q203','q204','q205','q208','q209','q223','q228','q230','q231','q232','expedicao-documento','q255','q256','q257','q268','q269','q272','q274','q280','q324','q328','q331','q335','q336','q338','q344','q345','res-06-xii','q354','q359','q360','q950','q394','q398','q401','q412','q416','ifa-01','ifa-02','ifa-03','ifa-04','ifa-05','ifa-06','ifa-07','ifa-08','ifa-09','ifa-10','ifa-11','ifa-12','ifa-13','ifa-15','ifa-16'];
-function xhOn(){return /(^|[?&])trilha=xivh(&|$)/.test(String(window.__QS||'').replace(/^\?/,''))||!!(state.meta&&state.meta.xivh&&state.meta.xivh.on)}
-function xh(){const m=state.meta;if(!m.xivh)m.xivh={on:true,ativ:[],classes:[],inicial:'Sim'};const x=m.xivh;x.ativ=x.ativ||[];x.classes=x.classes||[];state.plan=state.plan||{};state.plan.xh=state.plan.xh||{};return x}
+/* o modo XIV.H vem só do card aberto (trilha); a inspeção em andamento é a mesma dos dois cards,
+   como nas trilhas de Produtos, e o aviso xhAvisoTrilha() mostra quando ela foi começada no outro */
+function xhOn(){return /(^|[?&])trilha=xivh(&|$)/.test(String(window.__QS||'').replace(/^\?/,''))}
+function xhRespondidas(){return Object.values(state.answers||{}).filter(a=>a&&a.status).length}
+function xhAvisoTrilha(){
+ const m=state.meta||{},x=m.xivh;
+ if(!xhOn()){if(x&&x.on&&((x.ativ||[]).length||(x.classes||[]).length))return '<div class="note warning"><b>Inspeção começada no card “Atacadista — licença inicial (Formulário XIV.H)”.</b> Aqui as atividades, classes e módulos do formulário não aparecem. Para continuar, abra por aquele card; para outra inspeção, guarde esta em “Salvas” e comece em branco.</div>';return ''}
+ if(x&&x.sobre)return '<div class="note warning"><b>Inspeção começada no card “Atacadista de medicamentos”.</b> As respostas já dadas continuam valendo aqui. Se esta for outra inspeção, guarde a anterior em “Salvas” e comece em branco.</div>';
+ return '';
+}
+function xh(){const m=state.meta;if(!m.xivh)m.xivh={on:true,ativ:[],classes:[],cat:[],inicial:'Sim',sobre:xhRespondidas()>0||!!m.company};const x=m.xivh;x.on=true;x.ativ=x.ativ||[];x.classes=x.classes||[];x.cat=x.cat||[];state.plan=state.plan||{};state.plan.xh=state.plan.xh||{};return x}
 function xhTem(c){return xh().classes.includes(c)}
 /* combinações possíveis: fracionar só insumos (Portaria SMS 266/2025, art. 18, parágrafo único, I) */
 function xhValida(a,c){return a!=='frac'||c==='03'||c==='15'}
@@ -33,30 +51,36 @@ function xhSync(){
  m.activities=[...new Set(x.ativ.flatMap(a=>map[a]||[]))];
  const f=new Set(m.flags||[]),liga=(k,v)=>{v?f.add(k):f.delete(k)};
  liga('controlados',xhTem('02')||xhTem('15'));liga('insumos',xhTem('03')||xhTem('15'));liga('xh_frac',x.ativ.includes('frac'));liga('xh_gases',xhTem('20'));
+ liga('xh_radio',xhCat('244'));liga('xh_bio',xhCat('145')||xhCat('006'));
  m.flags=[...f];
  state.report=state.report||{};if(x.inicial==='Sim'&&!state.report.emAtividade)state.report.emAtividade='Não';
+ x.cat=x.cat.filter(c=>Object.entries(XH_CATS).some(([k,l])=>xhTem(k)&&l.some(([v])=>v===c)));
+ if(x.inicial==='Sim'){state.distDocs=state.distDocs||{};x.autoDocs=x.autoDocs||{};for(const [k,ce] of [['afe',0],['ae',1]]){const d=state.distDocs[k]=state.distDocs[k]||{},v=ce&&!xhTem('02')&&!xhTem('15')?'Não se aplica':'Não possui';if(!d.status||d.status===x.autoDocs[k]){d.status=v;x.autoDocs[k]=v}}}
  try{xhSecoes();xhCartao8()}catch(e){}
 }
-function xhRegistroPendentes(){return DATA.sections.flatMap(s=>s.questions).filter(q=>XH_REGISTRO.includes(q.id)&&!(state.answers[q.id]||{}).status)}
+function xhRegistroPendentes(){return DATA.sections.flatMap(s=>s.questions).filter(q=>(XH_REGISTRO.includes(q.id)||XH_AUT.includes(q.id))&&!(state.answers[q.id]||{}).status)}
 function xhAvisos(){
  const x=xh(),L=[];
  if(x.ativ.includes('frac')&&!xhTem('03')&&!xhTem('15'))L.push('Fracionar só se aplica a insumos farmacêuticos: marque a classe 03 ou 15 (Portaria SMS nº 266/2025, art. 18, parágrafo único, I).');
  if(x.ativ.includes('frac'))L.push('A fracionadora de insumos deve possuir laboratório de controle da qualidade próprio, para análises físico-químicas e microbiológicas (RDC Anvisa nº 204/2006, item 12.1.3).');
  if(xhTem('20'))L.push('Gases medicinais: a AFE deve trazer a classe gases medicinais, distinta da classe de medicamentos (RDC Anvisa nº 887/2024, art. 9º, § 1º).');
  if(xhTem('02')||xhTem('15'))L.push('Controle especial: AE para cada estabelecimento (Portaria SVS/MS nº 344/1998, art. 2º, § 7º); o relatório deve declarar expressamente o cumprimento da Portaria SVS/MS nº 344/1998 e da Portaria SVS/MS nº 6/1999 (RDC Anvisa nº 16/2014, art. 15, § 4º).');
+ if(xhCat('244'))L.push('Radiofármacos: o fornecimento só pode ser feito por instituição licenciada pela autoridade sanitária e pela autoridade nuclear (RDC Anvisa nº 430/2020, art. 6º, parágrafo único); a distribuição só começa após os atos de licenciamento da autoridade nuclear, que não incluem o transporte (Guia CNEN de Licenciamento e Controle de Distribuidoras de Radiofármacos, 2021, item 4). A regulação nuclear passou da CNEN à ANSN em agosto de 2025.');
+ if((xhCat('145')||xhCat('006'))&&!(state.meta.flags||[]).includes('termolabeis'))L.push('Soros e vacinas ou hemoderivados declarados: se algum tiver temperatura máxima de 8 °C ou menos, é termolábil (RDC Anvisa nº 430/2020, art. 3º, XVI); marque “Trabalha com termolábeis” para abrir as verificações de cadeia de frio.');
  L.push('Fracionar medicamento ou envasar gás medicinal não cabe no CNAE 4644-3/01: são atividades fabris (Portaria SMS nº 266/2025, art. 18; Anexo I, CNAE 2121-1/01 e 2014-2/00).');
  return L;
 }
 function xhPainel(){
  const x=xh(),chk=(grp,v,l)=>`<label class="check"><input type="checkbox" data-xh="${grp}" value="${esc(v)}" ${x[grp].includes(v)?'checked':''}>${esc(l)}</label>`;
  const pend=x.inicial==='Sim'?xhRegistroPendentes().length:0;
- return '<h4>Formulário XIV.H — atividades e classes declaradas</h4><p class="mini">Marque exatamente o que a empresa declarou nos itens VIII e IX do formulário. O relatório conclui por atividade e classe, porque é o que a Anvisa usa para conceder a AFE e a AE (RDC Anvisa nº 16/2014, art. 15, I, “c”).</p>'
+ const cats=Object.entries(XH_CATS).filter(([k])=>xhTem(k)).map(([k,l])=>'<h4 style="margin-top:10px">Categorias da classe '+k+' (item IX)</h4><div class="checks">'+l.map(([v,t])=>chk('cat',v,v+' – '+t)).join('')+'</div>').join('');
+ return xhAvisoTrilha()+'<h4>Formulário XIV.H — atividades e classes declaradas</h4><p class="mini">Marque exatamente o que a empresa declarou nos itens VIII e IX do formulário. O relatório conclui por atividade e classe, porque é o que a Anvisa usa para conceder a AFE e a AE (RDC Anvisa nº 16/2014, art. 15, I, “c”).</p>'
   +'<div class="checks">'+XH_ATIV.map(([v,l])=>chk('ativ',v,l)).join('')+'</div>'
-  +'<h4 style="margin-top:10px">Classes de produto</h4><div class="checks">'+XH_CLASSES.map(([v,l])=>chk('classes',v,v+' – '+l)).join('')+'</div>'
+  +'<h4 style="margin-top:10px">Classes de produto</h4><div class="checks">'+XH_CLASSES.map(([v,l])=>chk('classes',v,v+' – '+l)).join('')+'</div>'+cats
   +((xhTem('03')||xhTem('15'))?'<div class="checks" style="margin-top:6px">'+flagCheck('ifa','Entre os insumos há IFA (insumo farmacêutico ativo)')+flagCheck('termolabeis','Trabalha com termolábeis')+'</div>':(xhTem('01')||xhTem('02')?'<div class="checks" style="margin-top:6px">'+flagCheck('termolabeis','Trabalha com termolábeis')+'</div>':''))
   +'<div class="grid three" style="margin-top:10px"><label class="field">Licença inicial (atividades ainda não iniciadas)?<select data-xh="inicial"><option value="">— selecione —</option>'+['Sim','Não'].map(o=>`<option${x.inicial===o?' selected':''}>${o}</option>`).join('')+'</select></label></div>'
   +'<div class="note"><ul>'+xhAvisos().map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul></div>'
-  +(x.inicial==='Sim'?'<div class="note"><b>Licença inicial.</b> Cobre-se a existência de instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações (RDC Anvisa nº 16/2014, art. 28). Só as perguntas que dependem de registro de operação — lotes recebidos, expedições, auditorias feitas, análises de lotes, reclamações, inventários — aceitam “não aplicável — atividade não iniciada”. Se houver evidência de operação (nota fiscal, licenciamento de importação, livro escriturado), responda normalmente.'+(pend?`<div class="toolbar"><button class="btn" data-xh-na="1">Marcar ${pend} pergunta${pend>1?'s':''} de registro de operação como não aplicáveis</button></div>`:'')+'</div>':'');
+  +(x.inicial==='Sim'?'<div class="note"><b>Licença inicial.</b> Cobre-se a existência de instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações (RDC Anvisa nº 16/2014, art. 28). Só as perguntas que dependem de registro de operação — lotes recebidos, expedições, auditorias feitas, análises de lotes, reclamações, inventários — aceitam “não aplicável — atividade não iniciada”. A licença sanitária, a AFE e a AE ainda não existem: a licença só é deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, § 1º), e as três perguntas da análise documental vão como não aplicáveis. Se houver evidência de operação (nota fiscal, licenciamento de importação, livro escriturado), responda normalmente.'+(pend?`<div class="toolbar"><button class="btn" data-xh-na="1">Marcar ${pend} pergunta${pend>1?'s':''} de registro de operação, licença, AFE e AE como não aplicáveis</button></div>`:'')+'</div>':'');
 }
 function xhCelulas(){const x=xh();return x.ativ.flatMap(a=>x.classes.filter(c=>xhValida(a,c)).map(c=>a+'|'+c))}
 function xhMatriz(){
@@ -73,27 +97,30 @@ function xhConclusao(){
  for(const t of XH_CL)out[t]=x.ativ.map(a=>{const cs=x.classes.filter(c=>xhValida(a,c)&&v[a+'|'+c]===t);return cs.length?nomeA[a]+': '+cs.map(c=>nomeC[c].toLowerCase()).join(', '):''}).filter(Boolean);
  const ce=x.ativ.filter(a=>['02','15'].some(c=>xhValida(a,c)&&x.classes.includes(c)&&/^Cumpre/.test(v[a+'|'+c]||'')));
  out.decl344=ce.length?'O estabelecimento cumpre os requisitos de controle especial da Portaria SVS/MS nº 344/1998 e da Portaria SVS/MS nº 6/1999 para as atividades: '+ce.map(a=>nomeA[a].toLowerCase()).join(', ')+' (RDC Anvisa nº 16/2014, art. 15, § 4º).':'';
- out.inicial=x.inicial==='Sim'?'Licença inicial: foram verificados instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações exigidos para iniciar as atividades (RDC Anvisa nº 16/2014, art. 28); não havia operação até a data da inspeção.':'';
+ out.inicial=x.inicial==='Sim'?'Licença inicial: foram verificados instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações exigidos para iniciar as atividades (RDC Anvisa nº 16/2014, art. 28); não havia operação até a data da inspeção. A AFE e a AE serão requeridas à Anvisa com base neste relatório (RDC Anvisa nº 16/2014, art. 15, I, “c”), e a licença sanitária só será deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, § 1º).':'';
+ const cs=Object.entries(XH_CATS).flatMap(([k,l])=>l.filter(([v])=>xhCat(v)).map(([v,t])=>v+' – '+t.toLowerCase()));
+ out.categorias=cs.length?'Categorias de produto declaradas no Formulário XIV.H, item IX: '+cs.join('; ')+'.':'';
  return out;
 }
 function xhPendencias(){
  if(!xhOn())return [];const x=xh(),out=[],v=(state.plan&&state.plan.xh)||{};
  if(!x.ativ.length)out.push('Formulário XIV.H: marque as atividades declaradas (etapa 1).');
  if(!x.classes.length)out.push('Formulário XIV.H: marque as classes de produto declaradas (etapa 1).');
+ for(const k of ['01','02'])if(xhTem(k)&&!XH_CATS[k].some(([v])=>xhCat(v)))out.push('Formulário XIV.H: marque as categorias da classe '+k+' declaradas no item IX (etapa 1).');
  const vaz=xhCelulas().filter(k=>!v[k]);if(vaz.length)out.push('Item 14: falta a conclusão de '+vaz.length+' combinação(ões) de atividade e classe (aba Análise do plano de ação).');
- if(x.inicial==='Sim')for(const q of DATA.sections.flatMap(s=>s.questions)){const a=state.answers[q.id]||{};if(a.status==='NA'&&a.evidence===XH_NA&&!XH_REGISTRO.includes(q.id))out.push(q.id+': “atividade não iniciada” só vale para perguntas de registro de operação; esta trata de requisito exigido antes de iniciar (RDC Anvisa nº 16/2014, art. 28).')}
+ if(x.inicial==='Sim')for(const q of DATA.sections.flatMap(s=>s.questions)){const a=state.answers[q.id]||{};if(a.status==='NA'&&(a.evidence===XH_NA&&!XH_REGISTRO.includes(q.id)||a.evidence===XH_NA_AUT&&!XH_AUT.includes(q.id)))out.push(q.id+': “atividade não iniciada” só vale para perguntas de registro de operação; esta trata de requisito exigido antes de iniciar (RDC Anvisa nº 16/2014, art. 28).')}
  return out;
 }
 function xhPendurar(){
- if(typeof distTela1View==='function'&&!distTela1View.__xh){const o=distTela1View;distTela1View=function(){if(!xhOn())return o.apply(this,arguments);xhSync();const h=o.apply(this,arguments);const r=/<h4>Atividades<\/h4><div class="checks">[\s\S]*?<\/div>/;return r.test(h)?h.replace(r,()=>xhPainel()):h.replace('<h4>Equipe inspetora',()=>xhPainel()+'<h4>Equipe inspetora')};distTela1View.__xh=1}
- if(typeof planView==='function'&&!planView.__xh){const o=planView;planView=function(){const h=o.apply(this,arguments);return xhOn()?h+xhMatriz():h};planView.__xh=1}
- if(typeof distIssues==='function'&&!distIssues.__xh){const o=distIssues;distIssues=function(){const r=o.apply(this,arguments);return xhOn()?r.concat(xhPendencias()):r};distIssues.__xh=1}
- if(typeof ddAnexoIPendencias==='function'&&!ddAnexoIPendencias.__xh){const o=ddAnexoIPendencias;ddAnexoIPendencias=function(){let r=o.apply(this,arguments);if(!xhOn())return r;if(xhConclusao())r=r.filter(t=>!/classificação final não definida/.test(t));return r.concat(xhPendencias())};ddAnexoIPendencias.__xh=1}
+ if(typeof distTela1View==='function'&&!distTela1View.__xh){const o=distTela1View;distTela1View=function(){if(!xhOn()){const h=o.apply(this,arguments),av=xhAvisoTrilha();return av?h.replace('<h4>Atividades</h4>',()=>av+'<h4>Atividades</h4>'):h}xhSync();const h=o.apply(this,arguments);const r=/<h4>Atividades<\/h4><div class="checks">[\s\S]*?<\/div>/;return r.test(h)?h.replace(r,()=>xhPainel()):h.replace('<h4>Equipe inspetora',()=>xhPainel()+'<h4>Equipe inspetora')};Object.assign(distTela1View,o,{__xh:1})}
+ if(typeof planView==='function'&&!planView.__xh){const o=planView;planView=function(){const h=o.apply(this,arguments);return xhOn()?h+xhMatriz():h};Object.assign(planView,o,{__xh:1})}
+ if(typeof distIssues==='function'&&!distIssues.__xh){const o=distIssues;distIssues=function(){const r=o.apply(this,arguments);return xhOn()?r.concat(xhPendencias()):r};Object.assign(distIssues,o,{__xh:1})}
+ if(typeof ddAnexoIPendencias==='function'&&!ddAnexoIPendencias.__xh){const o=ddAnexoIPendencias;ddAnexoIPendencias=function(){let r=o.apply(this,arguments);if(!xhOn())return r;if(xhConclusao())r=r.filter(t=>!/classificação final não definida/.test(t));return r.concat(xhPendencias())};Object.assign(ddAnexoIPendencias,o,{__xh:1})}
  if(!window.__xhEventos){window.__xhEventos=1;
   document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset)return;
    if(t.dataset.xh){const x=xh(),g=t.dataset.xh;if(g==='inicial')x.inicial=t.value;else{let a=x[g]||[];a=t.checked?[...new Set(a.concat(t.value))]:a.filter(v=>v!==t.value);x[g]=a}xhSync();save();try{renderITab()}catch(_){}}
    else if(t.dataset.xhCel){state.plan.xh=state.plan.xh||{};state.plan.xh[t.dataset.xhCel]=t.value;save()}},true);
-  document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-xh-na]');if(!b)return;e.preventDefault();for(const q of xhRegistroPendentes())state.answers[q.id]={status:'NA',evidence:XH_NA};save();try{renderITab()}catch(_){}},true)}
+  document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-xh-na]');if(!b)return;e.preventDefault();for(const q of xhRegistroPendentes())state.answers[q.id]={status:'NA',evidence:XH_AUT.includes(q.id)?XH_NA_AUT:XH_NA};save();try{renderITab()}catch(_){}},true)}
 }
 /* ---------- Módulo de insumos, importação de insumos, fracionamento e laboratório ----------
    Textos conferidos no AnvisaLegis: RDC 204/2006 (vigente com alterações; regulamento técnico anexo),
@@ -208,8 +235,34 @@ XH_SECOES.push({id:'xh-ce',item:'11.9',title:'Substâncias e medicamentos sujeit
  ['xc-08','O transporte é feito com documento hábil e, quando terceirizado, por transportadora autorizada e licenciada?',XH_344+'art. 33; '+XH_6+'art. 62','O transporte de produtos sujeitos a controle especial não é feito com documento hábil ou por transportadora autorizada e licenciada'],
  ['xc-09','As entradas, as saídas e as perdas estão escrituradas em ordem cronológica no Livro de Registro Específico?',XH_344+'art. 65','A movimentação de produtos sujeitos a controle especial não está escriturada no Livro de Registro Específico',1],
  ['xc-10','Os livros, balanços e documentos de movimentação são arquivados no estabelecimento por 2 anos?',XH_344+'art. 64','Livros, balanços ou documentos de movimentação de controlados não arquivados por 2 anos',1]]});
+/* ---------- Categorias do item IX com requisitos próprios ----------
+   Radiofármacos (244): RDC 430/2020, arts. 6º, parágrafo único, e 71, e o Guia CNEN de Licenciamento e
+   Controle de Distribuidoras de Radiofármacos, versão 1.0 (set./2021), que lista o que a autoridade
+   nuclear exige (Normas CNEN NN 3.01, 5.01, 6.02, 7.01 e 8.01). A regulação nuclear passou da CNEN à ANSN
+   em agosto de 2025; as normas seguem as mesmas. Hemoderivados (006) e soros e vacinas (145) importados:
+   RDC 81/2008, Capítulo XXXIX, Procedimentos 2 e 2A. As demais categorias não têm requisito próprio de
+   distribuição na RDC 430/2020: entram nas perguntas gerais e no registro da conclusão. */
+const XH_GCNEN='Guia CNEN de Licenciamento e Controle de Distribuidoras de Radiofármacos (2021), ',XH_430='RDC Anvisa nº 430/2020, ';
+XH_SECOES.push({id:'xh-radio',item:'11',title:'Radiofármacos — licenciamento nuclear, proteção radiológica e rastreabilidade',quando:'radio',q:[
+ ['xn-01','A empresa apresentou o ato da autoridade nuclear (CNEN, hoje ANSN) para a prática de distribuição de radiofármacos — autorização para operação ou, enquanto em licenciamento, o requerimento e a autorização para construção, quando exigida?',XH_430+'art. 6º, parágrafo único; '+XH_GCNEN+'itens 4, 5 e 6','A empresa não apresentou ato da autoridade nuclear para a prática de distribuição de radiofármacos'],
+ ['xn-02','Para radiofármacos de meia-vida maior que 2 horas, há local próprio e de uso exclusivo para o armazenamento das fontes e o gerenciamento de rejeitos; se só houver meia-vida curta, há instrumento firmado com o fabricante para a expedição e os rejeitos?',XH_GCNEN+'item 4','Não há local próprio e exclusivo para fontes e rejeitos radioativos, nem instrumento com o fabricante quando só há radiofármacos de meia-vida curta'],
+ ['xn-03','Há Plano de Proteção Radiológica atualizado, datado e assinado pelo titular e pelo supervisor de proteção radiológica?',XH_GCNEN+'itens 6 e 8','Não há Plano de Proteção Radiológica atualizado, datado e assinado pelo titular e pelo supervisor de proteção radiológica'],
+ ['xn-04','Há supervisor de proteção radiológica contratado, com certificação da autoridade nuclear em transporte, radiofarmácia ou medicina nuclear, e substituto designado?',XH_GCNEN+'item 6','Não há supervisor de proteção radiológica certificado nem substituto designado'],
+ ['xn-05','Há Plano de Gerenciamento de Rejeitos Radioativos, com local de armazenamento, inventário, segregação, acondicionamento, eliminação e transporte?',XH_GCNEN+'itens 5 e 6','Não há Plano de Gerenciamento de Rejeitos Radioativos'],
+ ['xn-06','O transporte dos radiofármacos é contratado com empresa autorizada pela autoridade nuclear a transportar material radioativo, já que a autorização de distribuição não inclui o transporte?',XH_GCNEN+'itens 4 e 6','O transporte de radiofármacos não está contratado com empresa autorizada pela autoridade nuclear'],
+ ['xn-07','Há monitoração individual contratada, detectores de radiação calibrados e treinamento em proteção radiológica para a prática?',XH_GCNEN+'item 6','Não há monitoração individual, detectores calibrados ou treinamento em proteção radiológica'],
+ ['xn-08','Há sistema ou procedimento de rastreabilidade dos radiofármacos, do pedido à expedição, com lançamento no Sistema de Registro de Venda de Radiofármacos da autoridade nuclear?',XH_GCNEN+'itens 6 e 13','Não há sistema ou procedimento de rastreabilidade dos radiofármacos com lançamento no Sistema de Registro de Venda'],
+ ['xn-09','O procedimento de venda restringe os clientes a instalações radiativas com autorização para operação em vigor, aptas a receber o material e dentro das cotas autorizadas, e a estabelecimentos licenciados e autorizados pela autoridade sanitária?',XH_430+'art. 6º; '+XH_GCNEN+'item 13','O procedimento de venda de radiofármacos não restringe os clientes a instalações autorizadas pela autoridade nuclear e pela autoridade sanitária'],
+ ['xn-10','Há procedimento para comunicar à autoridade nuclear sinistro, roubo ou furto de radiofármacos?',XH_430+'art. 71','Não há procedimento para comunicar à autoridade nuclear sinistro, roubo ou furto de radiofármacos'],
+ ['xn-11','As vendas realizadas estão lançadas no Sistema de Registro de Venda de Radiofármacos?',XH_GCNEN+'item 13','As vendas de radiofármacos não estão lançadas no Sistema de Registro de Venda de Radiofármacos',1]]});
+XH_SECOES.push({id:'xh-bio-imp',item:'12.2',title:'Importação de hemoderivados, soros e vacinas',quando:'bioimp',q:[
+ ['xb-01','Para hemoderivados, o procedimento de importação prevê o licenciamento de importação no Siscomex e a fiscalização pela autoridade sanitária antes do desembaraço aduaneiro?',XH_81+'Capítulo XXXIX, item 12','O procedimento de importação de hemoderivados não prevê o licenciamento de importação no Siscomex e a fiscalização sanitária antes do desembaraço',0,'hd'],
+ ['xb-02','Para hemoderivados, o procedimento exige o laudo analítico do fabricante por lote e o certificado de liberação do lote emitido pela autoridade sanitária do país de fabricação?',XH_81+'Capítulo XXXIX, item 16, alínea “g”; '+XH_81+'Capítulo XXXIX, item 16, alínea “h”','O procedimento de importação de hemoderivados não exige o laudo analítico por lote e o certificado de liberação do lote da autoridade sanitária do país de fabricação',0,'hd'],
+ ['xb-03','Para soros e vacinas, o procedimento exige a petição para fiscalização e liberação sanitária, o laudo analítico do fabricante por lote e o certificado de liberação do lote emitido pela autoridade sanitária do país de fabricação?',XH_81+'Capítulo XXXIX, item 18, alínea “a”; '+XH_81+'Capítulo XXXIX, item 18, alínea “g”; '+XH_81+'Capítulo XXXIX, item 18, alínea “h”','O procedimento de importação de soros e vacinas não exige a petição de fiscalização, o laudo analítico por lote e o certificado de liberação do lote da autoridade sanitária do país de fabricação',0,'sv'],
+ ['xb-04','Os processos de importação de hemoderivados já realizados trazem o certificado de liberação de cada lote?',XH_81+'Capítulo XXXIX, item 16, alínea “h”','Processos de importação de hemoderivados sem o certificado de liberação do lote',1,'hd'],
+ ['xb-05','Os processos de importação de soros e vacinas já realizados trazem o certificado de liberação de cada lote?',XH_81+'Capítulo XXXIX, item 18, alínea “h”','Processos de importação de soros e vacinas sem o certificado de liberação do lote',1,'sv']]});
 if(typeof XH_GAS_SECOES!=='undefined')XH_SECOES.push(...XH_GAS_SECOES);
-function xhPrecisa(k){const x=xh(),ins=xhTem('03')||xhTem('15');return k==='ins'?ins:k==='imp'?ins&&x.ativ.includes('imp'):k==='frac'?ins&&x.ativ.includes('frac'):k==='ce'?xhTem('02')||xhTem('15'):k==='gas'?xhTem('20'):k==='gas-trp'?xhTem('20')&&x.ativ.includes('trp'):k==='c15'?xhTem('15'):k==='c02'?xhTem('02'):false}
+function xhPrecisa(k){const x=xh(),ins=xhTem('03')||xhTem('15');return k==='ins'?ins:k==='imp'?ins&&x.ativ.includes('imp'):k==='frac'?ins&&x.ativ.includes('frac'):k==='ce'?xhTem('02')||xhTem('15'):k==='gas'?xhTem('20'):k==='gas-trp'?xhTem('20')&&x.ativ.includes('trp'):k==='c15'?xhTem('15'):k==='c02'?xhTem('02'):k==='radio'?xhCat('244'):k==='bioimp'?x.ativ.includes('imp')&&(xhCat('006')||xhCat('145')):k==='hd'?xhCat('006'):k==='sv'?xhCat('145'):false}
 let XH_CARD8=null;
 function xhSecoes(){
  if(typeof DATA==='undefined')return;
@@ -219,7 +272,7 @@ function xhSecoes(){
   if(typeof DD_ITENS!=='undefined'){DD_ITENS[d.item]=DD_ITENS[d.item]||[];if(!DD_ITENS[d.item].includes(d.id))DD_ITENS[d.item].push(d.id)}
   for(const q of d.q)if(q[4]&&!XH_REGISTRO.includes(q[0]))XH_REGISTRO.push(q[0]);
   if(!xhPrecisa(d.quando))continue;
-  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio'})[d.quando]+'.',condition:'all',reportTitle:d.title,questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
+  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio',radio:'categoria 244 (radiofármacos)',bioimp:'importar hemoderivados (006) ou soros e vacinas (145)'})[d.quando]+'.',condition:'all',reportTitle:d.title,questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
  }
 }
 /* etapa 8: no modo XIV.H, reúne o controle de qualidade da importadora e os blocos de insumos */
@@ -228,14 +281,15 @@ function xhCartao8(){
  if(!xhOn()){DIST_CARDS[7][0]=XH_CARD8;return}
  const ins=xhTem('03')||xhTem('15'),base=DIST_CARDS[7][1].filter(x=>!/^xh-|^insumos_/.test(x));
  const add=ins?['insumos_gerais'].concat((state.meta.flags||[]).includes('ifa')||xh().ativ.includes('imp')?['insumos_ifa']:[]):[];
- const tem=k=>DATA.sections.some(z=>z.__xh&&z.id.startsWith(k)),partes=[ins&&'insumos',tem('xh-frac')&&'fracionamento',tem('xh-ce')&&'controlados',tem('xh-gas')&&'gases'].filter(Boolean);
+ const tem=k=>DATA.sections.some(z=>z.__xh&&z.id.startsWith(k)),partes=[ins&&'insumos',tem('xh-frac')&&'fracionamento',tem('xh-ce')&&'controlados',tem('xh-gas')&&'gases',tem('xh-radio')&&'radiofármacos',tem('xh-bio')&&'biológicos importados'].filter(Boolean);
  if(typeof dmImp==='function'&&dmImp().cq&&partes.length)partes.push('controle de qualidade');
  DIST_CARDS[7][0]=partes.length?(t=>t[0].toUpperCase()+t.slice(1))(partes.join(', ').replace(/, ([^,]*)$/,' e $1')):XH_CARD8;
  DIST_CARDS[7][1]=base.concat(add,DATA.sections.filter(s=>s.__xh).map(s=>s.id));
 }
-if(typeof dmCartao8==='function'&&!dmCartao8.__xh){const o=dmCartao8;dmCartao8=function(){o.apply(this,arguments);xhCartao8()};dmCartao8.__xh=1}
+if(typeof dmCartao8==='function'&&!dmCartao8.__xh){const o=dmCartao8;dmCartao8=function(){o.apply(this,arguments);xhCartao8()};Object.assign(dmCartao8,o,{__xh:1})}
 function xhFontes(){if(typeof DATA==='undefined'||!DATA.sources)return;const add=(name,role,url)=>{if(!DATA.sources.some(x=>x.name===name))DATA.sources.push({name,rev:'—',vigencia:'vigente',role,url})};
  add('RDC Anvisa nº 204/2006','Boas práticas de distribuição e fracionamento de insumos farmacêuticos (regulamento técnico anexo).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9431&cod_modulo=310&link=S&numeroAto=00000204&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=002&tipo=RDC&valorAno=2006');
+ add('Guia CNEN de Licenciamento e Controle de Distribuidoras de Radiofármacos (2021)','O que a autoridade nuclear exige da distribuidora de radiofármacos (Normas CNEN NN 3.01, 5.01, 6.02, 7.01 e 8.01); a regulação passou à ANSN em agosto de 2025.','https://appasp2019.cnen.gov.br/seguranca/orientacoes/images/cnen/documentos/drs/orientacoes/Guia-de-Licenciamento-e-Distribuidoras-de-Radiofarmacos.pdf');
  add('RDC Anvisa nº 637/2022','Cadastro, na Anvisa, de todos os insumos farmacêuticos ativos com que a empresa trabalha, com fabricantes e revendedores (arts. 1º e 3º).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9431&cod_modulo=310&link=S&numeroAto=00000637&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2022')}
 function xhIniciar(){try{if(xhOn()){xh();xhSync();xhFontes()}xhPendurar();xhCartao8()}catch(e){}}
 xhIniciar();

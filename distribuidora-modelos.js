@@ -125,7 +125,7 @@ function ddAnexoIMontar(o,fotos){
  const xc=typeof xhConclusao==='function'?xhConclusao():null,marca=t=>xc?xc[t].length>0:cl===t,lista=t=>xc?xc[t].join('; '):(cl===t?ativ:'');
  nodes.push({k:'p',al:'left',t:R.emAtividade==='Não'?'Estabelecimento em atividade: não.':'Estabelecimento em atividade'});
  nodes.push({k:'tbl',cols:[4677,4677],o:{hf:''},rows:[['14.1','Cumpre as Boas Práticas','14.1.1'],['14.3','Cumpre as Boas Práticas com Ação Corretiva','14.3.1'],['14.4','Não cumpre as Boas Práticas','14.4.1']].map(([n,t,na])=>[{sz:10,runs:[[n+' '+t+' '+(marca(t)?'☒':'☐'),{b:true}]]},{sz:10,runs:[[na+' ATIVIDADES(S): ',{b:true}],[lista(t),{}]]}])});
- if(xc){if(xc.decl344)p(xc.decl344);if(xc.inicial)p(xc.inicial)}
+ if(xc){if(xc.decl344)p(xc.decl344);if(xc.categorias)p(xc.categorias);if(xc.inicial)p(xc.inicial)}
  /* 15 */
  it(15,'Medidas adotadas/ documentos emitidos');
  const com=state.cycle&&state.cycle.communication;const med=[];
@@ -314,8 +314,8 @@ function dmTriagem(){
 /* Etapa 8: os blocos de insumos (IN 62/2020) entram quando a empresa importa IFA ou outros insumos. */
 function dmCartao8(){if(typeof DIST_CARDS==='undefined'||!DIST_CARDS[7])return;const c=DIST_CARDS[7][1].filter(x=>!/^insumos_/.test(x)),m=dmImp();if(m.imp&&(m.f.includes('imp_ifa')||m.f.includes('imp_exc')))c.push('insumos_gerais','insumos_ifa');DIST_CARDS[7][1]=c}
 function dmPendurar(){
- if(typeof distTela1View==='function'&&!distTela1View.__dm){const o=distTela1View;distTela1View=function(){const h=o.apply(this,arguments),k=h.indexOf('<h4>Equipe inspetora');return k<0?h:h.slice(0,k)+dmTriagem()+h.slice(k)};distTela1View.__dm=1}
- if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const p=h.indexOf('Toque no número'),k=p<0?-1:h.indexOf('</div>',p);const box=dmEnquadramento()||'';return k<0?h+box:h.slice(0,k+6)+'<div class="panel">'+box+'</div>'+h.slice(k+6)};roteiroView.__dm=1}
+ if(typeof distTela1View==='function'&&!distTela1View.__dm){const o=distTela1View;distTela1View=function(){const h=o.apply(this,arguments),k=h.indexOf('<h4>Equipe inspetora');return k<0?h:h.slice(0,k)+dmTriagem()+h.slice(k)};Object.assign(distTela1View,o,{__dm:1})}
+ if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const p=h.indexOf('Toque no número'),k=p<0?-1:h.indexOf('</div>',p);const box=dmEnquadramento()||'';return k<0?h+box:h.slice(0,k+6)+'<div class="panel">'+box+'</div>'+h.slice(k+6)};Object.assign(roteiroView,o,{__dm:1})}
   if(typeof DD_ROTA!=='undefined')DD_ROTA['dist-id-imp-terceiro']='2';
 }
 /* Item 12 vazio: diz por que não se aplica. */
