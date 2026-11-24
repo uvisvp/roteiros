@@ -255,6 +255,11 @@ XH_SECOES.push({id:'xh-radio',item:'11',title:'Radiofármacos — licenciamento 
  ['xn-09','O procedimento de venda restringe os clientes a instalações radiativas com autorização para operação em vigor, aptas a receber o material e dentro das cotas autorizadas, e a estabelecimentos licenciados e autorizados pela autoridade sanitária?',XH_430+'art. 6º; '+XH_GCNEN+'item 13','O procedimento de venda de radiofármacos não restringe os clientes a instalações autorizadas pela autoridade nuclear e pela autoridade sanitária'],
  ['xn-10','Há procedimento para comunicar à autoridade nuclear sinistro, roubo ou furto de radiofármacos?',XH_430+'art. 71','Não há procedimento para comunicar à autoridade nuclear sinistro, roubo ou furto de radiofármacos'],
  ['xn-11','As vendas realizadas estão lançadas no Sistema de Registro de Venda de Radiofármacos?',XH_GCNEN+'item 13','As vendas de radiofármacos não estão lançadas no Sistema de Registro de Venda de Radiofármacos',1]]});
+XH_SECOES.push({id:'xh-frio',item:'9.2',title:'Cadeia de frio — faixas de temperatura por produto (vacinas, soros, hemoderivados e demais termolábeis)',quando:'frio',q:[
+ ['xt-01','Para cada produto termolábil que a empresa pretende distribuir — inclusive vacinas, soros e hemoderivados —, está identificada a faixa de temperatura especificada pelo detentor do registro (refrigerado, congelado ou ultracongelado)?',XH_430+'art. 50; '+XH_430+'art. 78','A faixa de temperatura especificada pelo detentor do registro não está identificada para os produtos termolábeis'],
+ ['xt-02','Há equipamento de armazenagem para cada faixa identificada — câmara fria, refrigerador, congelador ou ultracongelador —, qualificado termicamente na faixa de uso?',XH_430+'art. 78','Não há equipamento qualificado para cada faixa de temperatura dos produtos termolábeis'],
+ ['xt-03','O plano de contingência cobre cada faixa, inclusive congelados e ultracongelados, com alternativa emergencial de resfriamento — como gelo seco ou nitrogênio líquido — que mantenha as condições do detentor do registro?',XH_430+'art. 80; '+XH_430+'art. 81','O plano de contingência não cobre cada faixa de temperatura com alternativa emergencial que mantenha as condições do detentor do registro'],
+ ['xt-04','O transporte próprio ou contratado dispõe de embalagens ou veículos qualificados para cada faixa, com a montagem da carga orientada pelo detentor do registro?',XH_430+'art. 83; '+XH_430+'art. 85','O transporte não dispõe de embalagens ou veículos qualificados para cada faixa de temperatura, com montagem da carga orientada pelo detentor do registro']]});
 XH_SECOES.push({id:'xh-bio-imp',item:'12.2',title:'Importação de hemoderivados, soros e vacinas',quando:'bioimp',q:[
  ['xb-01','Para hemoderivados, o procedimento de importação prevê o licenciamento de importação no Siscomex e a fiscalização pela autoridade sanitária antes do desembaraço aduaneiro?',XH_81+'Capítulo XXXIX, item 12','O procedimento de importação de hemoderivados não prevê o licenciamento de importação no Siscomex e a fiscalização sanitária antes do desembaraço',0,'hd'],
  ['xb-02','Para hemoderivados, o procedimento exige o laudo analítico do fabricante por lote e o certificado de liberação do lote emitido pela autoridade sanitária do país de fabricação?',XH_81+'Capítulo XXXIX, item 16, alínea “g”; '+XH_81+'Capítulo XXXIX, item 16, alínea “h”','O procedimento de importação de hemoderivados não exige o laudo analítico por lote e o certificado de liberação do lote da autoridade sanitária do país de fabricação',0,'hd'],
@@ -262,8 +267,7 @@ XH_SECOES.push({id:'xh-bio-imp',item:'12.2',title:'Importação de hemoderivados
  ['xb-04','Os processos de importação de hemoderivados já realizados trazem o certificado de liberação de cada lote?',XH_81+'Capítulo XXXIX, item 16, alínea “h”','Processos de importação de hemoderivados sem o certificado de liberação do lote',1,'hd'],
  ['xb-05','Os processos de importação de soros e vacinas já realizados trazem o certificado de liberação de cada lote?',XH_81+'Capítulo XXXIX, item 18, alínea “h”','Processos de importação de soros e vacinas sem o certificado de liberação do lote',1,'sv']]});
 if(typeof XH_GAS_SECOES!=='undefined')XH_SECOES.push(...XH_GAS_SECOES);
-function xhPrecisa(k){const x=xh(),ins=xhTem('03')||xhTem('15');return k==='ins'?ins:k==='imp'?ins&&x.ativ.includes('imp'):k==='frac'?ins&&x.ativ.includes('frac'):k==='ce'?xhTem('02')||xhTem('15'):k==='gas'?xhTem('20'):k==='gas-trp'?xhTem('20')&&x.ativ.includes('trp'):k==='c15'?xhTem('15'):k==='c02'?xhTem('02'):k==='radio'?xhCat('244'):k==='bioimp'?x.ativ.includes('imp')&&(xhCat('006')||xhCat('145')):k==='hd'?xhCat('006'):k==='sv'?xhCat('145'):false}
-let XH_CARD8=null;
+function xhPrecisa(k){const x=xh(),ins=xhTem('03')||xhTem('15');return k==='ins'?ins:k==='imp'?ins&&x.ativ.includes('imp'):k==='frac'?ins&&x.ativ.includes('frac'):k==='ce'?xhTem('02')||xhTem('15'):k==='gas'?xhTem('20'):k==='gas-trp'?xhTem('20')&&x.ativ.includes('trp'):k==='c15'?xhTem('15'):k==='c02'?xhTem('02'):k==='radio'?xhCat('244'):k==='bioimp'?x.ativ.includes('imp')&&(xhCat('006')||xhCat('145')):k==='frio'?(state.meta.flags||[]).includes('termolabeis'):k==='hd'?xhCat('006'):k==='sv'?xhCat('145'):false}
 function xhSecoes(){
  if(typeof DATA==='undefined')return;
  DATA.sections=DATA.sections.filter(s=>!s.__xh);
@@ -272,19 +276,32 @@ function xhSecoes(){
   if(typeof DD_ITENS!=='undefined'){DD_ITENS[d.item]=DD_ITENS[d.item]||[];if(!DD_ITENS[d.item].includes(d.id))DD_ITENS[d.item].push(d.id)}
   for(const q of d.q)if(q[4]&&!XH_REGISTRO.includes(q[0]))XH_REGISTRO.push(q[0]);
   if(!xhPrecisa(d.quando))continue;
-  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio',radio:'categoria 244 (radiofármacos)',bioimp:'importar hemoderivados (006) ou soros e vacinas (145)'})[d.quando]+'.',condition:'all',reportTitle:d.title,questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
+  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio',radio:'categoria 244 (radiofármacos)',frio:'termolábeis (classes 01 e 02; categorias 145 e 006)',bioimp:'importar hemoderivados (006) ou soros e vacinas (145)'})[d.quando]+'.',condition:'all',reportTitle:d.title,questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
  }
 }
-/* etapa 8: no modo XIV.H, reúne o controle de qualidade da importadora e os blocos de insumos */
+/* etapa 8 no modo XIV.H: “Classes e categorias — condições específicas”. Reúne, por classe e categoria
+   declaradas, o que vai além dos aspectos gerais da RDC 430/2020: cadeia de frio (termolábeis, vacinas,
+   soros, hemoderivados), controle especial, insumos, fracionamento e laboratório, gases, radiofármacos,
+   biológicos importados e o controle de qualidade da importadora. As perguntas de termolábeis e de
+   controlados saem das etapas 3, 4 e 7 só neste card; fora dele, as etapas voltam ao original.
+   O relatório não muda: cada pergunta continua no seu item do Anexo I. */
+let XH_CARDS0=null;
+const XH_GRUPOS=[['frio',['termolabeis','qt-equip','qt-veiculo','xh-frio']],['ce',['controlados','xh-ce']],['ins',['insumos_gerais','insumos_ifa','xh-ins-']],['frac',['xh-frac-','xh-lab-']],['gas',['xh-gas-']],['radio',['xh-radio']],['bio',['xh-bio-']]];
+const XH_MOVE=['termolabeis','qt-equip','qt-veiculo','controlados'];
 function xhCartao8(){
- if(typeof DIST_CARDS==='undefined'||!DIST_CARDS[7])return;if(!XH_CARD8)XH_CARD8=DIST_CARDS[7][0];
- if(!xhOn()){DIST_CARDS[7][0]=XH_CARD8;return}
- const ins=xhTem('03')||xhTem('15'),base=DIST_CARDS[7][1].filter(x=>!/^xh-|^insumos_/.test(x));
- const add=ins?['insumos_gerais'].concat((state.meta.flags||[]).includes('ifa')||xh().ativ.includes('imp')?['insumos_ifa']:[]):[];
- const tem=k=>DATA.sections.some(z=>z.__xh&&z.id.startsWith(k)),partes=[ins&&'insumos',tem('xh-frac')&&'fracionamento',tem('xh-ce')&&'controlados',tem('xh-gas')&&'gases',tem('xh-radio')&&'radiofármacos',tem('xh-bio')&&'biológicos importados'].filter(Boolean);
- if(typeof dmImp==='function'&&dmImp().cq&&partes.length)partes.push('controle de qualidade');
- DIST_CARDS[7][0]=partes.length?(t=>t[0].toUpperCase()+t.slice(1))(partes.join(', ').replace(/, ([^,]*)$/,' e $1')):XH_CARD8;
- DIST_CARDS[7][1]=base.concat(add,DATA.sections.filter(s=>s.__xh).map(s=>s.id));
+ if(typeof DIST_CARDS==='undefined'||!DIST_CARDS[7])return;
+ if(!XH_CARDS0)XH_CARDS0=DIST_CARDS.map(c=>[c[0],c[1].slice()]);
+ const cq=DIST_CARDS[7][1].filter(x=>/^cq_/.test(x));
+ if(!xhOn()){XH_CARDS0.forEach((c,i)=>{if(!DIST_CARDS[i])return;DIST_CARDS[i][0]=c[0];if(i<7)DIST_CARDS[i][1]=c[1].slice();else DIST_CARDS[i][1]=DIST_CARDS[i][1].filter(x=>!/^xh-/.test(x)&&!XH_MOVE.includes(x))});return}
+ /* etapas gerais sem os blocos específicos */
+ XH_CARDS0.forEach((c,i)=>{if(i<7&&DIST_CARDS[i])DIST_CARDS[i][1]=c[1].filter(x=>!XH_MOVE.includes(x))});
+ if(DIST_CARDS[2])DIST_CARDS[2][0]=XH_CARDS0[2][0].replace(/,? e termolábeis$/,'').replace(/, armazenamento$/,' e armazenamento');
+ if(DIST_CARDS[6])DIST_CARDS[6][0]=XH_CARDS0[6][0].replace(/, controlados e estoque$/,' e estoque');
+ const ins=xhTem('03')||xhTem('15'),fl=state.meta.flags||[];
+ const ids=DATA.sections.map(z=>z.id),ok=id=>id==='insumos_gerais'?ins:id==='insumos_ifa'?ins&&(fl.includes('ifa')||xh().ativ.includes('imp')):ids.includes(id);
+ const lista=XH_GRUPOS.flatMap(([,pre])=>pre.flatMap(k=>k.endsWith('-')?ids.filter(id=>id.startsWith(k)):ok(k)?[k]:[]));
+ DIST_CARDS[7][0]='Classes e categorias — condições específicas';
+ DIST_CARDS[7][1]=[...new Set(lista.concat(cq))];
 }
 if(typeof dmCartao8==='function'&&!dmCartao8.__xh){const o=dmCartao8;dmCartao8=function(){o.apply(this,arguments);xhCartao8()};Object.assign(dmCartao8,o,{__xh:1})}
 function xhFontes(){if(typeof DATA==='undefined'||!DATA.sources)return;const add=(name,role,url)=>{if(!DATA.sources.some(x=>x.name===name))DATA.sources.push({name,rev:'—',vigencia:'vigente',role,url})};
