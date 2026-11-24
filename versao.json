@@ -1,6 +1,6 @@
 {
-  "versao": "20261124-3",
+  "versao": "20261124-4",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Atacadista — licença inicial (Formulário XIV.H): a etapa 8 passa a ser “Classes e categorias — condições específicas”, com o que vai além dos aspectos gerais da RDC 430/2020, por classe e categoria declaradas: cadeia de frio (termolábeis, vacinas, soros e hemoderivados, com as faixas do detentor do registro — refrigerado, congelado ou ultracongelado —, equipamento qualificado, contingência e transporte por faixa: RDC 430/2020, arts. 50, 78, 80, 81, 83 e 85), controle especial, insumos, fracionamento e laboratório, gases, radiofármacos, biológicos importados e controle de qualidade da importadora. As etapas 1 a 7 ficam com os aspectos gerais; o relatório não muda. O card comum do Atacadista continua como estava."
+  "notas": "Atacadista — licença inicial (Formulário XIV.H): a empresa deve estar pronta para funcionar, e todas as perguntas são feitas. “Não se aplica” em lote fica só para licença sanitária, AFE, AE e, com controle especial, o Livro de Registro Específico (Portaria SVS/MS nº 344/1998, art. 2º, § 4º). As perguntas que dependem de operação já realizada (lotes recebidos, expedições, auditorias, análises de lotes, reclamações, inventários) ganham o botão “Atividade não iniciada”, a usar pergunta a pergunta se a empresa ainda não operou. Monitoramento de temperatura e umidade, aprovação e cadastro de fornecedores, logbook de equipamentos, disposição de carga e movimentação de estoque passam a ser exigidos na licença inicial."
 }

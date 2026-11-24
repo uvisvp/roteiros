@@ -12,8 +12,10 @@
    - RDC Anvisa nº 204/2006, item 12.1.3 (fracionadora com laboratório de controle da qualidade próprio).
    - RDC Anvisa nº 887/2024, art. 9º, § 1º (classe gases medicinais distinta na AFE).
    - Portaria SVS/MS nº 344/1998, art. 2º, §§ 6º e 7º (AE para cada estabelecimento).
-   Licença inicial: o que a RDC 16/2014 (art. 28) cobra é a existência do sistema; só as perguntas que
-   dependem de registro de operação (XH_REGISTRO) aceitam “não aplicável — atividade não iniciada”. */
+   Licença inicial: a empresa deve estar pronta para funcionar; o que a RDC 16/2014 (art. 28) cobra é a
+   existência do sistema. Todas as perguntas são feitas. As que dependem de operação já realizada
+   (XH_REGISTRO) têm o botão “Atividade não iniciada”, a usar só se a empresa ainda não operou; em lote,
+   só vão como não aplicáveis licença, AFE, AE e Livro de Registro Específico (XH_PRE). */
 const XH_ATIV=[['dist','Distribuir'],['imp','Importar'],['exp','Exportar'],['arm','Armazenar em área própria'],['trp','Transporte próprio'],['frac','Fracionar insumo farmacêutico'],['dep','Armazenar em depósito fechado']];
 const XH_CLASSES=[['01','Medicamentos'],['02','Medicamentos sujeitos ao controle especial'],['03','Insumos farmacêuticos'],['15','Insumos farmacêuticos sujeitos ao controle especial'],['20','Gases medicinais']];
 /* item IX do Formulário XIV.H: categorias de produto por classe (códigos do formulário) */
@@ -27,10 +29,18 @@ const XH_NA='Atividade não iniciada (licença inicial): não há registros de o
    concedidas pela Anvisa com base no relatório desta inspeção (RDC Anvisa nº 16/2014, art. 15, I, “c”). */
 const XH_AUT=['dist-id-licenca','dist-id-afe','dist-id-ae'];
 const XH_NA_AUT='Licença inicial: a AFE e a AE são concedidas pela Anvisa com base no relatório desta inspeção (RDC Anvisa nº 16/2014, art. 15, I, “c”), e a licença sanitária só é deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, caput e § 1º).';
+/* Livro de Registro Específico (xc-05): as atividades com controlados só começam após a publicação da AE
+   (Portaria SVS/MS nº 344/1998, art. 2º, § 4º); os termos de abertura são lavrados pela autoridade
+   sanitária (art. 63). */
+const XH_NA_LIVRO='Licença inicial: as atividades com substâncias e medicamentos sujeitos a controle especial só podem ser iniciadas após a publicação da Autorização Especial (Portaria SVS/MS nº 344/1998, art. 2º, § 4º); o Livro de Registro Específico, com termos de abertura lavrados pela autoridade sanitária (art. 63), ainda não foi aberto.';
+const XH_PRE=XH_AUT.concat('xc-05');
+function xhMotivoPre(id){return id==='xc-05'?XH_NA_LIVRO:XH_AUT.includes(id)?XH_NA_AUT:''}
 /* Perguntas que dependem de operação já realizada (lotes recebidos, expedições, auditorias feitas,
    análises de lotes, reclamações, inventários). As demais tratam de instalações, pessoal,
-   procedimentos, programas, contratos e qualificações, exigidos antes de iniciar. */
-const XH_REGISTRO=['dist-id-imp-terceiro','q902','q911','q912','q913','q914','q915','q916','q142','q175','q176','q177','q178','q179','q180','q181','q201','q203','q204','q205','q208','q209','q223','q228','q230','q231','q232','expedicao-documento','q255','q256','q257','q268','q269','q272','q274','q280','q324','q328','q331','q335','q336','q338','q344','q345','res-06-xii','q354','q359','q360','q950','q394','q398','q401','q412','q416','ifa-01','ifa-02','ifa-03','ifa-04','ifa-05','ifa-06','ifa-07','ifa-08','ifa-09','ifa-10','ifa-11','ifa-12','ifa-13','ifa-15','ifa-16'];
+   procedimentos, programas, contratos, qualificações e registros que correm sem operação — monitoramento
+   de temperatura e umidade, aprovação e cadastro de fornecedores, logbook de equipamentos —, exigidos
+   antes de iniciar. */
+const XH_REGISTRO=['dist-id-imp-terceiro','q911','q912','q913','q914','q915','q916','q142','q175','q176','q177','q178','q180','q181','q203','q204','q208','q209','q223','expedicao-documento','q255','q256','q257','q268','q272','q274','q280','q324','q331','q335','q336','q338','q344','q345','res-06-xii','q354','q359','q360','q950','q398','q401','q412','q416','ifa-01','ifa-02','ifa-03','ifa-04','ifa-05','ifa-06','ifa-07','ifa-08','ifa-09','ifa-10','ifa-11','ifa-12','ifa-13','ifa-15','ifa-16'];
 /* o modo XIV.H vem só do card aberto (trilha); a inspeção em andamento é a mesma dos dois cards,
    como nas trilhas de Produtos, e o aviso xhAvisoTrilha() mostra quando ela foi começada no outro */
 function xhOn(){return /(^|[?&])trilha=xivh(&|$)/.test(String(window.__QS||'').replace(/^\?/,''))}
@@ -58,7 +68,7 @@ function xhSync(){
  if(x.inicial==='Sim'){state.distDocs=state.distDocs||{};x.autoDocs=x.autoDocs||{};for(const [k,ce] of [['afe',0],['ae',1]]){const d=state.distDocs[k]=state.distDocs[k]||{},v=ce&&!xhTem('02')&&!xhTem('15')?'Não se aplica':'Não possui';if(!d.status||d.status===x.autoDocs[k]){d.status=v;x.autoDocs[k]=v}}}
  try{xhSecoes();xhCartao8()}catch(e){}
 }
-function xhRegistroPendentes(){return DATA.sections.flatMap(s=>s.questions).filter(q=>(XH_REGISTRO.includes(q.id)||XH_AUT.includes(q.id))&&!(state.answers[q.id]||{}).status)}
+function xhPrePendentes(){return DATA.sections.flatMap(s=>s.questions).filter(q=>XH_PRE.includes(q.id)&&!(state.answers[q.id]||{}).status)}
 function xhAvisos(){
  const x=xh(),L=[];
  if(x.ativ.includes('frac')&&!xhTem('03')&&!xhTem('15'))L.push('Fracionar só se aplica a insumos farmacêuticos: marque a classe 03 ou 15 (Portaria SMS nº 266/2025, art. 18, parágrafo único, I).');
@@ -72,7 +82,7 @@ function xhAvisos(){
 }
 function xhPainel(){
  const x=xh(),chk=(grp,v,l)=>`<label class="check"><input type="checkbox" data-xh="${grp}" value="${esc(v)}" ${x[grp].includes(v)?'checked':''}>${esc(l)}</label>`;
- const pend=x.inicial==='Sim'?xhRegistroPendentes().length:0;
+ const pp=x.inicial==='Sim'?xhPrePendentes():[],pend=pp.length,livro=pp.some(q=>q.id==='xc-05');
  const cats=Object.entries(XH_CATS).filter(([k])=>xhTem(k)).map(([k,l])=>'<h4 style="margin-top:10px">Categorias da classe '+k+' (item IX)</h4><div class="checks">'+l.map(([v,t])=>chk('cat',v,v+' – '+t)).join('')+'</div>').join('');
  return xhAvisoTrilha()+'<h4>Formulário XIV.H — atividades e classes declaradas</h4><p class="mini">Marque exatamente o que a empresa declarou nos itens VIII e IX do formulário. O relatório conclui por atividade e classe, porque é o que a Anvisa usa para conceder a AFE e a AE (RDC Anvisa nº 16/2014, art. 15, I, “c”).</p>'
   +'<div class="checks">'+XH_ATIV.map(([v,l])=>chk('ativ',v,l)).join('')+'</div>'
@@ -80,7 +90,7 @@ function xhPainel(){
   +((xhTem('03')||xhTem('15'))?'<div class="checks" style="margin-top:6px">'+flagCheck('ifa','Entre os insumos há IFA (insumo farmacêutico ativo)')+flagCheck('termolabeis','Trabalha com termolábeis')+'</div>':(xhTem('01')||xhTem('02')?'<div class="checks" style="margin-top:6px">'+flagCheck('termolabeis','Trabalha com termolábeis')+'</div>':''))
   +'<div class="grid three" style="margin-top:10px"><label class="field">Licença inicial (atividades ainda não iniciadas)?<select data-xh="inicial"><option value="">— selecione —</option>'+['Sim','Não'].map(o=>`<option${x.inicial===o?' selected':''}>${o}</option>`).join('')+'</select></label></div>'
   +'<div class="note"><ul>'+xhAvisos().map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul></div>'
-  +(x.inicial==='Sim'?'<div class="note"><b>Licença inicial.</b> Cobre-se a existência de instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações (RDC Anvisa nº 16/2014, art. 28). Só as perguntas que dependem de registro de operação — lotes recebidos, expedições, auditorias feitas, análises de lotes, reclamações, inventários — aceitam “não aplicável — atividade não iniciada”. A licença sanitária, a AFE e a AE ainda não existem: a licença só é deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, § 1º), e as três perguntas da análise documental vão como não aplicáveis. Se houver evidência de operação (nota fiscal, licenciamento de importação, livro escriturado), responda normalmente.'+(pend?`<div class="toolbar"><button class="btn" data-xh-na="1">Marcar ${pend} pergunta${pend>1?'s':''} de registro de operação, licença, AFE e AE como não aplicáveis</button></div>`:'')+'</div>':'');
+  +(x.inicial==='Sim'?'<div class="note"><b>Licença inicial.</b> A empresa deve estar pronta para funcionar: instalações, equipamentos, pessoal, procedimentos, programas, contratos e qualificações são cobrados (RDC Anvisa nº 16/2014, art. 28), assim como o que já corre sem operação — monitoramento de temperatura e umidade, aprovação e cadastro de fornecedores, logbook de equipamentos. Todas as perguntas são feitas. As que dependem de operação já realizada (lotes recebidos, expedições, auditorias feitas, análises de lotes, reclamações, inventários) têm o botão “Atividade não iniciada”: use-o só se a empresa ainda não operou; se já houver produto em estoque ou evidência de operação (nota fiscal, licenciamento de importação), responda normalmente. A licença sanitária, a AFE e a AE ainda não existem: a licença só é deferida após a publicação da AFE (Portaria SMS nº 266/2025, art. 17, § 1º). Com controle especial, o Livro de Registro Específico também não: as atividades só começam após a publicação da AE (Portaria SVS/MS nº 344/1998, art. 2º, § 4º).'+(pend?`<div class="toolbar"><button class="btn" data-xh-na="1">Marcar licença, AFE, AE${livro?' e Livro de Registro Específico':''} como não aplicáveis</button></div>`:'')+'</div>':'');
 }
 function xhCelulas(){const x=xh();return x.ativ.flatMap(a=>x.classes.filter(c=>xhValida(a,c)).map(c=>a+'|'+c))}
 function xhMatriz(){
@@ -108,11 +118,12 @@ function xhPendencias(){
  if(!x.classes.length)out.push('Formulário XIV.H: marque as classes de produto declaradas (etapa 1).');
  for(const k of ['01','02'])if(xhTem(k)&&!XH_CATS[k].some(([v])=>xhCat(v)))out.push('Formulário XIV.H: marque as categorias da classe '+k+' declaradas no item IX (etapa 1).');
  const vaz=xhCelulas().filter(k=>!v[k]);if(vaz.length)out.push('Item 14: falta a conclusão de '+vaz.length+' combinação(ões) de atividade e classe (aba Análise do plano de ação).');
- if(x.inicial==='Sim')for(const q of DATA.sections.flatMap(s=>s.questions)){const a=state.answers[q.id]||{};if(a.status==='NA'&&(a.evidence===XH_NA&&!XH_REGISTRO.includes(q.id)||a.evidence===XH_NA_AUT&&!XH_AUT.includes(q.id)))out.push(q.id+': “atividade não iniciada” só vale para perguntas de registro de operação; esta trata de requisito exigido antes de iniciar (RDC Anvisa nº 16/2014, art. 28).')}
+ if(x.inicial==='Sim')for(const q of DATA.sections.flatMap(s=>s.questions)){const a=state.answers[q.id]||{};const ev=String(a.evidence||''),mp=[XH_NA_AUT,XH_NA_LIVRO].find(t=>ev.startsWith(t));if(a.status==='NA'&&(ev.startsWith(XH_NA)&&!XH_REGISTRO.includes(q.id)||mp&&mp!==xhMotivoPre(q.id)))out.push(q.id+': “atividade não iniciada” só vale para perguntas de registro de operação; esta trata de requisito exigido antes de iniciar (RDC Anvisa nº 16/2014, art. 28).')}
  return out;
 }
 function xhPendurar(){
  if(typeof distTela1View==='function'&&!distTela1View.__xh){const o=distTela1View;distTela1View=function(){if(!xhOn()){const h=o.apply(this,arguments),av=xhAvisoTrilha();return av?h.replace('<h4>Atividades</h4>',()=>av+'<h4>Atividades</h4>'):h}xhSync();const h=o.apply(this,arguments);const r=/<h4>Atividades<\/h4><div class="checks">[\s\S]*?<\/div>/;return r.test(h)?h.replace(r,()=>xhPainel()):h.replace('<h4>Equipe inspetora',()=>xhPainel()+'<h4>Equipe inspetora')};Object.assign(distTela1View,o,{__xh:1})}
+ if(typeof questionHtml==='function'&&!questionHtml.__xh){const o=questionHtml;questionHtml=function(q){const h=o.apply(this,arguments);if(!q||!xhOn()||xh().inicial!=='Sim'||!XH_REGISTRO.includes(q.id))return h;return h.replace('<div class="toolbar"><button class="btn" data-dist-read=',()=>'<div class="toolbar"><button class="btn" data-xh-nai="'+q.id+'" title="Só se a empresa ainda não operou">Atividade não iniciada</button><button class="btn" data-dist-read=')};Object.assign(questionHtml,o,{__xh:1})}
  if(typeof planView==='function'&&!planView.__xh){const o=planView;planView=function(){const h=o.apply(this,arguments);return xhOn()?h+xhMatriz():h};Object.assign(planView,o,{__xh:1})}
  if(typeof distIssues==='function'&&!distIssues.__xh){const o=distIssues;distIssues=function(){const r=o.apply(this,arguments);return xhOn()?r.concat(xhPendencias()):r};Object.assign(distIssues,o,{__xh:1})}
  if(typeof ddAnexoIPendencias==='function'&&!ddAnexoIPendencias.__xh){const o=ddAnexoIPendencias;ddAnexoIPendencias=function(){let r=o.apply(this,arguments);if(!xhOn())return r;if(xhConclusao())r=r.filter(t=>!/classificação final não definida/.test(t));return r.concat(xhPendencias())};Object.assign(ddAnexoIPendencias,o,{__xh:1})}
@@ -120,7 +131,8 @@ function xhPendurar(){
   document.addEventListener('change',e=>{const t=e.target;if(!t||!t.dataset)return;
    if(t.dataset.xh){const x=xh(),g=t.dataset.xh;if(g==='inicial')x.inicial=t.value;else{let a=x[g]||[];a=t.checked?[...new Set(a.concat(t.value))]:a.filter(v=>v!==t.value);x[g]=a}xhSync();save();try{renderITab()}catch(_){}}
    else if(t.dataset.xhCel){state.plan.xh=state.plan.xh||{};state.plan.xh[t.dataset.xhCel]=t.value;save()}},true);
-  document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-xh-na]');if(!b)return;e.preventDefault();for(const q of xhRegistroPendentes())state.answers[q.id]={status:'NA',evidence:XH_AUT.includes(q.id)?XH_NA_AUT:XH_NA};save();try{renderITab()}catch(_){}},true)}
+  document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-xh-na]');if(!b)return;e.preventDefault();for(const q of xhPrePendentes())state.answers[q.id]={status:'NA',evidence:xhMotivoPre(q.id)};save();try{renderITab()}catch(_){}},true);
+  document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-xh-nai]');if(!b)return;e.preventDefault();const id=b.dataset.xhNai,a=state.answers[id]||{},ev=String(a.evidence||'').trim();state.answers[id]=Object.assign({},a,{status:'NA',evidence:ev.startsWith(XH_NA)?ev:(XH_NA+(ev?' '+ev:''))});save();try{renderITab()}catch(_){}},true)}
 }
 /* ---------- Módulo de insumos, importação de insumos, fracionamento e laboratório ----------
    Textos conferidos no AnvisaLegis: RDC 204/2006 (vigente com alterações; regulamento técnico anexo),

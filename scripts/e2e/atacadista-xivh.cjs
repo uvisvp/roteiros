@@ -16,10 +16,19 @@ const T=require('./lib.cjs');
    o.on=xhOn();o.tela0=distTela1View();
    const x=xh();x.ativ=['dist','imp','frac','dep'];x.classes=['01','02','03','15','20'];x.inicial='Sim';xhSync();
    o.acts=state.meta.activities.slice();o.flags=state.meta.flags.slice();o.emAt=state.report.emAtividade;o.tela=distTela1View();
-   /* não aplicável em lote: só perguntas de registro */
-   const pend=xhRegistroPendentes().length;document.querySelector('body').insertAdjacentHTML('beforeend','<button id="xhna" data-xh-na="1"></button>');document.getElementById('xhna').click();
-   const na=Object.entries(state.answers).filter(([k,a])=>a.evidence===XH_NA||a.evidence===XH_NA_AUT).map(([k])=>k);o.pend=pend;o.naFora=na.filter(k=>!XH_REGISTRO.includes(k)&&!XH_AUT.includes(k));o.naQtd=na.length;o.aut=XH_AUT.filter(k=>(state.answers[k]||{}).evidence!==XH_NA_AUT);o.docs=[(state.distDocs.afe||{}).status,(state.distDocs.ae||{}).status];
+   /* não aplicável em lote: só licença, AFE, AE e Livro de Registro Específico */
+   o.botaoLote=(o.tela.match(/data-xh-na="1">([^<]*)</)||[])[1]||'';
+   const pend=xhPrePendentes().length;document.querySelector('body').insertAdjacentHTML('beforeend','<button id="xhna" data-xh-na="1"></button>');document.getElementById('xhna').click();
+   const na=Object.entries(state.answers).filter(([k,a])=>[XH_NA,XH_NA_AUT,XH_NA_LIVRO].includes(a.evidence)).map(([k])=>k);o.pend=pend;o.naTxt=XH_NA;o.naFora=na.filter(k=>!XH_PRE.includes(k));o.naReg=na.filter(k=>state.answers[k].evidence===XH_NA);o.livro=(state.answers['xc-05']||{}).evidence===XH_NA_LIVRO;o.naQtd=na.length;o.aut=XH_AUT.filter(k=>(state.answers[k]||{}).evidence!==XH_NA_AUT);o.docs=[(state.distDocs.afe||{}).status,(state.distDocs.ae||{}).status];
    o.temSistema=['q343','q157','q199','q368','q319'].filter(k=>(state.answers[k]||{}).evidence===XH_NA);
+   /* exigidos com a empresa pronta para funcionar: fora da lista de registro de operação */
+   o.exigidos=['q201','q230','q269','q902','q328','q205','q394','q228','q231','q232','q179'].filter(k=>XH_REGISTRO.includes(k));
+   /* botão por pergunta: só nas de registro de operação */
+   const qq=id=>DATA.sections.flatMap(s=>s.questions).find(q=>q.id===id);
+   o.btnReg=/data-xh-nai="q176"/.test(questionHtml(qq('q176')));o.btnSis=/data-xh-nai/.test(questionHtml(qq('q343')))||/data-xh-nai/.test(questionHtml(qq('q201')));
+   state.answers.q176={evidence:'Sem estoque.'};document.querySelector('body').insertAdjacentHTML('beforeend','<button id="xhnai" data-xh-nai="q176"></button>');document.getElementById('xhnai').click();
+   o.nai=state.answers.q176;o.pNai=xhPendencias().filter(t=>/^q176:/.test(t));delete state.answers.q176;
+   o.pLivro=xhPendencias().filter(t=>/^xc-05:/.test(t));
    /* uso indevido: estrutura marcada como não iniciada */
    state.answers.q343={status:'NA',evidence:XH_NA};o.pIndevido=xhPendencias().filter(t=>/^q343:/.test(t));
    delete state.answers.q343;
@@ -42,7 +51,14 @@ const T=require('./lib.cjs');
   if(!r.pend||r.naQtd!==r.pend)T.falha('não aplicável em lote: marcou '+r.naQtd+' de '+r.pend);
   if(r.aut.length)T.falha('licença inicial: licença, AFE e AE deveriam ir como não aplicáveis, com o motivo próprio: '+r.aut.join(', '));
   if(r.docs.join('|')!=='Não possui|Não possui')T.falha('licença inicial: AFE e AE (com controlados) deveriam vir como “Não possui”: '+r.docs);
-  if(r.naFora.length)T.falha('não aplicável em lote: marcou pergunta que não é de registro: '+r.naFora.join(', '));
+  if(r.naFora.length)T.falha('não aplicável em lote: marcou pergunta fora de licença, AFE, AE e livro: '+r.naFora.join(', '));
+  if(r.naReg.length)T.falha('não aplicável em lote: perguntas de registro de operação não vão em lote: '+r.naReg.join(', '));
+  if(r.pend!==4||!r.livro)T.falha('não aplicável em lote: esperado licença, AFE, AE e Livro de Registro Específico (4), veio '+r.pend+(r.livro?'':'; livro sem o motivo próprio'));
+  if(r.botaoLote!=='Marcar licença, AFE, AE e Livro de Registro Específico como não aplicáveis')T.falha('botão do lote: '+r.botaoLote);
+  if(r.exigidos.length)T.falha('licença inicial: estas são exigidas com a empresa pronta para funcionar: '+r.exigidos.join(', '));
+  if(!r.btnReg||r.btnSis)T.falha('botão “Atividade não iniciada”: deveria aparecer só nas perguntas de registro de operação');
+  if(!r.nai||r.nai.status!=='NA'||r.nai.evidence!==r.naTxt+' Sem estoque.')T.falha('botão “Atividade não iniciada”: resposta '+JSON.stringify(r.nai));
+  if(r.pNai.length||r.pLivro.length)T.falha('pendência indevida: '+r.pNai.concat(r.pLivro).join(' | '));
   if(r.temSistema.length)T.falha('não aplicável em lote: pergunta de sistema marcada: '+r.temSistema.join(', '));
   if(!r.pIndevido.length)T.falha('pendência: “atividade não iniciada” em pergunta de estrutura deveria ser apontada');
   if(r.cel.includes('frac|01')||r.cel.includes('frac|20')||!r.cel.includes('frac|03'))T.falha('matriz: fracionar só com insumos: '+r.cel);
