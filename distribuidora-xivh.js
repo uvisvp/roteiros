@@ -322,6 +322,11 @@ function xhFontes(){if(typeof DATA==='undefined'||!DATA.sources)return;const add
  add('RDC Anvisa nº 204/2006','Boas práticas de distribuição e fracionamento de insumos farmacêuticos (regulamento técnico anexo).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9431&cod_modulo=310&link=S&numeroAto=00000204&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=002&tipo=RDC&valorAno=2006');
  add('Guia CNEN de Licenciamento e Controle de Distribuidoras de Radiofármacos (2021)','O que a autoridade nuclear exige da distribuidora de radiofármacos (Normas CNEN NN 3.01, 5.01, 6.02, 7.01 e 8.01); a regulação passou à ANSN em agosto de 2025.','https://appasp2019.cnen.gov.br/seguranca/orientacoes/images/cnen/documentos/drs/orientacoes/Guia-de-Licenciamento-e-Distribuidoras-de-Radiofarmacos.pdf');
  add('RDC Anvisa nº 637/2022','Cadastro, na Anvisa, de todos os insumos farmacêuticos ativos com que a empresa trabalha, com fabricantes e revendedores (arts. 1º e 3º).','https://anvisalegis.datalegis.net/action/ActionDatalegis.php?acao=abrirTextoAto&cod_menu=9431&cod_modulo=310&link=S&numeroAto=00000637&orgao=RDC%2FDC%2FANVISA%2FMS&seqAto=000&tipo=RDC&valorAno=2022')}
-function xhIniciar(){try{if(xhOn()){xh();xhSync();xhFontes()}xhPendurar();xhCartao8()}catch(e){}}
+/* cabeçalho do card da licença inicial: a casca escreve “Atacadista de medicamentos” (ou o tipo de operação);
+   no modo XIV.H o título é o do card. Depois da troca o padrão da casca não casa mais, e o título fica. */
+const XH_TITULO='Atacadista — licença inicial';
+function xhTitulo(){if(!xhOn())return;const h=document.querySelector('header');if(!h)return;const w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode())){const v=n.nodeValue,novo=v.replace(/distribuidora\s*\/\s*transportadora|Atacadista de medicamentos|Transportadora de medicamentos|Distribuidora e transportadora de medicamentos/i,XH_TITULO);if(novo!==v)n.nodeValue=novo}
+ if(!window.__xhTitulo){window.__xhTitulo=1;let pend=0;const ag=()=>{if(pend)return;pend=1;requestAnimationFrame(()=>{pend=0;xhTitulo()})};document.addEventListener('click',ag);document.addEventListener('change',ag);setTimeout(xhTitulo,1500)}}
+function xhIniciar(){try{if(xhOn()){xh();xhSync();xhFontes();xhTitulo()}xhPendurar();xhCartao8()}catch(e){}}
 xhIniciar();
 document.addEventListener('DOMContentLoaded',xhIniciar);window.addEventListener('load',xhIniciar);

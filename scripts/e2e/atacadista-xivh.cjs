@@ -161,6 +161,7 @@ const T=require('./lib.cjs');
   await p.waitForTimeout(500);
   const ids=await f.evaluate(()=>[...document.querySelectorAll('.dist-subitem-menu [data-dist-section]')].map(x=>x.dataset.distSection));
   if(ids.length<20)T.falha('etapa 8: itens no menu: '+ids.length);
+  const cab=await f.evaluate(()=>(document.querySelector('header')||{}).textContent||'');if(!/Atacadista — licença inicial/.test(cab)||/Atacadista de medicamentos/.test(cab))T.falha('cabeçalho do card da licença inicial: '+cab.replace(/\s+/g,' ').slice(0,120));
   const vazios=[];
   for(const id of ids){await f.evaluate(id=>document.querySelector('.dist-subitem-menu [data-dist-section="'+id+'"]').click(),id);await p.waitForTimeout(120);
    const n=await f.evaluate(()=>document.querySelectorAll('#inspectionContent .dist-section-screen .q').length);if(!n)vazios.push(id);
