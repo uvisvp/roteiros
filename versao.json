@@ -1,6 +1,6 @@
 {
-  "versao": "20261124-4",
+  "versao": "20261125-1",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Atacadista — licença inicial (Formulário XIV.H): a empresa deve estar pronta para funcionar, e todas as perguntas são feitas. “Não se aplica” em lote fica só para licença sanitária, AFE, AE e, com controle especial, o Livro de Registro Específico (Portaria SVS/MS nº 344/1998, art. 2º, § 4º). As perguntas que dependem de operação já realizada (lotes recebidos, expedições, auditorias, análises de lotes, reclamações, inventários) ganham o botão “Atividade não iniciada”, a usar pergunta a pergunta se a empresa ainda não operou. Monitoramento de temperatura e umidade, aprovação e cadastro de fornecedores, logbook de equipamentos, disposição de carga e movimentação de estoque passam a ser exigidos na licença inicial."
+  "notas": "Atacadista — licença inicial (Formulário XIV.H), etapa 8 “Classes e categorias”: os blocos de cadeia de frio, controle especial, insumos, fracionamento, laboratório, gases, radiofármacos e biológicos importados não abriam e a seta → travava no primeiro deles; agora todos abrem e a seta percorre a etapa até o Anexo II. Os blocos de insumos do card Atacadista de medicamentos (importação de IFA e excipientes) tinham o mesmo defeito e também foram corrigidos. Na navegação, os botões de etapa e de item têm 40 px de altura e os títulos longos são cortados com reticências, sem passar da largura da tela; o cartão de cada etapa passa a contar as verificações dos blocos que ela de fato contém. As perguntas dos blocos do Formulário XIV.H deixam de mostrar o aviso “sem correspondência no inventário”, porque a não conformidade delas entra no Anexo II."
 }
