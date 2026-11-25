@@ -319,7 +319,8 @@ function dmPendurar(){
  /* blocos sem lista de documentos (insumos_*, blocos do XIV.H): sectionHtml lê s.docs.length e a tela do item quebrava */
  if(typeof sectionHtml==='function'&&!sectionHtml.__dm){const o=sectionHtml;sectionHtml=function(s){if(s){if(!Array.isArray(s.docs))s.docs=[];if(!Array.isArray(s.questions))s.questions=[]}return o.apply(this,arguments)};Object.assign(sectionHtml,o,{__dm:1})}
  if(typeof distTela1View==='function'&&!distTela1View.__dm){const o=distTela1View;distTela1View=function(){const h=o.apply(this,arguments),k=h.indexOf('<h4>Equipe inspetora');return k<0?h:h.slice(0,k)+dmTriagem()+h.slice(k)};Object.assign(distTela1View,o,{__dm:1})}
- if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const p=h.indexOf('Toque no número'),k=p<0?-1:h.indexOf('</div>',p);const box=dmEnquadramento()||'';return k<0?h+box:h.slice(0,k+6)+'<div class="panel">'+box+'</div>'+h.slice(k+6)};Object.assign(roteiroView,o,{__dm:1})}
+ /* quadro “Enquadramento da importação”: na tela da etapa 8, entre o cabeçalho e a lista de itens; não se repete nas telas de item */
+ if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const box=dmEnquadramento();if(!box)return h;const k=h.search(/<div class="panel">\s*<div class="cards dist-subitem-menu"/);return k<0?h:h.slice(0,k)+'<div class="panel dm-imp-panel">'+box+'</div>'+h.slice(k)};Object.assign(roteiroView,o,{__dm:1})}
   if(typeof DD_ROTA!=='undefined')DD_ROTA['dist-id-imp-terceiro']='2';
 }
 /* Item 12 vazio: diz por que não se aplica. */
