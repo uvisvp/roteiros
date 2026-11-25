@@ -314,6 +314,10 @@ function dmTriagem(){
 /* Etapa 8: os blocos de insumos (IN 62/2020) entram quando a empresa importa IFA ou outros insumos. */
 function dmCartao8(){if(typeof DIST_CARDS==='undefined'||!DIST_CARDS[7])return;const c=DIST_CARDS[7][1].filter(x=>!/^insumos_/.test(x)),m=dmImp();if(m.imp&&(m.f.includes('imp_ifa')||m.f.includes('imp_exc')))c.push('insumos_gerais','insumos_ifa');DIST_CARDS[7][1]=c}
 function dmPendurar(){
+ /* navegação por etapas e itens: chips com toque de 40 px e título longo cortado com reticências, sem estourar a largura no celular */
+ if(!document.getElementById('dm-nav-ajuste')){const st=document.createElement('style');st.id='dm-nav-ajuste';st.textContent='.dist-nav .dist-nav-b,.dist-chips button{min-height:40px}.dist-chips button{max-width:min(320px,72vw);overflow:hidden;text-overflow:ellipsis}';(document.head||document.documentElement).appendChild(st)}
+ /* blocos sem lista de documentos (insumos_*, blocos do XIV.H): sectionHtml lê s.docs.length e a tela do item quebrava */
+ if(typeof sectionHtml==='function'&&!sectionHtml.__dm){const o=sectionHtml;sectionHtml=function(s){if(s){if(!Array.isArray(s.docs))s.docs=[];if(!Array.isArray(s.questions))s.questions=[]}return o.apply(this,arguments)};Object.assign(sectionHtml,o,{__dm:1})}
  if(typeof distTela1View==='function'&&!distTela1View.__dm){const o=distTela1View;distTela1View=function(){const h=o.apply(this,arguments),k=h.indexOf('<h4>Equipe inspetora');return k<0?h:h.slice(0,k)+dmTriagem()+h.slice(k)};Object.assign(distTela1View,o,{__dm:1})}
  if(typeof roteiroView==='function'&&!roteiroView.__dm){const o=roteiroView;roteiroView=function(){dmCartao8();const h=o.apply(this,arguments);if(Number(state.activeCard)!==8||!dmImp().imp)return h;const p=h.indexOf('Toque no número'),k=p<0?-1:h.indexOf('</div>',p);const box=dmEnquadramento()||'';return k<0?h+box:h.slice(0,k+6)+'<div class="panel">'+box+'</div>'+h.slice(k+6)};Object.assign(roteiroView,o,{__dm:1})}
   if(typeof DD_ROTA!=='undefined')DD_ROTA['dist-id-imp-terceiro']='2';

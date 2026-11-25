@@ -124,6 +124,8 @@ function xhPendencias(){
 function xhPendurar(){
  if(typeof distTela1View==='function'&&!distTela1View.__xh){const o=distTela1View;distTela1View=function(){if(!xhOn()){const h=o.apply(this,arguments),av=xhAvisoTrilha();return av?h.replace('<h4>Atividades</h4>',()=>av+'<h4>Atividades</h4>'):h}xhSync();const h=o.apply(this,arguments);const r=/<h4>Atividades<\/h4><div class="checks">[\s\S]*?<\/div>/;return r.test(h)?h.replace(r,()=>xhPainel()):h.replace('<h4>Equipe inspetora',()=>xhPainel()+'<h4>Equipe inspetora')};Object.assign(distTela1View,o,{__xh:1})}
  if(typeof questionHtml==='function'&&!questionHtml.__xh){const o=questionHtml;questionHtml=function(q){const h=o.apply(this,arguments);if(!q||!xhOn()||xh().inicial!=='Sim'||!XH_REGISTRO.includes(q.id))return h;return h.replace('<div class="toolbar"><button class="btn" data-dist-read=',()=>'<div class="toolbar"><button class="btn" data-xh-nai="'+q.id+'" title="Só se a empresa ainda não operou">Atividade não iniciada</button><button class="btn" data-dist-read=')};Object.assign(questionHtml,o,{__xh:1})}
+ /* as NCs dos blocos do XIV.H entram no Anexo II (allNCs); o aviso “sem correspondência no inventário” não vale para elas */
+ if(typeof distGeraNC==='function'&&!distGeraNC.__xh){const o=distGeraNC;distGeraNC=function(q){if(o.apply(this,arguments))return true;try{return DATA.sections.some(s=>s.__xh&&(s.questions||[]).includes(q))}catch(e){return false}};Object.assign(distGeraNC,o,{__xh:1})}
  if(typeof planView==='function'&&!planView.__xh){const o=planView;planView=function(){const h=o.apply(this,arguments);return xhOn()?h+xhMatriz():h};Object.assign(planView,o,{__xh:1})}
  if(typeof distIssues==='function'&&!distIssues.__xh){const o=distIssues;distIssues=function(){const r=o.apply(this,arguments);return xhOn()?r.concat(xhPendencias()):r};Object.assign(distIssues,o,{__xh:1})}
  if(typeof ddAnexoIPendencias==='function'&&!ddAnexoIPendencias.__xh){const o=ddAnexoIPendencias;ddAnexoIPendencias=function(){let r=o.apply(this,arguments);if(!xhOn())return r;if(xhConclusao())r=r.filter(t=>!/classificação final não definida/.test(t));return r.concat(xhPendencias())};Object.assign(ddAnexoIPendencias,o,{__xh:1})}
@@ -288,10 +290,10 @@ function xhSecoes(){
   if(typeof DD_ITENS!=='undefined'){DD_ITENS[d.item]=DD_ITENS[d.item]||[];if(!DD_ITENS[d.item].includes(d.id))DD_ITENS[d.item].push(d.id)}
   for(const q of d.q)if(q[4]&&!XH_REGISTRO.includes(q[0]))XH_REGISTRO.push(q[0]);
   if(!xhPrecisa(d.quando))continue;
-  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio',radio:'categoria 244 (radiofármacos)',frio:'termolábeis (classes 01 e 02; categorias 145 e 006)',bioimp:'importar hemoderivados (006) ou soros e vacinas (145)'})[d.quando]+'.',condition:'all',reportTitle:d.title,questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
+  DATA.sections.push({__xh:1,id:d.id,title:d.title,subtitle:'Formulário XIV.H: '+({frac:'fracionar insumo farmacêutico',imp:'importar insumos farmacêuticos',ins:'classes 03 ou 15 (insumos farmacêuticos)',ce:'classes 02 ou 15 (controle especial)',gas:'classe 20 (gases medicinais)','gas-trp':'classe 20 com transporte próprio',radio:'categoria 244 (radiofármacos)',frio:'termolábeis (classes 01 e 02; categorias 145 e 006)',bioimp:'importar hemoderivados (006) ou soros e vacinas (145)'})[d.quando]+'.',condition:'all',reportTitle:d.title,docs:[],questions:d.q.filter(q=>!q[5]||xhPrecisa(q[5])).map(([id,text,legal,nc])=>({id,text,legal,ncText:nc+': «evidência» ('+legal+').'}))});
  }
 }
-/* etapa 8 no modo XIV.H: “Classes e categorias — condições específicas”. Reúne, por classe e categoria
+/* etapa 8 no modo XIV.H: “Classes e categorias” (condições específicas). Reúne, por classe e categoria
    declaradas, o que vai além dos aspectos gerais da RDC 430/2020: cadeia de frio (termolábeis, vacinas,
    soros, hemoderivados), controle especial, insumos, fracionamento e laboratório, gases, radiofármacos,
    biológicos importados e o controle de qualidade da importadora. As perguntas de termolábeis e de
@@ -312,7 +314,7 @@ function xhCartao8(){
  const ins=xhTem('03')||xhTem('15'),fl=state.meta.flags||[];
  const ids=DATA.sections.map(z=>z.id),ok=id=>id==='insumos_gerais'?ins:id==='insumos_ifa'?ins&&(fl.includes('ifa')||xh().ativ.includes('imp')):ids.includes(id);
  const lista=XH_GRUPOS.flatMap(([,pre])=>pre.flatMap(k=>k.endsWith('-')?ids.filter(id=>id.startsWith(k)):ok(k)?[k]:[]));
- DIST_CARDS[7][0]='Classes e categorias — condições específicas';
+ DIST_CARDS[7][0]='Classes e categorias';
  DIST_CARDS[7][1]=[...new Set(lista.concat(cq))];
 }
 if(typeof dmCartao8==='function'&&!dmCartao8.__xh){const o=dmCartao8;dmCartao8=function(){o.apply(this,arguments);xhCartao8()};Object.assign(dmCartao8,o,{__xh:1})}

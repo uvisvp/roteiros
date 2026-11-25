@@ -83,7 +83,7 @@ const T=require('./lib.cjs');
    if(!base)o.cit=['SEM_REDE'];else for(const q of qs)for(const parte of String(q.legal).split(';').map(s=>s.trim()).filter(z=>z&&!/^Guia CNEN/.test(z))){let a=null;try{a=await LegisV12.texto({law:parte,device:parte})}catch(e){}if(!(a&&a.some(z=>z.exato&&String(z.texto).trim())))o.cit.push(q.id+': '+parte)}
    return o});
   if(m.sem.length)T.falha('módulo de insumos: sem classe 03/15 não deveria haver blocos: '+m.sem);
-  if(m.card8sem!=='Classes e categorias — condições específicas')T.falha('etapa 8 no XIV.H: título '+m.card8sem);
+  if(m.card8sem!=='Classes e categorias')T.falha('etapa 8 no XIV.H: título '+m.card8sem);
   for(const s of ['xh-ins-geral','xh-ins-receb','xh-ins-arm','xh-ins-exp'])if(!m.ins.includes(s))T.falha('módulo de insumos: falta o bloco '+s);
   for(const s of ['xh-ins-imp','xh-frac-area','xh-lab-inst'])if(m.ins.includes(s))T.falha('módulo de insumos: bloco '+s+' sem importar/fracionar marcado');
   for(const s of ['xh-ins-imp','xh-frac-area','xh-frac-op','xh-frac-val','xh-lab-inst','xh-lab-ativ'])if(!m.tudo.includes(s))T.falha('módulo completo: falta o bloco '+s);
@@ -105,7 +105,7 @@ const T=require('./lib.cjs');
    return o});
   for(const s of ['xh-ce','xh-gas-reg','xh-gas-areas','xh-gas-rast','xh-gas-transp'])if(!g.secs.includes(s))T.falha('controle especial e gases: falta o bloco '+s);
   for(const s of ['xh-ins-geral','xh-frac-op'])if(g.secs.includes(s))T.falha('classes 02 e 20 não deveriam abrir '+s);
-  if(g.card8!=='Classes e categorias — condições específicas')T.falha('etapa 8: título '+g.card8);
+  if(g.card8!=='Classes e categorias')T.falha('etapa 8: título '+g.card8);
   if(!g.c8.includes('controlados')||!g.c8.includes('xh-ce')||g.c8.indexOf('controlados')>g.c8.indexOf('xh-ce')||g.c7.includes('controlados')||g.t7!=='Sistemas e estoque')T.falha('controlados na etapa 8, antes do bloco do XIV.H, e fora da etapa 7: '+JSON.stringify([g.c8,g.c7,g.t7]));
   if(g.ids.includes('xc-04')||!g.ids.includes('xc-07'))T.falha('controle especial: xc-04 só com classe 15 e xc-07 só com classe 02');
   if(!g.so15.includes('xc-04')||g.so15.includes('xc-07'))T.falha('controle especial, classe 15: '+g.so15.filter(x=>/^xc-/.test(x)));
@@ -154,6 +154,26 @@ const T=require('./lib.cjs');
  {const {p,f}=await T.abre('Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos','',{browser:b});
   const r=await f.evaluate(()=>{state=blank();save();return {on:xhOn(),tela:distTela1View(),conc:xhConclusao()}});
   if(r.on||/Formulário XIV\.H — atividades/.test(r.tela)||r.conc)T.falha('card comum: não deveria mostrar o Formulário XIV.H');
+  await p.close()}
+ /* etapa 8 no celular: todos os itens abrem, a seta → percorre até o Anexo II e os chips cabem na tela */
+ {const {p,f,erros}=await T.abre('Medicamentos','distribuidoras-transportadoras','Atacadista — licença inicial (Formulário XIV.H)','trilha=xivh',{browser:b,viewport:{width:390,height:844}});
+  await f.evaluate(()=>{const x=xh();x.ativ=['dist','imp','arm','frac'];x.classes=['01','02','03','15','20'];x.cat=['145','006','244','003'];x.inicial='Sim';state.meta.flags=(state.meta.flags||[]).concat('termolabeis','ifa');xhSync();save();state.itab='roteiro';state.activeCard=8;state.activeSection=null;renderITab()});
+  await p.waitForTimeout(500);
+  const ids=await f.evaluate(()=>[...document.querySelectorAll('.dist-subitem-menu [data-dist-section]')].map(x=>x.dataset.distSection));
+  if(ids.length<20)T.falha('etapa 8: itens no menu: '+ids.length);
+  const vazios=[];
+  for(const id of ids){await f.evaluate(id=>document.querySelector('.dist-subitem-menu [data-dist-section="'+id+'"]').click(),id);await p.waitForTimeout(120);
+   const n=await f.evaluate(()=>document.querySelectorAll('#inspectionContent .dist-section-screen .q').length);if(!n)vazios.push(id);
+   await f.evaluate(()=>{state.activeSection=null;renderITab()});await p.waitForTimeout(60)}
+  if(vazios.length)T.falha('etapa 8: itens que não abrem: '+vazios.join(', '));
+  const seq=[];for(let i=0;i<ids.length+3;i++){await f.evaluate(()=>byId('dockNext').click());await p.waitForTimeout(100);const r=await f.evaluate(()=>state.itab+'|'+state.activeSection);seq.push(r);if(/^anexo2/.test(r))break}
+  if(!/^anexo2/.test(seq[seq.length-1])||new Set(seq).size!==seq.length)T.falha('etapa 8: seta → travou: '+seq.slice(-3).join(' > '));
+  const larg=await f.evaluate(()=>{state.itab='roteiro';state.activeSection='xh-frio';renderITab();const vw=document.documentElement.clientWidth,on=document.querySelector('.dist-chips button.on'),nav=document.querySelector('.dist-nav-b');return {vw,on:on?Math.round(on.getBoundingClientRect().width):0,h:nav?Math.round(nav.getBoundingClientRect().height):0,sw:document.documentElement.scrollWidth}});
+  if(!larg.on||larg.on>larg.vw*0.75||larg.sw>larg.vw||larg.h<40)T.falha('etapa 8: chips fora do enquadramento: '+JSON.stringify(larg));
+  const prog=await f.evaluate(()=>{state.activeCard=null;state.activeSection=null;renderITab();document.body.click();return new Promise(r=>setTimeout(()=>{const c=document.querySelector('.dist-card-menu [data-dist-card="8"] .dist-card-progress');r(c?c.textContent:'')},300))});
+  const tot=await f.evaluate(()=>DIST_CARDS[7][1].reduce((n,id)=>{const s=DATA.sections.find(z=>z.id===id);return n+(s?s.questions.length:0)},0));
+  if(!new RegExp('^'+tot+' verificações').test(prog))T.falha('etapa 8: progresso do cartão deveria contar '+tot+' verificações: '+prog);
+  if(erros.length)T.falha('etapa 8: erros na página: '+erros.slice(0,3).join(' | '));
   await p.close()}
  await b.close();
  console.log(process.exitCode?'atacadista-xivh: FALHOU':'atacadista-xivh: OK');

@@ -92,5 +92,15 @@ html = html.replace(/(<script type="text\/plain" id="([^"]+)">)([\s\S]*?)(<\/scr
   return a + novo + z;
 });
 if (!feito) throw Error('Bloco não localizado: ' + ID);
+/* Casca (fora do bloco): o progresso dos cartões das etapas seguia uma lista fixa de blocos por etapa;
+   passa a seguir DIST_CARDS, que muda com o modo XIV.H (etapa 8) e com a importação de insumos. */
+{
+  const DE = 'var n=Number(card.dataset.distCard),ids=grupos[n-1]||[]';
+  const PARA = "var n=Number(card.dataset.distCard),ids=(typeof DIST_CARDS!=='undefined'&&DIST_CARDS[n-1]?DIST_CARDS[n-1][1]:grupos[n-1])||[]";
+  if (!html.includes(PARA)) {
+    if (html.split(DE).length !== 2) throw Error('Casca: progresso das etapas não localizado de forma única');
+    html = html.replace(DE, () => PARA);
+  }
+}
 fs.writeFileSync(file, html);
 console.log('Atacadista: documentos nos modelos da Anvisa e roteiro revisado.');
