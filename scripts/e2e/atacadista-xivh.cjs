@@ -176,6 +176,21 @@ const T=require('./lib.cjs');
   if(!new RegExp('^'+tot+' verificações').test(prog))T.falha('etapa 8: progresso do cartão deveria contar '+tot+' verificações: '+prog);
   if(erros.length)T.falha('etapa 8: erros na página: '+erros.slice(0,3).join(' | '));
   await p.close()}
+ /* quadro “Enquadramento da importação”: entre o cabeçalho da etapa 8 e a lista de itens, uma vez; não aparece nas telas de item */
+ {const {p,f,erros}=await T.abre('Medicamentos','distribuidoras-transportadoras','Atacadista de medicamentos','',{browser:b,viewport:{width:390,height:844}});
+  const pos=()=>f.evaluate(()=>{const bx=[...document.querySelectorAll('#inspectionContent .dm-imp-panel')],m=document.querySelector('#inspectionContent .dist-subitem-menu'),h=document.querySelector('#inspectionContent .dist-card-head');
+   return {n:bx.length,antes:!!(bx[0]&&m&&(bx[0].compareDocumentPosition(m)&Node.DOCUMENT_POSITION_FOLLOWING)),depoisCab:!!(bx[0]&&h&&(h.compareDocumentPosition(bx[0])&Node.DOCUMENT_POSITION_FOLLOWING)),painel:!!(bx[0]&&bx[0].closest('.panel')),txt:bx[0]?bx[0].textContent:''}});
+  await f.evaluate(()=>{state.meta.activities=['Distribuir','Importar'];state.meta.flags=['imp_detentor'];save();state.itab='roteiro';state.activeCard=8;state.activeSection=null;renderITab()});
+  let r=await pos();
+  if(r.n!==1||!r.antes||!r.depoisCab||!r.painel||!/Enquadramento da importação/.test(r.txt)||!/Detentora do registro/.test(r.txt))T.falha('etapa 8: quadro de importação fora do lugar: '+JSON.stringify(Object.assign(r,{txt:r.txt.slice(0,60)})));
+  await f.evaluate(()=>document.querySelector('.dist-subitem-menu [data-dist-section]').click());await p.waitForTimeout(200);
+  r=await pos();if(r.n)T.falha('etapa 8: quadro de importação não deveria repetir na tela do item');
+  await f.evaluate(()=>{state.meta.flags=[];save();state.activeSection=null;renderITab()});
+  r=await pos();if(r.n!==1||!r.antes||!/Marque o que a empresa importa/.test(r.txt))T.falha('etapa 8: sem triagem, deveria pedir a marcação do que a empresa importa: '+JSON.stringify(r));
+  await f.evaluate(()=>{state.meta.activities=['Distribuir'];save();renderITab()});
+  r=await pos();if(r.n)T.falha('etapa 8: sem importar, o quadro não deveria aparecer');
+  if(erros.length)T.falha('quadro de importação: erros na página: '+erros.slice(0,3).join(' | '));
+  await p.close()}
  await b.close();
  console.log(process.exitCode?'atacadista-xivh: FALHOU':'atacadista-xivh: OK');
 })();

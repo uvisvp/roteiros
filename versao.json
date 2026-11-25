@@ -1,6 +1,6 @@
 {
-  "versao": "20261125-1",
+  "versao": "20261125-2",
   "banco": "13.1",
   "correcoes": 0,
-  "notas": "Atacadista — licença inicial (Formulário XIV.H), etapa 8 “Classes e categorias”: os blocos de cadeia de frio, controle especial, insumos, fracionamento, laboratório, gases, radiofármacos e biológicos importados não abriam e a seta → travava no primeiro deles; agora todos abrem e a seta percorre a etapa até o Anexo II. Os blocos de insumos do card Atacadista de medicamentos (importação de IFA e excipientes) tinham o mesmo defeito e também foram corrigidos. Na navegação, os botões de etapa e de item têm 40 px de altura e os títulos longos são cortados com reticências, sem passar da largura da tela; o cartão de cada etapa passa a contar as verificações dos blocos que ela de fato contém. As perguntas dos blocos do Formulário XIV.H deixam de mostrar o aviso “sem correspondência no inventário”, porque a não conformidade delas entra no Anexo II."
+  "notas": "Atacadista de medicamentos, etapa 8: o quadro “Enquadramento da importação” (o que a empresa importa e quais blocos se aplicam) aparece logo abaixo do cabeçalho da etapa, antes da lista de itens, e não se repete no fim de cada item aberto; antes ficava no rodapé da tela, depois de todos os itens. Sem importar, o quadro não aparece; sem a triagem marcada na etapa 1, pede a marcação."
 }
